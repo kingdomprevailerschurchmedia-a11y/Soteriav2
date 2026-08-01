@@ -103,7 +103,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
 });
 
 // --- Search Provider ---
-final gallerySearchQueryProvider = StateProvider<String>((ref) => '');
+class GallerySearchQueryNotifier extends Notifier<String> {
+  @override
+  String build() => '';
+
+  void update(String value) => state = value;
+}
+
+final gallerySearchQueryProvider = NotifierProvider<GallerySearchQueryNotifier, String>(GallerySearchQueryNotifier.new);
 
 final filteredGalleryItemsProvider = Provider<List<GalleryItem>>((ref) {
   final query = ref.watch(gallerySearchQueryProvider);
@@ -113,8 +120,9 @@ final filteredGalleryItemsProvider = Provider<List<GalleryItem>>((ref) {
 });
 
 // --- Settings Provider ---
-class GallerySettingsNotifier extends StateNotifier<GallerySettings> {
-  GallerySettingsNotifier() : super(const GallerySettings());
+class GallerySettingsNotifier extends Notifier<GallerySettings> {
+  @override
+  GallerySettings build() => const GallerySettings();
 
   void update(GallerySettings Function(GallerySettings) updater) {
     state = updater(state);
@@ -123,21 +131,23 @@ class GallerySettingsNotifier extends StateNotifier<GallerySettings> {
   void reset() => state = const GallerySettings();
 }
 
-final gallerySettingsProvider = StateNotifierProvider<GallerySettingsNotifier, GallerySettings>((ref) {
-  return GallerySettingsNotifier();
-});
+final gallerySettingsProvider = NotifierProvider<GallerySettingsNotifier, GallerySettings>(GallerySettingsNotifier.new);
 
 // --- Favorites Provider ---
-class GalleryFavoritesNotifier extends StateNotifier<Set<String>> {
-  GalleryFavoritesNotifier() : super({}) {
+class GalleryFavoritesNotifier extends Notifier<Set<String>> {
+  @override
+  Set<String> build() {
     _load();
+    return {};
   }
 
   static const _key = 'gallery_favorites';
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    state = prefs.getStringList(_key)?.toSet() ?? {};
+    if (ref.mounted) {
+      state = prefs.getStringList(_key)?.toSet() ?? {};
+    }
   }
 
   Future<void> toggle(String route) async {
@@ -151,19 +161,16 @@ class GalleryFavoritesNotifier extends StateNotifier<Set<String>> {
   }
 }
 
-final galleryFavoritesProvider = StateNotifierProvider<GalleryFavoritesNotifier, Set<String>>((ref) {
-  return GalleryFavoritesNotifier();
-});
+final galleryFavoritesProvider = NotifierProvider<GalleryFavoritesNotifier, Set<String>>(GalleryFavoritesNotifier.new);
 
 // --- Recents Provider ---
-class GalleryRecentNotifier extends StateNotifier<List<String>> {
-  GalleryRecentNotifier() : super([]);
+class GalleryRecentNotifier extends Notifier<List<String>> {
+  @override
+  List<String> build() => [];
 
   void add(String route) {
     state = [route, ...state.where((r) => r != route)].take(5).toList();
   }
 }
 
-final galleryRecentProvider = StateNotifierProvider<GalleryRecentNotifier, List<String>>((ref) {
-  return GalleryRecentNotifier();
-});
+final galleryRecentProvider = NotifierProvider<GalleryRecentNotifier, List<String>>(GalleryRecentNotifier.new);

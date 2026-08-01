@@ -52,23 +52,21 @@ class AppBootstrap {
 // Removing the duplicate/typo provider
 final bootstrapServiceProvider = Provider((ref) => AppBootstrap(ref));
 
-class BootstrapNotifier extends StateNotifier<BootstrapState> {
-  BootstrapNotifier(this.ref) : super(BootstrapState.initial);
-  final Ref ref;
+class BootstrapNotifier extends Notifier<BootstrapState> {
+  @override
+  BootstrapState build() => BootstrapState.initial;
 
   Future<void> run() async {
-    if (!mounted) return;
+    if (!ref.mounted) return;
     state = BootstrapState.loading;
     try {
       await ref.read(bootstrapServiceProvider).initialize();
-      if (mounted) state = BootstrapState.success;
+      if (ref.mounted) state = BootstrapState.success;
     } catch (_) {
-      if (mounted) state = BootstrapState.error;
+      if (ref.mounted) state = BootstrapState.error;
     }
   }
 }
 
 // Fixed the typo in provider name
-final bootstrapStateProvider = StateNotifierProvider<BootstrapNotifier, BootstrapState>((ref) {
-  return BootstrapNotifier(ref);
-});
+final bootstrapStateProvider = NotifierProvider<BootstrapNotifier, BootstrapState>(BootstrapNotifier.new);

@@ -75,4 +75,7 @@ extension SoteriaTypographyExtension on BuildContext {
   TextStyle get bodyLarge => textTheme.bodyLarge!;
   TextStyle get labelLarge => textTheme.labelLarge!;
   TextStyle get bodySmall => textTheme.bodySmall!;
+
+  /// Clamps the text scale factor to prevent extreme accessibility settings from breaking layouts.
+  double get safeTextScale => MediaQuery.textScalerOf(this).scale(1.0).clamp(0.8, 1.4);
 }

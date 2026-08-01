@@ -38,17 +38,16 @@ class ErrorHandler {
   }
 }
 
-class SoteriaProviderObserver extends ProviderObserver {
+base class SoteriaProviderObserver extends ProviderObserver {
   @override
   void didUpdateProvider(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object? previousValue,
     Object? newValue,
-    ProviderContainer container,
   ) {
     if (newValue is AsyncError) {
       LoggerService.e(
-        'Provider Error: ${provider.name ?? provider.runtimeType}',
+        'Provider Error: ${context.provider.name ?? context.provider.runtimeType}',
         error: newValue.error,
         stackTrace: newValue.stackTrace,
         feature: 'Riverpod',
@@ -58,13 +57,12 @@ class SoteriaProviderObserver extends ProviderObserver {
 
   @override
   void providerDidFail(
-    ProviderBase<Object?> provider,
+    ProviderObserverContext context,
     Object error,
     StackTrace stackTrace,
-    ProviderContainer container,
   ) {
     LoggerService.e(
-      'Provider Failed: ${provider.name ?? provider.runtimeType}',
+      'Provider Failed: ${context.provider.name ?? context.provider.runtimeType}',
       error: error,
       stackTrace: stackTrace,
       feature: 'Riverpod',

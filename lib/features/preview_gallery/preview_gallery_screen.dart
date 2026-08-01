@@ -37,26 +37,29 @@ class _GalleryAppBar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
-      expandedHeight: 200,
+      expandedHeight: 250.h,
       floating: false,
       pinned: true,
       backgroundColor: Colors.transparent,
       flexibleSpace: FlexibleSpaceBar(
-        background: Padding(
-          padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('Design System', style: context.displayMedium.copyWith(color: SoteriaColors.gold)),
-              SizedBox(height: SoteriaSpacing.sm),
-              SoteriaTextField(
-                hintText: 'Search components, tokens, screens...',
-                prefixIcon: Icons.search_rounded,
-                onChanged: (val) => ref.read(gallerySearchQueryProvider.notifier).state = val,
-              ),
-              SizedBox(height: SoteriaSpacing.lg),
-            ],
+        background: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Design System', style: context.displayMedium.copyWith(color: SoteriaColors.gold)),
+                SizedBox(height: SoteriaSpacing.sm),
+                SoteriaTextField(
+                  hintText: 'Search components, tokens, screens...',
+                  prefixIcon: Icons.search_rounded,
+                  onChanged: (val) => ref.read(gallerySearchQueryProvider.notifier).update(val),
+                ),
+                SizedBox(height: SoteriaSpacing.lg),
+              ],
+            ),
           ),
         ),
       ),
@@ -201,7 +204,7 @@ class _GalleryItemsGrid extends ConsumerWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
-          childAspectRatio: 1.0,
+          childAspectRatio: 1.15,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) => _GalleryItemCard(item: filteredItems[index]),
@@ -315,15 +318,16 @@ class _GalleryItemCard extends ConsumerWidget {
         padding: EdgeInsets.all(SoteriaSpacing.md),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(item.icon, color: SoteriaColors.primary, size: 24),
+                Icon(item.icon, color: SoteriaColors.primary, size: 24.w),
                 IconButton(
                   icon: Icon(
                     isFavorite ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
-                    size: 18,
+                    size: 18.w,
                     color: isFavorite ? SoteriaColors.gold : SoteriaColors.muted,
                   ),
                   onPressed: () => ref.read(galleryFavoritesProvider.notifier).toggle(item.route),
@@ -332,21 +336,30 @@ class _GalleryItemCard extends ConsumerWidget {
                 ),
               ],
             ),
-            const Spacer(),
-            Text(
-              item.title, 
-              style: context.titleLarge.copyWith(fontSize: 14.sp),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            const SizedBox(height: 4),
-            Flexible(
-              child: Text(
-                item.description,
-                style: context.bodySmall.copyWith(fontSize: 10.sp),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  item.title, 
+                  style: context.titleLarge.copyWith(
+                    fontSize: 14.sp,
+                    height: 1.2,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  item.description,
+                  style: context.bodySmall.copyWith(
+                    fontSize: 10.sp,
+                    color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ),
           ],
         ),
