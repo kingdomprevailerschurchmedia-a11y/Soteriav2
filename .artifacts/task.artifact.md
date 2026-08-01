@@ -1,0 +1,21 @@
+# Soteria Navigation Foundation Task List (Story 1.6)
+
+- [ ] Implement Route Constants & Structure
+    - [ ] Create `soteria_routes.dart` with modular definitions
+    - [ ] Create `route_params.dart`
+- [ ] Implement Route Guards
+    - [ ] Create base guard abstractions in `guards/`
+- [ ] Implement Premium Transitions
+    - [ ] Create `soteria_page_transitions.dart`
+- [ ] Implement Navigation Service
+    - [ ] Create `navigation_service.dart` (Riverpod)
+- [ ] Refactor App Router
+    - [ ] Reorganize `app_router.dart` for scalability
+    - [ ] Implement `errorBuilder` with premium error UI
+    - [ ] Configure global redirects for guards
+- [ ] Expand Preview Gallery
+    - [ ] Create `NavigationFoundationPage`
+    - [ ] Register new previews
+- [ ] Verification
+    - [ ] Add Navigation and Guard tests
+    - [ ] Run `flutter analyze` & `flutter test`

@@ -1,0 +1,21 @@
+# Tasks - Story 1.10: Epic 1 Production Certification
+
+- [x] `[x]` Phase 1: Lint & Compilation Fixes
+    - [x] Fix `LoggerService` named parameters
+    - [x] Fix `LogLevel.trace` and `LoggerService.t`
+    - [x] Fix `DiagnosticsService` interpolation
+    - [x] Fix `PerformanceService` unnecessary import
+    - [x] Fix `SoteriaApp` `ErrorWidget.builder` test isolation
+    - [x] Fix `error_handling_test.dart` type check
+    - [x] Fix `withValues` across the project
+    - [x] Fix `DiagnosticsPreviewPage` simulation calls
+- [x] `[x]` Phase 2: Design System Polish (Removing Hardcoded Values)
+    - [x] Audit `lib/core/widgets` for hardcoded `BorderRadius`
+    - [x] Audit `lib/core/widgets` for hardcoded `SizedBox`
+    - [x] Audit `lib/core/widgets` for hardcoded colors (`Colors.white`, etc.)
+- [x] `[x]` Phase 3: Final Integration & Tests
+    - [x] Run `flutter analyze` (Verified: PASS)
+    - [x] Run `flutter test` (Verified: PASS)
+- [x] `[x]` Phase 4: Production Report & Certification
+    - [x] Generate Report
+    - [x] Issue Certification
