@@ -22,6 +22,7 @@ class SoteriaTextField extends StatefulWidget {
     this.enabled = true,
     this.readOnly = false,
     this.onChanged,
+    this.autofillHints,
   });
 
   final TextEditingController? controller;
@@ -35,6 +36,7 @@ class SoteriaTextField extends StatefulWidget {
   final bool enabled;
   final bool readOnly;
   final ValueChanged<String>? onChanged;
+  final Iterable<String>? autofillHints;
 
   @override
   State<SoteriaTextField> createState() => _SoteriaTextFieldState();
@@ -69,6 +71,7 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
           enabled: widget.enabled,
           readOnly: widget.readOnly,
           onChanged: widget.onChanged,
+          autofillHints: widget.autofillHints,
           style: context.bodyLarge.copyWith(
             color: widget.enabled ? null : SoteriaColors.muted,
           ),

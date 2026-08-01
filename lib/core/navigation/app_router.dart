@@ -2,6 +2,11 @@ import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/navigation/transitions/soteria_page_transitions.dart';
 import 'package:soteria/features/splash/splash_screen.dart';
+import 'package:soteria/features/onboarding/screens/onboarding_screen.dart';
+import 'package:soteria/features/personalization/screens/personalization_screen.dart';
+import 'package:soteria/features/auth/screens/auth_landing_screen.dart';
+import 'package:soteria/features/auth/screens/registration_screen.dart';
+import 'package:soteria/features/auth/screens/login_screen.dart';
 import 'package:soteria/features/preview_gallery/preview_gallery_screen.dart';
 import 'package:soteria/features/preview_gallery/widgets/gallery_shell.dart';
 import 'package:soteria/features/preview_gallery/pages/tokens_preview_page.dart';
@@ -18,6 +23,11 @@ import 'package:soteria/features/preview_gallery/pages/navigation_preview_page.d
 import 'package:soteria/features/preview_gallery/pages/animations_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/startup_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/navigation_foundation_page.dart';
+import 'package:soteria/features/preview_gallery/pages/onboarding_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/personalization_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/auth_landing_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/registration_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/login_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/diagnostics_preview_page.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 
@@ -31,6 +41,46 @@ class AppRouter {
       GoRoute(
         path: SoteriaRoutes.splash,
         builder: (context, state) => const SplashScreen(),
+      ),
+
+      GoRoute(
+        path: SoteriaRoutes.onboarding,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const OnboardingScreen(),
+          key: state.pageKey,
+        ),
+      ),
+
+      GoRoute(
+        path: SoteriaRoutes.personalization,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const PersonalizationScreen(),
+          key: state.pageKey,
+        ),
+      ),
+
+      GoRoute(
+        path: SoteriaRoutes.auth,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const AuthLandingScreen(),
+          key: state.pageKey,
+        ),
+        routes: [
+          GoRoute(
+            path: 'login',
+            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+              child: const LoginScreen(),
+              key: state.pageKey,
+            ),
+          ),
+          GoRoute(
+            path: 'register',
+            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+              child: const RegistrationScreen(),
+              key: state.pageKey,
+            ),
+          ),
+        ],
       ),
 
       // Developer Gallery
@@ -96,6 +146,26 @@ class AppRouter {
           GoRoute(
             path: 'nav-foundation',
             builder: (context, state) => const GalleryShell(title: 'Navigation', child: NavigationFoundationPage()),
+          ),
+          GoRoute(
+            path: 'onboarding',
+            builder: (context, state) => const GalleryShell(title: 'Onboarding', child: OnboardingPreviewPage()),
+          ),
+          GoRoute(
+            path: 'personalization',
+            builder: (context, state) => const GalleryShell(title: 'Personalization', child: PersonalizationPreviewPage()),
+          ),
+          GoRoute(
+            path: 'auth-landing',
+            builder: (context, state) => const GalleryShell(title: 'Auth Landing', child: AuthLandingPreviewPage()),
+          ),
+          GoRoute(
+            path: 'registration',
+            builder: (context, state) => const GalleryShell(title: 'Registration', child: RegistrationPreviewPage()),
+          ),
+          GoRoute(
+            path: 'login',
+            builder: (context, state) => const GalleryShell(title: 'Login', child: LoginPreviewPage()),
           ),
           GoRoute(
             path: 'diagnostics',

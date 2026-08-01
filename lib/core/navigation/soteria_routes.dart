@@ -1,6 +1,8 @@
 class SoteriaRoutes {
   // Foundation
   static const String splash = '/';
+  static const String onboarding = '/onboarding';
+  static const String personalization = '/personalization';
   
   // Authentication
   static const String auth = '/auth';
