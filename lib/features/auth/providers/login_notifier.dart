@@ -2,6 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/login_state.dart';
 import '../repositories/login_repository.dart';
+import '../repositories/firebase_login_repository.dart';
+import '../../../core/identity/providers/firebase_providers.dart';
 import '../../../core/utils/identity_validator.dart';
 
 class LoginNotifier extends Notifier<LoginState> {
@@ -89,5 +91,9 @@ class LoginNotifier extends Notifier<LoginState> {
 
 final loginProvider = NotifierProvider<LoginNotifier, LoginState>(LoginNotifier.new);
 
-// Added repository provider
-final loginRepositoryProvider = Provider<LoginRepository>((ref) => MockLoginRepository());
+// Updated repository provider
+final loginRepositoryProvider = Provider<LoginRepository>((ref) {
+  return FirebaseLoginRepository(
+    auth: ref.watch(firebaseAuthProvider),
+  );
+});

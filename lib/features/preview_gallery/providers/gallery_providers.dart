@@ -128,6 +128,20 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.lock_open_rounded,
     ),
     const GalleryItem(
+      title: 'Verification',
+      description: 'OTP, Countdown, Reusable Engine',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/verification',
+      icon: Icons.verified_user_rounded,
+    ),
+    const GalleryItem(
+      title: 'Identity & Session',
+      description: 'Lifecycle, Roles, Auth states',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/identity',
+      icon: Icons.fingerprint_rounded,
+    ),
+    const GalleryItem(
       title: 'Diagnostics',
       description: 'Logs, Device Info, Simulators',
       category: GalleryCategory.status,

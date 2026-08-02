@@ -1,26 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/identity_provider.dart';
+import '../repositories/login_repository.dart';
 
 class AuthLandingState {
   final bool isLoading;
   final String? error;
-  final bool isGuestAvailable;
 
   const AuthLandingState({
     this.isLoading = false,
     this.error,
-    this.isGuestAvailable = false,
   });
 
   AuthLandingState copyWith({
     bool? isLoading,
     String? error,
-    bool? isGuestAvailable,
   }) {
     return AuthLandingState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      isGuestAvailable: isGuestAvailable ?? this.isGuestAvailable,
     );
   }
 }
@@ -35,15 +31,15 @@ class AuthLandingNotifier extends Notifier<AuthLandingState> {
     state = state.copyWith(isLoading: loading);
   }
 
-  void setError(String? error) {
-    state = state.copyWith(error: error);
-  }
-
-  Future<void> signInWithProvider(IdentityProvider provider) async {
+  Future<void> signInWithGoogle(LoginRepository repository) async {
     setLoading(true);
-    // Simulation of provider sign in
-    await Future.delayed(const Duration(seconds: 2));
-    setLoading(false);
+    final result = await repository.loginWithGoogle();
+    if (ref.mounted) {
+      setLoading(false);
+      if (!result.isSuccess) {
+        state = state.copyWith(error: result.error?.userMessage ?? 'Google sign in failed.');
+      }
+    }
   }
 }
 

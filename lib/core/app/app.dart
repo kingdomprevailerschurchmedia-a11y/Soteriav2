@@ -12,6 +12,8 @@ class SoteriaApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+
     return ScreenUtilInit(
       designSize: const Size(390, 844), // iPhone 13/14 size
       minTextAdapt: true,
@@ -21,7 +23,7 @@ class SoteriaApp extends ConsumerWidget {
           title: 'Soteria',
           debugShowCheckedModeBanner: false,
           theme: SoteriaTheme.darkTheme,
-          routerConfig: AppRouter.router,
+          routerConfig: router,
           builder: (context, child) {
             if (!kDebugMode || !Platform.environment.containsKey('FLUTTER_TEST')) {
               ErrorWidget.builder = ErrorHandler.errorWidgetBuilder;

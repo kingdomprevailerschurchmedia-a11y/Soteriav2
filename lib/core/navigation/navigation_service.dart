@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:soteria/core/navigation/app_router.dart';
+import 'app_router.dart';
 
 final navigationServiceProvider = Provider<NavigationService>((ref) {
   return NavigationService(ref);
@@ -11,7 +11,7 @@ class NavigationService {
   NavigationService(this.ref);
   final Ref ref;
 
-  GoRouter get _router => AppRouter.router;
+  GoRouter get _router => ref.read(routerProvider);
 
   void go(String path, {Object? extra}) => _router.go(path, extra: extra);
   

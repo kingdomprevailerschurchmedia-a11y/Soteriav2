@@ -2,6 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../personalization/providers/personalization_notifier.dart';
 import '../models/registration_draft.dart';
+import '../repositories/registration_repository.dart';
+import '../repositories/firebase_registration_repository.dart';
+import '../../../core/identity/providers/firebase_providers.dart';
 import '../../../core/utils/identity_validator.dart';
 
 class RegistrationNotifier extends Notifier<RegistrationDraft> {
@@ -64,13 +67,20 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
     }
   }
 
-  Future<void> completeRegistration() async {
+  Future<void> completeRegistration(RegistrationRepository repository) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_kFirstNameKey, state.firstName);
-    // Simulate API call
-    await Future.delayed(const Duration(seconds: 1));
+    
+    await repository.register(state);
   }
 }
 
 final registrationProvider =
     NotifierProvider<RegistrationNotifier, RegistrationDraft>(RegistrationNotifier.new);
+
+final registrationRepositoryProvider = Provider<RegistrationRepository>((ref) {
+  return FirebaseRegistrationRepository(
+    auth: ref.watch(firebaseAuthProvider),
+    firestore: ref.watch(firestoreProvider),
+  );
+});

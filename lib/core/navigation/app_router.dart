@@ -1,12 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/navigation/transitions/soteria_page_transitions.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/splash/splash_screen.dart';
 import 'package:soteria/features/onboarding/screens/onboarding_screen.dart';
 import 'package:soteria/features/personalization/screens/personalization_screen.dart';
 import 'package:soteria/features/auth/screens/auth_landing_screen.dart';
 import 'package:soteria/features/auth/screens/registration_screen.dart';
 import 'package:soteria/features/auth/screens/login_screen.dart';
+import 'package:soteria/features/auth/screens/verification_orchestrator.dart';
+import 'package:soteria/features/auth/models/verification_type.dart';
 import 'package:soteria/features/preview_gallery/preview_gallery_screen.dart';
 import 'package:soteria/features/preview_gallery/widgets/gallery_shell.dart';
 import 'package:soteria/features/preview_gallery/pages/tokens_preview_page.dart';
@@ -28,21 +33,47 @@ import 'package:soteria/features/preview_gallery/pages/personalization_preview_p
 import 'package:soteria/features/preview_gallery/pages/auth_landing_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/registration_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/login_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/verification_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/identity_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/diagnostics_preview_page.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 
-class AppRouter {
-  static final router = GoRouter(
+final routerProvider = Provider<GoRouter>((ref) {
+  final listenable = _RiverpodRefreshListenable(ref);
+  ref.onDispose(listenable.dispose);
+
+  return GoRouter(
     initialLocation: SoteriaRoutes.splash,
     debugLogDiagnostics: true,
+    refreshListenable: listenable,
+    redirect: (context, state) {
+      final lifecycle = ref.read(appLifecycleProvider);
+      final location = state.uri.toString();
+
+      if (lifecycle == AppStartupState.loading) return null;
+
+      // Route protection
+      if (lifecycle == AppStartupState.onboarding && location != SoteriaRoutes.onboarding) {
+        return SoteriaRoutes.onboarding;
+      }
+      if (lifecycle == AppStartupState.personalization && location != SoteriaRoutes.personalization) {
+        return SoteriaRoutes.personalization;
+      }
+      if (lifecycle == AppStartupState.auth && !location.startsWith(SoteriaRoutes.auth)) {
+        return SoteriaRoutes.auth;
+      }
+      if (lifecycle == AppStartupState.ready && location == SoteriaRoutes.splash) {
+        return SoteriaRoutes.previewGallery; // Default for now
+      }
+
+      return null;
+    },
     errorBuilder: (context, state) => UnknownRouteScreen(location: state.uri.toString()),
     routes: [
-      // Foundation
       GoRoute(
         path: SoteriaRoutes.splash,
         builder: (context, state) => const SplashScreen(),
       ),
-
       GoRoute(
         path: SoteriaRoutes.onboarding,
         pageBuilder: (context, state) => SoteriaPageTransitions.fade(
@@ -50,7 +81,6 @@ class AppRouter {
           key: state.pageKey,
         ),
       ),
-
       GoRoute(
         path: SoteriaRoutes.personalization,
         pageBuilder: (context, state) => SoteriaPageTransitions.fade(
@@ -58,7 +88,6 @@ class AppRouter {
           key: state.pageKey,
         ),
       ),
-
       GoRoute(
         path: SoteriaRoutes.auth,
         pageBuilder: (context, state) => SoteriaPageTransitions.fade(
@@ -80,10 +109,22 @@ class AppRouter {
               key: state.pageKey,
             ),
           ),
+          GoRoute(
+            path: 'verify/:type',
+            pageBuilder: (context, state) {
+              final typeStr = state.pathParameters['type']!;
+              final type = VerificationType.values.firstWhere(
+                (e) => e.name == typeStr,
+                orElse: () => VerificationType.emailVerification,
+              );
+              return SoteriaPageTransitions.fade(
+                child: VerificationOrchestrator(type: type),
+                key: state.pageKey,
+              );
+            },
+          ),
         ],
       ),
-
-      // Developer Gallery
       GoRoute(
         path: SoteriaRoutes.previewGallery,
         builder: (context, state) => const PreviewGalleryScreen(),
@@ -168,6 +209,14 @@ class AppRouter {
             builder: (context, state) => const GalleryShell(title: 'Login', child: LoginPreviewPage()),
           ),
           GoRoute(
+            path: 'verification',
+            builder: (context, state) => const GalleryShell(title: 'Verification', child: VerificationPreviewPage()),
+          ),
+          GoRoute(
+            path: 'identity',
+            builder: (context, state) => const GalleryShell(title: 'Identity & Session', child: IdentityPreviewPage()),
+          ),
+          GoRoute(
             path: 'diagnostics',
             builder: (context, state) => const GalleryShell(title: 'Diagnostics', child: DiagnosticsPreviewPage()),
           ),
@@ -175,4 +224,21 @@ class AppRouter {
       ),
     ],
   );
+});
+
+class _RiverpodRefreshListenable extends ChangeNotifier {
+  late final ProviderSubscription _lifecycleSub;
+  late final ProviderSubscription _sessionSub;
+
+  _RiverpodRefreshListenable(Ref ref) {
+    _lifecycleSub = ref.listen(appLifecycleProvider, (prev, next) => notifyListeners());
+    _sessionSub = ref.listen(sessionProvider, (prev, next) => notifyListeners());
+  }
+
+  @override
+  void dispose() {
+    _lifecycleSub.close();
+    _sessionSub.close();
+    super.dispose();
+  }
 }

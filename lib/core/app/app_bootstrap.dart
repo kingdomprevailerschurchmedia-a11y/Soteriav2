@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 
 enum BootstrapState { initial, loading, success, error }
@@ -14,17 +16,30 @@ class AppBootstrap {
       
       // Parallel initialization for speed
       await Future.wait([
+        _initFirebase(),
         _initLocalStorage(),
         _initConfiguration(),
         _initAnalytics(),
         _initFeatureFlags(),
       ]);
 
+      await _initGoogleSignIn();
+
       LoggerService.i('Bootstrap: All systems healthy.');
     } catch (e, stack) {
       LoggerService.e('Bootstrap: Critical failure during initialization', error: e, stackTrace: stack);
       rethrow;
     }
+  }
+
+  Future<void> _initFirebase() async {
+    await Firebase.initializeApp();
+    LoggerService.d('Bootstrap: Firebase initialized.');
+  }
+
+  Future<void> _initGoogleSignIn() async {
+    await GoogleSignIn.instance.initialize();
+    LoggerService.d('Bootstrap: Google Sign-In ready.');
   }
 
   Future<void> _initLocalStorage() async {

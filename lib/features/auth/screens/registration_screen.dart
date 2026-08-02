@@ -6,6 +6,8 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/buttons/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/widgets/feedback/soteria_linear_progress.dart';
+import 'package:soteria/core/navigation/navigation_service.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import '../providers/registration_notifier.dart';
 import '../models/registration_draft.dart';
 import '../widgets/step_personal_identity.dart';
@@ -36,9 +38,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     super.dispose();
   }
 
-  void _onContinue(RegistrationDraft state) {
-    if (state.step == RegistrationStep.success) {
-      // Final navigation (Placeholder)
+  void _onContinue(RegistrationDraft state) async {
+    if (state.step == RegistrationStep.review) {
+      await ref.read(registrationProvider.notifier).completeRegistration(
+        ref.read(registrationRepositoryProvider),
+      );
+      if (mounted) {
+        ref.read(navigationServiceProvider).go('${SoteriaRoutes.auth}/verify/emailVerification');
+      }
       return;
     }
 
