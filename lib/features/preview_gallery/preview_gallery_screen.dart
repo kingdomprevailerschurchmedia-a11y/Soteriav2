@@ -50,12 +50,18 @@ class _GalleryAppBar extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Design System', style: context.displayMedium.copyWith(color: SoteriaColors.gold)),
+                Text(
+                  'Design System',
+                  style: context.displayMedium.copyWith(
+                    color: SoteriaColors.gold,
+                  ),
+                ),
                 SizedBox(height: SoteriaSpacing.sm),
                 SoteriaTextField(
                   hintText: 'Search components, tokens, screens...',
                   prefixIcon: Icons.search_rounded,
-                  onChanged: (val) => ref.read(gallerySearchQueryProvider.notifier).update(val),
+                  onChanged: (val) =>
+                      ref.read(gallerySearchQueryProvider.notifier).update(val),
                 ),
                 SizedBox(height: SoteriaSpacing.lg),
               ],
@@ -73,9 +79,15 @@ class _GalleryStatsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final allItems = ref.watch(galleryItemsProvider);
-    final components = allItems.where((i) => i.category == GalleryCategory.components).length;
-    final screens = allItems.where((i) => i.category == GalleryCategory.screens).length;
-    final tokens = allItems.where((i) => i.category == GalleryCategory.designSystem).length;
+    final components = allItems
+        .where((i) => i.category == GalleryCategory.components)
+        .length;
+    final screens = allItems
+        .where((i) => i.category == GalleryCategory.screens)
+        .length;
+    final tokens = allItems
+        .where((i) => i.category == GalleryCategory.designSystem)
+        .length;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -103,8 +115,22 @@ class _StatItem extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(value, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: Colors.white)),
-        Text(label.toUpperCase(), style: const TextStyle(fontSize: 10, color: SoteriaColors.muted, letterSpacing: 1.0)),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.w900,
+            color: Colors.white,
+          ),
+        ),
+        Text(
+          label.toUpperCase(),
+          style: const TextStyle(
+            fontSize: 10,
+            color: SoteriaColors.muted,
+            letterSpacing: 1.0,
+          ),
+        ),
       ],
     );
   }
@@ -116,10 +142,13 @@ class _RecentItemsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recents = ref.watch(galleryRecentProvider);
-    if (recents.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+    if (recents.isEmpty)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     final allItems = ref.watch(galleryItemsProvider);
-    final recentItems = allItems.where((item) => recents.contains(item.route)).toList();
+    final recentItems = allItems
+        .where((item) => recents.contains(item.route))
+        .toList();
 
     return SliverToBoxAdapter(
       child: RepaintBoundary(
@@ -133,7 +162,8 @@ class _RecentItemsSection extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
                 itemCount: recentItems.length,
-                itemBuilder: (context, index) => _RecentCard(item: recentItems[index]),
+                itemBuilder: (context, index) =>
+                    _RecentCard(item: recentItems[index]),
               ),
             ),
             SizedBox(height: SoteriaSpacing.xl),
@@ -150,10 +180,13 @@ class _FavoritesSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favorites = ref.watch(galleryFavoritesProvider);
-    if (favorites.isEmpty) return const SliverToBoxAdapter(child: SizedBox.shrink());
+    if (favorites.isEmpty)
+      return const SliverToBoxAdapter(child: SizedBox.shrink());
 
     final allItems = ref.watch(galleryItemsProvider);
-    final favoriteItems = allItems.where((item) => favorites.contains(item.route)).toList();
+    final favoriteItems = allItems
+        .where((item) => favorites.contains(item.route))
+        .toList();
 
     return SliverToBoxAdapter(
       child: RepaintBoundary(
@@ -167,7 +200,8 @@ class _FavoritesSection extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
                 itemCount: favoriteItems.length,
-                itemBuilder: (context, index) => _FavoriteCard(item: favoriteItems[index]),
+                itemBuilder: (context, index) =>
+                    _FavoriteCard(item: favoriteItems[index]),
               ),
             ),
             SizedBox(height: SoteriaSpacing.xl),
@@ -183,9 +217,13 @@ class _GalleryGridHeader extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isSearching = ref.watch(gallerySearchQueryProvider.select((q) => q.isNotEmpty));
+    final isSearching = ref.watch(
+      gallerySearchQueryProvider.select((q) => q.isNotEmpty),
+    );
     return SliverToBoxAdapter(
-      child: _SectionHeader(title: isSearching ? 'SEARCH RESULTS' : 'EXPLORE CATEGORIES'),
+      child: _SectionHeader(
+        title: isSearching ? 'SEARCH RESULTS' : 'EXPLORE CATEGORIES',
+      ),
     );
   }
 }
@@ -225,7 +263,12 @@ class _SectionHeader extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       child: Text(
         title,
-        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: SoteriaColors.muted, letterSpacing: 2.0),
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+          color: SoteriaColors.muted,
+          letterSpacing: 2.0,
+        ),
       ),
     );
   }
@@ -252,7 +295,11 @@ class _FavoriteCard extends StatelessWidget {
           children: [
             Icon(item.icon, color: SoteriaColors.gold, size: 32),
             SizedBox(height: SoteriaSpacing.sm),
-            Text(item.title, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold), textAlign: TextAlign.center),
+            Text(
+              item.title,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
@@ -283,8 +330,11 @@ class _RecentCard extends StatelessWidget {
             SizedBox(width: SoteriaSpacing.sm),
             Expanded(
               child: Text(
-                item.title, 
-                style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
+                item.title,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -302,7 +352,9 @@ class _GalleryItemCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isFavorite = ref.watch(galleryFavoritesProvider.select((f) => f.contains(item.route)));
+    final isFavorite = ref.watch(
+      galleryFavoritesProvider.select((f) => f.contains(item.route)),
+    );
 
     return GestureDetector(
       onTap: () {
@@ -326,11 +378,17 @@ class _GalleryItemCard extends ConsumerWidget {
                 Icon(item.icon, color: SoteriaColors.primary, size: 24.w),
                 IconButton(
                   icon: Icon(
-                    isFavorite ? Icons.bookmark_rounded : Icons.bookmark_border_rounded,
+                    isFavorite
+                        ? Icons.bookmark_rounded
+                        : Icons.bookmark_border_rounded,
                     size: 18.w,
-                    color: isFavorite ? SoteriaColors.gold : SoteriaColors.muted,
+                    color: isFavorite
+                        ? SoteriaColors.gold
+                        : SoteriaColors.muted,
                   ),
-                  onPressed: () => ref.read(galleryFavoritesProvider.notifier).toggle(item.route),
+                  onPressed: () => ref
+                      .read(galleryFavoritesProvider.notifier)
+                      .toggle(item.route),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),
                 ),
@@ -341,7 +399,7 @@ class _GalleryItemCard extends ConsumerWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  item.title, 
+                  item.title,
                   style: context.titleLarge.copyWith(
                     fontSize: 14.sp,
                     height: 1.2,

@@ -27,14 +27,16 @@ class SoteriaAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       leading: leading,
       centerTitle: centerTitle,
-      backgroundColor: isTransparent ? Colors.transparent : SoteriaColors.navigation,
+      backgroundColor: isTransparent
+          ? Colors.transparent
+          : SoteriaColors.navigation,
       elevation: 0,
-      flexibleSpace: isGradient 
+      flexibleSpace: isGradient
           ? Container(
               decoration: const BoxDecoration(
                 gradient: SoteriaGradients.primaryBackground,
               ),
-            ) 
+            )
           : null,
     );
   }

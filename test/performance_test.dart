@@ -10,7 +10,7 @@ void main() {
       // Mock package info for test
       PackageInfo.setMockInitialValues(
         appName: 'Soteria',
-        packageName: 'com.example.soteria',
+        packageName: 'com.soteria.app',
         version: '1.0.0',
         buildNumber: '1',
         buildSignature: '',
@@ -20,23 +20,29 @@ void main() {
       await DiagnosticsService.init();
       stopwatch.stop();
 
-      expect(stopwatch.elapsedMilliseconds, lessThan(500), 
-        reason: 'Service initialization took too long');
+      expect(
+        stopwatch.elapsedMilliseconds,
+        lessThan(500),
+        reason: 'Service initialization took too long',
+      );
     });
 
     test('Diagnostics caching should be effective', () async {
-       await DiagnosticsService.init();
-       
-       final stopwatch1 = Stopwatch()..start();
-       await DiagnosticsService.getDiagnostics();
-       stopwatch1.stop();
+      await DiagnosticsService.init();
 
-       final stopwatch2 = Stopwatch()..start();
-       await DiagnosticsService.getDiagnostics();
-       stopwatch2.stop();
+      final stopwatch1 = Stopwatch()..start();
+      await DiagnosticsService.getDiagnostics();
+      stopwatch1.stop();
 
-       expect(stopwatch2.elapsedMicroseconds, lessThan(stopwatch1.elapsedMicroseconds),
-         reason: 'Cached diagnostics should be faster');
+      final stopwatch2 = Stopwatch()..start();
+      await DiagnosticsService.getDiagnostics();
+      stopwatch2.stop();
+
+      expect(
+        stopwatch2.elapsedMicroseconds,
+        lessThan(stopwatch1.elapsedMicroseconds),
+        reason: 'Cached diagnostics should be faster',
+      );
     });
   });
 }

@@ -28,11 +28,7 @@ class SafeGradientScaffold extends StatelessWidget {
         decoration: const BoxDecoration(
           gradient: SoteriaGradients.primaryBackground,
         ),
-        child: SizedBox.expand(
-          child: SafeArea(
-            child: body,
-          ),
-        ),
+        child: SizedBox.expand(child: SafeArea(child: body)),
       ),
     );
   }

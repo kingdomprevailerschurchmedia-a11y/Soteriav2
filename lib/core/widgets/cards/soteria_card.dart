@@ -34,18 +34,18 @@ class SoteriaCard extends StatelessWidget {
           child: Ink(
             padding: padding ?? EdgeInsets.all(SoteriaSpacing.lg),
             decoration: BoxDecoration(
-              color: isElevated ? SoteriaColors.elevatedSurface : SoteriaColors.surface,
+              color: isElevated
+                  ? SoteriaColors.elevatedSurface
+                  : SoteriaColors.surface,
               borderRadius: SoteriaRadius.brLg,
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.05),
-              ),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
               boxShadow: isElevated
                   ? [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
-                      )
+                      ),
                     ]
                   : null,
             ),

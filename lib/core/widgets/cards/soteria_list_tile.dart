@@ -35,13 +35,11 @@ class SoteriaListTile extends StatelessWidget {
           child: Ink(
             padding: EdgeInsets.all(SoteriaSpacing.md),
             decoration: BoxDecoration(
-              color: isGlass 
-                  ? Colors.white.withValues(alpha: 0.05) 
+              color: isGlass
+                  ? Colors.white.withValues(alpha: 0.05)
                   : SoteriaColors.surface,
               borderRadius: SoteriaRadius.brMd,
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.05),
-              ),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Row(
               children: [

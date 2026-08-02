@@ -11,7 +11,7 @@ class RegistrationDraft {
   final String username;
   final String password;
   final String confirmPassword;
-  
+
   // From Personalization
   final String? academicLevel;
   final Set<String> interests;
@@ -19,6 +19,8 @@ class RegistrationDraft {
 
   final bool acceptedTerms;
   final RegistrationStep step;
+  final bool isLoading;
+  final String? error;
 
   const RegistrationDraft({
     this.firstName = '',
@@ -33,6 +35,8 @@ class RegistrationDraft {
     this.goals = const {},
     this.acceptedTerms = false,
     this.step = RegistrationStep.personal,
+    this.isLoading = false,
+    this.error,
   });
 
   RegistrationDraft copyWith({
@@ -48,6 +52,8 @@ class RegistrationDraft {
     Set<String>? goals,
     bool? acceptedTerms,
     RegistrationStep? step,
+    bool? isLoading,
+    String? error,
   }) {
     return RegistrationDraft(
       firstName: firstName ?? this.firstName,
@@ -62,6 +68,8 @@ class RegistrationDraft {
       goals: goals ?? this.goals,
       acceptedTerms: acceptedTerms ?? this.acceptedTerms,
       step: step ?? this.step,
+      isLoading: isLoading ?? this.isLoading,
+      error: error,
     );
   }
 }

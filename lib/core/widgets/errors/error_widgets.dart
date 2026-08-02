@@ -9,11 +9,7 @@ class InlineErrorWidget extends StatelessWidget {
   final String message;
   final VoidCallback? onRetry;
 
-  const InlineErrorWidget({
-    super.key,
-    required this.message,
-    this.onRetry,
-  });
+  const InlineErrorWidget({super.key, required this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +22,11 @@ class InlineErrorWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(Icons.error_outline_rounded, color: SoteriaColors.error, size: 24.w),
+          Icon(
+            Icons.error_outline_rounded,
+            color: SoteriaColors.error,
+            size: 24.w,
+          ),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(
             child: Text(

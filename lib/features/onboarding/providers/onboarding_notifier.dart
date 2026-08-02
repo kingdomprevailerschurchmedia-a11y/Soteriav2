@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/features/onboarding/models/onboarding_state.dart';
@@ -48,10 +49,33 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kOnboardingCompletedKey, true);
     state = state.copyWith(isCompleted: true);
-    
-    // Navigate to Personalization
-    ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
+
+    // Trigger lifecycle update
+    ref.read(appLifecycleProvider.notifier).refresh();
+  }
+
+  Future<void> completeAndLogin() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kOnboardingCompletedKey, true);
+    state = state.copyWith(isCompleted: true);
+
+    // Bypass to auth and navigate
+    ref.read(appLifecycleProvider.notifier).bypassToAuth();
+    ref.read(navigationServiceProvider).go(SoteriaRoutes.login);
+  }
+
+  Future<void> completeAndRegister() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_kOnboardingCompletedKey, true);
+    state = state.copyWith(isCompleted: true);
+
+    // Bypass to auth and navigate
+    ref.read(appLifecycleProvider.notifier).bypassToAuth();
+    ref.read(navigationServiceProvider).go(SoteriaRoutes.register);
   }
 }
 
-final onboardingProvider = NotifierProvider<OnboardingNotifier, OnboardingState>(OnboardingNotifier.new);
+final onboardingProvider =
+    NotifierProvider<OnboardingNotifier, OnboardingState>(
+      OnboardingNotifier.new,
+    );

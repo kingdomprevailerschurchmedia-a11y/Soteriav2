@@ -24,11 +24,7 @@ class AuthHeroSection extends StatelessWidget {
         Column(
           children: [
             SizedBox(height: SoteriaSpacing.xxl),
-            Icon(
-              Icons.shield_rounded,
-              size: 80.w,
-              color: SoteriaColors.gold,
-            ),
+            Icon(Icons.shield_rounded, size: 80.w, color: SoteriaColors.gold),
             SizedBox(height: SoteriaSpacing.lg),
             Text(
               'Welcome to Soteria',

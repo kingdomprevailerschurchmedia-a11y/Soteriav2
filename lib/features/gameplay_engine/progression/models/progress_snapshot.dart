@@ -1,0 +1,72 @@
+/// Immutable state of a player's progression at a specific point in time.
+class ProgressSnapshot {
+  final int score;
+  final int totalXP;
+  final int level;
+  final int currentStreak;
+  final int maxStreak;
+  final int sessionScore;
+  final int sessionStreak;
+  final DateTime? lastDailyStreakUpdate;
+  final DateTime timestamp;
+
+  const ProgressSnapshot({
+    required this.score,
+    required this.totalXP,
+    required this.level,
+    required this.currentStreak,
+    required this.maxStreak,
+    required this.sessionScore,
+    required this.sessionStreak,
+    this.lastDailyStreakUpdate,
+    required this.timestamp,
+  });
+
+  factory ProgressSnapshot.initial() => ProgressSnapshot(
+    score: 0,
+    totalXP: 0,
+    level: 1,
+    currentStreak: 0,
+    maxStreak: 0,
+    sessionScore: 0,
+    sessionStreak: 0,
+    timestamp: DateTime.now(),
+  );
+
+  ProgressSnapshot copyWith({
+    int? score,
+    int? totalXP,
+    int? level,
+    int? currentStreak,
+    int? maxStreak,
+    int? sessionScore,
+    int? sessionStreak,
+    DateTime? lastDailyStreakUpdate,
+    DateTime? timestamp,
+  }) {
+    return ProgressSnapshot(
+      score: score ?? this.score,
+      totalXP: totalXP ?? this.totalXP,
+      level: level ?? this.level,
+      currentStreak: currentStreak ?? this.currentStreak,
+      maxStreak: maxStreak ?? this.maxStreak,
+      sessionScore: sessionScore ?? this.sessionScore,
+      sessionStreak: sessionStreak ?? this.sessionStreak,
+      lastDailyStreakUpdate:
+          lastDailyStreakUpdate ?? this.lastDailyStreakUpdate,
+      timestamp: timestamp ?? this.timestamp,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'score': score,
+    'totalXP': totalXP,
+    'level': level,
+    'currentStreak': currentStreak,
+    'maxStreak': maxStreak,
+    'sessionScore': sessionScore,
+    'sessionStreak': sessionStreak,
+    'lastDailyStreakUpdate': lastDailyStreakUpdate?.toIso8601String(),
+    'timestamp': timestamp.toIso8601String(),
+  };
+}

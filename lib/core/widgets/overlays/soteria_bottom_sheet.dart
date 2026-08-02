@@ -26,11 +26,8 @@ class SoteriaBottomSheet extends StatelessWidget {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (context) => SoteriaBottomSheet(
-        title: title,
-        action: action,
-        child: child,
-      ),
+      builder: (context) =>
+          SoteriaBottomSheet(title: title, action: action, child: child),
     );
   }
 
@@ -64,12 +61,7 @@ class SoteriaBottomSheet extends StatelessWidget {
             padding: EdgeInsets.all(SoteriaSpacing.lg),
             child: Row(
               children: [
-                Expanded(
-                  child: Text(
-                    title,
-                    style: context.titleLarge,
-                  ),
-                ),
+                Expanded(child: Text(title, style: context.titleLarge)),
                 // ignore: use_null_aware_elements
                 if (action != null) action,
               ],

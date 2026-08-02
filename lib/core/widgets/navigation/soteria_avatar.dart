@@ -28,8 +28,8 @@ class SoteriaAvatar extends StatelessWidget {
           color: isGold ? SoteriaColors.gold : SoteriaColors.primary,
           width: 2,
         ),
-        image: imageUrl != null 
-            ? DecorationImage(image: NetworkImage(imageUrl!), fit: BoxFit.cover) 
+        image: imageUrl != null
+            ? DecorationImage(image: NetworkImage(imageUrl!), fit: BoxFit.cover)
             : null,
         color: SoteriaColors.surface,
       ),
@@ -76,10 +76,7 @@ class SoteriaGroupAvatar extends StatelessWidget {
               for (int i = 0; i < avatarsToShow.length; i++)
                 Positioned(
                   left: i * (size * 0.6),
-                  child: SoteriaAvatar(
-                    initials: avatarsToShow[i],
-                    size: size,
-                  ),
+                  child: SoteriaAvatar(initials: avatarsToShow[i], size: size),
                 ),
             ],
           ),

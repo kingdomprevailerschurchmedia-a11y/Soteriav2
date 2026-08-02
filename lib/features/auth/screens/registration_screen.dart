@@ -6,6 +6,8 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/buttons/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/widgets/feedback/soteria_linear_progress.dart';
+import 'package:soteria/core/navigation/navigation_service.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import '../providers/registration_notifier.dart';
 import '../models/registration_draft.dart';
 import '../widgets/step_personal_identity.dart';
@@ -36,9 +38,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
     super.dispose();
   }
 
-  void _onContinue(RegistrationDraft state) {
-    if (state.step == RegistrationStep.success) {
-      // Final navigation (Placeholder)
+  void _onContinue(RegistrationDraft state) async {
+    if (state.step == RegistrationStep.review) {
+      await ref.read(registrationProvider.notifier).completeRegistration();
+      if (mounted && ref.read(registrationProvider).error == null) {
+        ref
+            .read(navigationServiceProvider)
+            .go('${SoteriaRoutes.auth}/verify/emailVerification');
+      }
       return;
     }
 
@@ -71,36 +78,58 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(registrationProvider);
-    final isValid = ref.read(registrationProvider.notifier).isStepValid(state.step);
+    final isValid = ref
+        .read(registrationProvider.notifier)
+        .isStepValid(state.step);
+
+    ref.listen(registrationProvider.select((s) => s.error), (previous, next) {
+      if (next != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next), backgroundColor: SoteriaColors.error),
+        );
+      }
+    });
 
     return SafeGradientScaffold(
       body: Column(
         children: [
           // Header & Progress
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg, vertical: SoteriaSpacing.md),
+            padding: EdgeInsets.symmetric(
+              horizontal: SoteriaSpacing.lg,
+              vertical: SoteriaSpacing.md,
+            ),
             child: Column(
               children: [
                 Stack(
                   alignment: Alignment.center,
                   children: [
-                    if (state.step.index > 0 && state.step != RegistrationStep.success)
+                    if (state.step.index > 0 &&
+                        state.step != RegistrationStep.success)
                       Align(
                         alignment: Alignment.centerLeft,
                         child: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                           onPressed: () => _onBack(state),
                         ),
                       ),
                     Text(
                       'Create Identity',
-                      style: context.titleLarge.copyWith(color: SoteriaColors.gold, fontSize: 18),
+                      style: context.titleLarge.copyWith(
+                        color: SoteriaColors.gold,
+                        fontSize: 18,
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(height: SoteriaSpacing.md),
                 SoteriaLinearProgress(
-                  progress: (state.step.index + 1) / RegistrationStep.values.length,
+                  progress:
+                      (state.step.index + 1) / RegistrationStep.values.length,
                   color: SoteriaColors.gold,
                 ),
               ],
@@ -127,8 +156,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             Padding(
               padding: EdgeInsets.all(SoteriaSpacing.lg),
               child: SoteriaButton.primary(
-                label: state.step == RegistrationStep.review ? 'Create Account' : 'Continue',
+                label: state.step == RegistrationStep.review
+                    ? 'Create Account'
+                    : 'Continue',
                 onPressed: isValid ? () => _onContinue(state) : null,
+                isLoading: state.isLoading,
               ),
             )
           else

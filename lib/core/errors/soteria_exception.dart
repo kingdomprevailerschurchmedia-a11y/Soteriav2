@@ -15,7 +15,8 @@ sealed class SoteriaException implements Exception {
   });
 
   @override
-  String toString() => 'SoteriaException: $message ${code != null ? '[$code]' : ''}';
+  String toString() =>
+      'SoteriaException: $message ${code != null ? '[$code]' : ''}';
 }
 
 class NetworkException extends SoteriaException {

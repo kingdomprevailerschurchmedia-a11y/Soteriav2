@@ -25,7 +25,9 @@ class SoteriaEmptyState extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(SoteriaSpacing.lg), // Reduced from xxl for better small-container fit
+          padding: EdgeInsets.all(
+            SoteriaSpacing.lg,
+          ), // Reduced from xxl for better small-container fit
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.min,
@@ -44,7 +46,9 @@ class SoteriaEmptyState extends StatelessWidget {
               SizedBox(height: SoteriaSpacing.xs), // Reduced from sm
               Text(
                 subtitle,
-                style: context.bodyLarge.copyWith(color: SoteriaColors.textSecondary),
+                style: context.bodyLarge.copyWith(
+                  color: SoteriaColors.textSecondary,
+                ),
                 textAlign: TextAlign.center,
               ),
               if (actionLabel != null && onActionPressed != null) ...[

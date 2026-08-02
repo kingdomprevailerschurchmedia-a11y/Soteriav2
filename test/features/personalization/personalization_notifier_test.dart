@@ -26,16 +26,22 @@ void main() {
     test('setting academic level updates state and persists', () async {
       final notifier = container.read(personalizationProvider.notifier);
       notifier.setAcademicLevel('University');
-      
-      expect(container.read(personalizationProvider).academicLevel, 'University');
+
+      expect(
+        container.read(personalizationProvider).academicLevel,
+        'University',
+      );
       expect(container.read(personalizationProvider).isLevelValid, true);
     });
 
     test('toggling interests updates state', () {
       final notifier = container.read(personalizationProvider.notifier);
       notifier.toggleInterest('Science');
-      expect(container.read(personalizationProvider).interests, contains('Science'));
-      
+      expect(
+        container.read(personalizationProvider).interests,
+        contains('Science'),
+      );
+
       notifier.toggleInterest('Science');
       expect(container.read(personalizationProvider).interests, isEmpty);
     });
@@ -44,7 +50,7 @@ void main() {
       final notifier = container.read(personalizationProvider.notifier);
       final stateBefore = container.read(personalizationProvider);
       expect(stateBefore.isStepValid(0), false);
-      
+
       notifier.setAcademicLevel('Secondary School');
       expect(container.read(personalizationProvider).isStepValid(0), true);
     });

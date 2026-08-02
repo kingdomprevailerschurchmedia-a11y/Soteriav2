@@ -1,26 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../models/identity_provider.dart';
+import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import 'package:soteria/core/logging/logger_service.dart';
+import 'package:soteria/features/auth/providers/auth_providers.dart';
 
 class AuthLandingState {
   final bool isLoading;
   final String? error;
-  final bool isGuestAvailable;
 
-  const AuthLandingState({
-    this.isLoading = false,
-    this.error,
-    this.isGuestAvailable = false,
-  });
+  const AuthLandingState({this.isLoading = false, this.error});
 
-  AuthLandingState copyWith({
-    bool? isLoading,
-    String? error,
-    bool? isGuestAvailable,
-  }) {
+  AuthLandingState copyWith({bool? isLoading, String? error}) {
     return AuthLandingState(
       isLoading: isLoading ?? this.isLoading,
       error: error,
-      isGuestAvailable: isGuestAvailable ?? this.isGuestAvailable,
     );
   }
 }
@@ -35,17 +27,41 @@ class AuthLandingNotifier extends Notifier<AuthLandingState> {
     state = state.copyWith(isLoading: loading);
   }
 
-  void setError(String? error) {
-    state = state.copyWith(error: error);
-  }
-
-  Future<void> signInWithProvider(IdentityProvider provider) async {
+  Future<void> signInWithGoogle() async {
     setLoading(true);
-    // Simulation of provider sign in
-    await Future.delayed(const Duration(seconds: 2));
-    setLoading(false);
+    final stopwatch = Stopwatch()..start();
+
+    try {
+      final useCase = ref.read(googleSignInUseCaseProvider);
+      final result = await useCase.execute();
+
+      if (ref.mounted) {
+        if (result.isSuccess) {
+          ref.read(analyticsProvider).logLogin(loginMethod: 'google');
+          LoggerService.i('Google Authentication successful', feature: 'Auth');
+        } else {
+          final errorMessage =
+              result.error?.userMessage ?? 'Google sign in failed.';
+          state = state.copyWith(error: errorMessage);
+        }
+      }
+    } catch (e, st) {
+      if (ref.mounted) {
+        state = state.copyWith(
+          error: 'An unexpected error occurred during Google sign in.',
+        );
+        ref.read(crashlyticsProvider).recordError(e, st);
+      }
+    } finally {
+      stopwatch.stop();
+      if (ref.mounted) {
+        setLoading(false);
+      }
+    }
   }
 }
 
 final authLandingProvider =
-    NotifierProvider<AuthLandingNotifier, AuthLandingState>(AuthLandingNotifier.new);
+    NotifierProvider<AuthLandingNotifier, AuthLandingState>(
+      AuthLandingNotifier.new,
+    );

@@ -25,11 +25,5 @@ void main() {
       notifier.setLoading(true);
       expect(container.read(authLandingProvider).isLoading, true);
     });
-
-    test('setError updates state', () {
-      final notifier = container.read(authLandingProvider.notifier);
-      notifier.setError('test error');
-      expect(container.read(authLandingProvider).error, 'test error');
-    });
   });
 }

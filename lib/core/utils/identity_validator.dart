@@ -1,7 +1,5 @@
 class IdentityValidator {
-  static final RegExp _emailRegExp = RegExp(
-    r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+',
-  );
+  static final RegExp _emailRegExp = RegExp(r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$');
 
   static final RegExp _usernameRegExp = RegExp(r'^[a-zA-Z0-9_]+$');
 
@@ -14,8 +12,10 @@ class IdentityValidator {
   }
 
   static bool hasMinLength(String password) => password.length >= 8;
-  static bool hasUppercase(String password) => password.contains(RegExp(r'[A-Z]'));
-  static bool hasLowercase(String password) => password.contains(RegExp(r'[a-z]'));
+  static bool hasUppercase(String password) =>
+      password.contains(RegExp(r'[A-Z]'));
+  static bool hasLowercase(String password) =>
+      password.contains(RegExp(r'[a-z]'));
   static bool hasDigit(String password) => password.contains(RegExp(r'[0-9]'));
   static bool hasSpecialChar(String password) =>
       password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));

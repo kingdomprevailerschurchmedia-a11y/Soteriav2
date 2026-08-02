@@ -16,7 +16,7 @@ class StartupPreviewPage extends StatelessWidget {
         const SoteriaText.label('LOADING STATE'),
         SizedBox(height: SoteriaSpacing.md),
         const Center(child: SoteriaLoader(size: 40)),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('BOOTSTRAP ERROR'),
         SizedBox(height: SoteriaSpacing.md),
@@ -31,7 +31,7 @@ class StartupPreviewPage extends StatelessWidget {
             onRetry: () {},
           ),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('ANIMATION PREVIEW'),
         SizedBox(height: SoteriaSpacing.md),

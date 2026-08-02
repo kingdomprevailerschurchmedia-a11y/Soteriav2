@@ -9,7 +9,10 @@ class SoteriaTypography {
 
   static TextStyle get _baseStyle {
     if (_isTest) {
-      return const TextStyle(color: SoteriaColors.textPrimary, fontFamily: 'Roboto');
+      return const TextStyle(
+        color: SoteriaColors.textPrimary,
+        fontFamily: 'Roboto',
+      );
     }
     return GoogleFonts.inter(color: SoteriaColors.textPrimary);
   }
@@ -67,7 +70,7 @@ class SoteriaTypography {
 
 extension SoteriaTypographyExtension on BuildContext {
   TextTheme get textTheme => Theme.of(this).textTheme;
-  
+
   TextStyle get displayLarge => textTheme.displayLarge!;
   TextStyle get displayMedium => textTheme.displayMedium!;
   TextStyle get headlineMedium => textTheme.headlineMedium!;
@@ -79,5 +82,6 @@ extension SoteriaTypographyExtension on BuildContext {
   TextStyle get labelSmall => textTheme.labelSmall!;
 
   /// Clamps the text scale factor to prevent extreme accessibility settings from breaking layouts.
-  double get safeTextScale => MediaQuery.textScalerOf(this).scale(1.0).clamp(0.8, 1.4);
+  double get safeTextScale =>
+      MediaQuery.textScalerOf(this).scale(1.0).clamp(0.8, 1.4);
 }

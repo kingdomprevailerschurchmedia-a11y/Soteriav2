@@ -17,18 +17,18 @@ class StepSummary extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       children: [
-        Text(
-          'Review your profile',
-          style: context.headlineMedium,
-        ),
+        Text('Review your profile', style: context.headlineMedium),
         SizedBox(height: SoteriaSpacing.xl),
-        
+
         _SummarySection(
           title: 'Academic Level',
           onEdit: () => ref.read(personalizationProvider.notifier).setStep(0),
-          child: Text(state.academicLevel ?? 'Not selected', style: context.bodyLarge),
+          child: Text(
+            state.academicLevel ?? 'Not selected',
+            style: context.bodyLarge,
+          ),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         _SummarySection(
           title: 'Interests',
@@ -36,26 +36,36 @@ class StepSummary extends ConsumerWidget {
           child: Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: state.interests.map((i) => SoteriaChip(label: i, isSelected: true)).toList(),
+            children: state.interests
+                .map((i) => SoteriaChip(label: i, isSelected: true))
+                .toList(),
           ),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         _SummarySection(
           title: 'Your Goals',
           onEdit: () => ref.read(personalizationProvider.notifier).setStep(2),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: state.goals.map((g) => Padding(
-              padding: const EdgeInsets.only(bottom: 4),
-              child: Row(
-                children: [
-                  const Icon(Icons.check_rounded, color: SoteriaColors.gold, size: 16),
-                  const SizedBox(width: 8),
-                  Text(g, style: context.bodyMedium),
-                ],
-              ),
-            )).toList(),
+            children: state.goals
+                .map(
+                  (g) => Padding(
+                    padding: const EdgeInsets.only(bottom: 4),
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.check_rounded,
+                          color: SoteriaColors.gold,
+                          size: 16,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(g, style: context.bodyMedium),
+                      ],
+                    ),
+                  ),
+                )
+                .toList(),
           ),
         ),
       ],
@@ -92,17 +102,17 @@ class _SummarySection extends StatelessWidget {
             ),
             TextButton(
               onPressed: onEdit,
-              child: const Text('Edit', style: TextStyle(color: SoteriaColors.muted)),
+              child: const Text(
+                'Edit',
+                style: TextStyle(color: SoteriaColors.muted),
+              ),
             ),
           ],
         ),
         const SizedBox(height: 8),
         GlassSurface(
           padding: EdgeInsets.all(SoteriaSpacing.md),
-          child: SizedBox(
-            width: double.infinity,
-            child: child,
-          ),
+          child: SizedBox(width: double.infinity, child: child),
         ),
       ],
     );

@@ -22,7 +22,7 @@ class PersonalizationPreviewPage extends StatelessWidget {
           onPressed: () => context.push(SoteriaRoutes.personalization),
         ),
         SizedBox(height: SoteriaSpacing.xl),
-        
+
         Text('Progress Bar', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
@@ -36,7 +36,7 @@ class PersonalizationPreviewPage extends StatelessWidget {
             ],
           ),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         Text('Selection Cards', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
@@ -58,7 +58,7 @@ class PersonalizationPreviewPage extends StatelessWidget {
             ),
           ],
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         Text('Responsiveness', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
@@ -66,9 +66,14 @@ class PersonalizationPreviewPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Adaptive Grid', style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+              Text(
+                'Adaptive Grid',
+                style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+              ),
               const SizedBox(height: 8),
-              const Text('The Interest selection uses a Wrap widget to automatically adapt chip layout based on screen width.'),
+              const Text(
+                'The Interest selection uses a Wrap widget to automatically adapt chip layout based on screen width.',
+              ),
             ],
           ),
         ),

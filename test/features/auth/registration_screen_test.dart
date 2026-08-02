@@ -12,9 +12,7 @@ void main() {
     return ProviderScope(
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
-        builder: (context, _) => MaterialApp(
-          home: child,
-        ),
+        builder: (context, _) => MaterialApp(home: child),
       ),
     );
   }
@@ -29,7 +27,9 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(createTestWidget(child: const RegistrationScreen()));
+      await tester.pumpWidget(
+        createTestWidget(child: const RegistrationScreen()),
+      );
       await tester.pumpAndSettle();
 
       expect(find.byType(StepPersonalIdentity), findsOneWidget);

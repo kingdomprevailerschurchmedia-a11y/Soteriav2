@@ -20,25 +20,30 @@ class AuthLandingPreviewPage extends StatelessWidget {
           onPressed: () => context.push(SoteriaRoutes.auth),
         ),
         SizedBox(height: SoteriaSpacing.xl),
-        
+
         Text('Hero Section', style: Theme.of(context).textTheme.titleMedium),
-        const SoteriaCard(
-          padding: EdgeInsets.zero,
-          child: AuthHeroSection(),
-        ),
-        
+        const SoteriaCard(padding: EdgeInsets.zero, child: AuthHeroSection()),
+
         SizedBox(height: SoteriaSpacing.xl),
-        Text('Feature Carousel', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          'Feature Carousel',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         SizedBox(height: SoteriaSpacing.md),
         const FeatureCarousel(),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
-        Text('Platform Buttons', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          'Platform Buttons',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
           child: Column(
             children: [
-              Text('Note: Apple button hidden on non-iOS by default in component logic.'),
+              Text(
+                'Note: Apple button hidden on non-iOS by default in component logic.',
+              ),
             ],
           ),
         ),

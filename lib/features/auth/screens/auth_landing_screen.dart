@@ -21,12 +21,20 @@ class AuthLandingScreen extends ConsumerWidget {
     final state = ref.watch(authLandingProvider);
     final notifier = ref.read(authLandingProvider.notifier);
 
+    ref.listen(authLandingProvider.select((s) => s.error), (previous, next) {
+      if (next != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next), backgroundColor: SoteriaColors.error),
+        );
+      }
+    });
+
     return SafeGradientScaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
             const AuthHeroSection(),
-            
+
             Padding(
               padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xl),
               child: Column(
@@ -38,9 +46,7 @@ class AuthLandingScreen extends ConsumerWidget {
                       icon: Icons.g_mobiledata_rounded,
                       type: IdentityProviderType.google,
                     ),
-                    onTap: () => notifier.signInWithProvider(
-                      const IdentityProvider(id: 'google', name: 'Google', icon: Icons.abc, type: IdentityProviderType.google)
-                    ),
+                    onTap: () => notifier.signInWithGoogle(),
                     isLoading: state.isLoading,
                   ),
                   AuthProviderButton(
@@ -55,15 +61,17 @@ class AuthLandingScreen extends ConsumerWidget {
                   SoteriaButton.ghost(
                     label: 'Continue with Email',
                     icon: Icons.email_outlined,
-                    onPressed: () => ref.read(navigationServiceProvider).push('${SoteriaRoutes.auth}/login'),
+                    onPressed: () => ref
+                        .read(navigationServiceProvider)
+                        .push('${SoteriaRoutes.auth}/login'),
                   ),
                   SizedBox(height: SoteriaSpacing.lg),
-                  
+
                   // Feature Carousel
                   const FeatureCarousel(),
-                  
+
                   SizedBox(height: SoteriaSpacing.xxl),
-                  
+
                   // Secondary Actions
                   Wrap(
                     alignment: WrapAlignment.center,
@@ -71,11 +79,15 @@ class AuthLandingScreen extends ConsumerWidget {
                     children: [
                       Text(
                         "Don't have an account?",
-                        style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                        style: context.bodySmall.copyWith(
+                          color: SoteriaColors.muted,
+                        ),
                       ),
                       SoteriaButton.text(
                         label: 'Create One',
-                        onPressed: () => ref.read(navigationServiceProvider).push('${SoteriaRoutes.auth}/register'),
+                        onPressed: () => ref
+                            .read(navigationServiceProvider)
+                            .push('${SoteriaRoutes.auth}/register'),
                       ),
                     ],
                   ),
@@ -83,13 +95,16 @@ class AuthLandingScreen extends ConsumerWidget {
                     label: 'Continue as Guest (Coming Soon)',
                     onPressed: null,
                   ),
-                  
+
                   SizedBox(height: SoteriaSpacing.xl),
-                  
+
                   // Legal
                   Text(
                     'By continuing, you agree to our',
-                    style: context.bodySmall.copyWith(fontSize: 10, color: SoteriaColors.muted),
+                    style: context.bodySmall.copyWith(
+                      fontSize: 10,
+                      color: SoteriaColors.muted,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   Row(
@@ -145,7 +160,10 @@ class _LegalDivider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       '•',
-      style: TextStyle(color: SoteriaColors.muted.withValues(alpha: 0.5), fontSize: 8),
+      style: TextStyle(
+        color: SoteriaColors.muted.withValues(alpha: 0.5),
+        fontSize: 8,
+      ),
     );
   }
 }

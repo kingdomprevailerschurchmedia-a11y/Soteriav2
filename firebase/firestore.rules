@@ -1,0 +1,111 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------------------
+    // HELPERS
+    // -------------------------------------------------------------------------
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isModerator() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'moderator'];
+    }
+
+    // Checks if the request is trying to modify restricted fields
+    function isNotModifying(fields) {
+      return !(request.resource.data.diff(resource.data).affectedKeys().hasAny(fields));
+    }
+
+    // -------------------------------------------------------------------------
+    // DEFAULT DENY
+    // -------------------------------------------------------------------------
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // -------------------------------------------------------------------------
+    // COLLECTIONS
+    // -------------------------------------------------------------------------
+
+    // USERS: Profile and Progression
+    match /users/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+
+      // Allow creation for new users (Bootstrap)
+      allow create: if isOwner(userId) &&
+                    request.resource.data.level == 1 &&
+                    request.resource.data.xp == 0 &&
+                    request.resource.data.coins == 0 &&
+                    request.resource.data.role == 'user' &&
+                    request.resource.data.accountStatus == 'active';
+
+      // Restrict updates to safe fields only
+      allow update: if isOwner(userId) &&
+                    isNotModifying([
+                      'xp', 'level', 'coins', 'badges', 'achievements',
+                      'gamesPlayed', 'gamesWon', 'accuracy', 'currentStreak',
+                      'highestStreak', 'role', 'accountStatus', 'createdAt', 'email'
+                    ]);
+    }
+
+    // QUESTIONS: Read-only for authenticated users
+    match /questions/{questionId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // CATEGORIES: Read-only for everyone
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // LEADERBOARDS: Read-only for authenticated users
+    match /leaderboards/{boardId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // TOURNAMENTS: Read-only for authenticated users
+    match /tournaments/{tournamentId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // ANNOUNCEMENTS: Publicly readable
+    match /announcements/{announcementId} {
+      allow read: if true;
+      allow write: if isModerator();
+    }
+
+    // SYSTEM CONFIG: App settings and feature flags
+    match /system_config/{configId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // QUESTION PACKS: Premium or downloadable content
+    match /question_packs/{packId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // PRACTICE SESSIONS: Ephemeral session data
+    match /practice_sessions/{sessionId} {
+      allow read, write: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}

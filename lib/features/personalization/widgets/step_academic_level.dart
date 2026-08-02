@@ -29,15 +29,17 @@ class StepAcademicLevel extends ConsumerWidget {
           style: context.headlineMedium,
         ),
         SizedBox(height: SoteriaSpacing.xl),
-        ...options.map((opt) => Padding(
-          padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-          child: SelectionCard(
-            title: opt['title'] as String,
-            icon: opt['icon'] as IconData,
-            isSelected: state.academicLevel == opt['title'],
-            onTap: () => notifier.setAcademicLevel(opt['title'] as String),
+        ...options.map(
+          (opt) => Padding(
+            padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+            child: SelectionCard(
+              title: opt['title'] as String,
+              icon: opt['icon'] as IconData,
+              isSelected: state.academicLevel == opt['title'],
+              onTap: () => notifier.setAcademicLevel(opt['title'] as String),
+            ),
           ),
-        )),
+        ),
       ],
     );
   }

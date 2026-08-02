@@ -28,11 +28,16 @@ class PersonalizationState {
 
   bool isStepValid(int step) {
     switch (step) {
-      case 0: return isLevelValid;
-      case 1: return isInterestsValid;
-      case 2: return isGoalsValid;
-      case 3: return true; // Notifications optional
-      default: return true;
+      case 0:
+        return isLevelValid;
+      case 1:
+        return isInterestsValid;
+      case 2:
+        return isGoalsValid;
+      case 3:
+        return true; // Notifications optional
+      default:
+        return true;
     }
   }
 

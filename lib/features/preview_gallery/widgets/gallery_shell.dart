@@ -53,11 +53,11 @@ class _GalleryShellState extends ConsumerState<GalleryShell> {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                width: settings.orientation == Orientation.portrait 
-                    ? settings.device.size.width.w 
+                width: settings.orientation == Orientation.portrait
+                    ? settings.device.size.width.w
                     : settings.device.size.height.w,
-                height: settings.orientation == Orientation.portrait 
-                    ? settings.device.size.height.h 
+                height: settings.orientation == Orientation.portrait
+                    ? settings.device.size.height.h
                     : settings.device.size.width.h,
                 decoration: BoxDecoration(
                   color: SoteriaColors.backgroundBottomRight,
@@ -65,7 +65,7 @@ class _GalleryShellState extends ConsumerState<GalleryShell> {
                     BoxShadow(
                       color: Colors.white.withValues(alpha: 0.1),
                       blurRadius: 40,
-                    )
+                    ),
                   ],
                 ),
                 child: ClipRect(
@@ -76,14 +76,15 @@ class _GalleryShellState extends ConsumerState<GalleryShell> {
                     ),
                     child: Theme(
                       data: Theme.of(context).copyWith(
-                        visualDensity: settings.highContrast 
-                            ? VisualDensity.comfortable 
+                        visualDensity: settings.highContrast
+                            ? VisualDensity.comfortable
                             : VisualDensity.standard,
                       ),
                       child: Stack(
                         children: [
                           Positioned.fill(child: widget.child),
-                          if (settings.showLayoutBounds) _buildLayoutBoundsOverlay(),
+                          if (settings.showLayoutBounds)
+                            _buildLayoutBoundsOverlay(),
                           if (settings.showSpacingGrid) _buildGridOverlay(),
                         ],
                       ),
@@ -109,19 +110,13 @@ class _GalleryShellState extends ConsumerState<GalleryShell> {
 
   Widget _buildLayoutBoundsOverlay() {
     return IgnorePointer(
-      child: CustomPaint(
-        painter: _LayoutBoundsPainter(),
-        size: Size.infinite,
-      ),
+      child: CustomPaint(painter: _LayoutBoundsPainter(), size: Size.infinite),
     );
   }
 
   Widget _buildGridOverlay() {
     return IgnorePointer(
-      child: CustomPaint(
-        painter: _GridPainter(),
-        size: Size.infinite,
-      ),
+      child: CustomPaint(painter: _GridPainter(), size: Size.infinite),
     );
   }
 }
@@ -140,9 +135,12 @@ class _GallerySettingsPanel extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('PREVIEW SETTINGS', style: context.labelLarge.copyWith(color: SoteriaColors.gold)),
+          Text(
+            'PREVIEW SETTINGS',
+            style: context.labelLarge.copyWith(color: SoteriaColors.gold),
+          ),
           SizedBox(height: SoteriaSpacing.lgStatic),
-          
+
           // Device Selection
           _buildDropdown<PreviewDevice>(
             label: 'Device',
@@ -151,16 +149,18 @@ class _GallerySettingsPanel extends ConsumerWidget {
             onChanged: (val) => notifier.update((s) => s.copyWith(device: val)),
             itemLabel: (d) => d.label,
           ),
-          
+
           // Orientation
           SwitchListTile(
             title: const Text('Landscape'),
             value: settings.orientation == Orientation.landscape,
-            onChanged: (val) => notifier.update((s) => s.copyWith(
-              orientation: val ? Orientation.landscape : Orientation.portrait,
-            )),
+            onChanged: (val) => notifier.update(
+              (s) => s.copyWith(
+                orientation: val ? Orientation.landscape : Orientation.portrait,
+              ),
+            ),
           ),
-          
+
           // Text Scale
           Text('Text Scale: ${settings.textScale.toStringAsFixed(1)}'),
           Slider(
@@ -168,23 +168,26 @@ class _GallerySettingsPanel extends ConsumerWidget {
             min: 0.5,
             max: 2.5,
             divisions: 20,
-            onChanged: (val) => notifier.update((s) => s.copyWith(textScale: val)),
+            onChanged: (val) =>
+                notifier.update((s) => s.copyWith(textScale: val)),
           ),
 
           const Divider(),
-          
+
           // Dev Tools
           CheckboxListTile(
             title: const Text('Show Layout Bounds'),
             value: settings.showLayoutBounds,
-            onChanged: (val) => notifier.update((s) => s.copyWith(showLayoutBounds: val)),
+            onChanged: (val) =>
+                notifier.update((s) => s.copyWith(showLayoutBounds: val)),
           ),
           CheckboxListTile(
             title: const Text('Show Spacing Grid (8px)'),
             value: settings.showSpacingGrid,
-            onChanged: (val) => notifier.update((s) => s.copyWith(showSpacingGrid: val)),
+            onChanged: (val) =>
+                notifier.update((s) => s.copyWith(showSpacingGrid: val)),
           ),
-          
+
           SizedBox(height: SoteriaSpacing.xlStatic),
         ],
       ),
@@ -203,12 +206,19 @@ class _GallerySettingsPanel extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(fontSize: 12, color: SoteriaColors.muted)),
+          Text(
+            label,
+            style: const TextStyle(fontSize: 12, color: SoteriaColors.muted),
+          ),
           DropdownButton<T>(
             value: value,
             isExpanded: true,
             underline: Container(height: 1, color: SoteriaColors.border),
-            items: items.map((i) => DropdownMenuItem(value: i, child: Text(itemLabel(i)))).toList(),
+            items: items
+                .map(
+                  (i) => DropdownMenuItem(value: i, child: Text(itemLabel(i))),
+                )
+                .toList(),
             onChanged: onChanged,
           ),
         ],
@@ -243,7 +253,7 @@ class _LayoutBoundsPainter extends CustomPainter {
       ..color = Colors.pink.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
-    
+
     canvas.drawRect(Offset.zero & size, paint);
   }
 

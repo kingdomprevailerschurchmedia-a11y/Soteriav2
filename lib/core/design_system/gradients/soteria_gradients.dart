@@ -16,10 +16,7 @@ class SoteriaGradients {
   static const LinearGradient competition = LinearGradient(
     begin: Alignment.topCenter,
     end: Alignment.bottomCenter,
-    colors: [
-      SoteriaColors.primary,
-      SoteriaColors.secondary,
-    ],
+    colors: [SoteriaColors.primary, SoteriaColors.secondary],
   );
 
   static const LinearGradient reward = LinearGradient(
@@ -43,9 +40,6 @@ class SoteriaGradients {
   static LinearGradient button = const LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [
-      SoteriaColors.primary,
-      SoteriaColors.secondary,
-    ],
+    colors: [SoteriaColors.primary, SoteriaColors.secondary],
   );
 }

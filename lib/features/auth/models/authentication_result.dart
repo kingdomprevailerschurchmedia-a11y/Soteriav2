@@ -8,17 +8,17 @@ class AuthenticationResult {
   final String? userId;
 
   const AuthenticationResult.success(this.userId)
-      : status = AuthenticationStatus.authenticated,
-        error = null;
+    : status = AuthenticationStatus.authenticated,
+      error = null;
 
   const AuthenticationResult.failure(this.error)
-      : status = AuthenticationStatus.unauthenticated,
-        userId = null;
+    : status = AuthenticationStatus.unauthenticated,
+      userId = null;
 
   const AuthenticationResult.unverified()
-      : status = AuthenticationStatus.unverified,
-        error = null,
-        userId = null;
+    : status = AuthenticationStatus.unverified,
+      error = null,
+      userId = null;
 
   bool get isSuccess => status == AuthenticationStatus.authenticated;
 }

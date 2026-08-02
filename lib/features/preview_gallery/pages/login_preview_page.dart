@@ -19,25 +19,33 @@ class LoginPreviewPage extends StatelessWidget {
           onPressed: () => context.push('${SoteriaRoutes.auth}/login'),
         ),
         SizedBox(height: SoteriaSpacing.xl),
-        
-        Text('Hero Section (Default)', style: Theme.of(context).textTheme.titleMedium),
-        const SoteriaCard(
-          padding: EdgeInsets.zero,
-          child: LoginHeroSection(),
+
+        Text(
+          'Hero Section (Default)',
+          style: Theme.of(context).textTheme.titleMedium,
         ),
-        
+        const SoteriaCard(padding: EdgeInsets.zero, child: LoginHeroSection()),
+
         SizedBox(height: SoteriaSpacing.xl),
-        Text('Hero Section (Personalized)', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          'Hero Section (Personalized)',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         const SoteriaCard(
           padding: EdgeInsets.zero,
           child: LoginHeroSection(userName: 'Koffi'),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
-        Text('Identity Abstraction', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          'Identity Abstraction',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
-          child: Text('The login architecture is decoupled from the backend. The UI interacts with a LoginRepository interface, allowing for seamless transition from mock data to real authentication services.'),
+          child: Text(
+            'The login architecture is decoupled from the backend. The UI interacts with a LoginRepository interface, allowing for seamless transition from mock data to real authentication services.',
+          ),
         ),
       ],
     );

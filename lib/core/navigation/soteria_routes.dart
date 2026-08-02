@@ -3,13 +3,13 @@ class SoteriaRoutes {
   static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String personalization = '/personalization';
-  
+
   // Authentication
   static const String auth = '/auth';
   static const String login = '/auth/login';
   static const String register = '/auth/register';
   static const String forgotPassword = '/auth/forgot-password';
-  
+
   // Main App (Shell)
   static const String main = '/app';
   static const String practice = '/app/practice';
@@ -20,7 +20,7 @@ class SoteriaRoutes {
   static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
   static const String settings = '/app/settings';
-  
+
   // Developer Gallery
   static const String previewGallery = '/preview-gallery';
   static const String tokens = '/preview-gallery/tokens';
@@ -38,4 +38,8 @@ class SoteriaRoutes {
   static const String startup = '/preview-gallery/startup';
   static const String navigationFoundation = '/preview-gallery/nav-foundation';
   static const String diagnostics = '/preview-gallery/diagnostics';
+  static const String player = '/preview-gallery/player';
+  static const String notifications = '/notifications';
+  static const String configDebug = '/preview-gallery/config-debug';
+  static const String securityStatus = '/preview-gallery/security-status';
 }

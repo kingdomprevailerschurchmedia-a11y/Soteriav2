@@ -22,22 +22,22 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
     {
       'title': 'Daily Challenges',
       'icon': Icons.bolt_rounded,
-      'description': 'Sharpen your mind every single day.'
+      'description': 'Sharpen your mind every single day.',
     },
     {
       'title': 'Leaderboards',
       'icon': Icons.leaderboard_rounded,
-      'description': 'Compete nationally and rise to the top.'
+      'description': 'Compete nationally and rise to the top.',
     },
     {
       'title': 'Achievements',
       'icon': Icons.emoji_events_rounded,
-      'description': 'Earn prestigious badges for your growth.'
+      'description': 'Earn prestigious badges for your growth.',
     },
     {
       'title': 'Tournaments',
       'icon': Icons.military_tech_rounded,
-      'description': 'Join high-stakes competitive events.'
+      'description': 'Join high-stakes competitive events.',
     },
   ];
 
@@ -88,7 +88,11 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                     padding: EdgeInsets.all(12.w),
                     child: Row(
                       children: [
-                        Icon(feature['icon'], color: SoteriaColors.gold, size: 24.w),
+                        Icon(
+                          feature['icon'],
+                          color: SoteriaColors.gold,
+                          size: 24.w,
+                        ),
                         SizedBox(width: 16.w),
                         Expanded(
                           child: Column(

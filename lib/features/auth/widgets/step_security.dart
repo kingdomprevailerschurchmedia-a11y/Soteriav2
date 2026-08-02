@@ -41,7 +41,10 @@ class _StepSecurityState extends ConsumerState<StepSecurity> {
       children: [
         Text('Security', style: context.headlineMedium),
         SizedBox(height: SoteriaSpacing.sm),
-        Text('Protect your account with a strong password.', style: context.bodyMedium),
+        Text(
+          'Protect your account with a strong password.',
+          style: context.bodyMedium,
+        ),
         SizedBox(height: SoteriaSpacing.xl),
         SoteriaTextField(
           controller: _passwordController,

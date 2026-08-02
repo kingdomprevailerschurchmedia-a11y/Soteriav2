@@ -22,7 +22,9 @@ class AuthProviderButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (provider.type == IdentityProviderType.apple && !kIsWeb && !Platform.isIOS) {
+    if (provider.type == IdentityProviderType.apple &&
+        !kIsWeb &&
+        !Platform.isIOS) {
       return const SizedBox.shrink();
     }
 
@@ -32,14 +34,14 @@ class AuthProviderButton extends StatelessWidget {
         onTap: isLoading ? null : onTap,
         child: GlassSurface(
           borderRadius: BorderRadius.circular(16.r),
-          child: Padding(
+          child: Container(
+            width: double.infinity,
             padding: EdgeInsets.symmetric(
               vertical: 14.h,
               horizontal: SoteriaSpacing.lg,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
               children: [
                 if (isLoading)
                   SizedBox(
@@ -47,24 +49,19 @@ class AuthProviderButton extends StatelessWidget {
                     width: 20.w,
                     child: const CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(SoteriaColors.gold),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        SoteriaColors.gold,
+                      ),
                     ),
                   )
                 else ...[
-                  Icon(
-                    provider.icon,
-                    color: Colors.white,
-                    size: 20.w,
-                  ),
+                  Icon(provider.icon, color: Colors.white, size: 20.w),
                   SizedBox(width: SoteriaSpacing.md),
-                  Flexible(
-                    child: Text(
-                      provider.name,
-                      style: context.labelLarge.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                  Text(
+                    provider.name,
+                    style: context.labelLarge.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],

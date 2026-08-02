@@ -21,20 +21,20 @@ class AppDiagnostics {
   });
 
   Map<String, String> toMap() => {
-        'App Version': appVersion,
-        'Build Number': buildNumber,
-        'Device': deviceModel,
-        'OS Version': osVersion,
-        'Build Mode': flutterMode,
-        'Uptime': DateTime.now().difference(startTime).toString().split('.').first,
-      };
+    'App Version': appVersion,
+    'Build Number': buildNumber,
+    'Device': deviceModel,
+    'OS Version': osVersion,
+    'Build Mode': flutterMode,
+    'Uptime': DateTime.now().difference(startTime).toString().split('.').first,
+  };
 }
 
 class DiagnosticsService {
   static final DateTime _startTime = DateTime.now();
   static late final PackageInfo _packageInfo;
   static final DeviceInfoPlugin _deviceInfo = DeviceInfoPlugin();
-  
+
   static String? _cachedDeviceModel;
   static String? _cachedOsVersion;
   static bool _initialized = false;
@@ -82,7 +82,9 @@ class DiagnosticsService {
       buildNumber: _packageInfo.buildNumber,
       deviceModel: model,
       osVersion: os,
-      flutterMode: kDebugMode ? 'Debug' : (kProfileMode ? 'Profile' : 'Release'),
+      flutterMode: kDebugMode
+          ? 'Debug'
+          : (kProfileMode ? 'Profile' : 'Release'),
       startTime: _startTime,
     );
   }

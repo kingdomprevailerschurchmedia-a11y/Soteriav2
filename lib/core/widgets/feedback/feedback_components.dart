@@ -23,7 +23,10 @@ class SoteriaFeedback {
         elevation: 0,
         duration: duration,
         content: Container(
-          padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md, vertical: SoteriaSpacing.sm),
+          padding: EdgeInsets.symmetric(
+            horizontal: SoteriaSpacing.md,
+            vertical: SoteriaSpacing.sm,
+          ),
           decoration: BoxDecoration(
             color: SoteriaColors.elevatedSurface,
             borderRadius: SoteriaRadius.brMd,

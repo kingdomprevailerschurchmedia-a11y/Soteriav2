@@ -14,24 +14,15 @@ class ButtonsPreviewPage extends StatelessWidget {
       children: [
         const SoteriaText.label('PRIMARY BUTTON'),
         SizedBox(height: SoteriaSpacing.md),
-        SoteriaButton.primary(
-          label: 'Primary Action',
-          onPressed: () {},
-        ),
+        SoteriaButton.primary(label: 'Primary Action', onPressed: () {}),
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('SECONDARY BUTTON'),
         SizedBox(height: SoteriaSpacing.md),
-        SoteriaButton.secondary(
-          label: 'Secondary Action',
-          onPressed: () {},
-        ),
+        SoteriaButton.secondary(label: 'Secondary Action', onPressed: () {}),
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('GHOST BUTTON'),
         SizedBox(height: SoteriaSpacing.md),
-        SoteriaButton.ghost(
-          label: 'Outline Action',
-          onPressed: () {},
-        ),
+        SoteriaButton.ghost(label: 'Outline Action', onPressed: () {}),
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('LOADING STATE'),
         SizedBox(height: SoteriaSpacing.md),
@@ -43,10 +34,7 @@ class ButtonsPreviewPage extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('DISABLED STATE'),
         SizedBox(height: SoteriaSpacing.md),
-        const SoteriaButton.primary(
-          label: 'Disabled Action',
-          onPressed: null,
-        ),
+        const SoteriaButton.primary(label: 'Disabled Action', onPressed: null),
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('ICON BUTTONS'),
         SizedBox(height: SoteriaSpacing.md),
@@ -54,16 +42,17 @@ class ButtonsPreviewPage extends StatelessWidget {
           children: [
             SoteriaIconButton(icon: Icons.add, onPressed: () {}),
             SizedBox(width: SoteriaSpacing.md),
-            SoteriaIconButton(icon: Icons.share, isGlass: true, onPressed: () {}),
+            SoteriaIconButton(
+              icon: Icons.share,
+              isGlass: true,
+              onPressed: () {},
+            ),
           ],
         ),
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('TEXT BUTTON'),
         SizedBox(height: SoteriaSpacing.md),
-        SoteriaButton.text(
-          label: 'Need help?',
-          onPressed: () {},
-        ),
+        SoteriaButton.text(label: 'Need help?', onPressed: () {}),
       ],
     );
   }

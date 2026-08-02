@@ -22,7 +22,9 @@ class SoteriaBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: BoxConstraints(maxWidth: 120.0.w), // Added constraint for safety
+      constraints: BoxConstraints(
+        maxWidth: 120.0.w,
+      ), // Added constraint for safety
       padding: EdgeInsets.symmetric(
         horizontal: isSmall ? SoteriaSpacing.sm : SoteriaSpacing.md,
         vertical: isSmall ? 2.0 : 4.0,
@@ -30,9 +32,7 @@ class SoteriaBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: _getBackgroundColor().withValues(alpha: 0.1),
         borderRadius: SoteriaRadius.brFull,
-        border: Border.all(
-          color: _getBackgroundColor().withValues(alpha: 0.2),
-        ),
+        border: Border.all(color: _getBackgroundColor().withValues(alpha: 0.2)),
       ),
       child: Text(
         label.toUpperCase(),

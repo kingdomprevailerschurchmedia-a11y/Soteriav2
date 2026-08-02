@@ -8,13 +8,14 @@ import 'package:soteria/features/onboarding/widgets/onboarding_page.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_indicator.dart';
 
 void main() {
-  Widget createTestWidget({required Widget child, Size size = const Size(390, 844)}) {
+  Widget createTestWidget({
+    required Widget child,
+    Size size = const Size(390, 844),
+  }) {
     return ProviderScope(
       child: ScreenUtilInit(
         designSize: size,
-        builder: (context, _) => MaterialApp(
-          home: child,
-        ),
+        builder: (context, _) => MaterialApp(home: child),
       ),
     );
   }
@@ -28,11 +29,9 @@ void main() {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
-      
+
       await tester.pumpWidget(
-        createTestWidget(
-          child: const OnboardingScreen(),
-        ),
+        createTestWidget(child: const OnboardingScreen()),
       );
       await tester.pump();
 
@@ -49,9 +48,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(
-        createTestWidget(
-          child: const OnboardingScreen(),
-        ),
+        createTestWidget(child: const OnboardingScreen()),
       );
       await tester.pump();
 
@@ -68,9 +65,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(
-        createTestWidget(
-          child: const OnboardingScreen(),
-        ),
+        createTestWidget(child: const OnboardingScreen()),
       );
       await tester.pump();
 
@@ -94,9 +89,7 @@ void main() {
       addTearDown(tester.view.resetPhysicalSize);
 
       await tester.pumpWidget(
-        createTestWidget(
-          child: const OnboardingScreen(),
-        ),
+        createTestWidget(child: const OnboardingScreen()),
       );
       await tester.pump();
 

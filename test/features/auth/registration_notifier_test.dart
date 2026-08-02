@@ -35,7 +35,7 @@ void main() {
 
     test('validation works for each step', () {
       final notifier = container.read(registrationProvider.notifier);
-      
+
       // Personal Step
       expect(notifier.isStepValid(RegistrationStep.personal), false);
       notifier.updatePersonal(first: 'John', last: 'Doe');

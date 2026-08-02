@@ -36,7 +36,9 @@ class StepRegistrationSuccess extends StatelessWidget {
               delay: const Duration(milliseconds: 400),
               child: Text(
                 'Registration Complete',
-                style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
+                style: context.headlineMedium.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),
@@ -45,7 +47,9 @@ class StepRegistrationSuccess extends StatelessWidget {
               delay: const Duration(milliseconds: 600),
               child: Text(
                 'Welcome to the future of learning. We\'ve sent a verification link to your email.',
-                style: context.bodyLarge.copyWith(color: SoteriaColors.textSecondary),
+                style: context.bodyLarge.copyWith(
+                  color: SoteriaColors.textSecondary,
+                ),
                 textAlign: TextAlign.center,
               ),
             ),

@@ -20,8 +20,11 @@ class OnboardingPreviewPage extends StatelessWidget {
           onPressed: () => context.push(SoteriaRoutes.onboarding),
         ),
         SizedBox(height: SoteriaSpacing.xl),
-        
-        Text('Progress Indicators', style: Theme.of(context).textTheme.titleMedium),
+
+        Text(
+          'Progress Indicators',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
           child: Column(
@@ -32,7 +35,7 @@ class OnboardingPreviewPage extends StatelessWidget {
             ],
           ),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         Text('Responsiveness', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
@@ -40,9 +43,14 @@ class OnboardingPreviewPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Tablet Mode', style: TextStyle(fontSize: 10.sp, color: Colors.grey)),
+              Text(
+                'Tablet Mode',
+                style: TextStyle(fontSize: 10.sp, color: Colors.grey),
+              ),
               const SizedBox(height: 8),
-              const Text('The onboarding uses PageView and Flexible/Spacer widgets to ensure content stays centered and readable on larger screens without hardcoded pixel overflows.'),
+              const Text(
+                'The onboarding uses PageView and Flexible/Spacer widgets to ensure content stays centered and readable on larger screens without hardcoded pixel overflows.',
+              ),
             ],
           ),
         ),

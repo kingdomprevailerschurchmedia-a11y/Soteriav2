@@ -13,7 +13,8 @@ class UnknownRouteScreen extends StatelessWidget {
     return SafeGradientScaffold(
       body: SoteriaEmptyState(
         title: '404 - Lost in Space',
-        subtitle: 'The destination "$location" does not exist in the Soteria universe.',
+        subtitle:
+            'The destination "$location" does not exist in the Soteria universe.',
         icon: Icons.map_outlined,
         actionLabel: 'Back to Safety',
         onActionPressed: () => context.go('/'),

@@ -12,7 +12,7 @@ class PasswordStrengthIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final strength = IdentityValidator.getPasswordStrength(password);
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -20,14 +20,16 @@ class PasswordStrengthIndicator extends StatelessWidget {
           children: List.generate(5, (index) {
             final barStrength = (index + 1) * 0.2;
             final isActive = strength >= barStrength;
-            
+
             return Expanded(
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 height: 4.h,
                 margin: EdgeInsets.only(right: index == 4 ? 0 : 4.w),
                 decoration: BoxDecoration(
-                  color: isActive ? _getColor(strength) : SoteriaColors.muted.withValues(alpha: 0.2),
+                  color: isActive
+                      ? _getColor(strength)
+                      : SoteriaColors.muted.withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(2.r),
                 ),
               ),
@@ -39,11 +41,26 @@ class PasswordStrengthIndicator extends StatelessWidget {
           spacing: 12.w,
           runSpacing: 4.h,
           children: [
-            _RequirementItem(label: '8+ chars', met: IdentityValidator.hasMinLength(password)),
-            _RequirementItem(label: 'Uppercase', met: IdentityValidator.hasUppercase(password)),
-            _RequirementItem(label: 'Lowercase', met: IdentityValidator.hasLowercase(password)),
-            _RequirementItem(label: 'Number', met: IdentityValidator.hasDigit(password)),
-            _RequirementItem(label: 'Special', met: IdentityValidator.hasSpecialChar(password)),
+            _RequirementItem(
+              label: '8+ chars',
+              met: IdentityValidator.hasMinLength(password),
+            ),
+            _RequirementItem(
+              label: 'Uppercase',
+              met: IdentityValidator.hasUppercase(password),
+            ),
+            _RequirementItem(
+              label: 'Lowercase',
+              met: IdentityValidator.hasLowercase(password),
+            ),
+            _RequirementItem(
+              label: 'Number',
+              met: IdentityValidator.hasDigit(password),
+            ),
+            _RequirementItem(
+              label: 'Special',
+              met: IdentityValidator.hasSpecialChar(password),
+            ),
           ],
         ),
       ],

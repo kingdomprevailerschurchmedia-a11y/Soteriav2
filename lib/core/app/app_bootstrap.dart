@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_performance/firebase_performance.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 
 enum BootstrapState { initial, loading, success, error }
@@ -9,9 +11,14 @@ class AppBootstrap {
   final Ref ref;
 
   Future<void> initialize() async {
+    final trace = FirebasePerformance.instance.newTrace('app_bootstrap');
+    await trace.start();
+
     try {
-      LoggerService.i('Bootstrap: Starting initialization sequence...');
-      
+      LoggerService.i(
+        'Bootstrap: Starting background initialization sequence...',
+      );
+
       // Parallel initialization for speed
       await Future.wait([
         _initLocalStorage(),
@@ -20,11 +27,28 @@ class AppBootstrap {
         _initFeatureFlags(),
       ]);
 
+      await _initGoogleSignIn();
+
       LoggerService.i('Bootstrap: All systems healthy.');
+      await trace.stop();
     } catch (e, stack) {
-      LoggerService.e('Bootstrap: Critical failure during initialization', error: e, stackTrace: stack);
+      trace.putAttribute('error', e.toString());
+      await trace.stop();
+      LoggerService.e(
+        'Bootstrap: Critical failure during initialization',
+        error: e,
+        stackTrace: stack,
+      );
       rethrow;
     }
+  }
+
+  Future<void> _initGoogleSignIn() async {
+    await GoogleSignIn.instance.initialize(
+      serverClientId:
+          '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
+    );
+    LoggerService.d('Bootstrap: Google Sign-In ready.');
   }
 
   Future<void> _initLocalStorage() async {
@@ -69,4 +93,5 @@ class BootstrapNotifier extends Notifier<BootstrapState> {
 }
 
 // Fixed the typo in provider name
-final bootstrapStateProvider = NotifierProvider<BootstrapNotifier, BootstrapState>(BootstrapNotifier.new);
+final bootstrapStateProvider =
+    NotifierProvider<BootstrapNotifier, BootstrapState>(BootstrapNotifier.new);

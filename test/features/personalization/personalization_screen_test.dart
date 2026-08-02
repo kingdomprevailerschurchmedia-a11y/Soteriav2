@@ -11,9 +11,7 @@ void main() {
     return ProviderScope(
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
-        builder: (context, _) => MaterialApp(
-          home: child,
-        ),
+        builder: (context, _) => MaterialApp(home: child),
       ),
     );
   }
@@ -28,7 +26,9 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(createTestWidget(child: const PersonalizationScreen()));
+      await tester.pumpWidget(
+        createTestWidget(child: const PersonalizationScreen()),
+      );
       await tester.pumpAndSettle();
 
       expect(find.text('What is your current academic level?'), findsOneWidget);
@@ -40,7 +40,9 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(createTestWidget(child: const PersonalizationScreen()));
+      await tester.pumpWidget(
+        createTestWidget(child: const PersonalizationScreen()),
+      );
       await tester.pumpAndSettle();
 
       // Tap continue without selection
@@ -52,11 +54,16 @@ void main() {
     });
 
     testWidgets('completes flow after selections', (tester) async {
-      tester.view.physicalSize = const Size(390, 1500); // Larger height to avoid scrolling
+      tester.view.physicalSize = const Size(
+        390,
+        1500,
+      ); // Larger height to avoid scrolling
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      await tester.pumpWidget(createTestWidget(child: const PersonalizationScreen()));
+      await tester.pumpWidget(
+        createTestWidget(child: const PersonalizationScreen()),
+      );
       await tester.pumpAndSettle();
 
       // Step 1: Academic Level

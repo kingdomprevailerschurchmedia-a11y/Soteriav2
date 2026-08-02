@@ -19,37 +19,40 @@ void main() {
   }
 
   group('Foundation Widgets Tests', () {
-    testWidgets('GlassSurface renders child and backdrop filter', (WidgetTester tester) async {
+    testWidgets('GlassSurface renders child and backdrop filter', (
+      WidgetTester tester,
+    ) async {
       await tester.pumpWidget(
-        wrap(
-          const GlassSurface(
-            child: Text('Test Child'),
-          ),
-        ),
+        wrap(const GlassSurface(child: Text('Test Child'))),
       );
 
       expect(find.text('Test Child'), findsOneWidget);
       expect(find.byType(BackdropFilter), findsOneWidget);
     });
 
-    testWidgets('AmbientGlow renders with correct color', (WidgetTester tester) async {
+    testWidgets('AmbientGlow renders with correct color', (
+      WidgetTester tester,
+    ) async {
       const testColor = Colors.red;
       await tester.pumpWidget(
-        wrap(
-          const AmbientGlow(color: testColor, size: 100),
-        ),
+        wrap(const AmbientGlow(color: testColor, size: 100)),
       );
 
       // Find the specific container within AmbientGlow
-      final containerFinder = find.descendant(
-        of: find.byType(AmbientGlow),
-        matching: find.byType(Container),
-      ).first;
+      final containerFinder = find
+          .descendant(
+            of: find.byType(AmbientGlow),
+            matching: find.byType(Container),
+          )
+          .first;
 
       final container = tester.widget<Container>(containerFinder);
       final decoration = container.decoration as BoxDecoration;
-      
-      expect(decoration.color?.withValues(alpha: 1.0), testColor.withValues(alpha: 1.0));
+
+      expect(
+        decoration.color?.withValues(alpha: 1.0),
+        testColor.withValues(alpha: 1.0),
+      );
     });
   });
 }

@@ -29,7 +29,8 @@ class SoteriaSwitchTile extends StatelessWidget {
         onChanged: onChanged,
         activeTrackColor: SoteriaColors.primary.withValues(alpha: 0.2),
         thumbColor: WidgetStateProperty.resolveWith<Color>((states) {
-          if (states.contains(WidgetState.selected)) return SoteriaColors.primary;
+          if (states.contains(WidgetState.selected))
+            return SoteriaColors.primary;
           return Colors.white;
         }),
       ),

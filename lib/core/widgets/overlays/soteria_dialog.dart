@@ -72,15 +72,13 @@ class SoteriaDialog extends StatelessWidget {
               Icon(icon, size: 48, color: iconColor ?? SoteriaColors.primary),
               SizedBox(height: SoteriaSpacing.md),
             ],
-            Text(
-              title,
-              style: context.titleLarge,
-              textAlign: TextAlign.center,
-            ),
+            Text(title, style: context.titleLarge, textAlign: TextAlign.center),
             SizedBox(height: SoteriaSpacing.sm),
             Text(
               message,
-              style: context.bodyLarge.copyWith(color: SoteriaColors.textSecondary),
+              style: context.bodyLarge.copyWith(
+                color: SoteriaColors.textSecondary,
+              ),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: SoteriaSpacing.xl),

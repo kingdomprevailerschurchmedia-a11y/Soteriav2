@@ -17,7 +17,10 @@ class StepAccountIdentity extends ConsumerWidget {
       children: [
         Text('Account Identity', style: context.headlineMedium),
         SizedBox(height: SoteriaSpacing.sm),
-        Text('Choose a unique username and valid email.', style: context.bodyMedium),
+        Text(
+          'Choose a unique username and valid email.',
+          style: context.bodyMedium,
+        ),
         SizedBox(height: SoteriaSpacing.xl),
         SoteriaTextField(
           label: 'Email Address',

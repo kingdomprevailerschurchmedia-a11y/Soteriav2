@@ -128,11 +128,116 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.lock_open_rounded,
     ),
     const GalleryItem(
+      title: 'Verification',
+      description: 'OTP, Countdown, Reusable Engine',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/verification',
+      icon: Icons.verified_user_rounded,
+    ),
+    const GalleryItem(
+      title: 'Identity & Session',
+      description: 'Lifecycle, Roles, Auth states',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/identity',
+      icon: Icons.fingerprint_rounded,
+    ),
+    const GalleryItem(
       title: 'Diagnostics',
       description: 'Logs, Device Info, Simulators',
       category: GalleryCategory.status,
       route: '/preview-gallery/diagnostics',
       icon: Icons.analytics_rounded,
+    ),
+    const GalleryItem(
+      title: 'Player Profile',
+      description: 'Firestore progression, Stats, Bootstrap',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/player',
+      icon: Icons.badge_rounded,
+    ),
+    const GalleryItem(
+      title: 'Notification Center',
+      description: 'In-app history, FCM integration, Badges',
+      category: GalleryCategory.screens,
+      route: '/notifications',
+      icon: Icons.notifications_active_rounded,
+    ),
+    const GalleryItem(
+      title: 'Config Debug',
+      description: 'Remote Config, Feature Flags, Game Params',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/config-debug',
+      icon: Icons.settings_remote_rounded,
+    ),
+    const GalleryItem(
+      title: 'Security Status',
+      description: 'App Check, Environment, Token State',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/security-status',
+      icon: Icons.admin_panel_settings_rounded,
+    ),
+    const GalleryItem(
+      title: 'Home Dashboard',
+      description: 'Premium landing, Stats, Hero card',
+      category: GalleryCategory.screens,
+      route: '/app',
+      icon: Icons.dashboard_rounded,
+    ),
+    const GalleryItem(
+      title: 'Gameplay Engine',
+      description: 'Core loop, Timer, Score, Lifecycles',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/game-engine',
+      icon: Icons.videogame_asset_rounded,
+    ),
+    const GalleryItem(
+      title: 'Content Pipeline',
+      description: 'Question sourcing, Cache, Offline',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/question-pipeline',
+      icon: Icons.dynamic_feed_rounded,
+    ),
+    const GalleryItem(
+      title: 'Question Presentation',
+      description: 'Universal renderer, Cards, Transitions',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/question-presentation',
+      icon: Icons.auto_awesome_mosaic_rounded,
+    ),
+    const GalleryItem(
+      title: 'Adaptive Timer',
+      description: 'Dynamic policies, Warnings, Pulse',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/adaptive-timer',
+      icon: Icons.timer_outlined,
+    ),
+    const GalleryItem(
+      title: 'Answer Engine',
+      description: 'Validation, Decision pipeline, Results',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/answer-engine',
+      icon: Icons.fact_check_rounded,
+    ),
+    const GalleryItem(
+      title: 'Progression Engine',
+      description: 'Score, XP, Levels, Streaks, Rewards',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/progression',
+      icon: Icons.trending_up_rounded,
+    ),
+    const GalleryItem(
+      title: 'Integrity & Anti-Cheat',
+      description: 'Risk assessment, Lifecycle monitoring, Signals',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/integrity',
+      icon: Icons.security_rounded,
+    ),
+    const GalleryItem(
+      title: 'Lifeline Framework',
+      description: '50/50, Pause Timer, Audience Simulation',
+      category: GalleryCategory.status,
+      route: '/preview-gallery/lifelines',
+      icon: Icons.assistant_direction_rounded,
     ),
   ];
 });
@@ -145,7 +250,10 @@ class GallerySearchQueryNotifier extends Notifier<String> {
   void update(String value) => state = value;
 }
 
-final gallerySearchQueryProvider = NotifierProvider<GallerySearchQueryNotifier, String>(GallerySearchQueryNotifier.new);
+final gallerySearchQueryProvider =
+    NotifierProvider<GallerySearchQueryNotifier, String>(
+      GallerySearchQueryNotifier.new,
+    );
 
 final filteredGalleryItemsProvider = Provider<List<GalleryItem>>((ref) {
   final query = ref.watch(gallerySearchQueryProvider);
@@ -166,7 +274,10 @@ class GallerySettingsNotifier extends Notifier<GallerySettings> {
   void reset() => state = const GallerySettings();
 }
 
-final gallerySettingsProvider = NotifierProvider<GallerySettingsNotifier, GallerySettings>(GallerySettingsNotifier.new);
+final gallerySettingsProvider =
+    NotifierProvider<GallerySettingsNotifier, GallerySettings>(
+      GallerySettingsNotifier.new,
+    );
 
 // --- Favorites Provider ---
 class GalleryFavoritesNotifier extends Notifier<Set<String>> {
@@ -196,7 +307,10 @@ class GalleryFavoritesNotifier extends Notifier<Set<String>> {
   }
 }
 
-final galleryFavoritesProvider = NotifierProvider<GalleryFavoritesNotifier, Set<String>>(GalleryFavoritesNotifier.new);
+final galleryFavoritesProvider =
+    NotifierProvider<GalleryFavoritesNotifier, Set<String>>(
+      GalleryFavoritesNotifier.new,
+    );
 
 // --- Recents Provider ---
 class GalleryRecentNotifier extends Notifier<List<String>> {
@@ -208,4 +322,7 @@ class GalleryRecentNotifier extends Notifier<List<String>> {
   }
 }
 
-final galleryRecentProvider = NotifierProvider<GalleryRecentNotifier, List<String>>(GalleryRecentNotifier.new);
+final galleryRecentProvider =
+    NotifierProvider<GalleryRecentNotifier, List<String>>(
+      GalleryRecentNotifier.new,
+    );

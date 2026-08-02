@@ -13,5 +13,6 @@ class MockUsernameService implements UsernameService {
   }
 
   @override
-  bool isReserved(String username) => _reserved.contains(username.toLowerCase());
+  bool isReserved(String username) =>
+      _reserved.contains(username.toLowerCase());
 }

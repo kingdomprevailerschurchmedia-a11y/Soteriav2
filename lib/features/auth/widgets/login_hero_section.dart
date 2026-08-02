@@ -12,7 +12,9 @@ class LoginHeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final greeting = userName != null ? 'Welcome back, $userName' : 'Welcome Back';
+    final greeting = userName != null
+        ? 'Welcome back, $userName'
+        : 'Welcome Back';
 
     return Stack(
       alignment: Alignment.center,
@@ -33,7 +35,10 @@ class LoginHeroSection extends StatelessWidget {
               height: 100.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.3), width: 2),
+                border: Border.all(
+                  color: SoteriaColors.gold.withValues(alpha: 0.3),
+                  width: 2,
+                ),
                 gradient: RadialGradient(
                   colors: [
                     SoteriaColors.gold.withValues(alpha: 0.1),

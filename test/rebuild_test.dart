@@ -6,7 +6,9 @@ import 'package:soteria/features/preview_gallery/preview_gallery_screen.dart';
 import 'package:soteria/features/preview_gallery/providers/gallery_providers.dart';
 
 void main() {
-  testWidgets('PreviewGalleryScreen refactor maintains functionality', (tester) async {
+  testWidgets('PreviewGalleryScreen refactor maintains functionality', (
+    tester,
+  ) async {
     tester.view.physicalSize = const Size(390 * 3, 844 * 3);
     tester.view.devicePixelRatio = 3.0;
     addTearDown(tester.view.resetPhysicalSize);
@@ -16,9 +18,8 @@ void main() {
       ProviderScope(
         child: ScreenUtilInit(
           designSize: const Size(390, 844),
-          builder: (context, _) => const MaterialApp(
-            home: PreviewGalleryScreen(),
-          ),
+          builder: (context, _) =>
+              const MaterialApp(home: PreviewGalleryScreen()),
         ),
       ),
     );
@@ -43,9 +44,8 @@ void main() {
         container: container,
         child: ScreenUtilInit(
           designSize: const Size(390, 844),
-          builder: (context, _) => const MaterialApp(
-            home: PreviewGalleryScreen(),
-          ),
+          builder: (context, _) =>
+              const MaterialApp(home: PreviewGalleryScreen()),
         ),
       ),
     );

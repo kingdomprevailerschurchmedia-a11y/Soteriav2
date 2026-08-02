@@ -17,7 +17,8 @@ class PersonalizationScreen extends ConsumerStatefulWidget {
   const PersonalizationScreen({super.key});
 
   @override
-  ConsumerState<PersonalizationScreen> createState() => _PersonalizationScreenState();
+  ConsumerState<PersonalizationScreen> createState() =>
+      _PersonalizationScreenState();
 }
 
 class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
@@ -81,7 +82,11 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                       child: Opacity(
                         opacity: state.currentStep > 0 ? 1.0 : 0.0,
                         child: IconButton(
-                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white, size: 20),
+                          icon: const Icon(
+                            Icons.arrow_back_ios_new_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
                           onPressed: state.currentStep > 0 ? _onBack : null,
                         ),
                       ),
@@ -124,7 +129,9 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
             padding: EdgeInsets.all(SoteriaSpacing.lg),
             child: SoteriaButton.primary(
               label: state.currentStep == 4 ? 'Complete Profile' : 'Continue',
-              onPressed: isValid ? () => _onContinue(state.currentStep, isValid) : null,
+              onPressed: isValid
+                  ? () => _onContinue(state.currentStep, isValid)
+                  : null,
             ),
           ),
         ],

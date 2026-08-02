@@ -9,13 +9,9 @@ class SoteriaBorders {
 
   static const Color defaultColor = SoteriaColors.border;
 
-  static BorderSide get defaultSide => const BorderSide(
-        color: defaultColor,
-        width: normal,
-      );
+  static BorderSide get defaultSide =>
+      const BorderSide(color: defaultColor, width: normal);
 
-  static Border get glassBorder => Border.all(
-        color: Colors.white.withValues(alpha: 0.1),
-        width: thin,
-      );
+  static Border get glassBorder =>
+      Border.all(color: Colors.white.withValues(alpha: 0.1), width: thin);
 }

@@ -66,11 +66,17 @@ class TokensPreviewPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSection({required String title, required List<Widget> children}) {
+  Widget _buildSection({
+    required String title,
+    required List<Widget> children,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title.toUpperCase(), style: SoteriaTypography.label.copyWith(color: SoteriaColors.gold)),
+        Text(
+          title.toUpperCase(),
+          style: SoteriaTypography.label.copyWith(color: SoteriaColors.gold),
+        ),
         SizedBox(height: SoteriaSpacing.md),
         ...children,
       ],
@@ -94,7 +100,10 @@ class TokensPreviewPage extends StatelessWidget {
           SizedBox(width: SoteriaSpacing.md),
           Text(name, style: SoteriaTypography.body),
           const Spacer(),
-          Text('#${color.toARGB32().toRadixString(16).toUpperCase().substring(2)}', style: SoteriaTypography.caption),
+          Text(
+            '#${color.toARGB32().toRadixString(16).toUpperCase().substring(2)}',
+            style: SoteriaTypography.caption,
+          ),
         ],
       ),
     );

@@ -15,7 +15,8 @@ class DiagnosticsPreviewPage extends StatefulWidget {
   State<DiagnosticsPreviewPage> createState() => _DiagnosticsPreviewPageState();
 }
 
-class _DiagnosticsPreviewPageState extends State<DiagnosticsPreviewPage> with SingleTickerProviderStateMixin {
+class _DiagnosticsPreviewPageState extends State<DiagnosticsPreviewPage>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -75,7 +76,8 @@ class _LiveLogViewer extends StatelessWidget {
         return ListView.separated(
           padding: EdgeInsets.all(16.w),
           itemCount: logs.length,
-          separatorBuilder: (context, index) => const Divider(color: SoteriaColors.border, height: 1),
+          separatorBuilder: (context, index) =>
+              const Divider(color: SoteriaColors.border, height: 1),
           itemBuilder: (context, index) {
             final entry = logs[index];
             return _LogEntryTile(entry: entry);
@@ -119,27 +121,36 @@ class _LogEntryTile extends StatelessWidget {
               SizedBox(width: 8.w),
               Text(
                 '${entry.timestamp.hour}:${entry.timestamp.minute}:${entry.timestamp.second}',
-                style: SoteriaTypography.caption.copyWith(color: SoteriaColors.hints),
+                style: SoteriaTypography.caption.copyWith(
+                  color: SoteriaColors.hints,
+                ),
               ),
               const Spacer(),
               if (entry.feature != null)
                 Text(
                   '#${entry.feature}',
-                  style: SoteriaTypography.caption.copyWith(color: SoteriaColors.gold.withValues(alpha: 0.5)),
+                  style: SoteriaTypography.caption.copyWith(
+                    color: SoteriaColors.gold.withValues(alpha: 0.5),
+                  ),
                 ),
             ],
           ),
           SizedBox(height: 4.h),
           Text(
             entry.message,
-            style: SoteriaTypography.body.copyWith(fontSize: 13.sp, color: SoteriaColors.textPrimary),
+            style: SoteriaTypography.body.copyWith(
+              fontSize: 13.sp,
+              color: SoteriaColors.textPrimary,
+            ),
           ),
           if (entry.error != null)
             Padding(
               padding: EdgeInsets.only(top: 4.h),
               child: Text(
                 'Error: ${entry.error}',
-                style: SoteriaTypography.caption.copyWith(color: SoteriaColors.error.withValues(alpha: 0.7)),
+                style: SoteriaTypography.caption.copyWith(
+                  color: SoteriaColors.error.withValues(alpha: 0.7),
+                ),
               ),
             ),
         ],
@@ -149,12 +160,18 @@ class _LogEntryTile extends StatelessWidget {
 
   Color _getLogLevelColor(LogLevel level) {
     switch (level) {
-      case LogLevel.trace: return Colors.grey;
-      case LogLevel.debug: return Colors.blue;
-      case LogLevel.info: return Colors.green;
-      case LogLevel.warning: return Colors.orange;
-      case LogLevel.error: return Colors.red;
-      case LogLevel.critical: return Colors.purple;
+      case LogLevel.trace:
+        return Colors.grey;
+      case LogLevel.debug:
+        return Colors.blue;
+      case LogLevel.info:
+        return Colors.green;
+      case LogLevel.warning:
+        return Colors.orange;
+      case LogLevel.error:
+        return Colors.red;
+      case LogLevel.critical:
+        return Colors.purple;
     }
   }
 }
@@ -167,11 +184,14 @@ class _DeviceInfoViewer extends StatelessWidget {
     return FutureBuilder<AppDiagnostics>(
       future: DiagnosticsService.getDiagnostics(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+        if (!snapshot.hasData)
+          return const Center(child: CircularProgressIndicator());
         final data = snapshot.data!.toMap();
         return ListView(
           padding: EdgeInsets.all(16.w),
-          children: data.entries.map((e) => _DiagnosticTile(label: e.key, value: e.value)).toList(),
+          children: data.entries
+              .map((e) => _DiagnosticTile(label: e.key, value: e.value))
+              .toList(),
         );
       },
     );
@@ -190,8 +210,18 @@ class _DiagnosticTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: SoteriaTypography.body.copyWith(color: SoteriaColors.textSecondary)),
-          Text(value, style: SoteriaTypography.label.copyWith(color: SoteriaColors.textPrimary)),
+          Text(
+            label,
+            style: SoteriaTypography.body.copyWith(
+              color: SoteriaColors.textSecondary,
+            ),
+          ),
+          Text(
+            value,
+            style: SoteriaTypography.label.copyWith(
+              color: SoteriaColors.textPrimary,
+            ),
+          ),
         ],
       ),
     );
@@ -210,22 +240,24 @@ class _PerformanceDashboard extends StatelessWidget {
         return ListView(
           padding: EdgeInsets.all(16.w),
           children: [
-             _DiagnosticTile(
-              label: 'STARTUP DURATION', 
+            _DiagnosticTile(
+              label: 'STARTUP DURATION',
               value: DiagnosticsService.startupDuration,
             ),
             const Divider(color: SoteriaColors.border),
             _DiagnosticTile(
-              label: 'FPS', 
+              label: 'FPS',
               value: metrics?.fps.toStringAsFixed(1) ?? '...',
             ),
             _DiagnosticTile(
-              label: 'FRAME BUILD', 
-              value: '${metrics?.frameBuildTimeMs.toStringAsFixed(2) ?? '...'} ms',
+              label: 'FRAME BUILD',
+              value:
+                  '${metrics?.frameBuildTimeMs.toStringAsFixed(2) ?? '...'} ms',
             ),
             _DiagnosticTile(
-              label: 'FRAME RASTER', 
-              value: '${metrics?.frameRasterTimeMs.toStringAsFixed(2) ?? '...'} ms',
+              label: 'FRAME RASTER',
+              value:
+                  '${metrics?.frameRasterTimeMs.toStringAsFixed(2) ?? '...'} ms',
             ),
           ],
         );
@@ -244,7 +276,10 @@ class _ErrorSimulator extends StatelessWidget {
       children: [
         _SimulateButton(
           label: 'LOG INFO EVENT',
-          onPressed: () => LoggerService.i('Manual test event triggered from simulator', feature: 'Simulator'),
+          onPressed: () => LoggerService.i(
+            'Manual test event triggered from simulator',
+            feature: 'Simulator',
+          ),
         ),
         _SimulateButton(
           label: 'SIMULATE NETWORK FAILURE',
@@ -263,25 +298,28 @@ class _ErrorSimulator extends StatelessWidget {
         _SimulateButton(
           label: 'SIMULATE SYSTEM ANOMALY',
           onPressed: () {
-             LoggerService.critical('Simulating system anomaly', feature: 'Simulator');
-             throw const UnexpectedException();
+            LoggerService.critical(
+              'Simulating system anomaly',
+              feature: 'Simulator',
+            );
+            throw const UnexpectedException();
           },
           isCritical: true,
         ),
         _SimulateButton(
           label: 'SIMULATE TIMEOUT',
           onPressed: () => LoggerService.e(
-            'Request timed out after 30000ms', 
-            error: const TimeoutException(), 
-            stackTrace: StackTrace.current, 
+            'Request timed out after 30000ms',
+            error: const TimeoutException(),
+            stackTrace: StackTrace.current,
             feature: 'Simulator',
           ),
         ),
         _SimulateButton(
           label: 'SIMULATE AUTH FAILURE',
           onPressed: () => LoggerService.e(
-            'Session expired. Redirecting to login.', 
-            error: const AuthenticationException(), 
+            'Session expired. Redirecting to login.',
+            error: const AuthenticationException(),
             feature: 'Auth',
           ),
         ),
@@ -308,10 +346,17 @@ class _SimulateButton extends StatelessWidget {
       child: OutlinedButton(
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
-          foregroundColor: isCritical ? SoteriaColors.error : SoteriaColors.gold,
-          side: BorderSide(color: (isCritical ? SoteriaColors.error : SoteriaColors.gold).withValues(alpha: 0.3)),
+          foregroundColor: isCritical
+              ? SoteriaColors.error
+              : SoteriaColors.gold,
+          side: BorderSide(
+            color: (isCritical ? SoteriaColors.error : SoteriaColors.gold)
+                .withValues(alpha: 0.3),
+          ),
           padding: EdgeInsets.symmetric(vertical: 16.h),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
         ),
         child: Text(label, style: SoteriaTypography.label),
       ),

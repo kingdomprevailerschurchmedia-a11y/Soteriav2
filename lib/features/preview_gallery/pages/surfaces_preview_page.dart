@@ -20,9 +20,15 @@ class SurfacesPreviewPage extends StatelessWidget {
             padding: EdgeInsets.all(SoteriaSpacing.lg),
             child: Column(
               children: [
-                const Text('Standard Glass', style: TextStyle(fontWeight: FontWeight.bold)),
+                const Text(
+                  'Standard Glass',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
                 SizedBox(height: SoteriaSpacing.sm),
-                const Text('Blurred backdrop with 8% opacity white overlay.', textAlign: TextAlign.center),
+                const Text(
+                  'Blurred backdrop with 8% opacity white overlay.',
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
@@ -34,7 +40,10 @@ class SurfacesPreviewPage extends StatelessWidget {
             blur: SoteriaBlur.high,
             opacity: 0.12,
             padding: EdgeInsets.all(SoteriaSpacing.lg),
-            child: const Text('High Blur / High Opacity', textAlign: TextAlign.center),
+            child: const Text(
+              'High Blur / High Opacity',
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
         _buildSurfaceSection(
@@ -46,7 +55,10 @@ class SurfacesPreviewPage extends StatelessWidget {
               color: SoteriaColors.elevatedSurface,
               borderRadius: BorderRadius.circular(16),
             ),
-            child: const Text('Elevated Surface (Solid)', textAlign: TextAlign.center),
+            child: const Text(
+              'Elevated Surface (Solid)',
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ],

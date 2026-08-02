@@ -15,7 +15,10 @@ void main() {
     });
 
     test('unknown type returns default message', () {
-      const e = IdentityException(IdentityExceptionType.unknown, 'Custom error');
+      const e = IdentityException(
+        IdentityExceptionType.unknown,
+        'Custom error',
+      );
       expect(e.userMessage, 'Custom error');
     });
   });

@@ -25,7 +25,10 @@ class FeedbackPreviewPage extends StatelessWidget {
           children: [
             SoteriaBadge(label: 'New'),
             SoteriaBadge(label: 'Premium', variant: SoteriaBadgeVariant.gold),
-            SoteriaBadge(label: 'Success', variant: SoteriaBadgeVariant.success),
+            SoteriaBadge(
+              label: 'Success',
+              variant: SoteriaBadgeVariant.success,
+            ),
             SoteriaBadge(label: 'Error', variant: SoteriaBadgeVariant.error),
           ],
         ),
@@ -61,9 +64,7 @@ class FeedbackPreviewPage extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('ERROR WIDGET'),
         SizedBox(height: SoteriaSpacing.md),
-        const SoteriaErrorWidget(
-          message: 'Secure link failed. Please retry.',
-        ),
+        const SoteriaErrorWidget(message: 'Secure link failed. Please retry.'),
       ],
     );
   }

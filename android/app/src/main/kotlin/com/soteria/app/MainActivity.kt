@@ -1,4 +1,4 @@
-package com.soteria.soteria
+package com.soteria.app
 
 import io.flutter.embedding.android.FlutterActivity
 

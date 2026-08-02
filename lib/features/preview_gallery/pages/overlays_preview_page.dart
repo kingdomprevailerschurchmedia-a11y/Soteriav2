@@ -30,7 +30,9 @@ class OverlaysPreviewPage extends StatelessWidget {
             title: 'Options',
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-              child: const SoteriaText.body('Select one of the following options to continue.'),
+              child: const SoteriaText.body(
+                'Select one of the following options to continue.',
+              ),
             ),
           ),
         ),

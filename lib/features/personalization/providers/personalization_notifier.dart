@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:soteria/core/navigation/navigation_service.dart';
-import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/features/personalization/models/personalization_state.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 
 class PersonalizationNotifier extends Notifier<PersonalizationState> {
   static const _kStorageKey = 'user_personalization';
@@ -24,7 +23,8 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
           academicLevel: map['academicLevel'],
           interests: (map['interests'] as List<dynamic>).cast<String>().toSet(),
           goals: (map['goals'] as List<dynamic>).cast<String>().toSet(),
-          notificationPrefs: (map['notificationPrefs'] as Map<String, dynamic>).cast<String, bool>(),
+          notificationPrefs: (map['notificationPrefs'] as Map<String, dynamic>)
+              .cast<String, bool>(),
         );
       } catch (_) {
         // Fallback to default
@@ -96,8 +96,12 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
   }
 
   void complete() {
-    ref.read(navigationServiceProvider).go(SoteriaRoutes.auth);
+    // Trigger lifecycle update
+    ref.read(appLifecycleProvider.notifier).refresh();
   }
 }
 
-final personalizationProvider = NotifierProvider<PersonalizationNotifier, PersonalizationState>(PersonalizationNotifier.new);
+final personalizationProvider =
+    NotifierProvider<PersonalizationNotifier, PersonalizationState>(
+      PersonalizationNotifier.new,
+    );

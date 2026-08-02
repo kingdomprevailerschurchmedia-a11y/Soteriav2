@@ -6,11 +6,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 
 class SoteriaOtpField extends StatefulWidget {
-  const SoteriaOtpField({
-    super.key,
-    this.length = 4,
-    this.onCompleted,
-  });
+  const SoteriaOtpField({super.key, this.length = 4, this.onCompleted});
 
   final int length;
   final ValueChanged<String>? onCompleted;
@@ -80,7 +76,9 @@ class _SoteriaOtpFieldState extends State<SoteriaOtpField> {
               contentPadding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
               enabledBorder: OutlineInputBorder(
                 borderRadius: SoteriaRadius.brMd,
-                borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+                borderSide: BorderSide(
+                  color: Colors.white.withValues(alpha: 0.05),
+                ),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: SoteriaRadius.brMd,

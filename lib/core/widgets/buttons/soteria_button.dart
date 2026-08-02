@@ -108,7 +108,8 @@ class SoteriaButton extends StatelessWidget {
           child: Ink(
             padding: EdgeInsets.symmetric(
               vertical: SoteriaSpacing.md,
-              horizontal: SoteriaSpacing.md, // Reduced from .lg for better responsiveness
+              horizontal: SoteriaSpacing
+                  .md, // Reduced from .lg for better responsiveness
             ),
             decoration: BoxDecoration(
               color: _getBackgroundColor(isDisabled),
@@ -148,7 +149,8 @@ class SoteriaButton extends StatelessWidget {
 
   Color _getTextColor(bool isDisabled) {
     if (variant == SoteriaButtonVariant.text) return SoteriaColors.primary;
-    if (variant == SoteriaButtonVariant.secondary) return SoteriaColors.textPrimary;
+    if (variant == SoteriaButtonVariant.secondary)
+      return SoteriaColors.textPrimary;
     return Colors.white;
   }
 }

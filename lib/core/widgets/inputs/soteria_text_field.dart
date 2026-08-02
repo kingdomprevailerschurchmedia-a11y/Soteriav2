@@ -59,7 +59,9 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
         if (widget.label != null) ...[
           Text(
             widget.label!,
-            style: context.labelLarge.copyWith(color: SoteriaColors.textSecondary),
+            style: context.labelLarge.copyWith(
+              color: SoteriaColors.textSecondary,
+            ),
           ),
           SizedBox(height: SoteriaSpacing.sm),
         ],
@@ -80,18 +82,20 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
             hintStyle: context.bodyLarge.copyWith(color: SoteriaColors.hints),
             filled: true,
             fillColor: SoteriaColors.surface,
-            prefixIcon: widget.prefixIcon != null 
-                ? Icon(widget.prefixIcon, color: SoteriaColors.muted, size: 20) 
+            prefixIcon: widget.prefixIcon != null
+                ? Icon(widget.prefixIcon, color: SoteriaColors.muted, size: 20)
                 : null,
-            suffixIcon: widget.obscureText 
+            suffixIcon: widget.obscureText
                 ? IconButton(
                     icon: Icon(
-                      _isObscured ? Icons.visibility_off_rounded : Icons.visibility_rounded,
+                      _isObscured
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
                       color: SoteriaColors.muted,
                       size: 20,
                     ),
                     onPressed: () => setState(() => _isObscured = !_isObscured),
-                  ) 
+                  )
                 : null,
             contentPadding: EdgeInsets.symmetric(
               horizontal: SoteriaSpacing.md,
@@ -99,7 +103,9 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: SoteriaRadius.brMd,
-              borderSide: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+              borderSide: BorderSide(
+                color: Colors.white.withValues(alpha: 0.05),
+              ),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: SoteriaRadius.brMd,
@@ -111,7 +117,10 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderRadius: SoteriaRadius.brMd,
-              borderSide: const BorderSide(color: SoteriaColors.error, width: 2),
+              borderSide: const BorderSide(
+                color: SoteriaColors.error,
+                width: 2,
+              ),
             ),
           ),
         ),

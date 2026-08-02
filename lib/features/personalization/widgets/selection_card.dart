@@ -30,7 +30,9 @@ class SelectionCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: isSelected ? SoteriaColors.gold : Colors.white.withValues(alpha: 0.05),
+            color: isSelected
+                ? SoteriaColors.gold
+                : Colors.white.withValues(alpha: 0.05),
             width: isSelected ? 2 : 1,
           ),
         ),
@@ -43,14 +45,16 @@ class SelectionCard extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
-                    color: isSelected 
-                      ? SoteriaColors.gold.withValues(alpha: 0.1) 
-                      : SoteriaColors.surface,
+                    color: isSelected
+                        ? SoteriaColors.gold.withValues(alpha: 0.1)
+                        : SoteriaColors.surface,
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   child: Icon(
                     icon,
-                    color: isSelected ? SoteriaColors.gold : SoteriaColors.muted,
+                    color: isSelected
+                        ? SoteriaColors.gold
+                        : SoteriaColors.muted,
                     size: 24.w,
                   ),
                 ),
@@ -64,7 +68,9 @@ class SelectionCard extends StatelessWidget {
                         style: context.titleLarge.copyWith(
                           fontSize: 16.sp,
                           color: isSelected ? SoteriaColors.gold : Colors.white,
-                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                       ),
                       if (subtitle != null) ...[

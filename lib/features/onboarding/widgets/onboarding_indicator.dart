@@ -19,9 +19,7 @@ class OnboardingIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(
         itemCount,
-        (index) => _IndicatorDot(
-          isActive: index == currentIndex,
-        ),
+        (index) => _IndicatorDot(isActive: index == currentIndex),
       ),
     );
   }
@@ -40,7 +38,9 @@ class _IndicatorDot extends StatelessWidget {
       height: 6.h,
       width: isActive ? 24.w : 6.w,
       decoration: BoxDecoration(
-        color: isActive ? SoteriaColors.gold : SoteriaColors.muted.withValues(alpha: 0.3),
+        color: isActive
+            ? SoteriaColors.gold
+            : SoteriaColors.muted.withValues(alpha: 0.3),
         borderRadius: SoteriaRadius.brFull,
         boxShadow: isActive
             ? [

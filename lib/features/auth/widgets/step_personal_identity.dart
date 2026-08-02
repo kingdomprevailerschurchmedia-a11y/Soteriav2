@@ -17,7 +17,10 @@ class StepPersonalIdentity extends ConsumerWidget {
       children: [
         Text('Personal Identity', style: context.headlineMedium),
         SizedBox(height: SoteriaSpacing.sm),
-        Text('Tell us a bit about yourself to get started.', style: context.bodyMedium),
+        Text(
+          'Tell us a bit about yourself to get started.',
+          style: context.bodyMedium,
+        ),
         SizedBox(height: SoteriaSpacing.xl),
         SoteriaTextField(
           label: 'First Name',

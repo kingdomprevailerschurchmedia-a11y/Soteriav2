@@ -14,9 +14,22 @@ class StepInterests extends ConsumerWidget {
     final notifier = ref.read(personalizationProvider.notifier);
 
     final interests = [
-      'Science', 'Technology', 'Business', 'Medicine', 'Arts', 'History',
-      'Sports', 'Current Affairs', 'Programming', 'Mathematics', 'Engineering',
-      'Languages', 'Law', 'Finance', 'Psychology', 'Design'
+      'Science',
+      'Technology',
+      'Business',
+      'Medicine',
+      'Arts',
+      'History',
+      'Sports',
+      'Current Affairs',
+      'Programming',
+      'Mathematics',
+      'Engineering',
+      'Languages',
+      'Law',
+      'Finance',
+      'Psychology',
+      'Design',
     ];
 
     return SingleChildScrollView(
@@ -24,10 +37,7 @@ class StepInterests extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Select your interests',
-            style: context.headlineMedium,
-          ),
+          Text('Select your interests', style: context.headlineMedium),
           SizedBox(height: SoteriaSpacing.sm),
           Text(
             'Choose at least one to personalize your feed.',
@@ -37,11 +47,15 @@ class StepInterests extends ConsumerWidget {
           Wrap(
             spacing: 12,
             runSpacing: 12,
-            children: interests.map((interest) => SoteriaChip(
-              label: interest,
-              isSelected: state.interests.contains(interest),
-              onTap: () => notifier.toggleInterest(interest),
-            )).toList(),
+            children: interests
+                .map(
+                  (interest) => SoteriaChip(
+                    label: interest,
+                    isSelected: state.interests.contains(interest),
+                    onTap: () => notifier.toggleInterest(interest),
+                  ),
+                )
+                .toList(),
           ),
         ],
       ),

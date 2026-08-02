@@ -34,5 +34,6 @@ class OnboardingState {
           isSkipped == other.isSkipped;
 
   @override
-  int get hashCode => currentPage.hashCode ^ isCompleted.hashCode ^ isSkipped.hashCode;
+  int get hashCode =>
+      currentPage.hashCode ^ isCompleted.hashCode ^ isSkipped.hashCode;
 }

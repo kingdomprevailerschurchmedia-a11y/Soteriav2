@@ -21,7 +21,7 @@ class NavigationFoundationPage extends ConsumerWidget {
         _buildRouteItem('Splash', SoteriaRoutes.splash),
         _buildRouteItem('Gallery', SoteriaRoutes.previewGallery),
         _buildRouteItem('Tokens', SoteriaRoutes.tokens),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('NAVIGATION ACTIONS'),
         SizedBox(height: SoteriaSpacing.md),
@@ -34,11 +34,13 @@ class NavigationFoundationPage extends ConsumerWidget {
           label: 'Go to Unknown Route (404)',
           onPressed: () => nav.go('/this-path-does-not-exist'),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('GUARD SIMULATION'),
         SizedBox(height: SoteriaSpacing.md),
-        const SoteriaText.body('Guards are abstracted and ready for business logic integration.'),
+        const SoteriaText.body(
+          'Guards are abstracted and ready for business logic integration.',
+        ),
       ],
     );
   }
@@ -50,7 +52,10 @@ class NavigationFoundationPage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(name, style: const TextStyle(fontWeight: FontWeight.bold)),
-          Text(path, style: const TextStyle(fontFamily: 'monospace', fontSize: 12)),
+          Text(
+            path,
+            style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
+          ),
         ],
       ),
     );

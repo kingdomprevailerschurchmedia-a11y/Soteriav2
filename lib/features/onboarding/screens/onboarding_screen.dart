@@ -62,7 +62,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
               OnboardingPage(
                 title: 'Challenge Yourself',
-                description: 'Practice daily, compete with peers, and grow your knowledge faster.',
+                description:
+                    'Practice daily, compete with peers, and grow your knowledge faster.',
                 offset: _currentPage - 1,
                 backgroundGlowColor: SoteriaColors.secondary,
                 illustration: _OnboardingIllustration(
@@ -72,7 +73,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
               OnboardingPage(
                 title: 'Earn Recognition',
-                description: 'Climb the leaderboards, earn exclusive badges, and build your reputation.',
+                description:
+                    'Climb the leaderboards, earn exclusive badges, and build your reputation.',
                 offset: _currentPage - 2,
                 backgroundGlowColor: SoteriaColors.gold,
                 illustration: _OnboardingIllustration(
@@ -82,7 +84,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
               OnboardingPage(
                 title: 'Ready to Begin?',
-                description: 'Join the community of innovators and start your journey today.',
+                description:
+                    'Join the community of innovators and start your journey today.',
                 offset: _currentPage - 3,
                 backgroundGlowColor: SoteriaColors.success,
                 illustration: _OnboardingIllustration(
@@ -92,7 +95,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
             ],
           ),
-          
+
           // Navigation Controls
           Positioned(
             bottom: SoteriaSpacing.xl,
@@ -140,15 +143,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         children: [
                           SoteriaButton.text(
                             label: 'Sign In',
-                            onPressed: () {},
+                            onPressed: () => notifier.completeAndLogin(),
                           ),
                           Padding(
                             padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            child: Text('|', style: TextStyle(color: SoteriaColors.muted.withValues(alpha: 0.3))),
+                            child: Text(
+                              '|',
+                              style: TextStyle(
+                                color: SoteriaColors.muted.withValues(
+                                  alpha: 0.3,
+                                ),
+                              ),
+                            ),
                           ),
                           SoteriaButton.text(
                             label: 'Create Account',
-                            onPressed: () {},
+                            onPressed: () => notifier.completeAndRegister(),
                           ),
                         ],
                       ),
@@ -164,10 +174,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 }
 
 class _OnboardingIllustration extends StatelessWidget {
-  const _OnboardingIllustration({
-    required this.icon,
-    required this.color,
-  });
+  const _OnboardingIllustration({required this.icon, required this.color});
 
   final IconData icon;
   final Color color;
@@ -191,11 +198,7 @@ class _OnboardingIllustration extends StatelessWidget {
         child: GlassSurface(
           borderRadius: BorderRadius.circular(40.r),
           padding: EdgeInsets.all(40.w),
-          child: Icon(
-            icon,
-            size: 100.w,
-            color: color,
-          ),
+          child: Icon(icon, size: 100.w, color: color),
         ),
       ),
     );

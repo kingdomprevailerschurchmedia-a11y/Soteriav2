@@ -1,8 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/login_state.dart';
-import '../repositories/login_repository.dart';
-import '../../../core/utils/identity_validator.dart';
+import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import 'package:soteria/core/utils/identity_validator.dart';
+import 'package:soteria/core/logging/logger_service.dart';
+import '../models/authentication_result.dart';
+import 'auth_providers.dart';
 
 class LoginNotifier extends Notifier<LoginState> {
   static const _kFirstNameKey = 'user_first_name';
@@ -46,7 +49,7 @@ class LoginNotifier extends Notifier<LoginState> {
     await prefs.setBool(_kRememberMeKey, newValue);
   }
 
-  Future<void> login(LoginRepository repository) async {
+  Future<void> login() async {
     if (!IdentityValidator.isValidEmail(state.email)) {
       state = state.copyWith(error: 'Please enter a valid email address.');
       return;
@@ -58,36 +61,87 @@ class LoginNotifier extends Notifier<LoginState> {
     }
 
     state = state.copyWith(isLoading: true, error: null);
+    final stopwatch = Stopwatch()..start();
 
     try {
-      final result = await repository.loginWithEmail(
-        email: state.email,
-        password: state.password,
-      );
+      final useCase = ref.read(signInUseCaseProvider);
+      final result = await useCase.execute(state.email, state.password);
 
       if (ref.mounted) {
         if (result.isSuccess) {
-          // Success handled by router/service listener usually
-          state = state.copyWith(isLoading: false);
-        } else {
+          ref.read(analyticsProvider).logLogin(loginMethod: 'email');
+          LoggerService.i('Authentication successful', feature: 'Auth');
+        } else if (result.status == AuthenticationStatus.unverified) {
+          LoggerService.i('Authentication blocked: Email unverified', feature: 'Auth');
           state = state.copyWith(
-            isLoading: false,
-            error: result.error?.userMessage ?? 'Sign in failed. Please try again.',
+            error: 'Please verify your email address before signing in.',
           );
+        } else {
+          final errorMessage =
+              result.error?.userMessage ?? 'Sign in failed. Please try again.';
+          LoggerService.w(
+            'Authentication failed: ${result.error?.message}',
+            feature: 'Auth',
+            metadata: {'email': state.email, 'type': result.error?.type.name},
+          );
+          state = state.copyWith(error: errorMessage);
         }
       }
-    } catch (e) {
+    } catch (e, st) {
       if (ref.mounted) {
+        LoggerService.e(
+          'Unexpected Auth Crash during login',
+          error: e,
+          stackTrace: st,
+          feature: 'Auth',
+        );
         state = state.copyWith(
-          isLoading: false,
           error: 'An unexpected connection error occurred.',
         );
+        ref
+            .read(crashlyticsProvider)
+            .recordError(e, st, reason: 'Unexpected Auth Crash');
       }
+    } finally {
+      stopwatch.stop();
+      if (ref.mounted) state = state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final useCase = ref.read(googleSignInUseCaseProvider);
+      final result = await useCase.execute();
+
+      if (ref.mounted && !result.isSuccess && result.error != null) {
+        state = state.copyWith(error: result.error!.userMessage);
+      }
+    } catch (e, st) {
+      if (ref.mounted) {
+        state = state.copyWith(error: 'Google Sign-In failed.');
+        ref.read(crashlyticsProvider).recordError(e, st);
+      }
+    } finally {
+      if (ref.mounted) state = state.copyWith(isLoading: false);
+    }
+  }
+
+  Future<void> resetPassword() async {
+    if (!IdentityValidator.isValidEmail(state.email)) {
+      state = state.copyWith(error: 'Please enter a valid email address.');
+      return;
+    }
+
+    try {
+      await ref.read(forgotPasswordUseCaseProvider).execute(state.email);
+      state = state.copyWith(error: 'Password reset email sent.');
+    } catch (e) {
+      state = state.copyWith(error: 'Failed to send reset email.');
     }
   }
 }
 
-final loginProvider = NotifierProvider<LoginNotifier, LoginState>(LoginNotifier.new);
-
-// Added repository provider
-final loginRepositoryProvider = Provider<LoginRepository>((ref) => MockLoginRepository());
+final loginProvider = NotifierProvider<LoginNotifier, LoginState>(
+  LoginNotifier.new,
+);

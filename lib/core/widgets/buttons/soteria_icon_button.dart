@@ -30,18 +30,12 @@ class SoteriaIconButton extends StatelessWidget {
           height: size,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: isGlass 
-                ? Colors.white.withValues(alpha: 0.05) 
+            color: isGlass
+                ? Colors.white.withValues(alpha: 0.05)
                 : SoteriaColors.surface.withValues(alpha: 0.5),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.1),
-            ),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           ),
-          child: Icon(
-            icon,
-            size: iconSize,
-            color: SoteriaColors.textPrimary,
-          ),
+          child: Icon(icon, size: iconSize, color: SoteriaColors.textPrimary),
         ),
       ),
     );

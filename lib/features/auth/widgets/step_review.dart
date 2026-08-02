@@ -29,7 +29,10 @@ class StepReview extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _InfoRow(label: 'Name', value: '${state.firstName} ${state.lastName}'),
+              _InfoRow(
+                label: 'Name',
+                value: '${state.firstName} ${state.lastName}',
+              ),
               _InfoRow(label: 'Username', value: '@${state.username}'),
               _InfoRow(label: 'Email', value: state.email),
             ],
@@ -48,7 +51,9 @@ class StepReview extends ConsumerWidget {
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: state.interests.map((i) => SoteriaChip(label: i, isSelected: true)).toList(),
+                children: state.interests
+                    .map((i) => SoteriaChip(label: i, isSelected: true))
+                    .toList(),
               ),
             ],
           ),
@@ -89,9 +94,21 @@ class _ReviewSection extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title.toUpperCase(), style: context.labelSmall.copyWith(color: SoteriaColors.gold, fontWeight: FontWeight.bold)),
+            Text(
+              title.toUpperCase(),
+              style: context.labelSmall.copyWith(
+                color: SoteriaColors.gold,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             if (onEdit != null)
-              TextButton(onPressed: onEdit, child: const Text('Edit', style: TextStyle(color: SoteriaColors.muted))),
+              TextButton(
+                onPressed: onEdit,
+                child: const Text(
+                  'Edit',
+                  style: TextStyle(color: SoteriaColors.muted),
+                ),
+              ),
           ],
         ),
         SizedBox(height: SoteriaSpacing.sm),
@@ -116,7 +133,10 @@ class _InfoRow extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: context.bodySmall.copyWith(color: SoteriaColors.muted)),
+          Text(
+            label,
+            style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+          ),
           Text(value, style: context.bodyMedium),
         ],
       ),

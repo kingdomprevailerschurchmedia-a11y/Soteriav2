@@ -12,7 +12,7 @@ class _AuthGuard implements SoteriaGuard {
   @override
   Future<String?> check(String currentPath) async {
     // Abstraction: Future implementation will check user auth state
-    return null; 
+    return null;
   }
 }
 

@@ -12,7 +12,10 @@ class GradientsPreviewPage extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       children: [
-        _buildGradientItem('Primary Background', SoteriaGradients.primaryBackground),
+        _buildGradientItem(
+          'Primary Background',
+          SoteriaGradients.primaryBackground,
+        ),
         _buildGradientItem('Competition', SoteriaGradients.competition),
         _buildGradientItem('Reward (Premium Gold)', SoteriaGradients.reward),
         _buildGradientItem('Card Subtle', SoteriaGradients.card),

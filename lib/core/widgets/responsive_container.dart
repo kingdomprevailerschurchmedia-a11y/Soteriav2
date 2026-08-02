@@ -17,10 +17,12 @@ class ResponsiveContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        if (constraints.maxWidth >= SoteriaBreakpoints.desktop && desktop != null) {
+        if (constraints.maxWidth >= SoteriaBreakpoints.desktop &&
+            desktop != null) {
           return desktop!;
         }
-        if (constraints.maxWidth >= SoteriaBreakpoints.tablet && tablet != null) {
+        if (constraints.maxWidth >= SoteriaBreakpoints.tablet &&
+            tablet != null) {
           return tablet!;
         }
         return mobile;

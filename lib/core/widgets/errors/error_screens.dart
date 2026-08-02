@@ -33,7 +33,8 @@ class PremiumErrorScreen extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 24.w),
               child: ConstrainedBox(
                 constraints: BoxConstraints(
-                  minHeight: MediaQuery.of(context).size.height -
+                  minHeight:
+                      MediaQuery.of(context).size.height -
                       MediaQuery.of(context).padding.top -
                       MediaQuery.of(context).padding.bottom,
                 ),
@@ -44,7 +45,9 @@ class PremiumErrorScreen extends StatelessWidget {
                     _ErrorIllustration(isUnexpected: isUnexpected),
                     SizedBox(height: SoteriaSpacing.xxl),
                     Text(
-                      isUnexpected ? 'SYSTEM ANOMALY' : 'CONNECTION INTERRUPTED',
+                      isUnexpected
+                          ? 'SYSTEM ANOMALY'
+                          : 'CONNECTION INTERRUPTED',
                       style: SoteriaTypography.headline.copyWith(
                         color: SoteriaColors.gold,
                         letterSpacing: 2.0,
@@ -102,7 +105,10 @@ class _ErrorIllustration extends StatelessWidget {
       decoration: BoxDecoration(
         color: SoteriaColors.gold.withValues(alpha: 0.1),
         shape: BoxShape.circle,
-        border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.2), width: 2),
+        border: Border.all(
+          color: SoteriaColors.gold.withValues(alpha: 0.2),
+          width: 2,
+        ),
         boxShadow: [
           BoxShadow(
             color: SoteriaColors.gold.withValues(alpha: 0.1),
@@ -113,7 +119,9 @@ class _ErrorIllustration extends StatelessWidget {
       ),
       child: Center(
         child: Icon(
-          isUnexpected ? Icons.security_update_warning_rounded : Icons.wifi_off_rounded,
+          isUnexpected
+              ? Icons.security_update_warning_rounded
+              : Icons.wifi_off_rounded,
           color: SoteriaColors.gold,
           size: 48.w,
         ),

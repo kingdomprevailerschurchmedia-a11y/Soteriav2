@@ -35,14 +35,25 @@ class SoteriaThemeExtension extends ThemeExtension<SoteriaThemeExtension> {
   }
 
   @override
-  SoteriaThemeExtension lerp(ThemeExtension<SoteriaThemeExtension>? other, double t) {
+  SoteriaThemeExtension lerp(
+    ThemeExtension<SoteriaThemeExtension>? other,
+    double t,
+  ) {
     if (other is! SoteriaThemeExtension) {
       return this;
     }
     return SoteriaThemeExtension(
-      primaryGradient: LinearGradient.lerp(primaryGradient, other.primaryGradient, t)!,
+      primaryGradient: LinearGradient.lerp(
+        primaryGradient,
+        other.primaryGradient,
+        t,
+      )!,
       cardGradient: LinearGradient.lerp(cardGradient, other.cardGradient, t)!,
-      buttonGradient: LinearGradient.lerp(buttonGradient, other.buttonGradient, t)!,
+      buttonGradient: LinearGradient.lerp(
+        buttonGradient,
+        other.buttonGradient,
+        t,
+      )!,
       glassBlur: lerpDouble(glassBlur, other.glassBlur, t)!,
       glassOpacity: lerpDouble(glassOpacity, other.glassOpacity, t)!,
     );
@@ -50,5 +61,6 @@ class SoteriaThemeExtension extends ThemeExtension<SoteriaThemeExtension> {
 }
 
 extension SoteriaThemeExtensionX on BuildContext {
-  SoteriaThemeExtension get soteriaTheme => Theme.of(this).extension<SoteriaThemeExtension>()!;
+  SoteriaThemeExtension get soteriaTheme =>
+      Theme.of(this).extension<SoteriaThemeExtension>()!;
 }

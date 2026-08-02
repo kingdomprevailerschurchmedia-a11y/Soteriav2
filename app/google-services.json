@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "464470460254",
+    "project_id": "soteriav2-b4042",
+    "storage_bucket": "soteriav2-b4042.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464470460254:android:989bc6dca720635016b1cf",
+        "android_client_info": {
+          "package_name": "com.soteria.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464470460254-esbjup6n9n3fn2n6vv6n6k080tbgsad0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soteria.app",
+            "certificate_hash": "3ff0fad302d16603a370f9316f9ff54290d1532b"
+          }
+        },
+        {
+          "client_id": "464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAo1el2cRS6VtggUY9FgXexDIe1f0ElAwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -21,10 +21,7 @@ class SoteriaFadeIn extends StatelessWidget {
       duration: duration,
       curve: Curves.easeOut,
       builder: (context, value, child) {
-        return Opacity(
-          opacity: value,
-          child: child,
-        );
+        return Opacity(opacity: value, child: child);
       },
       child: child,
     );

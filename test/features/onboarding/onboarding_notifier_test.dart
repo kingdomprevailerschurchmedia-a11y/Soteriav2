@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soteria/features/onboarding/providers/onboarding_notifier.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
+import '../../test_helper.dart';
 
 void main() {
   group('OnboardingNotifier', () {
@@ -9,7 +11,11 @@ void main() {
 
     setUp(() async {
       SharedPreferences.setMockInitialValues({});
-      container = ProviderContainer();
+      container = ProviderContainer(
+        overrides: [
+          identityRepositoryProvider.overrideWithValue(MockIdentityRepo()),
+        ],
+      );
     });
 
     tearDown(() {
@@ -38,7 +44,7 @@ void main() {
       final notifier = container.read(onboardingProvider.notifier);
       await notifier.skip();
       expect(container.read(onboardingProvider).isCompleted, true);
-      
+
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getBool('onboarding_completed'), true);
     });

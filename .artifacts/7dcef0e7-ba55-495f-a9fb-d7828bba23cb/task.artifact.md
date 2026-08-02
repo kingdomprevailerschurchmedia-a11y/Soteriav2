@@ -1,0 +1,4 @@
+- [x] `[x]` Navigation Logic Fix
+    - [x] `[x]` Update `app_router.dart` redirect logic
+- [ ] `[/]` Verification
+    - [ ] Verify navigation to gallery after login

@@ -32,7 +32,9 @@ class SoteriaChip extends StatelessWidget {
           color: isSelected ? SoteriaColors.primary : SoteriaColors.surface,
           borderRadius: SoteriaRadius.brFull,
           border: Border.all(
-            color: isSelected ? SoteriaColors.primary : Colors.white.withValues(alpha: 0.1),
+            color: isSelected
+                ? SoteriaColors.primary
+                : Colors.white.withValues(alpha: 0.1),
           ),
         ),
         child: Row(

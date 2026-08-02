@@ -19,8 +19,11 @@ class RegistrationPreviewPage extends StatelessWidget {
           onPressed: () => context.push('${SoteriaRoutes.auth}/register'),
         ),
         SizedBox(height: SoteriaSpacing.xl),
-        
-        Text('Password Strength States', style: Theme.of(context).textTheme.titleMedium),
+
+        Text(
+          'Password Strength States',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
           child: Column(
@@ -33,12 +36,17 @@ class RegistrationPreviewPage extends StatelessWidget {
             ],
           ),
         ),
-        
+
         SizedBox(height: SoteriaSpacing.xl),
-        Text('Guided Journey Architecture', style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          'Guided Journey Architecture',
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
-          child: Text('The registration flow uses a PageView with NeverScrollableScrollPhysics to enforce validation at each step, preventing users from skipping required information.'),
+          child: Text(
+            'The registration flow uses a PageView with NeverScrollableScrollPhysics to enforce validation at each step, preventing users from skipping required information.',
+          ),
         ),
       ],
     );

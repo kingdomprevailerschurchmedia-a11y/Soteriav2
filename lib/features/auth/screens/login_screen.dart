@@ -35,9 +35,11 @@ class LoginScreen extends ConsumerWidget {
                 ),
                 SoteriaButton.text(
                   label: 'Create One',
-                  onPressed: state.isLoading 
-                    ? null 
-                    : () => ref.read(navigationServiceProvider).push('${SoteriaRoutes.auth}/register'),
+                  onPressed: state.isLoading
+                      ? null
+                      : () => ref
+                            .read(navigationServiceProvider)
+                            .push('${SoteriaRoutes.auth}/register'),
                 ),
               ],
             ),
