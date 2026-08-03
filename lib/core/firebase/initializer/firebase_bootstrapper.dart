@@ -35,6 +35,7 @@ class FirebaseBootstrapper {
       await Future.wait([
         FirebaseInitializer.initializeCrashlytics(),
         FirebaseInitializer.initializeAnalytics(),
+        FirebaseInitializer.initializeGoogleSignIn(),
       ]);
 
       // 3. Security (App Check)

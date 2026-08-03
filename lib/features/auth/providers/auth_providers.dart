@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:soteria/core/firebase/data_sources/auth_data_source.dart';
 import '../data/repositories/firebase_auth_repository.dart';
 import '../domain/repositories/auth_repository.dart';
@@ -12,8 +13,9 @@ import '../domain/use_cases/sign_up_use_case.dart';
 
 // --- Data Sources ---
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
-  const dynamic googleSignIn = null; // Temporary bypass for analyzer
-  return FirebaseAuthDataSource(googleSignIn: googleSignIn);
+  return FirebaseAuthDataSource(
+    googleSignIn: GoogleSignIn.instance,
+  );
 });
 
 // --- Repositories ---
@@ -43,9 +45,9 @@ final forgotPasswordUseCaseProvider = Provider<ForgotPasswordUseCase>((ref) {
 });
 
 final sendEmailVerificationUseCaseProvider =
-    Provider<SendEmailVerificationUseCase>((ref) {
-      return SendEmailVerificationUseCase(ref.watch(authRepositoryProvider));
-    });
+Provider<SendEmailVerificationUseCase>((ref) {
+  return SendEmailVerificationUseCase(ref.watch(authRepositoryProvider));
+});
 
 final checkAuthStateUseCaseProvider = Provider<CheckAuthStateUseCase>((ref) {
   return CheckAuthStateUseCase(ref.watch(authRepositoryProvider));

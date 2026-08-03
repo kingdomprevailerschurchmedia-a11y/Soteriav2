@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract interface class AuthDataSource {
   Stream<auth.User?> get authStateChanges;
@@ -15,11 +16,12 @@ abstract interface class AuthDataSource {
 }
 
 class FirebaseAuthDataSource implements AuthDataSource {
-  FirebaseAuthDataSource({auth.FirebaseAuth? firebaseAuth, this._googleSignIn})
-    : _auth = firebaseAuth ?? auth.FirebaseAuth.instance;
+  FirebaseAuthDataSource({auth.FirebaseAuth? firebaseAuth, GoogleSignIn? googleSignIn})
+    : _auth = firebaseAuth ?? auth.FirebaseAuth.instance,
+      _googleSignIn = googleSignIn;
 
   final auth.FirebaseAuth _auth;
-  final dynamic _googleSignIn;
+  final GoogleSignIn? _googleSignIn;
 
   @override
   Stream<auth.User?> get authStateChanges => _auth.authStateChanges();
@@ -42,14 +44,15 @@ class FirebaseAuthDataSource implements AuthDataSource {
 
   @override
   Future<auth.UserCredential> signInWithGoogle() async {
-    if (_googleSignIn == null) {
+    final googleSignIn = _googleSignIn;
+    if (googleSignIn == null) {
       throw auth.FirebaseAuthException(
         code: 'not-configured',
         message: 'Google Sign In not configured.',
       );
     }
 
-    final dynamic googleUser = await _googleSignIn.signIn();
+    final googleUser = await googleSignIn.authenticate();
     if (googleUser == null) {
       throw auth.FirebaseAuthException(
         code: 'google-sign-in-cancelled',
@@ -57,9 +60,8 @@ class FirebaseAuthDataSource implements AuthDataSource {
       );
     }
 
-    final dynamic googleAuth = await googleUser.authentication;
+    final googleAuth = googleUser.authentication;
     final auth.AuthCredential credential = auth.GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 

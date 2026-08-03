@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_performance/firebase_performance.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter/foundation.dart';
 import '../config/firebase_config.dart';
 import '../services/firebase_services.dart';
@@ -44,6 +45,15 @@ class FirebaseInitializer {
     await FirebasePerformance.instance.setPerformanceCollectionEnabled(
       !kDebugMode,
     );
+  }
+
+  static Future<void> initializeGoogleSignIn() async {
+    LoggerService.i('Initializing Google Sign-In');
+    await GoogleSignIn.instance.initialize(
+      serverClientId:
+          '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
+    );
+    LoggerService.d('Google Sign-In ready.');
   }
 
   static Future<void> initializeAppCheck(
