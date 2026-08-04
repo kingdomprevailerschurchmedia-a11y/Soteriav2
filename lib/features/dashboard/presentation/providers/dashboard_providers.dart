@@ -1,57 +1,60 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/firebase/providers/firebase_providers.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../domain/models/dashboard_state.dart';
 import '../../domain/repositories/home_repository.dart';
-import '../../data/repositories/mock_home_repository.dart';
+import '../../data/repositories/firestore_home_repository.dart';
 
 final homeRepositoryProvider = Provider<HomeRepository>((ref) {
-  return MockHomeRepository();
+  return FirestoreHomeRepository(
+    database: ref.watch(firestoreDatabaseServiceProvider),
+  );
+});
+
+final announcementsProvider = FutureProvider<List<String>>((ref) {
+  return ref.watch(homeRepositoryProvider).getAnnouncements();
+});
+
+final dailyChallengeProvider = FutureProvider<DailyChallenge?>((ref) {
+  return ref.watch(homeRepositoryProvider).getDailyChallenge();
 });
 
 class DashboardNotifier extends Notifier<DashboardState> {
   @override
   DashboardState build() {
-    final player = ref.watch(currentPlayerProvider);
-
-    // Trigger initial fetch
-    Future.microtask(() => _fetchHomeData());
+    final playerAsync = ref.watch(currentPlayerStreamProvider);
+    final announcementsAsync = ref.watch(announcementsProvider);
+    final challengeAsync = ref.watch(dailyChallengeProvider);
 
     return DashboardState(
-      isLoading: true,
-      player: player,
+      isLoading: playerAsync.isLoading || announcementsAsync.isLoading || challengeAsync.isLoading,
+      player: playerAsync.value,
+      announcements: announcementsAsync.value ?? const [],
+      dailyChallenge: challengeAsync.value,
+      error: _getError(playerAsync, announcementsAsync, challengeAsync),
       greeting: _getGreeting(),
     );
   }
 
-  Future<void> _fetchHomeData() async {
-    final repo = ref.read(homeRepositoryProvider);
-
-    try {
-      final announcements = await repo.getAnnouncements();
-      final dailyChallenge = await repo.getDailyChallenge();
-
-      if (ref.mounted) {
-        state = state.copyWith(
-          isLoading: false,
-          announcements: announcements,
-          dailyChallenge: dailyChallenge,
-        );
-      }
-    } catch (e) {
-      if (ref.mounted) {
-        state = state.copyWith(isLoading: false, error: e.toString());
-      }
-    }
+  String? _getError(AsyncValue player, AsyncValue announcements, AsyncValue challenge) {
+    if (player.hasError) return player.error.toString();
+    if (announcements.hasError) return announcements.error.toString();
+    if (challenge.hasError) return challenge.error.toString();
+    return null;
   }
 
   String _getGreeting() {
     final hour = DateTime.now().hour;
+    if (hour < 5) return 'Good Night';
     if (hour < 12) return 'Good Morning';
     if (hour < 17) return 'Good Afternoon';
     return 'Good Evening';
   }
 
-  void refresh() => _fetchHomeData();
+  void refresh() {
+    ref.invalidate(announcementsProvider);
+    ref.invalidate(dailyChallengeProvider);
+  }
 }
 
 final dashboardProvider = NotifierProvider<DashboardNotifier, DashboardState>(

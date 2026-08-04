@@ -60,9 +60,20 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart';
 
+import 'package:soteria/shared/screens/coming_soon_screen.dart';
+import 'package:soteria/features/settings/screens/settings_screen.dart';
+
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
   ref.onDispose(listenable.dispose);
+
+  // Navigator Keys for stateful shells
+  final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+  final dashboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'dashboard');
+  final playNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'play');
+  final leaderboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'leaderboard');
+  final rewardsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rewards');
+  final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
   // Start Coordinators
   ref.watch(authCoordinatorProvider);
@@ -71,6 +82,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     initialLocation: SoteriaRoutes.splash,
+    navigatorKey: rootNavigatorKey,
     debugLogDiagnostics: true,
     refreshListenable: listenable,
     observers: [
@@ -145,28 +157,103 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: SoteriaRoutes.splash,
         builder: (context, state) => const SplashScreen(),
       ),
-      ShellRoute(
-        builder: (context, state, child) => HomeShell(child: child),
-        routes: [
-          GoRoute(
-            path: SoteriaRoutes.main,
-            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-              child: const DashboardScreen(),
-              key: state.pageKey,
-            ),
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) =>
+            HomeShell(navigationShell: navigationShell),
+        branches: [
+          StatefulShellBranch(
+            navigatorKey: dashboardNavigatorKey,
+            routes: [
+              GoRoute(
+                path: SoteriaRoutes.main,
+                pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                  child: const DashboardScreen(),
+                  key: state.pageKey,
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'practice',
+                    builder: (context, state) => const ComingSoonScreen(
+                      featureName: 'Practice Mode',
+                      category: 'Game',
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'pro-mode',
+                    builder: (context, state) => const ComingSoonScreen(
+                      featureName: 'Pro Mode',
+                      category: 'Game',
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'versus',
+                    builder: (context, state) => const ComingSoonScreen(
+                      featureName: 'Versus Mode',
+                      category: 'Social',
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'tournament',
+                    builder: (context, state) => const ComingSoonScreen(
+                      featureName: 'Tournaments',
+                      category: 'Game',
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'settings',
+                    pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
+                      child: const SettingsScreen(),
+                      key: state.pageKey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          GoRoute(
-            path: SoteriaRoutes.leaderboard,
-            builder: (context, state) =>
-                const Center(child: Text('Leaderboard')),
+          StatefulShellBranch(
+            navigatorKey: playNavigatorKey,
+            routes: [
+              GoRoute(
+                path: '/app/play',
+                builder: (context, state) => const ComingSoonScreen(
+                  featureName: 'Battle Hub',
+                  category: 'Game',
+                ),
+              ),
+            ],
           ),
-          GoRoute(
-            path: SoteriaRoutes.wallet,
-            builder: (context, state) => const Center(child: Text('Rewards')),
+          StatefulShellBranch(
+            navigatorKey: leaderboardNavigatorKey,
+            routes: [
+              GoRoute(
+                path: SoteriaRoutes.leaderboard,
+                builder: (context, state) => const ComingSoonScreen(
+                  featureName: 'Global Rankings',
+                  category: 'Social',
+                ),
+              ),
+            ],
           ),
-          GoRoute(
-            path: SoteriaRoutes.profile,
-            builder: (context, state) => const Center(child: Text('Profile')),
+          StatefulShellBranch(
+            navigatorKey: rewardsNavigatorKey,
+            routes: [
+              GoRoute(
+                path: SoteriaRoutes.wallet,
+                builder: (context, state) => const ComingSoonScreen(
+                  featureName: 'Soteria Rewards',
+                  category: 'Finance',
+                ),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            navigatorKey: profileNavigatorKey,
+            routes: [
+              GoRoute(
+                path: SoteriaRoutes.profile,
+                builder: (context, state) => const Center(child: Text('Profile')),
+              ),
+            ],
           ),
         ],
       ),

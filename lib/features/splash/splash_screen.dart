@@ -111,7 +111,7 @@ class SplashScreen extends ConsumerWidget {
                           fontSize: 42,
                         ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 7),
                       Text(
                         'COMPETE. LEARN. RISE.',
                         style: context.bodySmall.copyWith(

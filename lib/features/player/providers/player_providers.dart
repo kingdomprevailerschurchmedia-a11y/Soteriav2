@@ -4,10 +4,13 @@ import '../../auth/providers/auth_providers.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/repositories/player_repository.dart';
 import '../data/repositories/firestore_player_repository.dart';
+import '../domain/services/progression_service.dart';
+import '../domain/use_cases/get_progression_use_case.dart';
 import '../domain/use_cases/load_player_profile_use_case.dart';
 import '../domain/use_cases/create_player_profile_use_case.dart';
 import '../domain/use_cases/update_player_profile_use_case.dart';
 import '../domain/use_cases/observe_player_profile_use_case.dart';
+import '../domain/models/progression.dart';
 import '../services/player_bootstrap_service.dart';
 
 // --- Repositories ---
@@ -29,6 +32,12 @@ final updatePlayerProfileUseCaseProvider = Provider(
 );
 final observePlayerProfileUseCaseProvider = Provider(
   (ref) => ObservePlayerProfileUseCase(ref.watch(playerRepositoryProvider)),
+);
+
+final progressionServiceProvider = Provider((ref) => ProgressionService());
+
+final getProgressionUseCaseProvider = Provider(
+  (ref) => GetProgressionUseCase(ref.watch(progressionServiceProvider)),
 );
 
 // --- Services ---
@@ -56,6 +65,12 @@ final currentPlayerStreamProvider = StreamProvider<PlayerProfile?>((ref) {
 /// A convenience provider to access the current player profile data.
 final currentPlayerProvider = Provider<PlayerProfile?>((ref) {
   return ref.watch(currentPlayerStreamProvider).value;
+});
+
+/// Progression state for the current player.
+final playerProgressionProvider = Provider<Progression>((ref) {
+  final player = ref.watch(currentPlayerProvider);
+  return ref.watch(getProgressionUseCaseProvider).execute(player);
 });
 
 /// Manages the bootstrap process state.

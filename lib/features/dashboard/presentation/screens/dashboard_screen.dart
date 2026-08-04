@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
+import '../../../../shared/widgets/soteria_page.dart';
+import '../../../player/providers/player_providers.dart';
 import '../providers/dashboard_providers.dart';
 import '../widgets/dashboard_header.dart';
 import '../widgets/hero_card.dart';
@@ -19,102 +21,116 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(dashboardProvider);
+    final progression = ref.watch(playerProgressionProvider);
+    final player = state.player;
 
-    if (state.isLoading && state.player == null) {
+    if (state.isLoading && player == null) {
       return const DashboardSkeleton();
     }
 
-    final player = state.player;
+    return SoteriaPage(
+      error: state.error,
+      onRetry: () => ref.read(dashboardProvider.notifier).refresh(),
+      child: Scaffold(
+        backgroundColor: Colors.transparent, // SoteriaPage handles gradient/bg
+        body: RefreshIndicator(
+          onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
+          color: SoteriaColors.primary,
+          backgroundColor: SoteriaColors.surface,
+          child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
 
-    return RefreshIndicator(
-      onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
-      color: SoteriaColors.primary,
-      backgroundColor: SoteriaColors.surface,
-      child: CustomScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
-
-          // Header
-          SliverToBoxAdapter(
-            child: DashboardHeader(
-              greeting: state.greeting,
-              playerName: player?.displayName ?? 'Scholar',
-              level: player?.level ?? 1,
-              streak: player?.currentStreak ?? 0,
-            ),
-          ),
-
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-
-          // Hero Card
-          SliverToBoxAdapter(
-            child: HeroCard(
-              level: player?.level ?? 1,
-              xp: player?.xp ?? 0,
-              totalXpRequired: (player?.level ?? 1) * 1000,
-              coins: player?.coins ?? 0,
-              rank: player?.role ?? 'Student',
-            ),
-          ),
-
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
-
-          // Quick Actions
-          const SliverToBoxAdapter(child: QuickActionsGrid()),
-
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-
-          // Daily Challenge
-          if (state.dailyChallenge != null)
-            SliverToBoxAdapter(
-              child: DailyChallengeCard(
-                title: state.dailyChallenge!.title,
-                description: state.dailyChallenge!.description,
-                xpReward: state.dailyChallenge!.xpReward,
-                progress: state.dailyChallenge!.completionPercentage,
-              ),
-            ),
-
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-
-          // Announcements
-          if (state.announcements.isNotEmpty)
-            SliverPadding(
-              padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-              sliver: SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  (context, index) =>
-                      AnnouncementCard(message: state.announcements[index]),
-                  childCount: state.announcements.length,
+              // Header
+              SliverToBoxAdapter(
+                child: DashboardHeader(
+                  greeting: state.greeting,
+                  playerName: player?.displayName ?? 'Scholar',
+                  level: progression.level,
+                  streak: player?.currentStreak ?? 0,
+                  profileCompletion: progression.profileCompletion,
+                  avatarUrl: player?.photoUrl,
+                  isOnline: true,
                 ),
               ),
-            ),
 
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
 
-          // Achievements
-          const SliverToBoxAdapter(child: AchievementCarousel()),
+              // Hero Card
+              SliverToBoxAdapter(
+                child: HeroCard(
+                  level: progression.level,
+                  xpInCurrentLevel: progression.xpInCurrentLevel,
+                  xpThreshold: progression.nextLevelXp,
+                  coins: player?.coins ?? 0,
+                  rank: player?.role ?? 'Student',
+                  progress: progression.progressPercentage,
+                  xpRemaining: progression.xpRemaining,
+                  isDoubleXp: state.announcements.any(
+                      (a) => a.toLowerCase().contains('double xp')),
+                ),
+              ),
 
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
 
-          // Leaderboard
-          const SliverToBoxAdapter(child: LeaderboardPreview()),
+              // Quick Actions
+              const SliverToBoxAdapter(child: QuickActionsGrid()),
 
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
 
-          // Stats
-          SliverToBoxAdapter(
-            child: StatsGrid(
-              questionsAnswered: player?.totalQuestionsAnswered ?? 0,
-              accuracy: player?.accuracy ?? 0.0,
-              gamesPlayed: player?.gamesPlayed ?? 0,
-              highestStreak: player?.highestStreak ?? 0,
-            ),
+              // Daily Challenge
+              if (state.dailyChallenge != null)
+                SliverToBoxAdapter(
+                  child: DailyChallengeCard(
+                    title: state.dailyChallenge!.title,
+                    description: state.dailyChallenge!.description,
+                    xpReward: state.dailyChallenge!.xpReward,
+                    progress: state.dailyChallenge!.completionPercentage,
+                  ),
+                ),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Announcements
+              if (state.announcements.isNotEmpty)
+                SliverPadding(
+                  padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+                  sliver: SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                      (context, index) =>
+                          AnnouncementCard(message: state.announcements[index]),
+                      childCount: state.announcements.length,
+                    ),
+                  ),
+                ),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Achievements
+              const SliverToBoxAdapter(child: AchievementCarousel()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Leaderboard
+              const SliverToBoxAdapter(child: LeaderboardPreview()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Stats
+              SliverToBoxAdapter(
+                child: StatsGrid(
+                  questionsAnswered: player?.totalQuestionsAnswered ?? 0,
+                  accuracy: player?.accuracy ?? 0.0,
+                  gamesPlayed: player?.gamesPlayed ?? 0,
+                  highestStreak: player?.highestStreak ?? 0,
+                ),
+              ),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl * 2)),
+            ],
           ),
-
-          SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl * 2)),
-        ],
+        ),
       ),
     );
   }

@@ -1,0 +1,22 @@
+# Task: Epic 4 Story 4.3 — Dashboard Navigation & Interaction
+
+- [x] **Navigation Foundation**
+    - [x] Create `AppDestination` model [NEW]
+    - [x] Implement `NavigationCoordinator` [NEW]
+    - [x] Create `NavigationProviders` [NEW]
+    - [x] Refactor `app_router.dart` to use `StatefulShellRoute` [MODIFY]
+- [x] **Interactive Components**
+    - [x] Create reusable `ComingSoonScreen` [NEW]
+    - [x] Create `SoteriaPage` base wrapper [NEW]
+    - [x] Refactor `HomeShell` for stateful navigation [MODIFY]
+- [x] **Dashboard Integration**
+    - [x] Update `DashboardHeader` with action buttons [MODIFY]
+    - [x] Connect `QuickActionsGrid` to routes [MODIFY]
+    - [x] Implement haptic feedback across dashboard actions [MODIFY]
+- [x] **Testing & Verification**
+    - [x] Navigation unit tests
+    - [x] Accessibility check (semantics/labels)
+    - [x] Golden tests for `ComingSoonScreen`
+- [x] **Documentation**
+    - [x] Generate Route Catalog
+    - [x] Create Navigation Map diagram
