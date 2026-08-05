@@ -4,7 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/navigation/transitions/soteria_page_transitions.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
+<<<<<<< HEAD
 import 'package:soteria/core/logging/logger_service.dart';
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 import 'package:soteria/features/splash/splash_screen.dart';
 import 'package:soteria/features/onboarding/screens/onboarding_screen.dart';
 import 'package:soteria/features/personalization/screens/personalization_screen.dart';
@@ -47,6 +50,7 @@ import 'package:soteria/features/preview_gallery/pages/progression_preview_page.
 import 'package:soteria/features/preview_gallery/pages/integrity_preview_page.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 
+<<<<<<< HEAD
 import 'package:soteria/core/identity/models/user_session.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
 import 'package:soteria/features/auth/services/auth_coordinator.dart';
@@ -63,10 +67,13 @@ import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart'
 import 'package:soteria/shared/screens/coming_soon_screen.dart';
 import 'package:soteria/features/settings/screens/settings_screen.dart';
 
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
   ref.onDispose(listenable.dispose);
 
+<<<<<<< HEAD
   // Navigator Keys for stateful shells
   final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
   final dashboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'dashboard');
@@ -80,11 +87,14 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.read(notificationCoordinatorProvider).initialize();
   ref.read(configurationCoordinatorProvider).initialize();
 
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
   return GoRouter(
     initialLocation: SoteriaRoutes.splash,
     navigatorKey: rootNavigatorKey,
     debugLogDiagnostics: true,
     refreshListenable: listenable,
+<<<<<<< HEAD
     observers: [
       FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
     ],
@@ -146,17 +156,42 @@ final routerProvider = Provider<GoRouter>((ref) {
             return SoteriaRoutes.main;
           }
         }
+=======
+    redirect: (context, state) {
+      final lifecycle = ref.read(appLifecycleProvider);
+      final location = state.uri.toString();
+
+      if (lifecycle == AppStartupState.loading) return null;
+
+      // Route protection
+      if (lifecycle == AppStartupState.onboarding && location != SoteriaRoutes.onboarding) {
+        return SoteriaRoutes.onboarding;
+      }
+      if (lifecycle == AppStartupState.personalization && location != SoteriaRoutes.personalization) {
+        return SoteriaRoutes.personalization;
+      }
+      if (lifecycle == AppStartupState.auth && !location.startsWith(SoteriaRoutes.auth)) {
+        return SoteriaRoutes.auth;
+      }
+      if (lifecycle == AppStartupState.ready && location == SoteriaRoutes.splash) {
+        return SoteriaRoutes.previewGallery; // Default for now
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       }
 
       return null;
     },
+<<<<<<< HEAD
     errorBuilder: (context, state) =>
         UnknownRouteScreen(location: state.uri.toString()),
+=======
+    errorBuilder: (context, state) => UnknownRouteScreen(location: state.uri.toString()),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     routes: [
       GoRoute(
         path: SoteriaRoutes.splash,
         builder: (context, state) => const SplashScreen(),
       ),
+<<<<<<< HEAD
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             HomeShell(navigationShell: navigationShell),
@@ -264,6 +299,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           key: state.pageKey,
         ),
       ),
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       GoRoute(
         path: SoteriaRoutes.onboarding,
         pageBuilder: (context, state) => SoteriaPageTransitions.fade(
@@ -464,6 +501,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
           ),
           GoRoute(
+            path: 'verification',
+            builder: (context, state) => const GalleryShell(title: 'Verification', child: VerificationPreviewPage()),
+          ),
+          GoRoute(
+            path: 'identity',
+            builder: (context, state) => const GalleryShell(title: 'Identity & Session', child: IdentityPreviewPage()),
+          ),
+          GoRoute(
             path: 'diagnostics',
             builder: (context, state) => const GalleryShell(
               title: 'Diagnostics',
@@ -558,6 +603,7 @@ class _RiverpodRefreshListenable extends ChangeNotifier {
   late final ProviderSubscription _sessionSub;
 
   _RiverpodRefreshListenable(Ref ref) {
+<<<<<<< HEAD
     _lifecycleSub = ref.listen(
       appLifecycleProvider,
       (prev, next) => notifyListeners(),
@@ -566,6 +612,10 @@ class _RiverpodRefreshListenable extends ChangeNotifier {
       sessionProvider,
       (prev, next) => notifyListeners(),
     );
+=======
+    _lifecycleSub = ref.listen(appLifecycleProvider, (prev, next) => notifyListeners());
+    _sessionSub = ref.listen(sessionProvider, (prev, next) => notifyListeners());
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
   }
 
   @override

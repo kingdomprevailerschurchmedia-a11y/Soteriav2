@@ -28,10 +28,14 @@ class _SoteriaOtpWidgetState extends State<SoteriaOtpWidget> {
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
     _controllers = List.generate(
       widget.length,
       (index) => TextEditingController(),
     );
+=======
+    _controllers = List.generate(widget.length, (index) => TextEditingController());
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     _focusNodes = List.generate(widget.length, (index) => FocusNode());
   }
 
@@ -70,9 +74,15 @@ class _SoteriaOtpWidgetState extends State<SoteriaOtpWidget> {
   }
 
   void _onKeyEvent(KeyEvent event, int index) {
+<<<<<<< HEAD
     if (event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.backspace &&
         _controllers[index].text.isEmpty &&
+=======
+    if (event is KeyDownEvent && 
+        event.logicalKey == LogicalKeyboardKey.backspace && 
+        _controllers[index].text.isEmpty && 
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
         index > 0) {
       _focusNodes[index - 1].requestFocus();
     }
@@ -109,9 +119,13 @@ class _SoteriaOtpWidgetState extends State<SoteriaOtpWidget> {
                 ),
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
+<<<<<<< HEAD
                   LengthLimitingTextInputFormatter(
                     widget.length,
                   ), // Allow full length for paste then truncate
+=======
+                  LengthLimitingTextInputFormatter(widget.length), // Allow full length for paste then truncate
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
                 ],
                 onChanged: (val) => _onChanged(val, index),
                 autofillHints: const [AutofillHints.oneTimeCode],

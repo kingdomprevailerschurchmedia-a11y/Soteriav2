@@ -18,7 +18,14 @@ class UserIdentity {
     required this.lastLoginAt,
   });
 
+<<<<<<< HEAD
   UserIdentity copyWith({AccountStatus? status, DateTime? lastLoginAt}) {
+=======
+  UserIdentity copyWith({
+    AccountStatus? status,
+    DateTime? lastLoginAt,
+  }) {
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     return UserIdentity(
       uid: uid,
       providerId: providerId,

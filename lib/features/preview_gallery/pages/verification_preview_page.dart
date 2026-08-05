@@ -17,12 +17,17 @@ class VerificationPreviewPage extends StatelessWidget {
       children: [
         SoteriaButton.primary(
           label: 'Email Verification Flow',
+<<<<<<< HEAD
           onPressed: () =>
               context.push('${SoteriaRoutes.auth}/verify/emailVerification'),
+=======
+          onPressed: () => context.push('${SoteriaRoutes.auth}/verify/emailVerification'),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
         ),
         const SizedBox(height: 12),
         SoteriaButton.secondary(
           label: 'Password Recovery Flow',
+<<<<<<< HEAD
           onPressed: () =>
               context.push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
         ),
@@ -37,6 +42,20 @@ class VerificationPreviewPage extends StatelessWidget {
           'Countdown States',
           style: Theme.of(context).textTheme.titleMedium,
         ),
+=======
+          onPressed: () => context.push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
+        ),
+        SizedBox(height: SoteriaSpacing.xl),
+        
+        Text('OTP Widget', style: Theme.of(context).textTheme.titleMedium),
+        SizedBox(height: SoteriaSpacing.md),
+        SoteriaCard(
+          child: SoteriaOtpWidget(onChanged: (_) {}),
+        ),
+        
+        SizedBox(height: SoteriaSpacing.xl),
+        Text('Countdown States', style: Theme.of(context).textTheme.titleMedium),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
         SizedBox(height: SoteriaSpacing.md),
         SoteriaCard(
           child: Column(

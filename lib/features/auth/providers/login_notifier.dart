@@ -1,11 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/login_state.dart';
+<<<<<<< HEAD
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import '../models/authentication_result.dart';
 import 'auth_providers.dart';
+=======
+import '../repositories/login_repository.dart';
+import '../repositories/firebase_login_repository.dart';
+import '../../../core/identity/providers/firebase_providers.dart';
+import '../../../core/utils/identity_validator.dart';
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 
 class LoginNotifier extends Notifier<LoginState> {
   static const _kFirstNameKey = 'user_first_name';
@@ -142,6 +149,17 @@ class LoginNotifier extends Notifier<LoginState> {
   }
 }
 
+<<<<<<< HEAD
 final loginProvider = NotifierProvider<LoginNotifier, LoginState>(
   LoginNotifier.new,
 );
+=======
+final loginProvider = NotifierProvider<LoginNotifier, LoginState>(LoginNotifier.new);
+
+// Updated repository provider
+final loginRepositoryProvider = Provider<LoginRepository>((ref) {
+  return FirebaseLoginRepository(
+    auth: ref.watch(firebaseAuthProvider),
+  );
+});
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30

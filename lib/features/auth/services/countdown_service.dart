@@ -10,7 +10,11 @@ class CountdownService {
     _timer?.cancel();
     int current = seconds;
     _controller.add(current);
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (current > 0) {
         current--;

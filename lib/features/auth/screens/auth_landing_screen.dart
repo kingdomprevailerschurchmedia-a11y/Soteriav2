@@ -9,6 +9,7 @@ import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/widgets/buttons/soteria_button.dart';
 import '../models/identity_provider.dart';
 import '../providers/auth_landing_notifier.dart';
+import '../providers/login_notifier.dart';
 import '../widgets/auth_hero_section.dart';
 import '../widgets/auth_provider_button.dart';
 import '../widgets/feature_carousel.dart';
@@ -46,7 +47,11 @@ class AuthLandingScreen extends ConsumerWidget {
                       icon: Icons.g_mobiledata_rounded,
                       type: IdentityProviderType.google,
                     ),
+<<<<<<< HEAD
                     onTap: () => notifier.signInWithGoogle(),
+=======
+                    onTap: () => notifier.signInWithGoogle(ref.read(loginRepositoryProvider)),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
                     isLoading: state.isLoading,
                   ),
                   AuthProviderButton(

@@ -16,6 +16,7 @@ class IdentityPreviewPage extends StatelessWidget {
         Text('Session States', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
         const _SessionCard(status: SessionStatus.guest, label: 'Guest Session'),
+<<<<<<< HEAD
         const _SessionCard(
           status: SessionStatus.authenticated,
           label: 'Authenticated Session',
@@ -29,12 +30,19 @@ class IdentityPreviewPage extends StatelessWidget {
           label: 'Offline Session',
         ),
 
+=======
+        const _SessionCard(status: SessionStatus.authenticated, label: 'Authenticated Session'),
+        const _SessionCard(status: SessionStatus.expired, label: 'Expired Session'),
+        const _SessionCard(status: SessionStatus.offline, label: 'Offline Session'),
+        
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
         SizedBox(height: SoteriaSpacing.xl),
         Text('User Roles', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
           child: Column(
             children: [
+<<<<<<< HEAD
               _RoleRow(
                 role: 'Premium User',
                 icon: Icons.workspace_premium_rounded,
@@ -50,6 +58,11 @@ class IdentityPreviewPage extends StatelessWidget {
                 icon: Icons.admin_panel_settings_rounded,
                 color: SoteriaColors.success,
               ),
+=======
+              _RoleRow(role: 'Premium User', icon: Icons.workspace_premium_rounded, color: SoteriaColors.gold),
+              _RoleRow(role: 'Moderator', icon: Icons.gavel_rounded, color: SoteriaColors.primary),
+              _RoleRow(role: 'Administrator', icon: Icons.admin_panel_settings_rounded, color: SoteriaColors.success),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
             ],
           ),
         ),
@@ -69,6 +82,7 @@ class IdentityPreviewPage extends StatelessWidget {
       builder: (context) => AlertDialog(
         backgroundColor: SoteriaColors.surface,
         title: const Text('Sign Out'),
+<<<<<<< HEAD
         content: const Text(
           'Are you sure you want to exit your prestigious session?',
         ),
@@ -82,6 +96,12 @@ class IdentityPreviewPage extends StatelessWidget {
             fullWidth: false,
             onPressed: () => Navigator.pop(context),
           ),
+=======
+        content: const Text('Are you sure you want to exit your prestigious session?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          SoteriaButton.primary(label: 'Sign Out', fullWidth: false, onPressed: () => Navigator.pop(context)),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
         ],
       ),
     );
@@ -130,11 +150,15 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         status.name.toUpperCase(),
+<<<<<<< HEAD
         style: TextStyle(
           color: color,
           fontSize: 10,
           fontWeight: FontWeight.bold,
         ),
+=======
+        style: TextStyle(color: color, fontSize: 10, fontWeight: FontWeight.bold),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       ),
     );
   }

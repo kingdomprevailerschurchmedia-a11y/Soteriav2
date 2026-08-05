@@ -40,11 +40,19 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
 
   void _onContinue(RegistrationDraft state) async {
     if (state.step == RegistrationStep.review) {
+<<<<<<< HEAD
       await ref.read(registrationProvider.notifier).completeRegistration();
       if (mounted && ref.read(registrationProvider).error == null) {
         ref
             .read(navigationServiceProvider)
             .go('${SoteriaRoutes.auth}/verify/emailVerification');
+=======
+      await ref.read(registrationProvider.notifier).completeRegistration(
+        ref.read(registrationRepositoryProvider),
+      );
+      if (mounted) {
+        ref.read(navigationServiceProvider).go('${SoteriaRoutes.auth}/verify/emailVerification');
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       }
       return;
     }

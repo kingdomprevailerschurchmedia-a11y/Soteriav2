@@ -15,13 +15,18 @@ class SoteriaApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+<<<<<<< HEAD
     final firebaseInit = ref.watch(firebaseInitFutureProvider);
+=======
+    final router = ref.watch(routerProvider);
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 
     return ScreenUtilInit(
       designSize: const Size(390, 844), // iPhone 13/14 size
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
+<<<<<<< HEAD
         return firebaseInit.when(
           data: (_) => _buildApp(context, ref),
           loading: () => const _BootstrapWrapper(child: SplashScreen()),
@@ -31,6 +36,19 @@ class SoteriaApp extends ConsumerWidget {
               onRetry: () => ref.refresh(firebaseInitFutureProvider),
             ),
           ),
+=======
+        return MaterialApp.router(
+          title: 'Soteria',
+          debugShowCheckedModeBanner: false,
+          theme: SoteriaTheme.darkTheme,
+          routerConfig: router,
+          builder: (context, child) {
+            if (!kDebugMode || !Platform.environment.containsKey('FLUTTER_TEST')) {
+              ErrorWidget.builder = ErrorHandler.errorWidgetBuilder;
+            }
+            return child!;
+          },
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
         );
       },
     );

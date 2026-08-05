@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"file_system":[{"path":"c:\\joseph project\\.dart_tool\\package_config.json","hash":-4540097044035583761},{"path":"C:\\Joseph Project\\.dart_tool\\package_config.json","hash":-4540097044035583761},{"path":"C:\\src\\flutter\\bin\\cache\\dart-sdk\\version","hash":1109306723566754575}],"environment":[]}
+=======
+{"file_system":[{"path":"c:\\joseph project\\.dart_tool\\package_config.json","hash":7881795866436728688},{"path":"C:\\Joseph Project\\.dart_tool\\package_config.json","hash":7881795866436728688},{"path":"C:\\src\\flutter\\bin\\cache\\dart-sdk\\version","hash":1109306723566754575}],"environment":[]}
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30

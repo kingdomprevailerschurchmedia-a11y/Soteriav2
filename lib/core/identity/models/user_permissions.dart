@@ -17,7 +17,14 @@ class UserPermissions {
     return grantedFeatures.contains(feature);
   }
 
+<<<<<<< HEAD
   UserPermissions copyWith({UserRole? role, Set<String>? grantedFeatures}) {
+=======
+  UserPermissions copyWith({
+    UserRole? role,
+    Set<String>? grantedFeatures,
+  }) {
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     return UserPermissions(
       role: role ?? this.role,
       grantedFeatures: grantedFeatures ?? this.grantedFeatures,

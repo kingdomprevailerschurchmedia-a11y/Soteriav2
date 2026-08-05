@@ -12,8 +12,13 @@ class VerificationStepRequest extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+<<<<<<< HEAD
     final state = ref.watch(verificationProvider);
     final notifier = ref.read(verificationProvider.notifier);
+=======
+    final state = ref.watch(verificationProvider(type));
+    final notifier = ref.read(verificationProvider(type).notifier);
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 
     return ListView(
       padding: EdgeInsets.all(SoteriaSpacing.lg),

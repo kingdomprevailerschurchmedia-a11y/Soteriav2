@@ -11,12 +11,19 @@ class VerificationStepResetPassword extends ConsumerStatefulWidget {
   final VerificationType type;
 
   @override
+<<<<<<< HEAD
   ConsumerState<VerificationStepResetPassword> createState() =>
       _VerificationStepResetPasswordState();
 }
 
 class _VerificationStepResetPasswordState
     extends ConsumerState<VerificationStepResetPassword> {
+=======
+  ConsumerState<VerificationStepResetPassword> createState() => _VerificationStepResetPasswordState();
+}
+
+class _VerificationStepResetPasswordState extends ConsumerState<VerificationStepResetPassword> {
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
   String _password = '';
 
   @override

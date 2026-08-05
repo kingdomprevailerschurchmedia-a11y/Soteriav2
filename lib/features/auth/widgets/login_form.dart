@@ -64,11 +64,17 @@ class LoginForm extends ConsumerWidget {
               ],
             ),
             TextButton(
+<<<<<<< HEAD
               onPressed: state.isLoading
                   ? null
                   : () => ref
                         .read(navigationServiceProvider)
                         .push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
+=======
+              onPressed: state.isLoading 
+                ? null 
+                : () => ref.read(navigationServiceProvider).push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
               child: Text(
                 'Forgot Password?',
                 style: context.labelSmall.copyWith(color: SoteriaColors.gold),

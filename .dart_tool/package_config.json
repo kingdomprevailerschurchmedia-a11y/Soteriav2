@@ -236,6 +236,7 @@
       "languageVersion": "3.6"
     },
     {
+<<<<<<< HEAD
       "name": "firebase_app_check",
       "rootUri": "file:///C:/Users/USER/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_app_check-0.4.5+2",
       "packageUri": "lib/",
@@ -254,6 +255,8 @@
       "languageVersion": "3.6"
     },
     {
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       "name": "firebase_auth",
       "rootUri": "file:///C:/Users/USER/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_auth-6.5.6",
       "packageUri": "lib/",
@@ -338,6 +341,7 @@
       "languageVersion": "3.6"
     },
     {
+<<<<<<< HEAD
       "name": "firebase_remote_config",
       "rootUri": "file:///C:/Users/USER/AppData/Local/Pub/Cache/hosted/pub.dev/firebase_remote_config-6.5.5",
       "packageUri": "lib/",
@@ -374,6 +378,8 @@
       "languageVersion": "3.6"
     },
     {
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       "name": "fixnum",
       "rootUri": "file:///C:/Users/USER/AppData/Local/Pub/Cache/hosted/pub.dev/fixnum-1.1.1",
       "packageUri": "lib/",
@@ -488,12 +494,15 @@
       "languageVersion": "3.9"
     },
     {
+<<<<<<< HEAD
       "name": "graphs",
       "rootUri": "file:///C:/Users/USER/AppData/Local/Pub/Cache/hosted/pub.dev/graphs-2.3.2",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
     {
+=======
+>>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       "name": "hooks",
       "rootUri": "file:///C:/Users/USER/AppData/Local/Pub/Cache/hosted/pub.dev/hooks-2.0.2",
       "packageUri": "lib/",
