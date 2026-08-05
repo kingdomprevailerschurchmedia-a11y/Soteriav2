@@ -14,14 +14,11 @@ class MockAppLifecycleNotifier extends AppLifecycleNotifier {
   AppStartupState build() => AppStartupState.ready;
 }
 
-<<<<<<< HEAD
 class _MockAppLifecycleNotifier extends AppLifecycleNotifier {
   @override
   AppStartupState build() => AppStartupState.loading;
 }
 
-=======
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 void main() {
   setupTestEnvironment();
 
@@ -31,7 +28,6 @@ void main() {
     SharedPreferences.setMockInitialValues({});
 
     await tester.runAsync(() async {
-<<<<<<< HEAD
       final container = ProviderContainer(
         overrides: [
           identityRepositoryProvider.overrideWithValue(MockIdentityRepo()),
@@ -39,9 +35,6 @@ void main() {
           appLifecycleProvider.overrideWith(_MockAppLifecycleNotifier.new),
         ],
       );
-=======
-      final container = ProviderContainer();
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       addTearDown(container.dispose);
 
       await tester.pumpWidget(
@@ -84,20 +77,12 @@ void main() {
       final router = container.read(routerProvider);
       // Manually navigate to a bad route
       router.go('/bad-route');
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       await tester.pump();
       // Wait for router
       await Future.delayed(const Duration(milliseconds: 100));
       await tester.pumpAndSettle();
-<<<<<<< HEAD
 
-=======
-      
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       expect(find.byType(UnknownRouteScreen), findsOneWidget);
     });
   });

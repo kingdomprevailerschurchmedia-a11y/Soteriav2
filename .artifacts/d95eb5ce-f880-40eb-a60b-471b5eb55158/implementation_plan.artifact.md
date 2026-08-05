@@ -1,69 +1,89 @@
-# Implementation Plan - Epic 4 Story 4.3: Dashboard Actions, Navigation & Interaction Layer
+# Implementation Plan - Epic 5 Story 5.1: Practice Lobby & Session Initialization
 
-Transform the Home Dashboard into a fully interactive navigation hub using GoRouter, premium transitions, and a robust interaction layer.
+Build a premium Practice Lobby that allows players to configure their quiz sessions, initializes the gameplay engine, and prepares all necessary services.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Stateful Navigation**: I will refactor the `HomeShell` to use `StatefulShellRoute` (specifically `StatefulNavigationShell`). This will allow preserving the scroll position and state of each tab (Home, Play, Leaderboard, etc.) when switching between them, which is a key requirement.
+> **Adaptive Difficulty**: The architecture will support an `Adaptive` mode. For now, this will fallback to `Intermediate` until the player performance tracking engine is fully implemented in later stories.
 
 > [!TIP]
-> **Coming Soon Strategy**: For features not yet implemented (Practice, Pro Mode, Versus, Tournament, etc.), I will create a reusable `ComingSoonScreen` that provides a premium placeholder experience instead of dead buttons.
+> **Reward Multipliers**: XP and Coin estimations will be driven by Firebase Remote Config multipliers (e.g., `xp_mult_advanced: 1.5`), allowing live balancing without app updates.
 
 ## Proposed Changes
 
-### Core & Navigation Foundation
+### Infrastructure & Clean Up
 
-#### [NEW] [app_destination.dart](file:///C:/Joseph%20Project/lib/core/navigation/models/app_destination.dart)
-- Define `AppDestination` model with route name, path, icon, and requirements (auth, feature flag).
-
-#### [NEW] [navigation_coordinator.dart](file:///C:/Joseph%20Project/lib/core/navigation/services/navigation_coordinator.dart)
-- Centralized service to handle navigation logic, analytics logging, and routing events.
-
-#### [MODIFY] [app_router.dart](file:///C:/Joseph%20Project/lib/core/navigation/app_router.dart)
-- Upgrade `ShellRoute` to `StatefulShellRoute`.
-- Implement centralized route definitions with premium transitions.
-- Add guards and feature flag checks.
+#### [FIX] [app_router.dart](file:///C:/Joseph%20Project/lib/core/navigation/app_router.dart)
+- Resolve remaining Git merge conflicts to ensure stable navigation to the Practice Lobby.
 
 ---
 
-### UI Components & Screens
+### Domain Layer (Models & Logic)
 
-#### [NEW] [coming_soon_screen.dart](file:///C:/Joseph%20Project/lib/shared/screens/coming_soon_screen.dart)
-- Reusable premium placeholder for future features.
-- Supports different categories (Game, Social, Finance) with unique illustrations/text.
+#### [NEW] [category.dart](file:///C:/Joseph%20Project/lib/features/question_content/domain/entities/category.dart)
+- Model for quiz categories (id, name, description, icon, difficulty level).
 
-#### [NEW] [soteria_page.dart](file:///C:/Joseph%20Project/lib/shared/widgets/soteria_page.dart)
-- Base wrapper for all screens to handle Success/Loading/Offline/Error states consistently.
+#### [NEW] [practice_session_config.dart](file:///C:/Joseph%20Project/lib/features/gameplay_engine/models/practice_session_config.dart)
+- Reusable model for session parameters (category, difficulty, count, timerEnabled).
 
-#### [MODIFY] [home_shell.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/screens/home_shell.dart)
-- Refactor to support `StatefulNavigationShell`.
-- Improve bottom nav interaction and state preservation.
+#### [NEW] [practice_session.dart](file:///C:/Joseph%20Project/lib/features/gameplay_engine/models/practice_session.dart)
+- Represents an initialized session with `sessionId`, `config`, and `startTime`.
 
-#### [MODIFY] [dashboard_header.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/dashboard_header.dart)
-- Add Settings and Notification buttons with navigation triggers.
+#### [NEW] [session_validator.dart](file:///C:/Joseph%20Project/lib/features/gameplay_engine/services/session_validator.dart)
+- Pure logic service to verify configuration eligibility (e.g., "Is player level high enough for Advanced?").
 
-#### [MODIFY] [quick_actions_grid.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/quick_actions_grid.dart)
-- Link buttons to routes via `NavigationCoordinator`.
-- Add haptic feedback.
+#### [NEW] [reward_estimator.dart](file:///C:/Joseph%20Project/lib/features/gameplay_engine/services/reward_estimator.dart)
+- Calculates potential rewards based on config and Remote Config multipliers.
 
 ---
 
-### Infrastructure & Performance
+### Data Layer (Repositories)
 
-#### [NEW] [navigation_providers.dart](file:///C:/Joseph%20Project/lib/core/navigation/providers/navigation_providers.dart)
-- Riverpod providers for `NavigationCoordinator` and route state.
+#### [NEW] [category_repository.dart](file:///C:/Joseph%20Project/lib/features/question_content/domain/repositories/category_repository.dart)
+- Interface for fetching available quiz categories.
+
+#### [NEW] [firestore_category_repository.dart](file:///C:/Joseph%20Project/lib/features/question_content/data/repositories/firestore_category_repository.dart)
+- Firestore implementation with local caching support.
+
+#### [NEW] [practice_repository.dart](file:///C:/Joseph%20Project/lib/features/gameplay_engine/domain/repositories/practice_repository.dart)
+- Interface for session creation and metadata storage.
+
+---
+
+### Presentation Layer (State Management)
+
+#### [NEW] [practice_lobby_providers.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/providers/practice_lobby_providers.dart)
+- `sessionConfigProvider`: StateNotifier for user selections.
+- `practiceLobbyStateProvider`: Combines categories, profile, and validation logic.
+- `practiceSessionProvider`: Handles the async initialization of the game session.
+
+---
+
+### Presentation Layer (UI Components)
+
+#### [NEW] [practice_lobby_screen.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/screens/practice_lobby_screen.dart)
+- Main lobby container with glassmorphic background and entrance animations.
+
+#### [NEW] [category_grid.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/lobby/category_grid.dart)
+- Visual selector for quiz topics with horizontal scrolling and selection feedback.
+
+#### [NEW] [config_selectors.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/lobby/config_selectors.dart)
+- Custom chips and sliders for Difficulty and Question Count.
+
+#### [NEW] [session_summary_card.dart](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/lobby/session_summary_card.dart)
+- Premium card showing estimated rewards and duration.
+
+---
 
 ## Verification Plan
 
 ### Automated Tests
-- **Navigation Tests**: Verify all dashboard buttons navigate to the expected path.
-- **GoRouter Tests**: Ensure auth guards and deep links work correctly.
-- **Widget Tests**: `ComingSoonScreen` rendering and back button functionality.
-- **Accessibility Tests**: Verify semantic labels for all navigation buttons.
+- **Unit Tests**: `SessionValidator` rules and `RewardEstimator` math.
+- **Provider Tests**: Verify `sessionConfigProvider` correctly updates summary when choices change.
+- **Golden Tests**: Lobby UI in Loading, Ready, and Error states.
 
 ### Manual Verification
-- **Tab Switching**: Verify scroll position is preserved when switching between Home and Leaderboard.
-- **Haptics**: Feel the tactile feedback when tapping quick actions and bottom nav items.
-- **Transitions**: Confirm smooth fade/slide transitions between screens.
-- **Offline Indicator**: Verify `SoteriaPage` shows the offline banner when connectivity is lost.
+- **Category Load**: Verify categories are fetched from Firestore and cached for offline use.
+- **Initialization**: Tap "START PRACTICE" and verify it navigates to the (placeholder) Question screen after session creation.
+- **Responsiveness**: Verify the grid layout adjusts for Tablet and Landscape modes.

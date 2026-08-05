@@ -1,22 +1,27 @@
-# Task: Epic 4 Story 4.3 — Dashboard Navigation & Interaction
+# Task: Epic 5 Story 5.1 — Practice Lobby & Initialization
 
-- [x] **Navigation Foundation**
-    - [x] Create `AppDestination` model [NEW]
-    - [x] Implement `NavigationCoordinator` [NEW]
-    - [x] Create `NavigationProviders` [NEW]
-    - [x] Refactor `app_router.dart` to use `StatefulShellRoute` [MODIFY]
-- [x] **Interactive Components**
-    - [x] Create reusable `ComingSoonScreen` [NEW]
-    - [x] Create `SoteriaPage` base wrapper [NEW]
-    - [x] Refactor `HomeShell` for stateful navigation [MODIFY]
-- [x] **Dashboard Integration**
-    - [x] Update `DashboardHeader` with action buttons [MODIFY]
-    - [x] Connect `QuickActionsGrid` to routes [MODIFY]
-    - [x] Implement haptic feedback across dashboard actions [MODIFY]
+- [x] **Infrastructure & Setup**
+    - [x] Resolve merge conflicts in `app_router.dart` [FIX]
+    - [x] Register Practice Lobby route in `app_router.dart` [MODIFY]
+- [x] **Domain Layer**
+    - [x] Implement `Category` entity [NEW]
+    - [x] Implement `PracticeSessionConfig` & `PracticeSession` models [NEW]
+    - [x] Create `SessionValidator` service [NEW]
+    - [x] Create `RewardEstimator` service [NEW]
+- [x] **Data Layer**
+    - [x] Create `CategoryRepository` & `PracticeRepository` interfaces [NEW]
+    - [x] Implement `FirestoreCategoryRepository` [NEW]
+    - [x] Implement `FirestorePracticeRepository` [NEW]
+- [x] **State Management**
+    - [x] Implement `PracticeLobbyProviders` [NEW]
+    - [x] Add `PracticeLobbyState` model [NEW]
+- [x] **Presentation Layer (UI)**
+    - [x] Create `PracticeLobbyScreen` [NEW]
+    - [x] Implement `CategorySelector` widget [NEW]
+    - [x] Implement `SessionConfigSelector` widgets [NEW]
+    - [x] Implement `SessionSummaryCard` [NEW]
 - [x] **Testing & Verification**
-    - [x] Navigation unit tests
-    - [x] Accessibility check (semantics/labels)
-    - [x] Golden tests for `ComingSoonScreen`
+    - [x] Unit tests for `SessionValidator` & `RewardEstimator`
 - [x] **Documentation**
-    - [x] Generate Route Catalog
-    - [x] Create Navigation Map diagram
+    - [x] Generate Practice Lobby Architecture doc
+    - [x] Create Session Initialization Flow diagram

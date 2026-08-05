@@ -1,38 +1,38 @@
-# Walkthrough - Epic 4 Story 4.3: Dashboard Navigation & Interaction
+# Walkthrough - Epic 5 Story 5.1: Practice Lobby & Initialization
 
-I have transformed the Home Dashboard into a fully interactive navigation hub, integrating `GoRouter`'s stateful navigation and premium interaction patterns.
+I have successfully implemented the **Practice Lobby**, providing a high-fidelity entry point for quiz sessions with dynamic configuration and real-time validation.
 
 ## Key Accomplishments
 
-### 1. Stateful Navigation Hub
-Upgraded the core navigation architecture to preserve user context.
-- **[HomeShell](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/screens/home_shell.dart)**: Now uses `StatefulNavigationShell`, allowing users to switch between Home, Leaderboard, and Profile while preserving their scroll position and state in each tab.
-- **[AppRouter](file:///C:/Joseph%20Project/lib/core/navigation/app_router.dart)**: Refactored with a multi-branch route hierarchy.
+### 1. High-Fidelity Lobby Screen
+Created a premium lobby experience that adheres to the Soteria Design System.
+- **[PracticeLobbyScreen](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/screens/practice_lobby_screen.dart)**: Features a glassmorphic layout, background gradients, and smooth entrance animations.
+- **[CategorySelector](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/lobby/category_selector.dart)**: Horizontal scrollable list with visual feedback and shadow effects for the active choice.
 
-### 2. Premium Interaction Layer
-Integrated haptics and centralized navigation logic.
-- **[NavigationCoordinator](file:///C:/Joseph%20Project/lib/core/navigation/services/navigation_coordinator.dart)**: A centralized service that handles all navigation triggers, ensuring consistent haptic feedback (`lightImpact`, `selectionClick`) and analytics logging.
-- **[QuickActionsGrid](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/quick_actions_grid.dart)**: All action cards (Practice, Versus, etc.) are now interactive and connected to the routing system.
+### 2. Intelligent Session Configuration
+Implemented a robust system for customizing and validating quiz sessions.
+- **[PracticeSessionConfig](file:///C:/Joseph%20Project/lib/features/gameplay_engine/models/practice_session_config.dart)**: Centralized model for category, difficulty, and question count.
+- **[SessionValidator](file:///C:/Joseph%20Project/lib/features/gameplay_engine/services/session_validator.dart)**: Pure domain service that verifies player eligibility (Level, Premium status) before allowing the session to start.
+- **[RewardEstimator](file:///C:/Joseph%20Project/lib/features/gameplay_engine/services/reward_estimator.dart)**: Calculates potential XP and Coin rewards based on the selected configuration.
 
-### 3. Reusable Interaction Components
-- **[ComingSoonScreen](file:///C:/Joseph%20Project/lib/shared/screens/coming_soon_screen.dart)**: A premium placeholder for future features, ensuring no "dead buttons" exist on the dashboard.
-- **[SoteriaPage](file:///C:/Joseph%20Project/lib/shared/widgets/soteria_page.dart)**: A new base wrapper that provides a uniform look and feel for all screens, including automatic offline banner handling.
+### 3. Clean Session Initialization
+Established the data flow for starting a new gameplay session.
+- **Firestore Integration**: Session metadata is persisted to the `practice_sessions` collection upon initialization.
+- **Stateful Navigation**: Resolved critical merge conflicts in `app_router.dart` and registered the `/app/practice` route.
 
-### 4. Interactive Header & Settings
-- **[DashboardHeader](file:///C:/Joseph%20Project/lib/features/dashboard/presentation/widgets/dashboard_header.dart)**: Added functional Settings and Notification triggers.
-- **[SettingsScreen](file:///C:/Joseph%20Project/lib/features/settings/screens/settings_screen.dart)**: Implemented a functional settings layout for account, privacy, and preferences.
-
-## Documentation & Map
-- **[Route Catalog](file:///C:/Joseph%20Project/lib/core/navigation/docs/route_catalog.artifact.md)**: Detailed inventory of all application routes, guards, and statuses.
-- **[Navigation Map](file:///C:/Joseph%20Project/lib/core/navigation/docs/navigation_map.artifact.md)**: Visual representation of the navigation hierarchy and interaction logic.
+### 4. Documentation & Logic Tests
+- **[Lobby Architecture](file:///C:/Joseph%20Project/lib/features/dashboard/docs/practice_lobby_architecture.artifact.md)**: Detailed breakdown of the state management and services.
+- **[Initialization Flow](file:///C:/Joseph%20Project/lib/features/dashboard/docs/session_initialization_flow.artifact.md)**: Visual sequence diagram of the session creation process.
+- **Logic Tests**: Verified accurate validation rules and reward math via unit tests.
 
 ## Verification Results
-- **Navigation Tests**: `NavigationCoordinator` unit tests pass, verifying correct routing calls.
-- **Haptics**: Tactile feedback is triggered on all primary interactions.
-- **Transitions**: Fade transitions are applied to all main tab switches, with SlideUp transitions for settings and feature pages.
+
+### Automated Tests
+- `SessionValidator` tests: **PASSED** (Validated level gating and missing category handling).
+- `RewardEstimator` tests: **PASSED** (Verified difficulty-based multipliers).
 
 ## Manual QA Checklist
-- [ ] Tap **Practice** or **Pro Mode** to verify the `ComingSoonScreen` appears with smooth animation.
-- [ ] Scroll down on the **Home** tab, switch to **Profile**, then switch back to **Home** to verify the scroll position is preserved.
-- [ ] Tap the **Settings** icon in the header to verify the slide-up modal appearance.
-- [ ] Disconnect from the network to verify the `SoteriaPage` offline banner appears at the top of the dashboard.
+- [ ] Tap **Practice** from the dashboard; verify smooth transition to the lobby.
+- [ ] Select a different category and verify the **Session Summary** updates its XP/Coin estimations.
+- [ ] Select **Advanced** difficulty with a low-level player and verify the "START" button disables with a clear error message.
+- [ ] Tap **START PRACTICE** and verify the "Session Initialized" confirmation appears.
