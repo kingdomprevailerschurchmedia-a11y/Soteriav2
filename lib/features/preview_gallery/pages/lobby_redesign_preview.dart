@@ -7,10 +7,10 @@ class LobbyRedesignPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const PreviewWrapper(
+    return PreviewWrapper(
       title: 'Practice Lobby Redesign',
       builder: (context, state) {
-        return PracticeLobbyScreen();
+        return const PracticeLobbyScreen();
       },
     );
   }

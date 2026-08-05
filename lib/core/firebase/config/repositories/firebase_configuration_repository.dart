@@ -1,3 +1,6 @@
+import 'dart:convert';
+import '../../../../features/gameplay_engine/models/pro_mode_config.dart';
+import '../../../../features/tournaments/domain/models/tournament_config.dart';
 import '../../services/firebase_interfaces.dart';
 import '../constants/remote_config_keys.dart';
 import '../models/app_configuration.dart';
@@ -83,8 +86,44 @@ class FirebaseConfigurationRepository implements ConfigurationRepository {
         minAppVersion: _remoteConfig.getString(RemoteConfigKeys.minAppVersion),
         forceUpgrade: _remoteConfig.getBool(RemoteConfigKeys.forceUpgrade),
       ),
+      proMode: _parseProModeConfig(),
+      tournament: TournamentConfig(
+        maxRegistration: _remoteConfig.getInt(
+          RemoteConfigKeys.tournamentMaxRegistration,
+        ),
+        defaultFee: _remoteConfig.getDouble(
+          RemoteConfigKeys.tournamentDefaultFee,
+        ),
+      ),
       rawValues: getAllRawValues(),
     );
+  }
+
+  ProModeConfig _parseProModeConfig() {
+    try {
+      final feesStr = _remoteConfig.getString(RemoteConfigKeys.proModeFees);
+      final multsStr = _remoteConfig.getString(
+        RemoteConfigKeys.proModeMultipliers,
+      );
+
+      final Map<String, dynamic> feesMap = feesStr.isNotEmpty
+          ? jsonDecode(feesStr)
+          : {};
+      final Map<String, dynamic> multsMap = multsStr.isNotEmpty
+          ? jsonDecode(multsStr)
+          : {};
+
+      return ProModeConfig(
+        entryFees: feesMap.map((k, v) => MapEntry(int.parse(k), v as int)),
+        difficultyMultipliers: multsMap.map((k, v) => MapEntry(k, v as double)),
+        riskFactor: _remoteConfig.getDouble(RemoteConfigKeys.proModeRiskFactor),
+        minLevelRequirement: _remoteConfig.getInt(
+          RemoteConfigKeys.proModeMinLevel,
+        ),
+      );
+    } catch (_) {
+      return ProModeConfig.defaults();
+    }
   }
 
   @override

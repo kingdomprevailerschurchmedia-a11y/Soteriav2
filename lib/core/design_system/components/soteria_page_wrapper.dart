@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 

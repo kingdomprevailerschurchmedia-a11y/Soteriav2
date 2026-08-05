@@ -42,13 +42,18 @@ class GameEngine extends StateNotifier<GameState> {
   GameEngine({
     required this.config,
     this.analytics,
-    this._answerProcessor,
-    this._timerEngine,
-    this._progression,
-    this._integrity,
-    this._repository,
+    AnswerProcessor? answerProcessor,
+    TimerEngine? timerEngine,
+    ProgressionNotifier? progression,
+    IntegrityNotifier? integrity,
+    GameplayRepository? repository,
     this.ref,
-  }) : super(
+  }) : _answerProcessor = answerProcessor,
+       _timerEngine = timerEngine,
+       _progression = progression,
+       _integrity = integrity,
+       _repository = repository,
+       super(
          GameState(sessionId: DateTime.now().millisecondsSinceEpoch.toString()),
        ) {
     _subscribeToTimer();
@@ -320,12 +325,12 @@ final gameEngineProvider =
 
       final engine = GameEngine(
         config: config,
-        analytics: null, // Analytics hook could be watch as well
-        _answerProcessor: processor,
-        _timerEngine: timer,
-        _progression: progression,
-        _integrity: integrity,
-        _repository: repository,
+        analytics: null,
+        answerProcessor: processor,
+        timerEngine: timer,
+        progression: progression,
+        integrity: integrity,
+        repository: repository,
         ref: ref,
       );
 

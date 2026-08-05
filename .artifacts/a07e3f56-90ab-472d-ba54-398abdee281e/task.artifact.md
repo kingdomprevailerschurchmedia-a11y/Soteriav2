@@ -1,0 +1,23 @@
+# Task — Soteria Developer Preview System (Story 7.5)
+
+- [x] **Phase 1: Project Setup & Registry**
+    - [x] Create `lib/main_preview.dart` entry point
+    - [x] Implement `PreviewRegistry` (singleton for auto-registration)
+    - [x] Define `PreviewCategory` and `PreviewItem` models
+- [x] **Phase 2: Mock Environment**
+    - [x] Implement `FakeAuthService` and `FakeDatabaseService`
+    - [x] Create `preview_provider_overrides.dart`
+- [x] **Phase 3: Core Preview UI**
+    - [x] Implement `PreviewApp` (MaterialApp with overrides)
+    - [x] Build `PreviewHomeScreen` (Storybook-style)
+    - [x] Build `DeviceSimulator` widget
+    - [x] Build `StateSwitcher` toolbar
+- [x] **Phase 4: Design System & Animations**
+    - [x] Port Design System Token Viewers
+- [x] **Phase 5: Quality Tools**
+    - [x] Implement Spacing Overlay
+    - [x] Implement Semantics Debugger
+- [x] **Phase 6: Registration & Verification**
+    - [x] Register all existing Epic 1-7 features
+    - [x] Run `flutter analyze`
+    - [x] Generate `Developer Preview Guide`

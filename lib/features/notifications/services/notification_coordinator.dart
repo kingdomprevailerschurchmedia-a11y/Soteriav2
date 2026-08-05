@@ -104,7 +104,7 @@ class NotificationCoordinator {
   void _routeByAction(String action, Map<String, dynamic> data) {
     switch (action) {
       case 'tournament':
-        _navigation.go(SoteriaRoutes.tournament);
+        _navigation.go(SoteriaRoutes.tournaments);
       case 'practice':
         _navigation.go(SoteriaRoutes.practice);
       case 'leaderboard':

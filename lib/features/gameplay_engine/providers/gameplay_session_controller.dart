@@ -1,12 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import '../domain/repositories/gameplay_repository.dart';
-import '../models/game_state.dart';
-import '../models/game_configuration.dart';
-import '../models/game_lifecycle.dart';
-import 'game_engine_provider.dart';
-import 'gameplay_providers.dart';
-import '../../question_content/domain/entities/question.dart';
+import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
+import 'package:soteria/features/gameplay_engine/models/game_state.dart';
+import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
+import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
+import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
+import 'package:soteria/features/question_content/domain/entities/question.dart';
 
 /// Orchestrates the high-level session lifecycle: resuming or starting new games.
 class GameplaySessionController extends StateNotifier<AsyncValue<GameState?>> {

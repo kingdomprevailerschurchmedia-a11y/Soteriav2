@@ -17,55 +17,97 @@ class SoteriaTypography {
     return GoogleFonts.inter(color: SoteriaColors.textPrimary);
   }
 
-  static final TextStyle _displayLarge = _baseStyle.copyWith(
+  static TextStyle get displayLarge => _baseStyle.copyWith(
     fontSize: 64.sp,
     fontWeight: FontWeight.w800,
     letterSpacing: -2.0,
   );
 
-  static final TextStyle _displayMedium = _baseStyle.copyWith(
+  static TextStyle get displayMedium => _baseStyle.copyWith(
     fontSize: 48.sp,
     fontWeight: FontWeight.w800,
     letterSpacing: -1.0,
   );
 
-  static final TextStyle _headline = _baseStyle.copyWith(
+  static TextStyle get displaySmall => _baseStyle.copyWith(
+    fontSize: 36.sp,
+    fontWeight: FontWeight.w800,
+  );
+
+  static TextStyle get headlineLarge => _baseStyle.copyWith(
     fontSize: 32.sp,
     fontWeight: FontWeight.w700,
     letterSpacing: -0.5,
   );
 
-  static final TextStyle _title = _baseStyle.copyWith(
+  static TextStyle get headlineMedium => _baseStyle.copyWith(
+    fontSize: 28.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle get headlineSmall => _baseStyle.copyWith(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w700,
+  );
+
+  static TextStyle get titleLarge => _baseStyle.copyWith(
     fontSize: 20.sp,
     fontWeight: FontWeight.w600,
   );
 
-  static final TextStyle _body = _baseStyle.copyWith(
+  static TextStyle get titleMedium => _baseStyle.copyWith(
+    fontSize: 18.sp,
+    fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle get titleSmall => _baseStyle.copyWith(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w600,
+  );
+
+  static TextStyle get bodyLarge => _baseStyle.copyWith(
     fontSize: 16.sp,
     fontWeight: FontWeight.w400,
     color: SoteriaColors.textSecondary,
   );
 
-  static final TextStyle _label = _baseStyle.copyWith(
+  static TextStyle get bodyMedium => _baseStyle.copyWith(
     fontSize: 14.sp,
-    fontWeight: FontWeight.w500,
-    letterSpacing: 0.1,
+    fontWeight: FontWeight.w400,
+    color: SoteriaColors.textSecondary,
   );
 
-  static final TextStyle _caption = _baseStyle.copyWith(
+  static TextStyle get bodySmall => _baseStyle.copyWith(
     fontSize: 12.sp,
     fontWeight: FontWeight.w400,
     color: SoteriaColors.muted,
   );
 
-  static TextStyle get displayLarge => _displayLarge;
-  static TextStyle get displayMedium => _displayMedium;
-  static TextStyle get display => _displayMedium;
-  static TextStyle get headline => _headline;
-  static TextStyle get title => _title;
-  static TextStyle get body => _body;
-  static TextStyle get label => _label;
-  static TextStyle get caption => _caption;
+  static TextStyle get labelLarge => _baseStyle.copyWith(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.1,
+  );
+
+  static TextStyle get labelMedium => _baseStyle.copyWith(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  );
+
+  static TextStyle get labelSmall => _baseStyle.copyWith(
+    fontSize: 11.sp,
+    fontWeight: FontWeight.w500,
+    letterSpacing: 0.5,
+  );
+
+  // Legacy aliases
+  static TextStyle get display => displayMedium;
+  static TextStyle get headline => headlineLarge;
+  static TextStyle get title => titleLarge;
+  static TextStyle get body => bodyLarge;
+  static TextStyle get label => labelLarge;
+  static TextStyle get caption => bodySmall;
 }
 
 extension SoteriaTypographyExtension on BuildContext {

@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../domain/repositories/gameplay_repository.dart';
-import '../data/repositories/local_gameplay_repository.dart';
-import '../data/repositories/firebase_gameplay_repository.dart';
-import '../models/game_state.dart';
-import '../models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
+import 'package:soteria/features/gameplay_engine/data/repositories/local_gameplay_repository.dart';
+import 'package:soteria/features/gameplay_engine/data/repositories/firebase_gameplay_repository.dart';
+import 'package:soteria/features/gameplay_engine/models/game_state.dart';
+import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Initialize this in main.dart and override it');

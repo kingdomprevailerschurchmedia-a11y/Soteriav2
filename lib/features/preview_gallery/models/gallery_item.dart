@@ -6,6 +6,7 @@ enum GalleryCategory {
   screens('Screens', Icons.phone_iphone_rounded),
   overlays('Overlays', Icons.layers_rounded),
   animations('Animations', Icons.animation_rounded),
+  tournaments('Tournaments', Icons.emoji_events_rounded),
   status('Status & Feedback', Icons.feedback_outlined),
   navigation('Navigation', Icons.menu_open_rounded),
   forms('Forms & Inputs', Icons.input_rounded),

@@ -1,5 +1,5 @@
-import '../../models/game_state.dart';
-import '../../models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_state.dart';
+import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 
 /// Repository interface for managing gameplay sessions and persistence.
 abstract interface class GameplayRepository {

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
-import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/widgets/glass_surface.dart';
-import '../../../../core/design_system/components/soteria_button.dart';
-import '../../../../core/design_system/animations/soteria_animations.dart';
-import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
-import '../../../../shared/widgets/soteria_page.dart';
-import '../providers/practice_lobby_providers.dart';
-import '../widgets/lobby/category_selector.dart';
-import '../widgets/lobby/config_selectors.dart';
-import '../widgets/lobby/session_summary_card.dart';
-import '../../../player/providers/player_providers.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
+import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
+import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/animations/soteria_animations.dart';
+import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
+import 'package:soteria/shared/widgets/soteria_page.dart';
+import 'package:soteria/features/dashboard/presentation/providers/practice_lobby_providers.dart';
+import 'package:soteria/features/dashboard/presentation/widgets/lobby/category_selector.dart';
+import 'package:soteria/features/dashboard/presentation/widgets/lobby/config_selectors.dart';
+import 'package:soteria/features/dashboard/presentation/widgets/lobby/session_summary_card.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/core/design_system/components/soteria_avatar.dart';
 
 class PracticeLobbyScreen extends ConsumerWidget {

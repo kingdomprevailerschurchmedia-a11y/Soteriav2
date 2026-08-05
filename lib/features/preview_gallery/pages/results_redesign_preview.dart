@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/features/preview_gallery/widgets/preview_wrapper.dart';
 import 'package:soteria/features/preview_gallery/models/mock_data_factory.dart';
+import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/pages/results_screen.dart';
 import 'package:soteria/features/gameplay_engine/pages/answer_review_screen.dart';
 

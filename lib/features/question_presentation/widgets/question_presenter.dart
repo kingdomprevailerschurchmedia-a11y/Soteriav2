@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
@@ -11,8 +13,10 @@ import 'package:soteria/features/gameplay_engine/lifelines/widgets/lifeline_butt
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_type.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/providers/lifeline_controller.dart';
 import 'package:soteria/features/question_presentation/widgets/question_explanation_view.dart';
+import 'package:soteria/features/question_presentation/widgets/question_card.dart';
 import 'package:soteria/features/gameplay_engine/widgets/gameplay_progress_bar.dart';
 
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
@@ -135,9 +139,9 @@ class QuestionPresenter extends ConsumerWidget {
                     ),
                     const SizedBox(height: 32),
                     if (!isRevealed && selectedId != null)
-                      ElevatedButton(
+                      SoteriaButton.primary(
+                        label: 'CONFIRM ANSWER',
                         onPressed: () {
-                          HapticFeedback.mediumImpact();
                           ref.read(isResultRevealedProvider.notifier).state =
                               true;
                           if (gameConfig != null) {
@@ -146,21 +150,6 @@ class QuestionPresenter extends ConsumerWidget {
                                 .submitAnswer([selectedId]);
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 56),
-                          backgroundColor: SoteriaColors.primary,
-                          foregroundColor: SoteriaColors.textPrimary,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: const Text(
-                          'CONFIRM ANSWER',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 1.2,
-                          ),
-                        ),
                       ),
                     SizedBox(height: 120.h), // Space for explanation view
                   ],

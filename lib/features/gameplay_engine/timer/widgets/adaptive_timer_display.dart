@@ -135,8 +135,13 @@ class _PulseAnimationState extends State<_PulseAnimation>
   @override
   Widget build(BuildContext context) {
     return FadeTransition(
-      opacity: Tween<double>(begin: 0.4, end: 1.0).animate(_controller),
-      child: widget.child,
+      opacity: Tween<double>(begin: 0.6, end: 1.0).animate(_controller),
+      child: ScaleTransition(
+        scale: Tween<double>(begin: 0.95, end: 1.05).animate(
+          CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+        ),
+        child: widget.child,
+      ),
     );
   }
 }

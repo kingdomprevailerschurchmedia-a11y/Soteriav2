@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import '../domain/repositories/post_game_repository.dart';
-import '../../core/logging/logger_service.dart';
+import '../../../core/logging/logger_service.dart';
 
 class SyncService {
   final PostGameRepository _repository;
@@ -14,7 +14,7 @@ class SyncService {
     _connectivitySubscription = _connectivity.onConnectivityChanged.listen((
       status,
     ) {
-      if (status != ConnectivityResult.none) {
+      if (status.isNotEmpty && !status.contains(ConnectivityResult.none)) {
         _processQueue();
       }
     });

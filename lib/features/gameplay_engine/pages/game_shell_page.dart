@@ -8,6 +8,10 @@ import 'package:soteria/features/gameplay_engine/pages/game_loading_view.dart';
 import 'package:soteria/features/gameplay_engine/pages/game_playing_view.dart';
 import 'package:soteria/features/gameplay_engine/pages/game_paused_view.dart';
 import 'package:soteria/features/gameplay_engine/pages/game_result_view.dart';
+import 'package:soteria/features/gameplay_engine/pages/competitive_playing_view.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
+import 'package:soteria/features/gameplay_engine/widgets/competitive_overlays.dart';
+import 'package:soteria/features/gameplay_engine/providers/competitive_gameplay_providers.dart';
 
 class GameShellPage extends ConsumerWidget {
   final GameConfiguration config;
@@ -16,19 +20,34 @@ class GameShellPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final lifecycle = ref.watch(
-      gameEngineProvider(config).select((s) => s.lifecycle),
-    );
+    final gameState = ref.watch(gameEngineProvider(config));
+    final lifecycle = gameState.lifecycle;
     final notifier = ref.read(gameEngineProvider(config).notifier);
+
+    // Initialize Pro Mode logic if needed
+    if (config.mode == GameMode.pro) {
+      ref.watch(proGameplayProvider(config));
+    }
 
     return SafeGradientScaffold(
       body: Stack(
         children: [
           _buildBody(lifecycle, config, notifier),
           if (lifecycle == GameLifecycle.paused)
-            GamePausedView(
-              onResume: notifier.resumeSession,
-              onQuit: notifier.cancelSession,
+            config.mode == GameMode.pro
+                ? ProPausedView(
+                    onResume: notifier.resumeSession,
+                    onQuit: notifier.cancelSession,
+                  )
+                : GamePausedView(
+                    onResume: notifier.resumeSession,
+                    onQuit: notifier.cancelSession,
+                  ),
+          if (gameState.isOffline && config.mode == GameMode.pro)
+            ConnectionLostOverlay(
+              onRetry: () => ref
+                  .read(proGameplayProvider(config).notifier)
+                  .checkConnection(),
             ),
         ],
       ),
@@ -48,7 +67,9 @@ class GameShellPage extends ConsumerWidget {
       case GameLifecycle.playing:
       case GameLifecycle.paused:
       case GameLifecycle.answered:
-        return GamePlayingView(config: config);
+        return config.mode == GameMode.pro
+            ? CompetitivePlayingView(config: config)
+            : GamePlayingView(config: config);
       case GameLifecycle.completed:
       case GameLifecycle.failed:
       case GameLifecycle.timeout:

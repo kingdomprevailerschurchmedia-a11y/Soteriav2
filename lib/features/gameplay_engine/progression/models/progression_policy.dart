@@ -61,11 +61,36 @@ class PracticeProgressionPolicy implements ProgressionPolicy {
   bool get allowSpeedBonus => false;
 }
 
+class TournamentProgressionPolicy implements ProgressionPolicy {
+  @override
+  int get pointsPerCorrect => 200; // Higher stakes
+  @override
+  int get pointsPerWrong => -50; // Penalty in tournaments
+  @override
+  int get pointsPerTimeout => -100; // Large penalty for timeout
+
+  @override
+  double get xpMultiplier => 2.5; // Tournament XP boost
+  @override
+  int get xpPerCorrect => 50;
+  @override
+  int get completionBonusXP => 200;
+  @override
+  int get perfectRoundBonusXP => 1000;
+
+  @override
+  double get streakBonusMultiplier => 0.2; // +20% per streak
+  @override
+  bool get allowSpeedBonus => true;
+}
+
 class ProgressionPolicyResolver {
   static ProgressionPolicy resolve(GameMode mode) {
     switch (mode) {
       case GameMode.practice:
         return PracticeProgressionPolicy();
+      case GameMode.tournament:
+        return TournamentProgressionPolicy();
       default:
         return ProProgressionPolicy();
     }

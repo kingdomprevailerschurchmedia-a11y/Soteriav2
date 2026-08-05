@@ -1,4 +1,6 @@
 import 'package:flutter/foundation.dart';
+import '../../../../features/gameplay_engine/models/pro_mode_config.dart';
+import '../../../../features/tournaments/domain/models/tournament_config.dart';
 
 @immutable
 class AppConfiguration {
@@ -7,6 +9,8 @@ class AppConfiguration {
   final RewardConfig rewards;
   final LifelineConfig lifelines;
   final MaintenanceConfig maintenance;
+  final ProModeConfig proMode;
+  final TournamentConfig tournament;
   final Map<String, dynamic> rawValues;
 
   const AppConfiguration({
@@ -15,16 +19,42 @@ class AppConfiguration {
     required this.rewards,
     required this.lifelines,
     required this.maintenance,
+    required this.proMode,
+    required this.tournament,
     this.rawValues = const {},
   });
 
-  factory AppConfiguration.defaults() => const AppConfiguration(
-    gameplay: GameplayConfig.defaults(),
-    features: FeatureConfig.defaults(),
-    rewards: RewardConfig.defaults(),
-    lifelines: LifelineConfig.defaults(),
-    maintenance: MaintenanceConfig.defaults(),
+  factory AppConfiguration.defaults() => AppConfiguration(
+    gameplay: const GameplayConfig.defaults(),
+    features: const FeatureConfig.defaults(),
+    rewards: const RewardConfig.defaults(),
+    lifelines: const LifelineConfig.defaults(),
+    maintenance: const MaintenanceConfig.defaults(),
+    proMode: ProModeConfig.defaults(),
+    tournament: const TournamentConfig.defaults(),
   );
+
+  AppConfiguration copyWith({
+    GameplayConfig? gameplay,
+    FeatureConfig? features,
+    RewardConfig? rewards,
+    LifelineConfig? lifelines,
+    MaintenanceConfig? maintenance,
+    ProModeConfig? proMode,
+    TournamentConfig? tournament,
+    Map<String, dynamic>? rawValues,
+  }) {
+    return AppConfiguration(
+      gameplay: gameplay ?? this.gameplay,
+      features: features ?? this.features,
+      rewards: rewards ?? this.rewards,
+      lifelines: lifelines ?? this.lifelines,
+      maintenance: maintenance ?? this.maintenance,
+      proMode: proMode ?? this.proMode,
+      tournament: tournament ?? this.tournament,
+      rawValues: rawValues ?? this.rawValues,
+    );
+  }
 }
 
 @immutable
@@ -94,6 +124,30 @@ class FeatureConfig {
       enableClubs = false,
       enableFriends = false,
       enablePremium = false;
+
+  FeatureConfig copyWith({
+    bool? enablePractice,
+    bool? enableProMode,
+    bool? enableTournament,
+    bool? enableVersus,
+    bool? enableMarketplace,
+    bool? enableAICoach,
+    bool? enableClubs,
+    bool? enableFriends,
+    bool? enablePremium,
+  }) {
+    return FeatureConfig(
+      enablePractice: enablePractice ?? this.enablePractice,
+      enableProMode: enableProMode ?? this.enableProMode,
+      enableTournament: enableTournament ?? this.enableTournament,
+      enableVersus: enableVersus ?? this.enableVersus,
+      enableMarketplace: enableMarketplace ?? this.enableMarketplace,
+      enableAICoach: enableAICoach ?? this.enableAICoach,
+      enableClubs: enableClubs ?? this.enableClubs,
+      enableFriends: enableFriends ?? this.enableFriends,
+      enablePremium: enablePremium ?? this.enablePremium,
+    );
+  }
 }
 
 @immutable

@@ -36,7 +36,7 @@ class RewardSummaryCard extends StatelessWidget {
             _RewardRow(
               label: 'Streak Bonus',
               value: '+${rewards.streakBonus}',
-              color: Colors.orange,
+              color: SoteriaColors.primary,
               isBonus: true,
             ),
           if (rewards.perfectScoreBonus > 0)

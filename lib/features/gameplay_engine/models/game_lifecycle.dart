@@ -28,5 +28,11 @@ enum GameLifecycle {
   cancelled,
 
   /// Session ended due to inactivity or timer expiration.
-  timeout,
+  timeout;
+
+  bool get isEndState =>
+      this == GameLifecycle.completed ||
+      this == GameLifecycle.failed ||
+      this == GameLifecycle.cancelled ||
+      this == GameLifecycle.timeout;
 }

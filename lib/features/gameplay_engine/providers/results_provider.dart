@@ -8,6 +8,7 @@ import 'package:soteria/features/gameplay_engine/domain/repositories/post_game_r
 import 'package:soteria/features/gameplay_engine/data/repositories/firestore_post_game_repository.dart';
 import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
+import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/gameplay_engine/models/answer_review.dart';
 
 final postGameRepositoryProvider = Provider<PostGameRepository>((ref) {
@@ -23,12 +24,12 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
   ResultsNotifier(this._repository) : super(const AsyncValue.data(null));
 
   Future<void> processCompletedSession(
-    GameState state,
+    GameState gameState,
     GameConfiguration config,
   ) async {
     state = const AsyncValue.loading();
 
-    final history = state.answerHistory;
+    final history = gameState.answerHistory;
     final correct = history.where((r) => r.isCorrect).length;
     final wrong = history.where((r) => r.isWrong).length;
     final total = history.length;
@@ -49,27 +50,27 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
 
     final rewards = RewardSummary(
       baseXP: correct * 10,
-      bonusXP: (state.streak >= 5) ? 50 : 0,
+      bonusXP: (gameState.streak >= 5) ? 50 : 0,
       baseCoins: correct * 2,
-      streakBonus: state.streak * 5,
-      perfectScoreBonus: (correct > 0 && correct == state.questions.length)
+      streakBonus: gameState.streak * 5,
+      perfectScoreBonus: (correct > 0 && correct == gameState.questions.length)
           ? 100
           : 0,
     );
 
     final result = GameResult(
-      sessionId: state.sessionId,
-      finalScore: state.score,
-      totalXP: state.xp + rewards.totalXP,
-      totalQuestions: state.questions.length,
+      sessionId: gameState.sessionId,
+      finalScore: gameState.score,
+      totalXP: gameState.xp + rewards.totalXP,
+      totalQuestions: gameState.questions.length,
       correctAnswers: correct,
       wrongAnswers: wrong,
-      skippedQuestions: state.questions.length - total,
+      skippedQuestions: gameState.questions.length - total,
       totalDuration: DateTime.now().difference(
-        state.startTime ?? DateTime.now(),
+        gameState.startTime ?? DateTime.now(),
       ),
       accuracy: total == 0 ? 0 : correct / total,
-      maxStreak: state.streak,
+      maxStreak: gameState.streak,
       rewards: rewards,
       avgResponseTime: Duration(milliseconds: avgResponse.toInt()),
       fastestAnswerTime: Duration(milliseconds: fastest),

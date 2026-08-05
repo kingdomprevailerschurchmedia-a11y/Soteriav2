@@ -16,6 +16,8 @@ class GameState {
   final List<AnswerResult> answerHistory;
   final DateTime? startTime;
   final DateTime? lastAnswerTime;
+  final Map<String, dynamic> metadata;
+  final bool isOffline;
 
   const GameState({
     required this.sessionId,
@@ -30,6 +32,8 @@ class GameState {
     this.answerHistory = const [],
     this.startTime,
     this.lastAnswerTime,
+    this.metadata = const {},
+    this.isOffline = false,
   });
 
   Question? get currentQuestion =>
@@ -53,6 +57,8 @@ class GameState {
     List<AnswerResult>? answerHistory,
     DateTime? startTime,
     DateTime? lastAnswerTime,
+    Map<String, dynamic>? metadata,
+    bool? isOffline,
   }) {
     return GameState(
       sessionId: sessionId ?? this.sessionId,
@@ -67,6 +73,8 @@ class GameState {
       answerHistory: answerHistory ?? this.answerHistory,
       startTime: startTime ?? this.startTime,
       lastAnswerTime: lastAnswerTime ?? this.lastAnswerTime,
+      metadata: metadata ?? this.metadata,
+      isOffline: isOffline ?? this.isOffline,
     );
   }
 
@@ -83,6 +91,8 @@ class GameState {
     'answerHistory': answerHistory.map((e) => e.toJson()).toList(),
     'startTime': startTime?.toIso8601String(),
     'lastAnswerTime': lastAnswerTime?.toIso8601String(),
+    'metadata': metadata,
+    'isOffline': isOffline,
   };
 
   factory GameState.fromJson(Map<String, dynamic> json) => GameState(
@@ -108,5 +118,7 @@ class GameState {
     lastAnswerTime: json['lastAnswerTime'] != null
         ? DateTime.parse(json['lastAnswerTime'])
         : null,
+    metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
+    isOffline: json['isOffline'] ?? false,
   );
 }

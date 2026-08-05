@@ -79,6 +79,13 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.animation_rounded,
     ),
     const GalleryItem(
+      title: 'Tournaments',
+      description: 'Discovery, Details, Lobby & Actions',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/tournaments',
+      icon: Icons.emoji_events_rounded,
+    ),
+    const GalleryItem(
       title: 'Startup',
       description: 'Splash, Bootstrap, Recovery',
       category: GalleryCategory.screens,
@@ -189,6 +196,13 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       category: GalleryCategory.screens,
       route: '/preview-gallery/lobby-redesign',
       icon: Icons.school_rounded,
+    ),
+    const GalleryItem(
+      title: 'Pro Lobby',
+      description: 'Competitive competitive session initialization',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/pro-lobby',
+      icon: Icons.security_rounded,
     ),
     const GalleryItem(
       title: 'Session Results',

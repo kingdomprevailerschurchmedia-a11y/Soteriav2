@@ -9,7 +9,9 @@ import 'package:soteria/core/design_system/components/soteria_avatar.dart';
 import 'package:soteria/core/design_system/components/soteria_progress_bar.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/features/preview_gallery/widgets/preview_wrapper.dart';
+import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 import 'package:soteria/core/design_system/components/soteria_stats_widgets.dart';
+import 'package:soteria/features/preview_gallery/models/mock_data_factory.dart';
 
 class DashboardRedesignPreview extends StatelessWidget {
   const DashboardRedesignPreview({super.key});

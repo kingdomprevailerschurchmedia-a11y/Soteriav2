@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/design_system/components/soteria_progress_bar.dart';
-import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 
 class LevelProgressionCard extends StatefulWidget {
   final int initialXP;
@@ -25,47 +23,52 @@ class LevelProgressionCard extends StatefulWidget {
 
 class _LevelProgressionCardState extends State<LevelProgressionCard>
     with SingleTickerProviderStateMixin {
-  late int _currentXP;
-  late int _displayXP;
-  late int _currentLevel;
-  late double _progress;
+  late AnimationController _controller;
+  late Animation<double> _xpAnimation;
 
-  // Logic: 1000 XP per level for simplicity in mock
+  late int _displayXP;
+  late int _displayLevel;
+  late double _displayProgress;
+
   final int _xpPerLevel = 1000;
 
   @override
   void initState() {
     super.initState();
-    _currentXP = widget.initialXP;
     _displayXP = widget.initialXP;
-    _currentLevel = widget.initialLevel;
-    _progress = (widget.initialXP % _xpPerLevel) / _xpPerLevel;
+    _displayLevel = widget.initialLevel;
+    _displayProgress = (widget.initialXP % _xpPerLevel) / _xpPerLevel;
 
-    _startAnimation();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2000),
+    );
+
+    _xpAnimation =
+        Tween<double>(
+            begin: widget.initialXP.toDouble(),
+            end: (widget.initialXP + widget.xpEarned).toDouble(),
+          ).animate(
+            CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+          )
+          ..addListener(() {
+            setState(() {
+              final currentXP = _xpAnimation.value.toInt();
+              _displayXP = currentXP;
+              _displayLevel = currentXP ~/ _xpPerLevel;
+              _displayProgress = (currentXP % _xpPerLevel) / _xpPerLevel;
+            });
+          });
+
+    Future.delayed(const Duration(milliseconds: 500), () {
+      if (mounted) _controller.forward();
+    });
   }
 
-  void _startAnimation() async {
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    int remainingToGain = widget.xpEarned;
-    while (remainingToGain > 0 && mounted) {
-      int xpToNextLevel = _xpPerLevel - (_currentXP % _xpPerLevel);
-      int gain = remainingToGain > 10 ? 10 : remainingToGain; // Increment step
-
-      setState(() {
-        _currentXP += gain;
-        _displayXP = _currentXP;
-        _progress = (_currentXP % _xpPerLevel) / _xpPerLevel;
-
-        if (_currentXP ~/ _xpPerLevel > _currentLevel) {
-          _currentLevel++;
-          // Trigger Level Up Effect here
-        }
-      });
-
-      remainingToGain -= gain;
-      await Future.delayed(const Duration(milliseconds: 5));
-    }
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -78,20 +81,20 @@ class _LevelProgressionCardState extends State<LevelProgressionCard>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'LEVEL $_currentLevel',
+                'LEVEL $_displayLevel',
                 style: context.titleMedium.copyWith(
                   color: SoteriaColors.gold,
                   fontWeight: FontWeight.w900,
                 ),
               ),
               Text(
-                '${_currentXP % _xpPerLevel} / $_xpPerLevel XP',
+                '${_displayXP % _xpPerLevel} / $_xpPerLevel XP',
                 style: context.labelSmall.copyWith(color: SoteriaColors.muted),
               ),
             ],
           ),
           SizedBox(height: SoteriaSpacing.md),
-          SoteriaProgressBar(progress: _progress, hasGlow: true),
+          SoteriaProgressBar(progress: _displayProgress, hasGlow: true),
           SizedBox(height: SoteriaSpacing.sm),
           Center(
             child: Text(

@@ -37,4 +37,14 @@ class RemoteConfigKeys {
   static const String maintenanceMessage = 'maintenance_message';
   static const String minAppVersion = 'maintenance_min_version';
   static const String forceUpgrade = 'maintenance_force_upgrade';
+
+  // Pro Mode
+  static const String proModeFees = 'pro_mode_fees';
+  static const String proModeMultipliers = 'pro_mode_multipliers';
+  static const String proModeRiskFactor = 'pro_mode_risk_factor';
+  static const String proModeMinLevel = 'pro_mode_min_level';
+
+  // Tournaments
+  static const String tournamentMaxRegistration = 'tournament_max_registration';
+  static const String tournamentDefaultFee = 'tournament_default_fee';
 }

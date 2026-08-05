@@ -15,7 +15,10 @@ class SoteriaRoutes {
   static const String practice = '/app/practice';
   static const String proMode = '/app/pro-mode';
   static const String versus = '/app/versus';
-  static const String tournament = '/app/tournament';
+  static const String tournaments = '/app/tournaments';
+  static const String tournamentLobby = '/app/tournaments/lobby/:id';
+  static const String tournamentDetails = '/app/tournaments/details/:id';
+  static const String tournamentGameplay = '/app/tournaments/play/:id';
   static const String leaderboard = '/app/leaderboard';
   static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
@@ -42,4 +45,5 @@ class SoteriaRoutes {
   static const String notifications = '/notifications';
   static const String configDebug = '/preview-gallery/config-debug';
   static const String securityStatus = '/preview-gallery/security-status';
+  static const String proLobby = '/preview-gallery/pro-lobby';
 }

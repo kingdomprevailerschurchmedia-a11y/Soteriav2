@@ -70,6 +70,15 @@ import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart'
 import 'package:soteria/shared/screens/coming_soon_screen.dart';
 import 'package:soteria/features/settings/screens/settings_screen.dart';
 
+import 'package:soteria/features/preview_gallery/pages/pro_lobby_preview_page.dart';
+import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
+
+import 'package:soteria/features/tournaments/presentation/screens/tournament_discovery_screen.dart';
+import 'package:soteria/features/tournaments/presentation/screens/tournament_details_screen.dart';
+import 'package:soteria/features/tournaments/presentation/screens/tournament_lobby_screen.dart';
+import 'package:soteria/features/tournaments/presentation/screens/tournament_gameplay_screen.dart';
+import 'package:soteria/features/tournaments/presentation/pages/tournament_preview_gallery.dart';
+
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
   ref.onDispose(listenable.dispose);
@@ -194,10 +203,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'pro-mode',
-                    builder: (context, state) => const ComingSoonScreen(
-                      featureName: 'Pro Mode',
-                      category: 'Game',
-                    ),
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const ProLobbyScreen(),
+                          key: state.pageKey,
+                        ),
                   ),
                   GoRoute(
                     path: 'versus',
@@ -207,11 +217,44 @@ final routerProvider = Provider<GoRouter>((ref) {
                     ),
                   ),
                   GoRoute(
-                    path: 'tournament',
-                    builder: (context, state) => const ComingSoonScreen(
-                      featureName: 'Tournaments',
-                      category: 'Game',
-                    ),
+                    path: 'tournaments',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const TournamentDiscoveryScreen(),
+                          key: state.pageKey,
+                        ),
+                    routes: [
+                      GoRoute(
+                        path: 'details/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.slideUp(
+                            child: TournamentDetailsScreen(tournamentId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'lobby/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.fade(
+                            child: TournamentLobbyScreen(tournamentId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'play/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.fade(
+                            child: TournamentGameplayScreen(tournamentId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'settings',
@@ -562,6 +605,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const LobbyRedesignPreview(),
           ),
           GoRoute(
+            path: 'pro-lobby',
+            builder: (context, state) => const ProLobbyPreviewPage(),
+          ),
+          GoRoute(
             path: 'results-redesign',
             builder: (context, state) => const ResultsRedesignPreview(),
           ),
@@ -580,6 +627,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'dashboard-redesign',
             builder: (context, state) => const DashboardRedesignPreview(),
+          ),
+          GoRoute(
+            path: 'tournaments',
+            builder: (context, state) => const GalleryShell(
+              title: 'Tournament Engine',
+              child: TournamentPreviewGallery(),
+            ),
           ),
         ],
       ),

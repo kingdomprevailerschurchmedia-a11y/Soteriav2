@@ -39,59 +39,62 @@ class QuestionContentCard extends StatelessWidget {
           borderRadius: SoteriaRadius.brXl,
           opacity: 0.05,
           padding: EdgeInsets.all(SoteriaSpacing.xl),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              if (category != null || difficulty != null)
-                Padding(
-                  padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      if (category != null)
-                        _Tag(
-                          label: category!.toUpperCase(),
-                          color: SoteriaColors.gold,
-                        ),
-                      if (category != null && difficulty != null)
-                        SizedBox(width: SoteriaSpacing.sm),
-                      if (difficulty != null)
-                        _Tag(
-                          label: difficulty!.toUpperCase(),
-                          color: SoteriaColors.primary,
-                        ),
-                    ],
-                  ),
-                ),
-              Text(
-                text,
-                style: context.displayMedium.copyWith(
-                  fontSize: 24.sp,
-                  height: 1.4,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              if (mediaUrl != null) ...[
-                SizedBox(height: SoteriaSpacing.xl),
-                // Placeholder for future media implementation
-                Container(
-                  height: 200.h,
-                  decoration: BoxDecoration(
-                    color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: SoteriaRadius.brMd,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.image_outlined,
-                      color: SoteriaColors.muted,
-                      size: 48,
+          child: Semantics(
+            label: 'Question: $text',
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (category != null || difficulty != null)
+                  Padding(
+                    padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (category != null)
+                          _Tag(
+                            label: category!.toUpperCase(),
+                            color: SoteriaColors.gold,
+                          ),
+                        if (category != null && difficulty != null)
+                          SizedBox(width: SoteriaSpacing.sm),
+                        if (difficulty != null)
+                          _Tag(
+                            label: difficulty!.toUpperCase(),
+                            color: SoteriaColors.primary,
+                          ),
+                      ],
                     ),
                   ),
+                Text(
+                  text,
+                  style: context.displayMedium.copyWith(
+                    fontSize: 24.sp,
+                    height: 1.4,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: -0.5,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
+                if (mediaUrl != null) ...[
+                  SizedBox(height: SoteriaSpacing.xl),
+                  // Placeholder for future media implementation
+                  Container(
+                    height: 200.h,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.05),
+                      borderRadius: SoteriaRadius.brMd,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.image_outlined,
+                        color: SoteriaColors.muted,
+                        size: 48,
+                      ),
+                    ),
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ],

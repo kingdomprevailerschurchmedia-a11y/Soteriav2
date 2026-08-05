@@ -1,125 +1,96 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
-import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 
 class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Watch app lifecycle to ensure it initializes
     ref.watch(appLifecycleProvider);
+
+    final size = MediaQuery.of(context).size;
+
+    // ======================================================
+    // DESIGN VALUES (measured from the artwork)
+    // ======================================================
+
+    const double logoCenterFactor = 0.48;
+
+    final double logoSize = size.width * 0.22;
+
+    final double titleSize = size.width < 360
+        ? 28
+        : size.width < 420
+        ? 34
+        : 36;
+
+    final double subtitleSize = size.width < 360
+        ? 10.5
+        : size.width < 420
+        ? 12.5
+        : 13.5;
 
     return Scaffold(
       backgroundColor: const Color(0xFF0B012A),
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // 1. Background Pattern Asset
+          // Background
           Image.asset('assets/images/splash_bg.png', fit: BoxFit.cover),
 
-          // 2. Bottom Glow Arc
+          // Content
           Positioned(
-            bottom: -150,
-            left: -100,
-            right: -100,
-            child: Container(
-              height: 300,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: RadialGradient(
-                  colors: [
-                    const Color(0xFF7C4DFF).withValues(alpha: 0.3),
-                    const Color(0xFF7C4DFF).withValues(alpha: 0.0),
-                  ],
-                  stops: const [0.0, 0.7],
-                ),
-              ),
-            ),
-          ),
-
-          // Bright center point for the bottom glow
-          Positioned(
-            bottom: -5,
+            top: size.height * logoCenterFactor - logoSize / 2,
             left: 0,
             right: 0,
-            child: Center(
-              child: Container(
-                width: 100,
-                height: 10,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.8),
-                      blurRadius: 20,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-
-          // 3. Main Content
-          Center(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                // Logo with subtle background glow
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: 180,
-                      height: 180,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        gradient: RadialGradient(
-                          colors: [
-                            const Color(0xFF7C4DFF).withValues(alpha: 0.15),
-                            Colors.transparent,
-                          ],
-                        ),
-                      ),
-                    ),
-                    SoteriaScaleIn(
-                      duration: const Duration(milliseconds: 1000),
-                      child: Image.asset(
-                        'assets/images/logo_icon.png',
-                        width: 130,
-                        height: 130,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
-                  ],
+                // Logo
+                SoteriaScaleIn(
+                  duration: const Duration(milliseconds: 900),
+                  child: Image.asset(
+                    'assets/images/logo_icon.png',
+                    width: logoSize,
+                    height: logoSize,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                  ),
                 ),
-                const SizedBox(height: 5),
+
+                const SizedBox(height: 20),
+
+                // Title
+                SoteriaFadeIn(
+                  delay: const Duration(milliseconds: 300),
+                  child: Text(
+                    'SOTERIA',
+                    style: context.displayMedium.copyWith(
+                      color: Colors.white,
+                      fontSize: titleSize,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 8,
+                      height: 1,
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // Subtitle
                 SoteriaFadeIn(
                   delay: const Duration(milliseconds: 500),
-                  child: Column(
-                    children: [
-                      Text(
-                        'SOTERIA',
-                        style: context.displayMedium.copyWith(
-                          letterSpacing: 10,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          fontSize: 42,
-                        ),
-                      ),
-                      const SizedBox(height: 7),
-                      Text(
-                        'COMPETE. LEARN. RISE.',
-                        style: context.bodySmall.copyWith(
-                          letterSpacing: 2,
-                          color: const Color(0xFFD8B24A),
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
+                  child: Text(
+                    'COMPETE. LEARN. RISE.',
+                    style: context.bodySmall.copyWith(
+                      color: const Color(0xFFD8B24A),
+                      fontSize: subtitleSize,
+                      letterSpacing: 2.8,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],

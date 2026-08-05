@@ -1,9 +1,24 @@
+import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/reward_summary.dart';
 import 'package:soteria/features/gameplay_engine/models/answer_review.dart';
-import 'package:uuid/uuid.dart';
+import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
+import 'package:soteria/features/gameplay_engine/models/game_state.dart';
+import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
+import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
+import 'package:soteria/features/gameplay_engine/models/pro_session_config.dart';
+import 'package:soteria/features/gameplay_engine/models/competitive_settlement.dart';
+import 'package:soteria/features/gameplay_engine/models/competitive_review_item.dart';
+import 'package:soteria/features/tournaments/domain/models/tournament_ranking.dart';
+import 'package:soteria/features/tournaments/domain/models/tournament_reward.dart';
+import 'package:soteria/features/tournaments/domain/models/tournament_status.dart';
+import 'package:soteria/features/tournaments/domain/models/tournament_type.dart';
+import 'package:soteria/features/tournaments/domain/models/tournament.dart';
+import 'package:soteria/features/tournaments/domain/models/tournament_participant.dart';
 
 class MockDataFactory {
   static PlayerProfile createMockPlayer({
@@ -126,6 +141,74 @@ class MockDataFactory {
     return createMockResult().copyWith(isSynced: false);
   }
 
+  static GameResult createResumedResult() {
+    return createMockResult().copyWith(sessionId: 'session_resumed');
+  }
+
+  static PlayerProfile createLowCoinPlayer() => createMockPlayer(
+    name: 'Broke Hacker',
+    level: 10,
+    xp: 1500,
+    coins: 5,
+    role: 'Scavenger',
+  );
+
+  static PlayerProfile createChampionPlayer() => createMockPlayer(
+    name: 'Cyber Champion',
+    level: 75,
+    xp: 250000,
+    coins: 100000,
+    role: 'Grand Guardian',
+  );
+
+  static List<Map<String, dynamic>> createMockAchievements() {
+    return [
+      {
+        'title': 'Perfect Sentinel',
+        'description': 'Completed a session with 100% accuracy.',
+        'icon': Icons.verified_user_rounded,
+      },
+      {
+        'title': 'Speed Demon',
+        'description': 'Answered 5 questions in under 3 seconds each.',
+        'icon': Icons.speed_rounded,
+      },
+      {
+        'title': 'Night Owl',
+        'description': 'Completed a practice session after midnight.',
+        'icon': Icons.nightlight_round,
+      },
+    ];
+  }
+
+  static GameConfiguration createExpertMatchConfig() => const GameConfiguration(
+    mode: GameMode.pro,
+    difficultyMultiplier: 2.0,
+    questionCount: 30,
+    questionTimer: Duration(seconds: 10),
+  );
+
+  static GameState createWinningProState() => GameState(
+    sessionId: 'win_mock',
+    score: 2500,
+    streak: 12,
+    questions: createMockQuestions(30),
+    currentQuestionIndex: 15,
+    lifecycle: GameLifecycle.playing,
+    metadata: {'reservedFee': 500},
+  );
+
+  static GameState createLosingProState() => GameState(
+    sessionId: 'lose_mock',
+    score: 200,
+    streak: 0,
+    lives: 1,
+    questions: createMockQuestions(10),
+    currentQuestionIndex: 5,
+    lifecycle: GameLifecycle.playing,
+    metadata: {'reservedFee': 100},
+  );
+
   static List<AnswerReview> createMockReviews() {
     final questions = createMockQuestions(5);
     return [
@@ -148,6 +231,161 @@ class MockDataFactory {
         responseTime: Duration.zero,
       ),
     ];
+  }
+
+  static CompetitiveSession createMockCompetitiveSession({
+    String? id,
+    int? fee,
+    String? difficulty,
+    String? status,
+  }) {
+    return CompetitiveSession(
+      sessionId: id ?? 'session_mock_pro',
+      uid: 'user_mock',
+      config: ProSessionConfig(
+        difficulty: difficulty == 'expert'
+            ? ProDifficulty.expert
+            : ProDifficulty.intermediate,
+        questionCount: 10,
+        entryFee: fee ?? 100,
+        timerEnabled: true,
+      ),
+      startTime: DateTime.now().subtract(const Duration(minutes: 10)),
+      reservedFee: fee ?? 100,
+      status: status ?? 'initialized',
+    );
+  }
+
+  static CompetitiveSettlement createMockSettlement({
+    required GameResult result,
+    SettlementStatus status = SettlementStatus.completed,
+    int? wagered,
+    int? won,
+  }) {
+    return CompetitiveSettlement(
+      settlementId: 'st_${const Uuid().v4().substring(0, 8)}',
+      sessionId: result.sessionId,
+      uid: 'user_mock',
+      result: result,
+      status: status,
+      coinsWagered: wagered ?? 100,
+      coinsWon: won ?? ((result.accuracy >= 0.7) ? 150 : 0),
+      xpEarned: result.totalXP,
+      timestamp: DateTime.now(),
+    );
+  }
+
+  static List<CompetitiveReviewItem> createMockCompetitiveReviews() {
+    return [
+      const CompetitiveReviewItem(
+        questionId: 'q1',
+        questionText: 'What is the default port for HTTPS?',
+        selectedAnswer: '443',
+        correctAnswer: '443',
+        explanation:
+            'HTTPS uses port 443 for secure communication over TLS/SSL.',
+        difficulty: 'Medium',
+        timeTaken: Duration(seconds: 5),
+        isCorrect: true,
+      ),
+      const CompetitiveReviewItem(
+        questionId: 'q2',
+        questionText: 'Which protocol is used for secure shell access?',
+        selectedAnswer: 'TELNET',
+        correctAnswer: 'SSH',
+        explanation:
+            'SSH provides encrypted remote access, unlike TELNET which sends data in plain text.',
+        difficulty: 'Easy',
+        timeTaken: Duration(seconds: 12),
+        isCorrect: false,
+      ),
+    ];
+  }
+
+  static Tournament createMockTournament({
+    String? id,
+    String? name,
+    TournamentStatus? status,
+    TournamentType? type,
+    int? registeredPlayers,
+    int? maxPlayers,
+    DateTime? startTime,
+    double? prizePool,
+  }) {
+    final now = DateTime.now();
+    return Tournament(
+      id: id ?? const Uuid().v4(),
+      name: name ?? 'Tournament ${const Uuid().v4().substring(0, 4)}',
+      description:
+          'Join the elite competition and prove your knowledge. Massive rewards for the top performers.',
+      rules: const [
+        'Registration closes 1 hour before start.',
+        'No lifelines allowed in this event.',
+        'Stable connection required.',
+      ],
+      bannerUrl:
+          'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=800',
+      type: type ?? TournamentType.standard,
+      status: status ?? TournamentStatus.upcoming,
+      difficulty: 'Hard',
+      questionCount: 30,
+      entryFee: 250,
+      prizePool: prizePool ?? 10000,
+      maxPlayers: maxPlayers ?? 1000,
+      registeredPlayers: registeredPlayers ?? 124,
+      startTime: startTime ?? now.add(const Duration(hours: 2)),
+      endTime: now.add(const Duration(hours: 4)),
+      registrationEndTime: now.add(const Duration(hours: 1)),
+    );
+  }
+
+  static TournamentParticipant createMockTournamentParticipant({
+    String? tournamentId,
+    String? uid,
+    String? name,
+  }) {
+    return TournamentParticipant(
+      tournamentId: tournamentId ?? 't1',
+      uid: uid ?? const Uuid().v4(),
+      displayName: name ?? 'Aria Sterling',
+      photoUrl: 'https://i.pravatar.cc/300?u=aria',
+      registrationTime: DateTime.now().subtract(const Duration(minutes: 30)),
+    );
+  }
+
+  static TournamentReward createMockTournamentReward({
+    int? coins,
+    int? xp,
+    List<String>? badges,
+    List<String>? titles,
+  }) {
+    return TournamentReward(
+      coins: coins ?? 500,
+      xp: xp ?? 200,
+      badges: badges ?? ['Top 10'],
+      titles: titles ?? ['Elite Guardian'],
+    );
+  }
+
+  static TournamentRanking createMockTournamentRanking({
+    int? rank,
+    String? uid,
+    String? name,
+    int? score,
+    double? accuracy,
+    TournamentReward? prize,
+  }) {
+    return TournamentRanking(
+      rank: rank ?? 1,
+      uid: uid ?? const Uuid().v4(),
+      displayName: name ?? 'Cyber Master',
+      photoUrl: 'https://i.pravatar.cc/300?u=${const Uuid().v4()}',
+      score: score ?? 4500,
+      accuracy: accuracy ?? 0.95,
+      completionTime: const Duration(minutes: 4, seconds: 30),
+      completionTimestamp: DateTime.now().subtract(const Duration(minutes: 15)),
+      prize: prize,
+    );
   }
 }
 

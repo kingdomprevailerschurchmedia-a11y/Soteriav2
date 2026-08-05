@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 
 enum PreviewState { loading, success, empty, error, offline }
