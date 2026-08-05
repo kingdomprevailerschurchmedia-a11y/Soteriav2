@@ -5,10 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/hero_card.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/dashboard_skeleton.dart';
+import 'package:soteria/features/dashboard/presentation/providers/dashboard_providers.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
 
 void main() {
-  Widget wrap(Widget child) {
+  Widget wrap(Widget child, {List overrides = const []}) {
     return ProviderScope(
+      overrides: overrides.cast(),
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         builder: (context, _) => MaterialApp(home: child),
@@ -19,11 +22,17 @@ void main() {
   testWidgets('DashboardScreen shows skeleton when loading', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(wrap(const DashboardScreen()));
+    await tester.pumpWidget(
+      wrap(
+        const DashboardScreen(),
+        overrides: [
+          announcementsProvider.overrideWith((ref) => Future.value([])),
+          dailyChallengeProvider.overrideWith((ref) => Future.value(null)),
+          currentPlayerStreamProvider.overrideWith((ref) => const Stream.empty()),
+        ],
+      ),
+    );
     expect(find.byType(DashboardSkeleton), findsOneWidget);
-
-    // Clear pending timers from mock repo
-    await tester.pump(const Duration(seconds: 5));
   });
 
   testWidgets('HeroCard renders progression data correctly', (
@@ -34,10 +43,12 @@ void main() {
         const Scaffold(
           body: HeroCard(
             level: 5,
-            xp: 500,
-            totalXpRequired: 1000,
+            xpInCurrentLevel: 500,
+            xpThreshold: 1000,
             coins: 100,
             rank: 'Scholar',
+            progress: 0.5,
+            xpRemaining: 500,
           ),
         ),
       ),

@@ -8,13 +8,8 @@ class FirebaseRegistrationRepository implements RegistrationRepository {
   FirebaseRegistrationRepository({
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
-<<<<<<< HEAD
-  }) : _auth = auth ?? FirebaseAuth.instance,
-       _firestore = firestore ?? FirebaseFirestore.instance;
-=======
   })  : _auth = auth ?? FirebaseAuth.instance,
         _firestore = firestore ?? FirebaseFirestore.instance;
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
@@ -86,10 +81,6 @@ class FirebaseRegistrationRepository implements RegistrationRepository {
 
       // 3. Send Verification Email
       await userCredential.user!.sendEmailVerification();
-<<<<<<< HEAD
-=======
-      
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     } on FirebaseAuthException catch (e) {
       throw FirebaseErrorMapper.mapFirebaseAuthException(e);
     } catch (e) {

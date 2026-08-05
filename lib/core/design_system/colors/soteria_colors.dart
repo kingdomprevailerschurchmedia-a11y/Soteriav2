@@ -19,6 +19,7 @@ class SoteriaColors {
   );
 
   // Brand Colors
+  static const Color background = Color(0xFF0B012A);
   static const Color primary = Color(0xFF5B3FD9);
   static const Color secondary = Color(0xFF7C4DFF);
   static const Color gold = Color(0xFFD8B24A);

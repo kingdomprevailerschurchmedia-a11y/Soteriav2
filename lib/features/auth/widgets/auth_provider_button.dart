@@ -57,11 +57,14 @@ class AuthProviderButton extends StatelessWidget {
                 else ...[
                   Icon(provider.icon, color: Colors.white, size: 20.w),
                   SizedBox(width: SoteriaSpacing.md),
-                  Text(
-                    provider.name,
-                    style: context.labelLarge.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Text(
+                      provider.name,
+                      style: context.labelLarge.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],

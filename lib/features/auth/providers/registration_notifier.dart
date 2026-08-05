@@ -2,18 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../personalization/providers/personalization_notifier.dart';
 import '../models/registration_draft.dart';
-<<<<<<< HEAD
 import '../models/identity_exception.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import 'auth_providers.dart';
-=======
-import '../repositories/registration_repository.dart';
-import '../repositories/firebase_registration_repository.dart';
-import '../../../core/identity/providers/firebase_providers.dart';
-import '../../../core/utils/identity_validator.dart';
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 
 class RegistrationNotifier extends Notifier<RegistrationDraft> {
   static const _kFirstNameKey = 'user_first_name';
@@ -69,7 +62,6 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
     }
   }
 
-<<<<<<< HEAD
   Future<void> completeRegistration() async {
     state = state.copyWith(isLoading: true, error: null);
     final stopwatch = Stopwatch()..start();
@@ -114,28 +106,10 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
         state = state.copyWith(isLoading: false);
       }
     }
-=======
-  Future<void> completeRegistration(RegistrationRepository repository) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(_kFirstNameKey, state.firstName);
-    
-    await repository.register(state);
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
   }
 }
 
 final registrationProvider =
-<<<<<<< HEAD
     NotifierProvider<RegistrationNotifier, RegistrationDraft>(
       RegistrationNotifier.new,
     );
-=======
-    NotifierProvider<RegistrationNotifier, RegistrationDraft>(RegistrationNotifier.new);
-
-final registrationRepositoryProvider = Provider<RegistrationRepository>((ref) {
-  return FirebaseRegistrationRepository(
-    auth: ref.watch(firebaseAuthProvider),
-    firestore: ref.watch(firestoreProvider),
-  );
-});
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30

@@ -6,12 +6,16 @@ import 'package:soteria/features/question_content/domain/entities/question.dart'
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
 import 'package:soteria/features/gameplay_engine/answer/services/answer_processor.dart';
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
+import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
+import 'package:soteria/features/gameplay_engine/progression/services/progression_engine.dart';
+import 'package:soteria/features/gameplay_engine/progression/services/level_engine.dart';
 
 void main() {
   group('GameEngine Tests', () {
     late GameConfiguration config;
     late AnswerProcessor processor;
     late TimerEngine timer;
+    late ProgressionNotifier progression;
 
     final questions = [
       Question(
@@ -56,6 +60,9 @@ void main() {
       config = GameConfiguration.pro();
       processor = AnswerProcessor(onEvent: (_) {});
       timer = TimerEngine();
+      progression = ProgressionNotifier(
+        engine: ProgressionEngine(levelEngine: LevelEngine()),
+      );
     });
 
     test('initial state is correct', () {
@@ -63,6 +70,7 @@ void main() {
         config: config,
         answerProcessor: processor,
         timerEngine: timer,
+        progression: progression,
       );
       expect(engine.debugState.lifecycle, GameLifecycle.initializing);
       expect(engine.debugState.score, 0);
@@ -73,6 +81,7 @@ void main() {
         config: config,
         answerProcessor: processor,
         timerEngine: timer,
+        progression: progression,
       );
       final future = engine.startSession(questions);
 
@@ -89,6 +98,7 @@ void main() {
         config: config,
         answerProcessor: processor,
         timerEngine: timer,
+        progression: progression,
       );
       await engine.startSession(questions);
 
@@ -109,6 +119,7 @@ void main() {
         config: config,
         answerProcessor: processor,
         timerEngine: timer,
+        progression: progression,
       );
       await engine.startSession(questions);
 
@@ -125,6 +136,7 @@ void main() {
         config: GameConfiguration(mode: GameMode.pro, initialLives: 1),
         answerProcessor: processor,
         timerEngine: timer,
+        progression: progression,
       );
       await engine.startSession(questions);
 
@@ -138,6 +150,7 @@ void main() {
         config: config,
         answerProcessor: processor,
         timerEngine: timer,
+        progression: progression,
       );
       await engine.startSession(questions);
 

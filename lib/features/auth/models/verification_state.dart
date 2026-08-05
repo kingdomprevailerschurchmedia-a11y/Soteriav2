@@ -14,13 +14,8 @@ class VerificationState {
   final int countdown;
   final String? verificationToken;
 
-<<<<<<< HEAD
   const VerificationState(
     this.type, {
-=======
-  const VerificationState({
-    required this.type,
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
     this.step = VerificationStep.request,
     this.target = '',
     this.otp = '',
@@ -40,11 +35,7 @@ class VerificationState {
     String? verificationToken,
   }) {
     return VerificationState(
-<<<<<<< HEAD
       type,
-=======
-      type: type,
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
       step: step ?? this.step,
       target: target ?? this.target,
       otp: otp ?? this.otp,

@@ -118,13 +118,8 @@ class DashboardScreen extends ConsumerWidget {
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
 
               // Stats
-              SliverToBoxAdapter(
-                child: StatsGrid(
-                  questionsAnswered: player?.totalQuestionsAnswered ?? 0,
-                  accuracy: player?.accuracy ?? 0.0,
-                  gamesPlayed: player?.gamesPlayed ?? 0,
-                  highestStreak: player?.highestStreak ?? 0,
-                ),
+              const SliverToBoxAdapter(
+                child: StatsGrid(),
               ),
 
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl * 2)),

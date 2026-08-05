@@ -8,6 +8,7 @@ import '../../../core/identity/models/user_session.dart';
 import '../../../core/logging/logger_service.dart';
 import '../../player/providers/player_providers.dart';
 import '../models/verification_state.dart';
+import '../models/verification_type.dart';
 import '../providers/verification_notifier.dart';
 
 class AuthCoordinator {
@@ -93,7 +94,7 @@ class AuthCoordinator {
         final uid = _checkAuth.currentUserId;
         if (uid != null) {
           // Notify the verification UI if it's active
-          _ref.read(verificationProvider.notifier).setStep(VerificationStep.success);
+          _ref.read(verificationProvider(VerificationType.emailVerification).notifier).setStep(VerificationStep.success);
           await _handleAuthenticatedState(uid);
         }
       }

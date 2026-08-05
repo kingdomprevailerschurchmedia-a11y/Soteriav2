@@ -45,10 +45,10 @@ class PracticeLobbyScreen extends ConsumerWidget {
                               duration: const Duration(milliseconds: 400),
                               child: Text(
                                 'READY TO TRAIN?',
-                                style: context.displaySmall.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 2,
-                                ),
+                                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 2,
+                                    ),
                               ),
                             ),
                             SizedBox(height: SoteriaSpacing.xl),
@@ -152,7 +152,7 @@ class _StartAction extends StatelessWidget {
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       decoration: BoxDecoration(
         color: SoteriaColors.surface.withValues(alpha: 0.8),
-        border: const Border(top: BorderSide(color: Colors.white05)),
+        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/firebase/providers/firebase_providers.dart';
-import '../../../../core/firebase/config/providers/configuration_providers.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../../question_content/domain/entities/category.dart';
 import '../../../question_content/domain/repositories/category_repository.dart';
@@ -15,11 +14,15 @@ import '../../../gameplay_engine/data/repositories/firestore_practice_repository
 
 // --- Repositories ---
 final categoryRepositoryProvider = Provider<CategoryRepository>((ref) {
-  return FirestoreCategoryRepository(ref.watch(firestoreDatabaseServiceProvider));
+  return FirestoreCategoryRepository(
+    ref.watch(firestoreDatabaseServiceProvider),
+  );
 });
 
 final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
-  return FirestorePracticeRepository(ref.watch(firestoreDatabaseServiceProvider));
+  return FirestorePracticeRepository(
+    ref.watch(firestoreDatabaseServiceProvider),
+  );
 });
 
 // --- State Models ---
@@ -60,27 +63,34 @@ class PracticeLobbyState {
 }
 
 // --- Notifiers ---
-class PracticeLobbyNotifier extends StateNotifier<PracticeLobbyState> {
-  final Ref _ref;
+class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
   final SessionValidator _validator = SessionValidator();
-  final RewardEstimator _estimator;
 
-  PracticeLobbyNotifier(this._ref, this._estimator) : super(const PracticeLobbyState()) {
+  @override
+  PracticeLobbyState build() {
+    // Initial state
     _init();
+    return const PracticeLobbyState();
   }
 
   Future<void> _init() async {
     state = state.copyWith(isLoading: true);
     try {
-      final categories = await _ref.read(categoryRepositoryProvider).getCategories();
-      state = state.copyWith(
-        isLoading: false,
-        categories: categories,
-        config: state.config.copyWith(category: categories.isNotEmpty ? categories.first : null),
-      );
-      _updateSummary();
+      final categories = await ref.read(categoryRepositoryProvider).getCategories();
+      if (ref.mounted) {
+        state = state.copyWith(
+          isLoading: false,
+          categories: categories,
+          config: state.config.copyWith(
+            category: categories.isNotEmpty ? categories.first : null,
+          ),
+        );
+        _updateSummary();
+      }
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      if (ref.mounted) {
+        state = state.copyWith(isLoading: false, error: e.toString());
+      }
     }
   }
 
@@ -90,7 +100,8 @@ class PracticeLobbyNotifier extends StateNotifier<PracticeLobbyState> {
   }
 
   void updateDifficulty(PracticeDifficulty difficulty) {
-    state = state.copyWith(config: state.config.copyWith(difficulty: difficulty));
+    state =
+        state.copyWith(config: state.config.copyWith(difficulty: difficulty));
     _updateSummary();
   }
 
@@ -105,10 +116,11 @@ class PracticeLobbyNotifier extends StateNotifier<PracticeLobbyState> {
   }
 
   void _updateSummary() {
-    final player = _ref.read(currentPlayerProvider);
+    final player = ref.read(currentPlayerProvider);
+    final estimator = ref.read(rewardEstimatorProvider);
     final validationError = _validator.validate(state.config, player);
-    final estimatedRewards = _estimator.estimate(state.config);
-    
+    final estimatedRewards = estimator.estimate(state.config);
+
     state = state.copyWith(
       validationError: validationError,
       estimatedRewards: estimatedRewards,
@@ -116,7 +128,7 @@ class PracticeLobbyNotifier extends StateNotifier<PracticeLobbyState> {
   }
 
   Future<PracticeSession?> startSession() async {
-    final player = _ref.read(currentPlayerProvider);
+    final player = ref.read(currentPlayerProvider);
     if (player == null) return null;
 
     final validationError = _validator.validate(state.config, player);
@@ -134,11 +146,15 @@ class PracticeLobbyNotifier extends StateNotifier<PracticeLobbyState> {
         startTime: DateTime.now(),
       );
 
-      await _ref.read(practiceRepositoryProvider).createSession(session);
-      state = state.copyWith(isLoading: false);
+      await ref.read(practiceRepositoryProvider).createSession(session);
+      if (ref.mounted) {
+        state = state.copyWith(isLoading: false);
+      }
       return session;
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      if (ref.mounted) {
+        state = state.copyWith(isLoading: false, error: e.toString());
+      }
       return null;
     }
   }
@@ -146,11 +162,10 @@ class PracticeLobbyNotifier extends StateNotifier<PracticeLobbyState> {
 
 // --- Providers ---
 final rewardEstimatorProvider = Provider<RewardEstimator>((ref) {
-  // Potential: pass multipliers from Remote Config here
   return RewardEstimator();
 });
 
-final practiceLobbyProvider = StateNotifierProvider<PracticeLobbyNotifier, PracticeLobbyState>((ref) {
-  final estimator = ref.watch(rewardEstimatorProvider);
-  return PracticeLobbyNotifier(ref, estimator);
-});
+final practiceLobbyProvider =
+    NotifierProvider<PracticeLobbyNotifier, PracticeLobbyState>(
+      PracticeLobbyNotifier.new,
+    );

@@ -33,24 +33,16 @@ class VerificationStepSuccess extends StatelessWidget {
             SizedBox(height: SoteriaSpacing.xxl),
             Text(
               'Identity Verified',
-<<<<<<< HEAD
               style: context.headlineMedium.copyWith(
                 fontWeight: FontWeight.w900,
               ),
-=======
-              style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
             ),
             SizedBox(height: SoteriaSpacing.md),
             Text(
               'Your account is now secure. You can proceed to the platform.',
-<<<<<<< HEAD
               style: context.bodyLarge.copyWith(
                 color: SoteriaColors.textSecondary,
               ),
-=======
-              style: context.bodyLarge.copyWith(color: SoteriaColors.textSecondary),
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
               textAlign: TextAlign.center,
             ),
           ],

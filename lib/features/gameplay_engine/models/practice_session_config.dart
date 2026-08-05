@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import '../../question_content/domain/entities/category.dart';
 
 enum PracticeDifficulty { beginner, intermediate, advanced, adaptive }

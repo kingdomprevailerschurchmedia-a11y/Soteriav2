@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/core/firebase/services/firebase_interfaces.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/repositories/category_repository.dart';

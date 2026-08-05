@@ -59,6 +59,9 @@ import 'package:soteria/features/notifications/providers/notification_providers.
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:soteria/features/dashboard/presentation/screens/practice_lobby_screen.dart';
+import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart';
+import 'package:soteria/shared/screens/coming_soon_screen.dart';
+import 'package:soteria/features/settings/screens/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);

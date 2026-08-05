@@ -1,127 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/glass_surface.dart';
+import '../../../../core/utils/responsive_layout_helper.dart';
+import '../../../player/presentation/providers/progression_providers.dart';
+import 'premium_statistic_card.dart';
 
-class StatsGrid extends StatelessWidget {
-  const StatsGrid({
-    super.key,
-    required this.questionsAnswered,
-    required this.accuracy,
-    required this.gamesPlayed,
-    required this.highestStreak,
-  });
-
-  final int questionsAnswered;
-  final double accuracy;
-  final int gamesPlayed;
-  final int highestStreak;
+class StatsGrid extends ConsumerWidget {
+  const StatsGrid({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'PERFORMANCE',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
-              letterSpacing: 2,
-              fontWeight: FontWeight.bold,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final stats = ref.watch(playerStatisticsProvider);
+    final columns = ResponsiveLayoutHelper.getGridColumnCount(context);
+
+    return Semantics(
+      label: 'Player Performance Statistics',
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'PERFORMANCE',
+              style: context.labelSmall.copyWith(
+                color: SoteriaColors.gold,
+                letterSpacing: 2,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          SizedBox(height: SoteriaSpacing.md),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 2.2,
-            children: [
-              _StatItem(
-                label: 'Answered',
-                value: questionsAnswered.toString(),
-                icon: Icons.quiz_rounded,
-                color: SoteriaColors.primary,
-              ),
-              _StatItem(
-                label: 'Accuracy',
-                value: '${(accuracy * 100).toInt()}%',
-                icon: Icons.track_changes_rounded,
-                color: SoteriaColors.success,
-              ),
-              _StatItem(
-                label: 'Matches',
-                value: gamesPlayed.toString(),
-                icon: Icons.videogame_asset_rounded,
-                color: SoteriaColors.secondary,
-              ),
-              _StatItem(
-                label: 'Best Streak',
-                value: highestStreak.toString(),
-                icon: Icons.local_fire_department_rounded,
-                color: Colors.orange,
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StatItem extends StatelessWidget {
-  const _StatItem({
-    required this.label,
-    required this.value,
-    required this.icon,
-    required this.color,
-  });
-
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return GlassSurface(
-      padding: EdgeInsets.all(SoteriaSpacing.sm),
-      opacity: 0.04,
-      borderRadius: BorderRadius.circular(16),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: color.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
-            ),
-            child: Icon(icon, color: color, size: 16),
-          ),
-          SizedBox(width: SoteriaSpacing.sm),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                value,
-                style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                label,
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  fontSize: 10,
+            SizedBox(height: SoteriaSpacing.md),
+            GridView.count(
+              crossAxisCount: columns,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 1.5,
+              children: [
+                PremiumStatisticCard(
+                  title: 'Answered',
+                  value: stats.totalQuestionsAnswered,
+                  icon: Icons.quiz_rounded,
+                  color: SoteriaColors.primary,
                 ),
-              ),
-            ],
-          ),
-        ],
+                PremiumStatisticCard(
+                  title: 'Accuracy',
+                  value: (stats.overallAccuracy * 100).toInt(),
+                  unit: '%',
+                  icon: Icons.track_changes_rounded,
+                  color: SoteriaColors.success,
+                  trend: 0.12,
+                ),
+                PremiumStatisticCard(
+                  title: 'Study Time',
+                  value: stats.totalStudyTime.inMinutes,
+                  unit: 'm',
+                  icon: Icons.timer_rounded,
+                  color: SoteriaColors.secondary,
+                ),
+                PremiumStatisticCard(
+                  title: 'Resp. Time',
+                  value: (stats.averageResponseTimeMs / 1000).toInt(),
+                  unit: 's',
+                  icon: Icons.speed_rounded,
+                  color: Colors.cyanAccent,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

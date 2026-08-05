@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/core/firebase/services/firebase_interfaces.dart';
 import '../../domain/repositories/practice_repository.dart';
 import '../../models/practice_session.dart';
 import '../../models/practice_session_config.dart';
-import '../../../question_content/domain/entities/category.dart';
 
 class FirestorePracticeRepository implements PracticeRepository {
   final IDatabaseService _database;

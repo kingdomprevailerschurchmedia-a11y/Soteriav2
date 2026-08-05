@@ -14,11 +14,7 @@ class VerificationStepSent extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-<<<<<<< HEAD
-    final state = ref.watch(verificationProvider);
-=======
     final state = ref.watch(verificationProvider(type));
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
 
     return Center(
       child: Padding(
@@ -43,7 +39,6 @@ class VerificationStepSent extends ConsumerWidget {
             SizedBox(height: SoteriaSpacing.xxl),
             Text(
               'Code Sent!',
-<<<<<<< HEAD
               style: context.headlineMedium.copyWith(
                 fontWeight: FontWeight.w900,
               ),
@@ -57,27 +52,15 @@ class VerificationStepSent extends ConsumerWidget {
               style: context.bodyMedium.copyWith(
                 color: SoteriaColors.textSecondary,
               ),
-=======
-              style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
-            ),
-            SizedBox(height: SoteriaSpacing.md),
-            Text(
-              'We\'ve sent a 6-digit verification code to:',
-              style: context.bodyMedium.copyWith(color: SoteriaColors.textSecondary),
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
               textAlign: TextAlign.center,
             ),
             SizedBox(height: SoteriaSpacing.sm),
             Text(
               state.target,
-<<<<<<< HEAD
               style: context.bodyLarge.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
               ),
-=======
-              style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: Colors.white),
->>>>>>> 8f919d77a7dfbd609e3794dbbd737ef063400a30
             ),
           ],
         ),
