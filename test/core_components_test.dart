@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/typography/soteria_text.dart';
 import 'package:soteria/core/widgets/feedback/soteria_badge.dart';
 import 'package:soteria/core/design_system/themes/soteria_theme.dart';

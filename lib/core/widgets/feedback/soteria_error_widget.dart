@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 
 class SoteriaErrorWidget extends StatelessWidget {
   const SoteriaErrorWidget({
@@ -40,7 +40,7 @@ class SoteriaErrorWidget extends StatelessWidget {
               SoteriaButton.ghost(
                 label: 'Retry',
                 onPressed: onRetry!,
-                fullWidth: false,
+                isFullWidth: false,
               ),
             ],
           ],

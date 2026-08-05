@@ -3,7 +3,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/ambient_glow.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 
 class InitializationFailureScreen extends StatelessWidget {
   const InitializationFailureScreen({

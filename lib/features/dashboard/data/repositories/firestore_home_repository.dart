@@ -5,7 +5,7 @@ import '../../domain/models/dashboard_state.dart';
 
 class FirestoreHomeRepository implements HomeRepository {
   FirestoreHomeRepository({required IDatabaseService database})
-      : _database = database;
+    : _database = database;
 
   final IDatabaseService _database;
 
@@ -19,7 +19,9 @@ class FirestoreHomeRepository implements HomeRepository {
           .limit(5)
           .get();
 
-      return snapshot.docs.map((doc) => doc.data()['message'] as String).toList();
+      return snapshot.docs
+          .map((doc) => doc.data()['message'] as String)
+          .toList();
     } catch (e) {
       // Fallback to empty or a specific error message if needed
       return [];

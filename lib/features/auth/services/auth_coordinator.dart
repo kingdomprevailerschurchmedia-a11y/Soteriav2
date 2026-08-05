@@ -30,7 +30,7 @@ class AuthCoordinator {
     LoggerService.i('AuthCoordinator starting to listen', feature: 'Auth');
     _authSubscription = _checkAuth.execute().listen((uid) async {
       final currentSession = _ref.read(sessionProvider);
-      
+
       if (uid == null) {
         if (currentSession.uid != null) {
           LoggerService.i('User signed out, clearing session', feature: 'Auth');
@@ -51,7 +51,7 @@ class AuthCoordinator {
 
     if (isVerified) {
       LoggerService.i('Email verified, bootstrapping player', feature: 'Auth');
-      
+
       try {
         // Trigger Player Bootstrap
         await _ref.read(playerBootstrapStatusProvider.future);
@@ -94,7 +94,13 @@ class AuthCoordinator {
         final uid = _checkAuth.currentUserId;
         if (uid != null) {
           // Notify the verification UI if it's active
-          _ref.read(verificationProvider(VerificationType.emailVerification).notifier).setStep(VerificationStep.success);
+          _ref
+              .read(
+                verificationProvider(
+                  VerificationType.emailVerification,
+                ).notifier,
+              )
+              .setStep(VerificationStep.success);
           await _handleAuthenticatedState(uid);
         }
       }

@@ -41,4 +41,16 @@ class SoteriaColors {
   // Functional Colors
   static const Color error = Color(0xFFFF5252);
   static const Color success = Color(0xFF4CAF50);
+  static const Color warning = Color(0xFFFFAB40);
+  static const Color info = Color(0xFF448AFF);
+
+  // Status Colors (Extended)
+  static const Color xpColor = Color(0xFF00E5FF);
+  static const Color coinColor = Color(0xFFFFD700);
+  static const Color levelColor = Color(0xFF7C4DFF);
+
+  // Shadow & Glow Colors
+  static const Color shadowColor = Color(0xFF000000);
+  static const Color primaryGlow = Color(0x335B3FD9);
+  static const Color goldGlow = Color(0x33D8B24A);
 }

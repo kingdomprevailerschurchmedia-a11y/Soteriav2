@@ -16,9 +16,7 @@ void main() {
     mockHomeRepository = MockHomeRepository();
   });
 
-  ProviderContainer createContainer({
-    PlayerProfile? player,
-  }) {
+  ProviderContainer createContainer({PlayerProfile? player}) {
     final container = ProviderContainer(
       overrides: [
         homeRepositoryProvider.overrideWithValue(mockHomeRepository),

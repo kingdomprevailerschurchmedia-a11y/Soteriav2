@@ -5,7 +5,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
-import '../../../../core/widgets/animations/soteria_animations.dart';
+import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/widgets/animations/animated_numeric_counter.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
 
@@ -63,8 +63,11 @@ class DashboardHeader extends ConsumerWidget {
                           child: Semantics(
                             label: 'Settings',
                             button: true,
-                            child: const Icon(Icons.settings_rounded,
-                                color: SoteriaColors.muted, size: 14),
+                            child: const Icon(
+                              Icons.settings_rounded,
+                              color: SoteriaColors.muted,
+                              size: 14,
+                            ),
                           ),
                         ),
                       ],
@@ -72,9 +75,9 @@ class DashboardHeader extends ConsumerWidget {
                     Text(
                       playerName,
                       style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: 1.5,
-                          ),
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.5,
+                      ),
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: SoteriaSpacing.xs),
@@ -87,7 +90,8 @@ class DashboardHeader extends ConsumerWidget {
                         ),
                         SizedBox(width: SoteriaSpacing.sm),
                         _HeaderBadge(
-                          label: '${(profileCompletion * 100).toInt()}% COMPLETE',
+                          label:
+                              '${(profileCompletion * 100).toInt()}% COMPLETE',
                           icon: Icons.verified_user_rounded,
                           color: SoteriaColors.muted,
                         ),
@@ -230,8 +234,11 @@ class _ProfileAvatar extends StatelessWidget {
                 child: url != null && url!.isNotEmpty
                     ? Image.network(url!, fit: BoxFit.cover)
                     : const Center(
-                        child: Icon(Icons.person_rounded,
-                            color: Colors.white, size: 32),
+                        child: Icon(
+                          Icons.person_rounded,
+                          color: Colors.white,
+                          size: 32,
+                        ),
                       ),
               ),
             ),

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/identity/models/user_session.dart';
-import 'package:soteria/core/widgets/cards/soteria_card.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 
 class IdentityPreviewPage extends StatelessWidget {
   const IdentityPreviewPage({super.key});
@@ -77,7 +77,7 @@ class IdentityPreviewPage extends StatelessWidget {
           ),
           SoteriaButton.primary(
             label: 'Sign Out',
-            fullWidth: false,
+            isFullWidth: false,
             onPressed: () => Navigator.pop(context),
           ),
         ],

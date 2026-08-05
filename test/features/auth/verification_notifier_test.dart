@@ -17,15 +17,24 @@ void main() {
     });
 
     test('initial state is correct', () {
-      final state = container.read(verificationProvider(VerificationType.emailVerification));
+      final state = container.read(
+        verificationProvider(VerificationType.emailVerification),
+      );
       expect(state.type, VerificationType.emailVerification);
       expect(state.step, VerificationStep.request);
     });
 
     test('updateTarget updates state', () {
-      final notifier = container.read(verificationProvider(VerificationType.emailVerification).notifier);
+      final notifier = container.read(
+        verificationProvider(VerificationType.emailVerification).notifier,
+      );
       notifier.updateTarget('test@example.com');
-      expect(container.read(verificationProvider(VerificationType.emailVerification)).target, 'test@example.com');
+      expect(
+        container
+            .read(verificationProvider(VerificationType.emailVerification))
+            .target,
+        'test@example.com',
+      );
     });
   });
 }

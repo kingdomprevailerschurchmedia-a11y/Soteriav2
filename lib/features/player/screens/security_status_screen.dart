@@ -5,7 +5,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/firebase/security/providers/security_providers.dart';
 import 'package:soteria/core/firebase/security/models/security_status.dart';
-import 'package:soteria/core/widgets/cards/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
 
 class SecurityStatusScreen extends ConsumerWidget {
   const SecurityStatusScreen({super.key});

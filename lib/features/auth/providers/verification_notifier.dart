@@ -9,7 +9,8 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   final VerificationType _type;
   late final CountdownService _countdownService;
 
-  VerificationNotifier(this._ref, this._type) : super(VerificationState(_type)) {
+  VerificationNotifier(this._ref, this._type)
+    : super(VerificationState(_type)) {
     _countdownService = CountdownService();
     _countdownService.stream.listen((seconds) {
       if (mounted) {
@@ -67,10 +68,7 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
       state = state.copyWith(isLoading: false);
       _countdownService.start(60);
     } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: 'Failed to resend code.',
-      );
+      state = state.copyWith(isLoading: false, error: 'Failed to resend code.');
     }
   }
 
@@ -80,10 +78,13 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
       final isVerified = await _ref
           .read(checkAuthStateUseCaseProvider)
           .isEmailVerified();
-      
+
       if (mounted) {
         if (isVerified) {
-          state = state.copyWith(isLoading: false, step: VerificationStep.success);
+          state = state.copyWith(
+            isLoading: false,
+            step: VerificationStep.success,
+          );
         } else {
           state = state.copyWith(
             isLoading: false,
@@ -113,6 +114,8 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
 }
 
 final verificationProvider =
-    StateNotifierProvider.family<VerificationNotifier, VerificationState, VerificationType>(
-      (ref, type) => VerificationNotifier(ref, type),
-    );
+    StateNotifierProvider.family<
+      VerificationNotifier,
+      VerificationState,
+      VerificationType
+    >((ref, type) => VerificationNotifier(ref, type));

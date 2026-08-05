@@ -45,6 +45,13 @@ import 'package:soteria/features/gameplay_engine/answer/pages/answer_preview_gal
 import 'package:soteria/features/gameplay_engine/lifelines/pages/lifeline_preview_gallery.dart';
 import 'package:soteria/features/preview_gallery/pages/progression_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/integrity_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/tokens_preview.dart';
+import 'package:soteria/features/preview_gallery/pages/buttons_preview.dart';
+import 'package:soteria/features/preview_gallery/pages/dashboard_redesign_preview.dart';
+import 'package:soteria/features/preview_gallery/pages/login_redesign_preview.dart';
+import 'package:soteria/features/preview_gallery/pages/gameplay_redesign_preview.dart';
+import 'package:soteria/features/preview_gallery/pages/lobby_redesign_preview.dart';
+import 'package:soteria/features/preview_gallery/pages/results_redesign_preview.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 
 import 'package:soteria/core/identity/models/user_session.dart';
@@ -69,9 +76,13 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   // Navigator Keys for stateful shells
   final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-  final dashboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'dashboard');
+  final dashboardNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'dashboard',
+  );
   final playNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'play');
-  final leaderboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'leaderboard');
+  final leaderboardNavigatorKey = GlobalKey<NavigatorState>(
+    debugLabel: 'leaderboard',
+  );
   final rewardsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rewards');
   final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
@@ -131,10 +142,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           if (session.uid != null && session.status == SessionStatus.guest) {
             return '${SoteriaRoutes.auth}/verify/emailVerification';
           }
-          if (location.startsWith(SoteriaRoutes.main)) return SoteriaRoutes.auth;
+          if (location.startsWith(SoteriaRoutes.main))
+            return SoteriaRoutes.auth;
         } else {
           // Already authenticated, shouldn't be on auth pages
-          if (location.startsWith(SoteriaRoutes.auth)) return SoteriaRoutes.main;
+          if (location.startsWith(SoteriaRoutes.auth))
+            return SoteriaRoutes.main;
         }
       }
 
@@ -173,10 +186,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: 'practice',
-                    pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-                      child: const PracticeLobbyScreen(),
-                      key: state.pageKey,
-                    ),
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const PracticeLobbyScreen(),
+                          key: state.pageKey,
+                        ),
                   ),
                   GoRoute(
                     path: 'pro-mode',
@@ -201,10 +215,11 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'settings',
-                    pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
-                      child: const SettingsScreen(),
-                      key: state.pageKey,
-                    ),
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.slideUp(
+                          child: const SettingsScreen(),
+                          key: state.pageKey,
+                        ),
                   ),
                 ],
               ),
@@ -251,7 +266,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.profile,
-                builder: (context, state) => const Center(child: Text('Profile')),
+                builder: (context, state) =>
+                    const Center(child: Text('Profile')),
               ),
             ],
           ),
@@ -322,10 +338,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'tokens',
             pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-              child: const GalleryShell(
-                title: 'Tokens',
-                child: TokensPreviewPage(),
-              ),
+              child: const TokensPreview(),
               key: state.pageKey,
             ),
           ),
@@ -352,10 +365,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'buttons',
-            builder: (context, state) => const GalleryShell(
-              title: 'Buttons',
-              child: ButtonsPreviewPage(),
-            ),
+            builder: (context, state) => const ButtonsPreview(),
           ),
           GoRoute(
             path: 'cards',
@@ -546,6 +556,30 @@ final routerProvider = Provider<GoRouter>((ref) {
               title: 'Lifeline Framework',
               child: LifelinePreviewGallery(),
             ),
+          ),
+          GoRoute(
+            path: 'lobby-redesign',
+            builder: (context, state) => const LobbyRedesignPreview(),
+          ),
+          GoRoute(
+            path: 'results-redesign',
+            builder: (context, state) => const ResultsRedesignPreview(),
+          ),
+          GoRoute(
+            path: 'answer-review-preview',
+            builder: (context, state) => const AnswerReviewPreview(),
+          ),
+          GoRoute(
+            path: 'login-redesign',
+            builder: (context, state) => const LoginRedesignPreview(),
+          ),
+          GoRoute(
+            path: 'gameplay-redesign',
+            builder: (context, state) => const GameplayRedesignPreview(),
+          ),
+          GoRoute(
+            path: 'dashboard-redesign',
+            builder: (context, state) => const DashboardRedesignPreview(),
           ),
         ],
       ),

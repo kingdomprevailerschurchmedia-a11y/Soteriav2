@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
-import 'package:soteria/core/widgets/cards/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/features/auth/widgets/auth_hero_section.dart';
 import 'package:soteria/features/auth/widgets/feature_carousel.dart';

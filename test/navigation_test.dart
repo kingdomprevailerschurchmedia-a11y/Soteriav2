@@ -51,8 +51,12 @@ void main() {
           identityRepositoryProvider.overrideWithValue(MockIdentityRepo()),
           authRepositoryProvider.overrideWithValue(MockAuthRepository()),
           authCoordinatorProvider.overrideWithValue(MockAuthCoordinator()),
-          notificationCoordinatorProvider.overrideWithValue(MockNotificationCoordinator()),
-          configurationCoordinatorProvider.overrideWithValue(MockConfigurationCoordinator()),
+          notificationCoordinatorProvider.overrideWithValue(
+            MockNotificationCoordinator(),
+          ),
+          configurationCoordinatorProvider.overrideWithValue(
+            MockConfigurationCoordinator(),
+          ),
           routerProvider.overrideWithValue(testRouter),
           appLifecycleProvider.overrideWith(_MockAppLifecycleNotifier.new),
         ],
@@ -72,10 +76,15 @@ void main() {
       await tester.pumpAndSettle();
 
       final router = container.read(routerProvider);
-      final location = router.routerDelegate.currentConfiguration.uri.toString();
-      
+      final location = router.routerDelegate.currentConfiguration.uri
+          .toString();
+
       // GoRouter initial location might be normalized to '/' or empty depending on version/config
-      expect(location == '/' || location.isEmpty, isTrue, reason: 'Location was: $location');
+      expect(
+        location == '/' || location.isEmpty,
+        isTrue,
+        reason: 'Location was: $location',
+      );
     });
   });
 
@@ -98,10 +107,12 @@ void main() {
           ),
           GoRoute(
             path: '/bad-route',
-            builder: (context, state) => const UnknownRouteScreen(location: '/bad-route'),
+            builder: (context, state) =>
+                const UnknownRouteScreen(location: '/bad-route'),
           ),
         ],
-        errorBuilder: (context, state) => UnknownRouteScreen(location: state.uri.toString()),
+        errorBuilder: (context, state) =>
+            UnknownRouteScreen(location: state.uri.toString()),
       );
 
       final container = ProviderContainer(
@@ -109,8 +120,12 @@ void main() {
           firebaseInitFutureProvider.overrideWith((ref) async {}),
           authRepositoryProvider.overrideWithValue(MockAuthRepository()),
           authCoordinatorProvider.overrideWithValue(MockAuthCoordinator()),
-          notificationCoordinatorProvider.overrideWithValue(MockNotificationCoordinator()),
-          configurationCoordinatorProvider.overrideWithValue(MockConfigurationCoordinator()),
+          notificationCoordinatorProvider.overrideWithValue(
+            MockNotificationCoordinator(),
+          ),
+          configurationCoordinatorProvider.overrideWithValue(
+            MockConfigurationCoordinator(),
+          ),
           routerProvider.overrideWithValue(testRouter),
           appLifecycleProvider.overrideWith(MockAppLifecycleNotifier.new),
         ],

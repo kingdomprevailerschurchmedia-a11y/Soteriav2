@@ -42,7 +42,9 @@ void main() {
   });
 
   test('should fail if advanced difficulty selected by low level player', () {
-    final player = mockPlayer.copyWith(level: 5); // Enough for category but not for advanced
+    final player = mockPlayer.copyWith(
+      level: 5,
+    ); // Enough for category but not for advanced
     const config = PracticeSessionConfig(
       category: mockCategory,
       difficulty: PracticeDifficulty.advanced,

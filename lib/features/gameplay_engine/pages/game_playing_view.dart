@@ -8,6 +8,9 @@ import 'package:soteria/features/gameplay_engine/timer/widgets/adaptive_timer_di
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import 'package:soteria/features/question_presentation/widgets/question_presenter.dart';
 
+import 'package:soteria/features/gameplay_engine/widgets/gameplay_header_stats.dart';
+import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
+
 class GamePlayingView extends ConsumerWidget {
   final GameConfiguration config;
 
@@ -15,24 +18,46 @@ class GamePlayingView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameEngineProvider(config));
-    final question = state.currentQuestion;
+    final question = ref.watch(
+      gameEngineProvider(config).select((s) => s.currentQuestion),
+    );
+    final score = ref.watch(gameEngineProvider(config).select((s) => s.score));
+    final sessionId = ref.watch(
+      gameEngineProvider(config).select((s) => s.sessionId),
+    );
+    final currentIndex = ref.watch(
+      gameEngineProvider(config).select((s) => s.currentQuestionIndex),
+    );
+    final totalQuestions = ref.watch(
+      gameEngineProvider(config).select((s) => s.questions.length),
+    );
+
+    final progressionXP = ref.watch(
+      progressionProvider.select((s) => s.totalXP),
+    );
+    final sessionScore = ref.watch(
+      progressionProvider.select((s) => s.sessionScore),
+    );
 
     if (question == null) return const SizedBox.shrink();
 
     return Column(
       children: [
-        SizedBox(height: SoteriaSpacing.lg),
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16),
-          child: GameScoreBoard(),
+        SizedBox(height: SoteriaSpacing.md),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: GameplayHeaderStats(
+            score: score,
+            xp: progressionXP,
+            coins: sessionScore ~/ 10,
+          ),
         ),
         Expanded(
           child: QuestionPresenter(
             question: question,
-            currentQuestionIndex: state.currentQuestionIndex,
-            totalQuestions: state.questions.length,
-            sessionId: state.sessionId,
+            currentQuestionIndex: currentIndex,
+            totalQuestions: totalQuestions,
+            sessionId: sessionId,
             gameConfig: config,
             timerChild: config.questionTimer != null
                 ? AdaptiveTimerDisplay(state: ref.watch(timerEngineProvider))

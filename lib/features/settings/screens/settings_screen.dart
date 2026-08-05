@@ -121,9 +121,7 @@ class _SettingsSection extends StatelessWidget {
             borderRadius: BorderRadius.circular(24),
             border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
           ),
-          child: Column(
-            children: items,
-          ),
+          child: Column(children: items),
         ),
       ],
     );
@@ -150,9 +148,15 @@ class _SettingsItem extends StatelessWidget {
       leading: Icon(icon, color: Colors.white70),
       title: Text(title, style: context.bodyMedium),
       subtitle: subtitle != null
-          ? Text(subtitle!, style: context.labelSmall.copyWith(color: SoteriaColors.muted))
+          ? Text(
+              subtitle!,
+              style: context.labelSmall.copyWith(color: SoteriaColors.muted),
+            )
           : null,
-      trailing: const Icon(Icons.chevron_right_rounded, color: SoteriaColors.muted),
+      trailing: const Icon(
+        Icons.chevron_right_rounded,
+        color: SoteriaColors.muted,
+      ),
     );
   }
 }

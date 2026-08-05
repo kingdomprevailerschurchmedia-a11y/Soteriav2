@@ -7,6 +7,7 @@ class SoteriaRadius {
   static double get md => 12.0.r;
   static double get lg => 16.0.r;
   static double get xl => 24.0.r;
+  static double get xxl => 32.0.r;
   static const double full = 999.0;
 
   static BorderRadius get brXs => BorderRadius.circular(xs);
@@ -14,5 +15,6 @@ class SoteriaRadius {
   static BorderRadius get brMd => BorderRadius.circular(md);
   static BorderRadius get brLg => BorderRadius.circular(lg);
   static BorderRadius get brXl => BorderRadius.circular(xl);
+  static BorderRadius get brXxl => BorderRadius.circular(xxl);
   static BorderRadius get brFull => BorderRadius.circular(full);
 }

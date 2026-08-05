@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/overlays/soteria_dialog.dart';
 import 'package:soteria/core/widgets/overlays/soteria_bottom_sheet.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 
 class OverlaysPreviewPage extends StatelessWidget {
   const OverlaysPreviewPage({super.key});

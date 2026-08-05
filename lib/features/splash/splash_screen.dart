@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
-import 'package:soteria/core/widgets/animations/soteria_animations.dart';
+import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 
 class SplashScreen extends ConsumerWidget {
   const SplashScreen({super.key});
@@ -18,10 +18,7 @@ class SplashScreen extends ConsumerWidget {
         fit: StackFit.expand,
         children: [
           // 1. Background Pattern Asset
-          Image.asset(
-            'assets/images/splash_bg.png',
-            fit: BoxFit.cover,
-          ),
+          Image.asset('assets/images/splash_bg.png', fit: BoxFit.cover),
 
           // 2. Bottom Glow Arc
           Positioned(
@@ -42,7 +39,7 @@ class SplashScreen extends ConsumerWidget {
               ),
             ),
           ),
-          
+
           // Bright center point for the bottom glow
           Positioned(
             bottom: -5,

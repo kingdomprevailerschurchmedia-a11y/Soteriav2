@@ -4,7 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
-import 'package:soteria/core/widgets/cards/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/widgets/feedback/soteria_empty_state.dart';
 import '../domain/models/app_notification.dart';
 import '../providers/notification_providers.dart';

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -51,15 +52,25 @@ class AnswerCard extends StatelessWidget {
       opacity = 0.2;
     }
 
+    String semanticLabel = 'Answer option: $text.';
+    if (isCorrect) semanticLabel += ' Correct answer.';
+    if (isWrong) semanticLabel += ' Incorrect answer.';
+    if (isSelected) semanticLabel += ' Currently selected.';
+
     return Semantics(
       button: true,
       selected: isSelected,
       enabled: !isLocked,
-      label: 'Answer option: $text',
+      label: semanticLabel,
       child: Padding(
         padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
         child: GestureDetector(
-          onTap: isLocked ? null : onTap,
+          onTap: isLocked
+              ? null
+              : () {
+                  HapticFeedback.lightImpact();
+                  onTap();
+                },
           child: AnimatedContainer(
             duration: SoteriaAnimations.fast,
             curve: Curves.easeInOut,

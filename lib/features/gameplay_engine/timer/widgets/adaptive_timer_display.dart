@@ -37,6 +37,7 @@ class AdaptiveTimerDisplay extends StatelessWidget {
 
     return Semantics(
       label: 'Time remaining: ${state.remaining.inSeconds} seconds',
+      liveRegion: true,
       child: SizedBox(
         width: size.w,
         height: size.w,

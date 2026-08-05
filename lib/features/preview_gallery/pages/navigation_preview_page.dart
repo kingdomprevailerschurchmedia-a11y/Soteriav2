@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/widgets/navigation/soteria_avatar.dart';
 import 'package:soteria/core/widgets/navigation/soteria_chip.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 
 class NavigationPreviewPage extends StatelessWidget {
   const NavigationPreviewPage({super.key});

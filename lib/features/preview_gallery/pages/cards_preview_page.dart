@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/cards/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/widgets/cards/soteria_glass_card.dart';
 import 'package:soteria/core/widgets/cards/soteria_list_tile.dart';
 import 'package:soteria/core/widgets/cards/soteria_switch_tile.dart';
 import 'package:soteria/core/widgets/cards/soteria_radio_tile.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 
 class CardsPreviewPage extends StatelessWidget {
   const CardsPreviewPage({super.key});

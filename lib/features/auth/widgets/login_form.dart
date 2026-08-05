@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
-import 'package:soteria/core/widgets/inputs/soteria_text_field.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import '../providers/login_notifier.dart';
@@ -48,8 +48,9 @@ class LoginForm extends ConsumerWidget {
                   height: 24,
                   child: Checkbox(
                     value: state.rememberMe,
-                    onChanged:
-                        state.isLoading ? null : notifier.toggleRememberMe,
+                    onChanged: state.isLoading
+                        ? null
+                        : notifier.toggleRememberMe,
                     activeColor: SoteriaColors.gold,
                   ),
                 ),
@@ -66,8 +67,8 @@ class LoginForm extends ConsumerWidget {
               onPressed: state.isLoading
                   ? null
                   : () => ref
-                      .read(navigationServiceProvider)
-                      .push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
+                        .read(navigationServiceProvider)
+                        .push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
               child: Text(
                 'Forgot Password?',
                 style: context.labelSmall.copyWith(color: SoteriaColors.gold),

@@ -15,7 +15,10 @@ class FirestoreCategoryRepository implements CategoryRepository {
 
   @override
   Stream<List<Category>> watchCategories() {
-    return _database.collection('categories').snapshots().map(
+    return _database
+        .collection('categories')
+        .snapshots()
+        .map(
           (snapshot) => snapshot.docs
               .map((doc) => Category.fromJson(doc.data()))
               .toList(),

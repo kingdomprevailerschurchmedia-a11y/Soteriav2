@@ -13,9 +13,7 @@ import '../domain/use_cases/sign_up_use_case.dart';
 
 // --- Data Sources ---
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
-  return FirebaseAuthDataSource(
-    googleSignIn: GoogleSignIn.instance,
-  );
+  return FirebaseAuthDataSource(googleSignIn: GoogleSignIn.instance);
 });
 
 // --- Repositories ---
@@ -45,9 +43,9 @@ final forgotPasswordUseCaseProvider = Provider<ForgotPasswordUseCase>((ref) {
 });
 
 final sendEmailVerificationUseCaseProvider =
-Provider<SendEmailVerificationUseCase>((ref) {
-  return SendEmailVerificationUseCase(ref.watch(authRepositoryProvider));
-});
+    Provider<SendEmailVerificationUseCase>((ref) {
+      return SendEmailVerificationUseCase(ref.watch(authRepositoryProvider));
+    });
 
 final checkAuthStateUseCaseProvider = Provider<CheckAuthStateUseCase>((ref) {
   return CheckAuthStateUseCase(ref.watch(authRepositoryProvider));

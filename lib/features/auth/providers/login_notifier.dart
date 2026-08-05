@@ -72,7 +72,10 @@ class LoginNotifier extends Notifier<LoginState> {
           ref.read(analyticsProvider).logLogin(loginMethod: 'email');
           LoggerService.i('Authentication successful', feature: 'Auth');
         } else if (result.status == AuthenticationStatus.unverified) {
-          LoggerService.i('Authentication blocked: Email unverified', feature: 'Auth');
+          LoggerService.i(
+            'Authentication blocked: Email unverified',
+            feature: 'Auth',
+          );
           state = state.copyWith(
             error: 'Please verify your email address before signing in.',
           );

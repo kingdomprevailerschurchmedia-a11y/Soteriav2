@@ -10,8 +10,8 @@ import 'package:soteria/features/gameplay_engine/lifelines/widgets/audience_char
 import 'package:soteria/features/gameplay_engine/lifelines/widgets/lifeline_button.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_type.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/providers/lifeline_controller.dart';
-import 'package:soteria/features/question_presentation/widgets/question_card.dart';
-import 'package:soteria/features/question_presentation/widgets/question_progress_header.dart';
+import 'package:soteria/features/question_presentation/widgets/question_explanation_view.dart';
+import 'package:soteria/features/gameplay_engine/widgets/gameplay_progress_bar.dart';
 
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
@@ -48,100 +48,139 @@ class QuestionPresenter extends ConsumerWidget {
       children: [
         Padding(
           padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-          child: QuestionProgressHeader(
-            currentQuestion: currentQuestionIndex + 1,
-            totalQuestions: totalQuestions,
+          child: GameplayProgressBar(
+            current: currentQuestionIndex + 1,
+            total: totalQuestions,
             progress: (currentQuestionIndex + 1) / totalQuestions,
-            timerChild: timerChild,
           ),
         ),
         SizedBox(height: SoteriaSpacing.lg),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: LifelineType.values.map((type) {
-              final state = lifelineState[type]!;
-              return LifelineButton(
-                type: type,
-                status: state.status,
-                onTap: () {
-                  if (!isRevealed) {
-                    ref
-                        .read(lifelineControllerProvider(sessionId).notifier)
-                        .activate(type, question);
-                  }
-                },
-              );
-            }).toList(),
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              if (timerChild != null) timerChild!,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: LifelineType.values.map((type) {
+                  final state = lifelineState[type]!;
+                  return Padding(
+                    padding: EdgeInsets.only(left: SoteriaSpacing.sm),
+                    child: LifelineButton(
+                      type: type,
+                      status: state.status,
+                      onTap: () {
+                        if (!isRevealed) {
+                          ref
+                              .read(
+                                lifelineControllerProvider(sessionId).notifier,
+                              )
+                              .activate(type, question);
+                        }
+                      },
+                    ),
+                  );
+                }).toList(),
+              ),
+            ],
           ),
         ),
         Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.all(SoteriaSpacing.lg),
-            child: Column(
-              children: [
-                SizedBox(height: SoteriaSpacing.lg),
-                if (lifelineResults.audienceVotes != null) ...[
-                  AudienceChart(votes: lifelineResults.audienceVotes!),
-                  SizedBox(height: SoteriaSpacing.xl),
-                ],
-                AnimatedSwitcher(
-                  duration: SoteriaAnimations.normal,
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: animation.drive(
-                          Tween<Offset>(
-                            begin: const Offset(0.05, 0),
-                            end: Offset.zero,
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                padding: EdgeInsets.all(SoteriaSpacing.lg),
+                child: Column(
+                  children: [
+                    SizedBox(height: SoteriaSpacing.lg),
+                    if (lifelineResults.audienceVotes != null) ...[
+                      AudienceChart(votes: lifelineResults.audienceVotes!),
+                      SizedBox(height: SoteriaSpacing.xl),
+                    ],
+                    AnimatedSwitcher(
+                      duration: SoteriaAnimations.normal,
+                      transitionBuilder: (child, animation) {
+                        return FadeTransition(
+                          opacity: animation,
+                          child: SlideTransition(
+                            position: animation.drive(
+                              Tween<Offset>(
+                                begin: const Offset(0.05, 0),
+                                end: Offset.zero,
+                              ),
+                            ),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: QuestionContentCard(
+                        key: ValueKey(question.id),
+                        text: question.text,
+                        category: question.category,
+                        difficulty: question.difficulty.name,
+                      ),
+                    ),
+                    SizedBox(height: SoteriaSpacing.xxl),
+                    renderer.buildAnswerArea(
+                      question: question,
+                      selectedAnswerId: selectedId,
+                      isRevealed: isRevealed,
+                      onAnswerSelected: isRevealed
+                          ? (id) {}
+                          : (id) => ref
+                                .read(answerSelectionProvider.notifier)
+                                .select(id),
+                      hiddenOptionIds: lifelineResults.hiddenOptionIds,
+                    ),
+                    const SizedBox(height: 32),
+                    if (!isRevealed && selectedId != null)
+                      ElevatedButton(
+                        onPressed: () {
+                          HapticFeedback.mediumImpact();
+                          ref.read(isResultRevealedProvider.notifier).state =
+                              true;
+                          if (gameConfig != null) {
+                            ref
+                                .read(gameEngineProvider(gameConfig!).notifier)
+                                .submitAnswer([selectedId]);
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 56),
+                          backgroundColor: SoteriaColors.primary,
+                          foregroundColor: SoteriaColors.textPrimary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
                           ),
                         ),
-                        child: child,
+                        child: const Text(
+                          'CONFIRM ANSWER',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
                       ),
-                    );
-                  },
-                  child: QuestionContentCard(
-                    key: ValueKey(question.id),
-                    text: question.text,
-                    category: question.category,
-                    difficulty: question.difficulty.name,
-                  ),
+                    SizedBox(height: 120.h), // Space for explanation view
+                  ],
                 ),
-                SizedBox(height: SoteriaSpacing.xxl),
-                renderer.buildAnswerArea(
-                  question: question,
-                  selectedAnswerId: selectedId,
-                  isRevealed: isRevealed,
-                  onAnswerSelected: isRevealed
-                      ? (id) {}
-                      : (id) => ref
-                            .read(answerSelectionProvider.notifier)
-                            .select(id),
-                  hiddenOptionIds: lifelineResults.hiddenOptionIds,
-                ),
-                const SizedBox(height: 32),
-                if (!isRevealed && selectedId != null)
-                  ElevatedButton(
-                    onPressed: () {
-                      ref.read(isResultRevealedProvider.notifier).state = true;
+              ),
+              if (isRevealed)
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: QuestionExplanationView(
+                    question: question,
+                    onContinue: () {
                       if (gameConfig != null) {
                         ref
                             .read(gameEngineProvider(gameConfig!).notifier)
-                            .submitAnswer([selectedId]);
+                            .moveToNextQuestion();
                       }
                     },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 56),
-                      backgroundColor: SoteriaColors.primary,
-                      foregroundColor: SoteriaColors.textPrimary,
-                    ),
-                    child: const Text('CONFIRM ANSWER'),
                   ),
-                SizedBox(height: SoteriaSpacing.xxl),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
       ],

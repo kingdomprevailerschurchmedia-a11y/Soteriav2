@@ -6,7 +6,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import '../models/identity_provider.dart';
 import '../providers/auth_landing_notifier.dart';
 import '../widgets/auth_hero_section.dart';

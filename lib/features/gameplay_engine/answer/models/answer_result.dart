@@ -22,4 +22,24 @@ class AnswerResult {
 
   bool get isCorrect => decision == AnswerDecision.correct;
   bool get isWrong => decision == AnswerDecision.wrong;
+
+  Map<String, dynamic> toJson() => {
+    'submissionId': submissionId,
+    'questionId': questionId,
+    'decision': decision.name,
+    'correctOptionIds': correctOptionIds,
+    'xpEarned': xpEarned,
+    'timestamp': timestamp.toIso8601String(),
+    'metadata': metadata,
+  };
+
+  factory AnswerResult.fromJson(Map<String, dynamic> json) => AnswerResult(
+    submissionId: json['submissionId'],
+    questionId: json['questionId'],
+    decision: AnswerDecision.values.byName(json['decision']),
+    correctOptionIds: List<String>.from(json['correctOptionIds']),
+    xpEarned: json['xpEarned'] ?? 0,
+    timestamp: DateTime.parse(json['timestamp']),
+    metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
+  );
 }

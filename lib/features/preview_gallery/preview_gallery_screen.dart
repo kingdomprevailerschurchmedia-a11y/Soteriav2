@@ -6,7 +6,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
-import 'package:soteria/core/widgets/inputs/soteria_text_field.dart';
+import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import 'package:soteria/features/preview_gallery/models/gallery_item.dart';
 import 'package:soteria/features/preview_gallery/providers/gallery_providers.dart';
 

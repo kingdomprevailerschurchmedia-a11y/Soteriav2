@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/inputs/soteria_text_field.dart';
+import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import '../providers/registration_notifier.dart';
 
 class StepAccountIdentity extends ConsumerWidget {

@@ -28,7 +28,9 @@ void main() {
         overrides: [
           announcementsProvider.overrideWith((ref) => Future.value([])),
           dailyChallengeProvider.overrideWith((ref) => Future.value(null)),
-          currentPlayerStreamProvider.overrideWith((ref) => const Stream.empty()),
+          currentPlayerStreamProvider.overrideWith(
+            (ref) => const Stream.empty(),
+          ),
         ],
       ),
     );

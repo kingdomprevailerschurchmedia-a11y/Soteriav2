@@ -16,9 +16,11 @@ abstract interface class AuthDataSource {
 }
 
 class FirebaseAuthDataSource implements AuthDataSource {
-  FirebaseAuthDataSource({auth.FirebaseAuth? firebaseAuth, GoogleSignIn? googleSignIn})
-    : _auth = firebaseAuth ?? auth.FirebaseAuth.instance,
-      _googleSignIn = googleSignIn;
+  FirebaseAuthDataSource({
+    auth.FirebaseAuth? firebaseAuth,
+    GoogleSignIn? googleSignIn,
+  }) : _auth = firebaseAuth ?? auth.FirebaseAuth.instance,
+       _googleSignIn = googleSignIn;
 
   final auth.FirebaseAuth _auth;
   final GoogleSignIn? _googleSignIn;

@@ -67,8 +67,11 @@ class SoteriaPage extends ConsumerWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline_rounded,
-                        color: SoteriaColors.error, size: 64),
+                    const Icon(
+                      Icons.error_outline_rounded,
+                      color: SoteriaColors.error,
+                      size: 64,
+                    ),
                     const SizedBox(height: 16),
                     Text(
                       'SYSTEM ERROR',
@@ -88,7 +91,9 @@ class SoteriaPage extends ConsumerWidget {
                       ElevatedButton(
                         onPressed: onRetry,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: SoteriaColors.error.withValues(alpha: 0.2),
+                          backgroundColor: SoteriaColors.error.withValues(
+                            alpha: 0.2,
+                          ),
                           foregroundColor: SoteriaColors.error,
                           side: const BorderSide(color: SoteriaColors.error),
                         ),

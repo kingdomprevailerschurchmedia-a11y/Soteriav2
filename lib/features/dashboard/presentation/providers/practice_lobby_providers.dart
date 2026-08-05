@@ -76,7 +76,9 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
   Future<void> _init() async {
     state = state.copyWith(isLoading: true);
     try {
-      final categories = await ref.read(categoryRepositoryProvider).getCategories();
+      final categories = await ref
+          .read(categoryRepositoryProvider)
+          .getCategories();
       if (ref.mounted) {
         state = state.copyWith(
           isLoading: false,
@@ -100,8 +102,9 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
   }
 
   void updateDifficulty(PracticeDifficulty difficulty) {
-    state =
-        state.copyWith(config: state.config.copyWith(difficulty: difficulty));
+    state = state.copyWith(
+      config: state.config.copyWith(difficulty: difficulty),
+    );
     _updateSummary();
   }
 
@@ -111,7 +114,9 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
   }
 
   void toggleTimer(bool enabled) {
-    state = state.copyWith(config: state.config.copyWith(timerEnabled: enabled));
+    state = state.copyWith(
+      config: state.config.copyWith(timerEnabled: enabled),
+    );
     _updateSummary();
   }
 

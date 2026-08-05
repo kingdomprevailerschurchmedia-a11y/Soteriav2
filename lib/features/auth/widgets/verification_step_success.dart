@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/animations/soteria_animations.dart';
+import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 
 class VerificationStepSuccess extends StatelessWidget {
   const VerificationStepSuccess({super.key});

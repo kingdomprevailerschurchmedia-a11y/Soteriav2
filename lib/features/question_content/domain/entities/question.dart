@@ -71,6 +71,56 @@ class Question {
     required this.contentHash,
   }) : id = id ?? const Uuid().v4();
 
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'version': version,
+    'text': text,
+    'explanation': explanation,
+    'difficulty': difficulty.name,
+    'category': category,
+    'subcategory': subcategory,
+    'topic': topic,
+    'type': type.name,
+    'options': options.map((e) => e.toJson()).toList(),
+    'correctAnswers': correctAnswers,
+    'tags': tags,
+    'language': language,
+    'estimatedTime': estimatedTime.inSeconds,
+    'xpValue': xpValue,
+    'status': status.name,
+    'createdAt': createdAt.toIso8601String(),
+    'updatedAt': updatedAt.toIso8601String(),
+    'author': author,
+    'source': source,
+    'schemaVersion': schemaVersion,
+    'contentHash': contentHash,
+  };
+
+  factory Question.fromJson(Map<String, dynamic> json) => Question(
+    id: json['id'],
+    version: json['version'],
+    text: json['text'],
+    explanation: json['explanation'],
+    difficulty: QuestionDifficulty.values.byName(json['difficulty']),
+    category: json['category'],
+    subcategory: json['subcategory'],
+    topic: json['topic'],
+    type: QuestionType.values.byName(json['type']),
+    options: (json['options'] as List).map((e) => Answer.fromJson(e)).toList(),
+    correctAnswers: List<String>.from(json['correctAnswers']),
+    tags: List<String>.from(json['tags']),
+    language: json['language'],
+    estimatedTime: Duration(seconds: json['estimatedTime']),
+    xpValue: json['xpValue'],
+    status: QuestionStatus.values.byName(json['status']),
+    createdAt: DateTime.parse(json['createdAt']),
+    updatedAt: DateTime.parse(json['updatedAt']),
+    author: json['author'],
+    source: json['source'],
+    schemaVersion: json['schemaVersion'],
+    contentHash: json['contentHash'],
+  );
+
   /// Logic to check if a provided answer is correct.
   bool isAnswerCorrect(String answerId) => correctAnswers.contains(answerId);
 
@@ -88,4 +138,13 @@ class Answer {
   final String? mediaUrl; // For image/audio options
 
   const Answer({required this.id, required this.text, this.mediaUrl});
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'text': text,
+    'mediaUrl': mediaUrl,
+  };
+
+  factory Answer.fromJson(Map<String, dynamic> json) =>
+      Answer(id: json['id'], text: json['text'], mediaUrl: json['mediaUrl']);
 }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/inputs/soteria_text_field.dart';
+import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import 'package:soteria/core/widgets/inputs/soteria_otp_field.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 
 class InputsPreviewPage extends StatelessWidget {

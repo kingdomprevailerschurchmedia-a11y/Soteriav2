@@ -8,23 +8,24 @@ abstract class AudienceSimulationStrategy {
 class DifficultyBasedSimulationStrategy implements AudienceSimulationStrategy {
   @override
   Map<String, double> simulate(Question question) {
-    final random = Random();
+    // Deterministic seed based on question ID
+    final random = Random(question.id.hashCode);
     final results = <String, double>{};
 
     double correctProbability;
     switch (question.difficulty) {
       case QuestionDifficulty.easy:
-        correctProbability = 0.90 + (random.nextDouble() * 0.05);
+        correctProbability = 0.85 + (random.nextDouble() * 0.10); // 85-95%
         break;
       case QuestionDifficulty.medium:
-        correctProbability = 0.75 + (random.nextDouble() * 0.10);
+        correctProbability = 0.65 + (random.nextDouble() * 0.15); // 65-80%
         break;
       case QuestionDifficulty.hard:
-        correctProbability = 0.60 + (random.nextDouble() * 0.10);
+        correctProbability = 0.45 + (random.nextDouble() * 0.15); // 45-60%
         break;
       case QuestionDifficulty.expert:
       case QuestionDifficulty.adaptive:
-        correctProbability = 0.45 + (random.nextDouble() * 0.15);
+        correctProbability = 0.30 + (random.nextDouble() * 0.20); // 30-50%
         break;
     }
 
@@ -38,10 +39,13 @@ class DifficultyBasedSimulationStrategy implements AudienceSimulationStrategy {
 
     for (int i = 0; i < otherOptions.length; i++) {
       if (i == otherOptions.length - 1) {
-        results[otherOptions[i].id] = remainingProbability;
+        results[otherOptions[i].id] = double.parse(
+          remainingProbability.toStringAsFixed(4),
+        );
       } else {
+        // Distribute remaining randomly but weighted away from the correct answer
         final share = random.nextDouble() * remainingProbability;
-        results[otherOptions[i].id] = share;
+        results[otherOptions[i].id] = double.parse(share.toStringAsFixed(4));
         remainingProbability -= share;
       }
     }

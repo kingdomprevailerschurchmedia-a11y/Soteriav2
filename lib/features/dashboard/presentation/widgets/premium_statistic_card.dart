@@ -45,7 +45,9 @@ class PremiumStatisticCard extends StatelessWidget {
               if (unit.isNotEmpty)
                 Text(
                   unit,
-                  style: context.labelSmall.copyWith(color: SoteriaColors.muted),
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.muted,
+                  ),
                 ),
             ],
           ),
@@ -62,14 +64,20 @@ class PremiumStatisticCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
-                  trend! >= 0 ? Icons.arrow_upward_rounded : Icons.arrow_downward_rounded,
-                  color: trend! >= 0 ? SoteriaColors.success : SoteriaColors.error,
+                  trend! >= 0
+                      ? Icons.arrow_upward_rounded
+                      : Icons.arrow_downward_rounded,
+                  color: trend! >= 0
+                      ? SoteriaColors.success
+                      : SoteriaColors.error,
                   size: 12,
                 ),
                 Text(
                   ' ${(trend! * 100).abs().toInt()}%',
                   style: context.labelSmall.copyWith(
-                    color: trend! >= 0 ? SoteriaColors.success : SoteriaColors.error,
+                    color: trend! >= 0
+                        ? SoteriaColors.success
+                        : SoteriaColors.error,
                     fontSize: 8,
                   ),
                 ),

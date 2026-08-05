@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 import 'package:soteria/core/widgets/typography/soteria_gradient_text.dart';
 import 'package:soteria/core/widgets/typography/soteria_divider.dart';
 

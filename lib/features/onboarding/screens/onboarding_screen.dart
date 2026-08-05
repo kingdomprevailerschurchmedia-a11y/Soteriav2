@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/features/onboarding/providers/onboarding_notifier.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_indicator.dart';
@@ -119,7 +119,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                       ),
                       SoteriaButton.primary(
                         label: 'Next',
-                        fullWidth: false,
+                        isFullWidth: false,
                         onPressed: () {
                           _pageController.nextPage(
                             duration: const Duration(milliseconds: 300),

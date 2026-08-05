@@ -17,11 +17,10 @@ class FiftyFiftyEngine implements LifelineEngine {
         .where((o) => !correctIds.contains(o.id))
         .toList();
 
-    if (incorrectOptions.length < 2)
-      return []; // Should not happen with standard 4-option questions
+    if (incorrectOptions.length < 2) return [];
 
-    // Randomly pick 2 incorrect answers to remove
-    final random = Random();
+    // Deterministic seed based on question ID to ensure consistent behavior
+    final random = Random(question.id.hashCode);
     incorrectOptions.shuffle(random);
 
     return incorrectOptions.take(2).map((o) => o.id).toList();

@@ -18,9 +18,12 @@ class FirestorePracticeRepository implements PracticeRepository {
 
   @override
   Future<PracticeSession?> getSession(String sessionId) async {
-    final doc = await _database.collection('practice_sessions').doc(sessionId).get();
+    final doc = await _database
+        .collection('practice_sessions')
+        .doc(sessionId)
+        .get();
     if (!doc.exists) return null;
-    
+
     final data = doc.data() as Map<String, dynamic>;
     return _fromJson(data);
   }
@@ -30,8 +33,11 @@ class FirestorePracticeRepository implements PracticeRepository {
       sessionId: json['sessionId'],
       uid: json['uid'],
       config: PracticeSessionConfig(
-        category: null, // Category needs to be loaded separately or stored fully
-        difficulty: PracticeDifficulty.values.firstWhere((e) => e.name == json['config']['difficulty']),
+        category:
+            null, // Category needs to be loaded separately or stored fully
+        difficulty: PracticeDifficulty.values.firstWhere(
+          (e) => e.name == json['config']['difficulty'],
+        ),
         questionCount: json['config']['questionCount'],
         timerEnabled: json['config']['timerEnabled'],
         practiceType: json['config']['type'],

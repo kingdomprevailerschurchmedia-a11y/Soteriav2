@@ -80,7 +80,11 @@ class DashboardSkeleton extends StatelessWidget {
             // List Item Skeleton
             Padding(
               padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-              child: _SkeletonBox(width: double.infinity, height: 100, radius: 24),
+              child: _SkeletonBox(
+                width: double.infinity,
+                height: 100,
+                radius: 24,
+              ),
             ),
           ],
         ),

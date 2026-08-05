@@ -44,12 +44,14 @@ class MockAuthCoordinator extends Mock implements AuthCoordinator {
   void dispose() {}
 }
 
-class MockNotificationCoordinator extends Mock implements NotificationCoordinator {
+class MockNotificationCoordinator extends Mock
+    implements NotificationCoordinator {
   @override
   Future<void> initialize() async {}
 }
 
-class MockConfigurationCoordinator extends Mock implements ConfigurationCoordinator {
+class MockConfigurationCoordinator extends Mock
+    implements ConfigurationCoordinator {
   @override
   Future<void> initialize() async {}
 }

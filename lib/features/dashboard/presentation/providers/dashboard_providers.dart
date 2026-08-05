@@ -27,7 +27,10 @@ class DashboardNotifier extends Notifier<DashboardState> {
     final challengeAsync = ref.watch(dailyChallengeProvider);
 
     return DashboardState(
-      isLoading: playerAsync.isLoading || announcementsAsync.isLoading || challengeAsync.isLoading,
+      isLoading:
+          playerAsync.isLoading ||
+          announcementsAsync.isLoading ||
+          challengeAsync.isLoading,
       player: playerAsync.value,
       announcements: announcementsAsync.value ?? const [],
       dailyChallenge: challengeAsync.value,
@@ -36,7 +39,11 @@ class DashboardNotifier extends Notifier<DashboardState> {
     );
   }
 
-  String? _getError(AsyncValue player, AsyncValue announcements, AsyncValue challenge) {
+  String? _getError(
+    AsyncValue player,
+    AsyncValue announcements,
+    AsyncValue challenge,
+  ) {
     if (player.hasError) return player.error.toString();
     if (announcements.hasError) return announcements.error.toString();
     if (challenge.hasError) return challenge.error.toString();

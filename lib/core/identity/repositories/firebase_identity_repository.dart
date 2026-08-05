@@ -10,23 +10,23 @@ class FirebaseIdentityRepository implements IdentityRepository {
   FirebaseIdentityRepository({
     required IAuthService auth,
     required IDatabaseService database,
-  })  : _auth = auth,
-        _database = database;
+  }) : _auth = auth,
+       _database = database;
 
   final IAuthService _auth;
   final IDatabaseService _database;
 
   @override
   Stream<UserSession?> get sessionChanges => _auth.authStateChanges.map((user) {
-        if (user == null) return null;
-        return UserSession(
-          uid: user.uid,
-          status: user.emailVerified
-              ? SessionStatus.authenticated
-              : SessionStatus.guest,
-          isOffline: false,
-        );
-      });
+    if (user == null) return null;
+    return UserSession(
+      uid: user.uid,
+      status: user.emailVerified
+          ? SessionStatus.authenticated
+          : SessionStatus.guest,
+      isOffline: false,
+    );
+  });
 
   @override
   Future<UserSession?> getActiveSession() async {

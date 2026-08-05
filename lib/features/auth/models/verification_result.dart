@@ -6,10 +6,10 @@ class VerificationResult {
   final String? verificationToken;
 
   const VerificationResult.success({this.verificationToken})
-      : isSuccess = true,
-        error = null;
+    : isSuccess = true,
+      error = null;
 
   const VerificationResult.failure(this.error)
-      : isSuccess = false,
-        verificationToken = null;
+    : isSuccess = false,
+      verificationToken = null;
 }

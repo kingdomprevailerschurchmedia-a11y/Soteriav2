@@ -6,7 +6,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
 import '../../../../core/widgets/glass_surface.dart';
-import '../../../../core/widgets/animations/soteria_animations.dart';
+import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 
 class QuickActionsGrid extends ConsumerWidget {
   const QuickActionsGrid({super.key});

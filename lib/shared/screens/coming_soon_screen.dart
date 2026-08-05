@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/design_system/colors/soteria_colors.dart';
 import '../../core/design_system/spacing/soteria_spacing.dart';
 import '../../core/design_system/typography/soteria_typography.dart';
-import '../../core/widgets/animations/soteria_animations.dart';
+import '../../core/design_system/animations/soteria_animation_widgets.dart';
 
 class ComingSoonScreen extends StatelessWidget {
   const ComingSoonScreen({
@@ -24,7 +24,10 @@ class ComingSoonScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -93,7 +96,10 @@ class ComingSoonScreen extends StatelessWidget {
                 SoteriaFadeIn(
                   delay: const Duration(milliseconds: 500),
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.05),
                       borderRadius: BorderRadius.circular(12),

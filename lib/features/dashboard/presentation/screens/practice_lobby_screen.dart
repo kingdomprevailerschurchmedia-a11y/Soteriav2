@@ -4,14 +4,16 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/glass_surface.dart';
-import '../../../../core/widgets/buttons/soteria_button.dart';
-import '../../../../core/widgets/animations/soteria_animations.dart';
+import '../../../../core/design_system/components/soteria_button.dart';
+import '../../../../core/design_system/animations/soteria_animations.dart';
+import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/practice_lobby_providers.dart';
 import '../widgets/lobby/category_selector.dart';
 import '../widgets/lobby/config_selectors.dart';
 import '../widgets/lobby/session_summary_card.dart';
 import '../../../player/providers/player_providers.dart';
+import 'package:soteria/core/design_system/components/soteria_avatar.dart';
 
 class PracticeLobbyScreen extends ConsumerWidget {
   const PracticeLobbyScreen({super.key});
@@ -42,13 +44,13 @@ class PracticeLobbyScreen extends ConsumerWidget {
                         sliver: SliverList(
                           delegate: SliverChildListDelegate([
                             SoteriaFadeIn(
-                              duration: const Duration(milliseconds: 400),
+                              duration: SoteriaAnimations.medium,
                               child: Text(
                                 'READY TO TRAIN?',
-                                style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: 2,
-                                    ),
+                                style: context.displayMedium.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -1,
+                                ),
                               ),
                             ),
                             SizedBox(height: SoteriaSpacing.xl),
@@ -59,7 +61,9 @@ class PracticeLobbyScreen extends ConsumerWidget {
                             const QuestionCountSelector(),
                             SizedBox(height: SoteriaSpacing.xxl),
                             if (state.estimatedRewards != null)
-                              SessionSummaryCard(rewards: state.estimatedRewards!),
+                              SessionSummaryCard(
+                                rewards: state.estimatedRewards!,
+                              ),
                             SizedBox(height: SoteriaSpacing.xxl * 2),
                           ]),
                         ),
@@ -71,11 +75,17 @@ class PracticeLobbyScreen extends ConsumerWidget {
                   enabled: state.validationError == null,
                   error: state.validationError,
                   onStart: () async {
-                    final session = await ref.read(practiceLobbyProvider.notifier).startSession();
+                    final session = await ref
+                        .read(practiceLobbyProvider.notifier)
+                        .startSession();
                     if (session != null && context.mounted) {
                       // Navigate to Game Screen (Coming in 5.2)
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Session Initialized: ${session.sessionId}')),
+                        SnackBar(
+                          content: Text(
+                            'Session Initialized: ${session.sessionId}',
+                          ),
+                        ),
                       );
                     }
                   },
@@ -100,7 +110,10 @@ class _LobbyHeader extends StatelessWidget {
       child: Row(
         children: [
           IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+            icon: const Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: Colors.white,
+            ),
             onPressed: () => Navigator.of(context).pop(),
           ),
           const Spacer(),
@@ -112,21 +125,20 @@ class _LobbyHeader extends StatelessWidget {
                   children: [
                     Text(
                       player.displayName,
-                      style: context.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                      style: context.bodyMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Lvl ${player.level}',
-                      style: context.labelSmall.copyWith(color: SoteriaColors.gold),
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.gold,
+                      ),
                     ),
                   ],
                 ),
                 SizedBox(width: SoteriaSpacing.md),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundImage: player.photoUrl.isNotEmpty ? NetworkImage(player.photoUrl) : null,
-                  backgroundColor: Colors.white10,
-                  child: player.photoUrl.isEmpty ? const Icon(Icons.person, color: Colors.white38) : null,
-                ),
+                SoteriaAvatar(url: player.photoUrl, size: 40, isOnline: true),
               ],
             ),
         ],
@@ -152,7 +164,9 @@ class _StartAction extends StatelessWidget {
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       decoration: BoxDecoration(
         color: SoteriaColors.surface.withValues(alpha: 0.8),
-        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
+        border: Border(
+          top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,

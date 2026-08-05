@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 
 class NavigationFoundationPage extends ConsumerWidget {
   const NavigationFoundationPage({super.key});

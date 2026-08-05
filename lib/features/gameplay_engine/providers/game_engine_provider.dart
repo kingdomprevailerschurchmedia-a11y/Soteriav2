@@ -22,6 +22,9 @@ import 'package:soteria/features/gameplay_engine/progression/models/progression_
 import 'package:soteria/features/gameplay_engine/integrity/providers/integrity_providers.dart';
 import 'package:soteria/features/gameplay_engine/integrity/models/integrity_signal.dart';
 import 'package:soteria/features/question_presentation/providers/presentation_providers.dart';
+import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
+import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 /// Central engine managing the lifecycle and state of a gameplay session.
 class GameEngine extends StateNotifier<GameState> {
@@ -31,6 +34,7 @@ class GameEngine extends StateNotifier<GameState> {
   final TimerEngine? _timerEngine;
   final ProgressionNotifier? _progression;
   final IntegrityNotifier? _integrity;
+  final GameplayRepository? _repository;
   final Ref? ref;
 
   StreamSubscription<TimerState>? _timerSubscription;
@@ -42,6 +46,7 @@ class GameEngine extends StateNotifier<GameState> {
     this._timerEngine,
     this._progression,
     this._integrity,
+    this._repository,
     this.ref,
   }) : super(
          GameState(sessionId: DateTime.now().millisecondsSinceEpoch.toString()),
@@ -114,6 +119,20 @@ class GameEngine extends StateNotifier<GameState> {
     }
 
     analytics?.trackEvent('Game Started', {'mode': config.mode.name});
+    _saveCheckpoint();
+  }
+
+  /// Hydrates the engine with a previously saved state (for session resume).
+  void hydrate(GameState hydratedState) {
+    state = hydratedState;
+    if (state.lifecycle == GameLifecycle.playing &&
+        config.questionTimer != null) {
+      _timerEngine?.start(config.questionTimer!);
+    }
+  }
+
+  void _saveCheckpoint() {
+    _repository?.saveSessionState(state);
   }
 
   /// Handles user answer submission through the Answer Engine.
@@ -152,11 +171,15 @@ class GameEngine extends StateNotifier<GameState> {
       }
 
       _handleAnswerResult(result);
+      _saveCheckpoint();
     }
   }
 
   void _handleAnswerResult(AnswerResult result) {
     final progressionPolicy = ProgressionPolicyResolver.resolve(config.mode);
+
+    // Record in history for Answer Review
+    state = state.copyWith(answerHistory: [...state.answerHistory, result]);
 
     // Delegate to the Progression Engine
     _progression?.handleAnswer(result, progressionPolicy);
@@ -189,14 +212,17 @@ class GameEngine extends StateNotifier<GameState> {
     }
 
     // Auto-advance after delay (Story 3.1 logic)
-    Future.delayed(const Duration(milliseconds: 1500), () {
-      if (mounted && state.lifecycle == GameLifecycle.answered) {
-        _moveToNextQuestion();
-      }
-    });
+    // For Practice mode, we might want to wait for manual "Continue"
+    if (config.mode != GameMode.practice) {
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        if (mounted && state.lifecycle == GameLifecycle.answered) {
+          moveToNextQuestion();
+        }
+      });
+    }
   }
 
-  void _moveToNextQuestion() {
+  void moveToNextQuestion() {
     // Reset UI state for the next question
     ref?.read(answerSelectionProvider.notifier).reset();
     ref?.read(isResultRevealedProvider.notifier).state = false;
@@ -212,6 +238,7 @@ class GameEngine extends StateNotifier<GameState> {
       if (config.questionTimer != null) {
         _timerEngine?.start(config.questionTimer!);
       }
+      _saveCheckpoint();
     }
   }
 
@@ -266,6 +293,11 @@ class GameEngine extends StateNotifier<GameState> {
       'status': finalLifecycle.name,
       'score': result.finalScore,
     });
+
+    if (finalLifecycle == GameLifecycle.completed) {
+      _repository?.recordGameResult(result);
+      _repository?.clearActiveSession();
+    }
   }
 }
 
@@ -284,13 +316,16 @@ final gameEngineProvider =
       final timer = ref.watch(timerEngineProvider.notifier);
       final progression = ref.watch(progressionProvider.notifier);
       final integrity = ref.watch(integrityProvider.notifier);
+      final repository = ref.watch(gameplayRepositoryProvider);
 
       final engine = GameEngine(
         config: config,
-        answerProcessor: processor,
-        timerEngine: timer,
-        progression: progression,
-        integrity: integrity,
+        analytics: null, // Analytics hook could be watch as well
+        _answerProcessor: processor,
+        _timerEngine: timer,
+        _progression: progression,
+        _integrity: integrity,
+        _repository: repository,
         ref: ref,
       );
 

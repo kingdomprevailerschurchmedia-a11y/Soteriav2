@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/buttons/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/widgets/feedback/soteria_linear_progress.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
@@ -44,11 +44,11 @@ class _VerificationOrchestratorState
 
   void _onContinue(VerificationState state) async {
     final notifier = ref.read(verificationProvider(widget.type).notifier);
-    
+
     if (state.step == VerificationStep.request) {
       await notifier.submitRequest();
     } else if (state.step == VerificationStep.sent) {
-      if (widget.type == VerificationType.emailVerification || 
+      if (widget.type == VerificationType.emailVerification ||
           widget.type == VerificationType.passwordRecovery) {
         await notifier.checkVerificationStatus();
       } else {
@@ -79,7 +79,10 @@ class _VerificationOrchestratorState
     final state = ref.watch(verificationProvider(widget.type));
 
     // Sync PageView with state step
-    ref.listen<VerificationState>(verificationProvider(widget.type), (prev, next) {
+    ref.listen<VerificationState>(verificationProvider(widget.type), (
+      prev,
+      next,
+    ) {
       if (prev?.step != next.step) {
         _pageController.animateToPage(
           _getPageIndex(next.step),

@@ -32,7 +32,9 @@ class DifficultySelector extends ConsumerWidget {
             return ChoiceChip(
               label: Text(diff.name.toUpperCase()),
               selected: isSelected,
-              onSelected: (_) => ref.read(practiceLobbyProvider.notifier).updateDifficulty(diff),
+              onSelected: (_) => ref
+                  .read(practiceLobbyProvider.notifier)
+                  .updateDifficulty(diff),
               selectedColor: SoteriaColors.primary.withValues(alpha: 0.2),
               backgroundColor: Colors.white.withValues(alpha: 0.05),
               labelStyle: TextStyle(
@@ -43,7 +45,9 @@ class DifficultySelector extends ConsumerWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
                 side: BorderSide(
-                  color: isSelected ? SoteriaColors.primary : Colors.transparent,
+                  color: isSelected
+                      ? SoteriaColors.primary
+                      : Colors.transparent,
                 ),
               ),
               showCheckmark: false,
@@ -80,12 +84,19 @@ class QuestionCountSelector extends ConsumerWidget {
           children: counts.map((count) {
             final isSelected = selected == count;
             return GestureDetector(
-              onTap: () => ref.read(practiceLobbyProvider.notifier).updateQuestionCount(count),
+              onTap: () => ref
+                  .read(practiceLobbyProvider.notifier)
+                  .updateQuestionCount(count),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
-                  color: isSelected ? SoteriaColors.primary : Colors.white.withValues(alpha: 0.05),
+                  color: isSelected
+                      ? SoteriaColors.primary
+                      : Colors.white.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Text(

@@ -34,11 +34,13 @@ class CategorySelector extends ConsumerWidget {
             itemBuilder: (context, index) {
               final category = state.categories[index];
               final isSelected = state.config.category?.id == category.id;
-              
+
               return _CategoryCard(
                 category: category,
                 isSelected: isSelected,
-                onTap: () => ref.read(practiceLobbyProvider.notifier).updateCategory(category),
+                onTap: () => ref
+                    .read(practiceLobbyProvider.notifier)
+                    .updateCategory(category),
               );
             },
           ),
@@ -70,16 +72,20 @@ class _CategoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: isSelected ? SoteriaColors.primary : Colors.white.withValues(alpha: 0.1),
+            color: isSelected
+                ? SoteriaColors.primary
+                : Colors.white.withValues(alpha: 0.1),
             width: 2,
           ),
-          boxShadow: isSelected ? [
-            BoxShadow(
-              color: SoteriaColors.primary.withValues(alpha: 0.3),
-              blurRadius: 12,
-              spreadRadius: 2,
-            )
-          ] : null,
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: SoteriaColors.primary.withValues(alpha: 0.3),
+                    blurRadius: 12,
+                    spreadRadius: 2,
+                  ),
+                ]
+              : null,
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(22),
@@ -99,7 +105,9 @@ class _CategoryCard extends StatelessWidget {
                   Text(
                     category.name,
                     style: context.bodyMedium.copyWith(
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                      fontWeight: isSelected
+                          ? FontWeight.bold
+                          : FontWeight.normal,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
@@ -116,11 +124,16 @@ class _CategoryCard extends StatelessWidget {
 
   IconData _getIcon(String iconName) {
     switch (iconName) {
-      case 'security': return Icons.security_rounded;
-      case 'cloud': return Icons.cloud_rounded;
-      case 'code': return Icons.code_rounded;
-      case 'network': return Icons.router_rounded;
-      default: return Icons.category_rounded;
+      case 'security':
+        return Icons.security_rounded;
+      case 'cloud':
+        return Icons.cloud_rounded;
+      case 'code':
+        return Icons.code_rounded;
+      case 'network':
+        return Icons.router_rounded;
+      default:
+        return Icons.category_rounded;
     }
   }
 }

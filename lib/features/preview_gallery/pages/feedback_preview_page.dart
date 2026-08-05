@@ -7,7 +7,7 @@ import 'package:soteria/core/widgets/feedback/soteria_linear_progress.dart';
 import 'package:soteria/core/widgets/feedback/soteria_shimmer.dart';
 import 'package:soteria/core/widgets/feedback/soteria_empty_state.dart';
 import 'package:soteria/core/widgets/feedback/soteria_error_widget.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 
 class FeedbackPreviewPage extends StatelessWidget {
   const FeedbackPreviewPage({super.key});

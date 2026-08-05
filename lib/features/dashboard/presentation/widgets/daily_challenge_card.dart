@@ -4,7 +4,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/widgets/glass_surface.dart';
-import '../../../../core/widgets/buttons/soteria_button.dart';
+import '../../../../core/design_system/components/soteria_button.dart';
 
 class DailyChallengeCard extends StatelessWidget {
   const DailyChallengeCard({
@@ -29,7 +29,8 @@ class DailyChallengeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
-      label: 'Daily Challenge: $title. Reward: $xpReward XP. ${isCompleted ? "Completed" : "In Progress"}',
+      label:
+          'Daily Challenge: $title. Reward: $xpReward XP. ${isCompleted ? "Completed" : "In Progress"}',
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
         child: GlassSurface(
@@ -45,15 +46,21 @@ class DailyChallengeCard extends StatelessWidget {
                   Row(
                     children: [
                       Icon(
-                        isCompleted ? Icons.check_circle_rounded : Icons.calendar_today_rounded,
-                        color: isCompleted ? Colors.greenAccent : SoteriaColors.gold,
+                        isCompleted
+                            ? Icons.check_circle_rounded
+                            : Icons.calendar_today_rounded,
+                        color: isCompleted
+                            ? Colors.greenAccent
+                            : SoteriaColors.gold,
                         size: 16,
                       ),
                       SizedBox(width: SoteriaSpacing.xs),
                       Text(
                         isCompleted ? 'CHALLENGE COMPLETED' : 'DAILY CHALLENGE',
                         style: context.labelSmall.copyWith(
-                          color: isCompleted ? Colors.greenAccent : SoteriaColors.gold,
+                          color: isCompleted
+                              ? Colors.greenAccent
+                              : SoteriaColors.gold,
                           letterSpacing: 2,
                           fontWeight: FontWeight.bold,
                         ),
@@ -88,7 +95,9 @@ class DailyChallengeCard extends StatelessWidget {
                   if (!isCompleted)
                     Text(
                       'Ends at midnight',
-                      style: context.labelSmall.copyWith(color: SoteriaColors.muted),
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.muted,
+                      ),
                     ),
                 ],
               ),
@@ -118,7 +127,7 @@ class DailyChallengeCard extends StatelessWidget {
                     SoteriaButton.primary(
                       label: 'START',
                       onPressed: () {},
-                      fullWidth: false,
+                      isFullWidth: false,
                     ),
                   ],
                 ),

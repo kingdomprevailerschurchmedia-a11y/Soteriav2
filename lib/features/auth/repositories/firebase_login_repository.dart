@@ -7,8 +7,8 @@ import '../../../core/logging/logger_service.dart';
 
 class FirebaseLoginRepository implements LoginRepository {
   FirebaseLoginRepository({FirebaseAuth? auth, GoogleSignIn? googleSignIn})
-      : _auth = auth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
+    : _auth = auth ?? FirebaseAuth.instance,
+      _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
 
   final FirebaseAuth _auth;
   final GoogleSignIn _googleSignIn;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/animations/soteria_animations.dart';
-import 'package:soteria/core/widgets/typography/soteria_text.dart';
-import 'package:soteria/core/widgets/cards/soteria_card.dart';
+import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
 
 class AnimationsPreviewPage extends StatelessWidget {
   const AnimationsPreviewPage({super.key});

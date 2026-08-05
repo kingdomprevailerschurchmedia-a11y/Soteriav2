@@ -81,7 +81,10 @@ class _SummaryItem extends StatelessWidget {
         ),
         Text(
           label.toUpperCase(),
-          style: context.labelSmall.copyWith(color: SoteriaColors.muted, fontSize: 8),
+          style: context.labelSmall.copyWith(
+            color: SoteriaColors.muted,
+            fontSize: 8,
+          ),
         ),
       ],
     );

@@ -9,9 +9,9 @@ void main() {
       questionCount: 10,
       difficulty: PracticeDifficulty.beginner,
     );
-    
+
     final rewards = estimator.estimate(config);
-    
+
     // base_xp(10) * count(10) * mult_beginner(1.0) = 100
     expect(rewards.xp, 100);
     expect(rewards.estimatedDuration.inMinutes, 5);
@@ -23,9 +23,9 @@ void main() {
       questionCount: 10,
       difficulty: PracticeDifficulty.advanced,
     );
-    
+
     final rewards = estimator.estimate(config);
-    
+
     // base_xp(10) * count(10) * mult_advanced(1.5) = 150
     expect(rewards.xp, 150);
   });

@@ -68,7 +68,8 @@ class DashboardScreen extends ConsumerWidget {
                   progress: progression.progressPercentage,
                   xpRemaining: progression.xpRemaining,
                   isDoubleXp: state.announcements.any(
-                      (a) => a.toLowerCase().contains('double xp')),
+                    (a) => a.toLowerCase().contains('double xp'),
+                  ),
                 ),
               ),
 
@@ -118,11 +119,11 @@ class DashboardScreen extends ConsumerWidget {
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
 
               // Stats
-              const SliverToBoxAdapter(
-                child: StatsGrid(),
-              ),
+              const SliverToBoxAdapter(child: StatsGrid()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl * 2)),
+              SliverToBoxAdapter(
+                child: SizedBox(height: SoteriaSpacing.xxl * 2),
+              ),
             ],
           ),
         ),

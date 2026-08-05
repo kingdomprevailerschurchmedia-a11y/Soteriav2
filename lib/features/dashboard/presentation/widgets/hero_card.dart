@@ -3,7 +3,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/glass_surface.dart';
-import '../../../../core/widgets/animations/soteria_animations.dart';
+import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/widgets/animations/animated_numeric_counter.dart';
 import 'xp_progress_indicator.dart';
 

@@ -16,14 +16,16 @@ class GameShellPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(gameEngineProvider(config));
+    final lifecycle = ref.watch(
+      gameEngineProvider(config).select((s) => s.lifecycle),
+    );
     final notifier = ref.read(gameEngineProvider(config).notifier);
 
     return SafeGradientScaffold(
       body: Stack(
         children: [
-          _buildBody(state.lifecycle, config, notifier),
-          if (state.lifecycle == GameLifecycle.paused)
+          _buildBody(lifecycle, config, notifier),
+          if (lifecycle == GameLifecycle.paused)
             GamePausedView(
               onResume: notifier.resumeSession,
               onQuit: notifier.cancelSession,
@@ -53,11 +55,20 @@ class GameShellPage extends ConsumerWidget {
       case GameLifecycle.cancelled:
         return Consumer(
           builder: (context, ref, _) {
-            final state = ref.watch(gameEngineProvider(config));
+            final score = ref.watch(
+              gameEngineProvider(config).select((s) => s.score),
+            );
+            final xp = ref.watch(
+              gameEngineProvider(config).select((s) => s.xp),
+            );
+            final status = ref.watch(
+              gameEngineProvider(config).select((s) => s.lifecycle.name),
+            );
+
             return GameResultView(
-              score: state.score,
-              xp: state.xp,
-              status: state.lifecycle.name,
+              score: score,
+              xp: xp,
+              status: status,
               onDone: () => Navigator.of(context).pop(),
             );
           },

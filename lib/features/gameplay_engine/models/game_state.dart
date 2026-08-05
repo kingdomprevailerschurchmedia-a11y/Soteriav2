@@ -1,5 +1,6 @@
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
 
 /// Immutable state of the Gameplay Engine.
 class GameState {
@@ -12,6 +13,7 @@ class GameState {
   final int lives;
   final int xp;
   final List<String> usedLifelines;
+  final List<AnswerResult> answerHistory;
   final DateTime? startTime;
   final DateTime? lastAnswerTime;
 
@@ -25,6 +27,7 @@ class GameState {
     this.lives = 3,
     this.xp = 0,
     this.usedLifelines = const [],
+    this.answerHistory = const [],
     this.startTime,
     this.lastAnswerTime,
   });
@@ -47,6 +50,7 @@ class GameState {
     int? lives,
     int? xp,
     List<String>? usedLifelines,
+    List<AnswerResult>? answerHistory,
     DateTime? startTime,
     DateTime? lastAnswerTime,
   }) {
@@ -60,8 +64,49 @@ class GameState {
       lives: lives ?? this.lives,
       xp: xp ?? this.xp,
       usedLifelines: usedLifelines ?? this.usedLifelines,
+      answerHistory: answerHistory ?? this.answerHistory,
       startTime: startTime ?? this.startTime,
       lastAnswerTime: lastAnswerTime ?? this.lastAnswerTime,
     );
   }
+
+  Map<String, dynamic> toJson() => {
+    'sessionId': sessionId,
+    'lifecycle': lifecycle.name,
+    'currentQuestionIndex': currentQuestionIndex,
+    'questions': questions.map((e) => e.toJson()).toList(),
+    'score': score,
+    'streak': streak,
+    'lives': lives,
+    'xp': xp,
+    'usedLifelines': usedLifelines,
+    'answerHistory': answerHistory.map((e) => e.toJson()).toList(),
+    'startTime': startTime?.toIso8601String(),
+    'lastAnswerTime': lastAnswerTime?.toIso8601String(),
+  };
+
+  factory GameState.fromJson(Map<String, dynamic> json) => GameState(
+    sessionId: json['sessionId'],
+    lifecycle: GameLifecycle.values.byName(json['lifecycle']),
+    currentQuestionIndex: json['currentQuestionIndex'],
+    questions: (json['questions'] as List)
+        .map((e) => Question.fromJson(e))
+        .toList(),
+    score: json['score'],
+    streak: json['streak'],
+    lives: json['lives'],
+    xp: json['xp'],
+    usedLifelines: List<String>.from(json['usedLifelines']),
+    answerHistory:
+        (json['answerHistory'] as List?)
+            ?.map((e) => AnswerResult.fromJson(e))
+            .toList() ??
+        [],
+    startTime: json['startTime'] != null
+        ? DateTime.parse(json['startTime'])
+        : null,
+    lastAnswerTime: json['lastAnswerTime'] != null
+        ? DateTime.parse(json['lastAnswerTime'])
+        : null,
+  );
 }

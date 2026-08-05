@@ -13,7 +13,7 @@ class AppBootstrap {
   Future<void> initialize() async {
     try {
       LoggerService.i('Bootstrap: Starting initialization sequence...');
-      
+
       // Parallel initialization for speed
       await Future.wait([
         _initFirebase(),
@@ -27,7 +27,11 @@ class AppBootstrap {
 
       LoggerService.i('Bootstrap: All systems healthy.');
     } catch (e, stack) {
-      LoggerService.e('Bootstrap: Critical failure during initialization', error: e, stackTrace: stack);
+      LoggerService.e(
+        'Bootstrap: Critical failure during initialization',
+        error: e,
+        stackTrace: stack,
+      );
       rethrow;
     }
   }
@@ -84,4 +88,5 @@ class BootstrapNotifier extends Notifier<BootstrapState> {
 }
 
 // Fixed the typo in provider name
-final bootstrapStateProvider = NotifierProvider<BootstrapNotifier, BootstrapState>(BootstrapNotifier.new);
+final bootstrapStateProvider =
+    NotifierProvider<BootstrapNotifier, BootstrapState>(BootstrapNotifier.new);

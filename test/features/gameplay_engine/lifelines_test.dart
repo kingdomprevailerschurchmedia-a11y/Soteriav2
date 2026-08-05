@@ -34,6 +34,14 @@ void main() {
       expect(hiddenIds, isNot(contains('a'))); // Correct answer remains
       expect(['b', 'c', 'd'], containsAll(hiddenIds));
     });
+
+    test('is deterministic for the same question ID', () async {
+      final engine = FiftyFiftyEngine();
+      final hiddenIds1 = await engine.activate(question: mockQuestion);
+      final hiddenIds2 = await engine.activate(question: mockQuestion);
+
+      expect(hiddenIds1, equals(hiddenIds2));
+    });
   });
 
   group('DifficultyBasedSimulationStrategy Tests', () {
@@ -41,15 +49,24 @@ void main() {
       final strategy = DifficultyBasedSimulationStrategy();
       final results = strategy.simulate(mockQuestion); // Easy
 
-      expect(results['a'], greaterThanOrEqualTo(0.90));
+      expect(results['a'], greaterThanOrEqualTo(0.85));
+      expect(results['a'], lessThanOrEqualTo(0.95));
+    });
+
+    test('is deterministic for the same question ID', () {
+      final strategy = DifficultyBasedSimulationStrategy();
+      final results1 = strategy.simulate(mockQuestion);
+      final results2 = strategy.simulate(mockQuestion);
+
+      expect(results1, equals(results2));
     });
 
     test('expert questions have lower audience accuracy', () {
       final strategy = DifficultyBasedSimulationStrategy();
       final expertQuestion = Question(
-        id: 'q1',
+        id: 'q_expert',
         version: '1',
-        text: 'Test?',
+        text: 'Expert?',
         difficulty: QuestionDifficulty.expert,
         category: 'C',
         type: QuestionType.multipleChoice,
@@ -63,8 +80,8 @@ void main() {
       );
 
       final results = strategy.simulate(expertQuestion);
-      // Probabilities are random but range is 0.45 - 0.60
-      expect(results['a'], lessThan(0.70));
+      expect(results['a'], greaterThanOrEqualTo(0.30));
+      expect(results['a'], lessThanOrEqualTo(0.50));
     });
   });
 }
