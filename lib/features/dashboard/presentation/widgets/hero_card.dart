@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/widgets/glass_surface.dart';
+import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/widgets/animations/animated_numeric_counter.dart';
-import 'xp_progress_indicator.dart';
 
 class HeroCard extends StatelessWidget {
   const HeroCard({
@@ -34,103 +34,96 @@ class HeroCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       child: SoteriaSlideUp(
-        duration: const Duration(milliseconds: 500),
-        child: GlassSurface(
-          padding: EdgeInsets.all(SoteriaSpacing.lg),
-          borderRadius: BorderRadius.circular(32),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'CURRENT RANK',
-                        style: context.labelSmall.copyWith(
-                          color: SoteriaColors.muted,
-                          letterSpacing: 2,
-                        ),
-                      ),
-                      Text(
-                        rank.toUpperCase(),
-                        style: context.headlineMedium.copyWith(
-                          color: SoteriaColors.gold,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ],
-                  ),
-                  _CoinsDisplay(coins: coins),
-                ],
-              ),
-              if (isDoubleXp) ...[
-                SizedBox(height: SoteriaSpacing.md),
-                _EventBadge(
-                  label: 'DOUBLE XP ACTIVE',
-                  icon: Icons.bolt_rounded,
-                  color: Colors.cyanAccent,
-                ),
-              ],
-              SizedBox(height: SoteriaSpacing.xl),
-              Row(
-                children: [
-                  XPProgressIndicator(
-                    progress: progress,
-                    level: level,
-                    size: 90,
-                    strokeWidth: 10,
-                  ),
-                  SizedBox(width: SoteriaSpacing.xl),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        RichText(
-                          text: TextSpan(
-                            style: context.bodyMedium.copyWith(
-                              color: Colors.white70,
-                            ),
-                            children: [
-                              const TextSpan(text: 'Next unlock in '),
-                              TextSpan(
-                                text: '$xpRemaining XP',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: SoteriaSpacing.md),
-                        XPProgressBar(progress: progress),
-                        SizedBox(height: SoteriaSpacing.sm),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            AnimatedNumericCounter(
-                              value: xpInCurrentLevel,
-                              suffix: ' XP',
-                              style: context.labelSmall.copyWith(
-                                color: SoteriaColors.muted,
-                              ),
-                            ),
-                            Text(
-                              '$xpThreshold XP',
-                              style: context.labelSmall.copyWith(
-                                color: SoteriaColors.muted,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
+        duration: const Duration(milliseconds: 600),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(32),
+            boxShadow: [
+              BoxShadow(
+                color: SoteriaColors.primary.withValues(alpha: 0.1),
+                blurRadius: 40,
+                spreadRadius: -10,
               ),
             ],
+          ),
+          child: SoteriaCard(
+            padding: EdgeInsets.all(SoteriaSpacing.lg),
+            borderRadius: 32,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'CURRENT RANK',
+                            style: context.labelSmall.copyWith(
+                              color: SoteriaColors.muted,
+                              letterSpacing: 2.0,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                          FittedBox(
+                            fit: BoxFit.scaleDown,
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              rank.toUpperCase(),
+                              style: context.displaySmall.copyWith(
+                                color: SoteriaColors.textPrimary,
+                                fontWeight: FontWeight.w900,
+                                letterSpacing: -0.5,
+                                fontSize: 28.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(width: 8.w),
+                    _PremiumCoinsSummary(coins: coins),
+                  ],
+                ),
+                SizedBox(height: SoteriaSpacing.lg),
+                Row(
+                  children: [
+                    _HexagonLevelIndicator(level: level),
+                    SizedBox(width: SoteriaSpacing.md),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Next unlock in $xpRemaining XP',
+                            style: context.bodyMedium.copyWith(
+                              color: SoteriaColors.textSecondary,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          SizedBox(height: SoteriaSpacing.sm),
+                          _GlowingXPProgressBar(progress: progress),
+                          SizedBox(height: SoteriaSpacing.xs),
+                          Text(
+                            '$xpInCurrentLevel / $xpThreshold XP',
+                            style: context.labelSmall.copyWith(
+                              color: SoteriaColors.muted,
+                              fontWeight: FontWeight.w900,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -138,70 +131,174 @@ class HeroCard extends StatelessWidget {
   }
 }
 
-class _CoinsDisplay extends StatelessWidget {
-  const _CoinsDisplay({required this.coins});
-  final int coins;
+class _HexagonLevelIndicator extends StatelessWidget {
+  const _HexagonLevelIndicator({required this.level});
+  final int level;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-      ),
-      child: Row(
-        children: [
-          const Icon(
-            Icons.monetization_on_rounded,
-            color: SoteriaColors.gold,
-            size: 20,
+      width: 64.w,
+      height: 72.h,
+      constraints: BoxConstraints(maxHeight: 80.h),
+      child: CustomPaint(
+        painter: _HexagonPainter(
+          color: SoteriaColors.primary,
+          glowColor: SoteriaColors.primary.withValues(alpha: 0.5),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FittedBox(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Lvl',
+                    style: context.labelSmall.copyWith(
+                      color: SoteriaColors.textSecondary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    level.toString(),
+                    style: context.titleLarge.copyWith(
+                      color: SoteriaColors.textPrimary,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          const SizedBox(width: 8),
-          AnimatedNumericCounter(
-            value: coins,
-            style: context.bodyMedium.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
-class _EventBadge extends StatelessWidget {
-  const _EventBadge({
-    required this.label,
-    required this.icon,
-    required this.color,
-  });
-
-  final String label;
-  final IconData icon;
+class _HexagonPainter extends CustomPainter {
+  _HexagonPainter({required this.color, required this.glowColor});
   final Color color;
+  final Color glowColor;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color.withValues(alpha: 0.1)
+      ..style = PaintingStyle.fill;
+
+    final borderPaint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+
+    final glowPaint = Paint()
+      ..color = glowColor
+      ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 8);
+
+    final path = Path();
+    final w = size.width;
+    final h = size.height;
+
+    path.moveTo(w * 0.5, 0);
+    path.lineTo(w, h * 0.25);
+    path.lineTo(w, h * 0.75);
+    path.lineTo(w * 0.5, h);
+    path.lineTo(0, h * 0.75);
+    path.lineTo(0, h * 0.25);
+    path.close();
+
+    canvas.drawPath(path, paint);
+    canvas.drawPath(path, glowPaint);
+    canvas.drawPath(path, borderPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _GlowingXPProgressBar extends StatelessWidget {
+  const _GlowingXPProgressBar({required this.progress});
+  final double progress;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Container(
+          height: 6.h,
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(100),
+          ),
+        ),
+        FractionallySizedBox(
+          widthFactor: progress.clamp(0.0, 1.0),
+          child: Container(
+            height: 6.h,
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [SoteriaColors.primary, SoteriaColors.secondary],
+              ),
+              borderRadius: BorderRadius.circular(100),
+              boxShadow: [
+                BoxShadow(
+                  color: SoteriaColors.primary.withValues(alpha: 0.5),
+                  blurRadius: 6,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _PremiumCoinsSummary extends StatelessWidget {
+  const _PremiumCoinsSummary({required this.coins});
+  final int coins;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: TextStyle(
-              color: color,
-              fontSize: 10,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.5,
-            ),
+          Icon(
+            Icons.monetization_on_rounded,
+            color: SoteriaColors.gold,
+            size: 16.sp,
+          ),
+          SizedBox(width: 6.w),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AnimatedNumericCounter(
+                value: coins,
+                style: context.titleSmall.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: SoteriaColors.textPrimary,
+                ),
+              ),
+              Text(
+                'Coins',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.muted,
+                  fontSize: 9.sp,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
           ),
         ],
       ),

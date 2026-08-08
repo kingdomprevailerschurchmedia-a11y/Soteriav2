@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 enum PreviewCategory {
-  splash('Splash', Icons.rocket_launch_rounded),
   onboarding('Onboarding', Icons.auto_awesome_motion_rounded),
   auth('Authentication', Icons.login_rounded),
   dashboard('Dashboard', Icons.dashboard_rounded),

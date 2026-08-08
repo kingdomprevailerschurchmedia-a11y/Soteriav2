@@ -3,7 +3,7 @@
 ```mermaid
 graph TD
     subgraph "Root Flow"
-        Splash["Splash (/)"]
+        AppStartup["Native Splash (Startup)"]
         Onboarding["Onboarding (/onboarding)"]
         Perso["Personalization (/personalization)"]
         Auth["Auth Hub (/auth)"]
@@ -25,7 +25,7 @@ graph TD
         Settings["Settings (/app/settings)"]
     end
 
-    Splash --> Onboarding
+    AppStartup --> Onboarding
     Onboarding --> Perso
     Perso --> Auth
     Auth --> Home

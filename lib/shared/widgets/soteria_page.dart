@@ -62,45 +62,47 @@ class SoteriaPage extends ConsumerWidget {
           ColoredBox(
             color: SoteriaColors.background,
             child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.error_outline_rounded,
-                      color: SoteriaColors.error,
-                      size: 64,
-                    ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'SYSTEM ERROR',
-                      style: context.headlineSmall.copyWith(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline_rounded,
                         color: SoteriaColors.error,
-                        fontWeight: FontWeight.bold,
+                        size: 64,
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      error!,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(color: Colors.white70),
-                    ),
-                    if (onRetry != null) ...[
-                      const SizedBox(height: 24),
-                      ElevatedButton(
-                        onPressed: onRetry,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: SoteriaColors.error.withValues(
-                            alpha: 0.2,
-                          ),
-                          foregroundColor: SoteriaColors.error,
-                          side: const BorderSide(color: SoteriaColors.error),
+                      const SizedBox(height: 16),
+                      Text(
+                        'SYSTEM ERROR',
+                        style: context.headlineSmall.copyWith(
+                          color: SoteriaColors.error,
+                          fontWeight: FontWeight.bold,
                         ),
-                        child: const Text('RETRY'),
                       ),
+                      const SizedBox(height: 8),
+                      Text(
+                        error!,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(color: Colors.white70),
+                      ),
+                      if (onRetry != null) ...[
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: onRetry,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: SoteriaColors.error.withValues(
+                              alpha: 0.2,
+                            ),
+                            foregroundColor: SoteriaColors.error,
+                            side: const BorderSide(color: SoteriaColors.error),
+                          ),
+                          child: const Text('RETRY'),
+                        ),
+                      ],
                     ],
-                  ],
+                  ),
                 ),
               ),
             ),

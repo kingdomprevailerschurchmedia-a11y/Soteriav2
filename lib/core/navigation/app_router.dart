@@ -5,7 +5,6 @@ import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/navigation/transitions/soteria_page_transitions.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/logging/logger_service.dart';
-import 'package:soteria/features/splash/splash_screen.dart';
 import 'package:soteria/features/onboarding/screens/onboarding_screen.dart';
 import 'package:soteria/features/personalization/screens/personalization_screen.dart';
 import 'package:soteria/features/auth/screens/auth_landing_screen.dart';
@@ -37,6 +36,7 @@ import 'package:soteria/features/preview_gallery/pages/login_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/verification_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/identity_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/diagnostics_preview_page.dart';
+import 'package:soteria/features/quiz/preview/quiz_engine_preview.dart';
 import 'package:soteria/features/gameplay_engine/pages/game_preview_gallery.dart';
 import 'package:soteria/features/preview_gallery/pages/question_pipeline_preview_page.dart';
 import 'package:soteria/features/question_presentation/pages/presentation_preview_gallery.dart';
@@ -73,6 +73,7 @@ import 'package:soteria/features/settings/screens/settings_screen.dart';
 import 'package:soteria/features/preview_gallery/pages/pro_lobby_preview_page.dart';
 import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
 
+import 'package:soteria/features/player/presentation/screens/player_profile_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_discovery_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_details_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_lobby_screen.dart';
@@ -101,7 +102,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   ref.read(configurationCoordinatorProvider).initialize();
 
   return GoRouter(
-    initialLocation: SoteriaRoutes.splash,
+    initialLocation: SoteriaRoutes.main,
     navigatorKey: rootNavigatorKey,
     debugLogDiagnostics: true,
     refreshListenable: listenable,
@@ -119,7 +120,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       );
 
       if (lifecycle == AppStartupState.loading) {
-        return location == SoteriaRoutes.splash ? null : SoteriaRoutes.splash;
+        return null;
       }
 
       if (lifecycle == AppStartupState.onboarding &&
@@ -162,8 +163,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
       // Default Ready state
       if (lifecycle == AppStartupState.ready) {
-        if (location == SoteriaRoutes.splash ||
-            location.startsWith(SoteriaRoutes.auth)) {
+        if (location.startsWith(SoteriaRoutes.auth)) {
           if (session.isAuthenticated) {
             return SoteriaRoutes.main;
           }
@@ -175,10 +175,6 @@ final routerProvider = Provider<GoRouter>((ref) {
     errorBuilder: (context, state) =>
         UnknownRouteScreen(location: state.uri.toString()),
     routes: [
-      GoRoute(
-        path: SoteriaRoutes.splash,
-        builder: (context, state) => const SplashScreen(),
-      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             HomeShell(navigationShell: navigationShell),
@@ -309,8 +305,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.profile,
-                builder: (context, state) =>
-                    const Center(child: Text('Profile')),
+                builder: (context, state) => const PlayerProfileScreen(),
               ),
             ],
           ),
@@ -599,6 +594,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               title: 'Lifeline Framework',
               child: LifelinePreviewGallery(),
             ),
+          ),
+          GoRoute(
+            path: 'quiz-engine',
+            builder: (context, state) => const QuizEnginePreview(),
           ),
           GoRoute(
             path: 'lobby-redesign',

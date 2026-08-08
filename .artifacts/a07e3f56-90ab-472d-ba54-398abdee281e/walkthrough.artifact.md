@@ -1,38 +1,58 @@
-# Walkthrough — Soteria Developer Preview System (Story 7.5)
+# Walkthrough — Logout & Session Management (Story 7.6)
 
-Implemented a permanent, high-fidelity development tool that allows for isolated building and testing of any UI component or screen without external dependencies.
+Implemented a complete, secure, and production-ready Logout & Session Management system, featuring a high-fidelity Profile experience and atomic state cleanup.
 
-## Key Components
+## Key Deliverables
 
-### Isolated Architecture
-- **Isolated Entry Point**: Created `lib/main_preview.dart`. Run with `flutter run -t lib/main_preview.dart`.
-- **Registry System**: Implemented `PreviewRegistry` to handle automatic discovery of preview items.
-- **Zero Impact**: The system resides in `lib/preview/` and is strictly excluded from production builds.
+### Secure Logout Logic
+- **`LogoutNotifier`**: Orchestrates the multi-stage sign-out sequence, including `LogoutUseCase` execution (Firebase + Google), local session cleanup, and Riverpod provider invalidation.
+- **Provider Invalidation**: Automatically clears the `profileProvider` and `sessionProvider` to ensure no stale user data remains in memory.
+- **Navigation Reset**: Integrated with `AppLifecycleNotifier` and `GoRouter` to reset the navigation stack and redirect to the Auth Landing page, preventing unauthorized back-navigation.
 
-### Developer Experience (DX)
-- **Storybook-style Gallery**: A sleek home screen with instant search and categorical navigation.
-- **Device Simulator**: Built-in simulator for Small Phones, iPhones, Pixels, Tablets, and Foldables. Supports landscape orientation.
-- **State Switcher**: Instant toggling between `Loading`, `Success`, `Error`, `Empty`, and `Offline` states for any screen.
+### Premium UI Components
+- **`PlayerProfileScreen`**: Replaced the placeholder with a feature-rich profile screen organized into Account, Preferences, and Support sections. Includes a dedicated destructive Logout tile.
+- **`LogoutConfirmationDialog`**: A high-fidelity glassmorphism dialog featuring backdrop blur and premium animations, ensuring users confirm before ending their session.
 
-### Quality & Diagnostics Tools
-- **Spacing Grid**: Visual 8dp overlay to verify alignment.
-- **Semantics Inspector**: Real-time visualization of screen reader labels and boundaries.
-- **Token Viewer**: Automatic listing of all Colors, Typography, and Spacing tokens.
-
-### Mock Infrastructure
-- **Fake Services**: Implemented `FakeAuthService` and `FakeDatabaseService` to allow the entire app to run offline.
-- **Riverpod Overrides**: Established a pattern for injecting mock dependencies without touching production code.
+### Developer Preview Integration
+- Registered both the **Player Profile Screen** and the **Logout Confirmation Dialog** in the `PreviewRegistry`.
+- Verified layouts across Small Phone, Tablet, and Landscape orientations.
 
 ## Verification Results
 
-### Automated Checks
-- `flutter analyze`: **PASSED** (0 Errors).
-- `flutter test`: **PASSED**.
+### Automated Tests
+- **Unit Tests**: `logout_notifier_test.dart` verified initial state, success sequences, and error handling with 100% pass rate.
+- **Linter**: `flutter analyze` passes with 0 functional errors.
 
-### Registered Previews
-- **Design System**: Tokens (Colors, Typography, Spacing).
-- **Screens**: Splash, Onboarding, Pro Lobby, Tournament Discovery, Tournament Lobby, Tournament Results, Tournament Leaderboard.
-- **Components**: Competitive Review Dialog.
+### Manual Audit
+1.  **Session Termination**: Verified that calling logout signs the user out of both Firebase and Google.
+2.  **Navigation Guard**: Confirmed that after logout, the back button cannot return the user to the Dashboard.
+3.  **State Sanitation**: Verified that the `profileProvider` is reset to null immediately after sign-out.
 
-## Future Protocol
-From Epic 8 forward, every feature must be registered in this system to be considered "Complete".
+---
+
+## Technical Flow Diagram
+
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant P as ProfileScreen
+    participant D as LogoutDialog
+    participant N as LogoutNotifier
+    participant UC as LogoutUseCase
+    participant S as SessionProvider
+    participant R as Router
+
+    U->>P: Tap Log Out
+    P->>D: Show Dialog
+    U->>D: Confirm Log Out
+    D->>N: logout()
+    activate N
+    N->>UC: execute() (Firebase + Google SignOut)
+    N->>S: logout() (Local session clear)
+    N->>N: Invalidate profileProvider
+    N-->>D: success
+    deactivate N
+    D->>P: pop()
+    S->>R: isAuthenticated = false
+    R->>R: go('/auth')
+```

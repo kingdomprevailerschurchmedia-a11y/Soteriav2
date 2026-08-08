@@ -7,8 +7,6 @@ import 'package:soteria/core/design_system/themes/soteria_theme.dart';
 import 'package:soteria/core/navigation/app_router.dart';
 import 'package:soteria/core/errors/error_handler.dart';
 import '../firebase/providers/bootstrapper_provider.dart';
-import '../../features/splash/splash_screen.dart';
-import '../../features/splash/initialization_failure_screen.dart';
 
 class SoteriaApp extends ConsumerWidget {
   const SoteriaApp({super.key});
@@ -24,13 +22,8 @@ class SoteriaApp extends ConsumerWidget {
       builder: (context, child) {
         return firebaseInit.when(
           data: (_) => _buildApp(context, ref),
-          loading: () => const _BootstrapWrapper(child: SplashScreen()),
-          error: (error, stack) => _BootstrapWrapper(
-            child: InitializationFailureScreen(
-              error: error,
-              onRetry: () => ref.refresh(firebaseInitFutureProvider),
-            ),
-          ),
+          loading: () => const SizedBox.shrink(),
+          error: (error, stack) => _buildErrorApp(context, ref, error),
         );
       },
     );
@@ -51,18 +44,40 @@ class SoteriaApp extends ConsumerWidget {
       },
     );
   }
-}
 
-class _BootstrapWrapper extends StatelessWidget {
-  final Widget child;
-  const _BootstrapWrapper({required this.child});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildErrorApp(BuildContext context, WidgetRef ref, Object error) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: SoteriaTheme.darkTheme,
-      home: child,
+      home: Scaffold(
+        body: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, color: Colors.red, size: 64),
+                const SizedBox(height: 16),
+                Text(
+                  'Initialization Failed',
+                  style: SoteriaTheme.darkTheme.textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error.toString(),
+                  textAlign: TextAlign.center,
+                  style: SoteriaTheme.darkTheme.textTheme.bodyMedium,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: () => ref.refresh(firebaseInitFutureProvider),
+                  child: const Text('Retry'),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

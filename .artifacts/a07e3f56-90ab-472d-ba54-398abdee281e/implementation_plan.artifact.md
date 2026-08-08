@@ -1,71 +1,55 @@
-# Implementation Plan — Soteria Developer Preview System (Story 7.5)
+# Implementation Plan — Story 7.6: Logout & Session Management
 
-Build a complete, reusable Developer Preview System as a permanent development tool for the Soteria project, allowing for isolated testing of any component or screen without external dependencies.
+Implement a secure, production-ready Logout & Session Management system that integrates with the existing Soteria architecture.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> **Isolated Entry Point**: `lib/main_preview.dart` will be the exclusive entry point for the Preview System. It will NOT be included in production builds.
-> **Total Mocking**: All Firebase, Auth, and Backend services will be replaced by local fakes/mocks within the `PreviewScope`.
-> **Scalability**: The system is designed to handle thousands of components using an automated registration registry.
+> **Provider Invalidation**: On logout, I will explicitly invalidate `profileProvider`, `sessionProvider`, and `dashboardProvider`. Unrelated system providers (like `configurationProvider`) will remain untouched to maintain app stability.
+> **Navigation Reset**: The logout flow will use `GoRouter.go()` to reset the navigation stack to the Auth Landing page, ensuring the back button cannot return to authenticated screens.
 
 ## Proposed Changes
 
-### [Preview System Foundation]
+### [Authentication & Session]
 
-#### [NEW] [main_preview.dart](file:///C:/Joseph%20Project/lib/main_preview.dart)
-Main entry point that launches `SoteriaPreviewApp`.
+#### [NEW] [logout_notifier.dart](file:///C:/Joseph%20Project/lib/features/auth/presentation/providers/logout_notifier.dart)
+A `StateNotifier` that orchestrates the logout sequence:
+1.  Calls `LogoutUseCase`.
+2.  Invalidates relevant Riverpod providers.
+3.  Resets the `AppLifecycleProvider` to `auth` state if necessary.
 
-#### [NEW] [preview/app/preview_app.dart](file:///C:/Joseph%20Project/lib/preview/app/preview_app.dart)
-Root widget for the preview system, managing themes and top-level providers.
-
-#### [NEW] [preview/registry/preview_registry.dart](file:///C:/Joseph%20Project/lib/preview/registry/preview_registry.dart)
-Central singleton for registering categories and items.
-
-### [Mock Infrastructure]
-
-#### [NEW] [preview/mock/mock_auth_service.dart](file:///C:/Joseph%20Project/lib/preview/mock/mock_auth_service.dart)
-#### [NEW] [preview/mock/mock_database_service.dart](file:///C:/Joseph%20Project/lib/preview/mock/mock_database_service.dart)
-Fake implementations that allow the app to run offline without Firebase.
-
-#### [NEW] [preview/providers/preview_provider_overrides.dart](file:///C:/Joseph%20Project/lib/preview/providers/preview_provider_overrides.dart)
-Set of Riverpod overrides to inject mock dependencies.
+#### [MODIFY] [identity_providers.dart](file:///C:/Joseph%20Project/lib/core/identity/providers/identity_providers.dart)
+Ensure `SessionNotifier` and `AppLifecycleNotifier` react correctly to the `signOut` event from Firebase.
 
 ### [UI Components]
 
-#### [NEW] [preview/widgets/preview_home.dart](file:///C:/Joseph%20Project/lib/preview/widgets/preview_home.dart)
-Storybook-style gallery with search and category navigation.
+#### [NEW] [logout_confirmation_dialog.dart](file:///C:/Joseph%20Project/lib/features/auth/presentation/widgets/logout_confirmation_dialog.dart)
+A premium glassmorphism dialog following the Soteria Design System.
 
-#### [NEW] [preview/widgets/device_simulator.dart](file:///C:/Joseph%20Project/lib/preview/widgets/device_simulator.dart)
-Wrapper to simulate various device sizes (Pixel, iPhone, Tablet, Foldable).
+#### [NEW] [player_profile_screen.dart](file:///C:/Joseph%20Project/lib/features/player/presentation/screens/player_profile_screen.dart)
+A comprehensive profile screen with:
+-   Account Section (Personal info, Security).
+-   Preferences (Notifications, Theme).
+-   Support (Help, About).
+-   Destructive "Log Out" action at the bottom.
 
-#### [NEW] [preview/widgets/state_switcher.dart](file:///C:/Joseph%20Project/lib/preview/widgets/state_switcher.dart)
-Toolbar to toggle between `Loading`, `Success`, `Error`, and `Offline` states.
+#### [MODIFY] [app_router.dart](file:///C:/Joseph%20Project/lib/core/navigation/app_router.dart)
+Replace the placeholder profile route with `PlayerProfileScreen`.
 
-### [Design System & Animation Gallery]
+### [Developer Preview System]
 
-#### [NEW] [preview/categories/design_system/](file:///C:/Joseph%20Project/lib/preview/categories/design_system/)
-Automated pages for Tokens (Colors, Typography, Spacing, Radius, Icons).
-
-#### [NEW] [preview/categories/animations/](file:///C:/Joseph%20Project/lib/preview/categories/animations/)
-Dedicated previews for motion tokens and complex animations (Confetti, Level Up).
-
-### [Quality Tools]
-
-#### [NEW] [preview/utilities/quality_tools.dart](file:///C:/Joseph%20Project/lib/preview/utilities/quality_tools.dart)
-Tools like Spacing Overlay and Typography Viewer.
+#### [MODIFY] [all_previews.dart](file:///C:/Joseph%20Project/lib/preview/registry/all_previews.dart)
+Register the new Profile Screen and Logout Dialog previews.
 
 ## Verification Plan
 
 ### Automated Tests
-- `flutter analyze`
-- `flutter test`
-- **Golden Tests**: Generate baseline images for a selection of previewed components.
+-   **Unit Tests**: Verify `LogoutNotifier` invalidates correct providers.
+-   **Integration Tests**: Verify navigation redirection after successful sign-out.
 
 ### Manual Verification
-1.  Run `flutter run -t lib/main_preview.dart`.
-2.  Verify categories are displayed correctly.
-3.  Search for "Login" and "Button".
-4.  Switch between "Success" and "Error" states for a screen.
-5.  Simulate "Tablet" and "Landscape" orientations.
-6.  Check contrast and touch target tools.
+1.  Open Profile -> Tap Logout -> Confirm.
+2.  Verify redirection to Auth Landing.
+3.  Verify back button is disabled/ignored.
+4.  Test both Email and Google sign-out flows in the Preview System.
+5.  Check layout responsiveness on Tablet and Landscape.

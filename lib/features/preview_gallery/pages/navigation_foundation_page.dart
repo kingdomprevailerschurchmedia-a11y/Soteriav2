@@ -18,7 +18,6 @@ class NavigationFoundationPage extends ConsumerWidget {
       children: [
         const SoteriaText.label('ROUTE SYSTEM'),
         SizedBox(height: SoteriaSpacing.md),
-        _buildRouteItem('Splash', SoteriaRoutes.splash),
         _buildRouteItem('Gallery', SoteriaRoutes.previewGallery),
         _buildRouteItem('Tokens', SoteriaRoutes.tokens),
 

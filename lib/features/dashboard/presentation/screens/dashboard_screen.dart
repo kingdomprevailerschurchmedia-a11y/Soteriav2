@@ -8,12 +8,13 @@ import '../providers/dashboard_providers.dart';
 import '../widgets/dashboard_header.dart';
 import '../widgets/hero_card.dart';
 import '../widgets/quick_actions_grid.dart';
-import '../widgets/stats_grid.dart';
-import '../widgets/daily_challenge_card.dart';
+import '../widgets/daily_goals_section.dart';
 import '../widgets/dashboard_skeleton.dart';
-import '../widgets/announcement_card.dart';
-import '../widgets/achievement_carousel.dart';
-import '../widgets/leaderboard_preview.dart';
+import '../widgets/announcement_section.dart';
+import '../widgets/continue_playing_section.dart';
+import '../widgets/recent_achievements_section.dart';
+import '../widgets/top_scholars_section.dart';
+import '../widgets/performance_section.dart';
 
 class DashboardScreen extends ConsumerWidget {
   const DashboardScreen({super.key});
@@ -49,6 +50,7 @@ class DashboardScreen extends ConsumerWidget {
                   playerName: player?.displayName ?? 'Scholar',
                   level: progression.level,
                   streak: player?.currentStreak ?? 0,
+                  coins: player?.coins ?? 0,
                   profileCompletion: progression.profileCompletion,
                   avatarUrl: player?.photoUrl,
                   isOnline: true,
@@ -80,46 +82,40 @@ class DashboardScreen extends ConsumerWidget {
 
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
 
-              // Daily Challenge
-              if (state.dailyChallenge != null)
-                SliverToBoxAdapter(
-                  child: DailyChallengeCard(
-                    title: state.dailyChallenge!.title,
-                    description: state.dailyChallenge!.description,
-                    xpReward: state.dailyChallenge!.xpReward,
-                    progress: state.dailyChallenge!.completionPercentage,
-                  ),
-                ),
+              // Daily Goals
+              const SliverToBoxAdapter(child: DailyGoalsSection()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Continue Playing
+              const SliverToBoxAdapter(child: ContinuePlayingSection()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Recent Achievements
+              const SliverToBoxAdapter(child: RecentAchievementsSection()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Top Scholars
+              const SliverToBoxAdapter(child: TopScholarsSection()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+
+              // Performance
+              const SliverToBoxAdapter(child: PerformanceSection()),
 
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
 
               // Announcements
-              if (state.announcements.isNotEmpty)
-                SliverPadding(
-                  padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-                  sliver: SliverList(
-                    delegate: SliverChildBuilderDelegate(
-                      (context, index) =>
-                          AnnouncementCard(message: state.announcements[index]),
-                      childCount: state.announcements.length,
-                    ),
+              SliverPadding(
+                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+                sliver: SliverToBoxAdapter(
+                  child: AnnouncementSection(
+                    announcements: state.announcements,
                   ),
                 ),
-
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-
-              // Achievements
-              const SliverToBoxAdapter(child: AchievementCarousel()),
-
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-
-              // Leaderboard
-              const SliverToBoxAdapter(child: LeaderboardPreview()),
-
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-
-              // Stats
-              const SliverToBoxAdapter(child: StatsGrid()),
+              ),
 
               SliverToBoxAdapter(
                 child: SizedBox(height: SoteriaSpacing.xxl * 2),

@@ -2,13 +2,14 @@ import '../models/preview_item.dart';
 import '../models/preview_category.dart';
 import 'preview_registry.dart';
 import '../categories/design_system/token_viewer.dart';
-import '../../../features/splash/splash_screen.dart';
 import '../../../features/onboarding/screens/onboarding_screen.dart';
 import '../../../features/dashboard/presentation/screens/pro_lobby_screen.dart';
 import '../../../features/tournaments/presentation/screens/tournament_discovery_screen.dart';
 import '../../../features/tournaments/presentation/screens/tournament_lobby_screen.dart';
 import '../../../features/tournaments/presentation/screens/tournament_results_screen.dart';
 import '../../../features/tournaments/presentation/screens/tournament_leaderboard_screen.dart';
+import '../../../features/player/presentation/screens/player_profile_screen.dart';
+import '../../../features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 import '../../../features/gameplay_engine/pages/competitive_review_screen.dart';
 
 void registerAllPreviews() {
@@ -26,16 +27,6 @@ void registerAllPreviews() {
   );
 
   // --- Screens ---
-  r.registerPreview(
-    PreviewItem(
-      id: 'splash',
-      title: 'Splash Screen',
-      description: 'Entry sequence',
-      category: PreviewCategory.splash,
-      builder: (context) => const SplashScreen(),
-    ),
-  );
-
   r.registerPreview(
     PreviewItem(
       id: 'onboarding',
@@ -101,7 +92,28 @@ void registerAllPreviews() {
     ),
   );
 
+  // --- Profile ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'player-profile',
+      title: 'Player Profile',
+      description: 'User settings and account',
+      category: PreviewCategory.profile,
+      builder: (context) => const PlayerProfileScreen(),
+    ),
+  );
+
   // --- Dialogs ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'logout-confirmation',
+      title: 'Logout Confirmation',
+      description: 'Secure sign-out prompt',
+      category: PreviewCategory.dialogs,
+      builder: (context) => const LogoutConfirmationDialog(),
+    ),
+  );
+
   r.registerPreview(
     PreviewItem(
       id: 'answer-review',

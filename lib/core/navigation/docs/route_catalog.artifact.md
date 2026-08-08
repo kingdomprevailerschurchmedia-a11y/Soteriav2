@@ -10,7 +10,6 @@
 ### 1. Foundation & Auth
 | Route | Path | Guard | Transition | Status |
 | :--- | :--- | :--- | :--- | :--- |
-| Splash | `/` | None | None | Live |
 | Onboarding | `/onboarding` | Uncompleted | Fade | Live |
 | Personalization | `/personalization` | Uncompleted | Fade | Live |
 | Auth Landing | `/auth` | Unauthenticated | Fade | Live |
@@ -36,6 +35,6 @@
 | Notifications | `/notifications` | Root Modal | Fade | Live |
 
 ## Guard Conditions
-- `AppStartupState`: Orchestrates boot sequence (Splash -> Onboarding -> Personalization -> Auth -> Ready).
+- `AppStartupState`: Orchestrates boot sequence (Native Splash -> Onboarding -> Personalization -> Auth -> Ready).
 - `SessionStatus`: Ensures protected routes are only accessible by authenticated users.
 - `VerificationGuard`: Redirects unverified users to the email verification screen.

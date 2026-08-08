@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/gradients/soteria_gradients.dart';
-import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
-import '../../../../core/widgets/animations/animated_numeric_counter.dart';
+import '../../../../core/design_system/components/soteria_avatar.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
 
 class DashboardHeader extends ConsumerWidget {
@@ -16,6 +15,7 @@ class DashboardHeader extends ConsumerWidget {
     required this.playerName,
     required this.level,
     required this.streak,
+    required this.coins,
     required this.profileCompletion,
     this.avatarUrl,
     this.isOnline = true,
@@ -25,6 +25,7 @@ class DashboardHeader extends ConsumerWidget {
   final String playerName;
   final int level;
   final int streak;
+  final int coins;
   final double profileCompletion;
   final String? avatarUrl;
   final bool isOnline;
@@ -40,60 +41,47 @@ class DashboardHeader extends ConsumerWidget {
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
               child: SoteriaSlideLeft(
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: 600),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      greeting,
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.gold,
+                        letterSpacing: 1.5,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14.sp,
+                      ),
+                    ),
                     Row(
                       children: [
-                        Text(
-                          greeting.toUpperCase(),
-                          style: context.labelSmall.copyWith(
-                            color: SoteriaColors.gold,
-                            letterSpacing: 2,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: nav.openSettings,
-                          child: Semantics(
-                            label: 'Settings',
-                            button: true,
-                            child: const Icon(
-                              Icons.settings_rounded,
-                              color: SoteriaColors.muted,
-                              size: 14,
+                        Flexible(
+                          child: Text(
+                            playerName,
+                            style: context.displaySmall.copyWith(
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -1.0,
+                              fontSize: 36.sp,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        SizedBox(width: 8.w),
+                        Text('👋', style: TextStyle(fontSize: 24.sp)),
                       ],
                     ),
-                    Text(
-                      playerName,
-                      style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                      ),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: SoteriaSpacing.xs),
+                    SizedBox(height: SoteriaSpacing.md),
                     Row(
                       children: [
                         _HeaderBadge(
                           label: 'LEVEL $level',
                           icon: Icons.auto_awesome_rounded,
                           color: SoteriaColors.primary,
-                        ),
-                        SizedBox(width: SoteriaSpacing.sm),
-                        _HeaderBadge(
-                          label:
-                              '${(profileCompletion * 100).toInt()}% COMPLETE',
-                          icon: Icons.verified_user_rounded,
-                          color: SoteriaColors.muted,
                         ),
                       ],
                     ),
@@ -102,32 +90,59 @@ class DashboardHeader extends ConsumerWidget {
               ),
             ),
             SoteriaScaleIn(
-              duration: const Duration(milliseconds: 500),
-              delay: const Duration(milliseconds: 200),
-              child: Row(
+              duration: const Duration(milliseconds: 700),
+              delay: const Duration(milliseconds: 300),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  _StreakCounter(streak: streak),
-                  SizedBox(width: SoteriaSpacing.md),
-                  Stack(
+                  Row(
                     children: [
-                      _ProfileAvatar(
-                        url: avatarUrl,
-                        isOnline: isOnline,
-                        onTap: () => nav.go('/app/profile'),
+                      _CompactStat(
+                        icon: Icons.local_fire_department_rounded,
+                        value: streak.toString(),
+                        label: 'Day Streak',
+                        color: Colors.orange,
                       ),
-                      Positioned(
-                        top: -4,
-                        right: -4,
-                        child: IconButton(
-                          onPressed: nav.openNotifications,
-                          icon: const Icon(
-                            Icons.notifications_rounded,
-                            color: SoteriaColors.gold,
-                            size: 20,
-                          ),
-                        ),
+                      SizedBox(width: SoteriaSpacing.md),
+                      _CompactStat(
+                        icon: Icons.monetization_on_rounded,
+                        value: coins.toString(),
+                        label: 'Coins',
+                        color: SoteriaColors.gold,
                       ),
                     ],
+                  ),
+                  SizedBox(height: SoteriaSpacing.md),
+                  GestureDetector(
+                    onTap: () => nav.go('/app/profile'),
+                    child: Hero(
+                      tag: 'player_avatar',
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: SoteriaColors.primary.withValues(alpha: 0.3),
+                            width: 2,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: SoteriaColors.primary.withValues(
+                                alpha: 0.2,
+                              ),
+                              blurRadius: 15,
+                              spreadRadius: 2,
+                            ),
+                          ],
+                        ),
+                        child: SoteriaAvatar(
+                          url: avatarUrl,
+                          isOnline: isOnline,
+                          size: 56,
+                          hasBorder: false,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -153,24 +168,31 @@ class _HeaderBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(SoteriaRadius.full),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(100),
+        border: Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
+        boxShadow: [
+          BoxShadow(
+            color: color.withValues(alpha: 0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 10, color: color),
-          const SizedBox(width: 4),
+          Icon(icon, size: 14.sp, color: color),
+          SizedBox(width: 6.w),
           Text(
             label,
             style: TextStyle(
               color: color,
-              fontSize: 9,
+              fontSize: 11.sp,
               fontWeight: FontWeight.w900,
-              letterSpacing: 0.5,
+              letterSpacing: 1.0,
             ),
           ),
         ],
@@ -179,85 +201,45 @@ class _HeaderBadge extends StatelessWidget {
   }
 }
 
-class _StreakCounter extends StatelessWidget {
-  const _StreakCounter({required this.streak});
-  final int streak;
+class _CompactStat extends StatelessWidget {
+  const _CompactStat({
+    required this.icon,
+    required this.value,
+    required this.label,
+    required this.color,
+  });
+
+  final IconData icon;
+  final String value;
+  final String label;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: 'Current streak: $streak days',
-      child: Column(
-        children: [
-          const Icon(
-            Icons.local_fire_department_rounded,
-            color: Colors.orange,
-            size: 24,
-          ),
-          AnimatedNumericCounter(
-            value: streak,
-            style: context.bodySmall.copyWith(fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ProfileAvatar extends StatelessWidget {
-  const _ProfileAvatar({this.url, required this.isOnline, this.onTap});
-  final String? url;
-  final bool isOnline;
-  final VoidCallback? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Semantics(
-        label: 'User Avatar. Status: ${isOnline ? 'Online' : 'Offline'}',
-        button: true,
-        child: Stack(
+    return Column(
+      children: [
+        Row(
           children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.1),
-                  width: 2,
-                ),
-                gradient: SoteriaGradients.competition,
-              ),
-              child: ClipOval(
-                child: url != null && url!.isNotEmpty
-                    ? Image.network(url!, fit: BoxFit.cover)
-                    : const Center(
-                        child: Icon(
-                          Icons.person_rounded,
-                          color: Colors.white,
-                          size: 32,
-                        ),
-                      ),
-              ),
-            ),
-            Positioned(
-              right: 2,
-              bottom: 2,
-              child: Container(
-                width: 14,
-                height: 14,
-                decoration: BoxDecoration(
-                  color: isOnline ? Colors.greenAccent : Colors.grey,
-                  shape: BoxShape.circle,
-                  border: Border.all(color: SoteriaColors.background, width: 2),
-                ),
+            Icon(icon, size: 18.sp, color: color),
+            SizedBox(width: 4.w),
+            Text(
+              value,
+              style: context.titleMedium.copyWith(
+                fontWeight: FontWeight.w900,
+                color: SoteriaColors.textPrimary,
               ),
             ),
           ],
         ),
-      ),
+        Text(
+          label,
+          style: context.labelSmall.copyWith(
+            color: SoteriaColors.muted,
+            fontSize: 9.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
     );
   }
 }

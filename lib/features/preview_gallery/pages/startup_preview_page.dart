@@ -33,11 +33,11 @@ class StartupPreviewPage extends StatelessWidget {
         ),
 
         SizedBox(height: SoteriaSpacing.xl),
-        const SoteriaText.label('ANIMATION PREVIEW'),
+        const SoteriaText.label('STARTUP ACTIONS'),
         SizedBox(height: SoteriaSpacing.md),
         SoteriaButton.primary(
-          label: 'Re-run Splash Experience',
-          onPressed: () => Navigator.of(context).pushReplacementNamed('/'),
+          label: 'Simulate Bootstrapper Failure',
+          onPressed: () {},
         ),
       ],
     );

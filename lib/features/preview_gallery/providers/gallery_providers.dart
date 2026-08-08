@@ -87,7 +87,7 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
     ),
     const GalleryItem(
       title: 'Startup',
-      description: 'Splash, Bootstrap, Recovery',
+      description: 'Bootstrap, Recovery, Lifecycle',
       category: GalleryCategory.screens,
       route: '/preview-gallery/startup',
       icon: Icons.rocket_launch_rounded,
@@ -266,6 +266,13 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       category: GalleryCategory.status,
       route: '/preview-gallery/lifelines',
       icon: Icons.assistant_direction_rounded,
+    ),
+    const GalleryItem(
+      title: 'Quiz Engine',
+      description: 'Foundation, Models, Controllers, States',
+      category: GalleryCategory.designSystem,
+      route: '/preview-gallery/quiz-engine',
+      icon: Icons.settings_input_component_rounded,
     ),
   ];
 });

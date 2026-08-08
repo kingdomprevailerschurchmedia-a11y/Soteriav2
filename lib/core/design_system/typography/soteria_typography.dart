@@ -29,10 +29,8 @@ class SoteriaTypography {
     letterSpacing: -1.0,
   );
 
-  static TextStyle get displaySmall => _baseStyle.copyWith(
-    fontSize: 36.sp,
-    fontWeight: FontWeight.w800,
-  );
+  static TextStyle get displaySmall =>
+      _baseStyle.copyWith(fontSize: 36.sp, fontWeight: FontWeight.w800);
 
   static TextStyle get headlineLarge => _baseStyle.copyWith(
     fontSize: 32.sp,
@@ -40,30 +38,20 @@ class SoteriaTypography {
     letterSpacing: -0.5,
   );
 
-  static TextStyle get headlineMedium => _baseStyle.copyWith(
-    fontSize: 28.sp,
-    fontWeight: FontWeight.w700,
-  );
+  static TextStyle get headlineMedium =>
+      _baseStyle.copyWith(fontSize: 28.sp, fontWeight: FontWeight.w700);
 
-  static TextStyle get headlineSmall => _baseStyle.copyWith(
-    fontSize: 24.sp,
-    fontWeight: FontWeight.w700,
-  );
+  static TextStyle get headlineSmall =>
+      _baseStyle.copyWith(fontSize: 24.sp, fontWeight: FontWeight.w700);
 
-  static TextStyle get titleLarge => _baseStyle.copyWith(
-    fontSize: 20.sp,
-    fontWeight: FontWeight.w600,
-  );
+  static TextStyle get titleLarge =>
+      _baseStyle.copyWith(fontSize: 20.sp, fontWeight: FontWeight.w600);
 
-  static TextStyle get titleMedium => _baseStyle.copyWith(
-    fontSize: 18.sp,
-    fontWeight: FontWeight.w600,
-  );
+  static TextStyle get titleMedium =>
+      _baseStyle.copyWith(fontSize: 18.sp, fontWeight: FontWeight.w600);
 
-  static TextStyle get titleSmall => _baseStyle.copyWith(
-    fontSize: 16.sp,
-    fontWeight: FontWeight.w600,
-  );
+  static TextStyle get titleSmall =>
+      _baseStyle.copyWith(fontSize: 16.sp, fontWeight: FontWeight.w600);
 
   static TextStyle get bodyLarge => _baseStyle.copyWith(
     fontSize: 16.sp,

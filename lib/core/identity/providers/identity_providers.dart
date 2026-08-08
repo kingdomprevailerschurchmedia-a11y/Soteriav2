@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '../models/user_profile.dart';
 import '../models/user_game_profile.dart';
 import '../models/user_session.dart';
@@ -142,6 +143,8 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
         ref.read(sessionProvider.notifier).setSession(session);
         state = AppStartupState.ready;
       }
+
+      FlutterNativeSplash.remove();
     } catch (e, st) {
       LoggerService.e(
         'Lifecycle initialization failed',
@@ -149,7 +152,10 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
         stackTrace: st,
       );
       // Fallback to auth on error to avoid being stuck on splash
-      if (ref.mounted) state = AppStartupState.auth;
+      if (ref.mounted) {
+        state = AppStartupState.auth;
+        FlutterNativeSplash.remove();
+      }
     } finally {
       _isInitializing = false;
     }
