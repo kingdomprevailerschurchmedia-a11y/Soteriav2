@@ -181,9 +181,12 @@ class _OnboardingIllustration extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = 280.w.clamp(200.0, 320.0);
+    final iconSize = 100.w.clamp(60.0, 120.0);
+
     return Container(
-      width: 280.w,
-      height: 280.w,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         gradient: RadialGradient(
@@ -197,8 +200,8 @@ class _OnboardingIllustration extends StatelessWidget {
       child: Center(
         child: GlassSurface(
           borderRadius: BorderRadius.circular(40.r),
-          padding: EdgeInsets.all(40.w),
-          child: Icon(icon, size: 100.w, color: color),
+          padding: EdgeInsets.all(size * 0.15),
+          child: Icon(icon, size: iconSize, color: color),
         ),
       ),
     );

@@ -326,7 +326,7 @@ class GalleryFavoritesNotifier extends Notifier<Set<String>> {
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    if (ref.mounted) {
+    if (mounted) {
       state = prefs.getStringList(_key)?.toSet() ?? {};
     }
   }

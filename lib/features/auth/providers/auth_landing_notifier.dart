@@ -35,28 +35,22 @@ class AuthLandingNotifier extends Notifier<AuthLandingState> {
       final useCase = ref.read(googleSignInUseCaseProvider);
       final result = await useCase.execute();
 
-      if (ref.mounted) {
-        if (result.isSuccess) {
-          ref.read(analyticsProvider).logLogin(loginMethod: 'google');
-          LoggerService.i('Google Authentication successful', feature: 'Auth');
-        } else {
-          final errorMessage =
-              result.error?.userMessage ?? 'Google sign in failed.';
-          state = state.copyWith(error: errorMessage);
-        }
+      if (result.isSuccess) {
+        ref.read(analyticsProvider).logLogin(loginMethod: 'google');
+        LoggerService.i('Google Authentication successful', feature: 'Auth');
+      } else {
+        final errorMessage =
+            result.error?.userMessage ?? 'Google sign in failed.';
+        state = state.copyWith(error: errorMessage);
       }
     } catch (e, st) {
-      if (ref.mounted) {
-        state = state.copyWith(
-          error: 'An unexpected error occurred during Google sign in.',
-        );
-        ref.read(crashlyticsProvider).recordError(e, st);
-      }
+      state = state.copyWith(
+        error: 'An unexpected error occurred during Google sign in.',
+      );
+      ref.read(crashlyticsProvider).recordError(e, st);
     } finally {
       stopwatch.stop();
-      if (ref.mounted) {
-        setLoading(false);
-      }
+      setLoading(false);
     }
   }
 }

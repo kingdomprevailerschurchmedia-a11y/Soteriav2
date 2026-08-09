@@ -11,6 +11,8 @@ import '../../../features/tournaments/presentation/screens/tournament_leaderboar
 import '../../../features/player/presentation/screens/player_profile_screen.dart';
 import '../../../features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 import '../../../features/gameplay_engine/pages/competitive_review_screen.dart';
+import '../../../features/quiz/preview/question_loader_previews.dart';
+import '../../../features/quiz/preview/gameplay_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -123,6 +125,118 @@ void registerAllPreviews() {
       builder: (context) => const CompetitiveReviewScreen(
         items: [], // Add items if needed
       ),
+    ),
+  );
+
+  // --- Quiz Data Pipeline ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'question-loader-loaded',
+      title: 'Questions Loaded',
+      description: 'Mock data source list',
+      category: PreviewCategory.quizData,
+      builder: (context) => const QuestionLoaderLoadedPreview(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'question-loader-empty',
+      title: 'Questions Empty',
+      description: 'Empty collection state',
+      category: PreviewCategory.quizData,
+      builder: (context) => const QuestionLoaderEmptyPreview(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'question-loader-error',
+      title: 'Questions Error',
+      description: 'Remote failure simulation',
+      category: PreviewCategory.quizData,
+      builder: (context) => const QuestionLoaderErrorPreview(),
+    ),
+  );
+
+  // --- Gameplay ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-active',
+      title: 'Active Gameplay',
+      description: 'Premium session UI',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.active(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-timer-warning',
+      title: 'Timer Warning',
+      description: 'Critical timer state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.timerWarning(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-timer-critical',
+      title: 'Timer Critical',
+      description: 'Critical urgency state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.timerCritical(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-expired',
+      title: 'Timer Expired',
+      description: 'Timeout transition state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.expired(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-selected',
+      title: 'Answer Selected',
+      description: 'Locked interaction state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.selected(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-correct',
+      title: 'Correct Answer',
+      description: 'Success feedback state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.correct(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-incorrect',
+      title: 'Incorrect Answer',
+      description: 'Error feedback & reveal',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.incorrect(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-loading',
+      title: 'Gameplay Loading',
+      description: 'Session initialization',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.loading(),
     ),
   );
 }

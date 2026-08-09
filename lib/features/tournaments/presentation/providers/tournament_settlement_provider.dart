@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/tournament_settlement.dart';
 import '../../data/repositories/tournament_repository_provider.dart';
 import '../providers/tournament_details_provider.dart';

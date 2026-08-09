@@ -13,6 +13,8 @@ enum QuestionType {
 
 enum QuizStatus { idle, loading, ready, active, paused, completed, failed }
 
+enum TimerStatus { idle, running, warning, critical, paused, expired }
+
 enum GameMode {
   practice,
   pro,

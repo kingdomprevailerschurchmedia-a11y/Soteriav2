@@ -21,7 +21,7 @@ class LoginNotifier extends Notifier<LoginState> {
   Future<void> _loadUserGreeting() async {
     final prefs = await SharedPreferences.getInstance();
     final name = prefs.getString(_kFirstNameKey);
-    if (ref.mounted && name != null) {
+    if (name != null) {
       state = state.copyWith(userName: name);
     }
   }
@@ -29,7 +29,7 @@ class LoginNotifier extends Notifier<LoginState> {
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final remember = prefs.getBool(_kRememberMeKey) ?? false;
-    if (ref.mounted) {
+    if (remember != null) {
       state = state.copyWith(rememberMe: remember);
     }
   }
@@ -67,47 +67,43 @@ class LoginNotifier extends Notifier<LoginState> {
       final useCase = ref.read(signInUseCaseProvider);
       final result = await useCase.execute(state.email, state.password);
 
-      if (ref.mounted) {
-        if (result.isSuccess) {
-          ref.read(analyticsProvider).logLogin(loginMethod: 'email');
-          LoggerService.i('Authentication successful', feature: 'Auth');
-        } else if (result.status == AuthenticationStatus.unverified) {
-          LoggerService.i(
-            'Authentication blocked: Email unverified',
-            feature: 'Auth',
-          );
-          state = state.copyWith(
-            error: 'Please verify your email address before signing in.',
-          );
-        } else {
-          final errorMessage =
-              result.error?.userMessage ?? 'Sign in failed. Please try again.';
-          LoggerService.w(
-            'Authentication failed: ${result.error?.message}',
-            feature: 'Auth',
-            metadata: {'email': state.email, 'type': result.error?.type.name},
-          );
-          state = state.copyWith(error: errorMessage);
-        }
-      }
-    } catch (e, st) {
-      if (ref.mounted) {
-        LoggerService.e(
-          'Unexpected Auth Crash during login',
-          error: e,
-          stackTrace: st,
+      if (result.isSuccess) {
+        ref.read(analyticsProvider).logLogin(loginMethod: 'email');
+        LoggerService.i('Authentication successful', feature: 'Auth');
+      } else if (result.status == AuthenticationStatus.unverified) {
+        LoggerService.i(
+          'Authentication blocked: Email unverified',
           feature: 'Auth',
         );
         state = state.copyWith(
-          error: 'An unexpected connection error occurred.',
+          error: 'Please verify your email address before signing in.',
         );
-        ref
-            .read(crashlyticsProvider)
-            .recordError(e, st, reason: 'Unexpected Auth Crash');
+      } else {
+        final errorMessage =
+            result.error?.userMessage ?? 'Sign in failed. Please try again.';
+        LoggerService.w(
+          'Authentication failed: ${result.error?.message}',
+          feature: 'Auth',
+          metadata: {'email': state.email, 'type': result.error?.type.name},
+        );
+        state = state.copyWith(error: errorMessage);
       }
+    } catch (e, st) {
+      LoggerService.e(
+        'Unexpected Auth Crash during login',
+        error: e,
+        stackTrace: st,
+        feature: 'Auth',
+      );
+      state = state.copyWith(
+        error: 'An unexpected connection error occurred.',
+      );
+      ref
+          .read(crashlyticsProvider)
+          .recordError(e, st, reason: 'Unexpected Auth Crash');
     } finally {
       stopwatch.stop();
-      if (ref.mounted) state = state.copyWith(isLoading: false);
+      state = state.copyWith(isLoading: false);
     }
   }
 
@@ -117,16 +113,14 @@ class LoginNotifier extends Notifier<LoginState> {
       final useCase = ref.read(googleSignInUseCaseProvider);
       final result = await useCase.execute();
 
-      if (ref.mounted && !result.isSuccess && result.error != null) {
+      if (!result.isSuccess && result.error != null) {
         state = state.copyWith(error: result.error!.userMessage);
       }
     } catch (e, st) {
-      if (ref.mounted) {
-        state = state.copyWith(error: 'Google Sign-In failed.');
-        ref.read(crashlyticsProvider).recordError(e, st);
-      }
+      state = state.copyWith(error: 'Google Sign-In failed.');
+      ref.read(crashlyticsProvider).recordError(e, st);
     } finally {
-      if (ref.mounted) state = state.copyWith(isLoading: false);
+      state = state.copyWith(isLoading: false);
     }
   }
 

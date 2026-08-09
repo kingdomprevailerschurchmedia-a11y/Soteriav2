@@ -23,6 +23,9 @@ class SoteriaRoutes {
   static const String profile = '/app/profile';
   static const String settings = '/app/settings';
 
+  // Quiz Gameplay
+  static const String quizGameplay = '/quiz-gameplay';
+
   // Developer Gallery
   static const String previewGallery = '/preview-gallery';
   static const String tokens = '/preview-gallery/tokens';

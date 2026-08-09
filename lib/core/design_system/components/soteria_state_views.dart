@@ -6,7 +6,8 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
 
 class SoteriaLoadingView extends StatelessWidget {
-  const SoteriaLoadingView({super.key});
+  final String? message;
+  const SoteriaLoadingView({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class SoteriaLoadingView extends StatelessWidget {
           ),
           SizedBox(height: SoteriaSpacing.lg),
           Text(
-            'SYNCHRONIZING...',
+            (message ?? 'SYNCHRONIZING...').toUpperCase(),
             style: context.labelSmall.copyWith(
               color: SoteriaColors.muted,
               letterSpacing: 2,

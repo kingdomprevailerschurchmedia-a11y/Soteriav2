@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';

@@ -8,6 +8,8 @@ enum PreviewCategory {
   pro('Pro Mode', Icons.stars_rounded),
   tournament('Tournament Mode', Icons.emoji_events_rounded),
   versus('Versus Mode', Icons.bolt_rounded),
+  gameplay('Gameplay', Icons.play_circle_filled_rounded),
+  quizData('Quiz Data Pipeline', Icons.data_usage_rounded),
   social('Social & Community', Icons.people_rounded),
   profile('Player Profile', Icons.badge_rounded),
   settings('Settings', Icons.settings_rounded),

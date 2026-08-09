@@ -79,7 +79,7 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
       final categories = await ref
           .read(categoryRepositoryProvider)
           .getCategories();
-      if (ref.mounted) {
+      if (mounted) {
         state = state.copyWith(
           isLoading: false,
           categories: categories,
@@ -90,7 +90,7 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
         _updateSummary();
       }
     } catch (e) {
-      if (ref.mounted) {
+      if (mounted) {
         state = state.copyWith(isLoading: false, error: e.toString());
       }
     }
@@ -152,12 +152,12 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
       );
 
       await ref.read(practiceRepositoryProvider).createSession(session);
-      if (ref.mounted) {
+      if (mounted) {
         state = state.copyWith(isLoading: false);
       }
       return session;
     } catch (e) {
-      if (ref.mounted) {
+      if (mounted) {
         state = state.copyWith(isLoading: false, error: e.toString());
       }
       return null;

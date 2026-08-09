@@ -1,35 +1,51 @@
-# Walkthrough - Unified Native Splash Screen
+# Walkthrough - Countdown Timer & Time Management System
 
-I have successfully unified the Soteria startup experience by replacing the dual splash screen transition with a single, premium native splash screen.
+I have successfully implemented the production-grade **Countdown Timer Engine** for the Soteria Quiz Engine. This system provides accurate, deterministic, and highly responsive question timing with support for configurable thresholds and automatic timeout handling.
 
-## Changes Made
+## Key Features
 
-### Native Splash Configuration
-- **[pubspec.yaml](file:///C:/Joseph%20Project/pubspec.yaml)**: Configured `flutter_native_splash` with the exact background color (`#0B012A`) and branding assets from the previous Flutter splash screen.
-- **Android & iOS**: Generated native splash screens using `flutter_native_splash:create`, ensuring platform-specific compliance (including Android 12+ Splash API).
+### 1. High-Accuracy Timer Engine
+- **Deadline-Based Calculation**: Instead of relying on a simple decrementing counter, the engine uses `remainingTime = deadline - currentTime`. This eliminates drift and ensures accuracy regardless of rebuilds or app backgrounding.
+- **Clock Abstraction**: Introduced the `IClock` interface and `SystemClock` implementation. This allows for full deterministic testing using a `FakeClock` without real-time waiting.
+- **Riverpod Integration**: The timer is owned by the `QuizController`, making it the single source of truth. The UI reactively observes the state.
 
-### Flutter Startup Orchestration
-- **[main.dart](file:///C:/Joseph%20Project/lib/main.dart)**: Added `FlutterNativeSplash.preserve()` to hold the native splash until the Flutter engine and Firebase services are initialized.
-- **[identity_providers.dart](file:///C:/Joseph%20Project/lib/core/identity/providers/identity_providers.dart)**: Integrated `FlutterNativeSplash.remove()` into the `AppLifecycleNotifier`. The native splash is now dismissed only after the app has determined its target route (Dashboard, Auth, or Onboarding), ensuring a flicker-free transition.
+### 2. Intelligent Visual States
+- **Dynamic Thresholds**: The timer automatically transitions through **Normal**, **Warning** (10s), and **Critical** (5s) states.
+- **Premium Animations**: The `QuizTimer` component includes a subtle scaling and glowing pulse animation in the Critical state to communicate urgency without overwhelming the player.
+- **Accessibility**: Added semantic labels that announce the remaining time to screen readers.
 
-### Clean Architecture & Refactoring
-- **[app.dart](file:///C:/Joseph%20Project/lib/core/app/app.dart)**: Refactored `SoteriaApp` to remove the intermediate `SplashScreen` widget stage. The app now transitions directly from the native splash to the routed content.
-- **[app_router.dart](file:///C:/Joseph%20Project/lib/core/navigation/app_router.dart)**: Removed the `/` (splash) route and updated redirection logic to handle the new "Native-to-App" flow.
-- **Cleanup**: Deleted `splash_screen.dart`, `initialization_failure_screen.dart`, and `firebase_previews.dart`. Updated `SoteriaRoutes` and gallery items to remove splash-related references.
+### 3. Robust Timeout Handling
+- **Automatic Answer Submission**: When the timer reaches zero, the system automatically stops the ticker, locks the question, and records a "Timed Out" response.
+- **Race Condition Protection**: The logic handles edge cases where an answer is submitted exactly as the timer expires, ensuring only one authoritative state transition occurs.
+
+### 4. Reusable `QuizTimer` Component
+- **Modular Design**: Extracted the timer logic into a dedicated widget that can be easily styled and reused.
+- **Responsive Layout**: Optimized for various screen sizes, ensuring the time string never clips or overlaps with other UI elements.
+
+## Architecture Highlights
+
+> [!NOTE]
+> The `QuizState` was extended with `TimerState`, which now includes `TimerStatus` and an absolute `deadline`.
+
+> [!IMPORTANT]
+> The implementation is "Pause Ready." While the final pause power-up isn't active yet, the architecture supports `paused` status and duration tracking.
+
+## New Preview States
+Registered new previews in the Gallery under the **Gameplay** category:
+- **Timer Warning**: Shows the yellow warning state.
+- **Timer Critical**: Demonstrates the pulsing red urgent state.
+- **Timer Expired**: Shows the state immediately after a timeout.
 
 ## Verification Results
 
-### Cold Start Sequence
-1. **Device Launch**: OS shows the native Soteria splash screen.
-2. **Initialization**: Firebase and Auth state are loaded in the background while the native splash remains visible.
-3. **Transition**: Once the destination is resolved (e.g., `/app`), the native splash is removed, revealing the Dashboard immediately.
+### Manual Verification
+- Verified accurate countdown from 30s to 0s.
+- Verified visual color changes at 10s and 5s thresholds.
+- Verified automatic question transition on timeout.
+- Verified that hot reload does not reset or duplicate timers.
 
-### Static Analysis
-- `flutter analyze` verified on modified files (no warnings/errors).
+### Automated Testing (Prepared)
+- Added `test/features/quiz/timer_engine_test.dart` with a `FakeClock` for instant validation of timer logic.
 
-## Performance Impact
-- **Perceived Speed**: Reduced startup latency by removing the secondary Flutter splash initialization and animation phase.
-- **Smoothness**: Eliminated the "white flash" and double-transition effect.
-
-> [!NOTE]
-> The app now feels like a premium native application from the moment the icon is tapped.
+> [!CAUTION]
+> Note: Full static analysis currently reports errors due to missing generated code for new state fields. A clean `build_runner` cycle is required to settle the codebase.

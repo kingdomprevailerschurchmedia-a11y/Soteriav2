@@ -24,5 +24,8 @@ class QuizState with _$QuizState {
     @Default(false) bool isLoading,
     String? error,
     @Default(false) bool isOffline,
+    String? selectedOptionId,
+    @Default(false) bool isAnswerLocked,
+    DateTime? questionStartTime,
   }) = _QuizState;
 }

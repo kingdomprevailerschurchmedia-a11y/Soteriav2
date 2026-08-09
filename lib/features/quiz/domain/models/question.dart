@@ -25,6 +25,7 @@ class Question with _$Question {
     @Default(5) int coinValue,
     required DateTime createdAt,
     required DateTime updatedAt,
+    @Default('active') String status,
   }) = _Question;
 
   factory Question.fromJson(Map<String, dynamic> json) =>

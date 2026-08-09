@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/gameplay_engine/timer/models/timer_state.dart';
 import 'package:soteria/features/gameplay_engine/timer/models/timer_status.dart';
 import 'package:soteria/features/gameplay_engine/timer/models/timer_configuration.dart';

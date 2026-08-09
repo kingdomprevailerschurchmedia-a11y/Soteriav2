@@ -76,13 +76,12 @@ class BootstrapNotifier extends Notifier<BootstrapState> {
   BootstrapState build() => BootstrapState.initial;
 
   Future<void> run() async {
-    if (!ref.mounted) return;
     state = BootstrapState.loading;
     try {
       await ref.read(bootstrapServiceProvider).initialize();
-      if (ref.mounted) state = BootstrapState.success;
+      state = BootstrapState.success;
     } catch (_) {
-      if (ref.mounted) state = BootstrapState.error;
+      state = BootstrapState.error;
     }
   }
 }

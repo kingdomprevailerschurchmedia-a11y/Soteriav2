@@ -12,7 +12,6 @@ import 'package:soteria/features/auth/services/auth_coordinator.dart';
 import 'package:soteria/features/notifications/providers/notification_providers.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
-import 'package:soteria/features/splash/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'test_helper.dart';
 
@@ -29,22 +28,12 @@ class _MockAppLifecycleNotifier extends AppLifecycleNotifier {
 void main() {
   setupTestEnvironment();
 
-  testWidgets('Navigation: Splash is the initial route', (
+  testWidgets('Navigation: App launches to main route', (
     WidgetTester tester,
   ) async {
     SharedPreferences.setMockInitialValues({});
 
     await tester.runAsync(() async {
-      final testRouter = GoRouter(
-        initialLocation: SoteriaRoutes.splash,
-        routes: [
-          GoRoute(
-            path: SoteriaRoutes.splash,
-            builder: (context, state) => const SplashScreen(),
-          ),
-        ],
-      );
-
       final container = ProviderContainer(
         overrides: [
           firebaseInitFutureProvider.overrideWith((ref) async {}),
@@ -57,8 +46,7 @@ void main() {
           configurationCoordinatorProvider.overrideWithValue(
             MockConfigurationCoordinator(),
           ),
-          routerProvider.overrideWithValue(testRouter),
-          appLifecycleProvider.overrideWith(_MockAppLifecycleNotifier.new),
+          appLifecycleProvider.overrideWith(MockAppLifecycleNotifier.new),
         ],
       );
       addTearDown(container.dispose);
@@ -79,9 +67,8 @@ void main() {
       final location = router.routerDelegate.currentConfiguration.uri
           .toString();
 
-      // GoRouter initial location might be normalized to '/' or empty depending on version/config
       expect(
-        location == '/' || location.isEmpty,
+        location.startsWith(SoteriaRoutes.main),
         isTrue,
         reason: 'Location was: $location',
       );
@@ -98,23 +85,6 @@ void main() {
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
 
-      final testRouter = GoRouter(
-        initialLocation: SoteriaRoutes.splash,
-        routes: [
-          GoRoute(
-            path: SoteriaRoutes.splash,
-            builder: (context, state) => const SplashScreen(),
-          ),
-          GoRoute(
-            path: '/bad-route',
-            builder: (context, state) =>
-                const UnknownRouteScreen(location: '/bad-route'),
-          ),
-        ],
-        errorBuilder: (context, state) =>
-            UnknownRouteScreen(location: state.uri.toString()),
-      );
-
       final container = ProviderContainer(
         overrides: [
           firebaseInitFutureProvider.overrideWith((ref) async {}),
@@ -126,7 +96,6 @@ void main() {
           configurationCoordinatorProvider.overrideWithValue(
             MockConfigurationCoordinator(),
           ),
-          routerProvider.overrideWithValue(testRouter),
           appLifecycleProvider.overrideWith(MockAppLifecycleNotifier.new),
         ],
       );

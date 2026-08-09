@@ -23,6 +23,7 @@ class QuestionDto with _$QuestionDto {
     required int coinValue,
     required String createdAt,
     required String updatedAt,
+    required String status,
   }) = _QuestionDto;
 
   factory QuestionDto.fromJson(Map<String, dynamic> json) =>

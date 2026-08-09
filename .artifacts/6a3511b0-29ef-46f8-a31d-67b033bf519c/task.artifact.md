@@ -1,11 +1,13 @@
-# Task: Unified Native Splash Screen Implementation
+# Task: Countdown Timer & Time Management System Implementation
 
-- [x] `[x]` Configure `flutter_native_splash` in `pubspec.yaml`
-- [x] `[x]` Update `main.dart` to preserve native splash
-- [x] `[x]` Update `AppLifecycleNotifier` to remove native splash when ready
-- [x] `[x]` Refactor `SoteriaApp` in `app.dart` to remove Flutter splash stage
-- [x] `[x]` Update `AppRouter` to remove splash routes and redirects
-- [x] `[x]` Remove splash-related files (`splash_screen.dart`, `initialization_failure_screen.dart`)
-- [x] `[x]` Clean up `SoteriaRoutes`
-- [x] `[x]` Generate native splash screens
-- [x] `[x]` Verify implementation (build, run, test)
+- [x] `[x]` Add `TimerStatus` to `quiz_enums.dart`
+- [x] `[x]` Update `TimerState` with status and deadline
+- [x] `[x]` Implement `Clock` abstraction for testability
+- [x] `[x]` Implement Timer Logic in `QuizController`
+- [x] `[x]` Create reusable `QuizTimer` component
+- [x] `[x]` Update `QuizStatsBar` to use new `QuizTimer`
+- [x] `[x]` Implement Automatic Timeout Handling
+- [x] `[x]` Add App Lifecycle synchronization logic
+- [x] `[x]` Register Timer state previews in Gallery
+- [x] `[x]` Create comprehensive unit tests for Timer Engine
+- [x] `[x]` Final verification (Build, Analyze, Test)

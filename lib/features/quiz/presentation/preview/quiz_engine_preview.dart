@@ -20,23 +20,38 @@ class QuizEnginePreview extends StatelessWidget {
           padding: EdgeInsets.all(SoteriaSpacing.lg),
           children: [
             _buildSection('Quiz States', [
-               const _StateDebugCard(title: 'Idle / Initial', data: QuizState()),
-               const _StateDebugCard(title: 'Loading', data: QuizState(isLoading: true)),
-               const _StateDebugCard(title: 'Empty (No Questions)', data: QuizState(questions: [])),
-               const _StateDebugCard(title: 'Error State', data: QuizState(error: 'Failed to connect to Quiz Server')),
-               const _StateDebugCard(title: 'Offline State', data: QuizState(isOffline: true)),
-               _StateDebugCard(
-                title: 'Active Session', 
+              const _StateDebugCard(title: 'Idle / Initial', data: QuizState()),
+              const _StateDebugCard(
+                title: 'Loading',
+                data: QuizState(isLoading: true),
+              ),
+              const _StateDebugCard(
+                title: 'Empty (No Questions)',
+                data: QuizState(questions: []),
+              ),
+              const _StateDebugCard(
+                title: 'Error State',
+                data: QuizState(error: 'Failed to connect to Quiz Server'),
+              ),
+              const _StateDebugCard(
+                title: 'Offline State',
+                data: QuizState(isOffline: true),
+              ),
+              _StateDebugCard(
+                title: 'Active Session',
                 data: QuizState(
                   status: QuizStatus.active,
                   currentIndex: 2,
                   score: 1500,
                   streak: 5,
-                  timer: TimerState.initial(30).copyWith(isRunning: true, remainingTime: const Duration(seconds: 18)),
-                )
+                  timer: TimerState.initial(30).copyWith(
+                    isRunning: true,
+                    remainingTime: const Duration(seconds: 18),
+                  ),
+                ),
               ),
-               _StateDebugCard(
-                title: 'Success / Completed', 
+              _StateDebugCard(
+                title: 'Success / Completed',
                 data: QuizState(
                   status: QuizStatus.completed,
                   result: QuizResult(
@@ -53,14 +68,18 @@ class QuizEnginePreview extends StatelessWidget {
                     performanceGrade: 'A+',
                     timestamp: DateTime.now(),
                   ),
-                )
+                ),
               ),
             ]),
             SizedBox(height: SoteriaSpacing.xl),
             _buildSection('Component Snapshots', [
               _ModelDebugCard(
                 title: 'TimerState (Running)',
-                data: TimerState.initial(30).copyWith(isRunning: true, remainingTime: const Duration(seconds: 12), progress: 0.4),
+                data: TimerState.initial(30).copyWith(
+                  isRunning: true,
+                  remainingTime: const Duration(seconds: 12),
+                  progress: 0.4,
+                ),
               ),
               _ModelDebugCard(
                 title: 'TimerState (Expired)',
@@ -97,7 +116,14 @@ class QuizEnginePreview extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white70)),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.white70,
+          ),
+        ),
         const Divider(),
         ...children,
       ],
@@ -120,9 +146,18 @@ class _StateDebugCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.blueAccent)),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(data.toString(), style: const TextStyle(fontSize: 10, color: Colors.white54)),
+            Text(
+              data.toString(),
+              style: const TextStyle(fontSize: 10, color: Colors.white54),
+            ),
           ],
         ),
       ),
@@ -145,9 +180,18 @@ class _ModelDebugCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(title, style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.orangeAccent)),
+            Text(
+              title,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.orangeAccent,
+              ),
+            ),
             const SizedBox(height: 4),
-            Text(data.toString(), style: const TextStyle(fontSize: 10, color: Colors.white54)),
+            Text(
+              data.toString(),
+              style: const TextStyle(fontSize: 10, color: Colors.white54),
+            ),
           ],
         ),
       ),

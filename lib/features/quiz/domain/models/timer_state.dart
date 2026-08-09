@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'quiz_enums.dart';
 
 part 'timer_state.freezed.dart';
 part 'timer_state.g.dart';
@@ -12,11 +13,14 @@ class TimerState with _$TimerState {
     @Default(false) bool isPaused,
     @Default(false) bool isRunning,
     @Default(false) bool hasExpired,
+    @Default(TimerStatus.idle) TimerStatus status,
+    DateTime? deadline,
   }) = _TimerState;
 
   factory TimerState.initial(int seconds) => TimerState(
     totalDuration: Duration(seconds: seconds),
     remainingTime: Duration(seconds: seconds),
+    status: TimerStatus.idle,
   );
 
   factory TimerState.fromJson(Map<String, dynamic> json) =>

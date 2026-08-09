@@ -1,63 +1,71 @@
-# Implementation Plan - Unified Native Splash Screen
+# Implementation Plan - Story 8.5: Countdown Timer & Time Management System
 
-Unify the startup experience by replacing the two-stage splash screen (Native + Flutter) with a single Native Splash Screen that stays visible until the application is fully initialized.
+Implement a production-grade countdown timer engine integrated into the Quiz Engine, ensuring accurate, testable, and responsive question timing.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> The Flutter `SplashScreen` included animations (ScaleIn, FadeIn) for the logo and text. Native splash screens (especially on Android 12+) have limited animation support. The new experience will be a static, premium native splash that transitions directly to the first interactive screen (Dashboard or Sign In).
+> The timer will be owned by the `QuizController` and will use an absolute deadline-based approach to avoid drift. It will automatically handle timeouts by submitting a "timed out" answer.
 
-> [!WARNING]
-> The "Exactly Identical" requirement for the native splash screen is challenging due to platform-specific constraints (e.g., Android 12 splash icon size limits). I will use `flutter_native_splash` to get as close as possible, but some minor layout differences may occur between platforms.
+- **Clock Abstraction**: I will create a `Clock` interface to allow for deterministic testing using a `FakeClock`.
+- **Thresholds**: Warning and Critical thresholds will be configurable.
+- **App Lifecycle**: The timer will react to app foreground/background changes (currently set to continue/sync on resume).
 
 ## Proposed Changes
 
-### Native Configuration
+### Domain Layer
 
-#### [MODIFY] [pubspec.yaml](file:///C:/Joseph%20Project/pubspec.yaml)
-- Update `flutter_native_splash` configuration to match `SplashScreen` colors and images.
-- Adjust background color to `#0B012A`.
-- Ensure `android_12` settings are correctly configured.
+#### [MODIFY] [quiz_enums.dart](file:///C:/Joseph%20Project/lib/features/quiz/domain/models/quiz_enums.dart)
+- Add `TimerStatus` enum: `idle`, `running`, `paused`, `expired`, `warning`, `critical`.
 
-### Flutter Startup Logic
+#### [MODIFY] [timer_state.dart](file:///C:/Joseph%20Project/lib/features/quiz/domain/models/timer_state.dart)
+- Add `TimerStatus status`.
+- Add `DateTime? deadline`.
 
-#### [MODIFY] [main.dart](file:///C:/Joseph%20Project/lib/main.dart)
-- Initialize `widgetsBinding`.
-- Call `FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding)` to keep the native splash visible.
+### Infrastructure Layer
 
-#### [MODIFY] [lib/core/identity/providers/identity_providers.dart](file:///C:/Joseph%20Project/lib/core/identity/providers/identity_providers.dart)
-- Inject a call to `FlutterNativeSplash.remove()` when the `AppStartupState` transitions from `loading` to any other state.
-- This ensures the native splash is only removed once the app has determined its destination (Onboarding, Auth, or Dashboard).
+#### [NEW] [clock.dart](file:///C:/Joseph%20Project/lib/core/utils/clock.dart)
+- Define `IClock` interface with `now()`.
+- Implement `SystemClock`.
+- Provide `clockProvider` via Riverpod.
 
-#### [MODIFY] [lib/core/app/app.dart](file:///C:/Joseph%20Project/lib/core/app/app.dart)
-- Remove the `firebaseInitFutureProvider` check in the `build` method.
-- Remove `_BootstrapWrapper` and `SplashScreen` usage.
-- Ensure `SoteriaApp` always builds the main `MaterialApp.router`.
+### Presentation Layer (Controllers)
 
-#### [MODIFY] [lib/core/navigation/app_router.dart](file:///C:/Joseph%20Project/lib/core/navigation/app_router.dart)
-- Remove `SoteriaRoutes.splash` from the route list.
-- Update `initialLocation` to `SoteriaRoutes.main` (or another appropriate default, as the redirect logic will handle the actual destination).
-- Remove the redirect logic that points to `SoteriaRoutes.splash`.
+#### [MODIFY] [quiz_controller.dart](file:///C:/Joseph%20Project/lib/features/quiz/presentation/controllers/quiz_controller.dart)
+- Add `Timer? _ticker`.
+- Implement `_startTimer(Duration duration)`, `_stopTimer()`, `_onTick()`.
+- Integrate into `startQuiz`, `selectAnswer`, and `_nextQuestion`.
+- Implement `_handleTimeout()` to record a timed-out answer and transition.
+- Add lifecycle listener support.
 
-### Cleanup
+### Presentation Layer (Widgets)
 
-#### [DELETE] [splash_screen.dart](file:///C:/Joseph%20Project/lib/features/splash/splash_screen.dart)
-- Delete the Flutter splash screen widget.
+#### [NEW] [quiz_timer.dart](file:///C:/Joseph%20Project/lib/features/quiz/presentation/widgets/quiz_timer.dart)
+- Extract from `QuizStatsBar`.
+- Add animations (pulse for critical state).
+- Use `TimerStatus` for visual states.
+- Support Accessibility (Semantics for remaining time).
 
-#### [DELETE] [initialization_failure_screen.dart](file:///C:/Joseph%20Project/lib/features/splash/initialization_failure_screen.dart)
-- Delete the failure screen as per the "remove every unused splash-related file" requirement.
-- *Note*: We may need a basic error UI in `app.dart` if Firebase fails, but it will be handled by the `firebaseInitFutureProvider.when` error state (which we should keep or move).
+#### [MODIFY] [quiz_stats_bar.dart](file:///C:/Joseph%20Project/lib/features/quiz/presentation/widgets/quiz_stats_bar.dart)
+- Replace inline timer logic with the new `QuizTimer` component.
 
-#### [MODIFY] [soteria_routes.dart](file:///C:/Joseph%20Project/lib/core/navigation/soteria_routes.dart)
-- Remove `splash` constant.
+### Preview & Testing
+
+#### [MODIFY] [gameplay_previews.dart](file:///C:/Joseph%20Project/lib/features/quiz/preview/gameplay_previews.dart)
+- Update previews to use various `TimerStatus` and time values.
+
+#### [NEW] [timer_engine_test.dart](file:///C:/Joseph%20Project/test/features/quiz/timer_engine_test.dart)
+- Unit tests for timer lifecycle and thresholds using `FakeClock`.
 
 ## Verification Plan
 
 ### Automated Tests
-- Run `flutter test` to ensure no regressions in navigation or identity providers.
+- `flutter test test/features/quiz/timer_engine_test.dart`
+- `flutter analyze`
 
 ### Manual Verification
-- **Cold Start**: Verify the app shows the native splash and transitions directly to Dashboard (authenticated) or Auth Landing (guest) without a second splash screen.
-- **Visual Check**: Compare the new native splash with the previous Flutter splash (using provided design values).
-- **Android 12+**: Verify the splash screen on an Android 12+ emulator/device.
-- **Navigation**: Ensure the app no longer attempts to navigate to `/`.
+- **Cold Start**: Start quiz, verify timer begins.
+- **Thresholds**: Observe transition to Warning (e.g., 10s) and Critical (e.g., 5s) states.
+- **Expiration**: Let timer reach 00:00, verify question locks and moves to next.
+- **Race Condition**: Try to answer at the last second.
+- **Accessibility**: Verify screen reader announces time increments/thresholds.

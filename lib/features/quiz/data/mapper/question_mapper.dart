@@ -29,6 +29,7 @@ class QuestionMapper {
       coinValue: dto.coinValue,
       createdAt: DateTime.parse(dto.createdAt),
       updatedAt: DateTime.parse(dto.updatedAt),
+      status: dto.status,
     );
   }
 
@@ -51,6 +52,7 @@ class QuestionMapper {
       coinValue: model.coinValue,
       createdAt: model.createdAt.toIso8601String(),
       updatedAt: model.updatedAt.toIso8601String(),
+      status: model.status,
     );
   }
 }

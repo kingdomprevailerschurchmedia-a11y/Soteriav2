@@ -135,11 +135,11 @@ class _SoteriaButtonState extends State<SoteriaButton>
   double _getHeight() {
     switch (widget.size) {
       case SoteriaButtonSize.sm:
-        return 36.h;
+        return 36.h.clamp(32.0, 40.0);
       case SoteriaButtonSize.md:
-        return 48.h;
+        return 48.h.clamp(44.0, 56.0);
       case SoteriaButtonSize.lg:
-        return 56.h;
+        return 56.h.clamp(52.0, 64.0);
     }
   }
 

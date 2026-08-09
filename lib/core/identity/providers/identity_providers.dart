@@ -60,7 +60,7 @@ class ProfileNotifier extends Notifier<UserProfile?> {
     final profile = await ref
         .read(identityRepositoryProvider)
         .getUserProfile(uid);
-    if (ref.mounted) state = profile;
+    state = profile;
   }
 }
 
@@ -121,7 +121,6 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
 
     try {
       _prefs ??= await SharedPreferences.getInstance();
-      if (!ref.mounted) return;
 
       final onboardingCompleted =
           _prefs!.getBool('onboarding_completed') ?? false;
@@ -131,7 +130,6 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
       final session = await ref
           .read(identityRepositoryProvider)
           .getActiveSession();
-      if (!ref.mounted) return;
 
       if (!onboardingCompleted) {
         state = AppStartupState.onboarding;
@@ -152,10 +150,8 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
         stackTrace: st,
       );
       // Fallback to auth on error to avoid being stuck on splash
-      if (ref.mounted) {
-        state = AppStartupState.auth;
-        FlutterNativeSplash.remove();
-      }
+      state = AppStartupState.auth;
+      FlutterNativeSplash.remove();
     } finally {
       _isInitializing = false;
     }

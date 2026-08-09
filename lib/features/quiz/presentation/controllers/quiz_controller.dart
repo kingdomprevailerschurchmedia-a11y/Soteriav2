@@ -1,13 +1,22 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/utils/clock.dart';
 import '../../domain/models/quiz_enums.dart';
 import '../../domain/models/player_answer.dart';
 import '../../domain/models/quiz_session.dart';
+import '../../domain/models/timer_state.dart';
 import '../states/quiz_state.dart';
 import '../providers/quiz_providers.dart';
 
 class QuizController extends Notifier<QuizState> {
+  Timer? _ticker;
+  static const _kTickDuration = Duration(milliseconds: 100);
+  static const _kWarningSeconds = 10;
+  static const _kCriticalSeconds = 5;
+
   @override
   QuizState build() {
+    ref.onDispose(() => _ticker?.cancel());
     return const QuizState();
   }
 
@@ -40,7 +49,12 @@ class QuizController extends Notifier<QuizState> {
         questions: questions,
         currentQuestion: questions.isNotEmpty ? questions.first : null,
         currentIndex: 0,
+        questionStartTime: DateTime.now(),
       );
+
+      if (state.currentQuestion != null) {
+        _startTimer(Duration(seconds: state.currentQuestion!.estimatedTime));
+      }
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
@@ -73,45 +87,63 @@ class QuizController extends Notifier<QuizState> {
     }
   }
 
-  Future<void> submitAnswer(PlayerAnswer answer) async {
-    if (state.session == null) return;
+  Future<void> selectAnswer(String optionId) async {
+    // 1. Protection & State Guard
+    if (state.isAnswerLocked || state.status != QuizStatus.active) return;
+    if (state.currentQuestion == null) return;
+
+    // 2. Lock UI immediately
+    _stopTimer();
+    state = state.copyWith(selectedOptionId: optionId, isAnswerLocked: true);
+
+    final startTime = state.questionStartTime ?? DateTime.now();
+    final responseTime = DateTime.now().difference(startTime);
 
     try {
-      final submittedAnswer = await ref
-          .read(submitAnswerUseCaseProvider)
-          .execute(sessionId: state.session!.sessionId, answer: answer);
-
-      final updatedAnswers = [
-        ...state.session!.answeredQuestions,
-        submittedAnswer,
-      ];
-      final isCorrect = submittedAnswer.isCorrect;
-      final newStreak = isCorrect ? state.streak + 1 : 0;
-      final newScore = isCorrect ? state.score + 100 : state.score;
-
-      final updatedSession = state.session!.copyWith(
-        answeredQuestions: updatedAnswers,
-        currentStreak: newStreak,
-        currentScore: newScore,
-        currentQuestionIndex: state.currentIndex,
+      // 3. Validation (Local for immediate feedback, prepared for server)
+      final isCorrect = state.currentQuestion!.correctOptionIds.contains(
+        optionId,
       );
 
-      state = state.copyWith(
-        streak: newStreak,
-        score: newScore,
-        session: updatedSession,
+      // 4. Record Answer
+      final answer = PlayerAnswer(
+        questionId: state.currentQuestion!.id,
+        selectedOptionIds: [optionId],
+        isCorrect: isCorrect,
+        responseTime: responseTime,
+        timestamp: DateTime.now(),
       );
 
-      await ref.read(saveProgressUseCaseProvider).execute(updatedSession);
+      // 5. Submit to Repository
+      if (state.session != null) {
+        await ref
+            .read(submitAnswerUseCaseProvider)
+            .execute(sessionId: state.session!.sessionId, answer: answer);
 
+        // Update local session state (Score/Streak logic simplified as per scope)
+        final newStreak = isCorrect ? state.streak + 1 : 0;
+        final newScore = isCorrect ? state.score + 100 : state.score;
+
+        state = state.copyWith(streak: newStreak, score: newScore);
+      }
+
+      // 6. Delay for visual feedback (Premium feel)
+      await Future.delayed(const Duration(milliseconds: 1500));
+
+      // 7. Proceed
       _nextQuestion();
     } catch (e) {
-      state = state.copyWith(error: e.toString());
+      // Handle submission error (Recoverable)
+      state = state.copyWith(
+        isAnswerLocked: false,
+        selectedOptionId: null,
+        error: 'Unable to submit answer. Please try again.',
+      );
     }
   }
 
   void skipQuestion() {
-    if (state.session == null) return;
+    if (state.isAnswerLocked) return;
 
     final skipAnswer = PlayerAnswer(
       questionId: state.currentQuestion?.id ?? '',
@@ -122,19 +154,127 @@ class QuizController extends Notifier<QuizState> {
       isSkipped: true,
     );
 
-    submitAnswer(skipAnswer);
+    _submitInternal(skipAnswer);
+  }
+
+  Future<void> _submitInternal(PlayerAnswer answer) async {
+    if (state.session == null) return;
+    try {
+      await ref
+          .read(submitAnswerUseCaseProvider)
+          .execute(sessionId: state.session!.sessionId, answer: answer);
+      _nextQuestion();
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+    }
   }
 
   void _nextQuestion() {
     final nextIndex = state.currentIndex + 1;
     if (nextIndex < state.questions.length) {
+      final nextQuestion = state.questions[nextIndex];
       state = state.copyWith(
         currentIndex: nextIndex,
-        currentQuestion: state.questions[nextIndex],
+        currentQuestion: nextQuestion,
+        selectedOptionId: null,
+        isAnswerLocked: false,
+        questionStartTime: DateTime.now(),
       );
+      _startTimer(Duration(seconds: nextQuestion.estimatedTime));
     } else {
       finishQuiz();
     }
+  }
+
+  void _startTimer(Duration duration) {
+    _ticker?.cancel();
+    final clock = ref.read(clockProvider);
+    final deadline = clock.now().add(duration);
+
+    state = state.copyWith(
+      timer: TimerState(
+        totalDuration: duration,
+        remainingTime: duration,
+        deadline: deadline,
+        status: TimerStatus.running,
+        isRunning: true,
+      ),
+    );
+
+    _ticker = Timer.periodic(_kTickDuration, (_) => _onTick());
+  }
+
+  void _stopTimer() {
+    _ticker?.cancel();
+    state = state.copyWith(
+      timer: state.timer?.copyWith(isRunning: false, status: TimerStatus.idle),
+    );
+  }
+
+  void _onTick() {
+    final timer = state.timer;
+    if (timer == null || !timer.isRunning || timer.deadline == null) return;
+
+    final clock = ref.read(clockProvider);
+    final now = clock.now();
+    final remaining = timer.deadline!.difference(now);
+
+    if (remaining <= Duration.zero) {
+      _ticker?.cancel();
+      state = state.copyWith(
+        timer: timer.copyWith(
+          remainingTime: Duration.zero,
+          progress: 0.0,
+          status: TimerStatus.expired,
+          hasExpired: true,
+          isRunning: false,
+        ),
+      );
+      _handleTimeout();
+    } else {
+      final progress =
+          remaining.inMilliseconds / timer.totalDuration.inMilliseconds;
+      TimerStatus status = TimerStatus.running;
+
+      if (remaining.inSeconds <= _kCriticalSeconds) {
+        status = TimerStatus.critical;
+      } else if (remaining.inSeconds <= _kWarningSeconds) {
+        status = TimerStatus.warning;
+      }
+
+      state = state.copyWith(
+        timer: timer.copyWith(
+          remainingTime: remaining,
+          progress: progress,
+          status: status,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleTimeout() async {
+    if (state.isAnswerLocked) return;
+
+    state = state.copyWith(isAnswerLocked: true);
+
+    final timeoutAnswer = PlayerAnswer(
+      questionId: state.currentQuestion?.id ?? '',
+      selectedOptionIds: [],
+      isCorrect: false,
+      responseTime: state.timer?.totalDuration ?? Duration.zero,
+      timestamp: DateTime.now(),
+    );
+
+    if (state.session != null) {
+      await ref
+          .read(submitAnswerUseCaseProvider)
+          .execute(sessionId: state.session!.sessionId, answer: timeoutAnswer);
+      // Timeout reset streak
+      state = state.copyWith(streak: 0);
+    }
+
+    await Future.delayed(const Duration(milliseconds: 1500));
+    _nextQuestion();
   }
 
   Future<void> finishQuiz() async {

@@ -17,7 +17,7 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
   Future<void> _loadState() async {
     final prefs = await SharedPreferences.getInstance();
     final isCompleted = prefs.getBool(_kOnboardingCompletedKey) ?? false;
-    if (ref.mounted) {
+    if (mounted) {
       state = state.copyWith(isCompleted: isCompleted);
     }
   }

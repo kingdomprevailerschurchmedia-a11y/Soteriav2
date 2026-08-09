@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Manages the countdown timer for individual questions.
 class TimerController extends StateNotifier<int> {

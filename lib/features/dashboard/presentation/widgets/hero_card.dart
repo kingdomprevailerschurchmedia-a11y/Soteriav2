@@ -137,37 +137,38 @@ class _HexagonLevelIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 64.w,
-      height: 72.h,
-      constraints: BoxConstraints(maxHeight: 80.h),
-      child: CustomPaint(
-        painter: _HexagonPainter(
-          color: SoteriaColors.primary,
-          glowColor: SoteriaColors.primary.withValues(alpha: 0.5),
-        ),
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: FittedBox(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    'Lvl',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.textSecondary,
-                      fontWeight: FontWeight.bold,
+      child: AspectRatio(
+        aspectRatio: 64 / 72,
+        child: CustomPaint(
+          painter: _HexagonPainter(
+            color: SoteriaColors.primary,
+            glowColor: SoteriaColors.primary.withValues(alpha: 0.5),
+          ),
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: FittedBox(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'Lvl',
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.textSecondary,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    level.toString(),
-                    style: context.titleLarge.copyWith(
-                      color: SoteriaColors.textPrimary,
-                      fontWeight: FontWeight.w900,
+                    Text(
+                      level.toString(),
+                      style: context.titleLarge.copyWith(
+                        color: SoteriaColors.textPrimary,
+                        fontWeight: FontWeight.w900,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

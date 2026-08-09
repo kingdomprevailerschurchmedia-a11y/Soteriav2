@@ -73,7 +73,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
       final useCase = ref.read(signUpUseCaseProvider);
       final result = await useCase.execute(state.email, state.password);
 
-      if (ref.mounted) {
+      if (mounted) {
         if (result.isSuccess) {
           ref.read(analyticsProvider).logSignUp(signUpMethod: 'email');
           LoggerService.i('Registration successful', feature: 'Auth');
@@ -84,7 +84,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
         }
       }
     } catch (e, st) {
-      if (ref.mounted) {
+      if (mounted) {
         state = state.copyWith(
           error: e is IdentityException
               ? e.userMessage
@@ -102,7 +102,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
       );
     } finally {
       stopwatch.stop();
-      if (ref.mounted) {
+      if (mounted) {
         state = state.copyWith(isLoading: false);
       }
     }

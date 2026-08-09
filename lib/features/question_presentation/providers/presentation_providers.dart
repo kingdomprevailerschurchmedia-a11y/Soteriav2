@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Represents the visual state of an individual answer.
 enum AnswerVisualState { normal, selected, correct, wrong, disabled, locked }

@@ -16,7 +16,7 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
   Future<void> _loadFromLocal() async {
     final prefs = await SharedPreferences.getInstance();
     final data = prefs.getString(_kStorageKey);
-    if (data != null && ref.mounted) {
+    if (data != null && mounted) {
       try {
         final Map<String, dynamic> map = jsonDecode(data);
         state = state.copyWith(

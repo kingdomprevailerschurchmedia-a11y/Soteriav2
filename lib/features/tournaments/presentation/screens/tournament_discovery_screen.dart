@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/config/soteria_breakpoints.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import 'package:soteria/features/tournaments/domain/models/tournament.dart';
@@ -119,7 +120,8 @@ class _TournamentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isTablet = MediaQuery.of(context).size.width > 600;
+    final bool isTablet =
+        MediaQuery.of(context).size.width >= SoteriaBreakpoints.tablet;
 
     return SliverPadding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),

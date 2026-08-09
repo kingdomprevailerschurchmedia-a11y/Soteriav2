@@ -119,5 +119,5 @@ extension SoteriaTypographyExtension on BuildContext {
 
   /// Clamps the text scale factor to prevent extreme accessibility settings from breaking layouts.
   double get safeTextScale =>
-      MediaQuery.textScalerOf(this).scale(1.0).clamp(0.8, 1.4);
+      MediaQuery.textScalerOf(this).scale(1.0).clamp(0.9, 1.2);
 }
