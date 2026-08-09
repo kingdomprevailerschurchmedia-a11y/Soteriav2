@@ -6,8 +6,11 @@ import '../domain/models/answer_option.dart';
 import '../domain/models/timer_state.dart';
 import '../domain/models/power_up_state.dart';
 import '../presentation/states/quiz_state.dart';
+import '../presentation/controllers/quiz_controller.dart';
 import '../presentation/providers/quiz_providers.dart';
 import '../presentation/screens/quiz_gameplay_screen.dart';
+
+import '../domain/models/score_result.dart';
 
 class GameplayPreviewWrapper extends StatelessWidget {
   const GameplayPreviewWrapper({super.key, required this.state});
@@ -73,6 +76,7 @@ class GameplayPreviews {
       currentIndex: 0,
       score: 1200,
       streak: 4,
+      xp: 250,
       timer: TimerState(
         totalDuration: const Duration(seconds: 30),
         remainingTime: const Duration(seconds: 24),
@@ -110,8 +114,17 @@ class GameplayPreviews {
       currentIndex: 0,
       selectedOptionId: 'o1',
       isAnswerLocked: true,
-      score: 100,
-      streak: 1,
+      score: 1450,
+      streak: 5,
+      xp: 285,
+      lastScoreResult: ScoreResult(
+        baseScore: 200,
+        difficultyBonus: 40,
+        speedBonus: 10,
+        totalScore: 250,
+        xpEarned: 35,
+        timestamp: DateTime.now(),
+      ),
       timer: TimerState(
         totalDuration: const Duration(seconds: 30),
         remainingTime: const Duration(seconds: 20),

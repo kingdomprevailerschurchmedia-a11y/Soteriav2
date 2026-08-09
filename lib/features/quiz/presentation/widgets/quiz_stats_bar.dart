@@ -10,21 +10,61 @@ class QuizStatsBar extends StatelessWidget {
   const QuizStatsBar({
     super.key,
     required this.streak,
+    required this.xp,
     required this.timerState,
   });
 
   final int streak;
+  final int xp;
   final TimerState? timerState;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+    return Semantics(
+      label: 'Quiz Statistics: $streak streak, $xp experience points',
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                _buildStreakIndicator(context),
+                SizedBox(width: 24.w),
+                _buildXPIndicator(context),
+              ],
+            ),
+            if (timerState != null) QuizTimer(state: timerState!),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildXPIndicator(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      decoration: BoxDecoration(
+        color: SoteriaColors.primary.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildStreakIndicator(context),
-          if (timerState != null) QuizTimer(state: timerState!),
+          Text(
+            xp.toString(),
+            style: context.titleSmall.copyWith(
+              color: SoteriaColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(width: 4.w),
+          Text(
+            'XP',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.primary.withValues(alpha: 0.7),
+              fontWeight: FontWeight.w900,
+            ),
+          ),
         ],
       ),
     );

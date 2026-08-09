@@ -7,9 +7,12 @@ import 'package:soteria/features/onboarding/models/onboarding_state.dart';
 
 class OnboardingNotifier extends Notifier<OnboardingState> {
   static const _kOnboardingCompletedKey = 'onboarding_completed';
+  bool _mounted = true;
 
   @override
   OnboardingState build() {
+    _mounted = true;
+    ref.onDispose(() => _mounted = false);
     _loadState();
     return const OnboardingState();
   }
@@ -17,7 +20,7 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
   Future<void> _loadState() async {
     final prefs = await SharedPreferences.getInstance();
     final isCompleted = prefs.getBool(_kOnboardingCompletedKey) ?? false;
-    if (mounted) {
+    if (_mounted) {
       state = state.copyWith(isCompleted: isCompleted);
     }
   }

@@ -1,4 +1,4 @@
-import '../../../core/utils/clock.dart';
+import '../../../../core/utils/clock.dart';
 import '../models/timer_state.dart';
 import '../models/quiz_enums.dart';
 

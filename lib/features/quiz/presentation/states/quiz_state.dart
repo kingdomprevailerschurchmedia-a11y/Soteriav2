@@ -5,11 +5,13 @@ import '../../domain/models/quiz_session.dart';
 import '../../domain/models/quiz_result.dart';
 import '../../domain/models/timer_state.dart';
 import '../../domain/models/power_up_state.dart';
+import '../../domain/models/score_result.dart';
+import '../../domain/models/reward_event.dart';
 
 part 'quiz_state.freezed.dart';
 
 @freezed
-class QuizState with _$QuizState {
+abstract class QuizState with _$QuizState {
   const factory QuizState({
     @Default(QuizStatus.idle) QuizStatus status,
     Question? currentQuestion,
@@ -19,6 +21,10 @@ class QuizState with _$QuizState {
     QuizResult? result,
     @Default(0) int score,
     @Default(0) int streak,
+    @Default(0) int bestStreak,
+    @Default(0) int xp,
+    ScoreResult? lastScoreResult,
+    @Default([]) List<RewardEvent> rewardEvents,
     TimerState? timer,
     @Default([]) List<PowerUpState> powerUps,
     @Default(false) bool isLoading,

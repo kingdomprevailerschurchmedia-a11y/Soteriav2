@@ -316,8 +316,12 @@ final gallerySettingsProvider =
 
 // --- Favorites Provider ---
 class GalleryFavoritesNotifier extends Notifier<Set<String>> {
+  bool _mounted = true;
+
   @override
   Set<String> build() {
+    _mounted = true;
+    ref.onDispose(() => _mounted = false);
     _load();
     return {};
   }
@@ -326,7 +330,7 @@ class GalleryFavoritesNotifier extends Notifier<Set<String>> {
 
   Future<void> _load() async {
     final prefs = await SharedPreferences.getInstance();
-    if (mounted) {
+    if (_mounted) {
       state = prefs.getStringList(_key)?.toSet() ?? {};
     }
   }

@@ -5,7 +5,7 @@ part 'timer_state.freezed.dart';
 part 'timer_state.g.dart';
 
 @freezed
-class TimerState with _$TimerState {
+abstract class TimerState with _$TimerState {
   const factory TimerState({
     required Duration totalDuration,
     required Duration remainingTime,

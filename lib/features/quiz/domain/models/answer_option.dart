@@ -4,7 +4,7 @@ part 'answer_option.freezed.dart';
 part 'answer_option.g.dart';
 
 @freezed
-class AnswerOption with _$AnswerOption {
+abstract class AnswerOption with _$AnswerOption {
   const factory AnswerOption({
     required String id,
     required String text,

@@ -10,6 +10,7 @@ import '../../domain/usecases/save_progress_use_case.dart';
 import '../../domain/usecases/validate_answer_use_case.dart';
 import '../controllers/quiz_controller.dart';
 import '../states/quiz_state.dart';
+import '../../data/repository/quiz_repository_provider.dart';
 
 // --- Repository Contract ---
 // Implementation will be provided via overrides or a specific implementation provider

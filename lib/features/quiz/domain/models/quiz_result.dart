@@ -4,7 +4,7 @@ part 'quiz_result.freezed.dart';
 part 'quiz_result.g.dart';
 
 @freezed
-class QuizResult with _$QuizResult {
+abstract class QuizResult with _$QuizResult {
   const factory QuizResult({
     required int finalScore,
     required double accuracy,

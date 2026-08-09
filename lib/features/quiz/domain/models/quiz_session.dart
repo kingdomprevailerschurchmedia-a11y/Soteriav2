@@ -6,7 +6,7 @@ part 'quiz_session.freezed.dart';
 part 'quiz_session.g.dart';
 
 @freezed
-class QuizSession with _$QuizSession {
+abstract class QuizSession with _$QuizSession {
   const factory QuizSession({
     required String sessionId,
     required String playerId,

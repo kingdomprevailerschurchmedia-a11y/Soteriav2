@@ -15,6 +15,7 @@ import '../widgets/quiz_stats_bar.dart';
 import '../widgets/quiz_question_card.dart';
 import '../widgets/quiz_answer_option.dart';
 import '../widgets/quiz_power_up_bar.dart';
+import '../widgets/score_gain_animation.dart';
 
 class QuizGameplayScreen extends ConsumerWidget {
   const QuizGameplayScreen({super.key});
@@ -70,77 +71,90 @@ class QuizGameplayScreen extends ConsumerWidget {
     final question = state.currentQuestion;
     if (question == null) return const SizedBox.shrink();
 
-    return Column(
+    return Stack(
       children: [
-        SizedBox(height: SoteriaSpacing.lg),
-        QuizHeader(
-          currentQuestion: state.currentIndex + 1,
-          totalQuestions: state.questions.length,
-          score: state.score,
-          onExit: () async {
-            final bool? shouldExit = await _showExitConfirmation(context);
-            if (shouldExit == true && context.mounted) {
-              context.pop();
-            }
-          },
-        ),
-        SizedBox(height: SoteriaSpacing.xl),
-        QuizStatsBar(streak: state.streak, timerState: state.timer),
-        SizedBox(height: SoteriaSpacing.lg),
-        Expanded(
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              children: [
-                QuizQuestionCard(
-                  text: question.text,
-                  category: question.category,
-                  difficulty: question.difficulty,
-                  imageUrl: question.imageUrl,
-                ),
-                SizedBox(height: SoteriaSpacing.xl),
-                ...question.options.map((option) {
-                  final letter = _getLetterForIndex(
-                    question.options.indexOf(option),
-                  );
-                  final isSelected = state.selectedOptionId == option.id;
-                  final isCorrect = question.correctOptionIds.contains(
-                    option.id,
-                  );
-
-                  QuizAnswerState answerState = QuizAnswerState.defaultState;
-
-                  if (state.isAnswerLocked) {
-                    if (isSelected) {
-                      answerState = isCorrect
-                          ? QuizAnswerState.correct
-                          : QuizAnswerState.incorrect;
-                    } else if (isCorrect) {
-                      // Reveal correct answer if player was wrong
-                      answerState = QuizAnswerState.correct;
-                    } else {
-                      answerState = QuizAnswerState.disabled;
-                    }
-                  }
-
-                  return QuizAnswerOption(
-                    letter: letter,
-                    text: option.text,
-                    state: answerState,
-                    onTap: () => notifier.selectAnswer(option.id),
-                  );
-                }),
-                SizedBox(height: SoteriaSpacing.xxl),
-              ],
+        Column(
+          children: [
+            SizedBox(height: SoteriaSpacing.lg),
+            QuizHeader(
+              currentQuestion: state.currentIndex + 1,
+              totalQuestions: state.questions.length,
+              score: state.score,
+              onExit: () async {
+                final bool? shouldExit = await _showExitConfirmation(context);
+                if (shouldExit == true && context.mounted) {
+                  context.pop();
+                }
+              },
             ),
-          ),
+            SizedBox(height: SoteriaSpacing.xl),
+            QuizStatsBar(
+              streak: state.streak,
+              xp: state.xp,
+              timerState: state.timer,
+            ),
+            SizedBox(height: SoteriaSpacing.lg),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+                physics: const BouncingScrollPhysics(),
+                child: Column(
+                  children: [
+                    QuizQuestionCard(
+                      text: question.text,
+                      category: question.category,
+                      difficulty: question.difficulty,
+                      imageUrl: question.imageUrl,
+                    ),
+                    SizedBox(height: SoteriaSpacing.xl),
+                    ...question.options.map((option) {
+                      final letter = _getLetterForIndex(
+                        question.options.indexOf(option),
+                      );
+                      final isSelected = state.selectedOptionId == option.id;
+                      final isCorrect = question.correctOptionIds.contains(
+                        option.id,
+                      );
+
+                      QuizAnswerState answerState =
+                          QuizAnswerState.defaultState;
+
+                      if (state.isAnswerLocked) {
+                        if (isSelected) {
+                          answerState = isCorrect
+                              ? QuizAnswerState.correct
+                              : QuizAnswerState.incorrect;
+                        } else if (isCorrect) {
+                          // Reveal correct answer if player was wrong
+                          answerState = QuizAnswerState.correct;
+                        } else {
+                          answerState = QuizAnswerState.disabled;
+                        }
+                      }
+
+                      return QuizAnswerOption(
+                        letter: letter,
+                        text: option.text,
+                        state: answerState,
+                        onTap: () => notifier.selectAnswer(option.id),
+                      );
+                    }),
+                    SizedBox(height: SoteriaSpacing.xxl),
+                  ],
+                ),
+              ),
+            ),
+            QuizPowerUpBar(
+              powerUps: state.powerUps,
+              onPowerUpTap: (type) {
+                // Power-up logic in Story 8.7
+              },
+            ),
+          ],
         ),
-        QuizPowerUpBar(
-          powerUps: state.powerUps,
-          onPowerUpTap: (type) {
-            // Power-up logic in Story 8.7
-          },
+        const Align(
+          alignment: Alignment(0, -0.2),
+          child: ScoreGainAnimation(),
         ),
       ],
     );

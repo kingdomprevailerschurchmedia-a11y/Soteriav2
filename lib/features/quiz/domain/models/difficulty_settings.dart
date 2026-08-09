@@ -5,7 +5,7 @@ part 'difficulty_settings.freezed.dart';
 part 'difficulty_settings.g.dart';
 
 @freezed
-class DifficultySettings with _$DifficultySettings {
+abstract class DifficultySettings with _$DifficultySettings {
   const factory DifficultySettings({
     required Difficulty difficulty,
     required int baseXP,

@@ -10,9 +10,12 @@ import 'auth_providers.dart';
 
 class RegistrationNotifier extends Notifier<RegistrationDraft> {
   static const _kFirstNameKey = 'user_first_name';
+  bool _mounted = true;
 
   @override
   RegistrationDraft build() {
+    _mounted = true;
+    ref.onDispose(() => _mounted = false);
     final personalization = ref.watch(personalizationProvider);
     return RegistrationDraft(
       academicLevel: personalization.academicLevel,
@@ -73,7 +76,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
       final useCase = ref.read(signUpUseCaseProvider);
       final result = await useCase.execute(state.email, state.password);
 
-      if (mounted) {
+      if (_mounted) {
         if (result.isSuccess) {
           ref.read(analyticsProvider).logSignUp(signUpMethod: 'email');
           LoggerService.i('Registration successful', feature: 'Auth');
@@ -84,7 +87,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
         }
       }
     } catch (e, st) {
-      if (mounted) {
+      if (_mounted) {
         state = state.copyWith(
           error: e is IdentityException
               ? e.userMessage
@@ -102,7 +105,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
       );
     } finally {
       stopwatch.stop();
-      if (mounted) {
+      if (_mounted) {
         state = state.copyWith(isLoading: false);
       }
     }

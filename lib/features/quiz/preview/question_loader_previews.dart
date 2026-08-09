@@ -11,14 +11,14 @@ import '../../../../core/widgets/feedback/soteria_error_widget.dart';
 
 class QuestionLoaderPreview extends ConsumerWidget {
   final String title;
-  final Override? override;
+  final Override? providerOverride;
 
-  const QuestionLoaderPreview({super.key, required this.title, this.override});
+  const QuestionLoaderPreview({super.key, required this.title, this.providerOverride});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return ProviderScope(
-      overrides: override != null ? [override!] : [],
+      overrides: providerOverride != null ? [providerOverride!] : [],
       child: Scaffold(
         appBar: AppBar(title: Text(title)),
         body: const _QuestionListContent(),
@@ -77,7 +77,7 @@ class QuestionLoaderLoadedPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return QuestionLoaderPreview(
       title: 'Questions Loaded (Mock)',
-      override: questionRepositoryProvider.overrideWithValue(
+      providerOverride: questionRepositoryProvider.overrideWithValue(
         MockQuestionRepository(),
       ),
     );
@@ -91,7 +91,7 @@ class QuestionLoaderEmptyPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return QuestionLoaderPreview(
       title: 'Empty State',
-      override: questionRepositoryProvider.overrideWithValue(
+      providerOverride: questionRepositoryProvider.overrideWithValue(
         _EmptyMockRepository(),
       ),
     );
@@ -105,7 +105,7 @@ class QuestionLoaderErrorPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return QuestionLoaderPreview(
       title: 'Error State',
-      override: questionRepositoryProvider.overrideWithValue(
+      providerOverride: questionRepositoryProvider.overrideWithValue(
         _ErrorMockRepository(),
       ),
     );

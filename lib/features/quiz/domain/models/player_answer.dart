@@ -4,7 +4,7 @@ part 'player_answer.freezed.dart';
 part 'player_answer.g.dart';
 
 @freezed
-class PlayerAnswer with _$PlayerAnswer {
+abstract class PlayerAnswer with _$PlayerAnswer {
   const factory PlayerAnswer({
     required String questionId,
     required List<String> selectedOptionIds,

@@ -6,9 +6,12 @@ import 'package:soteria/core/identity/providers/identity_providers.dart';
 
 class PersonalizationNotifier extends Notifier<PersonalizationState> {
   static const _kStorageKey = 'user_personalization';
+  bool _mounted = true;
 
   @override
   PersonalizationState build() {
+    _mounted = true;
+    ref.onDispose(() => _mounted = false);
     _loadFromLocal();
     return const PersonalizationState();
   }
@@ -16,7 +19,7 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
   Future<void> _loadFromLocal() async {
     final prefs = await SharedPreferences.getInstance();
     final data = prefs.getString(_kStorageKey);
-    if (data != null && mounted) {
+    if (data != null && _mounted) {
       try {
         final Map<String, dynamic> map = jsonDecode(data);
         state = state.copyWith(

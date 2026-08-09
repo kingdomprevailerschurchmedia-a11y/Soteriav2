@@ -6,12 +6,18 @@ import '../../domain/models/quiz_enums.dart';
 import '../../domain/models/player_answer.dart';
 import '../../domain/models/quiz_session.dart';
 import '../../domain/models/timer_state.dart';
+import '../../domain/models/score_result.dart';
+import '../../domain/models/scoring_configuration.dart';
+import '../../domain/models/reward_event.dart';
+import '../../domain/services/quiz_scoring_engine.dart';
 import '../states/quiz_state.dart';
 import '../providers/quiz_providers.dart';
 
 class QuizController extends Notifier<QuizState> {
   Timer? _ticker;
   static const _kTickDuration = Duration(milliseconds: 100);
+
+  final _scoringEngine = QuizScoringEngine(config: ScoringConfiguration.standard());
 
   @override
   QuizState build() {
@@ -119,11 +125,7 @@ class QuizController extends Notifier<QuizState> {
             .read(submitAnswerUseCaseProvider)
             .execute(sessionId: state.session!.sessionId, answer: answer);
 
-        // Update local session state (Score/Streak logic simplified as per scope)
-        final newStreak = isCorrect ? state.streak + 1 : 0;
-        final newScore = isCorrect ? state.score + 100 : state.score;
-
-        state = state.copyWith(streak: newStreak, score: newScore);
+        _applyRewards(answer);
       }
 
       // 6. Delay for visual feedback (Premium feel)
@@ -162,10 +164,57 @@ class QuizController extends Notifier<QuizState> {
       await ref
           .read(submitAnswerUseCaseProvider)
           .execute(sessionId: state.session!.sessionId, answer: answer);
+      _applyRewards(answer);
       _nextQuestion();
     } catch (e) {
       state = state.copyWith(error: e.toString());
     }
+  }
+
+  void _applyRewards(PlayerAnswer answer) {
+    if (state.currentQuestion == null) return;
+
+    final result = _scoringEngine.calculate(
+      state.currentQuestion!,
+      answer,
+      state.streak,
+    );
+
+    final newStreak = _scoringEngine.calculateNewStreak(state.streak, answer);
+    final newBestStreak =
+        newStreak > state.bestStreak ? newStreak : state.bestStreak;
+
+    RewardEvent? event;
+    if (answer.isCorrect) {
+      event = RewardEvent.questionCorrect(
+        questionId: state.currentQuestion!.id,
+        result: result,
+        newStreak: newStreak,
+      );
+    } else if (answer.isTimedOut) {
+      event = RewardEvent.questionTimedOut(
+        questionId: state.currentQuestion!.id,
+        streakResetTo: 0,
+      );
+    } else if (answer.isSkipped) {
+      // Skips don't have a specific event yet in my model, but could reset streak
+    } else {
+      event = RewardEvent.questionIncorrect(
+        questionId: state.currentQuestion!.id,
+        streakResetTo: 0,
+      );
+    }
+
+    state = state.copyWith(
+      score: state.score + result.totalScore,
+      xp: state.xp + result.xpEarned,
+      streak: newStreak,
+      bestStreak: newBestStreak,
+      lastScoreResult: result,
+      rewardEvents: event != null
+          ? [...state.rewardEvents, event]
+          : state.rewardEvents,
+    );
   }
 
   void _nextQuestion() {
@@ -245,7 +294,7 @@ class QuizController extends Notifier<QuizState> {
       await ref
           .read(submitAnswerUseCaseProvider)
           .execute(sessionId: state.session!.sessionId, answer: timeoutAnswer);
-      state = state.copyWith(streak: 0);
+      _applyRewards(timeoutAnswer);
     }
 
     await Future.delayed(const Duration(milliseconds: 1500));

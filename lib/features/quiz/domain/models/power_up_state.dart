@@ -5,7 +5,7 @@ part 'power_up_state.freezed.dart';
 part 'power_up_state.g.dart';
 
 @freezed
-class PowerUpState with _$PowerUpState {
+abstract class PowerUpState with _$PowerUpState {
   const factory PowerUpState({
     required PowerUpType type,
     @Default(true) bool isAvailable,
