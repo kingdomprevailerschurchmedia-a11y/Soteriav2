@@ -15,6 +15,8 @@ class TimerState with _$TimerState {
     @Default(false) bool hasExpired,
     @Default(TimerStatus.idle) TimerStatus status,
     DateTime? deadline,
+    @Default(false) bool isWarning,
+    @Default(false) bool isCritical,
   }) = _TimerState;
 
   factory TimerState.initial(int seconds) => TimerState(

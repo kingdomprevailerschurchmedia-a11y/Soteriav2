@@ -13,9 +13,9 @@ import '../states/quiz_state.dart';
 
 // --- Repository Contract ---
 // Implementation will be provided via overrides or a specific implementation provider
-final quizRepositoryProvider = Provider<QuizRepository>((ref) {
-  throw UnimplementedError('QuizRepository must be implemented');
-});
+import '../../../../core/utils/clock.dart';
+
+final clockProvider = Provider<Clock>((ref) => SystemClock());
 
 // --- Use Cases ---
 final loadQuestionsUseCaseProvider = Provider((ref) {

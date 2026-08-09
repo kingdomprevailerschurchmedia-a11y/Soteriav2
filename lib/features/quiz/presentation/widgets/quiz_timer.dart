@@ -52,7 +52,8 @@ class _QuizTimerState extends State<QuizTimer>
   @override
   Widget build(BuildContext context) {
     final status = widget.state.status;
-    final Color color = _getColor(status);
+    final isCritical = widget.state.isCritical;
+    final Color color = _getColor(status, isCritical);
     final String timeStr = _formatDuration(widget.state.remainingTime);
 
     return Semantics(
@@ -62,7 +63,7 @@ class _QuizTimerState extends State<QuizTimer>
         builder: (context, child) {
           final scale = 1.0 + (_pulseController.value * 0.05);
           return Transform.scale(
-            scale: status == TimerStatus.critical ? scale : 1.0,
+            scale: isCritical ? scale : 1.0,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
               decoration: BoxDecoration(
@@ -70,7 +71,7 @@ class _QuizTimerState extends State<QuizTimer>
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: color.withValues(alpha: 0.3)),
                 boxShadow: [
-                  if (status == TimerStatus.critical)
+                  if (isCritical)
                     BoxShadow(
                       color: color.withValues(alpha: 0.2),
                       blurRadius: 10 * _pulseController.value,
@@ -104,11 +105,11 @@ class _QuizTimerState extends State<QuizTimer>
     );
   }
 
-  Color _getColor(TimerStatus status) {
+  Color _getColor(TimerStatus status, bool isCritical) {
+    if (isCritical) return SoteriaColors.error;
     switch (status) {
       case TimerStatus.warning:
         return SoteriaColors.warning;
-      case TimerStatus.critical:
       case TimerStatus.expired:
         return SoteriaColors.error;
       case TimerStatus.paused:

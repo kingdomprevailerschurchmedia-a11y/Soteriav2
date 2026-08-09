@@ -1,50 +1,101 @@
-import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/utils/clock.dart';
+import 'package:soteria/features/quiz/domain/services/timer_engine.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
-import 'package:soteria/features/quiz/presentation/controllers/quiz_controller.dart';
-import 'package:soteria/features/quiz/presentation/providers/quiz_providers.dart';
-
-class FakeClock implements IClock {
-  DateTime _now = DateTime(2026, 8, 8, 12, 0, 0);
-
-  @override
-  DateTime now() => _now;
-
-  void advance(Duration duration) {
-    _now = _now.add(duration);
-  }
-}
 
 void main() {
-  group('Quiz Timer Engine', () {
-    late ProviderContainer container;
-    late FakeClock fakeClock;
+  group('TimerEngine Tests', () {
+    test('creates timer correctly with deadline and running status', () {
+      final now = DateTime(2026, 1, 1, 12, 0, 0);
+      final clock = FakeClock(now);
+      final engine = TimerEngine(clock: clock);
 
-    setUp(() {
-      fakeClock = FakeClock();
-      container = ProviderContainer(
-        overrides: [clockProvider.overrideWithValue(fakeClock)],
-      );
+      final timer = engine.createTimer(const Duration(seconds: 30));
+
+      expect(timer.isRunning, isTrue);
+      expect(timer.status, equals(TimerStatus.running));
+      expect(timer.totalDuration, equals(const Duration(seconds: 30)));
+      expect(timer.remainingTime, equals(const Duration(seconds: 30)));
+      expect(timer.deadline, equals(now.add(const Duration(seconds: 30))));
+      expect(timer.hasExpired, isFalse);
     });
 
-    tearDown(() => container.dispose());
+    test('ticks correctly into warning state', () {
+      final now = DateTime(2026, 1, 1, 12, 0, 0);
+      final clock = FakeClock(now);
+      final engine = TimerEngine(clock: clock);
 
-    test('Timer starts with correct duration and status', () async {
-      final notifier = container.read(quizControllerProvider.notifier);
+      var timer = engine.createTimer(const Duration(seconds: 30));
 
-      // We manually call the private _startTimer via a public method if possible,
-      // but startQuiz calls it.
-      // For this test, we can just use startQuiz with a mock repo.
+      // Advance by 22 seconds (8 seconds remaining -> warning threshold <= 10s)
+      clock.advance(const Duration(seconds: 22));
+      timer = engine.tick(timer);
 
-      // Let's assume startQuiz is called.
-      // Since we already implemented it, we can verify the state.
+      expect(timer.status, equals(TimerStatus.warning));
+      expect(timer.isWarning, isTrue);
+      expect(timer.isCritical, isFalse);
+      expect(timer.remainingTime.inSeconds, equals(8));
     });
 
-    test('Warning state is triggered at threshold', () {
-      // Logic for testing thresholds without real time waiting
-      // We can trigger _onTick manually or via the periodic timer if we use FakeAsync
+    test('ticks correctly into critical state', () {
+      final now = DateTime(2026, 1, 1, 12, 0, 0);
+      final clock = FakeClock(now);
+      final engine = TimerEngine(clock: clock);
+
+      var timer = engine.createTimer(const Duration(seconds: 30));
+
+      // Advance by 26 seconds (4 seconds remaining -> critical threshold <= 5s)
+      clock.advance(const Duration(seconds: 26));
+      timer = engine.tick(timer);
+
+      expect(timer.status, equals(TimerStatus.critical));
+      expect(timer.isCritical, isTrue);
+      expect(timer.remainingTime.inSeconds, equals(4));
+    });
+
+    test('expires when time runs out', () {
+      final now = DateTime(2026, 1, 1, 12, 0, 0);
+      final clock = FakeClock(now);
+      final engine = TimerEngine(clock: clock);
+
+      var timer = engine.createTimer(const Duration(seconds: 30));
+
+      // Advance past total duration
+      clock.advance(const Duration(seconds: 31));
+      timer = engine.tick(timer);
+
+      expect(timer.status, equals(TimerStatus.expired));
+      expect(timer.hasExpired, isTrue);
+      expect(timer.isRunning, isFalse);
+      expect(timer.remainingTime, equals(Duration.zero));
+    });
+
+    test('pauses and resumes correctly preserving deadline offset', () {
+      final now = DateTime(2026, 1, 1, 12, 0, 0);
+      final clock = FakeClock(now);
+      final engine = TimerEngine(clock: clock);
+
+      var timer = engine.createTimer(const Duration(seconds: 30));
+      clock.advance(const Duration(seconds: 10));
+      timer = engine.tick(timer);
+
+      expect(timer.remainingTime.inSeconds, equals(20));
+
+      // Pause
+      timer = engine.pause(timer);
+      expect(timer.isRunning, isFalse);
+      expect(timer.status, equals(TimerStatus.paused));
+
+      // Advance clock while paused (should not affect deadline until resume or tick)
+      clock.advance(const Duration(seconds: 5));
+
+      // Resume with 5 seconds paused duration
+      timer = engine.resume(timer, const Duration(seconds: 5));
+      expect(timer.isRunning, isTrue);
+
+      // Tick right after resume
+      timer = engine.tick(timer);
+      expect(timer.remainingTime.inSeconds, equals(20));
     });
   });
 }

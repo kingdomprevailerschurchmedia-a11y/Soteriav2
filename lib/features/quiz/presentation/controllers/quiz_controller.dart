@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/utils/clock.dart';
+import '../../domain/services/timer_engine.dart';
 import '../../domain/models/quiz_enums.dart';
 import '../../domain/models/player_answer.dart';
 import '../../domain/models/quiz_session.dart';
@@ -11,8 +12,6 @@ import '../providers/quiz_providers.dart';
 class QuizController extends Notifier<QuizState> {
   Timer? _ticker;
   static const _kTickDuration = Duration(milliseconds: 100);
-  static const _kWarningSeconds = 10;
-  static const _kCriticalSeconds = 5;
 
   @override
   QuizState build() {
@@ -216,43 +215,19 @@ class QuizController extends Notifier<QuizState> {
     if (timer == null || !timer.isRunning || timer.deadline == null) return;
 
     final clock = ref.read(clockProvider);
-    final now = clock.now();
-    final remaining = timer.deadline!.difference(now);
+    final engine = TimerEngine(clock: clock);
+    final updatedTimer = engine.tick(timer);
 
-    if (remaining <= Duration.zero) {
+    state = state.copyWith(timer: updatedTimer);
+
+    if (updatedTimer.hasExpired) {
       _ticker?.cancel();
-      state = state.copyWith(
-        timer: timer.copyWith(
-          remainingTime: Duration.zero,
-          progress: 0.0,
-          status: TimerStatus.expired,
-          hasExpired: true,
-          isRunning: false,
-        ),
-      );
       _handleTimeout();
-    } else {
-      final progress =
-          remaining.inMilliseconds / timer.totalDuration.inMilliseconds;
-      TimerStatus status = TimerStatus.running;
-
-      if (remaining.inSeconds <= _kCriticalSeconds) {
-        status = TimerStatus.critical;
-      } else if (remaining.inSeconds <= _kWarningSeconds) {
-        status = TimerStatus.warning;
-      }
-
-      state = state.copyWith(
-        timer: timer.copyWith(
-          remainingTime: remaining,
-          progress: progress,
-          status: status,
-        ),
-      );
     }
   }
 
   Future<void> _handleTimeout() async {
+    // Atomic check: If answer already locked, timer expiration arrived late
     if (state.isAnswerLocked) return;
 
     state = state.copyWith(isAnswerLocked: true);
@@ -263,13 +238,13 @@ class QuizController extends Notifier<QuizState> {
       isCorrect: false,
       responseTime: state.timer?.totalDuration ?? Duration.zero,
       timestamp: DateTime.now(),
+      isTimedOut: true, // Assuming PlayerAnswer model will be updated for this
     );
 
     if (state.session != null) {
       await ref
           .read(submitAnswerUseCaseProvider)
           .execute(sessionId: state.session!.sessionId, answer: timeoutAnswer);
-      // Timeout reset streak
       state = state.copyWith(streak: 0);
     }
 

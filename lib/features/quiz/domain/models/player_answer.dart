@@ -12,6 +12,7 @@ class PlayerAnswer with _$PlayerAnswer {
     required Duration responseTime,
     required DateTime timestamp,
     @Default(false) bool isSkipped,
+    @Default(false) bool isTimedOut,
   }) = _PlayerAnswer;
 
   factory PlayerAnswer.fromJson(Map<String, dynamic> json) =>

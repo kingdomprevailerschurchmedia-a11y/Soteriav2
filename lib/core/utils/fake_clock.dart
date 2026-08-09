@@ -1,14 +1,8 @@
-abstract class Clock {
-  DateTime now();
-}
+import 'clock.dart';
 
-class SystemClock implements Clock {
-  @override
-  DateTime now() => DateTime.now();
-}
-
-class FakeClock implements Clock {
+class FakeClock implements IClock {
   DateTime _now;
+
   FakeClock(this._now);
 
   @override
