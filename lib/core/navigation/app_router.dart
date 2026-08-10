@@ -14,11 +14,9 @@ import 'package:soteria/features/auth/screens/verification_orchestrator.dart';
 import 'package:soteria/features/auth/models/verification_type.dart';
 import 'package:soteria/features/preview_gallery/preview_gallery_screen.dart';
 import 'package:soteria/features/preview_gallery/widgets/gallery_shell.dart';
-import 'package:soteria/features/preview_gallery/pages/tokens_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/gradients_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/lighting_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/surfaces_preview_page.dart';
-import 'package:soteria/features/preview_gallery/pages/buttons_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/cards_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/inputs_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/feedback_preview_page.dart';
@@ -37,6 +35,7 @@ import 'package:soteria/features/preview_gallery/pages/verification_preview_page
 import 'package:soteria/features/preview_gallery/pages/identity_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/diagnostics_preview_page.dart';
 import 'package:soteria/features/quiz/preview/quiz_engine_preview.dart';
+import 'package:soteria/features/quiz/preview/history_previews.dart';
 import 'package:soteria/features/gameplay_engine/pages/game_preview_gallery.dart';
 import 'package:soteria/features/preview_gallery/pages/question_pipeline_preview_page.dart';
 import 'package:soteria/features/question_presentation/pages/presentation_preview_gallery.dart';
@@ -54,7 +53,11 @@ import 'package:soteria/features/preview_gallery/pages/lobby_redesign_preview.da
 import 'package:soteria/features/preview_gallery/pages/results_redesign_preview.dart';
 import 'package:soteria/features/quiz/presentation/screens/quiz_gameplay_screen.dart';
 import 'package:soteria/features/quiz/presentation/screens/quiz_results_screen.dart';
+import 'package:soteria/features/quiz/presentation/screens/quiz_history_screen.dart';
+import 'package:soteria/features/quiz/presentation/screens/quiz_history_detail_screen.dart';
+import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
+import 'package:soteria/features/splash/presentation/screens/splash_screen.dart';
 
 import 'package:soteria/core/identity/models/user_session.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
@@ -98,13 +101,8 @@ final routerProvider = Provider<GoRouter>((ref) {
   final rewardsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rewards');
   final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
-  // Start Coordinators
-  ref.watch(authCoordinatorProvider);
-  ref.read(notificationCoordinatorProvider).initialize();
-  ref.read(configurationCoordinatorProvider).initialize();
-
   return GoRouter(
-    initialLocation: SoteriaRoutes.main,
+    initialLocation: SoteriaRoutes.splash,
     navigatorKey: rootNavigatorKey,
     debugLogDiagnostics: true,
     refreshListenable: listenable,
@@ -116,10 +114,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       final session = ref.read(sessionProvider);
       final location = state.uri.toString();
 
-      LoggerService.t(
-        'Router Redirect Check: loc=$location, life=$lifecycle, auth=${session.status}',
-        feature: 'Navigation',
-      );
+      // Optimize: Only log non-verbose redirects or in debug mode
+      if (kDebugMode && location != SoteriaRoutes.splash) {
+        LoggerService.t(
+          'Router Redirect Check: loc=$location, life=$lifecycle, auth=${session.status}',
+          feature: 'Navigation',
+        );
+      }
 
       if (lifecycle == AppStartupState.loading) {
         return null;
@@ -177,6 +178,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     errorBuilder: (context, state) =>
         UnknownRouteScreen(location: state.uri.toString()),
     routes: [
+      GoRoute(
+        path: SoteriaRoutes.splash,
+        builder: (context, state) => const SplashScreen(),
+      ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
             HomeShell(navigationShell: navigationShell),
@@ -347,6 +352,25 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: const QuizResultsScreen(),
           key: state.pageKey,
         ),
+      ),
+      GoRoute(
+        path: SoteriaRoutes.quizHistory,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const QuizHistoryScreen(),
+          key: state.pageKey,
+        ),
+        routes: [
+          GoRoute(
+            path: 'detail',
+            pageBuilder: (context, state) {
+              final result = state.extra as QuizResult;
+              return SoteriaPageTransitions.fade(
+                child: QuizHistoryDetailScreen(result: result),
+                key: state.pageKey,
+              );
+            },
+          ),
+        ],
       ),
       GoRoute(
         path: SoteriaRoutes.auth,
@@ -614,6 +638,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'quiz-engine',
             builder: (context, state) => const QuizEnginePreview(),
+          ),
+          GoRoute(
+            path: 'quiz-history',
+            builder: (context, state) => const QuizHistoryPreview(),
           ),
           GoRoute(
             path: 'lobby-redesign',

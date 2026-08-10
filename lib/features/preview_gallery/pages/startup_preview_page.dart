@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/design_system/components/soteria_text.dart';
 import 'package:soteria/core/widgets/feedback/soteria_error_widget.dart';
 import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
+import 'package:soteria/features/splash/preview/splash_preview.dart';
 
 class StartupPreviewPage extends StatelessWidget {
   const StartupPreviewPage({super.key});
@@ -13,6 +14,11 @@ class StartupPreviewPage extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       children: [
+        const SoteriaText.label('CUSTOM SPLASH SCREEN'),
+        SizedBox(height: SoteriaSpacing.md),
+        const SplashPreviewGallery(),
+
+        SizedBox(height: SoteriaSpacing.xl),
         const SoteriaText.label('LOADING STATE'),
         SizedBox(height: SoteriaSpacing.md),
         const Center(child: SoteriaLoader(size: 40)),

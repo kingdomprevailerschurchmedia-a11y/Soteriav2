@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import '../models/user_profile.dart';
 import '../models/user_game_profile.dart';
 import '../models/user_session.dart';
@@ -96,14 +95,20 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
 
   @override
   AppStartupState build() {
-    final session = ref.watch(sessionProvider);
-    if (session.isAuthenticated) {
-      return AppStartupState.ready;
-    }
+    // Watch session state
+    ref.watch(sessionProvider);
 
     // Defer initialization to avoid reading 'state' before build() completes.
     Future.microtask(() => _init());
-    return AppStartupState.loading;
+    return stateOr(AppStartupState.loading);
+  }
+
+  AppStartupState stateOr(AppStartupState fallback) {
+    try {
+      return state;
+    } catch (_) {
+      return fallback;
+    }
   }
 
   void refresh() {
@@ -116,7 +121,7 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
 
   Future<void> _init() async {
     // Prevent overlapping initialization cycles
-    if (_isInitializing || state == AppStartupState.ready) return;
+    if (_isInitializing) return;
     _isInitializing = true;
 
     try {
@@ -141,8 +146,6 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
         ref.read(sessionProvider.notifier).setSession(session);
         state = AppStartupState.ready;
       }
-
-      FlutterNativeSplash.remove();
     } catch (e, st) {
       LoggerService.e(
         'Lifecycle initialization failed',
@@ -151,9 +154,10 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
       );
       // Fallback to auth on error to avoid being stuck on splash
       state = AppStartupState.auth;
-      FlutterNativeSplash.remove();
     } finally {
       _isInitializing = false;
+      // Always remove splash after first init attempt
+      // FlutterNativeSplash.remove(); // Handled by Custom Splash
     }
   }
 }

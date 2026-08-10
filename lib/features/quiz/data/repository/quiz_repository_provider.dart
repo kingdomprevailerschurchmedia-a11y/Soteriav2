@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/repositories/quiz_repository.dart';
+import '../../domain/repositories/quiz_history_repository.dart';
 import 'quiz_repository_impl.dart';
+import 'quiz_history_repository_impl.dart';
 import '../datasource/quiz_remote_data_source.dart';
 import '../datasource/quiz_local_data_source.dart';
 import '../datasource/quiz_data_sources_impl.dart';
@@ -18,4 +20,8 @@ final quizRepositoryProvider = Provider<QuizRepository>((ref) {
     remoteDataSource: ref.watch(quizRemoteDataSourceProvider),
     localDataSource: ref.watch(quizLocalDataSourceProvider),
   );
+});
+
+final quizHistoryRepositoryProvider = Provider<QuizHistoryRepository>((ref) {
+  return QuizHistoryRepositoryImpl(ref.watch(quizLocalDataSourceProvider));
 });

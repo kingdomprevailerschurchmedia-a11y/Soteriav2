@@ -31,6 +31,7 @@ abstract class QuizResult with _$QuizResult {
     required List<QuestionResult> questionResults,
     @Default([]) List<PowerUpType> powerUpsUsed,
     required DateTime completedAt,
+    DateTime? createdAt,
     required Duration completionTime,
     required String performanceRating,
     @Default(1) int version,

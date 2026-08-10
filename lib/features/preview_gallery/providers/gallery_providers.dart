@@ -274,6 +274,13 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       route: '/preview-gallery/quiz-engine',
       icon: Icons.settings_input_component_rounded,
     ),
+    const GalleryItem(
+      title: 'Quiz History',
+      description: 'Personal history, Performance, Trends',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/quiz-history',
+      icon: Icons.history_rounded,
+    ),
   ];
 });
 

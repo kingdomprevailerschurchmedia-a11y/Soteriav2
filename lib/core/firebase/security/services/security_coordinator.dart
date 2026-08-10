@@ -28,12 +28,13 @@ class SecurityCoordinator {
     );
 
     try {
-      // Use deprecated parameters temporarily if types are conflicting in this environment
-      // or use dynamic to bridge the versions.
       await FirebaseAppCheck.instance.activate(
         androidProvider: _getAndroidProvider(_env),
         appleProvider: AppleProvider.debug,
       );
+    } catch (e) {
+      rethrow;
+    }
 
       _updateStatus(
         _currentStatus.copyWith(

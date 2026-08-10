@@ -132,6 +132,7 @@ class MockQuizRemoteDataSource implements QuizRemoteDataSource {
 
 class MockQuizLocalDataSource implements QuizLocalDataSource {
   final Map<String, QuizSession> _cache = {};
+  final Map<String, QuizResult> _resultsCache = {};
 
   @override
   Future<void> saveProgress(QuizSession session) async {
@@ -158,5 +159,32 @@ class MockQuizLocalDataSource implements QuizLocalDataSource {
   Future<void> clearAllProgress(String playerId) async {
     _cache.remove('active_session_$playerId');
     _cache.removeWhere((key, value) => value.playerId == playerId);
+  }
+
+  @override
+  Future<void> saveResult(QuizResult result) async {
+    _resultsCache[result.sessionId] = result;
+  }
+
+  @override
+  Future<QuizResult?> getResult(String sessionId) async {
+    return _resultsCache[sessionId];
+  }
+
+  @override
+  Future<List<QuizResult>> getResults(String playerId) async {
+    return _resultsCache.values
+        .where((r) => r.playerId == playerId)
+        .toList();
+  }
+
+  @override
+  Future<void> deleteResult(String sessionId) async {
+    _resultsCache.remove(sessionId);
+  }
+
+  @override
+  Future<void> clearHistory(String playerId) async {
+    _resultsCache.removeWhere((key, value) => value.playerId == playerId);
   }
 }

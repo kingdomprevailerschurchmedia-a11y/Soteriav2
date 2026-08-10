@@ -1,5 +1,6 @@
 class SoteriaRoutes {
   // Foundation
+  static const String splash = '/';
   static const String onboarding = '/onboarding';
   static const String personalization = '/personalization';
 
@@ -26,6 +27,8 @@ class SoteriaRoutes {
   // Quiz Gameplay
   static const String quizGameplay = '/quiz-gameplay';
   static const String quizResults = '/quiz-results';
+  static const String quizHistory = '/quiz-history';
+  static const String quizHistoryDetail = '/quiz-history/detail';
 
   // Developer Gallery
   static const String previewGallery = '/preview-gallery';
@@ -49,4 +52,5 @@ class SoteriaRoutes {
   static const String configDebug = '/preview-gallery/config-debug';
   static const String securityStatus = '/preview-gallery/security-status';
   static const String proLobby = '/preview-gallery/pro-lobby';
+  static const String quizHistoryPreview = '/preview-gallery/quiz-history';
 }

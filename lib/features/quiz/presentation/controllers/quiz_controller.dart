@@ -586,7 +586,9 @@ class QuizController extends Notifier<QuizState> {
       lastUpdatedTime: DateTime.now(),
     );
     await ref.read(quizSessionRepositoryProvider).saveSession(updatedSession);
-    // In a real app, we'd also save the QuizResult to a history repository
+    
+    // Save the QuizResult to history repository
+    await ref.read(quizHistoryRepositoryProvider).addResult(quizResult);
     
     return quizResult;
   }

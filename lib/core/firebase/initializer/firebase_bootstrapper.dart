@@ -31,19 +31,12 @@ class FirebaseBootstrapper {
       // 1. Initialize Core
       await FirebaseInitializer.initializeCore(config);
 
-      // 2. Critical observability
+      // 2. Parallelize critical services
       await Future.wait([
         FirebaseInitializer.initializeCrashlytics(),
         FirebaseInitializer.initializeAnalytics(),
         FirebaseInitializer.initializeGoogleSignIn(),
-      ]);
-
-      // 3. Security (App Check)
-      await FirebaseInitializer.initializeAppCheck(securityCoordinator);
-
-      // 4. Persistence & Others
-      await Future.wait([
-        FirebaseInitializer.initializePerformance(),
+        FirebaseInitializer.initializeAppCheck(securityCoordinator),
         FirebaseInitializer.configureFirestoreOffline(),
       ]);
 

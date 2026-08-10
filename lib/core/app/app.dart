@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/themes/soteria_theme.dart';
@@ -30,6 +31,12 @@ class SoteriaApp extends ConsumerWidget {
   }
 
   Widget _buildApp(BuildContext context, WidgetRef ref) {
+    // Initialize background services after first frame
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(notificationCoordinatorProvider).initialize();
+      ref.read(configurationCoordinatorProvider).initialize();
+    });
+
     final router = ref.watch(routerProvider);
     return MaterialApp.router(
       title: 'Soteria',
@@ -46,6 +53,9 @@ class SoteriaApp extends ConsumerWidget {
   }
 
   Widget _buildErrorApp(BuildContext context, WidgetRef ref, Object error) {
+    // Ensure native splash is removed if we hit a fatal error
+    FlutterNativeSplash.remove();
+    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: SoteriaTheme.darkTheme,

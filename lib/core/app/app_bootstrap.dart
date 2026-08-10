@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:soteria/core/logging/logger_service.dart';
+import 'package:soteria/firebase_options.dart';
 
 enum BootstrapState { initial, loading, success, error }
 
@@ -37,7 +38,9 @@ class AppBootstrap {
   }
 
   Future<void> _initFirebase() async {
-    await Firebase.initializeApp();
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
     LoggerService.d('Bootstrap: Firebase initialized.');
   }
 

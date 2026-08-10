@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+export '../../data/repository/quiz_repository_provider.dart';
 import '../../domain/repositories/quiz_repository.dart';
 import '../../domain/usecases/load_questions_use_case.dart';
 import '../../domain/usecases/create_quiz_session_use_case.dart';
@@ -16,10 +17,19 @@ import '../states/quiz_state.dart';
 import '../../data/repository/quiz_repository_provider.dart';
 import '../../data/repository/quiz_session_repository_impl.dart';
 
+import '../../domain/usecases/history/get_quiz_history_use_case.dart';
+import '../../domain/usecases/history/get_performance_summary_use_case.dart';
+import '../../domain/usecases/history/get_category_performance_use_case.dart';
+import '../../domain/usecases/history/get_difficulty_performance_use_case.dart';
+import '../../domain/usecases/history/get_trend_analysis_use_case.dart';
+
 // --- Repository Contract ---
 final quizSessionRepositoryProvider = Provider<QuizSessionRepository>((ref) {
   return QuizSessionRepositoryImpl(ref.watch(quizLocalDataSourceProvider));
 });
+
+// History Repository already defined in quiz_repository_provider.dart
+// But we can re-export or alias it here if needed for consistency
 
 // --- Use Cases ---
 final loadQuestionsUseCaseProvider = Provider((ref) {
@@ -60,6 +70,27 @@ final loadActiveSessionUseCaseProvider = Provider((ref) {
 
 final deleteSessionUseCaseProvider = Provider((ref) {
   return DeleteSessionUseCase(ref.watch(quizSessionRepositoryProvider));
+});
+
+// --- History Use Cases ---
+final getQuizHistoryUseCaseProvider = Provider((ref) {
+  return GetQuizHistoryUseCase(ref.watch(quizHistoryRepositoryProvider));
+});
+
+final getPerformanceSummaryUseCaseProvider = Provider((ref) {
+  return GetPerformanceSummaryUseCase(ref.watch(quizHistoryRepositoryProvider));
+});
+
+final getCategoryPerformanceUseCaseProvider = Provider((ref) {
+  return GetCategoryPerformanceUseCase(ref.watch(quizHistoryRepositoryProvider));
+});
+
+final getDifficultyPerformanceUseCaseProvider = Provider((ref) {
+  return GetDifficultyPerformanceUseCase(ref.watch(quizHistoryRepositoryProvider));
+});
+
+final getTrendAnalysisUseCaseProvider = Provider((ref) {
+  return GetTrendAnalysisUseCase(ref.watch(quizHistoryRepositoryProvider));
 });
 
 // --- Controller ---
