@@ -8,15 +8,21 @@ import '../../../../core/design_system/animations/soteria_animation_widgets.dart
 import '../../../../core/navigation/providers/navigation_providers.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class QuickActionsGrid extends ConsumerWidget {
   const QuickActionsGrid({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final nav = ref.watch(navigationCoordinatorProvider);
+    final isTablet = SoteriaResponsive.isTablet(context);
+    final isShort = SoteriaResponsive.isShortScreen(context);
 
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.containerPadding(context),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -52,14 +58,16 @@ class QuickActionsGrid extends ConsumerWidget {
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+          ),
           GridView.count(
-            crossAxisCount: 2,
+            crossAxisCount: isTablet ? 4 : 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 16.h,
-            crossAxisSpacing: 16.w,
-            childAspectRatio: 1.2,
+            mainAxisSpacing: 12.h,
+            crossAxisSpacing: 12.w,
+            childAspectRatio: isTablet ? 1.5 : 1.25,
             children: [
               _ActionCard(
                 title: 'Practice',
@@ -164,6 +172,8 @@ class _ActionCardState extends State<_ActionCard>
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return SoteriaFadeIn(
       delay: Duration(milliseconds: widget.delay),
       child: SoteriaScaleIn(
@@ -213,22 +223,27 @@ class _ActionCardState extends State<_ActionCard>
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(SoteriaSpacing.lg),
+                        padding: EdgeInsets.all(
+                          SoteriaSpacing.adaptive(
+                            context,
+                            SoteriaSpacing.mdStatic,
+                          ),
+                        ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             LayoutBuilder(
                               builder: (context, constraints) {
                                 return Container(
-                                  padding: const EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(6),
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.15),
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
                                   child: Icon(
                                     widget.icon,
                                     color: Colors.white,
-                                    size: 24.sp,
+                                    size: isShort ? 20.sp : 24.sp,
                                   ),
                                 );
                               },
@@ -252,7 +267,7 @@ class _ActionCardState extends State<_ActionCard>
                                           style: context.titleMedium.copyWith(
                                             fontWeight: FontWeight.w900,
                                             color: Colors.white,
-                                            fontSize: 18.sp,
+                                            fontSize: isShort ? 16.sp : 18.sp,
                                           ),
                                         ),
                                       ),
@@ -266,7 +281,7 @@ class _ActionCardState extends State<_ActionCard>
                                               alpha: 0.7,
                                             ),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: 12.sp,
+                                            fontSize: isShort ? 10.sp : 12.sp,
                                           ),
                                         ),
                                       ),
@@ -283,7 +298,7 @@ class _ActionCardState extends State<_ActionCard>
                                   child: Icon(
                                     Icons.chevron_right_rounded,
                                     color: Colors.white,
-                                    size: 16.sp,
+                                    size: 14.sp,
                                   ),
                                 ),
                               ],

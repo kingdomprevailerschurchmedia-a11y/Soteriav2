@@ -37,24 +37,34 @@ class RecommendationCard extends StatelessWidget {
                   color: SoteriaColors.gold,
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.psychology, color: SoteriaColors.background, size: 20.w),
+                child: Icon(
+                  Icons.psychology,
+                  color: SoteriaColors.background,
+                  size: 20.w,
+                ),
               ),
               SizedBox(width: 12.w),
               Text(
                 'Soteria Advice',
-                style: SoteriaTypography.labelLarge.copyWith(color: SoteriaColors.gold),
+                style: SoteriaTypography.labelLarge.copyWith(
+                  color: SoteriaColors.gold,
+                ),
               ),
             ],
           ),
           SizedBox(height: 16.h),
           Text(
             title,
-            style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+            style: SoteriaTypography.titleMedium.copyWith(
+              color: SoteriaColors.textPrimary,
+            ),
           ),
           SizedBox(height: 8.h),
           Text(
             description,
-            style: SoteriaTypography.bodyMedium.copyWith(color: SoteriaColors.textSecondary),
+            style: SoteriaTypography.bodyMedium.copyWith(
+              color: SoteriaColors.textSecondary,
+            ),
           ),
           SizedBox(height: 20.h),
           SizedBox(
@@ -64,12 +74,16 @@ class RecommendationCard extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: SoteriaColors.gold,
                 foregroundColor: SoteriaColors.background,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
                 padding: EdgeInsets.symmetric(vertical: 12.h),
               ),
               child: Text(
                 actionLabel,
-                style: SoteriaTypography.labelLarge.copyWith(fontWeight: FontWeight.w700),
+                style: SoteriaTypography.labelLarge.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           ),

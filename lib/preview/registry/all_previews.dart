@@ -35,9 +35,19 @@ void registerAllPreviews() {
   // --- Screens ---
   r.registerPreview(
     PreviewItem(
-      id: 'onboarding',
-      title: 'Onboarding',
-      description: 'Premium welcome flow',
+      id: 'onboarding-p1',
+      title: 'Onboarding - Page 1',
+      description: 'Premium welcome: Compete. Learn. Rise.',
+      category: PreviewCategory.onboarding,
+      builder: (context) => const OnboardingScreen(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'onboarding-tablet',
+      title: 'Onboarding - Tablet',
+      description: 'Adaptive layout for large screens',
       category: PreviewCategory.onboarding,
       builder: (context) => const OnboardingScreen(),
     ),

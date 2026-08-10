@@ -8,10 +8,7 @@ import '../../../domain/usecases/history/get_performance_summary_use_case.dart';
 import '../../../domain/usecases/history/get_category_performance_use_case.dart';
 
 class PerformanceSummarySection extends StatelessWidget {
-  const PerformanceSummarySection({
-    super.key,
-    required this.summary,
-  });
+  const PerformanceSummarySection({super.key, required this.summary});
 
   final PerformanceSummary summary;
 
@@ -105,9 +102,7 @@ class _SummaryStatCard extends StatelessWidget {
           ),
           Text(
             label,
-            style: context.labelSmall.copyWith(
-              color: Colors.white38,
-            ),
+            style: context.labelSmall.copyWith(color: Colors.white38),
           ),
         ],
       ),
@@ -116,10 +111,7 @@ class _SummaryStatCard extends StatelessWidget {
 }
 
 class CategoryPerformanceList extends StatelessWidget {
-  const CategoryPerformanceList({
-    super.key,
-    required this.performances,
-  });
+  const CategoryPerformanceList({super.key, required this.performances});
 
   final List<CategoryPerformance> performances;
 
@@ -137,7 +129,9 @@ class CategoryPerformanceList extends StatelessWidget {
           ),
         ),
         SizedBox(height: SoteriaSpacing.lg),
-        ...performances.take(5).map((p) => _CategoryPerformanceRow(performance: p)),
+        ...performances
+            .take(5)
+            .map((p) => _CategoryPerformanceRow(performance: p)),
       ],
     );
   }
@@ -178,7 +172,9 @@ class _CategoryPerformanceRow extends StatelessWidget {
             child: LinearProgressIndicator(
               value: performance.averageAccuracy,
               backgroundColor: Colors.white10,
-              valueColor: AlwaysStoppedAnimation(_getColor(performance.averageAccuracy)),
+              valueColor: AlwaysStoppedAnimation(
+                _getColor(performance.averageAccuracy),
+              ),
               minHeight: 6.h,
             ),
           ),

@@ -12,6 +12,8 @@ import '../providers/quiz_providers.dart';
 import '../../domain/models/quiz_result.dart';
 import '../widgets/results/results_components.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class QuizResultsScreen extends ConsumerWidget {
   const QuizResultsScreen({super.key});
 
@@ -29,11 +31,17 @@ class QuizResultsScreen extends ConsumerWidget {
     return SafeGradientScaffold(
       body: CustomScrollView(
         slivers: [
-          SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+            ),
+          ),
           SliverToBoxAdapter(child: ResultsHero(result: result)),
           SliverToBoxAdapter(child: ScoreSummary(result: result)),
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+            padding: EdgeInsets.symmetric(
+              horizontal: SoteriaSpacing.containerPadding(context),
+            ),
             sliver: SliverToBoxAdapter(
               child: Text(
                 'QUESTION BREAKDOWN',
@@ -46,18 +54,23 @@ class QuizResultsScreen extends ConsumerWidget {
             ),
           ),
           SliverPadding(
-            padding: EdgeInsets.all(SoteriaSpacing.lg),
+            padding: EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => QuestionResultCard(
-                  result: result.questionResults[index],
-                ),
+                (context, index) =>
+                    QuestionResultCard(result: result.questionResults[index]),
                 childCount: result.questionResults.length,
               ),
             ),
           ),
           SliverToBoxAdapter(child: _ResultActions()),
-          SliverToBoxAdapter(child: SizedBox(height: 40.h)),
+          SliverToBoxAdapter(
+            child: SizedBox(
+              height:
+                  SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic) +
+                  MediaQuery.paddingOf(context).bottom,
+            ),
+          ),
         ],
       ),
     );
@@ -88,8 +101,10 @@ class _ResultActionsState extends ConsumerState<_ResultActions> {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return Padding(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
       child: Column(
         children: [
           ElevatedButton(
@@ -97,19 +112,28 @@ class _ResultActionsState extends ConsumerState<_ResultActions> {
             style: ElevatedButton.styleFrom(
               backgroundColor: SoteriaColors.primary,
               foregroundColor: Colors.white,
-              minimumSize: Size(double.infinity, 56.h),
+              minimumSize: Size(double.infinity, isShort ? 48.h : 56.h),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(SoteriaRadius.lg),
               ),
             ),
             child: _isNavigating
-                ? const CircularProgressIndicator(color: Colors.white)
+                ? const SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                      strokeWidth: 2,
+                    ),
+                  )
                 : Text(
                     'PLAY AGAIN',
-                    style: context.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                    style: context.titleMedium.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
           ),
-          SizedBox(height: SoteriaSpacing.md),
+          SizedBox(height: SoteriaSpacing.smallGap(context)),
           TextButton(
             onPressed: _isNavigating ? null : _handleReturnHome,
             child: Text(

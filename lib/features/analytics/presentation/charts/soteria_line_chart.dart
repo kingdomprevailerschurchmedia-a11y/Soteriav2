@@ -41,8 +41,12 @@ class SoteriaLineChart extends StatelessWidget {
         ),
         titlesData: FlTitlesData(
           show: true,
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
           bottomTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: false),
           ),
@@ -78,12 +82,13 @@ class SoteriaLineChart extends StatelessWidget {
             isStrokeCapRound: true,
             dotData: FlDotData(
               show: showDots,
-              getDotPainter: (spot, percent, barData, index) => FlDotCirclePainter(
-                radius: 4,
-                color: lineColor,
-                strokeWidth: 2,
-                strokeColor: SoteriaColors.background,
-              ),
+              getDotPainter: (spot, percent, barData, index) =>
+                  FlDotCirclePainter(
+                    radius: 4,
+                    color: lineColor,
+                    strokeWidth: 2,
+                    strokeColor: SoteriaColors.background,
+                  ),
             ),
             belowBarData: BarAreaData(
               show: true,
@@ -107,7 +112,9 @@ class SoteriaLineChart extends StatelessWidget {
                 final flSpot = barSpot;
                 return LineTooltipItem(
                   flSpot.y.toStringAsFixed(1),
-                  SoteriaTypography.labelLarge.copyWith(color: SoteriaColors.textPrimary),
+                  SoteriaTypography.labelLarge.copyWith(
+                    color: SoteriaColors.textPrimary,
+                  ),
                 );
               }).toList();
             },

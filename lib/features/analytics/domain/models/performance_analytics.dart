@@ -10,7 +10,8 @@ part 'performance_analytics.freezed.dart';
 part 'performance_analytics.g.dart';
 
 @freezed
-abstract class PersonalPerformanceAnalytics with _$PersonalPerformanceAnalytics {
+abstract class PersonalPerformanceAnalytics
+    with _$PersonalPerformanceAnalytics {
   const factory PersonalPerformanceAnalytics({
     required String playerId,
     required TimePeriod period,

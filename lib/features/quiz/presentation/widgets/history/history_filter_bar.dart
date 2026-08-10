@@ -26,13 +26,19 @@ class HistoryFilterBar extends ConsumerWidget {
               _FilterChip(
                 label: 'All Modes',
                 isSelected: filters.mode == null,
-                onSelected: (_) => ref.read(historyFiltersProvider.notifier).update((s) => s.copyWith(clearMode: true)),
+                onSelected: (_) => ref
+                    .read(historyFiltersProvider.notifier)
+                    .update((s) => s.copyWith(clearMode: true)),
               ),
-              ...GameMode.values.map((mode) => _FilterChip(
-                label: mode.name.toUpperCase(),
-                isSelected: filters.mode == mode,
-                onSelected: (_) => ref.read(historyFiltersProvider.notifier).update((s) => s.copyWith(mode: mode)),
-              )),
+              ...GameMode.values.map(
+                (mode) => _FilterChip(
+                  label: mode.name.toUpperCase(),
+                  isSelected: filters.mode == mode,
+                  onSelected: (_) => ref
+                      .read(historyFiltersProvider.notifier)
+                      .update((s) => s.copyWith(mode: mode)),
+                ),
+              ),
             ],
           ),
         ),
@@ -41,9 +47,7 @@ class HistoryFilterBar extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
           child: Row(
             children: [
-              Expanded(
-                child: _SearchField(),
-              ),
+              Expanded(child: _SearchField()),
               SizedBox(width: SoteriaSpacing.md),
               _SortButton(currentSort: currentSort),
             ],
@@ -104,12 +108,17 @@ class _SearchField extends ConsumerWidget {
         border: Border.all(color: Colors.white10),
       ),
       child: TextField(
-        onChanged: (value) => ref.read(historySearchProvider.notifier).state = value,
+        onChanged: (value) =>
+            ref.read(historySearchProvider.notifier).state = value,
         style: context.bodyMedium.copyWith(color: Colors.white),
         decoration: InputDecoration(
           hintText: 'Search history...',
           hintStyle: context.bodyMedium.copyWith(color: Colors.white38),
-          prefixIcon: Icon(Icons.search_rounded, color: Colors.white38, size: 20.sp),
+          prefixIcon: Icon(
+            Icons.search_rounded,
+            color: Colors.white38,
+            size: 20.sp,
+          ),
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 10.h),
         ),
@@ -133,7 +142,11 @@ class _SortButton extends ConsumerWidget {
         border: Border.all(color: Colors.white10),
       ),
       child: IconButton(
-        icon: Icon(Icons.sort_rounded, color: SoteriaColors.secondary, size: 20.sp),
+        icon: Icon(
+          Icons.sort_rounded,
+          color: SoteriaColors.secondary,
+          size: 20.sp,
+        ),
         onPressed: () => _showSortSheet(context, ref),
       ),
     );
@@ -144,7 +157,9 @@ class _SortButton extends ConsumerWidget {
       context: context,
       backgroundColor: SoteriaColors.background,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(SoteriaRadius.xl)),
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(SoteriaRadius.xl),
+        ),
       ),
       builder: (context) => Column(
         mainAxisSize: MainAxisSize.min,
@@ -159,20 +174,28 @@ class _SortButton extends ConsumerWidget {
             ),
           ),
           SizedBox(height: SoteriaSpacing.lg),
-          ...HistorySort.values.map((sort) => ListTile(
-            title: Text(
-              _getSortLabel(sort),
-              style: context.bodyLarge.copyWith(
-                color: currentSort == sort ? SoteriaColors.primary : Colors.white,
-                fontWeight: currentSort == sort ? FontWeight.bold : FontWeight.normal,
+          ...HistorySort.values.map(
+            (sort) => ListTile(
+              title: Text(
+                _getSortLabel(sort),
+                style: context.bodyLarge.copyWith(
+                  color: currentSort == sort
+                      ? SoteriaColors.primary
+                      : Colors.white,
+                  fontWeight: currentSort == sort
+                      ? FontWeight.bold
+                      : FontWeight.normal,
+                ),
               ),
+              trailing: currentSort == sort
+                  ? Icon(Icons.check_rounded, color: SoteriaColors.primary)
+                  : null,
+              onTap: () {
+                ref.read(historySortProvider.notifier).state = sort;
+                Navigator.pop(context);
+              },
             ),
-            trailing: currentSort == sort ? Icon(Icons.check_rounded, color: SoteriaColors.primary) : null,
-            onTap: () {
-              ref.read(historySortProvider.notifier).state = sort;
-              Navigator.pop(context);
-            },
-          )),
+          ),
           SizedBox(height: SoteriaSpacing.xl),
         ],
       ),
@@ -181,12 +204,18 @@ class _SortButton extends ConsumerWidget {
 
   String _getSortLabel(HistorySort sort) {
     switch (sort) {
-      case HistorySort.newest: return 'Newest First';
-      case HistorySort.oldest: return 'Oldest First';
-      case HistorySort.highestScore: return 'Highest Score';
-      case HistorySort.highestAccuracy: return 'Highest Accuracy';
-      case HistorySort.highestXp: return 'Highest XP';
-      case HistorySort.bestStreak: return 'Best Streak';
+      case HistorySort.newest:
+        return 'Newest First';
+      case HistorySort.oldest:
+        return 'Oldest First';
+      case HistorySort.highestScore:
+        return 'Highest Score';
+      case HistorySort.highestAccuracy:
+        return 'Highest Accuracy';
+      case HistorySort.highestXp:
+        return 'Highest XP';
+      case HistorySort.bestStreak:
+        return 'Best Streak';
     }
   }
 }

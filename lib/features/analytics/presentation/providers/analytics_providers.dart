@@ -4,37 +4,44 @@ import 'package:soteria/features/analytics/domain/models/performance_analytics.d
 import 'package:soteria/features/analytics/domain/repositories/performance_analytics_repository.dart';
 import 'package:soteria/features/analytics/data/repositories/performance_analytics_repository_impl.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_enums.dart' as quiz_enums;
+import 'package:soteria/features/quiz/domain/models/quiz_enums.dart'
+    as quiz_enums;
 import 'package:soteria/features/quiz/data/repository/quiz_repository_provider.dart';
 
-final performanceAnalyticsRepositoryProvider = Provider<PerformanceAnalyticsRepository>((ref) {
-  final historyRepo = ref.watch(quizHistoryRepositoryProvider);
-  return PerformanceAnalyticsRepositoryImpl(historyRepo);
-});
+final performanceAnalyticsRepositoryProvider =
+    Provider<PerformanceAnalyticsRepository>((ref) {
+      final historyRepo = ref.watch(quizHistoryRepositoryProvider);
+      return PerformanceAnalyticsRepositoryImpl(historyRepo);
+    });
 
-final selectedTimePeriodProvider = StateProvider<TimePeriod>((ref) => TimePeriod.last30Days);
+final selectedTimePeriodProvider = StateProvider<TimePeriod>(
+  (ref) => TimePeriod.last30Days,
+);
 final selectedAnalyticsCategoryProvider = StateProvider<String?>((ref) => null);
-final selectedAnalyticsModeProvider = StateProvider<quiz_enums.GameMode?>((ref) => null);
+final selectedAnalyticsModeProvider = StateProvider<quiz_enums.GameMode?>(
+  (ref) => null,
+);
 
-final personalPerformanceAnalyticsProvider = FutureProvider<PersonalPerformanceAnalytics>((ref) async {
-  final playerId = ref.watch(sessionProvider).uid;
-  if (playerId == null) {
-    throw Exception('User not logged in');
-  }
+final personalPerformanceAnalyticsProvider =
+    FutureProvider<PersonalPerformanceAnalytics>((ref) async {
+      final playerId = ref.watch(sessionProvider).uid;
+      if (playerId == null) {
+        throw Exception('User not logged in');
+      }
 
-  final period = ref.watch(selectedTimePeriodProvider);
-  final category = ref.watch(selectedAnalyticsCategoryProvider);
-  final mode = ref.watch(selectedAnalyticsModeProvider);
-  
-  final repository = ref.watch(performanceAnalyticsRepositoryProvider);
-  
-  return repository.getAnalytics(
-    playerId: playerId,
-    period: period,
-    category: category,
-    mode: mode,
-  );
-});
+      final period = ref.watch(selectedTimePeriodProvider);
+      final category = ref.watch(selectedAnalyticsCategoryProvider);
+      final mode = ref.watch(selectedAnalyticsModeProvider);
+
+      final repository = ref.watch(performanceAnalyticsRepositoryProvider);
+
+      return repository.getAnalytics(
+        playerId: playerId,
+        period: period,
+        category: category,
+        mode: mode,
+      );
+    });
 
 // Insights derived from analytics
 final performanceInsightsProvider = Provider<List>((ref) {

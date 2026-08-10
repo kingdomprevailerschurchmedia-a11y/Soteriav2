@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/design_system/colors/soteria_colors.dart';
 import '../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../core/design_system/typography/soteria_typography.dart';
@@ -23,11 +24,14 @@ class SettingsScreen extends StatelessWidget {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.close_rounded, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => context.pop(),
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(SoteriaSpacing.lg),
+        padding: EdgeInsets.symmetric(
+          horizontal: SoteriaSpacing.containerPadding(context),
+          vertical: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        ),
         children: [
           _SettingsSection(
             title: 'ACCOUNT',
@@ -44,7 +48,9 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+          ),
           _SettingsSection(
             title: 'PREFERENCES',
             items: [
@@ -61,7 +67,9 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+          ),
           _SettingsSection(
             title: 'SUPPORT',
             items: [
@@ -77,7 +85,9 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xxl),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+          ),
           TextButton(
             onPressed: () {},
             child: Text(
@@ -88,6 +98,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom),
         ],
       ),
     );

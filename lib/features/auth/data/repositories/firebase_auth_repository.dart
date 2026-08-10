@@ -70,13 +70,17 @@ class FirebaseAuthRepository implements AuthRepository {
       }
       return const AuthenticationResult.failure(null);
     } on auth.FirebaseAuthException catch (e) {
-      if (e.code == 'google-sign-in-cancelled') {
-        // Return unauthenticated status but with null error to indicate cancellation
+      if (e.code == 'google-sign-in-failed' &&
+          e.message?.contains('canceled') == true) {
         return const AuthenticationResult.failure(null);
       }
       return AuthenticationResult.failure(IdentityExceptionMapper.map(e));
     } catch (e) {
-      return AuthenticationResult.failure(IdentityExceptionMapper.map(e));
+      final identityException = IdentityExceptionMapper.map(e);
+      if (identityException.userMessage == 'Sign in cancelled.') {
+        return const AuthenticationResult.failure(null);
+      }
+      return AuthenticationResult.failure(identityException);
     }
   }
 

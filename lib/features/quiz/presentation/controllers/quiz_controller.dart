@@ -43,18 +43,18 @@ class QuizController extends Notifier<QuizState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final session = await ref.read(createQuizSessionUseCaseProvider).execute(
-        playerId: playerId,
-        mode: mode,
-        category: category,
-        difficulty: difficulty,
-      );
+      final session = await ref
+          .read(createQuizSessionUseCaseProvider)
+          .execute(
+            playerId: playerId,
+            mode: mode,
+            category: category,
+            difficulty: difficulty,
+          );
 
-      final questions = await ref.read(loadQuestionsUseCaseProvider).execute(
-        mode: mode,
-        category: category,
-        difficulty: difficulty,
-      );
+      final questions = await ref
+          .read(loadQuestionsUseCaseProvider)
+          .execute(mode: mode, category: category, difficulty: difficulty);
 
       final updatedSession = session.copyWith(
         questionIds: questions.map((q) => q.id).toList(),
@@ -88,17 +88,20 @@ class QuizController extends Notifier<QuizState> {
     state = state.copyWith(isLoading: true, error: null);
 
     try {
-      final session =
-          await ref.read(restoreSessionUseCaseProvider).execute(sessionId);
+      final session = await ref
+          .read(restoreSessionUseCaseProvider)
+          .execute(sessionId);
       if (session != null) {
         // Re-load questions based on questionIds in session
         // In a real scenario, QuestionRepository should support loading by IDs
         // For now, we'll re-load based on criteria and then filter/align
-        final questions = await ref.read(loadQuestionsUseCaseProvider).execute(
-          mode: session.gameMode,
-          category: session.category,
-          difficulty: session.difficulty,
-        );
+        final questions = await ref
+            .read(loadQuestionsUseCaseProvider)
+            .execute(
+              mode: session.gameMode,
+              category: session.category,
+              difficulty: session.difficulty,
+            );
 
         final currentQuestion = questions.firstWhere(
           (q) => q.id == session.currentQuestionId,
@@ -136,9 +139,7 @@ class QuizController extends Notifier<QuizState> {
   void _recoverTimer(QuizSession session) {
     if (session.timerState == null || session.questionStartTime == null) {
       _startTimer(
-        Duration(
-          seconds: state.currentQuestion?.estimatedTime ?? 30,
-        ),
+        Duration(seconds: state.currentQuestion?.estimatedTime ?? 30),
       );
       return;
     }
@@ -434,10 +435,11 @@ class QuizController extends Notifier<QuizState> {
 
   Future<void> finishQuiz() async {
     // Guard: Prevent duplicate finalization or invalid state transitions
-    if (state.session == null || 
-        state.status == QuizStatus.completing || 
-        state.status == QuizStatus.finalizing || 
-        state.status == QuizStatus.completed) return;
+    if (state.session == null ||
+        state.status == QuizStatus.completing ||
+        state.status == QuizStatus.finalizing ||
+        state.status == QuizStatus.completed)
+      return;
 
     state = state.copyWith(status: QuizStatus.completing, isLoading: true);
 
@@ -451,9 +453,9 @@ class QuizController extends Notifier<QuizState> {
       );
     } catch (e) {
       state = state.copyWith(
-        isLoading: false, 
-        status: QuizStatus.failed, 
-        error: e.toString()
+        isLoading: false,
+        status: QuizStatus.failed,
+        error: e.toString(),
       );
     }
   }
@@ -533,26 +535,29 @@ class QuizController extends Notifier<QuizState> {
         orElse: () => question.options.first,
       );
 
-      questionResults.add(QuestionResult(
-        questionId: question.id,
-        questionNumber: i + 1,
-        questionText: question.text,
-        outcome: outcome,
-        selectedOptionId: selectedOption?.id,
-        selectedOptionText: selectedOption?.text,
-        correctOptionIds: question.correctOptionIds,
-        correctOptionText: correctOption.text,
-        responseTime: answer.responseTime,
-        scoreEarned: answer.isCorrect ? 100 : 0, 
-        difficulty: question.difficulty,
-        explanation: question.explanation,
-      ));
+      questionResults.add(
+        QuestionResult(
+          questionId: question.id,
+          questionNumber: i + 1,
+          questionText: question.text,
+          outcome: outcome,
+          selectedOptionId: selectedOption?.id,
+          selectedOptionText: selectedOption?.text,
+          correctOptionIds: question.correctOptionIds,
+          correctOptionText: correctOption.text,
+          responseTime: answer.responseTime,
+          scoreEarned: answer.isCorrect ? 100 : 0,
+          difficulty: question.difficulty,
+          explanation: question.explanation,
+        ),
+      );
     }
 
     final accuracy = totalQuestions > 0 ? correct / totalQuestions : 0.0;
     final avgResponseTime = responseTimes.isNotEmpty
         ? Duration(
-            milliseconds: responseTimes
+            milliseconds:
+                responseTimes
                     .map((d) => d.inMilliseconds)
                     .reduce((a, b) => a + b) ~/
                 responseTimes.length,
@@ -601,17 +606,17 @@ class QuizController extends Notifier<QuizState> {
     // Save history entry and update session status atomically (conceptually)
     try {
       await ref.read(quizHistoryRepositoryProvider).addResult(quizResult);
-      
+
       final updatedSession = session.copyWith(
         sessionStatus: SessionStatus.completed,
         completionStatus: QuizStatus.completed,
         lastUpdatedTime: DateTime.now(),
       );
       await ref.read(quizSessionRepositoryProvider).saveSession(updatedSession);
-      
+
       // Refresh analytics
       ref.invalidate(personalPerformanceAnalyticsProvider);
-      
+
       return quizResult;
     } catch (e) {
       // Revert status on persistence error

@@ -33,13 +33,17 @@ class PeriodSelector extends StatelessWidget {
               child: Container(
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: isSelected ? SoteriaColors.primary : Colors.transparent,
+                  color: isSelected
+                      ? SoteriaColors.primary
+                      : Colors.transparent,
                   borderRadius: BorderRadius.circular(8.r),
                 ),
                 child: Text(
                   period.label,
                   style: SoteriaTypography.labelSmall.copyWith(
-                    color: isSelected ? SoteriaColors.textPrimary : SoteriaColors.muted,
+                    color: isSelected
+                        ? SoteriaColors.textPrimary
+                        : SoteriaColors.muted,
                     fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),

@@ -19,6 +19,8 @@ import '../widgets/quiz_power_up_bar.dart';
 import '../widgets/audience_distribution_overlay.dart';
 import '../widgets/score_gain_animation.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class QuizGameplayScreen extends ConsumerWidget {
   const QuizGameplayScreen({super.key});
 
@@ -26,6 +28,7 @@ class QuizGameplayScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(quizControllerProvider);
     final notifier = ref.read(quizControllerProvider.notifier);
+    final isShort = SoteriaResponsive.isShortScreen(context);
 
     ref.listen(quizControllerProvider.select((s) => s.status), (prev, next) {
       if (next == QuizStatus.completed) {
@@ -43,12 +46,18 @@ class QuizGameplayScreen extends ConsumerWidget {
         }
       },
       child: SafeGradientScaffold(
-        body: _buildBody(context, ref, state, notifier),
+        body: _buildBody(context, ref, state, notifier, isShort),
       ),
     );
   }
 
-  Widget _buildBody(BuildContext context, WidgetRef ref, state, notifier) {
+  Widget _buildBody(
+    BuildContext context,
+    WidgetRef ref,
+    state,
+    notifier,
+    bool isShort,
+  ) {
     if (state.isLoading) {
       return const SoteriaLoadingView(message: 'Initializing session...');
     }
@@ -83,7 +92,9 @@ class QuizGameplayScreen extends ConsumerWidget {
       children: [
         Column(
           children: [
-            SizedBox(height: SoteriaSpacing.lg),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+            ),
             QuizHeader(
               currentQuestion: state.currentIndex + 1,
               totalQuestions: state.questions.length,
@@ -95,17 +106,23 @@ class QuizGameplayScreen extends ConsumerWidget {
                 }
               },
             ),
-            SizedBox(height: SoteriaSpacing.xl),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+            ),
             QuizStatsBar(
               streak: state.streak,
               xp: state.xp,
               timerState: state.timer,
               powerUpTimerState: state.powerUpTimer,
             ),
-            SizedBox(height: SoteriaSpacing.lg),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+            ),
             Expanded(
               child: SingleChildScrollView(
-                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+                padding: EdgeInsets.symmetric(
+                  horizontal: SoteriaSpacing.containerPadding(context),
+                ),
                 physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
@@ -116,7 +133,12 @@ class QuizGameplayScreen extends ConsumerWidget {
                       imageUrl: question.imageUrl,
                     ),
                     if (state.audienceDistribution.isNotEmpty) ...[
-                      SizedBox(height: SoteriaSpacing.lg),
+                      SizedBox(
+                        height: SoteriaSpacing.adaptive(
+                          context,
+                          SoteriaSpacing.mdStatic,
+                        ),
+                      ),
                       AudienceDistributionOverlay(
                         distribution: state.audienceDistribution,
                         optionLetters: {
@@ -125,7 +147,12 @@ class QuizGameplayScreen extends ConsumerWidget {
                         },
                       ),
                     ],
-                    SizedBox(height: SoteriaSpacing.xl),
+                    SizedBox(
+                      height: SoteriaSpacing.adaptive(
+                        context,
+                        SoteriaSpacing.lgStatic,
+                      ),
+                    ),
                     ...question.options.map((option) {
                       final index = question.options.indexOf(option);
                       final letter = _getLetterForIndex(index);
@@ -160,7 +187,12 @@ class QuizGameplayScreen extends ConsumerWidget {
                         isHidden: isHidden,
                       );
                     }),
-                    SizedBox(height: SoteriaSpacing.xxl),
+                    SizedBox(
+                      height: SoteriaSpacing.adaptive(
+                        context,
+                        SoteriaSpacing.xlStatic,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -171,6 +203,7 @@ class QuizGameplayScreen extends ConsumerWidget {
               isLocked:
                   state.isAnswerLocked || state.status != QuizStatus.active,
             ),
+            SizedBox(height: MediaQuery.paddingOf(context).bottom),
           ],
         ),
         const Align(alignment: Alignment(0, -0.2), child: ScoreGainAnimation()),

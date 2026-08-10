@@ -7,6 +7,8 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/animations/soteria_animations.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 enum QuizAnswerState { defaultState, selected, correct, incorrect, disabled }
 
 class QuizAnswerOption extends StatelessWidget {
@@ -29,6 +31,7 @@ class QuizAnswerOption extends StatelessWidget {
   Widget build(BuildContext context) {
     final bool isInteractive =
         state == QuizAnswerState.defaultState && !isHidden;
+    final isShort = SoteriaResponsive.isShortScreen(context);
 
     return IgnorePointer(
       ignoring: isHidden,
@@ -53,10 +56,18 @@ class QuizAnswerOption extends StatelessWidget {
               duration: SoteriaAnimations.fast,
               child: AnimatedContainer(
                 duration: SoteriaAnimations.fast,
-                margin: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                margin: EdgeInsets.only(
+                  bottom: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
                 padding: EdgeInsets.symmetric(
-                  horizontal: SoteriaSpacing.lg,
-                  vertical: SoteriaSpacing.md,
+                  horizontal: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.lgStatic,
+                  ),
+                  vertical: isShort ? 10.h : 14.h,
                 ),
                 decoration: BoxDecoration(
                   color: _getBackgroundColor(),
@@ -69,17 +80,25 @@ class QuizAnswerOption extends StatelessWidget {
                 ),
                 child: Row(
                   children: [
-                    _buildLetterCircle(context),
-                    SizedBox(width: SoteriaSpacing.lg),
+                    _buildLetterCircle(context, isShort),
+                    SizedBox(
+                      width: SoteriaSpacing.adaptive(
+                        context,
+                        SoteriaSpacing.lgStatic,
+                      ),
+                    ),
                     Expanded(
                       child: Text(
                         text,
-                        style: context.bodyLarge.copyWith(
-                          color: _getTextColor(),
-                          fontWeight: state == QuizAnswerState.defaultState
-                              ? FontWeight.w500
-                              : FontWeight.bold,
-                        ),
+                        style:
+                            (isShort ? context.bodyMedium : context.bodyLarge)
+                                .copyWith(
+                                  color: _getTextColor(),
+                                  fontWeight:
+                                      state == QuizAnswerState.defaultState
+                                      ? FontWeight.w500
+                                      : FontWeight.bold,
+                                ),
                       ),
                     ),
                     if (_getIcon() != null) ...[
@@ -96,10 +115,11 @@ class QuizAnswerOption extends StatelessWidget {
     );
   }
 
-  Widget _buildLetterCircle(BuildContext context) {
+  Widget _buildLetterCircle(BuildContext context, bool isShort) {
+    final size = isShort ? 32.w : 40.w;
     return Container(
-      width: 40.w,
-      height: 40.w,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: _getLetterCircleColor(),
@@ -108,7 +128,7 @@ class QuizAnswerOption extends StatelessWidget {
       child: Center(
         child: Text(
           letter,
-          style: context.titleMedium.copyWith(
+          style: (isShort ? context.titleSmall : context.titleMedium).copyWith(
             color: _getLetterTextColor(),
             fontWeight: FontWeight.w900,
           ),

@@ -15,13 +15,13 @@ void main() {
   Widget createSplashScreen({AppStartupState state = AppStartupState.loading}) {
     return ProviderScope(
       overrides: [
-        appLifecycleProvider.overrideWith(() => MockAppLifecycleNotifier(initialState: state)),
+        appLifecycleProvider.overrideWith(
+          () => MockAppLifecycleNotifier(initialState: state),
+        ),
       ],
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
-        builder: (context, child) => const MaterialApp(
-          home: SplashScreen(),
-        ),
+        builder: (context, child) => const MaterialApp(home: SplashScreen()),
       ),
     );
   }
@@ -29,7 +29,7 @@ void main() {
   group('SplashScreen Widget Tests', () {
     testWidgets('renders splash background and branding', (tester) async {
       await tester.pumpWidget(createSplashScreen());
-      
+
       expect(find.byType(SplashScreen), findsOneWidget);
       expect(find.byType(SplashBranding), findsOneWidget);
       expect(find.byType(Image), findsWidgets); // BG and Logo
@@ -41,7 +41,7 @@ void main() {
 
     testWidgets('renders SOTERIA text and tagline', (tester) async {
       await tester.pumpWidget(createSplashScreen());
-      
+
       expect(find.text('SOTERIA'), findsOneWidget);
       expect(find.text('COMPETE. LEARN. RISE.'), findsOneWidget);
 
@@ -52,14 +52,16 @@ void main() {
 
     testWidgets('logo animation starts with scale 0.94', (tester) async {
       await tester.pumpWidget(createSplashScreen());
-      
+
       final scaleTransition = tester.widget<ScaleTransition>(
-        find.descendant(
-          of: find.byType(SplashBranding),
-          matching: find.byType(ScaleTransition),
-        ).first,
+        find
+            .descendant(
+              of: find.byType(SplashBranding),
+              matching: find.byType(ScaleTransition),
+            )
+            .first,
       );
-      
+
       expect(scaleTransition.scale.value, closeTo(0.94, 0.01));
 
       // Clean up pending timers

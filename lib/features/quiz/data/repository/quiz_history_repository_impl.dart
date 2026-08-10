@@ -31,39 +31,60 @@ class QuizHistoryRepositoryImpl implements QuizHistoryRepository {
   }
 
   @override
-  Future<List<QuizResult>> getRecentResults(String playerId, {int limit = 10}) async {
+  Future<List<QuizResult>> getRecentResults(
+    String playerId, {
+    int limit = 10,
+  }) async {
     final results = await getResults(playerId);
     return results.take(limit).toList();
   }
 
   @override
-  Future<List<QuizResult>> getResultsByMode(String playerId, GameMode mode) async {
+  Future<List<QuizResult>> getResultsByMode(
+    String playerId,
+    GameMode mode,
+  ) async {
     final results = await getResults(playerId);
     return results.where((r) => r.gameMode == mode).toList();
   }
 
   @override
-  Future<List<QuizResult>> getResultsByCategory(String playerId, String category) async {
+  Future<List<QuizResult>> getResultsByCategory(
+    String playerId,
+    String category,
+  ) async {
     final results = await getResults(playerId);
     return results.where((r) => r.category == category).toList();
   }
 
   @override
-  Future<List<QuizResult>> getResultsByDifficulty(String playerId, Difficulty difficulty) async {
+  Future<List<QuizResult>> getResultsByDifficulty(
+    String playerId,
+    Difficulty difficulty,
+  ) async {
     final results = await getResults(playerId);
     return results.where((r) => r.difficulty == difficulty).toList();
   }
 
   @override
-  Future<List<QuizResult>> getResultsByDateRange(String playerId, DateTime start, DateTime end) async {
+  Future<List<QuizResult>> getResultsByDateRange(
+    String playerId,
+    DateTime start,
+    DateTime end,
+  ) async {
     final results = await getResults(playerId);
-    return results.where((r) => 
-      r.completedAt.isAfter(start) && r.completedAt.isBefore(end)
-    ).toList();
+    return results
+        .where(
+          (r) => r.completedAt.isAfter(start) && r.completedAt.isBefore(end),
+        )
+        .toList();
   }
 
   @override
-  Future<List<QuizResult>> getBestResults(String playerId, {int limit = 5}) async {
+  Future<List<QuizResult>> getBestResults(
+    String playerId, {
+    int limit = 5,
+  }) async {
     final results = await getResults(playerId);
     results.sort((a, b) => b.finalScore.compareTo(a.finalScore));
     return results.take(limit).toList();

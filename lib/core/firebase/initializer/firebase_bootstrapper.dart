@@ -28,17 +28,21 @@ class FirebaseBootstrapper {
     final config = FirebaseConfig.fromEnvironment();
 
     try {
-      // 1. Initialize Core
+      // 1. Initialize Core (Redundant if done in main, but safe)
       await FirebaseInitializer.initializeCore(config);
 
-      // 2. Parallelize critical services
+      // 2. Parallelize essential services
       await Future.wait([
         FirebaseInitializer.initializeCrashlytics(),
-        FirebaseInitializer.initializeAnalytics(),
-        FirebaseInitializer.initializeGoogleSignIn(),
         FirebaseInitializer.initializeAppCheck(securityCoordinator),
-        FirebaseInitializer.configureFirestoreOffline(),
       ]);
+
+      // 3. Essential initialization that must be awaited for plugin stability
+      await FirebaseInitializer.initializeGoogleSignIn();
+
+      // 4. Defer non-critical services (don't await them here)
+      unawaited(FirebaseInitializer.initializeAnalytics());
+      unawaited(FirebaseInitializer.configureFirestoreOffline());
 
       _status = BootstrapperStatus.success;
       LoggerService.i('Firebase Bootstrap successful');

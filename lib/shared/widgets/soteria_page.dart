@@ -13,6 +13,7 @@ class SoteriaPage extends ConsumerWidget {
     this.error,
     this.onRetry,
     this.showOfflineBanner = true,
+    this.useSafeArea = true,
   });
 
   final Widget child;
@@ -20,6 +21,7 @@ class SoteriaPage extends ConsumerWidget {
   final String? error;
   final VoidCallback? onRetry;
   final bool showOfflineBanner;
+  final bool useSafeArea;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,7 +30,7 @@ class SoteriaPage extends ConsumerWidget {
 
     return Stack(
       children: [
-        child,
+        if (useSafeArea) SafeArea(child: child) else child,
         if (showOfflineBanner && isOffline)
           Positioned(
             top: 0,

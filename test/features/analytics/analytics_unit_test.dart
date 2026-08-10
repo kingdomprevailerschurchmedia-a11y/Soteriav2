@@ -84,7 +84,10 @@ void main() {
 
       expect(analytics.categoryPerformance.length, 1);
       expect(analytics.categoryPerformance.first.category, 'Science');
-      expect(analytics.categoryPerformance.first.accuracy, closeTo(0.85, 0.001));
+      expect(
+        analytics.categoryPerformance.first.accuracy,
+        closeTo(0.85, 0.001),
+      );
     });
   });
 }

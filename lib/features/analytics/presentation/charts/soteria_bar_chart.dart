@@ -36,7 +36,9 @@ class SoteriaBarChart extends StatelessWidget {
                     padding: EdgeInsets.only(top: 8.h),
                     child: Text(
                       labels[value.toInt()],
-                      style: SoteriaTypography.labelSmall.copyWith(color: SoteriaColors.muted),
+                      style: SoteriaTypography.labelSmall.copyWith(
+                        color: SoteriaColors.muted,
+                      ),
                     ),
                   );
                 }
@@ -45,9 +47,15 @@ class SoteriaBarChart extends StatelessWidget {
               reservedSize: 28.h,
             ),
           ),
-          leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          leftTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
         ),
         gridData: const FlGridData(show: false),
         borderData: FlBorderData(show: false),

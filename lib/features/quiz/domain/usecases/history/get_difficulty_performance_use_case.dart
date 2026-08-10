@@ -30,7 +30,10 @@ class GetDifficultyPerformanceUseCase {
 
     return difficultyGroups.entries.map((entry) {
       final difficultyResults = entry.value;
-      final totalAccuracy = difficultyResults.fold(0.0, (sum, r) => sum + r.accuracy);
+      final totalAccuracy = difficultyResults.fold(
+        0.0,
+        (sum, r) => sum + r.accuracy,
+      );
       return DifficultyPerformance(
         difficulty: entry.key,
         averageAccuracy: totalAccuracy / difficultyResults.length,

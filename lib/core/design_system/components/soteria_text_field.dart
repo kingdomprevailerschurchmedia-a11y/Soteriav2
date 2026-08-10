@@ -86,9 +86,9 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
             borderRadius: SoteriaRadius.brMd,
             border: Border.all(
               color: _isFocused
-                  ? SoteriaColors.primary.withValues(alpha: 0.5)
-                  : Colors.white.withValues(alpha: 0.06),
-              width: 1,
+                  ? SoteriaColors.secondary
+                  : SoteriaColors.secondary.withValues(alpha: 0.1),
+              width: 1.5,
             ),
             boxShadow: _isFocused
                 ? [
@@ -120,10 +120,25 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
               hintText: widget.hintText,
               hintStyle: context.bodyLarge.copyWith(color: SoteriaColors.hints),
               prefixIcon: widget.prefixIcon != null
-                  ? Icon(
-                      widget.prefixIcon,
-                      color: SoteriaColors.muted,
-                      size: 20.sp,
+                  ? Padding(
+                      padding: EdgeInsets.all(SoteriaSpacing.sm),
+                      child: Container(
+                        padding: EdgeInsets.all(SoteriaSpacing.xs),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.05),
+                          borderRadius: SoteriaRadius.brSm,
+                          border: Border.all(
+                            color: SoteriaColors.secondary.withValues(
+                              alpha: 0.2,
+                            ),
+                          ),
+                        ),
+                        child: Icon(
+                          widget.prefixIcon,
+                          color: SoteriaColors.secondary,
+                          size: 18.sp,
+                        ),
+                      ),
                     )
                   : null,
               suffixIcon: widget.obscureText

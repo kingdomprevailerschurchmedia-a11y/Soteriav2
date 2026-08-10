@@ -20,7 +20,8 @@ class SessionRecoveryDialog extends ConsumerWidget {
 
     return SoteriaDialog(
       title: 'RESUME QUIZ?',
-      message: 'You have an unfinished quiz from ${session.category}.\n'
+      message:
+          'You have an unfinished quiz from ${session.category}.\n'
           'Question ${session.currentQuestionIndex + 1} of ${session.questionIds.length}\n'
           'Score: ${session.currentScore}',
       confirmLabel: 'RESUME QUIZ',

@@ -11,6 +11,8 @@ import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';
 import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class PlayerProfileScreen extends ConsumerWidget {
   const PlayerProfileScreen({super.key});
 
@@ -38,12 +40,18 @@ class PlayerProfileScreen extends ConsumerWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        padding: EdgeInsets.symmetric(
+          horizontal: SoteriaSpacing.containerPadding(context),
+        ),
         child: Column(
           children: [
-            SizedBox(height: SoteriaSpacing.xl),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+            ),
             _buildHeader(context, profile),
-            SizedBox(height: SoteriaSpacing.xxl),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+            ),
             _buildSection(
               context,
               title: 'ACCOUNT',
@@ -65,7 +73,9 @@ class PlayerProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(height: SoteriaSpacing.xl),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+            ),
             _buildSection(
               context,
               title: 'PREFERENCES',
@@ -82,7 +92,9 @@ class PlayerProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(height: SoteriaSpacing.xl),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+            ),
             _buildSection(
               context,
               title: 'SUPPORT',
@@ -99,9 +111,15 @@ class PlayerProfileScreen extends ConsumerWidget {
                 ),
               ],
             ),
-            SizedBox(height: SoteriaSpacing.xxl),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+            ),
             _buildLogoutButton(context),
-            SizedBox(height: SoteriaSpacing.xxxl),
+            SizedBox(
+              height:
+                  SoteriaSpacing.adaptive(context, SoteriaSpacing.xxlStatic) +
+                  MediaQuery.paddingOf(context).bottom,
+            ),
           ],
         ),
       ),
@@ -109,13 +127,21 @@ class PlayerProfileScreen extends ConsumerWidget {
   }
 
   Widget _buildHeader(BuildContext context, UserProfile? profile) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+    final avatarSize = isShort ? 80.w : 100.w;
+
     return Column(
       children: [
-        SoteriaAvatar(url: profile?.avatarUrl, size: 100.w, isOnline: true),
-        SizedBox(height: SoteriaSpacing.md),
+        SoteriaAvatar(
+          url: profile?.avatarUrl,
+          size: avatarSize,
+          isOnline: true,
+        ),
+        SizedBox(height: SoteriaSpacing.smallGap(context)),
         Text(
           profile?.displayName ?? 'Anonymous User',
-          style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
+          style: (isShort ? context.headlineSmall : context.headlineMedium)
+              .copyWith(fontWeight: FontWeight.w900),
         ),
         Text(
           '@${profile?.username ?? 'guest'}',

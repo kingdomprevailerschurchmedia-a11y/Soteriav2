@@ -4,6 +4,7 @@ import '../../design_system/colors/soteria_colors.dart';
 import '../../design_system/spacing/soteria_spacing.dart';
 import '../../design_system/animations/soteria_animations.dart';
 import '../../design_system/radius/soteria_radius.dart';
+import '../../utils/soteria_responsive.dart';
 import '../glass_surface.dart';
 
 class SoteriaBottomNavBar extends StatelessWidget {
@@ -18,12 +19,16 @@ class SoteriaBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.paddingOf(context).bottom;
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return Container(
       padding: EdgeInsets.fromLTRB(
-        SoteriaSpacing.lg,
+        SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
         0,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg + MediaQuery.of(context).padding.bottom,
+        SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        (isShort ? SoteriaSpacing.smStatic : SoteriaSpacing.mdStatic) +
+            bottomInset,
       ),
       alignment: Alignment.bottomCenter,
       child: ConstrainedBox(
@@ -40,9 +45,12 @@ class SoteriaBottomNavBar extends StatelessWidget {
             ],
           ),
           child: GlassSurface(
-            blur: 32, // High blur
+            blur: 32,
             borderRadius: BorderRadius.circular(SoteriaRadius.full),
-            padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+            padding: EdgeInsets.symmetric(
+              vertical: isShort ? 8.h : 12.h,
+              horizontal: 8.w,
+            ),
             opacity: 0.15,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -101,6 +109,8 @@ class _NavButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -113,41 +123,30 @@ class _NavButton extends StatelessWidget {
           children: [
             AnimatedContainer(
               duration: SoteriaAnimations.fast,
-              padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+              padding: EdgeInsets.symmetric(
+                horizontal: isShort ? 12.w : 16.w,
+                vertical: isShort ? 6.h : 8.h,
+              ),
               decoration: BoxDecoration(
                 color: isSelected
                     ? SoteriaColors.primary.withValues(alpha: 0.2)
                     : Colors.transparent,
                 borderRadius: BorderRadius.circular(SoteriaRadius.full),
-                boxShadow: [
-                  if (isSelected)
-                    BoxShadow(
-                      color: SoteriaColors.primary.withValues(alpha: 0.2),
-                      blurRadius: 15,
-                      spreadRadius: -2,
-                    ),
-                ],
               ),
               child: Icon(
                 icon,
                 color: isSelected ? Colors.white : SoteriaColors.muted,
-                size: 28.sp,
+                size: isShort ? 24.sp : 28.sp,
               ),
             ),
             if (isSelected) ...[
-              SizedBox(height: 4.h),
+              SizedBox(height: isShort ? 2.h : 4.h),
               Container(
-                width: 6.w,
-                height: 6.w,
+                width: 4.w,
+                height: 4.w,
                 decoration: BoxDecoration(
                   color: SoteriaColors.primary,
                   shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: SoteriaColors.primary.withValues(alpha: 0.8),
-                      blurRadius: 10,
-                    ),
-                  ],
                 ),
               ),
             ],

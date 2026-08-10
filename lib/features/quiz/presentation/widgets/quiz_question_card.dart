@@ -7,6 +7,8 @@ import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../domain/models/quiz_enums.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class QuizQuestionCard extends StatelessWidget {
   const QuizQuestionCard({
     super.key,
@@ -23,8 +25,12 @@ class QuizQuestionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return SoteriaCard(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.all(
+        SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
@@ -44,17 +50,19 @@ class QuizQuestionCard extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+          ),
           if (imageUrl != null) ...[
             ClipRRect(
               borderRadius: BorderRadius.circular(SoteriaRadius.md),
               child: Image.network(
                 imageUrl!,
-                height: 180.h,
+                height: isShort ? 120.h : 180.h,
                 width: double.infinity,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  height: 180.h,
+                  height: isShort ? 120.h : 180.h,
                   color: Colors.white10,
                   child: const Icon(
                     Icons.image_not_supported,
@@ -63,15 +71,18 @@ class QuizQuestionCard extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: SoteriaSpacing.lg),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+            ),
           ],
           Text(
             text,
-            style: context.headlineSmall.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              height: 1.4,
-            ),
+            style: (isShort ? context.titleLarge : context.headlineSmall)
+                .copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  height: 1.3,
+                ),
           ),
         ],
       ),

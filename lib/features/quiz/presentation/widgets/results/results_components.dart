@@ -127,7 +127,8 @@ class ScoreSummary extends StatelessWidget {
           ),
           StatCard(
             label: 'AVG SPEED',
-            value: '${(result.averageResponseTime.inMilliseconds / 1000).toStringAsFixed(1)}s',
+            value:
+                '${(result.averageResponseTime.inMilliseconds / 1000).toStringAsFixed(1)}s',
             icon: Icons.timer_rounded,
             color: Colors.white70,
           ),

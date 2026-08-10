@@ -34,7 +34,8 @@ class SoteriaCard extends StatelessWidget {
 
     Widget content = GlassSurface(
       borderRadius: BorderRadius.circular(effectiveRadius),
-      padding: padding ?? EdgeInsets.all(SoteriaSpacing.lg),
+      padding:
+          padding ?? EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
       opacity: isElevated ? 0.12 : 0.08,
       border: Border.all(
         color: borderColor ?? Colors.white.withValues(alpha: 0.08),

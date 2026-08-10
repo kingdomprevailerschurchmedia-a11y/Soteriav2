@@ -242,7 +242,7 @@ class _GalleryItemsGrid extends ConsumerWidget {
           crossAxisCount: 2,
           mainAxisSpacing: 16,
           crossAxisSpacing: 16,
-          childAspectRatio: 1.15,
+          childAspectRatio: 4,
         ),
         delegate: SliverChildBuilderDelegate(
           (context, index) => _GalleryItemCard(item: filteredItems[index]),

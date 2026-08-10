@@ -29,13 +29,15 @@ class GetCategoryPerformanceUseCase {
 
     return categoryGroups.entries.map((entry) {
       final categoryResults = entry.value;
-      final totalAccuracy = categoryResults.fold(0.0, (sum, r) => sum + r.accuracy);
+      final totalAccuracy = categoryResults.fold(
+        0.0,
+        (sum, r) => sum + r.accuracy,
+      );
       return CategoryPerformance(
         category: entry.key,
         averageAccuracy: totalAccuracy / categoryResults.length,
         quizzesPlayed: categoryResults.length,
       );
-    }).toList()
-      ..sort((a, b) => b.averageAccuracy.compareTo(a.averageAccuracy));
+    }).toList()..sort((a, b) => b.averageAccuracy.compareTo(a.averageAccuracy));
   }
 }

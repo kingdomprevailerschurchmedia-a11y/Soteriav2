@@ -83,10 +83,13 @@ class AnalyticsMockData {
       ],
       accuracyTrend: PerformanceTrend(
         label: 'Accuracy',
-        points: List.generate(10, (i) => PerformanceTrendPoint(
-          date: now.subtract(Duration(days: 10 - i)),
-          value: 0.7 + (i * 0.02),
-        )),
+        points: List.generate(
+          10,
+          (i) => PerformanceTrendPoint(
+            date: now.subtract(Duration(days: 10 - i)),
+            value: 0.7 + (i * 0.02),
+          ),
+        ),
         averageValue: 0.8,
         minValue: 0.7,
         maxValue: 0.9,
@@ -95,10 +98,13 @@ class AnalyticsMockData {
       ),
       scoreTrend: PerformanceTrend(
         label: 'Score',
-        points: List.generate(10, (i) => PerformanceTrendPoint(
-          date: now.subtract(Duration(days: 10 - i)),
-          value: 700.0 + (i * 30),
-        )),
+        points: List.generate(
+          10,
+          (i) => PerformanceTrendPoint(
+            date: now.subtract(Duration(days: 10 - i)),
+            value: 700.0 + (i * 30),
+          ),
+        ),
         averageValue: 850,
         minValue: 700,
         maxValue: 1000,
@@ -107,10 +113,13 @@ class AnalyticsMockData {
       ),
       speedTrend: PerformanceTrend(
         label: 'Speed',
-        points: List.generate(10, (i) => PerformanceTrendPoint(
-          date: now.subtract(Duration(days: 10 - i)),
-          value: 6000.0 - (i * 200),
-        )),
+        points: List.generate(
+          10,
+          (i) => PerformanceTrendPoint(
+            date: now.subtract(Duration(days: 10 - i)),
+            value: 6000.0 - (i * 200),
+          ),
+        ),
         averageValue: 5000,
         minValue: 4000,
         maxValue: 6000,
@@ -119,10 +128,13 @@ class AnalyticsMockData {
       ),
       xpTrend: PerformanceTrend(
         label: 'XP',
-        points: List.generate(10, (i) => PerformanceTrendPoint(
-          date: now.subtract(Duration(days: 10 - i)),
-          value: 300.0 + (i * 50),
-        )),
+        points: List.generate(
+          10,
+          (i) => PerformanceTrendPoint(
+            date: now.subtract(Duration(days: 10 - i)),
+            value: 300.0 + (i * 50),
+          ),
+        ),
         averageValue: 550,
         minValue: 300,
         maxValue: 800,
@@ -140,7 +152,8 @@ class AnalyticsMockData {
         PerformanceInsight(
           type: InsightType.improvement,
           title: 'Accuracy Improving',
-          description: 'Your accuracy increased by 9 percentage points over your last 10 quizzes.',
+          description:
+              'Your accuracy increased by 9 percentage points over your last 10 quizzes.',
           metricLabel: 'Change',
           metricValue: '+9%',
           direction: TrendDirection.improving,
@@ -151,7 +164,8 @@ class AnalyticsMockData {
         PerformanceInsight(
           type: InsightType.strength,
           title: 'Science Master',
-          description: 'Science is your best-performing category with 92% accuracy.',
+          description:
+              'Science is your best-performing category with 92% accuracy.',
           metricLabel: 'Accuracy',
           metricValue: '92%',
           direction: TrendDirection.improving,
@@ -200,13 +214,14 @@ class AnalyticsMockData {
         PerformanceInsight(
           type: InsightType.insufficientData,
           title: 'Your performance story starts here',
-          description: 'Complete a few more quizzes to unlock detailed insights.',
+          description:
+              'Complete a few more quizzes to unlock detailed insights.',
           metricLabel: 'Status',
           metricValue: 'No Data',
           direction: TrendDirection.insufficientData,
           confidence: InsightConfidence.insufficientData,
           generatedAt: DateTime.now(),
-        )
+        ),
       ],
       calculatedAt: DateTime.now(),
     );

@@ -82,11 +82,15 @@ final getPerformanceSummaryUseCaseProvider = Provider((ref) {
 });
 
 final getCategoryPerformanceUseCaseProvider = Provider((ref) {
-  return GetCategoryPerformanceUseCase(ref.watch(quizHistoryRepositoryProvider));
+  return GetCategoryPerformanceUseCase(
+    ref.watch(quizHistoryRepositoryProvider),
+  );
 });
 
 final getDifficultyPerformanceUseCaseProvider = Provider((ref) {
-  return GetDifficultyPerformanceUseCase(ref.watch(quizHistoryRepositoryProvider));
+  return GetDifficultyPerformanceUseCase(
+    ref.watch(quizHistoryRepositoryProvider),
+  );
 });
 
 final getTrendAnalysisUseCaseProvider = Provider((ref) {

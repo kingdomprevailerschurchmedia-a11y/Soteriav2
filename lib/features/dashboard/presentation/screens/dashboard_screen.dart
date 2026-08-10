@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../shared/widgets/soteria_page.dart';
@@ -55,7 +56,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.xlStatic,
+                  ),
+                ),
+              ),
 
               // Header
               SliverToBoxAdapter(
@@ -64,14 +72,20 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   playerName: player?.displayName ?? 'Scholar',
                   level: progression.level,
                   streak: player?.currentStreak ?? 0,
-                  coins: player?.coins ?? 0,
                   profileCompletion: progression.profileCompletion,
                   avatarUrl: player?.photoUrl,
                   isOnline: true,
                 ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Hero Card
               SliverToBoxAdapter(
@@ -89,41 +103,92 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.lgStatic,
+                  ),
+                ),
+              ),
 
               // Quick Actions
               const SliverToBoxAdapter(child: QuickActionsGrid()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Daily Goals
               const SliverToBoxAdapter(child: DailyGoalsSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Continue Playing
               const SliverToBoxAdapter(child: ContinuePlayingSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Recent Achievements
               const SliverToBoxAdapter(child: RecentAchievementsSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Top Scholars
               const SliverToBoxAdapter(child: TopScholarsSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Performance
               const SliverToBoxAdapter(child: PerformanceSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
+              ),
 
               // Announcements
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+                padding: EdgeInsets.symmetric(
+                  horizontal: SoteriaSpacing.containerPadding(context),
+                ),
                 sliver: SliverToBoxAdapter(
                   child: AnnouncementSection(
                     announcements: state.announcements,
@@ -132,7 +197,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               ),
 
               SliverToBoxAdapter(
-                child: SizedBox(height: SoteriaSpacing.xxl * 2),
+                child: SizedBox(
+                  height: 120.h + MediaQuery.paddingOf(context).bottom,
+                ),
               ),
             ],
           ),

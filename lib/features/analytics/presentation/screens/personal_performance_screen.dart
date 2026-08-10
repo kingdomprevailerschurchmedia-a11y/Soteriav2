@@ -14,6 +14,9 @@ import '../charts/soteria_progress_chart.dart';
 import '../../domain/models/performance_analytics.dart';
 import '../../domain/models/analytics_enums.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+import '../../../../core/design_system/spacing/soteria_spacing.dart';
+
 class PersonalPerformanceScreen extends ConsumerWidget {
   const PersonalPerformanceScreen({super.key});
 
@@ -25,23 +28,41 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: SoteriaColors.background,
       body: Container(
-        decoration: const BoxDecoration(gradient: SoteriaColors.backgroundGradient),
+        decoration: const BoxDecoration(
+          gradient: SoteriaColors.backgroundGradient,
+        ),
         child: SafeArea(
           child: CustomScrollView(
             slivers: [
               _buildAppBar(context, ref),
               SliverPadding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                padding: EdgeInsets.symmetric(
+                  horizontal: SoteriaSpacing.containerPadding(context),
+                ),
                 sliver: SliverToBoxAdapter(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 20.h),
+                      SizedBox(
+                        height: SoteriaSpacing.adaptive(
+                          context,
+                          SoteriaSpacing.mdStatic,
+                        ),
+                      ),
                       PeriodSelector(
                         selectedPeriod: selectedPeriod,
-                        onPeriodChanged: (period) => ref.read(selectedTimePeriodProvider.notifier).state = period,
+                        onPeriodChanged: (period) =>
+                            ref
+                                    .read(selectedTimePeriodProvider.notifier)
+                                    .state =
+                                period,
                       ),
-                      SizedBox(height: 24.h),
+                      SizedBox(
+                        height: SoteriaSpacing.adaptive(
+                          context,
+                          SoteriaSpacing.lgStatic,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -49,18 +70,28 @@ class PersonalPerformanceScreen extends ConsumerWidget {
               analyticsAsync.when(
                 data: (analytics) => _buildAnalyticsContent(context, analytics),
                 loading: () => const SliverFillRemaining(
-                  child: Center(child: CircularProgressIndicator(color: SoteriaColors.primary)),
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: SoteriaColors.primary,
+                    ),
+                  ),
                 ),
                 error: (error, stack) => SliverFillRemaining(
                   child: Center(
                     child: Text(
                       'Performance insights are temporarily unavailable.',
-                      style: SoteriaTypography.bodyMedium.copyWith(color: SoteriaColors.error),
+                      style: SoteriaTypography.bodyMedium.copyWith(
+                        color: SoteriaColors.error,
+                      ),
                     ),
                   ),
                 ),
               ),
-              SliverPadding(padding: EdgeInsets.only(bottom: 100.h)), // Space for bottom nav
+              SliverPadding(
+                padding: EdgeInsets.only(
+                  bottom: 40.h + MediaQuery.paddingOf(context).bottom,
+                ),
+              ),
             ],
           ),
         ),
@@ -88,36 +119,49 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildAnalyticsContent(BuildContext context, PersonalPerformanceAnalytics analytics) {
+  Widget _buildAnalyticsContent(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
     return SliverPadding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.containerPadding(context),
+      ),
       sliver: SliverList(
         delegate: SliverChildListDelegate([
-          _buildOverviewSection(analytics),
-          SizedBox(height: 32.h),
-          _buildTrendSection(analytics),
-          SizedBox(height: 32.h),
-          _buildInsightsSection(analytics),
-          SizedBox(height: 32.h),
-          _buildCategorySection(analytics),
-          SizedBox(height: 32.h),
-          _buildDifficultySection(analytics),
-          SizedBox(height: 32.h),
-          _buildConsistencySection(analytics),
+          _buildOverviewSection(context, analytics),
+          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          _buildTrendSection(context, analytics),
+          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          _buildInsightsSection(context, analytics),
+          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          _buildCategorySection(context, analytics),
+          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          _buildDifficultySection(context, analytics),
+          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          _buildConsistencySection(context, analytics),
         ]),
       ),
     );
   }
 
-  Widget _buildOverviewSection(PersonalPerformanceAnalytics analytics) {
+  Widget _buildOverviewSection(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Overview',
-          style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+          style: SoteriaTypography.titleMedium.copyWith(
+            color: SoteriaColors.textPrimary,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(
+          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        ),
         Row(
           children: [
             Expanded(
@@ -128,7 +172,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                 color: SoteriaColors.primary,
               ),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: SoteriaSpacing.md),
             Expanded(
               child: Column(
                 children: [
@@ -138,7 +182,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                     icon: Icons.quiz,
                     color: SoteriaColors.secondary,
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: SoteriaSpacing.md),
                   MetricCard(
                     title: 'Total XP',
                     value: '${analytics.totalXp}',
@@ -150,7 +194,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
             ),
           ],
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: SoteriaSpacing.md),
         Row(
           children: [
             Expanded(
@@ -161,7 +205,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                 color: SoteriaColors.gold,
               ),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: SoteriaSpacing.md),
             Expanded(
               child: MetricCard(
                 title: 'Best Streak',
@@ -176,20 +220,27 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildTrendSection(PersonalPerformanceAnalytics analytics) {
+  Widget _buildTrendSection(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Accuracy Trend',
-          style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+          style: SoteriaTypography.titleMedium.copyWith(
+            color: SoteriaColors.textPrimary,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: SoteriaSpacing.md),
         Container(
-          height: 200.h,
+          height: isShort ? 160.h : 200.h,
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
-            color: SoteriaColors.surface.withOpacity(0.5),
+            color: SoteriaColors.surface.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(color: SoteriaColors.border),
           ),
@@ -199,7 +250,10 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildInsightsSection(PersonalPerformanceAnalytics analytics) {
+  Widget _buildInsightsSection(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
     if (analytics.insights.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -207,18 +261,26 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       children: [
         Text(
           'Personal Insights',
-          style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+          style: SoteriaTypography.titleMedium.copyWith(
+            color: SoteriaColors.textPrimary,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-        SizedBox(height: 16.h),
-        ...analytics.insights.map((insight) => Padding(
-          padding: EdgeInsets.only(bottom: 12.h),
-          child: InsightCard(insight: insight),
-        )),
+        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
+        ...analytics.insights.map(
+          (insight) => Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: InsightCard(insight: insight),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildCategorySection(PersonalPerformanceAnalytics analytics) {
+  Widget _buildCategorySection(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
     if (analytics.categoryPerformance.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -226,27 +288,34 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       children: [
         Text(
           'Category Performance',
-          style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+          style: SoteriaTypography.titleMedium.copyWith(
+            color: SoteriaColors.textPrimary,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
         Container(
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
-            color: SoteriaColors.surface.withOpacity(0.5),
+            color: SoteriaColors.surface.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(color: SoteriaColors.border),
           ),
           child: Column(
-            children: analytics.categoryPerformance.take(5).map((cp) => 
-              CategoryPerformanceItem(performance: cp)
-            ).toList(),
+            children: analytics.categoryPerformance
+                .take(5)
+                .map((cp) => CategoryPerformanceItem(performance: cp))
+                .toList(),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildDifficultySection(PersonalPerformanceAnalytics analytics) {
+  Widget _buildDifficultySection(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
     if (analytics.difficultyPerformance.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -254,42 +323,55 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       children: [
         Text(
           'Difficulty Breakdown',
-          style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+          style: SoteriaTypography.titleMedium.copyWith(
+            color: SoteriaColors.textPrimary,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
         Row(
-          children: analytics.difficultyPerformance.where((d) => d.totalQuizzes > 0).map((dp) => 
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: MetricCard(
-                  title: dp.difficulty.name.toUpperCase(),
-                  value: '${(dp.accuracy * 100).toInt()}%',
-                  subValue: '${dp.totalQuizzes} Quizzes',
-                  color: _getDifficultyColor(dp.difficulty),
+          children: analytics.difficultyPerformance
+              .where((d) => d.totalQuizzes > 0)
+              .map(
+                (dp) => Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4.w),
+                    child: MetricCard(
+                      title: dp.difficulty.name.toUpperCase(),
+                      value: '${(dp.accuracy * 100).toInt()}%',
+                      subValue: '${dp.totalQuizzes} Quizzes',
+                      color: _getDifficultyColor(dp.difficulty),
+                    ),
+                  ),
                 ),
-              ),
-            )
-          ).toList(),
+              )
+              .toList(),
         ),
       ],
     );
   }
 
-  Widget _buildConsistencySection(PersonalPerformanceAnalytics analytics) {
+  Widget _buildConsistencySection(
+    BuildContext context,
+    PersonalPerformanceAnalytics analytics,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Consistency',
-          style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+          style: SoteriaTypography.titleMedium.copyWith(
+            color: SoteriaColors.textPrimary,
+            fontWeight: FontWeight.w900,
+          ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
         RecommendationCard(
-          title: 'Your Performance is ${analytics.consistency.consistencyLevel}',
-          description: analytics.consistency.consistencyScore > 0.7 
-            ? 'You are maintaining a steady performance level. Consider trying harder challenges to push your limits.'
-            : 'Your performance varies between sessions. Try focused practice on your weaker categories to stabilize your accuracy.',
+          title:
+              'Your Performance is ${analytics.consistency.consistencyLevel}',
+          description: analytics.consistency.consistencyScore > 0.7
+              ? 'You are maintaining a steady performance level. Consider trying harder challenges to push your limits.'
+              : 'Your performance varies between sessions. Try focused practice on your weaker categories to stabilize your accuracy.',
           actionLabel: 'Practice Weakest Category',
           onAction: () {
             // Navigate to practice or filtered quiz
@@ -301,11 +383,16 @@ class PersonalPerformanceScreen extends ConsumerWidget {
 
   Color _getDifficultyColor(dynamic difficulty) {
     switch (difficulty.name) {
-      case 'easy': return SoteriaColors.success;
-      case 'medium': return SoteriaColors.info;
-      case 'hard': return SoteriaColors.warning;
-      case 'expert': return SoteriaColors.error;
-      default: return SoteriaColors.primary;
+      case 'easy':
+        return SoteriaColors.success;
+      case 'medium':
+        return SoteriaColors.info;
+      case 'hard':
+        return SoteriaColors.warning;
+      case 'expert':
+        return SoteriaColors.error;
+      default:
+        return SoteriaColors.primary;
     }
   }
 }

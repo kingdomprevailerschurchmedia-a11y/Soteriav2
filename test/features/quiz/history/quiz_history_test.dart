@@ -55,8 +55,10 @@ void main() {
 
     test('getResults filters by playerId', () async {
       await repository.addResult(mockResult);
-      await repository.addResult(mockResult.copyWith(sessionId: 's2', playerId: 'user2'));
-      
+      await repository.addResult(
+        mockResult.copyWith(sessionId: 's2', playerId: 'user2'),
+      );
+
       final user1Results = await repository.getResults('user1');
       expect(user1Results.length, 1);
       expect(user1Results.first.playerId, 'user1');
@@ -64,10 +66,12 @@ void main() {
 
     test('clearHistory removes results only for specific player', () async {
       await repository.addResult(mockResult);
-      await repository.addResult(mockResult.copyWith(sessionId: 's2', playerId: 'user2'));
-      
+      await repository.addResult(
+        mockResult.copyWith(sessionId: 's2', playerId: 'user2'),
+      );
+
       await repository.clearHistory('user1');
-      
+
       expect((await repository.getResults('user1')).isEmpty, true);
       expect((await repository.getResults('user2')).length, 1);
     });
@@ -76,15 +80,17 @@ void main() {
   group('Performance Aggregation Tests', () {
     test('summaryUseCase calculates correct statistics', () async {
       await repository.addResult(mockResult); // 80% accuracy, 1000 score
-      await repository.addResult(mockResult.copyWith(
-        sessionId: 's2', 
-        accuracy: 0.6, 
-        finalScore: 500,
-        longestStreak: 3,
-      ));
+      await repository.addResult(
+        mockResult.copyWith(
+          sessionId: 's2',
+          accuracy: 0.6,
+          finalScore: 500,
+          longestStreak: 3,
+        ),
+      );
 
       final summary = await summaryUseCase.execute('user1');
-      
+
       expect(summary.totalQuizzes, 2);
       expect(summary.averageAccuracy, 0.7);
       expect(summary.averageScore, 750);
@@ -94,11 +100,23 @@ void main() {
 
     test('categoryUseCase groups results by category', () async {
       await repository.addResult(mockResult); // Science
-      await repository.addResult(mockResult.copyWith(sessionId: 's2', category: 'History', accuracy: 0.9));
-      await repository.addResult(mockResult.copyWith(sessionId: 's3', category: 'Science', accuracy: 1.0));
+      await repository.addResult(
+        mockResult.copyWith(
+          sessionId: 's2',
+          category: 'History',
+          accuracy: 0.9,
+        ),
+      );
+      await repository.addResult(
+        mockResult.copyWith(
+          sessionId: 's3',
+          category: 'Science',
+          accuracy: 1.0,
+        ),
+      );
 
       final performances = await categoryUseCase.execute('user1');
-      
+
       expect(performances.length, 2);
       final science = performances.firstWhere((p) => p.category == 'Science');
       expect(science.averageAccuracy, 0.9); // (0.8 + 1.0) / 2

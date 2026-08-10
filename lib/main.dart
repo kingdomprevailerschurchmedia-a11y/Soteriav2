@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -9,7 +8,6 @@ import 'package:soteria/core/logging/logger_service.dart';
 import 'package:soteria/core/services/diagnostics_service.dart';
 import 'package:soteria/core/services/performance_service.dart';
 import 'package:soteria/core/firebase/initializer/firebase_initializer.dart';
-import 'firebase_options.dart'; // Import your generated options file
 
 void main() {
   runZonedGuarded(
@@ -17,10 +15,8 @@ void main() {
       WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
       FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-      // 1. Essential core init only
-      await Firebase.initializeApp(
-        options: DefaultFirebaseOptions.currentPlatform,
-      );
+      // We no longer await Firebase.initializeApp here to get to runApp faster.
+      // The initialization is now handled by the FirebaseBootstrapper.
 
       runApp(
         ProviderScope(

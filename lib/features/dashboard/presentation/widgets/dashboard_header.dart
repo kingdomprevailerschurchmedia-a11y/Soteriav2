@@ -15,7 +15,6 @@ class DashboardHeader extends ConsumerWidget {
     required this.playerName,
     required this.level,
     required this.streak,
-    required this.coins,
     required this.profileCompletion,
     this.avatarUrl,
     this.isOnline = true,
@@ -25,7 +24,6 @@ class DashboardHeader extends ConsumerWidget {
   final String playerName;
   final int level;
   final int streak;
-  final int coins;
   final double profileCompletion;
   final String? avatarUrl;
   final bool isOnline;
@@ -92,45 +90,37 @@ class DashboardHeader extends ConsumerWidget {
             SoteriaScaleIn(
               duration: const Duration(milliseconds: 700),
               delay: const Duration(milliseconds: 300),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      _CompactStat(
-                        icon: Icons.local_fire_department_rounded,
-                        value: streak.toString(),
-                        label: 'Day Streak',
-                        color: Colors.orange,
-                      ),
-                      SizedBox(width: SoteriaSpacing.md),
-                      _CompactStat(
-                        icon: Icons.monetization_on_rounded,
-                        value: coins.toString(),
-                        label: 'Coins',
-                        color: SoteriaColors.gold,
-                      ),
-                    ],
+                  _CompactStat(
+                    icon: Icons.local_fire_department_rounded,
+                    value: streak.toString(),
+                    label: 'Day Streak',
+                    color: Colors.orange,
                   ),
-                  SizedBox(height: SoteriaSpacing.md),
+                  SizedBox(width: SoteriaSpacing.md),
                   GestureDetector(
                     onTap: () => nav.go('/app/profile'),
                     child: Hero(
                       tag: 'player_avatar',
                       child: Container(
-                        padding: const EdgeInsets.all(3),
+                        padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: SoteriaColors.primary.withValues(alpha: 0.3),
-                            width: 2,
+                          gradient: RadialGradient(
+                            colors: [
+                              SoteriaColors.primary.withValues(alpha: 0.6),
+                              SoteriaColors.primary.withValues(alpha: 0.0),
+                            ],
+                            stops: const [0.7, 1.0],
                           ),
                           boxShadow: [
                             BoxShadow(
                               color: SoteriaColors.primary.withValues(
-                                alpha: 0.2,
+                                alpha: 0.4,
                               ),
-                              blurRadius: 15,
+                              blurRadius: 20,
                               spreadRadius: 2,
                             ),
                           ],
@@ -138,7 +128,7 @@ class DashboardHeader extends ConsumerWidget {
                         child: SoteriaAvatar(
                           url: avatarUrl,
                           isOnline: isOnline,
-                          size: 56,
+                          size: 60,
                           hasBorder: false,
                         ),
                       ),
@@ -167,32 +157,29 @@ class _HeaderBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final badgeColor = SoteriaColors.primary;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
+        color: badgeColor.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(100),
-        border: Border.all(color: color.withValues(alpha: 0.3), width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: color.withValues(alpha: 0.1),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        border: Border.all(
+          color: badgeColor.withValues(alpha: 0.4),
+          width: 1.5,
+        ),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14.sp, color: color),
-          SizedBox(width: 6.w),
+          Icon(icon, size: 12.sp, color: Colors.white),
+          SizedBox(width: 8.w),
           Text(
             label,
             style: TextStyle(
-              color: color,
+              color: Colors.white.withValues(alpha: 0.9),
               fontSize: 11.sp,
               fontWeight: FontWeight.w900,
-              letterSpacing: 1.0,
+              letterSpacing: 1.2,
             ),
           ),
         ],
@@ -217,16 +204,19 @@ class _CompactStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 18.sp, color: color),
-            SizedBox(width: 4.w),
+            Icon(icon, size: 24.sp, color: color),
+            SizedBox(width: 8.w),
             Text(
               value,
-              style: context.titleMedium.copyWith(
+              style: context.headlineMedium.copyWith(
                 fontWeight: FontWeight.w900,
                 color: SoteriaColors.textPrimary,
+                fontSize: 28.sp,
               ),
             ),
           ],
@@ -234,9 +224,9 @@ class _CompactStat extends StatelessWidget {
         Text(
           label,
           style: context.labelSmall.copyWith(
-            color: SoteriaColors.muted,
-            fontSize: 9.sp,
-            fontWeight: FontWeight.bold,
+            color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
+            fontSize: 12.sp,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],

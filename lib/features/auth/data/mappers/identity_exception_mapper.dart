@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../../models/identity_exception.dart';
 
 class IdentityExceptionMapper {
@@ -31,6 +32,7 @@ class IdentityExceptionMapper {
             'The password provided is too weak.',
           );
         case 'google-sign-in-cancelled':
+        case 'google-sign-in-failed':
           // We'll handle this specially in the UseCase or Repository to avoid showing an error
           return const IdentityException(
             IdentityExceptionType.unknown,
@@ -43,6 +45,17 @@ class IdentityExceptionMapper {
           );
       }
     }
+
+    if (error is GoogleSignInException) {
+      if (error.code == 'canceled') {
+        return const IdentityException(
+          IdentityExceptionType.unknown,
+          'Sign in cancelled.',
+        );
+      }
+      return IdentityException(IdentityExceptionType.unknown, error.description);
+    }
+
     return IdentityException(IdentityExceptionType.unknown, error.toString());
   }
 }

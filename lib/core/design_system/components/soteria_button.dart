@@ -16,8 +16,10 @@ class SoteriaButton extends StatefulWidget {
   final SoteriaButtonVariant variant;
   final SoteriaButtonSize size;
   final IconData? icon;
+  final IconData? trailingIcon;
   final bool isLoading;
   final bool isFullWidth;
+  final bool uppercase;
 
   const SoteriaButton({
     super.key,
@@ -26,8 +28,10 @@ class SoteriaButton extends StatefulWidget {
     this.variant = SoteriaButtonVariant.primary,
     this.size = SoteriaButtonSize.md,
     this.icon,
+    this.trailingIcon,
     this.isLoading = false,
     this.isFullWidth = true,
+    this.uppercase = true,
   });
 
   const SoteriaButton.primary({
@@ -36,8 +40,10 @@ class SoteriaButton extends StatefulWidget {
     this.onPressed,
     this.size = SoteriaButtonSize.md,
     this.icon,
+    this.trailingIcon,
     this.isLoading = false,
     this.isFullWidth = true,
+    this.uppercase = true,
   }) : variant = SoteriaButtonVariant.primary;
 
   const SoteriaButton.secondary({
@@ -46,8 +52,10 @@ class SoteriaButton extends StatefulWidget {
     this.onPressed,
     this.size = SoteriaButtonSize.md,
     this.icon,
+    this.trailingIcon,
     this.isLoading = false,
     this.isFullWidth = true,
+    this.uppercase = true,
   }) : variant = SoteriaButtonVariant.secondary;
 
   const SoteriaButton.ghost({
@@ -56,8 +64,10 @@ class SoteriaButton extends StatefulWidget {
     this.onPressed,
     this.size = SoteriaButtonSize.md,
     this.icon,
+    this.trailingIcon,
     this.isLoading = false,
     this.isFullWidth = true,
+    this.uppercase = true,
   }) : variant = SoteriaButtonVariant.ghost;
 
   const SoteriaButton.text({
@@ -66,8 +76,10 @@ class SoteriaButton extends StatefulWidget {
     this.onPressed,
     this.size = SoteriaButtonSize.md,
     this.icon,
+    this.trailingIcon,
     this.isLoading = false,
     this.isFullWidth = false,
+    this.uppercase = true,
   }) : variant = SoteriaButtonVariant.text;
 
   @override
@@ -160,8 +172,15 @@ class _SoteriaButtonState extends State<SoteriaButton>
     switch (widget.variant) {
       case SoteriaButtonVariant.primary:
         return BoxDecoration(
+          gradient: isEnabled
+              ? LinearGradient(
+                  colors: [SoteriaColors.primary, SoteriaColors.secondary],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )
+              : null,
           color: isEnabled
-              ? SoteriaColors.primary
+              ? null
               : SoteriaColors.primary.withValues(alpha: 0.3),
           borderRadius: SoteriaRadius.brMd,
           boxShadow: isEnabled
@@ -202,19 +221,28 @@ class _SoteriaButtonState extends State<SoteriaButton>
   Widget _buildContent(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (widget.icon != null) ...[
           Icon(widget.icon, size: _getIconSize(), color: _getTextColor()),
           SizedBox(width: 8.w),
         ],
         Text(
-          widget.label.toUpperCase(),
-          style: context.labelMedium.copyWith(
+          widget.uppercase ? widget.label.toUpperCase() : widget.label,
+          style: context.labelLarge.copyWith(
             color: _getTextColor(),
             fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
+            letterSpacing: widget.uppercase ? 1.2 : 0,
           ),
         ),
+        if (widget.trailingIcon != null) ...[
+          SizedBox(width: 8.w),
+          Icon(
+            widget.trailingIcon,
+            size: _getIconSize(),
+            color: _getTextColor(),
+          ),
+        ],
       ],
     );
   }

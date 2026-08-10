@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -113,7 +115,7 @@ class _LobbyHeader extends StatelessWidget {
               Icons.arrow_back_ios_new_rounded,
               color: Colors.white,
             ),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => context.pop(),
           ),
           const Spacer(),
           if (player != null)
@@ -160,7 +162,12 @@ class _StartAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.fromLTRB(
+        SoteriaSpacing.lg,
+        SoteriaSpacing.lg,
+        SoteriaSpacing.lg,
+        SoteriaSpacing.lg + 80.h,
+      ),
       decoration: BoxDecoration(
         color: SoteriaColors.surface.withValues(alpha: 0.8),
         border: Border(

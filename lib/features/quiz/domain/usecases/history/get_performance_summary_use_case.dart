@@ -70,7 +70,9 @@ class GetPerformanceSummaryUseCase {
       bestAccuracy: bestAccuracy,
       bestStreak: bestStreak,
       totalXp: totalXp,
-      averageResponseTime: Duration(milliseconds: (totalMillis / results.length).round()),
+      averageResponseTime: Duration(
+        milliseconds: (totalMillis / results.length).round(),
+      ),
     );
   }
 }

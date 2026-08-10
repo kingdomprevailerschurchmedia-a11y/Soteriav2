@@ -39,7 +39,12 @@ void main() {
       expect(result.correctAnswers, equals(2));
       expect(result.accuracy, equals(1.0));
       expect(result.performanceRating, equals('Exceptional'));
-      expect(result.questionResults.every((r) => r.outcome == QuestionOutcome.correct), isTrue);
+      expect(
+        result.questionResults.every(
+          (r) => r.outcome == QuestionOutcome.correct,
+        ),
+        isTrue,
+      );
     });
 
     test('finalizeQuiz handles mixed results correctly', () async {
@@ -64,8 +69,14 @@ void main() {
       expect(result.correctAnswers, equals(1));
       expect(result.wrongAnswers, equals(1));
       expect(result.accuracy, equals(0.5));
-      expect(result.questionResults[0].outcome, equals(QuestionOutcome.correct));
-      expect(result.questionResults[1].outcome, equals(QuestionOutcome.incorrect));
+      expect(
+        result.questionResults[0].outcome,
+        equals(QuestionOutcome.correct),
+      );
+      expect(
+        result.questionResults[1].outcome,
+        equals(QuestionOutcome.incorrect),
+      );
     });
 
     test('finalizeQuiz is idempotent', () async {

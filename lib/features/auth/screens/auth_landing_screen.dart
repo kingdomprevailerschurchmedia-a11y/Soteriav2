@@ -14,6 +14,8 @@ import '../widgets/auth_hero_section.dart';
 import '../widgets/auth_provider_button.dart';
 import '../widgets/feature_carousel.dart';
 
+import 'package:soteria/core/utils/soteria_responsive.dart';
+
 class AuthLandingScreen extends ConsumerWidget {
   const AuthLandingScreen({super.key});
 
@@ -21,6 +23,7 @@ class AuthLandingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(authLandingProvider);
     final notifier = ref.read(authLandingProvider.notifier);
+    final isShort = SoteriaResponsive.isShortScreen(context);
 
     ref.listen(authLandingProvider.select((s) => s.error), (previous, next) {
       if (next != null) {
@@ -30,13 +33,24 @@ class AuthLandingScreen extends ConsumerWidget {
       }
     });
 
-    return PremiumBackground(
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/welcomescreen_bg.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
-            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xl),
+            padding: EdgeInsets.symmetric(
+              horizontal: SoteriaSpacing.adaptive(
+                context,
+                SoteriaSpacing.xlStatic,
+              ),
+            ),
             child: Column(
               children: [
                 const AuthHeroSection(),
@@ -51,7 +65,6 @@ class AuthLandingScreen extends ConsumerWidget {
                   ),
                   onTap: () => notifier.signInWithGoogle(),
                   isLoading: state.isLoading,
-                  variant: AuthProviderButtonVariant.glow,
                 ),
 
                 const SoteriaDivider(),
@@ -60,16 +73,15 @@ class AuthLandingScreen extends ConsumerWidget {
                   provider: const IdentityProvider(
                     id: 'email',
                     name: 'Continue with Email',
-                    icon: Icons.email_rounded,
+                    icon: Icons.mail_outline_rounded,
                     type: IdentityProviderType.email,
                   ),
                   onTap: () => ref
                       .read(navigationServiceProvider)
                       .push('${SoteriaRoutes.auth}/login'),
-                  variant: AuthProviderButtonVariant.outline,
                 ),
 
-                SizedBox(height: SoteriaSpacing.xxl),
+                SizedBox(height: 24.h),
 
                 // Feature Highlights
                 const FeatureCarousel(),
@@ -82,11 +94,11 @@ class AuthLandingScreen extends ConsumerWidget {
                     Text(
                       "Don't have an account?",
                       style: context.bodyMedium.copyWith(
-                        color: SoteriaColors.muted,
-                        fontWeight: FontWeight.w500,
+                        color: Colors.white.withValues(alpha: 0.4),
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 8.h),
                     GestureDetector(
                       onTap: () => ref
                           .read(navigationServiceProvider)
@@ -95,17 +107,18 @@ class AuthLandingScreen extends ConsumerWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'CREATE ONE',
+                            'Create one',
                             style: context.titleMedium.copyWith(
-                              color: SoteriaColors.gold,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: 2.0,
+                              color: SoteriaColors.secondary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
                             ),
                           ),
-                          SizedBox(width: 8.w),
-                          const Icon(
+                          SizedBox(width: 4.w),
+                          Icon(
                             Icons.chevron_right_rounded,
-                            color: SoteriaColors.gold,
+                            color: SoteriaColors.secondary,
+                            size: 20.sp,
                           ),
                         ],
                       ),
@@ -113,29 +126,28 @@ class AuthLandingScreen extends ConsumerWidget {
                   ],
                 ),
 
-                const SoteriaDivider(),
+                SizedBox(height: 32.h),
 
                 // Guest Access
                 _GuestAction(),
 
-                SizedBox(height: 50.h),
+                SizedBox(height: 40.h),
 
                 // Legal Footer
                 Text(
                   'By continuing, you agree to our',
                   style: context.bodySmall.copyWith(
-                    fontSize: 12.sp,
-                    color: SoteriaColors.muted,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 13.sp,
+                    color: Colors.white.withValues(alpha: 0.4),
+                    fontWeight: FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 6.h),
+                SizedBox(height: 8.h),
                 Wrap(
                   alignment: WrapAlignment.center,
                   crossAxisAlignment: WrapCrossAlignment.center,
                   spacing: 4.w,
-                  runSpacing: 8.h,
                   children: [
                     _LegalButton(label: 'Terms', onTap: () {}),
                     const _LegalDot(),
@@ -144,7 +156,7 @@ class AuthLandingScreen extends ConsumerWidget {
                     _LegalButton(label: 'Guidelines', onTap: () {}),
                   ],
                 ),
-                SizedBox(height: SoteriaSpacing.xxl),
+                SizedBox(height: 40.h),
               ],
             ),
           ),
@@ -159,49 +171,20 @@ class _GuestAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 24.w),
+      height: 56.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-        color: Colors.white.withValues(alpha: 0.02),
+        borderRadius: BorderRadius.circular(30.r),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
-      child: Row(
-        children: [
-          Icon(
-            Icons.person_outline_rounded,
-            color: SoteriaColors.primary,
-            size: 28.sp,
+      child: Center(
+        child: Text(
+          'Continue as Guest (Coming Soon)',
+          style: context.titleSmall.copyWith(
+            color: Colors.white.withValues(alpha: 0.4),
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
           ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Text(
-              'CONTINUE AS GUEST',
-              style: context.titleSmall.copyWith(
-                color: Colors.white.withValues(alpha: 0.7),
-                fontWeight: FontWeight.w900,
-                letterSpacing: 0.5,
-                fontSize: 16.sp,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
-            decoration: BoxDecoration(
-              color: SoteriaColors.primary.withValues(alpha: 0.2),
-              borderRadius: BorderRadius.circular(100),
-            ),
-            child: Text(
-              'COMING SOON',
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.primary,
-                fontWeight: FontWeight.w900,
-                fontSize: 10.sp,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -218,14 +201,15 @@ class _LegalButton extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(4),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: Text(
           label,
-          style: const TextStyle(
-            color: SoteriaColors.gold,
-            fontSize: 12,
-            fontWeight: FontWeight.w900,
+          style: TextStyle(
+            color: const Color(0xFFD4AF37),
+            fontSize: 13.sp,
+            fontWeight: FontWeight.w500,
             decoration: TextDecoration.underline,
+            decorationColor: const Color(0xFFD4AF37),
           ),
         ),
       ),
@@ -238,12 +222,14 @@ class _LegalDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 4,
-      height: 4,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: SoteriaColors.muted.withValues(alpha: 0.4),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: Text(
+        '•',
+        style: TextStyle(
+          color: Colors.white.withValues(alpha: 0.4),
+          fontSize: 14.sp,
+        ),
       ),
     );
   }

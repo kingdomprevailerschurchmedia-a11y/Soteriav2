@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum DeviceType {
   smallPhone('Small Phone', Size(320, 568)),
@@ -49,15 +50,20 @@ class DeviceSimulator extends StatelessWidget {
           ],
         ),
         clipBehavior: Clip.antiAlias,
-        child: MediaQuery(
-          data: MediaQuery.of(context).copyWith(
-            size: size,
-            padding: const EdgeInsets.only(
-              top: 44,
-              bottom: 34,
-            ), // Notch simulation
+        child: ScreenUtilInit(
+          designSize: const Size(390, 844),
+          minTextAdapt: true,
+          splitScreenMode: true,
+          builder: (context, _) => MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              size: size,
+              padding: EdgeInsets.only(
+                top: isLandscape ? 0 : 44,
+                bottom: isLandscape ? 21 : 34,
+              ),
+            ),
+            child: child,
           ),
-          child: child,
         ),
       ),
     );

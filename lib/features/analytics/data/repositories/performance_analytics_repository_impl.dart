@@ -6,9 +6,10 @@ import '../../../quiz/domain/models/quiz_enums.dart';
 import '../../../quiz/domain/models/quiz_result.dart';
 import 'analytics_aggregator.dart';
 
-class PerformanceAnalyticsRepositoryImpl implements PerformanceAnalyticsRepository {
+class PerformanceAnalyticsRepositoryImpl
+    implements PerformanceAnalyticsRepository {
   final QuizHistoryRepository _historyRepository;
-  
+
   // Simple in-memory cache
   final Map<String, PersonalPerformanceAnalytics> _cache = {};
 
@@ -28,17 +29,16 @@ class PerformanceAnalyticsRepositoryImpl implements PerformanceAnalyticsReposito
 
     final now = DateTime.now();
     final start = _getStartDate(period, now);
-    
+
     // Get current period results
-    List<QuizResult> currentResults = await _historyRepository.getResultsByDateRange(
-      playerId, 
-      start, 
-      now,
-    );
+    List<QuizResult> currentResults = await _historyRepository
+        .getResultsByDateRange(playerId, start, now);
 
     // Apply filters
     if (category != null) {
-      currentResults = currentResults.where((r) => r.category == category).toList();
+      currentResults = currentResults
+          .where((r) => r.category == category)
+          .toList();
     }
     if (mode != null) {
       currentResults = currentResults.where((r) => r.gameMode == mode).toList();
@@ -46,17 +46,18 @@ class PerformanceAnalyticsRepositoryImpl implements PerformanceAnalyticsReposito
 
     // Get previous period results for comparison
     final prevStart = _getPreviousPeriodStart(period, start);
-    List<QuizResult> previousResults = await _historyRepository.getResultsByDateRange(
-      playerId, 
-      prevStart, 
-      start,
-    );
+    List<QuizResult> previousResults = await _historyRepository
+        .getResultsByDateRange(playerId, prevStart, start);
 
     if (category != null) {
-      previousResults = previousResults.where((r) => r.category == category).toList();
+      previousResults = previousResults
+          .where((r) => r.category == category)
+          .toList();
     }
     if (mode != null) {
-      previousResults = previousResults.where((r) => r.gameMode == mode).toList();
+      previousResults = previousResults
+          .where((r) => r.gameMode == mode)
+          .toList();
     }
 
     final analytics = AnalyticsAggregator.aggregate(
@@ -75,7 +76,12 @@ class PerformanceAnalyticsRepositoryImpl implements PerformanceAnalyticsReposito
     _cache.clear();
   }
 
-  String _getCacheKey(String playerId, TimePeriod period, String? category, GameMode? mode) {
+  String _getCacheKey(
+    String playerId,
+    TimePeriod period,
+    String? category,
+    GameMode? mode,
+  ) {
     return '$playerId-$period-${category ?? "all"}-${mode ?? "all"}';
   }
 

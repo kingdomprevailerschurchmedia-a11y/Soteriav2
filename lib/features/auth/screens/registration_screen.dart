@@ -90,88 +90,205 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
       }
     });
 
-    return SafeGradientScaffold(
-      body: Column(
-        children: [
-          // Header & Progress
-          Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: SoteriaSpacing.lg,
-              vertical: SoteriaSpacing.md,
-            ),
-            child: Column(
-              children: [
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    if (state.step.index > 0 &&
-                        state.step != RegistrationStep.success)
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          icon: const Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          onPressed: () => _onBack(state),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/welcomescreen_bg.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              // Header & Progress
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Top Glow Arc
+                  Transform.translate(
+                    offset: Offset(0, -160.h),
+                    child: Container(
+                      width: 400.w,
+                      height: 400.w,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        gradient: RadialGradient(
+                          colors: [
+                            const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                            Colors.transparent,
+                          ],
+                        ),
+                        border: Border.all(
+                          color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
+                          width: 2,
                         ),
                       ),
-                    Text(
-                      'Create Identity',
-                      style: context.titleLarge.copyWith(
-                        color: SoteriaColors.gold,
-                        fontSize: 18,
-                      ),
                     ),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: SoteriaSpacing.lg,
+                      vertical: SoteriaSpacing.md,
+                    ),
+                    child: Column(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            if (state.step.index > 0 &&
+                                state.step != RegistrationStep.success)
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: GestureDetector(
+                                  onTap: () => _onBack(state),
+                                  child: const Icon(
+                                    Icons.arrow_back_ios_new_rounded,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ),
+                              ),
+                            Text(
+                              'Create Identity',
+                              style: context.titleLarge.copyWith(
+                                color: const Color(0xFFD4AF37),
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 24.h),
+                        Container(
+                          height: 6.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(3.r),
+                          ),
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor:
+                                (state.step.index + 1) /
+                                RegistrationStep.values.length,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFFD4AF37),
+                                    Color(0xFFB8860B),
+                                  ],
+                                ),
+                                borderRadius: BorderRadius.circular(3.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFFD4AF37).withValues(
+                                      alpha: 0.4,
+                                    ),
+                                    blurRadius: 8,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+
+              // Content
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    const StepPersonalIdentity(),
+                    const StepAccountIdentity(),
+                    const StepSecurity(),
+                    StepReview(onEdit: _jumpToStep),
+                    const StepRegistrationSuccess(),
                   ],
                 ),
-                SizedBox(height: SoteriaSpacing.md),
-                SoteriaLinearProgress(
-                  progress:
-                      (state.step.index + 1) / RegistrationStep.values.length,
-                  color: SoteriaColors.gold,
+              ),
+
+              // Footer
+              if (state.step != RegistrationStep.success)
+                Padding(
+                  padding: EdgeInsets.all(SoteriaSpacing.lg),
+                  child: GestureDetector(
+                    onTap: isValid ? () => _onContinue(state) : null,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 200),
+                      opacity: isValid ? 1.0 : 0.4,
+                      child: Container(
+                        height: 56.h,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF5E2BFF), Color(0xFF4A10FF)],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF5E2BFF).withValues(
+                                alpha: 0.4,
+                              ),
+                              blurRadius: 20,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child:
+                              state.isLoading
+                                  ? const CircularProgressIndicator(
+                                    color: Colors.white,
+                                  )
+                                  : Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        (state.step == RegistrationStep.review
+                                                ? 'CREATE ACCOUNT'
+                                                : 'CONTINUE')
+                                            .toUpperCase(),
+                                        style: context.titleMedium.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 1.5,
+                                        ),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      const Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              else
+                Padding(
+                  padding: EdgeInsets.all(SoteriaSpacing.lg),
+                  child: SoteriaButton.primary(
+                    label: 'Check Email',
+                    onPressed: () {},
+                  ),
                 ),
-              ],
-            ),
+            ],
           ),
-
-          // Content
-          Expanded(
-            child: PageView(
-              controller: _pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              children: [
-                const StepPersonalIdentity(),
-                const StepAccountIdentity(),
-                const StepSecurity(),
-                StepReview(onEdit: _jumpToStep),
-                const StepRegistrationSuccess(),
-              ],
-            ),
-          ),
-
-          // Footer
-          if (state.step != RegistrationStep.success)
-            Padding(
-              padding: EdgeInsets.all(SoteriaSpacing.lg),
-              child: SoteriaButton.primary(
-                label: state.step == RegistrationStep.review
-                    ? 'Create Account'
-                    : 'Continue',
-                onPressed: isValid ? () => _onContinue(state) : null,
-                isLoading: state.isLoading,
-              ),
-            )
-          else
-            Padding(
-              padding: EdgeInsets.all(SoteriaSpacing.lg),
-              child: SoteriaButton.primary(
-                label: 'Check Email',
-                onPressed: () {},
-              ),
-            ),
-        ],
+        ),
       ),
     );
   }

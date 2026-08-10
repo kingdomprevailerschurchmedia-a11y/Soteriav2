@@ -10,6 +10,8 @@ class SoteriaPageWrapper extends StatelessWidget {
   final bool showAppBar;
   final bool isScrollable;
   final bool usePadding;
+  final ScrollPhysics? physics;
+  final EdgeInsetsGeometry? padding;
 
   const SoteriaPageWrapper({
     super.key,
@@ -20,6 +22,8 @@ class SoteriaPageWrapper extends StatelessWidget {
     this.showAppBar = true,
     this.isScrollable = true,
     this.usePadding = true,
+    this.physics,
+    this.padding,
   });
 
   @override
@@ -28,14 +32,18 @@ class SoteriaPageWrapper extends StatelessWidget {
 
     if (usePadding) {
       content = Padding(
-        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        padding:
+            padding ??
+            EdgeInsets.symmetric(
+              horizontal: SoteriaSpacing.containerPadding(context),
+            ),
         child: content,
       );
     }
 
     if (isScrollable) {
       content = SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: physics ?? const BouncingScrollPhysics(),
         child: content,
       );
     }

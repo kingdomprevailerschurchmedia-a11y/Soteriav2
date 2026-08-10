@@ -20,11 +20,15 @@ class CategoryPerformanceItem extends StatelessWidget {
             children: [
               Text(
                 performance.category,
-                style: SoteriaTypography.titleSmall.copyWith(color: SoteriaColors.textPrimary),
+                style: SoteriaTypography.titleSmall.copyWith(
+                  color: SoteriaColors.textPrimary,
+                ),
               ),
               Text(
                 '${(performance.accuracy * 100).toInt()}% Accuracy',
-                style: SoteriaTypography.labelSmall.copyWith(color: SoteriaColors.textSecondary),
+                style: SoteriaTypography.labelSmall.copyWith(
+                  color: SoteriaColors.textSecondary,
+                ),
               ),
             ],
           ),
@@ -66,11 +70,15 @@ class CategoryPerformanceItem extends StatelessWidget {
             children: [
               Text(
                 '${performance.totalQuizzes} Quizzes',
-                style: SoteriaTypography.bodySmall.copyWith(color: SoteriaColors.muted),
+                style: SoteriaTypography.bodySmall.copyWith(
+                  color: SoteriaColors.muted,
+                ),
               ),
               Text(
                 'Avg Score: ${performance.averageScore}',
-                style: SoteriaTypography.bodySmall.copyWith(color: SoteriaColors.muted),
+                style: SoteriaTypography.bodySmall.copyWith(
+                  color: SoteriaColors.muted,
+                ),
               ),
             ],
           ),

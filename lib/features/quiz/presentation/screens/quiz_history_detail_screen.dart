@@ -30,7 +30,7 @@ class QuizHistoryDetailScreen extends StatelessWidget {
           SliverToBoxAdapter(child: SizedBox(height: 20.h)),
           SliverToBoxAdapter(child: ResultsHero(result: result)),
           SliverToBoxAdapter(child: ScoreSummary(result: result)),
-          
+
           if (result.powerUpsUsed.isNotEmpty)
             SliverPadding(
               padding: EdgeInsets.all(SoteriaSpacing.lg),
@@ -56,9 +56,8 @@ class QuizHistoryDetailScreen extends StatelessWidget {
             padding: EdgeInsets.all(SoteriaSpacing.lg),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => QuestionResultCard(
-                  result: result.questionResults[index],
-                ),
+                (context, index) =>
+                    QuestionResultCard(result: result.questionResults[index]),
                 childCount: result.questionResults.length,
               ),
             ),
@@ -90,12 +89,18 @@ class _PowerUpSummary extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.md),
         Wrap(
           spacing: 8.w,
-          children: powerUps.map((p) => Chip(
-            label: Text(p.toString().split('.').last.toUpperCase()),
-            backgroundColor: SoteriaColors.primary.withValues(alpha: 0.1),
-            labelStyle: context.labelSmall.copyWith(color: SoteriaColors.primary),
-            padding: EdgeInsets.zero,
-          )).toList(),
+          children: powerUps
+              .map(
+                (p) => Chip(
+                  label: Text(p.toString().split('.').last.toUpperCase()),
+                  backgroundColor: SoteriaColors.primary.withValues(alpha: 0.1),
+                  labelStyle: context.labelSmall.copyWith(
+                    color: SoteriaColors.primary,
+                  ),
+                  padding: EdgeInsets.zero,
+                ),
+              )
+              .toList(),
         ),
       ],
     );

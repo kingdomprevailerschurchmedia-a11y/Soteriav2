@@ -18,10 +18,14 @@ class QuizHistoryPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        authStateChangesProvider.overrideWith((ref) => Stream.value(const identity.UserSession(
-          uid: 'preview_user',
-          status: identity.SessionStatus.authenticated,
-        ))),
+        authStateChangesProvider.overrideWith(
+          (ref) => Stream.value(
+            const identity.UserSession(
+              uid: 'preview_user',
+              status: identity.SessionStatus.authenticated,
+            ),
+          ),
+        ),
         historyListProvider.overrideWith((ref) async {
           if (scenario == 'empty') return [];
           if (scenario == 'error') throw Exception('Failed to load history');
@@ -161,7 +165,8 @@ class QuizHistoryDetailPreview extends StatelessWidget {
           correctOptionIds: ['o1'],
           correctOptionText: 'Jupiter',
           outcome: QuestionOutcome.incorrect,
-          explanation: 'Jupiter is the largest planet, with a mass more than twice that of all the other planets in the Solar System combined.',
+          explanation:
+              'Jupiter is the largest planet, with a mass more than twice that of all the other planets in the Solar System combined.',
           responseTime: Duration(seconds: 3),
           scoreEarned: 0,
         ),

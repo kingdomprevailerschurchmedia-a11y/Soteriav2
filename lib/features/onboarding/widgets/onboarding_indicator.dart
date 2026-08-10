@@ -33,20 +33,21 @@ class _IndicatorDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: EdgeInsets.symmetric(horizontal: 4.w),
-      height: 6.h,
-      width: isActive ? 24.w : 6.w,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.easeOutQuint,
+      margin: EdgeInsets.symmetric(horizontal: 6.w),
+      height: 8.h,
+      width: isActive ? 28.w : 8.w,
       decoration: BoxDecoration(
         color: isActive
             ? SoteriaColors.gold
-            : SoteriaColors.muted.withValues(alpha: 0.3),
+            : SoteriaColors.secondary.withValues(alpha: 0.2),
         borderRadius: SoteriaRadius.brFull,
         boxShadow: isActive
             ? [
                 BoxShadow(
                   color: SoteriaColors.gold.withValues(alpha: 0.4),
-                  blurRadius: 8,
+                  blurRadius: 12,
                   offset: const Offset(0, 2),
                 ),
               ]

@@ -39,7 +39,9 @@ class InsightCard extends StatelessWidget {
                   children: [
                     Text(
                       insight.title,
-                      style: SoteriaTypography.titleSmall.copyWith(color: SoteriaColors.textPrimary),
+                      style: SoteriaTypography.titleSmall.copyWith(
+                        color: SoteriaColors.textPrimary,
+                      ),
                     ),
                     Text(
                       insight.type.name.toUpperCase(),
@@ -56,11 +58,15 @@ class InsightCard extends StatelessWidget {
                 children: [
                   Text(
                     insight.metricValue,
-                    style: SoteriaTypography.titleMedium.copyWith(color: SoteriaColors.textPrimary),
+                    style: SoteriaTypography.titleMedium.copyWith(
+                      color: SoteriaColors.textPrimary,
+                    ),
                   ),
                   Text(
                     insight.metricLabel,
-                    style: SoteriaTypography.labelSmall.copyWith(color: SoteriaColors.muted),
+                    style: SoteriaTypography.labelSmall.copyWith(
+                      color: SoteriaColors.muted,
+                    ),
                   ),
                 ],
               ),
@@ -69,7 +75,9 @@ class InsightCard extends StatelessWidget {
           SizedBox(height: 12.h),
           Text(
             insight.description,
-            style: SoteriaTypography.bodyMedium.copyWith(color: SoteriaColors.textSecondary),
+            style: SoteriaTypography.bodyMedium.copyWith(
+              color: SoteriaColors.textSecondary,
+            ),
           ),
           if (insight.recommendation != null) ...[
             SizedBox(height: 12.h),
@@ -81,12 +89,18 @@ class InsightCard extends StatelessWidget {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.lightbulb_outline, size: 14.w, color: SoteriaColors.gold),
+                  Icon(
+                    Icons.lightbulb_outline,
+                    size: 14.w,
+                    color: SoteriaColors.gold,
+                  ),
                   SizedBox(width: 8.w),
                   Expanded(
                     child: Text(
                       insight.recommendation!,
-                      style: SoteriaTypography.labelSmall.copyWith(color: SoteriaColors.gold),
+                      style: SoteriaTypography.labelSmall.copyWith(
+                        color: SoteriaColors.gold,
+                      ),
                     ),
                   ),
                 ],

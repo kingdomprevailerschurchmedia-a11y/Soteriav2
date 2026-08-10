@@ -16,7 +16,7 @@ void main() {
 
     test('Saves and loads a quiz session correctly', () async {
       final repository = container.read(quizSessionRepositoryProvider);
-      
+
       final session = QuizSession(
         sessionId: 's1',
         playerId: 'p1',
@@ -29,7 +29,7 @@ void main() {
       );
 
       await repository.saveSession(session);
-      
+
       final loaded = await repository.loadSession('s1');
       expect(loaded, isNotNull);
       expect(loaded!.sessionId, equals('s1'));
@@ -39,7 +39,7 @@ void main() {
 
     test('Loads active session for a specific player', () async {
       final repository = container.read(quizSessionRepositoryProvider);
-      
+
       final session = QuizSession(
         sessionId: 's2',
         playerId: 'p2',
@@ -51,7 +51,7 @@ void main() {
       );
 
       await repository.saveSession(session);
-      
+
       final active = await repository.loadActiveSession('p2');
       expect(active, isNotNull);
       expect(active!.sessionId, equals('s2'));
@@ -59,7 +59,7 @@ void main() {
 
     test('Deletes a session correctly', () async {
       final repository = container.read(quizSessionRepositoryProvider);
-      
+
       final session = QuizSession(
         sessionId: 's3',
         playerId: 'p3',
@@ -71,7 +71,7 @@ void main() {
 
       await repository.saveSession(session);
       await repository.deleteSession('s3');
-      
+
       final loaded = await repository.loadSession('s3');
       expect(loaded, isNull);
     });

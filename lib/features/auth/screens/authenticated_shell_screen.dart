@@ -30,8 +30,9 @@ class AuthenticatedShellScreen extends ConsumerWidget {
   }
 
   Widget _buildContent(BuildContext context, WidgetRef ref, dynamic player) {
-    return Center(
-      child: Column(
+    return SafeArea(
+      child: Center(
+        child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(

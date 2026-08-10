@@ -9,11 +9,7 @@ class SplashPreview extends StatelessWidget {
   final Size? deviceSize;
   final bool reducedMotion;
 
-  const SplashPreview({
-    super.key,
-    this.deviceSize,
-    this.reducedMotion = false,
-  });
+  const SplashPreview({super.key, this.deviceSize, this.reducedMotion = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +23,7 @@ class SplashPreview extends StatelessWidget {
           accessibleNavigation: false,
           disableAnimations: reducedMotion,
         ),
-        child: const ProviderScope(
-          child: SplashScreen(),
-        ),
+        child: const ProviderScope(child: SplashScreen()),
       ),
     );
   }
@@ -46,10 +40,7 @@ class SplashPreviewGallery extends StatelessWidget {
       children: [
         _buildPreviewSection(
           title: 'Default (iPhone 13/14)',
-          child: const SizedBox(
-            height: 600,
-            child: SplashPreview(),
-          ),
+          child: const SizedBox(height: 600, child: SplashPreview()),
         ),
         _buildPreviewSection(
           title: 'Small Phone (Pixel 4)',
@@ -85,10 +76,7 @@ class SplashPreviewGallery extends StatelessWidget {
           style: SoteriaTypography.titleMedium.copyWith(color: Colors.white),
         ),
         SizedBox(height: 12.h),
-        ClipRRect(
-          borderRadius: BorderRadius.circular(16.r),
-          child: child,
-        ),
+        ClipRRect(borderRadius: BorderRadius.circular(16.r), child: child),
         SizedBox(height: 32.h),
       ],
     );

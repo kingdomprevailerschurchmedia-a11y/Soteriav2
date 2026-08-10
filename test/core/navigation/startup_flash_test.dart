@@ -49,7 +49,7 @@ void main() {
       // Force GoRouter to start at '/app' (which would normally flash Dashboard)
       // We do this by overriding the router provider with a custom initial location
       // or by relying on the redirect which we just fixed.
-      
+
       await tester.pumpWidget(
         UncontrolledProviderScope(
           container: container,
@@ -59,7 +59,7 @@ void main() {
 
       // Settle initial router state
       await tester.pump();
-      
+
       // Attempt to navigate to Dashboard explicitly
       container.read(routerProvider).go(SoteriaRoutes.main);
       await tester.pump();
@@ -67,10 +67,10 @@ void main() {
       // Verify that even after attempting to go to /app, we are gated.
       // DashboardScreen should NOT be in the tree.
       expect(find.byType(DashboardScreen), findsNothing);
-      
+
       // SplashScreen SHOULD be in the tree.
       expect(find.byType(SplashScreen), findsOneWidget);
-      
+
       // Clean up timers from SplashScreen
       await tester.pump(const Duration(milliseconds: 2000));
       await tester.pumpAndSettle();

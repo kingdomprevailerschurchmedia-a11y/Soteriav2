@@ -54,31 +54,33 @@ class QuizHistoryScreen extends ConsumerWidget {
             SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.md)),
             SliverToBoxAdapter(child: HistoryFilterBar()),
             SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
-            
+
             summaryAsync.when(
               data: (summary) => SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
                 sliver: SliverToBoxAdapter(
-                  child: summary.totalQuizzes > 0 
-                    ? PerformanceSummarySection(summary: summary)
-                    : const SizedBox.shrink(),
+                  child: summary.totalQuizzes > 0
+                      ? PerformanceSummarySection(summary: summary)
+                      : const SizedBox.shrink(),
                 ),
               ),
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (_, __) =>
+                  const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
 
             categoryAsync.when(
               data: (performances) => SliverPadding(
                 padding: EdgeInsets.all(SoteriaSpacing.lg),
                 sliver: SliverToBoxAdapter(
-                  child: (performances as List<CategoryPerformance>).isNotEmpty 
-                    ? CategoryPerformanceList(performances: performances)
-                    : const SizedBox.shrink(),
+                  child: (performances as List<CategoryPerformance>).isNotEmpty
+                      ? CategoryPerformanceList(performances: performances)
+                      : const SizedBox.shrink(),
                 ),
               ),
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+              error: (_, __) =>
+                  const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
 
             SliverPadding(
@@ -115,7 +117,9 @@ class QuizHistoryScreen extends ConsumerWidget {
                   );
                 },
                 loading: () => SliverToBoxAdapter(child: _LoadingState()),
-                error: (err, _) => SliverToBoxAdapter(child: _ErrorState(message: err.toString())),
+                error: (err, _) => SliverToBoxAdapter(
+                  child: _ErrorState(message: err.toString()),
+                ),
               ),
             ),
             SliverToBoxAdapter(child: SizedBox(height: 100.h)),
@@ -132,7 +136,10 @@ class QuizHistoryScreen extends ConsumerWidget {
         backgroundColor: SoteriaColors.background,
         title: Text(
           'Clear Quiz History?',
-          style: context.titleLarge.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+          style: context.titleLarge.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         content: Text(
           'This will permanently remove your saved quiz history from this device.',
@@ -141,14 +148,20 @@ class QuizHistoryScreen extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('CANCEL', style: context.labelLarge.copyWith(color: Colors.white38)),
+            child: Text(
+              'CANCEL',
+              style: context.labelLarge.copyWith(color: Colors.white38),
+            ),
           ),
           TextButton(
             onPressed: () {
               // Implementation of clear history
               Navigator.pop(context);
             },
-            child: Text('CLEAR HISTORY', style: context.labelLarge.copyWith(color: SoteriaColors.error)),
+            child: Text(
+              'CLEAR HISTORY',
+              style: context.labelLarge.copyWith(color: SoteriaColors.error),
+            ),
           ),
         ],
       ),
@@ -167,7 +180,10 @@ class _EmptyState extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.lg),
         Text(
           'No Quizzes Yet',
-          style: context.titleLarge.copyWith(color: Colors.white, fontWeight: FontWeight.bold),
+          style: context.titleLarge.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SizedBox(height: SoteriaSpacing.sm),
         Text(
@@ -180,7 +196,9 @@ class _EmptyState extends StatelessWidget {
           onPressed: () => context.go(SoteriaRoutes.main),
           style: ElevatedButton.styleFrom(
             backgroundColor: SoteriaColors.primary,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(SoteriaRadius.md)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(SoteriaRadius.md),
+            ),
           ),
           child: const Text('START A QUIZ'),
         ),
@@ -193,14 +211,17 @@ class _LoadingState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: List.generate(3, (index) => Container(
-        height: 100.h,
-        margin: EdgeInsets.only(bottom: SoteriaSpacing.md),
-        decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(SoteriaRadius.lg),
+      children: List.generate(
+        3,
+        (index) => Container(
+          height: 100.h,
+          margin: EdgeInsets.only(bottom: SoteriaSpacing.md),
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(SoteriaRadius.lg),
+          ),
         ),
-      )),
+      ),
     );
   }
 }
@@ -214,7 +235,11 @@ class _ErrorState extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          Icon(Icons.error_outline_rounded, color: SoteriaColors.error, size: 48.sp),
+          Icon(
+            Icons.error_outline_rounded,
+            color: SoteriaColors.error,
+            size: 48.sp,
+          ),
           SizedBox(height: SoteriaSpacing.md),
           Text(
             'Unable to load quiz history',

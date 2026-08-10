@@ -82,115 +82,81 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
               final feature = _features[index];
               return Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
-                child: GlassSurface(
-                  opacity: 0.1,
-                  borderRadius: BorderRadius.circular(24.r),
-                  border: Border.all(
-                    color: SoteriaColors.primary.withValues(alpha: 0.2),
-                    width: 1.5,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.r),
+                    color: const Color(0xFF130F26).withValues(alpha: 0.8),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.1),
+                      width: 1,
+                    ),
                   ),
-                  child: Stack(
-                    children: [
-                      // Subtile Glow
-                      Positioned(
-                        right: -20,
-                        bottom: -20,
-                        child: Container(
-                          width: 100.w,
-                          height: 100.w,
+                  child: Padding(
+                    padding: EdgeInsets.all(20.w),
+                    child: Row(
+                      children: [
+                        // Illustration Placeholder / Large Icon
+                        Container(
+                          width: 60.w,
+                          height: 60.w,
                           decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: SoteriaColors.primary.withValues(alpha: 0.1),
+                            color: const Color(0xFF1A1633),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Icon(
+                            feature['icon'],
+                            color: SoteriaColors.gold,
+                            size: 30.sp,
                           ),
                         ),
-                      ),
 
-                      Padding(
-                        padding: EdgeInsets.all(20.w),
-                        child: Row(
-                          children: [
-                            // Illustration Placeholder / Large Icon
-                            Container(
-                              width: 90.w,
-                              height: 90.w,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    SoteriaColors.primary.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                    SoteriaColors.secondary.withValues(
-                                      alpha: 0.1,
-                                    ),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
+                        SizedBox(width: 20.w),
+
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                feature['title'],
+                                style: context.titleLarge.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                  fontSize: 20.sp,
                                 ),
-                                borderRadius: BorderRadius.circular(20.r),
                               ),
-                              child: Icon(
-                                feature['icon'],
-                                color: SoteriaColors.primary,
-                                size: 48.sp,
-                              ),
-                            ),
-
-                            SizedBox(width: 20.w),
-
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      feature['title'],
-                                      style: context.titleLarge.copyWith(
-                                        fontWeight: FontWeight.w900,
-                                        color: Colors.white,
-                                        fontSize: 22.sp,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 6.h),
-                                  Text(
-                                    feature['description'],
-                                    style: context.bodySmall.copyWith(
-                                      color: SoteriaColors.textSecondary,
-                                      fontSize: 14.sp,
-                                      height: 1.3,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ],
-                              ),
-                            ),
-
-                            SizedBox(width: 12.w),
-
-                            // Interaction Arrow
-                            Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: SoteriaColors.primary.withValues(
-                                  alpha: 0.15,
+                              SizedBox(height: 4.h),
+                              Text(
+                                feature['description'],
+                                style: context.bodySmall.copyWith(
+                                  color: Colors.white.withValues(alpha: 0.6),
+                                  fontSize: 14.sp,
                                 ),
-                                shape: BoxShape.circle,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              child: Icon(
-                                Icons.chevron_right_rounded,
-                                color: SoteriaColors.secondary,
-                                size: 24.sp,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+
+                        SizedBox(width: 12.w),
+
+                        // Interaction Arrow
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.chevron_right_rounded,
+                            color: Colors.white.withValues(alpha: 0.4),
+                            size: 20.sp,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -208,20 +174,14 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
             (index) => AnimatedContainer(
               duration: const Duration(milliseconds: 400),
               margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: _currentPage == index ? 24.w : 8.w,
-              height: 6.h,
+              width: 8.w,
+              height: 8.w,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(3),
-                color: _currentPage == index
-                    ? SoteriaColors.primary
-                    : SoteriaColors.muted.withValues(alpha: 0.3),
-                boxShadow: [
-                  if (_currentPage == index)
-                    BoxShadow(
-                      color: SoteriaColors.primary.withValues(alpha: 0.4),
-                      blurRadius: 8,
-                    ),
-                ],
+                shape: BoxShape.circle,
+                color:
+                    _currentPage == index
+                        ? SoteriaColors.primary
+                        : Colors.white.withValues(alpha: 0.15),
               ),
             ),
           ),

@@ -33,10 +33,11 @@ class SoteriaApp extends ConsumerWidget {
   }
 
   Widget _buildApp(BuildContext context, WidgetRef ref) {
-    // Initialize background services after first frame
+    // Initialize background services and remove splash after first frame
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(notificationCoordinatorProvider).initialize();
       ref.read(configurationCoordinatorProvider).initialize();
+      FlutterNativeSplash.remove();
     });
 
     final router = ref.watch(routerProvider);
@@ -57,7 +58,7 @@ class SoteriaApp extends ConsumerWidget {
   Widget _buildErrorApp(BuildContext context, WidgetRef ref, Object error) {
     // Ensure native splash is removed if we hit a fatal error
     FlutterNativeSplash.remove();
-    
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: SoteriaTheme.darkTheme,

@@ -17,7 +17,9 @@ class ResultsPreviewWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return ProviderScope(
       overrides: [
-        quizControllerProvider.overrideWith(() => _MockResultsController(state)),
+        quizControllerProvider.overrideWith(
+          () => _MockResultsController(state),
+        ),
       ],
       child: const QuizResultsScreen(),
     );
@@ -93,23 +95,25 @@ class ResultsPreviews {
   }
 
   static Widget excellent() => ResultsPreviewWrapper(
-        state: QuizState(
-          status: QuizStatus.completed,
-          result: mockResult(),
-        ),
-      );
+    state: QuizState(status: QuizStatus.completed, result: mockResult()),
+  );
 
   static Widget perfect() => ResultsPreviewWrapper(
-        state: QuizState(
-          status: QuizStatus.completed,
-          result: mockResult(accuracy: 1.0, score: 2500, xp: 250, rating: 'Exceptional'),
-        ),
-      );
+    state: QuizState(
+      status: QuizStatus.completed,
+      result: mockResult(
+        accuracy: 1.0,
+        score: 2500,
+        xp: 250,
+        rating: 'Exceptional',
+      ),
+    ),
+  );
 
   static Widget average() => ResultsPreviewWrapper(
-        state: QuizState(
-          status: QuizStatus.completed,
-          result: mockResult(accuracy: 0.6, score: 950, xp: 60, rating: 'Good'),
-        ),
-      );
+    state: QuizState(
+      status: QuizStatus.completed,
+      result: mockResult(accuracy: 0.6, score: 950, xp: 60, rating: 'Good'),
+    ),
+  );
 }

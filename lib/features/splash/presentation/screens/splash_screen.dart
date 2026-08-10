@@ -73,8 +73,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         statusBarBrightness: Brightness.dark,
         systemNavigationBarColor: SoteriaColors.backgroundBottomRight,
         systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarDividerColor:
-        SoteriaColors.backgroundBottomRight,
+        systemNavigationBarDividerColor: SoteriaColors.backgroundBottomRight,
       ),
     );
   }
@@ -97,11 +96,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _logoOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(
-        0.075,
-        0.30,
-        curve: Curves.easeOut,
-      ),
+      curve: const Interval(0.075, 0.30, curve: Curves.easeOut),
     );
 
     // -------------------------------------------------------------------------
@@ -111,17 +106,10 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // 94% → 100%
     // -------------------------------------------------------------------------
 
-    _logoScale = Tween<double>(
-      begin: 0.94,
-      end: 1.0,
-    ).animate(
+    _logoScale = Tween<double>(begin: 0.94, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(
-          0.075,
-          0.30,
-          curve: Curves.easeOutCubic,
-        ),
+        curve: const Interval(0.075, 0.30, curve: Curves.easeOutCubic),
       ),
     );
 
@@ -133,11 +121,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _textOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(
-        0.25,
-        0.45,
-        curve: Curves.easeOut,
-      ),
+      curve: const Interval(0.25, 0.45, curve: Curves.easeOut),
     );
   }
 
@@ -173,16 +157,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
        *
        * Startup work continues independently.
        */
-      Future<void>.delayed(
-        const Duration(milliseconds: 1500),
-            () {
-          if (!mounted) return;
+      Future<void>.delayed(const Duration(milliseconds: 1500), () {
+        if (!mounted) return;
 
-          _minimumSplashDurationComplete = true;
+        _minimumSplashDurationComplete = true;
 
-          _maybeNavigate();
-        },
-      );
+        _maybeNavigate();
+      });
     });
 
     /*
@@ -194,7 +175,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
      */
     _startupSubscription = ref.listenManual<AppStartupState>(
       appLifecycleProvider,
-          (previous, next) {
+      (previous, next) {
         if (!mounted) return;
 
         _startupReady = next != AppStartupState.loading;
@@ -313,8 +294,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         statusBarBrightness: Brightness.dark,
         systemNavigationBarColor: SoteriaColors.backgroundBottomRight,
         systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarDividerColor:
-        SoteriaColors.backgroundBottomRight,
+        systemNavigationBarDividerColor: SoteriaColors.backgroundBottomRight,
       ),
     );
 
@@ -337,7 +317,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           //
           // Therefore NO additional glow layer is added.
           // =================================================================
-
           const _SplashBackground(),
 
           // =================================================================
@@ -351,7 +330,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           //
           // Do NOT wrap this in Center().
           // =================================================================
-
           SplashBranding(
             logoOpacity: _logoOpacity,
             logoScale: _logoScale,

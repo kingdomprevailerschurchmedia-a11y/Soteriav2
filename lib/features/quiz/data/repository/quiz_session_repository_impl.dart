@@ -16,7 +16,7 @@ class QuizSessionRepositoryImpl implements QuizSessionRepository {
   Future<QuizSession?> loadActiveSession(String playerId) async {
     // For now, we assume there's only one "active" or "recoverable" session per player
     // This could be more sophisticated if we query by status
-    // But since QuizLocalDataSource is simple, we might need to extend it 
+    // But since QuizLocalDataSource is simple, we might need to extend it
     // or just rely on the latest one found if we can list them.
     // For simplicity, I'll use a fixed key or similar in a real implementation.
     // But let's check what MockQuizLocalDataSource does.

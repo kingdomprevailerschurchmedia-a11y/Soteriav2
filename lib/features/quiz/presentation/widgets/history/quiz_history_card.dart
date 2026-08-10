@@ -9,11 +9,7 @@ import '../../../domain/models/quiz_result.dart';
 import '../../../domain/models/quiz_enums.dart';
 
 class QuizHistoryCard extends StatelessWidget {
-  const QuizHistoryCard({
-    super.key,
-    required this.result,
-    required this.onTap,
-  });
+  const QuizHistoryCard({super.key, required this.result, required this.onTap});
 
   final QuizResult result;
   final VoidCallback onTap;
@@ -99,7 +95,9 @@ class QuizHistoryCard extends StatelessWidget {
                             vertical: 2.h,
                           ),
                           decoration: BoxDecoration(
-                            color: _getRatingColor(result.accuracy).withValues(alpha: 0.1),
+                            color: _getRatingColor(
+                              result.accuracy,
+                            ).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4),
                           ),
                           child: Text(

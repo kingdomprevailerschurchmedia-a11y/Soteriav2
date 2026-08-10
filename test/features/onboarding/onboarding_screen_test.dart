@@ -35,11 +35,17 @@ void main() {
       );
       await tester.pump();
 
-      expect(find.text('Compete. Learn. Rise.'), findsOneWidget);
+      // Check for rich text "Compete." using widget predicate
+      expect(
+        find.byWidgetPredicate(
+          (w) => w is RichText && w.text.toPlainText().contains('Compete.'),
+        ),
+        findsOneWidget,
+      );
       expect(find.byType(OnboardingPage), findsOneWidget);
       expect(find.byType(OnboardingIndicator), findsOneWidget);
-      expect(find.text('Skip'), findsOneWidget);
-      expect(find.text('Next'), findsOneWidget);
+      expect(find.text('SKIP'), findsOneWidget);
+      expect(find.text('NEXT'), findsOneWidget);
     });
 
     testWidgets('navigation updates UI', (tester) async {
@@ -53,13 +59,13 @@ void main() {
       await tester.pump();
 
       // Tap Next
-      await tester.tap(find.text('Next'));
+      await tester.tap(find.text('NEXT'));
       await tester.pumpAndSettle();
 
       expect(find.text('Challenge Yourself'), findsOneWidget);
     });
 
-    testWidgets('last page shows Get Started', (tester) async {
+    testWidgets('last page shows Start', (tester) async {
       tester.view.physicalSize = const Size(390, 844);
       tester.view.devicePixelRatio = 1.0;
       addTearDown(tester.view.resetPhysicalSize);
@@ -70,17 +76,18 @@ void main() {
       await tester.pump();
 
       // Swipe to the last page (total 4 pages)
-      await tester.drag(find.byType(PageView), const Offset(-400, 0));
+      final pageView = find.byType(PageView);
+      await tester.drag(pageView, const Offset(-400, 0));
       await tester.pumpAndSettle();
-      await tester.drag(find.byType(PageView), const Offset(-400, 0));
+      await tester.drag(pageView, const Offset(-400, 0));
       await tester.pumpAndSettle();
-      await tester.drag(find.byType(PageView), const Offset(-400, 0));
+      await tester.drag(pageView, const Offset(-400, 0));
       await tester.pumpAndSettle();
 
       expect(find.text('Ready to Begin?'), findsOneWidget);
-      expect(find.text('Get Started'), findsOneWidget);
-      expect(find.text('Sign In'), findsOneWidget);
-      expect(find.text('Create Account'), findsOneWidget);
+      expect(find.text('START'), findsOneWidget);
+      expect(find.text('Sign In'), findsNothing);
+      expect(find.text('Create Account'), findsNothing);
     });
 
     testWidgets('onboarding accessibility test', (tester) async {
@@ -94,7 +101,7 @@ void main() {
       await tester.pump();
 
       // Verify label is present
-      expect(find.bySemanticsLabel('Next'), findsOneWidget);
+      expect(find.bySemanticsLabel(RegExp('Next', caseSensitive: false)), findsOneWidget);
     });
   });
 }

@@ -60,10 +60,11 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
       return const SizedBox.shrink();
     }
 
-    final isGlow = widget.variant == AuthProviderButtonVariant.glow;
+    final isGoogle = widget.provider.type == IdentityProviderType.google;
+    final isEmail = widget.provider.type == IdentityProviderType.email;
 
     return Padding(
-      padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+      padding: EdgeInsets.only(bottom: SoteriaSpacing.lg),
       child: GestureDetector(
         onTapDown: (_) => _controller.forward(),
         onTapUp: (_) => _controller.reverse(),
@@ -72,77 +73,56 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
         child: ScaleTransition(
           scale: _scaleAnimation,
           child: Container(
-            height: 64.h,
+            height: 56.h,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
+              borderRadius: BorderRadius.circular(16.r),
+              color: const Color(0xFF0D0B1E),
+              border: Border.all(
+                color:
+                    isEmail
+                        ? SoteriaColors.primary.withValues(alpha: 0.5)
+                        : Colors.white.withValues(alpha: 0.1),
+                width: 1,
+              ),
               boxShadow: [
-                if (isGlow)
+                if (isGoogle)
                   BoxShadow(
-                    color: SoteriaColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 25,
-                    offset: const Offset(0, 8),
+                    color: SoteriaColors.primary.withValues(alpha: 0.2),
+                    blurRadius: 20,
+                    offset: const Offset(0, 4),
                   ),
               ],
             ),
-            child: GlassSurface(
-              borderRadius: BorderRadius.circular(24.r),
-              border: Border.all(
-                color: isGlow
-                    ? SoteriaColors.primary.withValues(alpha: 0.5)
-                    : Colors.white.withValues(alpha: 0.1),
-                width: 1.5,
-              ),
-              opacity: isGlow ? 0.15 : 0.05,
-              child: Stack(
-                children: [
-                  // Inner Glow for Google Button
-                  if (isGlow)
-                    Positioned.fill(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24.r),
-                          gradient: LinearGradient(
-                            colors: [
-                              Colors.white.withValues(alpha: 0.05),
-                              Colors.transparent,
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
+            child: Center(
+              child:
+                  widget.isLoading
+                      ? _buildLoader()
+                      : Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SoteriaSpacing.lg,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildIcon(),
+                            SizedBox(width: 16.w),
+                            Flexible(
+                              child: Text(
+                                widget.provider.name,
+                                style: context.titleSmall.copyWith(
+                                  color:
+                                      isEmail
+                                          ? SoteriaColors.secondary
+                                          : Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 18.sp,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-
-                  Center(
-                    child: widget.isLoading
-                        ? _buildLoader()
-                        : Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: SoteriaSpacing.lg,
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildIcon(),
-                                SizedBox(width: SoteriaSpacing.md),
-                                Flexible(
-                                  child: Text(
-                                    widget.provider.name,
-                                    style: context.titleSmall.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                      letterSpacing: 0.5,
-                                      fontSize: 18.sp,
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                  ),
-                ],
-              ),
             ),
           ),
         ),
@@ -152,28 +132,20 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
 
   Widget _buildIcon() {
     if (widget.provider.type == IdentityProviderType.google) {
-      return Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 5,
-            ),
-          ],
-        ),
-        child: Image.network(
-          'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
-          width: 20.sp,
-          height: 20.sp,
-          errorBuilder: (_, __, ___) =>
-              Icon(widget.provider.icon, color: Colors.blue, size: 20.sp),
-        ),
+      return Image.network(
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
+        width: 24.sp,
+        height: 24.sp,
+        errorBuilder:
+            (_, __, ___) =>
+                Icon(widget.provider.icon, color: Colors.blue, size: 24.sp),
       );
     }
-    return Icon(widget.provider.icon, color: Colors.white, size: 24.sp);
+    return Icon(
+      widget.provider.icon,
+      color: SoteriaColors.secondary,
+      size: 24.sp,
+    );
   }
 
   Widget _buildLoader() {

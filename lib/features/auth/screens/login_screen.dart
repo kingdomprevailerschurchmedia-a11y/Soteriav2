@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -7,6 +8,7 @@ import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
+import 'package:soteria/shared/widgets/soteria_divider.dart';
 import '../providers/login_notifier.dart';
 import '../widgets/login_hero_section.dart';
 import '../widgets/login_form.dart';
@@ -18,33 +20,67 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(loginProvider);
 
-    return SafeGradientScaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xl),
-        child: Column(
-          children: [
-            LoginHeroSection(userName: state.userName),
-            const LoginForm(),
-            SizedBox(height: SoteriaSpacing.xl),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/welcomescreen_bg.png'),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xl),
+            child: Column(
               children: [
-                Text(
-                  "Don't have an account?",
-                  style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                LoginHeroSection(userName: state.userName),
+                const LoginForm(),
+                SizedBox(height: SoteriaSpacing.xl),
+                const SoteriaDivider(text: 'OR'),
+                SizedBox(height: SoteriaSpacing.xl),
+                Column(
+                  children: [
+                    Text(
+                      "Don't have an account?",
+                      style: context.bodyMedium.copyWith(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 8.h),
+                    GestureDetector(
+                      onTap: state.isLoading
+                          ? null
+                          : () => ref
+                                .read(navigationServiceProvider)
+                                .push('${SoteriaRoutes.auth}/register'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'CREATE ONE',
+                            style: context.titleMedium.copyWith(
+                              color: SoteriaColors.secondary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18.sp,
+                            ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            color: SoteriaColors.secondary,
+                            size: 20.sp,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
-                SoteriaButton.text(
-                  label: 'Create One',
-                  onPressed: state.isLoading
-                      ? null
-                      : () => ref
-                            .read(navigationServiceProvider)
-                            .push('${SoteriaRoutes.auth}/register'),
-                ),
+                SizedBox(height: SoteriaSpacing.xxl),
               ],
             ),
-            SizedBox(height: SoteriaSpacing.xxl),
-          ],
+          ),
         ),
       ),
     );

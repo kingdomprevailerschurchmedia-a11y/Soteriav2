@@ -18,9 +18,7 @@ class RecoveryPreviewWrapper extends StatelessWidget {
       ],
       child: const Scaffold(
         backgroundColor: Color(0xFF0D081E),
-        body: Center(
-          child: SessionRecoveryDialog(),
-        ),
+        body: Center(child: SessionRecoveryDialog()),
       ),
     );
   }
@@ -49,31 +47,28 @@ class RecoveryPreviews {
   );
 
   static Widget available() => RecoveryPreviewWrapper(
-        state: RecoveryState(
-          status: RecoveryStatus.available,
-          session: mockSession,
-        ),
-      );
+    state: RecoveryState(
+      status: RecoveryStatus.available,
+      session: mockSession,
+    ),
+  );
 
   static Widget recovering() => RecoveryPreviewWrapper(
-        state: RecoveryState(
-          status: RecoveryStatus.recovering,
-          session: mockSession,
-        ),
-      );
+    state: RecoveryState(
+      status: RecoveryStatus.recovering,
+      session: mockSession,
+    ),
+  );
 
   static Widget success() => RecoveryPreviewWrapper(
-        state: RecoveryState(
-          status: RecoveryStatus.success,
-          session: mockSession,
-        ),
-      );
+    state: RecoveryState(status: RecoveryStatus.success, session: mockSession),
+  );
 
   static Widget failed() => RecoveryPreviewWrapper(
-        state: RecoveryState(
-          status: RecoveryStatus.failed,
-          session: mockSession,
-          error: 'Connection timed out while restoring session.',
-        ),
-      );
+    state: RecoveryState(
+      status: RecoveryStatus.failed,
+      session: mockSession,
+      error: 'Connection timed out while restoring session.',
+    ),
+  );
 }

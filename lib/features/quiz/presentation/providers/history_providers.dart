@@ -5,7 +5,14 @@ import 'quiz_providers.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../domain/usecases/history/get_performance_summary_use_case.dart';
 
-enum HistorySort { newest, oldest, highestScore, highestAccuracy, highestXp, bestStreak }
+enum HistorySort {
+  newest,
+  oldest,
+  highestScore,
+  highestAccuracy,
+  highestXp,
+  bestStreak,
+}
 
 class HistoryFilters {
   final GameMode? mode;
@@ -41,12 +48,21 @@ class HistoryFilters {
     );
   }
 
-  bool get isEmpty => mode == null && category == null && difficulty == null && startDate == null && endDate == null;
+  bool get isEmpty =>
+      mode == null &&
+      category == null &&
+      difficulty == null &&
+      startDate == null &&
+      endDate == null;
 }
 
-final historyFiltersProvider = StateProvider<HistoryFilters>((ref) => const HistoryFilters());
+final historyFiltersProvider = StateProvider<HistoryFilters>(
+  (ref) => const HistoryFilters(),
+);
 final historySearchProvider = StateProvider<String>((ref) => '');
-final historySortProvider = StateProvider<HistorySort>((ref) => HistorySort.newest);
+final historySortProvider = StateProvider<HistorySort>(
+  (ref) => HistorySort.newest,
+);
 
 final historyListProvider = FutureProvider<List<QuizResult>>((ref) async {
   final playerId = ref.watch(sessionProvider).uid;
@@ -55,9 +71,9 @@ final historyListProvider = FutureProvider<List<QuizResult>>((ref) async {
   final filters = ref.watch(historyFiltersProvider);
   final search = ref.watch(historySearchProvider).toLowerCase();
   final sort = ref.watch(historySortProvider);
-  
+
   final repository = ref.watch(quizHistoryRepositoryProvider);
-  
+
   List<QuizResult> results = await repository.getResults(playerId);
 
   // Apply filters
@@ -71,20 +87,27 @@ final historyListProvider = FutureProvider<List<QuizResult>>((ref) async {
     results = results.where((r) => r.difficulty == filters.difficulty).toList();
   }
   if (filters.startDate != null) {
-    results = results.where((r) => r.completedAt.isAfter(filters.startDate!)).toList();
+    results = results
+        .where((r) => r.completedAt.isAfter(filters.startDate!))
+        .toList();
   }
   if (filters.endDate != null) {
-    results = results.where((r) => r.completedAt.isBefore(filters.endDate!)).toList();
+    results = results
+        .where((r) => r.completedAt.isBefore(filters.endDate!))
+        .toList();
   }
 
   // Apply search
   if (search.isNotEmpty) {
-    results = results.where((r) => 
-      r.category.toLowerCase().contains(search) ||
-      r.gameMode.name.toLowerCase().contains(search) ||
-      r.difficulty.name.toLowerCase().contains(search) ||
-      r.performanceRating.toLowerCase().contains(search)
-    ).toList();
+    results = results
+        .where(
+          (r) =>
+              r.category.toLowerCase().contains(search) ||
+              r.gameMode.name.toLowerCase().contains(search) ||
+              r.difficulty.name.toLowerCase().contains(search) ||
+              r.performanceRating.toLowerCase().contains(search),
+        )
+        .toList();
   }
 
   // Apply sort
@@ -112,7 +135,9 @@ final historyListProvider = FutureProvider<List<QuizResult>>((ref) async {
   return results;
 });
 
-final performanceSummaryProvider = FutureProvider<PerformanceSummary>((ref) async {
+final performanceSummaryProvider = FutureProvider<PerformanceSummary>((
+  ref,
+) async {
   final playerId = ref.watch(sessionProvider).uid;
   if (playerId == null) return PerformanceSummary.empty();
 

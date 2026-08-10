@@ -7,6 +7,8 @@ import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
 import 'package:soteria/core/widgets/ambient_glow.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class QuestionContentCard extends StatelessWidget {
   const QuestionContentCard({
     super.key,
@@ -23,6 +25,8 @@ class QuestionContentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -38,7 +42,7 @@ class QuestionContentCard extends StatelessWidget {
         GlassSurface(
           borderRadius: SoteriaRadius.brXl,
           opacity: 0.05,
-          padding: EdgeInsets.all(SoteriaSpacing.xl),
+          padding: EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
           child: Semantics(
             label: 'Question: $text',
             child: Column(
@@ -46,7 +50,12 @@ class QuestionContentCard extends StatelessWidget {
               children: [
                 if (category != null || difficulty != null)
                   Padding(
-                    padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                    padding: EdgeInsets.only(
+                      bottom: SoteriaSpacing.adaptive(
+                        context,
+                        SoteriaSpacing.mdStatic,
+                      ),
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -67,19 +76,25 @@ class QuestionContentCard extends StatelessWidget {
                   ),
                 Text(
                   text,
-                  style: context.displayMedium.copyWith(
-                    fontSize: 24.sp,
-                    height: 1.4,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: -0.5,
-                  ),
+                  style: (isShort ? context.titleLarge : context.displayMedium)
+                      .copyWith(
+                        fontSize: isShort ? 20.sp : 24.sp,
+                        height: 1.4,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.5,
+                      ),
                   textAlign: TextAlign.center,
                 ),
                 if (mediaUrl != null) ...[
-                  SizedBox(height: SoteriaSpacing.xl),
+                  SizedBox(
+                    height: SoteriaSpacing.adaptive(
+                      context,
+                      SoteriaSpacing.lgStatic,
+                    ),
+                  ),
                   // Placeholder for future media implementation
                   Container(
-                    height: 200.h,
+                    height: isShort ? 120.h : 200.h,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: 0.05),
                       borderRadius: SoteriaRadius.brMd,

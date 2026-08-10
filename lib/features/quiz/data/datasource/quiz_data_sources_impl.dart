@@ -173,9 +173,7 @@ class MockQuizLocalDataSource implements QuizLocalDataSource {
 
   @override
   Future<List<QuizResult>> getResults(String playerId) async {
-    return _resultsCache.values
-        .where((r) => r.playerId == playerId)
-        .toList();
+    return _resultsCache.values.where((r) => r.playerId == playerId).toList();
   }
 
   @override

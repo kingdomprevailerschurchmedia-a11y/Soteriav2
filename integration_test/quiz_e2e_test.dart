@@ -4,7 +4,8 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/app/app.dart';
 import 'package:soteria/features/quiz/presentation/providers/quiz_providers.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_enums.dart' as quiz_enums;
+import 'package:soteria/features/quiz/domain/models/quiz_enums.dart'
+    as quiz_enums;
 import 'package:soteria/features/quiz/domain/repositories/quiz_repository.dart';
 import 'package:soteria/features/quiz/domain/models/question.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_session.dart';
@@ -60,9 +61,13 @@ class MockQuizRepository implements QuizRepository {
   @override
   Future<QuizSession?> restoreSession(String sessionId) async => null;
   @override
-  Future<PlayerAnswer> submitAnswer({required String sessionId, required PlayerAnswer answer}) async => answer;
+  Future<PlayerAnswer> submitAnswer({
+    required String sessionId,
+    required PlayerAnswer answer,
+  }) async => answer;
   @override
-  Future<QuizResult> finishSession(String sessionId) async => throw UnimplementedError();
+  Future<QuizResult> finishSession(String sessionId) async =>
+      throw UnimplementedError();
   @override
   Future<int> calculateScore(String sessionId) async => 0;
   @override
@@ -70,7 +75,10 @@ class MockQuizRepository implements QuizRepository {
   @override
   Future<QuizSession?> loadProgress(String sessionId) async => null;
   @override
-  Future<bool> validateAnswer({required String questionId, required List<String> selectedOptionIds}) async => true;
+  Future<bool> validateAnswer({
+    required String questionId,
+    required List<String> selectedOptionIds,
+  }) async => true;
   @override
   Future<void> syncSession(String sessionId) async {}
 }
@@ -84,7 +92,9 @@ void main() {
         ProviderScope(
           overrides: [
             quizRepositoryProvider.overrideWithValue(MockQuizRepository()),
-            sessionProvider.overrideWith(() => SessionNotifier()), // Default guest session or custom
+            sessionProvider.overrideWith(
+              () => SessionNotifier(),
+            ), // Default guest session or custom
           ],
           child: const SoteriaApp(),
         ),
@@ -92,16 +102,22 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      final container = ProviderScope.containerOf(tester.element(find.byType(SoteriaApp)));
-      
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(SoteriaApp)),
+      );
+
       // Manually set session to authenticated for test
-      container.read(sessionProvider.notifier).setSession(const UserSession(
-        uid: 'test-user',
-        status: SessionStatus.authenticated,
-      ));
+      container
+          .read(sessionProvider.notifier)
+          .setSession(
+            const UserSession(
+              uid: 'test-user',
+              status: SessionStatus.authenticated,
+            ),
+          );
 
       final quizController = container.read(quizControllerProvider.notifier);
-      
+
       await quizController.startQuiz(
         playerId: 'test-user',
         mode: quiz_enums.GameMode.practice,
@@ -112,7 +128,7 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('What is 1+1?'), findsOneWidget);
-      
+
       await tester.tap(find.text('2'));
       await tester.pump();
       await tester.pumpAndSettle(const Duration(seconds: 3));

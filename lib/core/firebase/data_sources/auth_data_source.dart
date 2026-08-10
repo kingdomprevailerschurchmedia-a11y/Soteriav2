@@ -54,20 +54,21 @@ class FirebaseAuthDataSource implements AuthDataSource {
       );
     }
 
-    final googleUser = await googleSignIn.authenticate();
-    if (googleUser == null) {
+    try {
+      final googleUser = await googleSignIn.authenticate();
+      final googleAuth = googleUser.authentication;
+
+      final auth.AuthCredential credential = auth.GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      return _auth.signInWithCredential(credential);
+    } on GoogleSignInException catch (e) {
       throw auth.FirebaseAuthException(
-        code: 'google-sign-in-cancelled',
-        message: 'The user cancelled the Google Sign-In flow.',
+        code: 'google-sign-in-failed',
+        message: e.description,
       );
     }
-
-    final googleAuth = googleUser.authentication;
-    final auth.AuthCredential credential = auth.GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-    );
-
-    return _auth.signInWithCredential(credential);
   }
 
   @override

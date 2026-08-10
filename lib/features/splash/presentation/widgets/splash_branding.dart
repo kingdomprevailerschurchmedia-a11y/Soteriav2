@@ -31,7 +31,6 @@ class SplashBranding extends StatelessWidget {
         // ============================================================
         // GOLD SOTERIA ICON
         // ============================================================
-
         Positioned(
           top: size.height * 0.412,
           left: 0,
@@ -61,36 +60,26 @@ class SplashBranding extends StatelessWidget {
         // ============================================================
         // SOTERIA WORDMARK
         // ============================================================
-
         Positioned(
           top: size.height * 0.523,
           left: 0,
           right: 0,
           child: FadeTransition(
             opacity: textOpacity,
-            child: Center(
-              child: _Wordmark(
-                availableWidth: size.width,
-              ),
-            ),
+            child: Center(child: _Wordmark(availableWidth: size.width)),
           ),
         ),
 
         // ============================================================
         // TAGLINE
         // ============================================================
-
         Positioned(
           top: size.height * 0.560,
           left: 0,
           right: 0,
           child: FadeTransition(
             opacity: textOpacity,
-            child: Center(
-              child: _Tagline(
-                availableWidth: size.width,
-              ),
-            ),
+            child: Center(child: _Tagline(availableWidth: size.width)),
           ),
         ),
       ],
@@ -105,9 +94,7 @@ class SplashBranding extends StatelessWidget {
 class _Wordmark extends StatelessWidget {
   final double availableWidth;
 
-  const _Wordmark({
-    required this.availableWidth,
-  });
+  const _Wordmark({required this.availableWidth});
 
   @override
   Widget build(BuildContext context) {
@@ -143,9 +130,7 @@ class _Wordmark extends StatelessWidget {
 class _Tagline extends StatelessWidget {
   final double availableWidth;
 
-  const _Tagline({
-    required this.availableWidth,
-  });
+  const _Tagline({required this.availableWidth});
 
   @override
   Widget build(BuildContext context) {

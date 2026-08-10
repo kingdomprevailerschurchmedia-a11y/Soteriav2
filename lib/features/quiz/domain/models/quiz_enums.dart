@@ -20,7 +20,7 @@ enum QuizStatus {
   completing,
   finalizing,
   completed,
-  failed
+  failed,
 }
 
 enum TimerStatus { idle, running, warning, critical, paused, expired }

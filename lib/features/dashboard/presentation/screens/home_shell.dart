@@ -12,22 +12,17 @@ class HomeShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
+      extendBody: true,
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: const BoxDecoration(
           gradient: SoteriaColors.backgroundGradient,
         ),
-        child: Stack(
-          children: [
-            navigationShell,
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SoteriaBottomNavBar(
-                currentIndex: navigationShell.currentIndex,
-                onTap: (index) => _onTabTapped(context, index),
-              ),
-            ),
-          ],
-        ),
+        child: navigationShell,
+      ),
+      bottomNavigationBar: SoteriaBottomNavBar(
+        currentIndex: navigationShell.currentIndex,
+        onTap: (index) => _onTabTapped(context, index),
       ),
     );
   }
@@ -35,7 +30,7 @@ class HomeShell extends ConsumerWidget {
   void _onTabTapped(BuildContext context, int index) {
     navigationShell.goBranch(
       index,
-      initialLocation: index == navigationShell.currentIndex,
+      initialLocation: true,
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_indicator.dart';
+import 'package:soteria/features/onboarding/widgets/onboarding_button.dart';
 
 class OnboardingPreviewPage extends StatelessWidget {
   const OnboardingPreviewPage({super.key});
@@ -22,16 +23,41 @@ class OnboardingPreviewPage extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.xl),
 
         Text(
-          'Progress Indicators',
+          'Components',
           style: Theme.of(context).textTheme.titleMedium,
         ),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
           child: Column(
             children: [
+              Text('Pagination Indicators'),
+              SizedBox(height: 16),
               OnboardingIndicator(currentIndex: 0, itemCount: 4),
               SizedBox(height: 16),
               OnboardingIndicator(currentIndex: 2, itemCount: 4),
+            ],
+          ),
+        ),
+        SizedBox(height: SoteriaSpacing.md),
+        SoteriaCard(
+          child: Column(
+            children: [
+              const Text('Premium Buttons'),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  SoteriaOnboardingButton(
+                    label: 'Skip',
+                    variant: OnboardingButtonVariant.skip,
+                    onPressed: () {},
+                  ),
+                  SoteriaOnboardingButton(
+                    label: 'Next',
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ],
           ),
         ),
@@ -44,12 +70,12 @@ class OnboardingPreviewPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Tablet Mode',
+                'Layout Strategy',
                 style: TextStyle(fontSize: 10.sp, color: Colors.grey),
               ),
               const SizedBox(height: 8),
               const Text(
-                'The onboarding uses PageView and Flexible/Spacer widgets to ensure content stays centered and readable on larger screens without hardcoded pixel overflows.',
+                'The onboarding uses LayoutBuilder, Flexible, and Spacer to ensure content fits naturally on all viewports. On tablets, content is constrained to a maximum width of 500dp to maintain premium proportions.',
               ),
             ],
           ),

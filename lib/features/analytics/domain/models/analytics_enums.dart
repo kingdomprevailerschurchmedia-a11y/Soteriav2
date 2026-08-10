@@ -18,12 +18,7 @@ enum TimePeriod {
   }
 }
 
-enum TrendDirection {
-  improving,
-  stable,
-  declining,
-  insufficientData;
-}
+enum TrendDirection { improving, stable, declining, insufficientData }
 
 enum InsightType {
   improvement,
@@ -36,12 +31,7 @@ enum InsightType {
   difficulty,
   streak,
   personalBest,
-  insufficientData;
+  insufficientData,
 }
 
-enum InsightConfidence {
-  high,
-  medium,
-  low,
-  insufficientData;
-}
+enum InsightConfidence { high, medium, low, insufficientData }

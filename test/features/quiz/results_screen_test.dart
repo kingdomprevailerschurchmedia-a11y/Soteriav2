@@ -23,11 +23,11 @@ void main() {
       designSize: const Size(390, 844),
       builder: (context, _) => ProviderScope(
         overrides: [
-          quizControllerProvider.overrideWith(() => _MockResultsController(state)),
+          quizControllerProvider.overrideWith(
+            () => _MockResultsController(state),
+          ),
         ],
-        child: const MaterialApp(
-          home: QuizResultsScreen(),
-        ),
+        child: const MaterialApp(home: QuizResultsScreen()),
       ),
     );
   }
@@ -60,10 +60,7 @@ void main() {
     );
 
     testWidgets('displays score and XP earned', (WidgetTester tester) async {
-      final state = QuizState(
-        status: QuizStatus.completed,
-        result: mockResult,
-      );
+      final state = QuizState(status: QuizStatus.completed, result: mockResult);
 
       await tester.pumpWidget(buildTestableWidget(state));
       await tester.pumpAndSettle();
@@ -74,10 +71,7 @@ void main() {
     });
 
     testWidgets('displays performance metrics', (WidgetTester tester) async {
-      final state = QuizState(
-        status: QuizStatus.completed,
-        result: mockResult,
-      );
+      final state = QuizState(status: QuizStatus.completed, result: mockResult);
 
       await tester.pumpWidget(buildTestableWidget(state));
       await tester.pumpAndSettle();

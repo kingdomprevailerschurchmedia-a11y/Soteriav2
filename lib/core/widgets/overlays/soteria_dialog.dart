@@ -8,6 +8,8 @@ import 'package:soteria/core/design_system/components/soteria_button.dart';
 /// A premium modal dialog for critical user interactions.
 ///
 /// Features an optional icon, title, message, and customizable actions.
+import '../../utils/soteria_responsive.dart';
+
 class SoteriaDialog extends StatelessWidget {
   const SoteriaDialog({
     super.key,
@@ -44,6 +46,7 @@ class SoteriaDialog extends StatelessWidget {
   }) {
     return showDialog<bool>(
       context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.8),
       builder: (context) => SoteriaDialog(
         title: title,
         message: message,
@@ -60,46 +63,86 @@ class SoteriaDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return Dialog(
       backgroundColor: SoteriaColors.elevatedSurface,
+      elevation: 0,
+      insetPadding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+        vertical: 24,
+      ),
       shape: RoundedRectangleBorder(borderRadius: SoteriaRadius.brLg),
-      child: Padding(
-        padding: EdgeInsets.all(SoteriaSpacing.xl),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, size: 48, color: iconColor ?? SoteriaColors.primary),
-              SizedBox(height: SoteriaSpacing.md),
-            ],
-            Text(title, style: context.titleLarge, textAlign: TextAlign.center),
-            SizedBox(height: SoteriaSpacing.sm),
-            Text(
-              message,
-              style: context.bodyLarge.copyWith(
-                color: SoteriaColors.textSecondary,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: SoteriaSpacing.xl),
-            Row(
-              children: [
-                Expanded(
-                  child: SoteriaButton.ghost(
-                    label: cancelLabel,
-                    onPressed: onCancel ?? () => Navigator.of(context).pop(),
-                  ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 400),
+        child: Padding(
+          padding: EdgeInsets.all(
+            SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (icon != null) ...[
+                Icon(
+                  icon,
+                  size: isShort ? 32 : 48,
+                  color: iconColor ?? SoteriaColors.primary,
                 ),
-                SizedBox(width: SoteriaSpacing.md),
-                Expanded(
-                  child: SoteriaButton.primary(
-                    label: confirmLabel,
-                    onPressed: onConfirm,
+                SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
                   ),
                 ),
               ],
-            ),
-          ],
+              Text(
+                title,
+                style: (isShort ? context.titleMedium : context.titleLarge)
+                    .copyWith(fontWeight: FontWeight.w900, letterSpacing: 0.5),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: SoteriaSpacing.adaptive(
+                  context,
+                  SoteriaSpacing.smStatic,
+                ),
+              ),
+              Flexible(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Text(
+                    message,
+                    style: (isShort ? context.bodyMedium : context.bodyLarge)
+                        .copyWith(color: SoteriaColors.textSecondary),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: SoteriaSpacing.adaptive(
+                  context,
+                  SoteriaSpacing.lgStatic,
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SoteriaButton.ghost(
+                      label: cancelLabel,
+                      onPressed: onCancel ?? () => Navigator.of(context).pop(),
+                    ),
+                  ),
+                  SizedBox(width: SoteriaSpacing.md),
+                  Expanded(
+                    child: SoteriaButton.primary(
+                      label: confirmLabel,
+                      onPressed: onConfirm,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

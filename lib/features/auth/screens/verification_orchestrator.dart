@@ -97,17 +97,55 @@ class _VerificationOrchestratorState
         children: [
           // Header
           Padding(
-            padding: EdgeInsets.all(SoteriaSpacing.lg),
+            padding: EdgeInsets.fromLTRB(
+              SoteriaSpacing.md,
+              SoteriaSpacing.lg,
+              SoteriaSpacing.lg,
+              SoteriaSpacing.md,
+            ),
             child: Column(
               children: [
-                Text(
-                  'Identity',
-                  style: context.titleLarge.copyWith(color: SoteriaColors.gold),
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(
+                          Icons.arrow_back_rounded,
+                          color: Colors.white,
+                        ),
+                        style: IconButton.styleFrom(
+                          backgroundColor: Colors.white.withValues(alpha: 0.05),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'Identity',
+                      style: context.titleLarge.copyWith(
+                        color: SoteriaColors.gold,
+                      ),
+                    ),
+                  ],
                 ),
                 SizedBox(height: SoteriaSpacing.md),
-                SoteriaLinearProgress(
-                  progress: (_getPageIndex(state.step) + 1) / 5.0,
-                  color: SoteriaColors.gold,
+                Row(
+                  children: [
+                    Expanded(
+                      child: SoteriaLinearProgress(
+                        progress: (_getPageIndex(state.step) + 1) / 3.0,
+                        color: SoteriaColors.gold,
+                      ),
+                    ),
+                    SizedBox(width: SoteriaSpacing.md),
+                    Text(
+                      'Step ${_getPageIndex(state.step) + 1} of 3',
+                      style: context.bodySmall.copyWith(
+                        color: SoteriaColors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -147,6 +185,8 @@ class _VerificationOrchestratorState
                 SoteriaButton.primary(
                   label: _getButtonLabel(state.step),
                   isLoading: state.isLoading,
+                  uppercase: false,
+                  trailingIcon: Icons.arrow_forward_rounded,
                   onPressed: _isButtonEnabled(state)
                       ? () => _onContinue(state)
                       : null,

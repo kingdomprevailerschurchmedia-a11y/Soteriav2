@@ -22,9 +22,13 @@ class GetTrendAnalysisUseCase {
   }) async {
     final start = DateTime.now().subtract(Duration(days: days));
     final end = DateTime.now();
-    
-    final results = await _repository.getResultsByDateRange(playerId, start, end);
-    
+
+    final results = await _repository.getResultsByDateRange(
+      playerId,
+      start,
+      end,
+    );
+
     // Sort by date ascending for trends
     results.sort((a, b) => a.completedAt.compareTo(b.completedAt));
 

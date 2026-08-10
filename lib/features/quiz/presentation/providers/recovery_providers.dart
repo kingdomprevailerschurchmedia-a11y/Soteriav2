@@ -4,7 +4,16 @@ import '../../domain/models/quiz_enums.dart';
 import 'quiz_providers.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 
-enum RecoveryStatus { idle, checking, available, recovering, success, failed, expired, corrupted }
+enum RecoveryStatus {
+  idle,
+  checking,
+  available,
+  recovering,
+  success,
+  failed,
+  expired,
+  corrupted,
+}
 
 class RecoveryState {
   final RecoveryStatus status;
@@ -51,12 +60,18 @@ class RecoveryNotifier extends Notifier<RecoveryState> {
           .execute(userSession.uid!);
 
       if (session != null && _isRecoverable(session)) {
-        state = state.copyWith(status: RecoveryStatus.available, session: session);
+        state = state.copyWith(
+          status: RecoveryStatus.available,
+          session: session,
+        );
       } else {
         state = state.copyWith(status: RecoveryStatus.idle);
       }
     } catch (e) {
-      state = state.copyWith(status: RecoveryStatus.corrupted, error: e.toString());
+      state = state.copyWith(
+        status: RecoveryStatus.corrupted,
+        error: e.toString(),
+      );
     }
   }
 
@@ -69,7 +84,8 @@ class RecoveryNotifier extends Notifier<RecoveryState> {
     // Check expiration (e.g., 2 hours)
     final now = DateTime.now();
     const maxAge = Duration(hours: 2);
-    if (now.difference(session.lastUpdatedTime ?? session.startedTime).abs() > maxAge) {
+    if (now.difference(session.lastUpdatedTime ?? session.startedTime).abs() >
+        maxAge) {
       return false;
     }
 
@@ -82,10 +98,15 @@ class RecoveryNotifier extends Notifier<RecoveryState> {
     state = state.copyWith(status: RecoveryStatus.recovering);
 
     try {
-      await ref.read(quizControllerProvider.notifier).restoreQuiz(state.session!.sessionId);
+      await ref
+          .read(quizControllerProvider.notifier)
+          .restoreQuiz(state.session!.sessionId);
       state = state.copyWith(status: RecoveryStatus.success);
     } catch (e) {
-      state = state.copyWith(status: RecoveryStatus.failed, error: e.toString());
+      state = state.copyWith(
+        status: RecoveryStatus.failed,
+        error: e.toString(),
+      );
     }
   }
 
@@ -93,7 +114,9 @@ class RecoveryNotifier extends Notifier<RecoveryState> {
     if (state.session == null) return;
 
     try {
-      await ref.read(deleteSessionUseCaseProvider).execute(state.session!.sessionId);
+      await ref
+          .read(deleteSessionUseCaseProvider)
+          .execute(state.session!.sessionId);
       state = state.copyWith(status: RecoveryStatus.idle, session: null);
     } catch (e) {
       state = state.copyWith(error: e.toString());

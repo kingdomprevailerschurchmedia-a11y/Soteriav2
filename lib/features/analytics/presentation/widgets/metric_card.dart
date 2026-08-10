@@ -45,7 +45,9 @@ class MetricCard extends StatelessWidget {
               Expanded(
                 child: Text(
                   title,
-                  style: SoteriaTypography.labelMedium.copyWith(color: SoteriaColors.muted),
+                  style: SoteriaTypography.labelMedium.copyWith(
+                    color: SoteriaColors.muted,
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -55,16 +57,21 @@ class MetricCard extends StatelessWidget {
           SizedBox(height: 8.h),
           Text(
             value,
-            style: SoteriaTypography.headlineSmall.copyWith(color: SoteriaColors.textPrimary),
+            style: SoteriaTypography.headlineSmall.copyWith(
+              color: SoteriaColors.textPrimary,
+            ),
           ),
           if (subValue != null) ...[
             SizedBox(height: 4.h),
             Text(
               subValue!,
-              style: SoteriaTypography.bodySmall.copyWith(color: SoteriaColors.muted),
+              style: SoteriaTypography.bodySmall.copyWith(
+                color: SoteriaColors.muted,
+              ),
             ),
           ],
-          if (direction != null && direction != TrendDirection.insufficientData) ...[
+          if (direction != null &&
+              direction != TrendDirection.insufficientData) ...[
             SizedBox(height: 8.h),
             _TrendIndicator(direction: direction!, label: trendLabel),
           ],

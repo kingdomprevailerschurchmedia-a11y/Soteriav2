@@ -7,6 +7,8 @@ import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/widgets/animations/animated_numeric_counter.dart';
 
+import '../../../../core/utils/soteria_responsive.dart';
+
 class HeroCard extends StatelessWidget {
   const HeroCard({
     super.key,
@@ -31,13 +33,17 @@ class HeroCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.containerPadding(context),
+      ),
       child: SoteriaSlideUp(
         duration: const Duration(milliseconds: 600),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(32),
+            borderRadius: BorderRadius.circular(24),
             boxShadow: [
               BoxShadow(
                 color: SoteriaColors.primary.withValues(alpha: 0.1),
@@ -47,8 +53,10 @@ class HeroCard extends StatelessWidget {
             ],
           ),
           child: SoteriaCard(
-            padding: EdgeInsets.all(SoteriaSpacing.lg),
-            borderRadius: 32,
+            padding: EdgeInsets.all(
+              SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+            ),
+            borderRadius: 24,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -78,7 +86,7 @@ class HeroCard extends StatelessWidget {
                                 color: SoteriaColors.textPrimary,
                                 fontWeight: FontWeight.w900,
                                 letterSpacing: -0.5,
-                                fontSize: 28.sp,
+                                fontSize: isShort ? 22.sp : 28.sp,
                               ),
                             ),
                           ),
@@ -89,7 +97,12 @@ class HeroCard extends StatelessWidget {
                     _PremiumCoinsSummary(coins: coins),
                   ],
                 ),
-                SizedBox(height: SoteriaSpacing.lg),
+                SizedBox(
+                  height: SoteriaSpacing.adaptive(
+                    context,
+                    SoteriaSpacing.mdStatic,
+                  ),
+                ),
                 Row(
                   children: [
                     _HexagonLevelIndicator(level: level),
@@ -137,8 +150,11 @@ class _HexagonLevelIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isShort = SoteriaResponsive.isShortScreen(context);
+    final size = isShort ? 54.w : 64.w;
+
     return SizedBox(
-      width: 64.w,
+      width: size,
       child: AspectRatio(
         aspectRatio: 64 / 72,
         child: CustomPaint(

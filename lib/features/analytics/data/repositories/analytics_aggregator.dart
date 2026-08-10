@@ -26,7 +26,7 @@ class AnalyticsAggregator {
     final difficultyPerf = _calculateDifficultyPerformance(currentResults);
     final trends = _calculateTrends(currentResults, period);
     final consistency = _calculateConsistency(currentResults);
-    
+
     // Insights & Recommendations
     final insights = _generateInsights(
       currentResults: currentResults,
@@ -106,13 +106,19 @@ class AnalyticsAggregator {
       bestScore: bestScore,
       bestAccuracy: bestAccuracy,
       bestStreak: bestStreak,
-      fastestResponseTime: fastest == const Duration(hours: 1) ? Duration.zero : fastest,
+      fastestResponseTime: fastest == const Duration(hours: 1)
+          ? Duration.zero
+          : fastest,
       slowestResponseTime: slowest,
     );
   }
 
-  static _Averages _calculateAverages(List<QuizResult> results, _Totals totals) {
-    if (results.isEmpty) return _Averages(accuracy: 0, score: 0, responseTime: Duration.zero);
+  static _Averages _calculateAverages(
+    List<QuizResult> results,
+    _Totals totals,
+  ) {
+    if (results.isEmpty)
+      return _Averages(accuracy: 0, score: 0, responseTime: Duration.zero);
 
     double totalAccuracy = 0;
     int totalScore = 0;
@@ -127,11 +133,15 @@ class AnalyticsAggregator {
     return _Averages(
       accuracy: totalAccuracy / results.length,
       score: (totalScore / results.length).round(),
-      responseTime: Duration(milliseconds: (totalMillis / results.length).round()),
+      responseTime: Duration(
+        milliseconds: (totalMillis / results.length).round(),
+      ),
     );
   }
 
-  static List<CategoryPerformance> _calculateCategoryPerformance(List<QuizResult> results) {
+  static List<CategoryPerformance> _calculateCategoryPerformance(
+    List<QuizResult> results,
+  ) {
     final Map<String, List<QuizResult>> grouped = {};
     for (final r in results) {
       grouped.putIfAbsent(r.category, () => []).add(r);
@@ -156,7 +166,9 @@ class AnalyticsAggregator {
     }).toList()..sort((a, b) => b.accuracy.compareTo(a.accuracy));
   }
 
-  static List<DifficultyPerformance> _calculateDifficultyPerformance(List<QuizResult> results) {
+  static List<DifficultyPerformance> _calculateDifficultyPerformance(
+    List<QuizResult> results,
+  ) {
     final Map<Difficulty, List<QuizResult>> grouped = {};
     for (final r in results) {
       grouped.putIfAbsent(r.difficulty, () => []).add(r);
@@ -192,12 +204,38 @@ class AnalyticsAggregator {
 
   static _Trends _calculateTrends(List<QuizResult> results, TimePeriod period) {
     // Sort by date ascending for trends
-    final sorted = List<QuizResult>.from(results)..sort((a, b) => a.completedAt.compareTo(b.completedAt));
+    final sorted = List<QuizResult>.from(results)
+      ..sort((a, b) => a.completedAt.compareTo(b.completedAt));
 
-    final accuracyPoints = sorted.map((r) => PerformanceTrendPoint(date: r.completedAt, value: r.accuracy)).toList();
-    final scorePoints = sorted.map((r) => PerformanceTrendPoint(date: r.completedAt, value: r.finalScore.toDouble())).toList();
-    final speedPoints = sorted.map((r) => PerformanceTrendPoint(date: r.completedAt, value: r.averageResponseTime.inMilliseconds.toDouble())).toList();
-    final xpPoints = sorted.map((r) => PerformanceTrendPoint(date: r.completedAt, value: r.xpEarned.toDouble())).toList();
+    final accuracyPoints = sorted
+        .map(
+          (r) => PerformanceTrendPoint(date: r.completedAt, value: r.accuracy),
+        )
+        .toList();
+    final scorePoints = sorted
+        .map(
+          (r) => PerformanceTrendPoint(
+            date: r.completedAt,
+            value: r.finalScore.toDouble(),
+          ),
+        )
+        .toList();
+    final speedPoints = sorted
+        .map(
+          (r) => PerformanceTrendPoint(
+            date: r.completedAt,
+            value: r.averageResponseTime.inMilliseconds.toDouble(),
+          ),
+        )
+        .toList();
+    final xpPoints = sorted
+        .map(
+          (r) => PerformanceTrendPoint(
+            date: r.completedAt,
+            value: r.xpEarned.toDouble(),
+          ),
+        )
+        .toList();
 
     return _Trends(
       accuracy: _createTrend('Accuracy', accuracyPoints),
@@ -207,7 +245,10 @@ class AnalyticsAggregator {
     );
   }
 
-  static PerformanceTrend _createTrend(String label, List<PerformanceTrendPoint> points) {
+  static PerformanceTrend _createTrend(
+    String label,
+    List<PerformanceTrendPoint> points,
+  ) {
     if (points.isEmpty) {
       return PerformanceTrend(
         label: label,
@@ -258,7 +299,7 @@ class AnalyticsAggregator {
     }
 
     final averages = _calculateAverages(results, _calculateTotals(results));
-    
+
     double accuracyVarSum = 0;
     double scoreVarSum = 0;
     for (final r in results) {
@@ -272,12 +313,16 @@ class AnalyticsAggregator {
     // Consistency score normalized (heuristic)
     // Higher variance = lower consistency
     final accConsistency = max(0.0, 1.0 - (sqrt(accuracyVar) * 2));
-    
+
     String level;
-    if (accConsistency > 0.85) level = 'Highly Consistent';
-    else if (accConsistency > 0.7) level = 'Consistent';
-    else if (accConsistency > 0.5) level = 'Variable';
-    else level = 'Highly Variable';
+    if (accConsistency > 0.85)
+      level = 'Highly Consistent';
+    else if (accConsistency > 0.7)
+      level = 'Consistent';
+    else if (accConsistency > 0.5)
+      level = 'Variable';
+    else
+      level = 'Highly Variable';
 
     return ConsistencyMetrics(
       accuracyVariance: accuracyVar,
@@ -301,63 +346,78 @@ class AnalyticsAggregator {
     final List<PerformanceInsight> insights = [];
 
     if (currentResults.length < 3) {
-      insights.add(PerformanceInsight(
-        type: InsightType.insufficientData,
-        title: 'Start Your Journey',
-        description: 'Play ${3 - currentResults.length} more quizzes to unlock performance trends.',
-        metricLabel: 'Quizzes Needed',
-        metricValue: '${3 - currentResults.length}',
-        direction: TrendDirection.insufficientData,
-        confidence: InsightConfidence.insufficientData,
-        generatedAt: DateTime.now(),
-      ));
+      insights.add(
+        PerformanceInsight(
+          type: InsightType.insufficientData,
+          title: 'Start Your Journey',
+          description:
+              'Play ${3 - currentResults.length} more quizzes to unlock performance trends.',
+          metricLabel: 'Quizzes Needed',
+          metricValue: '${3 - currentResults.length}',
+          direction: TrendDirection.insufficientData,
+          confidence: InsightConfidence.insufficientData,
+          generatedAt: DateTime.now(),
+        ),
+      );
       return insights;
     }
 
     // 1. Accuracy Trend
     final accChange = trends.accuracy.changeValue;
     if (accChange.abs() > 0.05) {
-      insights.add(PerformanceInsight(
-        type: InsightType.accuracy,
-        title: accChange > 0 ? 'Accuracy Improving' : 'Accuracy Declining',
-        description: accChange > 0 
-          ? 'Your accuracy increased by ${(accChange * 100).toStringAsFixed(1)} percentage points.' 
-          : 'Your accuracy decreased by ${(accChange.abs() * 100).toStringAsFixed(1)} percentage points.',
-        metricLabel: 'Change',
-        metricValue: '${accChange > 0 ? '+' : ''}${(accChange * 100).toStringAsFixed(1)}%',
-        direction: accChange > 0 ? TrendDirection.improving : TrendDirection.declining,
-        confidence: InsightConfidence.medium,
-        generatedAt: DateTime.now(),
-        recommendation: accChange > 0 ? 'Keep it up!' : 'Focus on precision over speed.',
-      ));
+      insights.add(
+        PerformanceInsight(
+          type: InsightType.accuracy,
+          title: accChange > 0 ? 'Accuracy Improving' : 'Accuracy Declining',
+          description: accChange > 0
+              ? 'Your accuracy increased by ${(accChange * 100).toStringAsFixed(1)} percentage points.'
+              : 'Your accuracy decreased by ${(accChange.abs() * 100).toStringAsFixed(1)} percentage points.',
+          metricLabel: 'Change',
+          metricValue:
+              '${accChange > 0 ? '+' : ''}${(accChange * 100).toStringAsFixed(1)}%',
+          direction: accChange > 0
+              ? TrendDirection.improving
+              : TrendDirection.declining,
+          confidence: InsightConfidence.medium,
+          generatedAt: DateTime.now(),
+          recommendation: accChange > 0
+              ? 'Keep it up!'
+              : 'Focus on precision over speed.',
+        ),
+      );
     }
 
     // 2. Speed/Accuracy Insight
     final speedChange = trends.speed.changeValue; // Negative is good (faster)
     if (speedChange < -500 && accChange > -0.02) {
-      insights.add(PerformanceInsight(
-        type: InsightType.speed,
-        title: 'Efficiency Boost',
-        description: 'You\'re answering faster while maintaining your accuracy.',
-        metricLabel: 'Speed Gain',
-        metricValue: '${(speedChange.abs() / 1000).toStringAsFixed(1)}s',
-        direction: TrendDirection.improving,
-        confidence: InsightConfidence.high,
-        generatedAt: DateTime.now(),
-        recommendation: 'You\'re performing efficiently.',
-      ));
+      insights.add(
+        PerformanceInsight(
+          type: InsightType.speed,
+          title: 'Efficiency Boost',
+          description:
+              'You\'re answering faster while maintaining your accuracy.',
+          metricLabel: 'Speed Gain',
+          metricValue: '${(speedChange.abs() / 1000).toStringAsFixed(1)}s',
+          direction: TrendDirection.improving,
+          confidence: InsightConfidence.high,
+          generatedAt: DateTime.now(),
+          recommendation: 'You\'re performing efficiently.',
+        ),
+      );
     } else if (speedChange < -500 && accChange < -0.05) {
-      insights.add(PerformanceInsight(
-        type: InsightType.speed,
-        title: 'Speed vs Accuracy',
-        description: 'Your speed has improved, but accuracy has dropped.',
-        metricLabel: 'Accuracy Loss',
-        metricValue: '${(accChange.abs() * 100).toStringAsFixed(1)}%',
-        direction: TrendDirection.declining,
-        confidence: InsightConfidence.high,
-        generatedAt: DateTime.now(),
-        recommendation: 'Consider slowing down slightly.',
-      ));
+      insights.add(
+        PerformanceInsight(
+          type: InsightType.speed,
+          title: 'Speed vs Accuracy',
+          description: 'Your speed has improved, but accuracy has dropped.',
+          metricLabel: 'Accuracy Loss',
+          metricValue: '${(accChange.abs() * 100).toStringAsFixed(1)}%',
+          direction: TrendDirection.declining,
+          confidence: InsightConfidence.high,
+          generatedAt: DateTime.now(),
+          recommendation: 'Consider slowing down slightly.',
+        ),
+      );
     }
 
     // 3. Category Strength/Weakness
@@ -366,54 +426,68 @@ class AnalyticsAggregator {
       final weakest = categoryPerf.last;
 
       if (strongest.totalQuizzes >= 3) {
-        insights.add(PerformanceInsight(
-          type: InsightType.strength,
-          title: 'Strongest Category',
-          description: '${strongest.category} is your best-performing subject.',
-          metricLabel: 'Accuracy',
-          metricValue: '${(strongest.accuracy * 100).toStringAsFixed(1)}%',
-          direction: TrendDirection.improving,
-          confidence: InsightConfidence.medium,
-          generatedAt: DateTime.now(),
-          recommendation: 'Try higher difficulty in this category.',
-        ));
+        insights.add(
+          PerformanceInsight(
+            type: InsightType.strength,
+            title: 'Strongest Category',
+            description:
+                '${strongest.category} is your best-performing subject.',
+            metricLabel: 'Accuracy',
+            metricValue: '${(strongest.accuracy * 100).toStringAsFixed(1)}%',
+            direction: TrendDirection.improving,
+            confidence: InsightConfidence.medium,
+            generatedAt: DateTime.now(),
+            recommendation: 'Try higher difficulty in this category.',
+          ),
+        );
       }
 
       if (weakest.totalQuizzes >= 3 && weakest != strongest) {
-        insights.add(PerformanceInsight(
-          type: InsightType.opportunity,
-          title: 'Growth Opportunity',
-          description: '${weakest.category} is currently your biggest opportunity for improvement.',
-          metricLabel: 'Accuracy',
-          metricValue: '${(weakest.accuracy * 100).toStringAsFixed(1)}%',
-          direction: TrendDirection.stable,
-          confidence: InsightConfidence.medium,
-          generatedAt: DateTime.now(),
-          recommendation: 'Practice more quizzes in this subject.',
-        ));
+        insights.add(
+          PerformanceInsight(
+            type: InsightType.opportunity,
+            title: 'Growth Opportunity',
+            description:
+                '${weakest.category} is currently your biggest opportunity for improvement.',
+            metricLabel: 'Accuracy',
+            metricValue: '${(weakest.accuracy * 100).toStringAsFixed(1)}%',
+            direction: TrendDirection.stable,
+            confidence: InsightConfidence.medium,
+            generatedAt: DateTime.now(),
+            recommendation: 'Practice more quizzes in this subject.',
+          ),
+        );
       }
     }
 
     // 4. Difficulty Insight
-    final hardPerf = difficultyPerf.firstWhere((d) => d.difficulty == Difficulty.hard, orElse: () => difficultyPerf.first);
+    final hardPerf = difficultyPerf.firstWhere(
+      (d) => d.difficulty == Difficulty.hard,
+      orElse: () => difficultyPerf.first,
+    );
     if (hardPerf.totalQuizzes >= 3 && hardPerf.accuracy < 0.6) {
-      insights.add(PerformanceInsight(
-        type: InsightType.difficulty,
-        title: 'Hard Challenge',
-        description: 'Hard questions are currently your biggest challenge.',
-        metricLabel: 'Accuracy',
-        metricValue: '${(hardPerf.accuracy * 100).toStringAsFixed(1)}%',
-        direction: TrendDirection.stable,
-        confidence: InsightConfidence.high,
-        generatedAt: DateTime.now(),
-        recommendation: 'Practice more Hard questions.',
-      ));
+      insights.add(
+        PerformanceInsight(
+          type: InsightType.difficulty,
+          title: 'Hard Challenge',
+          description: 'Hard questions are currently your biggest challenge.',
+          metricLabel: 'Accuracy',
+          metricValue: '${(hardPerf.accuracy * 100).toStringAsFixed(1)}%',
+          direction: TrendDirection.stable,
+          confidence: InsightConfidence.high,
+          generatedAt: DateTime.now(),
+          recommendation: 'Practice more Hard questions.',
+        ),
+      );
     }
 
     return insights;
   }
 
-  static PersonalPerformanceAnalytics _createEmptyAnalytics(String playerId, TimePeriod period) {
+  static PersonalPerformanceAnalytics _createEmptyAnalytics(
+    String playerId,
+    TimePeriod period,
+  ) {
     return PersonalPerformanceAnalytics(
       playerId: playerId,
       period: period,
@@ -449,13 +523,14 @@ class AnalyticsAggregator {
         PerformanceInsight(
           type: InsightType.insufficientData,
           title: 'Welcome to Soteria',
-          description: 'Your performance story starts here. Complete a few more quizzes to unlock detailed insights.',
+          description:
+              'Your performance story starts here. Complete a few more quizzes to unlock detailed insights.',
           metricLabel: 'Status',
           metricValue: 'No Data',
           direction: TrendDirection.insufficientData,
           confidence: InsightConfidence.insufficientData,
           generatedAt: DateTime.now(),
-        )
+        ),
       ],
       calculatedAt: DateTime.now(),
     );

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../design_system/colors/soteria_colors.dart';
@@ -14,6 +15,7 @@ class PremiumBackground extends StatefulWidget {
 class _PremiumBackgroundState extends State<PremiumBackground>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  static final bool _isTest = Platform.environment.containsKey('FLUTTER_TEST');
 
   @override
   void initState() {
@@ -21,7 +23,10 @@ class _PremiumBackgroundState extends State<PremiumBackground>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 10),
-    )..repeat();
+    );
+    if (!_isTest) {
+      _controller.repeat();
+    }
   }
 
   @override

@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import '../../utils/soteria_responsive.dart';
 
 class SoteriaSpacing {
   static double get xs => 4.0.w;
@@ -17,4 +19,23 @@ class SoteriaSpacing {
   static const double xlStatic = 32.0;
   static const double xxlStatic = 48.0;
   static const double xxxlStatic = 64.0;
+
+  /// Returns a spacing value that adapts to the screen size.
+  /// It reduces spacing on small phones and short screens to prevent unnecessary scrolling.
+  static double adaptive(BuildContext context, double baseValue) {
+    if (SoteriaResponsive.isSmallPhone(context) ||
+        SoteriaResponsive.isShortScreen(context)) {
+      return baseValue * 0.75;
+    }
+    if (SoteriaResponsive.isTablet(context)) {
+      return baseValue * 1.2;
+    }
+    return baseValue;
+  }
+
+  // Adaptive presets
+  static double sectionGap(BuildContext context) => adaptive(context, xl);
+  static double itemGap(BuildContext context) => adaptive(context, md);
+  static double containerPadding(BuildContext context) => adaptive(context, lg);
+  static double smallGap(BuildContext context) => adaptive(context, sm);
 }
