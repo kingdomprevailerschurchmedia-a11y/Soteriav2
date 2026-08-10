@@ -16,6 +16,7 @@ import '../../domain/services/quiz_scoring_engine.dart';
 import '../states/quiz_state.dart';
 import '../providers/quiz_providers.dart';
 
+import 'package:soteria/features/analytics/presentation/providers/analytics_providers.dart';
 import '../../domain/models/question_result.dart';
 import '../../domain/models/quiz_result.dart';
 
@@ -406,7 +407,7 @@ class QuizController extends Notifier<QuizState> {
 
   Future<void> _handleTimeout() async {
     // Atomic check: If answer already locked, timer expiration arrived late
-    if (state.isAnswerLocked) return;
+    if (state.isAnswerLocked || state.status != QuizStatus.active) return;
 
     state = state.copyWith(isAnswerLocked: true);
 
@@ -416,7 +417,7 @@ class QuizController extends Notifier<QuizState> {
       isCorrect: false,
       responseTime: state.timer?.totalDuration ?? Duration.zero,
       timestamp: DateTime.now(),
-      isTimedOut: true, // Assuming PlayerAnswer model will be updated for this
+      isTimedOut: true,
     );
 
     if (state.session != null) {
@@ -432,9 +433,13 @@ class QuizController extends Notifier<QuizState> {
   }
 
   Future<void> finishQuiz() async {
-    if (state.session == null || state.status == QuizStatus.completed) return;
+    // Guard: Prevent duplicate finalization or invalid state transitions
+    if (state.session == null || 
+        state.status == QuizStatus.completing || 
+        state.status == QuizStatus.finalizing || 
+        state.status == QuizStatus.completed) return;
 
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(status: QuizStatus.completing, isLoading: true);
 
     try {
       final quizResult = await finalizeQuiz();
@@ -445,7 +450,11 @@ class QuizController extends Notifier<QuizState> {
         result: quizResult,
       );
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      state = state.copyWith(
+        isLoading: false, 
+        status: QuizStatus.failed, 
+        error: e.toString()
+      );
     }
   }
 
@@ -453,10 +462,20 @@ class QuizController extends Notifier<QuizState> {
     final session = state.session;
     if (session == null) throw Exception('No active session to finalize');
 
-    // Idempotency: Return existing result if already finalized
+    // Atomic guard for idempotency
+    if (state.status == QuizStatus.finalizing) {
+      while (state.status == QuizStatus.finalizing) {
+        await Future.delayed(const Duration(milliseconds: 100));
+      }
+      if (state.result != null) return state.result!;
+    }
+
+    // Return existing result if already finalized for this session
     if (state.result != null && state.result!.sessionId == session.sessionId) {
       return state.result!;
     }
+
+    state = state.copyWith(status: QuizStatus.finalizing);
 
     final answers = state.answeredQuestions;
     final totalQuestions = state.questions.length;
@@ -479,7 +498,7 @@ class QuizController extends Notifier<QuizState> {
           isCorrect: false,
           responseTime: Duration.zero,
           timestamp: DateTime.now(),
-          isSkipped: true, // Default to skipped if no answer found
+          isSkipped: true,
         ),
       );
 
@@ -524,7 +543,7 @@ class QuizController extends Notifier<QuizState> {
         correctOptionIds: question.correctOptionIds,
         correctOptionText: correctOption.text,
         responseTime: answer.responseTime,
-        scoreEarned: answer.isCorrect ? 100 : 0, // Simplified for now
+        scoreEarned: answer.isCorrect ? 100 : 0, 
         difficulty: question.difficulty,
         explanation: question.explanation,
       ));
@@ -579,18 +598,26 @@ class QuizController extends Notifier<QuizState> {
       performanceRating: _generatePerformanceRating(accuracy),
     );
 
-    // Persist result
-    final updatedSession = session.copyWith(
-      sessionStatus: SessionStatus.completed,
-      completionStatus: QuizStatus.completed,
-      lastUpdatedTime: DateTime.now(),
-    );
-    await ref.read(quizSessionRepositoryProvider).saveSession(updatedSession);
-    
-    // Save the QuizResult to history repository
-    await ref.read(quizHistoryRepositoryProvider).addResult(quizResult);
-    
-    return quizResult;
+    // Save history entry and update session status atomically (conceptually)
+    try {
+      await ref.read(quizHistoryRepositoryProvider).addResult(quizResult);
+      
+      final updatedSession = session.copyWith(
+        sessionStatus: SessionStatus.completed,
+        completionStatus: QuizStatus.completed,
+        lastUpdatedTime: DateTime.now(),
+      );
+      await ref.read(quizSessionRepositoryProvider).saveSession(updatedSession);
+      
+      // Refresh analytics
+      ref.invalidate(personalPerformanceAnalyticsProvider);
+      
+      return quizResult;
+    } catch (e) {
+      // Revert status on persistence error
+      state = state.copyWith(status: QuizStatus.active);
+      rethrow;
+    }
   }
 
   String _generatePerformanceRating(double accuracy) {

@@ -275,10 +275,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       case AppStartupState.loading:
         _hasNavigated = false;
         return;
-
-      default:
-        destination = SoteriaRoutes.auth;
-        break;
     }
 
     /*

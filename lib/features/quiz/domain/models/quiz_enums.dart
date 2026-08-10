@@ -11,7 +11,17 @@ enum QuestionType {
   dragAndDrop,
 }
 
-enum QuizStatus { idle, loading, ready, active, paused, completed, failed }
+enum QuizStatus {
+  idle,
+  loading,
+  ready,
+  active,
+  paused,
+  completing,
+  finalizing,
+  completed,
+  failed
+}
 
 enum TimerStatus { idle, running, warning, critical, paused, expired }
 

@@ -17,6 +17,7 @@ enum PreviewCategory {
   components('Components', Icons.widgets_rounded),
   animations('Animations', Icons.animation_rounded),
   dialogs('Dialogs & Sheets', Icons.copy_all_rounded),
+  analytics('Analytics & Insights', Icons.insights_rounded),
   devTools('Developer Tools', Icons.build_circle_outlined);
 
   final String label;

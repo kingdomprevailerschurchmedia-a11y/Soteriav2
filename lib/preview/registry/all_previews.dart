@@ -15,6 +15,8 @@ import '../../../features/quiz/preview/question_loader_previews.dart';
 import '../../../features/quiz/preview/gameplay_previews.dart';
 import '../../../features/quiz/preview/recovery_previews.dart';
 import '../../../features/quiz/preview/results_previews.dart';
+import '../../../features/quiz/preview/certification_previews.dart';
+import '../../../features/analytics/preview/analytics_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -331,6 +333,28 @@ void registerAllPreviews() {
       description: 'Mixed performance summary',
       category: PreviewCategory.gameplay,
       builder: (context) => ResultsPreviews.average(),
+    ),
+  );
+
+  // --- Analytics ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'analytics-dashboard',
+      title: 'Performance Dashboard',
+      description: 'Personal intelligence hub',
+      category: PreviewCategory.analytics,
+      builder: (context) => const AnalyticsPreviews(),
+    ),
+  );
+
+  // --- Certification ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'quiz-certification',
+      title: 'Quiz E2E Certification',
+      description: 'Hardening & integration pass',
+      category: PreviewCategory.devTools,
+      builder: (context) => const CertificationPreviews(),
     ),
   );
 }

@@ -64,18 +64,36 @@ class QuizResultsScreen extends ConsumerWidget {
   }
 }
 
-class _ResultActions extends ConsumerWidget {
+class _ResultActions extends ConsumerStatefulWidget {
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_ResultActions> createState() => _ResultActionsState();
+}
+
+class _ResultActionsState extends ConsumerState<_ResultActions> {
+  bool _isNavigating = false;
+
+  void _handlePlayAgain() {
+    if (_isNavigating) return;
+    setState(() => _isNavigating = true);
+    ref.read(quizControllerProvider.notifier).resetQuiz();
+    context.go(SoteriaRoutes.main);
+  }
+
+  void _handleReturnHome() {
+    if (_isNavigating) return;
+    setState(() => _isNavigating = true);
+    ref.read(quizControllerProvider.notifier).resetQuiz();
+    context.go(SoteriaRoutes.main);
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       child: Column(
         children: [
           ElevatedButton(
-            onPressed: () {
-              ref.read(quizControllerProvider.notifier).resetQuiz();
-              context.go(SoteriaRoutes.main); 
-            },
+            onPressed: _isNavigating ? null : _handlePlayAgain,
             style: ElevatedButton.styleFrom(
               backgroundColor: SoteriaColors.primary,
               foregroundColor: Colors.white,
@@ -84,17 +102,16 @@ class _ResultActions extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(SoteriaRadius.lg),
               ),
             ),
-            child: Text(
-              'PLAY AGAIN',
-              style: context.titleMedium.copyWith(fontWeight: FontWeight.bold),
-            ),
+            child: _isNavigating
+                ? const CircularProgressIndicator(color: Colors.white)
+                : Text(
+                    'PLAY AGAIN',
+                    style: context.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                  ),
           ),
           SizedBox(height: SoteriaSpacing.md),
           TextButton(
-            onPressed: () {
-              ref.read(quizControllerProvider.notifier).resetQuiz();
-              context.go(SoteriaRoutes.main);
-            },
+            onPressed: _isNavigating ? null : _handleReturnHome,
             child: Text(
               'RETURN HOME',
               style: context.titleSmall.copyWith(

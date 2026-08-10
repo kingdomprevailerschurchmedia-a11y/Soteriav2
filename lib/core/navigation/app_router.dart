@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -58,15 +60,9 @@ import 'package:soteria/features/quiz/presentation/screens/quiz_history_detail_s
 import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 import 'package:soteria/features/splash/presentation/screens/splash_screen.dart';
+import 'package:soteria/features/notifications/screens/notification_center_screen.dart';
 
 import 'package:soteria/core/identity/models/user_session.dart';
-import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
-import 'package:soteria/features/auth/services/auth_coordinator.dart';
-import 'package:soteria/features/preview_gallery/pages/player_preview_page.dart';
-import 'package:soteria/features/player/screens/security_status_screen.dart';
-import 'package:soteria/features/player/screens/config_debug_screen.dart';
-import 'package:soteria/features/notifications/screens/notification_center_screen.dart';
-import 'package:soteria/features/notifications/providers/notification_providers.dart';
 
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -84,6 +80,9 @@ import 'package:soteria/features/tournaments/presentation/screens/tournament_det
 import 'package:soteria/features/tournaments/presentation/screens/tournament_lobby_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_gameplay_screen.dart';
 import 'package:soteria/features/tournaments/presentation/pages/tournament_preview_gallery.dart';
+import 'package:soteria/features/preview_gallery/pages/player_preview_page.dart';
+import 'package:soteria/features/player/screens/config_debug_screen.dart';
+import 'package:soteria/features/player/screens/security_status_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
@@ -107,7 +106,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     debugLogDiagnostics: true,
     refreshListenable: listenable,
     observers: [
-      FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+      if (!Platform.environment.containsKey('FLUTTER_TEST'))
+        FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
     ],
     redirect: (context, state) {
       final lifecycle = ref.read(appLifecycleProvider);
@@ -123,6 +123,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (lifecycle == AppStartupState.loading) {
+        // FORCE the splash screen while loading.
+        // This prevents deep links or state restoration from flashing the Dashboard.
+        if (location != SoteriaRoutes.splash) {
+          return SoteriaRoutes.splash;
+        }
         return null;
       }
 
@@ -562,21 +567,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'player',
             builder: (context, state) => const GalleryShell(
               title: 'Player Profile',
-              child: PlayerPreviewPage(),
+              child: const PlayerPreviewPage(),
             ),
           ),
           GoRoute(
             path: 'config-debug',
             builder: (context, state) => const GalleryShell(
               title: 'Config Debug',
-              child: ConfigDebugScreen(),
+              child: const ConfigDebugScreen(),
             ),
           ),
           GoRoute(
             path: 'security-status',
             builder: (context, state) => const GalleryShell(
               title: 'Security Status',
-              child: SecurityStatusScreen(),
+              child: const SecurityStatusScreen(),
             ),
           ),
           GoRoute(
