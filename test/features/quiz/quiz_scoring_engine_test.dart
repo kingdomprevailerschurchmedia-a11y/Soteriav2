@@ -29,7 +29,9 @@ void main() {
         questionId: 'q1',
         selectedOptionIds: ['o1'],
         isCorrect: true,
-        responseTime: const Duration(seconds: 20), // > 50% of 30s, no speed bonus
+        responseTime: const Duration(
+          seconds: 20,
+        ), // > 50% of 30s, no speed bonus
         timestamp: DateTime.now(),
       );
 

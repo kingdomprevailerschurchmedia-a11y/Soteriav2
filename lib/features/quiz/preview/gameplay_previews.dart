@@ -63,9 +63,18 @@ class GameplayPreviews {
   );
 
   static final mockPowerUps = [
-    const PowerUpState(type: PowerUpType.fiftyFifty, isAvailable: true),
-    const PowerUpState(type: PowerUpType.pauseTimer, isAvailable: true),
-    const PowerUpState(type: PowerUpType.askAudience, isAvailable: false),
+    const PowerUpState(
+      type: PowerUpType.fiftyFifty,
+      status: PowerUpStatus.available,
+    ),
+    const PowerUpState(
+      type: PowerUpType.pauseTimer,
+      status: PowerUpStatus.available,
+    ),
+    const PowerUpState(
+      type: PowerUpType.askAudience,
+      status: PowerUpStatus.available,
+    ),
   ];
 
   static Widget active() => GameplayPreviewWrapper(
@@ -85,6 +94,106 @@ class GameplayPreviews {
       ),
       powerUps: mockPowerUps,
       questionStartTime: DateTime.now(),
+    ),
+  );
+
+  static Widget fiftyFiftyActivated() => GameplayPreviewWrapper(
+    state: QuizState(
+      status: QuizStatus.active,
+      currentQuestion: mockQuestion,
+      questions: [mockQuestion],
+      currentIndex: 0,
+      powerUps: [
+        const PowerUpState(
+          type: PowerUpType.fiftyFifty,
+          status: PowerUpStatus.used,
+          remainingUses: 0,
+        ),
+        const PowerUpState(
+          type: PowerUpType.pauseTimer,
+          status: PowerUpStatus.available,
+        ),
+        const PowerUpState(
+          type: PowerUpType.askAudience,
+          status: PowerUpStatus.available,
+        ),
+      ],
+      hiddenOptionIds: {'o2', 'o4'},
+      timer: TimerState(
+        totalDuration: const Duration(seconds: 30),
+        remainingTime: const Duration(seconds: 15),
+        progress: 0.5,
+        isRunning: true,
+      ),
+    ),
+  );
+
+  static Widget timerPaused() => GameplayPreviewWrapper(
+    state: QuizState(
+      status: QuizStatus.active,
+      currentQuestion: mockQuestion,
+      questions: [mockQuestion],
+      currentIndex: 0,
+      powerUps: [
+        const PowerUpState(
+          type: PowerUpType.fiftyFifty,
+          status: PowerUpStatus.available,
+        ),
+        const PowerUpState(
+          type: PowerUpType.pauseTimer,
+          status: PowerUpStatus.used,
+          remainingUses: 0,
+        ),
+        const PowerUpState(
+          type: PowerUpType.askAudience,
+          status: PowerUpStatus.available,
+        ),
+      ],
+      timer: TimerState(
+        totalDuration: const Duration(seconds: 30),
+        remainingTime: const Duration(seconds: 20),
+        progress: 0.66,
+        isRunning: false,
+        status: TimerStatus.paused,
+        deadline: DateTime.now().add(const Duration(seconds: 20)),
+      ),
+      powerUpTimer: TimerState(
+        totalDuration: const Duration(seconds: 10),
+        remainingTime: const Duration(seconds: 7),
+        progress: 0.7,
+        isRunning: true,
+      ),
+    ),
+  );
+
+  static Widget audienceResults() => GameplayPreviewWrapper(
+    state: QuizState(
+      status: QuizStatus.active,
+      currentQuestion: mockQuestion,
+      questions: [mockQuestion],
+      currentIndex: 0,
+      powerUps: [
+        const PowerUpState(
+          type: PowerUpType.fiftyFifty,
+          status: PowerUpStatus.available,
+        ),
+        const PowerUpState(
+          type: PowerUpType.pauseTimer,
+          status: PowerUpStatus.available,
+        ),
+        const PowerUpState(
+          type: PowerUpType.askAudience,
+          status: PowerUpStatus.used,
+          remainingUses: 0,
+        ),
+      ],
+      audienceDistribution: {'o1': 0.72, 'o2': 0.12, 'o3': 0.08, 'o4': 0.08},
+      timer: TimerState(
+        totalDuration: const Duration(seconds: 30),
+        remainingTime: const Duration(seconds: 18),
+        progress: 0.6,
+        isRunning: true,
+      ),
     ),
   );
 

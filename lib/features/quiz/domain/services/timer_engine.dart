@@ -45,7 +45,8 @@ class TimerEngine {
       );
     }
 
-    final progress = remaining.inMilliseconds / current.totalDuration.inMilliseconds;
+    final progress =
+        remaining.inMilliseconds / current.totalDuration.inMilliseconds;
     final remainingSeconds = remaining.inSeconds;
 
     TimerStatus status = TimerStatus.running;
@@ -71,10 +72,7 @@ class TimerEngine {
 
   TimerState pause(TimerState current) {
     if (!current.isRunning) return current;
-    return current.copyWith(
-      isRunning: false,
-      status: TimerStatus.paused,
-    );
+    return current.copyWith(isRunning: false, status: TimerStatus.paused);
   }
 
   TimerState resume(TimerState current, Duration pausedDuration) {
@@ -91,9 +89,6 @@ class TimerEngine {
   }
 
   TimerState stop(TimerState current) {
-    return current.copyWith(
-      isRunning: false,
-      status: TimerStatus.idle,
-    );
+    return current.copyWith(isRunning: false, status: TimerStatus.idle);
   }
 }

@@ -15,12 +15,26 @@ import '../widgets/continue_playing_section.dart';
 import '../widgets/recent_achievements_section.dart';
 import '../widgets/top_scholars_section.dart';
 import '../widgets/performance_section.dart';
+import '../../../quiz/presentation/widgets/session_recovery_dialog.dart';
 
-class DashboardScreen extends ConsumerWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SessionRecoveryDialog.checkAndShow(context, ref);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final state = ref.watch(dashboardProvider);
     final progression = ref.watch(playerProgressionProvider);
     final player = state.player;

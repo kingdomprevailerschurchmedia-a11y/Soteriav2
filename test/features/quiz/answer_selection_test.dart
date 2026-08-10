@@ -1,38 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
-import 'package:soteria/features/quiz/domain/models/question.dart';
-import 'package:soteria/features/quiz/domain/models/answer_option.dart';
-import 'package:soteria/features/quiz/presentation/controllers/quiz_controller.dart';
 import 'package:soteria/features/quiz/presentation/providers/quiz_providers.dart';
-import 'package:soteria/features/quiz/data/repository/mock_question_repository.dart';
 
 void main() {
   group('QuizController - Answer Selection', () {
     late ProviderContainer container;
 
-    final mockQuestion = Question(
-      id: 'q1',
-      type: QuestionType.multipleChoice,
-      category: 'Science',
-      difficulty: Difficulty.easy,
-      text: 'Test Question',
-      options: [
-        const AnswerOption(id: 'o1', text: 'A'),
-        const AnswerOption(id: 'o2', text: 'B'),
-      ],
-      correctOptionIds: ['o1'],
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-    );
-
     setUp(() {
-      container = ProviderContainer(
-        overrides: [
-          // Override repository to avoid real firebase calls if necessary
-          // Though we focus on controller logic here
-        ],
-      );
+      container = ProviderContainer();
     });
 
     tearDown(() => container.dispose());
@@ -49,21 +25,26 @@ void main() {
         final notifier = container.read(quizControllerProvider.notifier);
 
         // Setup state with questions
-        notifier.startQuiz(
+        await notifier.startQuiz(
           playerId: 'p1',
           mode: GameMode.practice,
           category: 'Science',
           difficulty: Difficulty.easy,
         );
 
-        // Wait for loading to finish (mock repo delay)
-        await Future.delayed(const Duration(milliseconds: 600));
+        // state should be updated now because startQuiz was awaited
+        final stateBefore = container.read(quizControllerProvider);
+        expect(stateBefore.status, equals(QuizStatus.active));
+        expect(stateBefore.currentQuestion, isNotNull);
 
-        await notifier.selectAnswer('o1');
+        final future = notifier.selectAnswer('o1');
 
-        final state = container.read(quizControllerProvider);
-        expect(state.selectedOptionId, equals('o1'));
-        expect(state.isAnswerLocked, isTrue);
+        // Check state immediately before delay completes
+        final stateDuring = container.read(quizControllerProvider);
+        expect(stateDuring.selectedOptionId, equals('o1'));
+        expect(stateDuring.isAnswerLocked, isTrue);
+
+        await future;
       },
     );
 
@@ -72,13 +53,12 @@ void main() {
       () async {
         final notifier = container.read(quizControllerProvider.notifier);
 
-        notifier.startQuiz(
+        await notifier.startQuiz(
           playerId: 'p1',
           mode: GameMode.practice,
           category: 'Science',
           difficulty: Difficulty.easy,
         );
-        await Future.delayed(const Duration(milliseconds: 600));
 
         // First selection
         final firstSelectionFuture = notifier.selectAnswer('o1');
@@ -86,14 +66,15 @@ void main() {
         // Rapid second selection
         await notifier.selectAnswer('o2');
 
-        await firstSelectionFuture;
-
-        final state = container.read(quizControllerProvider);
+        // Check state before delay completes
+        final stateDuring = container.read(quizControllerProvider);
         expect(
-          state.selectedOptionId,
+          stateDuring.selectedOptionId,
           equals('o1'),
           reason: 'Should remain o1',
         );
+
+        await firstSelectionFuture;
       },
     );
   });

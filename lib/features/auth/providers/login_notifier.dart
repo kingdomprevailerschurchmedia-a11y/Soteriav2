@@ -95,9 +95,7 @@ class LoginNotifier extends Notifier<LoginState> {
         stackTrace: st,
         feature: 'Auth',
       );
-      state = state.copyWith(
-        error: 'An unexpected connection error occurred.',
-      );
+      state = state.copyWith(error: 'An unexpected connection error occurred.');
       ref
           .read(crashlyticsProvider)
           .recordError(e, st, reason: 'Unexpected Auth Crash');

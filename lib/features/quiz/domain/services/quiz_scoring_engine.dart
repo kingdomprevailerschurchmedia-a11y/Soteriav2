@@ -24,15 +24,17 @@ class QuizScoringEngine {
     // 2. Difficulty Bonus
     final difficultyMultiplier =
         config.difficultyMultipliers[question.difficulty] ?? 1.0;
-    final difficultyBonus = ((baseScore * difficultyMultiplier) - baseScore).toInt();
+    final difficultyBonus = ((baseScore * difficultyMultiplier) - baseScore)
+        .toInt();
 
     // 3. Speed Bonus
     int speedBonus = 0;
     final totalAvailableTime = Duration(seconds: question.estimatedTime);
     if (totalAvailableTime.inMilliseconds > 0) {
       final responseRatio =
-          answer.responseTime.inMilliseconds / totalAvailableTime.inMilliseconds;
-      
+          answer.responseTime.inMilliseconds /
+          totalAvailableTime.inMilliseconds;
+
       // If answered in less than config.speedBonusThreshold (e.g. 50% of time)
       if (responseRatio < config.speedBonusThreshold) {
         // Linear scale for speed bonus: faster is better
@@ -51,7 +53,9 @@ class QuizScoringEngine {
     final totalScore = baseScore + difficultyBonus + speedBonus + streakBonus;
 
     // 6. XP Calculation
-    final xpEarned = (config.xpPerCorrect * config.xpMultiplier * difficultyMultiplier).toInt();
+    final xpEarned =
+        (config.xpPerCorrect * config.xpMultiplier * difficultyMultiplier)
+            .toInt();
 
     return ScoreResult(
       baseScore: baseScore,

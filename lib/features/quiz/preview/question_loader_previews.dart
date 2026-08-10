@@ -13,7 +13,11 @@ class QuestionLoaderPreview extends ConsumerWidget {
   final String title;
   final Override? providerOverride;
 
-  const QuestionLoaderPreview({super.key, required this.title, this.providerOverride});
+  const QuestionLoaderPreview({
+    super.key,
+    required this.title,
+    this.providerOverride,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

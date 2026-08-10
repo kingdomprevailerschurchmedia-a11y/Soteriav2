@@ -12,14 +12,19 @@ class QuizStatsBar extends StatelessWidget {
     required this.streak,
     required this.xp,
     required this.timerState,
+    this.powerUpTimerState,
   });
 
   final int streak;
   final int xp;
   final TimerState? timerState;
+  final TimerState? powerUpTimerState;
 
   @override
   Widget build(BuildContext context) {
+    final isPausedByPowerUp =
+        powerUpTimerState != null && powerUpTimerState!.isRunning;
+
     return Semantics(
       label: 'Quiz Statistics: $streak streak, $xp experience points',
       child: Padding(
@@ -34,9 +39,53 @@ class QuizStatsBar extends StatelessWidget {
                 _buildXPIndicator(context),
               ],
             ),
-            if (timerState != null) QuizTimer(state: timerState!),
+            if (isPausedByPowerUp)
+              _buildPausedIndicator(context)
+            else if (timerState != null)
+              QuizTimer(state: timerState!),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildPausedIndicator(BuildContext context) {
+    final remainingSeconds = powerUpTimerState!.remainingTime.inSeconds;
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: SoteriaColors.primary.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: SoteriaColors.primary.withValues(alpha: 0.5)),
+        boxShadow: [
+          BoxShadow(
+            color: SoteriaColors.primary.withValues(alpha: 0.3),
+            blurRadius: 10,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            'PAUSED',
+            style: context.labelSmall.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.2,
+            ),
+          ),
+          SizedBox(width: 8.w),
+          Text(
+            remainingSeconds.toString(),
+            style: context.titleSmall.copyWith(
+              color: SoteriaColors.secondary,
+              fontWeight: FontWeight.w900,
+              fontFamily: 'monospace',
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -104,49 +153,5 @@ class QuizStatsBar extends StatelessWidget {
         ),
       ],
     );
-  }
-
-  Widget _buildTimerIndicator(BuildContext context) {
-    final remainingSeconds = timerState!.remainingTime.inSeconds;
-    final bool isWarning = remainingSeconds <= 5;
-
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
-      decoration: BoxDecoration(
-        color: isWarning
-            ? SoteriaColors.error.withValues(alpha: 0.1)
-            : Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: isWarning
-              ? SoteriaColors.error.withValues(alpha: 0.3)
-              : Colors.white.withValues(alpha: 0.1),
-        ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.timer_outlined,
-            size: 18.sp,
-            color: isWarning ? SoteriaColors.error : Colors.white70,
-          ),
-          SizedBox(width: 8.w),
-          Text(
-            _formatDuration(timerState!.remainingTime),
-            style: context.titleSmall.copyWith(
-              color: isWarning ? SoteriaColors.error : Colors.white,
-              fontWeight: FontWeight.w900,
-              fontFamily: 'monospace',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _formatDuration(Duration duration) {
-    final seconds = duration.inSeconds;
-    return seconds.toString().padLeft(2, '0');
   }
 }

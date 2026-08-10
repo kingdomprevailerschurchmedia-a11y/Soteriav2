@@ -8,15 +8,18 @@ import '../../domain/usecases/calculate_score_use_case.dart';
 import '../../domain/usecases/restore_session_use_case.dart';
 import '../../domain/usecases/save_progress_use_case.dart';
 import '../../domain/usecases/validate_answer_use_case.dart';
+import '../../domain/usecases/load_active_session_use_case.dart';
+import '../../domain/usecases/delete_session_use_case.dart';
+import '../../domain/repositories/quiz_session_repository.dart';
 import '../controllers/quiz_controller.dart';
 import '../states/quiz_state.dart';
 import '../../data/repository/quiz_repository_provider.dart';
+import '../../data/repository/quiz_session_repository_impl.dart';
 
 // --- Repository Contract ---
-// Implementation will be provided via overrides or a specific implementation provider
-import '../../../../core/utils/clock.dart';
-
-final clockProvider = Provider<Clock>((ref) => SystemClock());
+final quizSessionRepositoryProvider = Provider<QuizSessionRepository>((ref) {
+  return QuizSessionRepositoryImpl(ref.watch(quizLocalDataSourceProvider));
+});
 
 // --- Use Cases ---
 final loadQuestionsUseCaseProvider = Provider((ref) {
@@ -49,6 +52,14 @@ final saveProgressUseCaseProvider = Provider((ref) {
 
 final validateAnswerUseCaseProvider = Provider((ref) {
   return ValidateAnswerUseCase(ref.watch(quizRepositoryProvider));
+});
+
+final loadActiveSessionUseCaseProvider = Provider((ref) {
+  return LoadActiveSessionUseCase(ref.watch(quizSessionRepositoryProvider));
+});
+
+final deleteSessionUseCaseProvider = Provider((ref) {
+  return DeleteSessionUseCase(ref.watch(quizSessionRepositoryProvider));
 });
 
 // --- Controller ---

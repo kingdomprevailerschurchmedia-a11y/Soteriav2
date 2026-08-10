@@ -26,4 +26,36 @@ enum GameMode {
   seasonalEvent,
 }
 
-enum PowerUpType { fiftyFifty, pauseTimer, askAudience }
+enum PowerUpType {
+  fiftyFifty,
+  pauseTimer,
+  askAudience,
+  extraTime,
+  doubleXP,
+  shield,
+  revealCategory,
+}
+
+enum PowerUpStatus {
+  available,
+  used,
+  disabled,
+  locked,
+  activating,
+  active,
+  completed,
+  failed,
+}
+
+enum SessionStatus {
+  created,
+  active,
+  paused,
+  interrupted,
+  recoverable,
+  completed,
+  cancelled,
+  expired,
+  corrupted,
+  deleted,
+}

@@ -16,9 +16,7 @@ abstract class ScoreResult with _$ScoreResult {
     required DateTime timestamp,
   }) = _ScoreResult;
 
-  factory ScoreResult.zero() => ScoreResult(
-        timestamp: DateTime.now(),
-      );
+  factory ScoreResult.zero() => ScoreResult(timestamp: DateTime.now());
 
   factory ScoreResult.fromJson(Map<String, dynamic> json) =>
       _$ScoreResultFromJson(json);

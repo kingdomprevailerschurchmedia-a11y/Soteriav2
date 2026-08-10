@@ -16,69 +16,79 @@ class QuizAnswerOption extends StatelessWidget {
     required this.text,
     this.state = QuizAnswerState.defaultState,
     this.onTap,
+    this.isHidden = false,
   });
 
   final String letter;
   final String text;
   final QuizAnswerState state;
   final VoidCallback? onTap;
+  final bool isHidden;
 
   @override
   Widget build(BuildContext context) {
-    final bool isInteractive = state == QuizAnswerState.defaultState;
+    final bool isInteractive =
+        state == QuizAnswerState.defaultState && !isHidden;
 
-    return Semantics(
-      label: 'Option $letter: $text',
-      button: true,
-      enabled: isInteractive,
-      selected:
-          state == QuizAnswerState.selected || state == QuizAnswerState.correct,
-      child: GestureDetector(
-        onTap: () {
-          if (isInteractive && onTap != null) {
-            HapticFeedback.lightImpact();
-            onTap!();
-          }
-        },
-        child: AnimatedScale(
-          scale: state == QuizAnswerState.selected ? 1.02 : 1.0,
-          duration: SoteriaAnimations.fast,
-          child: AnimatedContainer(
-            duration: SoteriaAnimations.fast,
-            margin: EdgeInsets.only(bottom: SoteriaSpacing.md),
-            padding: EdgeInsets.symmetric(
-              horizontal: SoteriaSpacing.lg,
-              vertical: SoteriaSpacing.md,
-            ),
-            decoration: BoxDecoration(
-              color: _getBackgroundColor(),
-              borderRadius: BorderRadius.circular(SoteriaRadius.lg),
-              border: Border.all(
-                color: _getBorderColor(),
-                width: state == QuizAnswerState.defaultState ? 1 : 2,
-              ),
-              boxShadow: _getShadows(),
-            ),
-            child: Row(
-              children: [
-                _buildLetterCircle(context),
-                SizedBox(width: SoteriaSpacing.lg),
-                Expanded(
-                  child: Text(
-                    text,
-                    style: context.bodyLarge.copyWith(
-                      color: _getTextColor(),
-                      fontWeight: state == QuizAnswerState.defaultState
-                          ? FontWeight.w500
-                          : FontWeight.bold,
-                    ),
-                  ),
+    return IgnorePointer(
+      ignoring: isHidden,
+      child: Semantics(
+        label: isHidden ? 'Removed option' : 'Option $letter: $text',
+        button: !isHidden,
+        enabled: isInteractive,
+        hidden: isHidden,
+        child: AnimatedOpacity(
+          opacity: isHidden ? 0.0 : 1.0,
+          duration: SoteriaAnimations.normal,
+          curve: Curves.easeOut,
+          child: GestureDetector(
+            onTap: () {
+              if (isInteractive && onTap != null) {
+                HapticFeedback.lightImpact();
+                onTap!();
+              }
+            },
+            child: AnimatedScale(
+              scale: state == QuizAnswerState.selected ? 1.02 : 1.0,
+              duration: SoteriaAnimations.fast,
+              child: AnimatedContainer(
+                duration: SoteriaAnimations.fast,
+                margin: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                padding: EdgeInsets.symmetric(
+                  horizontal: SoteriaSpacing.lg,
+                  vertical: SoteriaSpacing.md,
                 ),
-                if (_getIcon() != null) ...[
-                  SizedBox(width: SoteriaSpacing.md),
-                  Icon(_getIcon(), color: _getIconColor(), size: 24.sp),
-                ],
-              ],
+                decoration: BoxDecoration(
+                  color: _getBackgroundColor(),
+                  borderRadius: BorderRadius.circular(SoteriaRadius.lg),
+                  border: Border.all(
+                    color: _getBorderColor(),
+                    width: state == QuizAnswerState.defaultState ? 1 : 2,
+                  ),
+                  boxShadow: _getShadows(),
+                ),
+                child: Row(
+                  children: [
+                    _buildLetterCircle(context),
+                    SizedBox(width: SoteriaSpacing.lg),
+                    Expanded(
+                      child: Text(
+                        text,
+                        style: context.bodyLarge.copyWith(
+                          color: _getTextColor(),
+                          fontWeight: state == QuizAnswerState.defaultState
+                              ? FontWeight.w500
+                              : FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    if (_getIcon() != null) ...[
+                      SizedBox(width: SoteriaSpacing.md),
+                      Icon(_getIcon(), color: _getIconColor(), size: 24.sp),
+                    ],
+                  ],
+                ),
+              ),
             ),
           ),
         ),

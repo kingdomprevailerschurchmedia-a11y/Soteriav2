@@ -36,13 +36,13 @@ class _ScoreGainAnimationState extends ConsumerState<ScoreGainAnimation>
       TweenSequenceItem(tween: Tween(begin: 1.0, end: 0.0), weight: 20),
     ]).animate(_controller);
 
-    _offset = Tween<Offset>(
-      begin: const Offset(0, 0),
-      end: const Offset(0, -1),
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: SoteriaAnimations.emphasize,
-    ));
+    _offset = Tween<Offset>(begin: const Offset(0, 0), end: const Offset(0, -1))
+        .animate(
+          CurvedAnimation(
+            parent: _controller,
+            curve: SoteriaAnimations.emphasize,
+          ),
+        );
   }
 
   @override
@@ -53,10 +53,12 @@ class _ScoreGainAnimationState extends ConsumerState<ScoreGainAnimation>
 
   @override
   Widget build(BuildContext context) {
-    final prefersReducedMotion = MediaQuery.of(context).prefersReducedMotion;
+    final prefersReducedMotion = MediaQuery.of(context).accessibleNavigation;
 
-    ref.listen(quizControllerProvider.select((s) => s.lastScoreResult),
-        (previous, next) {
+    ref.listen(quizControllerProvider.select((s) => s.lastScoreResult), (
+      previous,
+      next,
+    ) {
       if (next != null && next != _lastResult && next.totalScore > 0) {
         _lastResult = next;
         _controller.forward(from: 0.0);
@@ -64,7 +66,8 @@ class _ScoreGainAnimationState extends ConsumerState<ScoreGainAnimation>
     });
 
     final result = ref.read(quizControllerProvider).lastScoreResult;
-    if (result == null || result.totalScore == 0) return const SizedBox.shrink();
+    if (result == null || result.totalScore == 0)
+      return const SizedBox.shrink();
 
     return AnimatedBuilder(
       animation: _controller,
@@ -81,10 +84,7 @@ class _ScoreGainAnimationState extends ConsumerState<ScoreGainAnimation>
             opacity: _opacity,
             child: prefersReducedMotion
                 ? child!
-                : SlideTransition(
-                    position: _offset,
-                    child: child,
-                  ),
+                : SlideTransition(position: _offset, child: child),
           ),
         );
       },

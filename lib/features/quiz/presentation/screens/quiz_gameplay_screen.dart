@@ -6,6 +6,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/overlays/soteria_dialog.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 import '../../../../core/widgets/feedback/soteria_error_widget.dart';
 import '../../../../core/design_system/components/soteria_state_views.dart';
 import '../../domain/models/quiz_enums.dart';
@@ -15,6 +16,7 @@ import '../widgets/quiz_stats_bar.dart';
 import '../widgets/quiz_question_card.dart';
 import '../widgets/quiz_answer_option.dart';
 import '../widgets/quiz_power_up_bar.dart';
+import '../widgets/audience_distribution_overlay.dart';
 import '../widgets/score_gain_animation.dart';
 
 class QuizGameplayScreen extends ConsumerWidget {
@@ -24,6 +26,12 @@ class QuizGameplayScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(quizControllerProvider);
     final notifier = ref.read(quizControllerProvider.notifier);
+
+    ref.listen(quizControllerProvider.select((s) => s.status), (prev, next) {
+      if (next == QuizStatus.completed) {
+        context.go(SoteriaRoutes.quizResults);
+      }
+    });
 
     return PopScope(
       canPop: false,
@@ -92,6 +100,7 @@ class QuizGameplayScreen extends ConsumerWidget {
               streak: state.streak,
               xp: state.xp,
               timerState: state.timer,
+              powerUpTimerState: state.powerUpTimer,
             ),
             SizedBox(height: SoteriaSpacing.lg),
             Expanded(
@@ -106,13 +115,25 @@ class QuizGameplayScreen extends ConsumerWidget {
                       difficulty: question.difficulty,
                       imageUrl: question.imageUrl,
                     ),
+                    if (state.audienceDistribution.isNotEmpty) ...[
+                      SizedBox(height: SoteriaSpacing.lg),
+                      AudienceDistributionOverlay(
+                        distribution: state.audienceDistribution,
+                        optionLetters: {
+                          for (var i = 0; i < question.options.length; i++)
+                            question.options[i].id: _getLetterForIndex(i),
+                        },
+                      ),
+                    ],
                     SizedBox(height: SoteriaSpacing.xl),
                     ...question.options.map((option) {
-                      final letter = _getLetterForIndex(
-                        question.options.indexOf(option),
-                      );
+                      final index = question.options.indexOf(option);
+                      final letter = _getLetterForIndex(index);
                       final isSelected = state.selectedOptionId == option.id;
                       final isCorrect = question.correctOptionIds.contains(
+                        option.id,
+                      );
+                      final isHidden = state.hiddenOptionIds.contains(
                         option.id,
                       );
 
@@ -125,7 +146,6 @@ class QuizGameplayScreen extends ConsumerWidget {
                               ? QuizAnswerState.correct
                               : QuizAnswerState.incorrect;
                         } else if (isCorrect) {
-                          // Reveal correct answer if player was wrong
                           answerState = QuizAnswerState.correct;
                         } else {
                           answerState = QuizAnswerState.disabled;
@@ -137,6 +157,7 @@ class QuizGameplayScreen extends ConsumerWidget {
                         text: option.text,
                         state: answerState,
                         onTap: () => notifier.selectAnswer(option.id),
+                        isHidden: isHidden,
                       );
                     }),
                     SizedBox(height: SoteriaSpacing.xxl),
@@ -146,16 +167,13 @@ class QuizGameplayScreen extends ConsumerWidget {
             ),
             QuizPowerUpBar(
               powerUps: state.powerUps,
-              onPowerUpTap: (type) {
-                // Power-up logic in Story 8.7
-              },
+              onPowerUpTap: (type) => notifier.activatePowerUp(type),
+              isLocked:
+                  state.isAnswerLocked || state.status != QuizStatus.active,
             ),
           ],
         ),
-        const Align(
-          alignment: Alignment(0, -0.2),
-          child: ScoreGainAnimation(),
-        ),
+        const Align(alignment: Alignment(0, -0.2), child: ScoreGainAnimation()),
       ],
     );
   }

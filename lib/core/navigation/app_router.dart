@@ -53,6 +53,7 @@ import 'package:soteria/features/preview_gallery/pages/gameplay_redesign_preview
 import 'package:soteria/features/preview_gallery/pages/lobby_redesign_preview.dart';
 import 'package:soteria/features/preview_gallery/pages/results_redesign_preview.dart';
 import 'package:soteria/features/quiz/presentation/screens/quiz_gameplay_screen.dart';
+import 'package:soteria/features/quiz/presentation/screens/quiz_results_screen.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 
 import 'package:soteria/core/identity/models/user_session.dart';
@@ -337,6 +338,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: SoteriaRoutes.quizGameplay,
         pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
           child: const QuizGameplayScreen(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: SoteriaRoutes.quizResults,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const QuizResultsScreen(),
           key: state.pageKey,
         ),
       ),

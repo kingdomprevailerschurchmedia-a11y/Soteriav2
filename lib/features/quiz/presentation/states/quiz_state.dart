@@ -5,6 +5,7 @@ import '../../domain/models/quiz_session.dart';
 import '../../domain/models/quiz_result.dart';
 import '../../domain/models/timer_state.dart';
 import '../../domain/models/power_up_state.dart';
+import '../../domain/models/player_answer.dart';
 import '../../domain/models/score_result.dart';
 import '../../domain/models/reward_event.dart';
 
@@ -25,8 +26,12 @@ abstract class QuizState with _$QuizState {
     @Default(0) int xp,
     ScoreResult? lastScoreResult,
     @Default([]) List<RewardEvent> rewardEvents,
+    @Default([]) List<PlayerAnswer> answeredQuestions,
     TimerState? timer,
     @Default([]) List<PowerUpState> powerUps,
+    @Default({}) Set<String> hiddenOptionIds,
+    @Default({}) Map<String, double> audienceDistribution,
+    TimerState? powerUpTimer,
     @Default(false) bool isLoading,
     String? error,
     @Default(false) bool isOffline,

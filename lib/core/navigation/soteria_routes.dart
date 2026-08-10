@@ -25,6 +25,7 @@ class SoteriaRoutes {
 
   // Quiz Gameplay
   static const String quizGameplay = '/quiz-gameplay';
+  static const String quizResults = '/quiz-results';
 
   // Developer Gallery
   static const String previewGallery = '/preview-gallery';

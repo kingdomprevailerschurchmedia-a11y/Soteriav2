@@ -4,6 +4,8 @@ import '../../domain/models/question.dart';
 import '../../domain/models/quiz_session.dart';
 import '../../domain/models/quiz_result.dart';
 import '../../domain/models/player_answer.dart';
+import '../../domain/models/answer_option.dart';
+import '../../domain/models/power_up_state.dart';
 import 'quiz_remote_data_source.dart';
 import 'quiz_local_data_source.dart';
 
@@ -15,7 +17,42 @@ class MockQuizRemoteDataSource implements QuizRemoteDataSource {
     required Difficulty difficulty,
   }) async {
     await Future.delayed(const Duration(seconds: 1));
-    return []; // Return empty for now or add some mock data
+    return [
+      Question(
+        id: 'q1',
+        type: QuestionType.multipleChoice,
+        category: category,
+        difficulty: difficulty,
+        text: 'What is the capital of France?',
+        options: [
+          const AnswerOption(id: 'o1', text: 'Paris'),
+          const AnswerOption(id: 'o2', text: 'London'),
+          const AnswerOption(id: 'o3', text: 'Berlin'),
+          const AnswerOption(id: 'o4', text: 'Madrid'),
+        ],
+        correctOptionIds: ['o1'],
+        estimatedTime: 30,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
+      Question(
+        id: 'q2',
+        type: QuestionType.multipleChoice,
+        category: category,
+        difficulty: difficulty,
+        text: 'Which planet is known as the Red Planet?',
+        options: [
+          const AnswerOption(id: 'o1', text: 'Mars'),
+          const AnswerOption(id: 'o2', text: 'Venus'),
+          const AnswerOption(id: 'o3', text: 'Jupiter'),
+          const AnswerOption(id: 'o4', text: 'Saturn'),
+        ],
+        correctOptionIds: ['o1'],
+        estimatedTime: 30,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+      ),
+    ];
   }
 
   @override
@@ -33,6 +70,11 @@ class MockQuizRemoteDataSource implements QuizRemoteDataSource {
       category: category,
       difficulty: difficulty,
       startedTime: DateTime.now(),
+      powerUps: [
+        const PowerUpState(type: PowerUpType.fiftyFifty),
+        const PowerUpState(type: PowerUpType.pauseTimer),
+        const PowerUpState(type: PowerUpType.askAudience),
+      ],
     );
   }
 
@@ -55,18 +97,30 @@ class MockQuizRemoteDataSource implements QuizRemoteDataSource {
   Future<QuizResult> finishSession(String sessionId) async {
     await Future.delayed(const Duration(seconds: 1));
     return QuizResult(
-      finalScore: 0,
-      accuracy: 0.0,
+      sessionId: sessionId,
+      playerId: 'mock_p1',
+      gameMode: GameMode.practice,
+      category: 'Science',
+      difficulty: Difficulty.easy,
+      totalQuestions: 0,
+      answeredQuestions: 0,
       correctAnswers: 0,
       wrongAnswers: 0,
       skipped: 0,
-      averageResponseTime: Duration.zero,
-      longestStreak: 0,
+      timedOut: 0,
+      accuracy: 0.0,
+      finalScore: 0,
       xpEarned: 0,
       coinsEarned: 0,
-      rank: 'N/A',
-      performanceGrade: 'N/A',
-      timestamp: DateTime.now(),
+      longestStreak: 0,
+      finalStreak: 0,
+      averageResponseTime: Duration.zero,
+      fastestResponseTime: Duration.zero,
+      slowestResponseTime: Duration.zero,
+      questionResults: [],
+      completedAt: DateTime.now(),
+      completionTime: Duration.zero,
+      performanceRating: 'N/A',
     );
   }
 
@@ -82,6 +136,8 @@ class MockQuizLocalDataSource implements QuizLocalDataSource {
   @override
   Future<void> saveProgress(QuizSession session) async {
     _cache[session.sessionId] = session;
+    // Also save as active session for the player
+    _cache['active_session_${session.playerId}'] = session;
   }
 
   @override
@@ -91,6 +147,16 @@ class MockQuizLocalDataSource implements QuizLocalDataSource {
 
   @override
   Future<void> clearProgress(String sessionId) async {
+    final session = _cache[sessionId];
+    if (session != null) {
+      _cache.remove('active_session_${session.playerId}');
+    }
     _cache.remove(sessionId);
+  }
+
+  @override
+  Future<void> clearAllProgress(String playerId) async {
+    _cache.remove('active_session_$playerId');
+    _cache.removeWhere((key, value) => value.playerId == playerId);
   }
 }

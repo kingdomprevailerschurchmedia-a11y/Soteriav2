@@ -13,6 +13,8 @@ import '../../../features/auth/presentation/widgets/logout_confirmation_dialog.d
 import '../../../features/gameplay_engine/pages/competitive_review_screen.dart';
 import '../../../features/quiz/preview/question_loader_previews.dart';
 import '../../../features/quiz/preview/gameplay_previews.dart';
+import '../../../features/quiz/preview/recovery_previews.dart';
+import '../../../features/quiz/preview/results_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -232,11 +234,103 @@ void registerAllPreviews() {
 
   r.registerPreview(
     PreviewItem(
+      id: 'gameplay-5050',
+      title: '50/50 Activated',
+      description: 'Hidden options state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.fiftyFiftyActivated(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-paused',
+      title: 'Timer Paused',
+      description: 'Power-up pause state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.timerPaused(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'gameplay-audience',
+      title: 'Audience Poll',
+      description: 'Results distribution UI',
+      category: PreviewCategory.gameplay,
+      builder: (context) => GameplayPreviews.audienceResults(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
       id: 'gameplay-loading',
       title: 'Gameplay Loading',
       description: 'Session initialization',
       category: PreviewCategory.gameplay,
       builder: (context) => GameplayPreviews.loading(),
+    ),
+  );
+
+  // --- Recovery ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'recovery-available',
+      title: 'Recovery Available',
+      description: 'Active session found dialog',
+      category: PreviewCategory.gameplay,
+      builder: (context) => RecoveryPreviews.available(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'recovery-recovering',
+      title: 'Recovering State',
+      description: 'Restoration in progress',
+      category: PreviewCategory.gameplay,
+      builder: (context) => RecoveryPreviews.recovering(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'recovery-failed',
+      title: 'Recovery Failed',
+      description: 'Error during restoration',
+      category: PreviewCategory.gameplay,
+      builder: (context) => RecoveryPreviews.failed(),
+    ),
+  );
+
+  // --- Results ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'results-excellent',
+      title: 'Excellent Results',
+      description: 'High performance summary',
+      category: PreviewCategory.gameplay,
+      builder: (context) => ResultsPreviews.excellent(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'results-perfect',
+      title: 'Perfect Quiz',
+      description: '100% accuracy hero state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => ResultsPreviews.perfect(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'results-average',
+      title: 'Average Results',
+      description: 'Mixed performance summary',
+      category: PreviewCategory.gameplay,
+      builder: (context) => ResultsPreviews.average(),
     ),
   );
 }
