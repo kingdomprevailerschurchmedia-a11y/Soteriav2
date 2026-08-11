@@ -201,6 +201,7 @@ class _VerificationOrchestratorState
                   SoteriaButton.primary(
                     label: _getButtonLabel(state.step),
                     isLoading: state.isLoading,
+                    size: SoteriaButtonSize.lg,
                     uppercase: false,
                     trailingIcon: Icons.arrow_forward_rounded,
                     onPressed: _isButtonEnabled(state)

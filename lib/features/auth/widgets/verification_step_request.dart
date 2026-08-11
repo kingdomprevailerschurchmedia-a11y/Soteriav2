@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import 'package:soteria/core/design_system/radius/soteria_radius.dart';
+import 'package:soteria/core/utils/identity_validator.dart';
 import '../models/verification_type.dart';
 import '../providers/verification_notifier.dart';
 

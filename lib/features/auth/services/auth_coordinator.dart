@@ -32,13 +32,14 @@ class AuthCoordinator {
       final currentSession = _ref.read(sessionProvider);
 
       if (uid == null) {
-        if (currentSession.uid != null) {
+        if (currentSession.status != SessionStatus.guest) {
           LoggerService.i('User signed out, clearing session', feature: 'Auth');
+          // We only call logout if the session isn't already guest
           _ref.read(sessionProvider.notifier).logout();
         }
         _stopVerificationCheck();
       } else {
-        if (currentSession.uid != uid) {
+        if (currentSession.uid != uid || !currentSession.isAuthenticated) {
           LoggerService.i('User authenticated: $uid', feature: 'Auth');
           await _handleAuthenticatedState(uid);
         }

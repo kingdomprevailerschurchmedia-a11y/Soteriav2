@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/radius/soteria_radius.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 
 class PremiumErrorScreen extends StatelessWidget {
   final Object exception;
@@ -66,10 +67,10 @@ class PremiumErrorScreen extends StatelessWidget {
                     ),
                     if (onRetry != null) ...[
                       SizedBox(height: SoteriaSpacing.xxl),
-                      SoteriaButton(
+                      SoteriaButton.primary(
                         label: 'RE-ESTABLISH CONNECTION',
                         onPressed: onRetry!,
-                        isPrimary: true,
+                        size: SoteriaButtonSize.lg,
                       ),
                     ],
                     SizedBox(height: SoteriaSpacing.xxl),
@@ -130,51 +131,3 @@ class _ErrorIllustration extends StatelessWidget {
   }
 }
 
-// Temporary internal button since I don't want to break if someone changes the shared one
-class SoteriaButton extends StatelessWidget {
-  final String label;
-  final VoidCallback onPressed;
-  final bool isPrimary;
-
-  const SoteriaButton({
-    super.key,
-    required this.label,
-    required this.onPressed,
-    this.isPrimary = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: double.infinity,
-        height: 56.h,
-        decoration: BoxDecoration(
-          color: isPrimary ? SoteriaColors.primary : Colors.transparent,
-          borderRadius: SoteriaRadius.brMd,
-          border: isPrimary ? null : Border.all(color: SoteriaColors.border),
-          boxShadow: isPrimary
-              ? [
-                  BoxShadow(
-                    color: SoteriaColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 15,
-                    offset: const Offset(0, 5),
-                  ),
-                ]
-              : null,
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: SoteriaTypography.label.copyWith(
-              color: SoteriaColors.textPrimary,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}

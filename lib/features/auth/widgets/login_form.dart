@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/utils/identity_validator.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import '../providers/login_notifier.dart';
@@ -152,43 +154,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           ),
         ],
         SizedBox(height: 24.h),
-        GestureDetector(
-          onTap: state.isLoading ? null : () => notifier.login(),
-          child: Container(
-            height: 64.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.r),
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF2E1A8A),
-                  Color(0xFF5B3FD9),
-                  Color(0xFF7C4DFF),
-                ],
-                stops: [0.0, 0.5, 1.0],
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
-                  blurRadius: 20,
-                  offset: const Offset(0, 8),
-                ),
-              ],
-            ),
-            child: Center(
-              child:
-                  state.isLoading
-                      ? const CircularProgressIndicator(color: Colors.white)
-                      : Text(
-                        'SIGN IN',
-                        style: context.titleMedium.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2.0,
-                          fontSize: 18.sp,
-                        ),
-                      ),
-            ),
-          ),
+        SoteriaButton.primary(
+          label: 'SIGN IN',
+          onPressed: state.isLoading ? null : () => notifier.login(),
+          isLoading: state.isLoading,
+          size: SoteriaButtonSize.lg,
         ),
       ],
     );

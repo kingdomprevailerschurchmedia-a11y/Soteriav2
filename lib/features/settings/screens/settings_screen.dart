@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: SoteriaColors.background,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -29,6 +29,7 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
+        physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
           vertical: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),

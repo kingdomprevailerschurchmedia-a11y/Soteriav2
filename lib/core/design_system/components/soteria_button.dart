@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
+import 'package:soteria/core/design_system/gradients/soteria_gradients.dart';
 import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/animations/soteria_animations.dart';
@@ -112,31 +113,37 @@ class _SoteriaButtonState extends State<SoteriaButton>
 
   @override
   Widget build(BuildContext context) {
+    final isEnabled = widget.onPressed != null;
+
     return Semantics(
       button: true,
-      enabled: widget.onPressed != null,
+      enabled: isEnabled,
       label: widget.label,
       child: GestureDetector(
         onTapDown: (_) =>
-            widget.onPressed != null ? _controller.forward() : null,
+            isEnabled ? _controller.forward() : null,
         onTapUp: (_) => _controller.reverse(),
         onTapCancel: () => _controller.reverse(),
         onTap: () {
-          if (widget.onPressed != null && !widget.isLoading) {
+          if (isEnabled && !widget.isLoading) {
             HapticFeedback.lightImpact();
             widget.onPressed!();
           }
         },
-        child: ScaleTransition(
-          scale: _scaleAnimation,
-          child: AnimatedContainer(
-            duration: SoteriaAnimations.fast,
-            width: widget.isFullWidth ? double.infinity : null,
-            height: _getHeight(),
-            padding: _getPadding(),
-            decoration: _getDecoration(),
-            child: Center(
-              child: widget.isLoading ? _buildLoader() : _buildContent(context),
+        child: AnimatedOpacity(
+          duration: SoteriaAnimations.fast,
+          opacity: isEnabled ? 1.0 : 0.4,
+          child: ScaleTransition(
+            scale: _scaleAnimation,
+            child: AnimatedContainer(
+              duration: SoteriaAnimations.fast,
+              width: widget.isFullWidth ? double.infinity : null,
+              height: _getHeight(),
+              padding: _getPadding(),
+              decoration: _getDecoration(),
+              child: Center(
+                child: widget.isLoading ? _buildLoader() : _buildContent(context),
+              ),
             ),
           ),
         ),
@@ -151,7 +158,7 @@ class _SoteriaButtonState extends State<SoteriaButton>
       case SoteriaButtonSize.md:
         return 48.h.clamp(44.0, 56.0);
       case SoteriaButtonSize.lg:
-        return 56.h.clamp(52.0, 64.0);
+        return 64.h;
     }
   }
 
@@ -172,23 +179,17 @@ class _SoteriaButtonState extends State<SoteriaButton>
     switch (widget.variant) {
       case SoteriaButtonVariant.primary:
         return BoxDecoration(
-          gradient: isEnabled
-              ? LinearGradient(
-                  colors: [SoteriaColors.primary, SoteriaColors.secondary],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                )
-              : null,
+          gradient: isEnabled ? SoteriaGradients.premiumButton : null,
           color: isEnabled
               ? null
               : SoteriaColors.primary.withValues(alpha: 0.3),
-          borderRadius: SoteriaRadius.brMd,
+          borderRadius: SoteriaRadius.brLg,
           boxShadow: isEnabled
               ? [
                   BoxShadow(
-                    color: SoteriaColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    offset: const Offset(0, 4),
+                    color: SoteriaColors.secondary.withValues(alpha: 0.4),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
                   ),
                 ]
               : null,

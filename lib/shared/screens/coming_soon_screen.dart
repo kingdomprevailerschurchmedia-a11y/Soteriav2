@@ -10,11 +10,13 @@ class ComingSoonScreen extends StatelessWidget {
     required this.featureName,
     this.category = 'Feature',
     this.estimatedArrival,
+    this.showBackButton = false,
   });
 
   final String featureName;
   final String category;
   final String? estimatedArrival;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +25,16 @@ class ComingSoonScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.white,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+        automaticallyImplyLeading: false,
+        leading: showBackButton
+            ? IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            : null,
       ),
       body: Center(
         child: Padding(

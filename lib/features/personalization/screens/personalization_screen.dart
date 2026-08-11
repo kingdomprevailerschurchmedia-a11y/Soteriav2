@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/features/personalization/providers/personalization_notifier.dart';
 import 'package:soteria/features/personalization/widgets/step_academic_level.dart';
@@ -260,62 +261,12 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  GestureDetector(
-                    onTap: isValid ? () => _onContinue(state.currentStep, isValid) : null,
-                    child: AnimatedOpacity(
-                      duration: const Duration(milliseconds: 200),
-                      opacity: isValid ? 1.0 : 0.4,
-                      child: Container(
-                        height: 60.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFF2E1A8A),
-                              Color(0xFF5B3FD9),
-                              Color(0xFF7C4DFF),
-                            ],
-                            stops: [0.0, 0.5, 1.0],
-                          ),
-                          borderRadius: BorderRadius.circular(30.r),
-                          boxShadow: [
-                            BoxShadow(
-                              color: SoteriaColors.primary.withValues(alpha: 0.3),
-                              blurRadius: 15,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 30.w),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Icon(
-                                Icons.auto_awesome_rounded,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                              Text(
-                                (state.currentStep == 4 ? 'COMPLETE PROFILE' : 'CONTINUE')
-                                    .toUpperCase(),
-                                style: context.titleMedium.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  letterSpacing: 2.0,
-                                  fontSize: 16.sp,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_rounded,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+                  SoteriaButton.primary(
+                    label: state.currentStep == 4 ? 'COMPLETE PROFILE' : 'CONTINUE',
+                    onPressed: isValid ? () => _onContinue(state.currentStep, isValid) : null,
+                    size: SoteriaButtonSize.lg,
+                    icon: Icons.auto_awesome_rounded,
+                    trailingIcon: Icons.arrow_forward_rounded,
                   ),
                   SizedBox(height: 16.h),
                   Row(

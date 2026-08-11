@@ -35,25 +35,17 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
       LoggerService.i('Initiating secure logout sequence...', feature: 'Auth');
 
       // 1. Perform Sign Out from Repository/Data Source (Firebase & Google)
-      // We wrap this in a timeout and try-catch to ensure we always proceed to clear local state.
-      try {
-        await _logoutUseCase.execute().timeout(const Duration(seconds: 5));
-      } catch (e) {
-        LoggerService.w(
-          'Remote sign out failed or timed out: $e. Proceeding with local session clear.',
-          feature: 'Auth',
-        );
-      }
+      // This is the authoritative logout call.
+      await _logoutUseCase.execute().timeout(const Duration(seconds: 5));
 
-      // 2. Clear Session and App State
-      // This will trigger SessionNotifier which updates authStateChangesProvider
+      // 2. Clear Session and local state
+      // We explicitly clear the session notifier to ensure any local-only metadata is wiped.
+      // We use a non-awaiting call here if it's redundant, but given the repo call above,
+      // the stream should already be updating.
       await _ref.read(sessionProvider.notifier).logout();
 
-      // 3. Invalidate specific providers to clear cached data
+      // 3. Invalidate profile to ensure it's re-fetched correctly on next login
       _ref.invalidate(profileProvider);
-
-      // 4. Force a lifecycle refresh to ensure router picks up the change correctly
-      _ref.read(appLifecycleProvider.notifier).refresh();
 
       LoggerService.i(
         'Logout sequence completed successfully.',

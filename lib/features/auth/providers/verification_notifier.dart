@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/utils/identity_validator.dart';
 import '../models/verification_state.dart';
 import '../models/verification_type.dart';
 import 'auth_providers.dart';

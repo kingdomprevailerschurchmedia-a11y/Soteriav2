@@ -167,9 +167,9 @@ class _GuestAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 56.h,
+      height: 64.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30.r),
+        borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
       ),
       child: Center(

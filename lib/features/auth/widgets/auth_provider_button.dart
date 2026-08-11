@@ -72,7 +72,7 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
         child: ScaleTransition(
           scale: _scaleAnimation,
           child: Container(
-            height: 56.h,
+            height: 64.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(16.r),
               color: const Color(0xFF0D0B1E),

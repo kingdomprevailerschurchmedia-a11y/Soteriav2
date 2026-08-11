@@ -21,10 +21,11 @@ class PlayerProfileScreen extends ConsumerWidget {
     final profile = ref.watch(profileProvider);
 
     return Scaffold(
-      backgroundColor: SoteriaColors.background,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false, // Back button removed for bottom nav tab
         title: Text(
           'PROFILE',
           style: context.titleMedium.copyWith(
@@ -40,6 +41,7 @@ class PlayerProfileScreen extends ConsumerWidget {
         ],
       ),
       body: SingleChildScrollView(
+        physics: const ClampingScrollPhysics(),
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
         ),

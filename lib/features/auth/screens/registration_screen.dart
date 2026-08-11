@@ -248,65 +248,14 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       SoteriaSpacing.lg,
                       SoteriaSpacing.lg,
                     ),
-                    child: GestureDetector(
-                      onTap: isValid ? () => _onContinue(state) : null,
-                      child: AnimatedOpacity(
-                        duration: const Duration(milliseconds: 200),
-                        opacity: isValid ? 1.0 : 0.4,
-                        child: Container(
-                          height: 58.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.r),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xFF5E2BFF),
-                                Color(0xFF4A10FF),
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF5E2BFF).withValues(
-                                  alpha: 0.4,
-                                ),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: Center(
-                            child:
-                                state.isLoading
-                                    ? const CircularProgressIndicator(
-                                      color: Colors.white,
-                                    )
-                                    : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          (state.step == RegistrationStep.review
-                                                  ? 'CREATE ACCOUNT'
-                                                  : 'CONTINUE')
-                                              .toUpperCase(),
-                                          style: context.titleMedium.copyWith(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 2.0,
-                                          ),
-                                        ),
-                                        SizedBox(width: 8.w),
-                                        const Icon(
-                                          Icons.chevron_right_rounded,
-                                          color: Colors.white,
-                                          size: 20,
-                                        ),
-                                      ],
-                                    ),
-                          ),
-                        ),
-                      ),
+                    child: SoteriaButton.primary(
+                      label: state.step == RegistrationStep.review
+                          ? 'CREATE ACCOUNT'
+                          : 'CONTINUE',
+                      onPressed: isValid ? () => _onContinue(state) : null,
+                      isLoading: state.isLoading,
+                      size: SoteriaButtonSize.lg,
+                      trailingIcon: Icons.chevron_right_rounded,
                     ),
                   )
                 else
@@ -315,6 +264,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     child: SoteriaButton.primary(
                       label: 'Check Email',
                       onPressed: () {},
+                      size: SoteriaButtonSize.lg,
                     ),
                   ),
               ],

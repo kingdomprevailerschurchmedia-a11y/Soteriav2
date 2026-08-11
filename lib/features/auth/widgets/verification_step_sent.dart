@@ -25,29 +25,29 @@ class VerificationStepSent extends ConsumerWidget {
         children: [
           // Illustration Box
           SizedBox(
-            height: 220.h,
+            height: 160.h,
             child: Stack(
               alignment: Alignment.center,
               children: [
                 // Background glow
                 Container(
-                  height: 180.h,
-                  width: 180.w,
+                  height: 120.h,
+                  width: 120.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
                         color: SoteriaColors.primary.withValues(alpha: 0.25),
-                        blurRadius: 50,
-                        spreadRadius: 20,
+                        blurRadius: 40,
+                        spreadRadius: 15,
                       ),
                     ],
                   ),
                 ),
                 // Dashed orbital lines (simplified with circles)
                 Container(
-                  height: 200.h,
-                  width: 200.w,
+                  height: 140.h,
+                  width: 140.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
@@ -60,15 +60,15 @@ class VerificationStepSent extends ConsumerWidget {
                 // Main Illustration
                 Icon(
                   Icons.email_rounded,
-                  size: 110.sp,
+                  size: 70.sp,
                   color: SoteriaColors.primary,
                 ),
                 // Paper/Envelope detail
                 Positioned(
-                  top: 60.h,
+                  top: 45.h,
                   child: Container(
-                    height: 50.h,
-                    width: 70.w,
+                    height: 35.h,
+                    width: 50.w,
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: SoteriaRadius.brSm,
@@ -83,7 +83,7 @@ class VerificationStepSent extends ConsumerWidget {
                         child: Icon(
                           Icons.check_rounded,
                           color: Colors.white,
-                          size: 20.sp,
+                          size: 14.sp,
                         ),
                       ),
                     ),
@@ -91,35 +91,35 @@ class VerificationStepSent extends ConsumerWidget {
                 ),
                 // Flying plane
                 Positioned(
-                  top: 20.h,
-                  right: 20.w,
+                  top: 15.h,
+                  right: 15.w,
                   child: Transform.rotate(
                     angle: -0.2,
                     child: Icon(
                       Icons.send_rounded,
-                      size: 40.sp,
+                      size: 28.sp,
                       color: SoteriaColors.primary.withValues(alpha: 0.8),
                     ),
                   ),
                 ),
                 // Shield check
                 Positioned(
-                  bottom: 50.h,
-                  right: 40.w,
+                  bottom: 35.h,
+                  right: 30.w,
                   child: Container(
-                    padding: const EdgeInsets.all(6),
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       color: SoteriaColors.primary,
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: SoteriaColors.background,
-                        width: 3,
+                        width: 2,
                       ),
                     ),
                     child: Icon(
                       Icons.verified_user_rounded,
                       color: Colors.white,
-                      size: 20.sp,
+                      size: 14.sp,
                     ),
                   ),
                 ),

@@ -31,11 +31,12 @@ class SessionNotifier extends Notifier<UserSession> {
 
   void setSession(UserSession session) {
     state = session;
-    ref.read(identityRepositoryProvider).saveSession(session);
+    // We don't save to repository here as repo is the source of truth via authStateChanges
   }
 
   Future<void> logout() async {
-    state = const UserSession(status: SessionStatus.guest);
+    // We don't set state manually here. 
+    // The repository's clearSession will trigger authStateChangesProvider.
     await ref.read(identityRepositoryProvider).clearSession();
   }
 }

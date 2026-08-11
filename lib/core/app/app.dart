@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/themes/soteria_theme.dart';
 import 'package:soteria/core/navigation/app_router.dart';
 import 'package:soteria/core/errors/error_handler.dart';
+import 'package:soteria/features/auth/services/auth_coordinator.dart';
 import 'package:soteria/features/notifications/providers/notification_providers.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
 import '../firebase/providers/bootstrapper_provider.dart';
@@ -33,6 +34,9 @@ class SoteriaApp extends ConsumerWidget {
   }
 
   Widget _buildApp(BuildContext context, WidgetRef ref) {
+    // Ensure auth/session management is active
+    ref.watch(authCoordinatorProvider);
+
     // Initialize background services
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(notificationCoordinatorProvider).initialize();

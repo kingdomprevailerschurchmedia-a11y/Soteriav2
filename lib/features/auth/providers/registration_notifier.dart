@@ -33,7 +33,10 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
   }
 
   void updateAccount({String? email, String? username}) {
-    state = state.copyWith(email: email, username: username);
+    state = state.copyWith(
+      email: email?.trim(),
+      username: username,
+    );
   }
 
   void updateSecurity({String? password, String? confirm}) {

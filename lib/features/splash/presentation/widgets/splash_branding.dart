@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 
@@ -53,7 +54,7 @@ class SplashBranding extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: size.height * 0.01),
+          SizedBox(height: 8.h),
 
           // ============================================================
           // SOTERIA WORDMARK
@@ -63,7 +64,7 @@ class SplashBranding extends StatelessWidget {
             child: _Wordmark(availableWidth: size.width),
           ),
 
-          SizedBox(height: size.height * 0.01),
+          SizedBox(height: 4.h),
 
           // ============================================================
           // TAGLINE

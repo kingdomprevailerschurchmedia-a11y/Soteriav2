@@ -40,20 +40,18 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     final progression = ref.watch(playerProgressionProvider);
     final player = state.player;
 
-    if (state.isLoading && player == null) {
-      return const DashboardSkeleton();
-    }
-
     return SoteriaPage(
       error: state.error,
       onRetry: () => ref.read(dashboardProvider.notifier).refresh(),
       child: Scaffold(
-        backgroundColor: Colors.transparent, // SoteriaPage handles gradient/bg
-        body: RefreshIndicator(
-          onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
-          color: SoteriaColors.primary,
-          backgroundColor: SoteriaColors.surface,
-          child: CustomScrollView(
+        backgroundColor: Colors.transparent, 
+        body: state.isLoading && player == null
+            ? const DashboardSkeleton()
+            : RefreshIndicator(
+                onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
+                color: SoteriaColors.primary,
+                backgroundColor: SoteriaColors.surface,
+                child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
               SliverToBoxAdapter(
