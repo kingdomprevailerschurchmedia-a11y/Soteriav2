@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 import '../../../core/design_system/colors/soteria_colors.dart';
 import '../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../core/design_system/typography/soteria_typography.dart';
@@ -89,7 +90,7 @@ class SettingsScreen extends StatelessWidget {
             height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () => _showLogoutDialog(context),
             child: Text(
               'LOGOUT',
               style: context.bodyMedium.copyWith(
@@ -101,6 +102,14 @@ class SettingsScreen extends StatelessWidget {
           SizedBox(height: MediaQuery.paddingOf(context).bottom),
         ],
       ),
+    );
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => const LogoutConfirmationDialog(),
     );
   }
 }

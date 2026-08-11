@@ -5,14 +5,17 @@ class SoteriaPageTransitions {
   static CustomTransitionPage fade({
     required Widget child,
     LocalKey? key,
-    Duration duration = const Duration(milliseconds: 300),
+    Duration duration = const Duration(milliseconds: 400),
   }) {
     return CustomTransitionPage(
       key: key,
       child: child,
       transitionDuration: duration,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(opacity: animation, child: child);
+        return FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: Curves.easeInOut),
+          child: child,
+        );
       },
     );
   }

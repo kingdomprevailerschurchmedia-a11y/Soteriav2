@@ -47,7 +47,7 @@ class IdentityExceptionMapper {
     }
 
     if (error is GoogleSignInException) {
-      if (error.code == 'canceled') {
+      if (error.code.toString().contains('canceled')) {
         return const IdentityException(
           IdentityExceptionType.unknown,
           'Sign in cancelled.',

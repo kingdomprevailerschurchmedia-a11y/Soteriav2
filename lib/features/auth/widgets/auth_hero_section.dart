@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/design_system/components/soteria_gradient_text.dart';
 import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
@@ -20,7 +18,7 @@ class AuthHeroSection extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+          height: 24.h,
         ),
 
         // Premium Glowing Hero Area
@@ -28,28 +26,51 @@ class AuthHeroSection extends StatelessWidget {
           duration: const Duration(milliseconds: 1000),
           child: Stack(
             alignment: Alignment.center,
+            clipBehavior: Clip.none,
             children: [
-              // Purple Glow behind logo
+              // Large Top Arc Glow (from the image)
+              Positioned(
+                top: -300.h,
+                child: Container(
+                  width: 500.w,
+                  height: 500.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                      width: 1.5,
+                    ),
+                    gradient: RadialGradient(
+                      colors: [
+                        const Color(0xFF7C4DFF).withValues(alpha: 0.15),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              // Purple Glow behind logo (Resized for larger logo)
               Container(
-                width: isShort ? 200.w : 250.w,
-                height: isShort ? 200.w : 250.w,
+                width: isShort ? 140.w : 180.w,
+                height: isShort ? 140.w : 180.w,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      const Color(0xFF7C4DFF).withValues(alpha: 0.2),
+                      const Color(0xFF7C4DFF).withValues(alpha: 0.25),
                       Colors.transparent,
                     ],
                   ),
                 ),
               ),
 
-              // Shield Logo
+              // Shield Logo (Increased 3x)
               logo ??
                   Image.asset(
                     'assets/images/logo_icon.png',
-                    width: isShort ? 80.w : 100.w,
-                    height: isShort ? 80.w : 100.w,
+                    width: isShort ? 90.w : 120.w,
+                    height: isShort ? 90.w : 120.w,
                     fit: BoxFit.contain,
                   ),
             ],
@@ -57,7 +78,7 @@ class AuthHeroSection extends StatelessWidget {
         ),
 
         SizedBox(
-          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          height: 2.h,
         ),
 
         // Welcome Text with Gradient
@@ -77,16 +98,13 @@ class AuthHeroSection extends StatelessWidget {
               ),
 
               SizedBox(
-                height: SoteriaSpacing.adaptive(
-                  context,
-                  SoteriaSpacing.xsStatic,
-                ),
+                height: 8.h,
               ),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.w),
                 child: Text(
-                  'Compete with the brightest minds.\nRise through knowledge.',
+                  'Rise through knowledge.',
                   style: context.bodyLarge.copyWith(
                     color: Colors.white.withValues(alpha: 0.6),
                     height: 1.4,
@@ -101,7 +119,7 @@ class AuthHeroSection extends StatelessWidget {
         ),
 
         SizedBox(
-          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          height: 32.h,
         ),
       ],
     );

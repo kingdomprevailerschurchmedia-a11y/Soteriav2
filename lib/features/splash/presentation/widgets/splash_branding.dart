@@ -5,13 +5,15 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 class SplashBranding extends StatelessWidget {
   final Animation<double> logoOpacity;
   final Animation<double> logoScale;
-  final Animation<double> textOpacity;
+  final Animation<double> wordmarkOpacity;
+  final Animation<double> taglineOpacity;
 
   const SplashBranding({
     super.key,
     required this.logoOpacity,
     required this.logoScale,
-    required this.textOpacity,
+    required this.wordmarkOpacity,
+    required this.taglineOpacity,
   });
 
   @override
@@ -23,66 +25,58 @@ class SplashBranding extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final logoSize = size.width * 0.208;
+    final logoSize = size.width * 0.62; // Increased size (3x, previously 0.208)
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        // ============================================================
-        // GOLD SOTERIA ICON
-        // ============================================================
-        Positioned(
-          top: size.height * 0.412,
-          left: 0,
-          right: 0,
-          child: Center(
-            child: FadeTransition(
-              opacity: logoOpacity,
-              child: ScaleTransition(
-                scale: logoScale,
-                child: Image.asset(
-                  'assets/images/logo_icon.png',
-                  width: logoSize,
-                  height: logoSize,
-                  fit: BoxFit.contain,
-                  filterQuality: FilterQuality.high,
-                  isAntiAlias: true,
-                  errorBuilder: (context, error, stackTrace) {
-                    debugPrint('Logo Icon Error: $error');
-                    return const SizedBox.shrink();
-                  },
-                ),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // ============================================================
+          // GOLD SOTERIA ICON
+          // ============================================================
+          FadeTransition(
+            opacity: logoOpacity,
+            child: ScaleTransition(
+              scale: logoScale,
+              child: Image.asset(
+                'assets/images/logo_icon.png',
+                width: logoSize,
+                height: logoSize,
+                fit: BoxFit.contain,
+                filterQuality: FilterQuality.high,
+                isAntiAlias: true,
+                errorBuilder: (context, error, stackTrace) {
+                  debugPrint('Logo Icon Error: $error');
+                  return const SizedBox.shrink();
+                },
               ),
             ),
           ),
-        ),
 
-        // ============================================================
-        // SOTERIA WORDMARK
-        // ============================================================
-        Positioned(
-          top: size.height * 0.523,
-          left: 0,
-          right: 0,
-          child: FadeTransition(
-            opacity: textOpacity,
-            child: Center(child: _Wordmark(availableWidth: size.width)),
-          ),
-        ),
+          SizedBox(height: size.height * 0.01),
 
-        // ============================================================
-        // TAGLINE
-        // ============================================================
-        Positioned(
-          top: size.height * 0.560,
-          left: 0,
-          right: 0,
-          child: FadeTransition(
-            opacity: textOpacity,
-            child: Center(child: _Tagline(availableWidth: size.width)),
+          // ============================================================
+          // SOTERIA WORDMARK
+          // ============================================================
+          FadeTransition(
+            opacity: wordmarkOpacity,
+            child: _Wordmark(availableWidth: size.width),
           ),
-        ),
-      ],
+
+          SizedBox(height: size.height * 0.01),
+
+          // ============================================================
+          // TAGLINE
+          // ============================================================
+          FadeTransition(
+            opacity: taglineOpacity,
+            child: _Tagline(availableWidth: size.width),
+          ),
+          
+          // Add a bit of bottom padding to balance the logo's height
+          SizedBox(height: size.height * 0.05),
+        ],
+      ),
     );
   }
 }

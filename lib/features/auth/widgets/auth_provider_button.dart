@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/glass_surface.dart';
 import '../models/identity_provider.dart';
 
 enum AuthProviderButtonVariant { glow, outline }
@@ -64,7 +63,7 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
     final isEmail = widget.provider.type == IdentityProviderType.email;
 
     return Padding(
-      padding: EdgeInsets.only(bottom: SoteriaSpacing.lg),
+      padding: EdgeInsets.only(bottom: 8.h),
       child: GestureDetector(
         onTapDown: (_) => _controller.forward(),
         onTapUp: (_) => _controller.reverse(),
@@ -137,7 +136,7 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
         width: 24.sp,
         height: 24.sp,
         errorBuilder:
-            (_, __, ___) =>
+            (_, _, _) =>
                 Icon(widget.provider.icon, color: Colors.blue, size: 24.sp),
       );
     }

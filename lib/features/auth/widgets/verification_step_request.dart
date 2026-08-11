@@ -29,13 +29,17 @@ class VerificationStepRequest extends ConsumerWidget {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                      text: 'Verify ',
+                      text: type == VerificationType.passwordRecovery
+                          ? 'Recover '
+                          : 'Verify ',
                       style: context.headlineLarge.copyWith(
                         color: SoteriaColors.textPrimary,
                       ),
                     ),
                     TextSpan(
-                      text: 'Email',
+                      text: type == VerificationType.passwordRecovery
+                          ? 'Password'
+                          : 'Email',
                       style: context.headlineLarge.copyWith(
                         color: SoteriaColors.secondary,
                       ),
@@ -45,7 +49,9 @@ class VerificationStepRequest extends ConsumerWidget {
               ),
               SizedBox(width: SoteriaSpacing.sm),
               Icon(
-                Icons.verified_user_rounded,
+                type == VerificationType.passwordRecovery
+                    ? Icons.lock_reset_rounded
+                    : Icons.verified_user_rounded,
                 color: SoteriaColors.secondary,
                 size: 28.sp,
               ),
@@ -53,7 +59,9 @@ class VerificationStepRequest extends ConsumerWidget {
           ),
           SizedBox(height: SoteriaSpacing.xs),
           Text(
-            'Verify your email to secure your account and unlock all features.',
+            type == VerificationType.passwordRecovery
+                ? 'Enter your email to receive a password reset link.'
+                : 'Verify your email to secure your account and unlock all features.',
             style: context.bodyMedium,
           ),
           SizedBox(height: SoteriaSpacing.xl),
@@ -89,7 +97,9 @@ class VerificationStepRequest extends ConsumerWidget {
                     ),
                     // Illustration Icons
                     Icon(
-                      Icons.email_rounded,
+                      type == VerificationType.passwordRecovery
+                          ? Icons.lock_open_rounded
+                          : Icons.email_rounded,
                       size: 80.sp,
                       color: SoteriaColors.primary,
                     ),
@@ -154,7 +164,9 @@ class VerificationStepRequest extends ConsumerWidget {
                       SizedBox(width: SoteriaSpacing.md),
                       Expanded(
                         child: Text(
-                          'We\'ll send a 6-digit verification code to the email you provide.',
+                          type == VerificationType.passwordRecovery
+                              ? 'We\'ll send a password reset link to the email you provide.'
+                              : 'We\'ll send a 6-digit verification code to the email you provide.',
                           style: context.bodySmall.copyWith(
                             color: SoteriaColors.textSecondary,
                           ),

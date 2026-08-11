@@ -121,7 +121,7 @@ flutter_launcher_icons:
 # It exists only as a seamless launch bridge while Flutter initializes.
 #
 # Native:
-#     #090514
+#     #090514 (Blank - as requested)
 #
 # Flutter:
 #     splash_bg.png + logo_icon.png + Soteria branding
@@ -130,7 +130,7 @@ flutter_launcher_icons:
 
 flutter_native_splash:
   color: "#090514"
-  image: "assets/images/logo_icon.png"
+  # image: "assets/images/logo_icon.png" # Removed to keep native splash blank
 
   android: true
   ios: true
@@ -139,7 +139,7 @@ flutter_native_splash:
 
   android_12:
     color: "#090514"
-    image: "assets/images/logo_icon.png"
+    # image: "assets/images/logo_icon.png" # Removed to keep native splash blank
 
 # =============================================================================
 # FLUTTER

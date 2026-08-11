@@ -6,15 +6,12 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
-import 'package:soteria/core/widgets/premium_background.dart';
 import 'package:soteria/shared/widgets/soteria_divider.dart';
 import '../models/identity_provider.dart';
 import '../providers/auth_landing_notifier.dart';
 import '../widgets/auth_hero_section.dart';
 import '../widgets/auth_provider_button.dart';
 import '../widgets/feature_carousel.dart';
-
-import 'package:soteria/core/utils/soteria_responsive.dart';
 
 class AuthLandingScreen extends ConsumerWidget {
   const AuthLandingScreen({super.key});
@@ -23,7 +20,6 @@ class AuthLandingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(authLandingProvider);
     final notifier = ref.read(authLandingProvider.notifier);
-    final isShort = SoteriaResponsive.isShortScreen(context);
 
     ref.listen(authLandingProvider.select((s) => s.error), (previous, next) {
       if (next != null) {
@@ -81,12 +77,12 @@ class AuthLandingScreen extends ConsumerWidget {
                       .push('${SoteriaRoutes.auth}/login'),
                 ),
 
-                SizedBox(height: 24.h),
+                SizedBox(height: 4.h),
 
                 // Feature Highlights
                 const FeatureCarousel(),
 
-                SizedBox(height: 40.h),
+                SizedBox(height: 8.h),
 
                 // Secondary Navigation
                 Column(
@@ -126,12 +122,12 @@ class AuthLandingScreen extends ConsumerWidget {
                   ],
                 ),
 
-                SizedBox(height: 32.h),
+                SizedBox(height: 16.h),
 
                 // Guest Access
                 _GuestAction(),
 
-                SizedBox(height: 40.h),
+                SizedBox(height: 12.h),
 
                 // Legal Footer
                 Text(
@@ -156,7 +152,7 @@ class AuthLandingScreen extends ConsumerWidget {
                     _LegalButton(label: 'Guidelines', onTap: () {}),
                   ],
                 ),
-                SizedBox(height: 40.h),
+                SizedBox(height: 20.h),
               ],
             ),
           ),

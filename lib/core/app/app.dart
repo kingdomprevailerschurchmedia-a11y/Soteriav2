@@ -33,11 +33,11 @@ class SoteriaApp extends ConsumerWidget {
   }
 
   Widget _buildApp(BuildContext context, WidgetRef ref) {
-    // Initialize background services and remove splash after first frame
+    // Initialize background services
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(notificationCoordinatorProvider).initialize();
       ref.read(configurationCoordinatorProvider).initialize();
-      FlutterNativeSplash.remove();
+      // Native splash removal is handled by SplashScreen for a smoother transition
     });
 
     final router = ref.watch(routerProvider);

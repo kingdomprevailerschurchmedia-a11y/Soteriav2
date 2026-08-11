@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import '../providers/registration_notifier.dart';
@@ -15,15 +14,16 @@ class StepAccountIdentity extends ConsumerWidget {
     final notifier = ref.read(registrationProvider.notifier);
 
     return ListView(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
-        SizedBox(height: 20.h),
+        SizedBox(height: 32.h),
         Text(
           'Account Identity',
           style: context.headlineMedium.copyWith(
             color: Colors.white,
-            fontWeight: FontWeight.w600,
-            fontSize: 40.sp,
+            fontWeight: FontWeight.w700,
+            fontSize: 34.sp,
+            letterSpacing: -0.5,
           ),
         ),
         SizedBox(height: 8.h),
@@ -31,7 +31,7 @@ class StepAccountIdentity extends ConsumerWidget {
           'Choose a unique username and valid email.',
           style: context.bodyLarge.copyWith(
             color: Colors.white.withValues(alpha: 0.6),
-            fontSize: 18.sp,
+            fontSize: 16.sp,
           ),
         ),
         SizedBox(height: 40.h),
@@ -45,7 +45,7 @@ class StepAccountIdentity extends ConsumerWidget {
           keyboardType: TextInputType.emailAddress,
           enabled: !state.isLoading,
         ),
-        SizedBox(height: 24.h),
+        SizedBox(height: 32.h),
         _buildLabel(context, 'USERNAME'),
         SizedBox(height: 12.h),
         _buildTextField(
@@ -64,8 +64,8 @@ class StepAccountIdentity extends ConsumerWidget {
       text,
       style: context.labelSmall.copyWith(
         color: Colors.white.withValues(alpha: 0.4),
-        letterSpacing: 1.2,
-        fontWeight: FontWeight.w500,
+        letterSpacing: 1.5,
+        fontWeight: FontWeight.w700,
         fontSize: 12.sp,
       ),
     );
@@ -80,29 +80,36 @@ class StepAccountIdentity extends ConsumerWidget {
     TextInputType? keyboardType,
   }) {
     return Container(
-      height: 56.h,
+      height: 64.h,
       decoration: BoxDecoration(
-        color: const Color(0xFF0D0B1E).withValues(alpha: 0.8),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        color: const Color(0xFF130F26).withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: const Color(0xFF5E2BFF).withValues(alpha: 0.3),
+          width: 1.5,
+        ),
       ),
       child: TextField(
         onChanged: onChanged,
         enabled: enabled,
         keyboardType: keyboardType,
-        style: context.bodyLarge.copyWith(color: Colors.white),
+        style: context.bodyLarge.copyWith(color: Colors.white, fontSize: 16.sp),
         decoration: InputDecoration(
           hintText: hintText,
           hintStyle: context.bodyLarge.copyWith(
             color: Colors.white.withValues(alpha: 0.2),
+            fontSize: 16.sp,
           ),
-          prefixIcon: Icon(
-            prefixIcon,
-            color: SoteriaColors.secondary,
-            size: 24.sp,
+          prefixIcon: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            child: Icon(
+              prefixIcon,
+              color: const Color(0xFF5E2BFF),
+              size: 24.sp,
+            ),
           ),
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
+          contentPadding: EdgeInsets.symmetric(vertical: 20.h),
         ),
       ),
     );

@@ -20,15 +20,19 @@ class SafeGradientScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
+      extendBody: true,
       extendBodyBehindAppBar: extendBodyBehindAppBar,
       appBar: appBar,
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
-      body: DecoratedBox(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: SoteriaGradients.primaryBackground,
         ),
-        child: SizedBox.expand(child: SafeArea(child: body)),
+        child: SafeArea(child: body),
       ),
     );
   }

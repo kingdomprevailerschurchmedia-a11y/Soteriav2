@@ -52,31 +52,42 @@ class StepNotifications extends ConsumerWidget {
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
         SizedBox(height: SoteriaSpacing.md),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'Notification ',
-                style: context.headlineMedium.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32.sp,
-                  color: Colors.white,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'Notification ',
+                      style: context.headlineMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'Preferences',
+                      style: context.headlineMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32.sp,
+                        color: const Color(0xFF7C4DFF),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              TextSpan(
-                text: 'Preferences',
-                style: context.headlineMedium.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32.sp,
-                  color: const Color(0xFF7C4DFF),
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, top: 4.h),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                color: Color(0xFF7C4DFF),
+                size: 24,
               ),
-              const TextSpan(
-                text: ' 🔔',
-                style: TextStyle(fontSize: 28),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         SizedBox(height: 8.h),
         Text(
@@ -145,7 +156,7 @@ class StepNotifications extends ConsumerWidget {
                       value: state.notificationPrefs[pref['key']] ?? true,
                       onChanged: (val) =>
                           notifier.updateNotificationPref(pref['key'] as String, val),
-                      activeColor: Colors.white,
+                      activeThumbColor: Colors.white,
                       activeTrackColor: const Color(0xFF5B3FD9),
                       inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
                       inactiveTrackColor: Colors.white.withValues(alpha: 0.1),

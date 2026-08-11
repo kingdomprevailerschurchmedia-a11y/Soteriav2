@@ -10,6 +10,7 @@ import 'auth_providers.dart';
 class LoginNotifier extends Notifier<LoginState> {
   static const _kFirstNameKey = 'user_first_name';
   static const _kRememberMeKey = 'login_remember_me';
+  static const _kSavedEmailKey = 'login_saved_email';
 
   @override
   LoginState build() {
@@ -29,9 +30,12 @@ class LoginNotifier extends Notifier<LoginState> {
   Future<void> _loadPreferences() async {
     final prefs = await SharedPreferences.getInstance();
     final remember = prefs.getBool(_kRememberMeKey) ?? false;
-    if (remember != null) {
-      state = state.copyWith(rememberMe: remember);
-    }
+    final savedEmail = prefs.getString(_kSavedEmailKey) ?? '';
+
+    state = state.copyWith(
+      rememberMe: remember,
+      email: remember ? savedEmail : '',
+    );
   }
 
   void updateEmail(String email) {
@@ -47,6 +51,11 @@ class LoginNotifier extends Notifier<LoginState> {
     state = state.copyWith(rememberMe: newValue);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_kRememberMeKey, newValue);
+    if (!newValue) {
+      await prefs.remove(_kSavedEmailKey);
+    } else if (state.email.isNotEmpty) {
+      await prefs.setString(_kSavedEmailKey, state.email);
+    }
   }
 
   Future<void> login() async {
@@ -61,6 +70,12 @@ class LoginNotifier extends Notifier<LoginState> {
     }
 
     state = state.copyWith(isLoading: true, error: null);
+
+    // Save email if remember me is on
+    if (state.rememberMe) {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_kSavedEmailKey, state.email);
+    }
     final stopwatch = Stopwatch()..start();
 
     try {

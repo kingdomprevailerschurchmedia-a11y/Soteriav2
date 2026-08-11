@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/design_system/components/soteria_button.dart';
-import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_divider.dart';
@@ -36,9 +33,9 @@ class LoginScreen extends ConsumerWidget {
               children: [
                 LoginHeroSection(userName: state.userName),
                 const LoginForm(),
-                SizedBox(height: SoteriaSpacing.xl),
+                SizedBox(height: 8.h),
                 const SoteriaDivider(text: 'OR'),
-                SizedBox(height: SoteriaSpacing.xl),
+                SizedBox(height: 8.h),
                 Column(
                   children: [
                     Text(
@@ -46,9 +43,10 @@ class LoginScreen extends ConsumerWidget {
                       style: context.bodyMedium.copyWith(
                         color: Colors.white.withValues(alpha: 0.4),
                         fontWeight: FontWeight.w400,
+                        fontSize: 16.sp,
                       ),
                     ),
-                    SizedBox(height: 8.h),
+                    SizedBox(height: 12.h),
                     GestureDetector(
                       onTap: state.isLoading
                           ? null
@@ -61,15 +59,16 @@ class LoginScreen extends ConsumerWidget {
                           Text(
                             'CREATE ONE',
                             style: context.titleMedium.copyWith(
-                              color: SoteriaColors.secondary,
-                              fontWeight: FontWeight.w500,
+                              color: const Color(0xFF7C4DFF),
+                              fontWeight: FontWeight.bold,
                               fontSize: 18.sp,
+                              letterSpacing: 1.2,
                             ),
                           ),
                           SizedBox(width: 4.w),
                           Icon(
                             Icons.chevron_right_rounded,
-                            color: SoteriaColors.secondary,
+                            color: const Color(0xFF7C4DFF),
                             size: 20.sp,
                           ),
                         ],
@@ -77,7 +76,7 @@ class LoginScreen extends ConsumerWidget {
                     ),
                   ],
                 ),
-                SizedBox(height: SoteriaSpacing.xxl),
+                SizedBox(height: 16.h),
               ],
             ),
           ),

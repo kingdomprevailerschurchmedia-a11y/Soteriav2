@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/auth/domain/use_cases/logout_use_case.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
@@ -28,19 +27,33 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
   LogoutNotifier(this._logoutUseCase, this._ref) : super(const LogoutState());
 
   Future<void> logout() async {
+    if (state.status == LogoutStatus.loading) return;
+
     state = state.copyWith(status: LogoutStatus.loading);
 
     try {
       LoggerService.i('Initiating secure logout sequence...', feature: 'Auth');
 
-      // 1. Perform Sign Out from Repository/Data Source
-      await _logoutUseCase.execute();
+      // 1. Perform Sign Out from Repository/Data Source (Firebase & Google)
+      // We wrap this in a timeout and try-catch to ensure we always proceed to clear local state.
+      try {
+        await _logoutUseCase.execute().timeout(const Duration(seconds: 5));
+      } catch (e) {
+        LoggerService.w(
+          'Remote sign out failed or timed out: $e. Proceeding with local session clear.',
+          feature: 'Auth',
+        );
+      }
 
       // 2. Clear Session and App State
+      // This will trigger SessionNotifier which updates authStateChangesProvider
       await _ref.read(sessionProvider.notifier).logout();
 
       // 3. Invalidate specific providers to clear cached data
       _ref.invalidate(profileProvider);
+
+      // 4. Force a lifecycle refresh to ensure router picks up the change correctly
+      _ref.read(appLifecycleProvider.notifier).refresh();
 
       LoggerService.i(
         'Logout sequence completed successfully.',
@@ -56,7 +69,7 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
       );
       state = state.copyWith(
         status: LogoutStatus.failure,
-        errorMessage: e.toString(),
+        errorMessage: 'An unexpected error occurred during logout. Please try again.',
       );
     }
   }

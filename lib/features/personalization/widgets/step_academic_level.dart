@@ -45,23 +45,43 @@ class StepAcademicLevel extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
-        SizedBox(height: 20.h),
-        Center(
-          child: Image.asset(
-            'assets/images/personalisation_icon.png',
-            width: 120.w,
-            height: 120.w,
-            fit: BoxFit.contain,
-          ),
-        ),
-        SizedBox(height: 30.h),
-        Text(
-          'What is your current academic level?',
-          style: context.headlineMedium.copyWith(
-            fontWeight: FontWeight.bold,
-            fontSize: 28.sp,
-            color: Colors.white,
-          ),
+        SizedBox(height: 32.h),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'What is your current ',
+                      style: context.headlineMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'academic level?',
+                      style: context.headlineMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28.sp,
+                        color: const Color(0xFF7C4DFF),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, top: 4.h),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                color: Color(0xFF7C4DFF),
+                size: 24,
+              ),
+            ),
+          ],
         ),
         SizedBox(height: SoteriaSpacing.xl),
         ...options.map(

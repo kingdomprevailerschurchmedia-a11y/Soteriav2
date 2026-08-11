@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/glass_surface.dart';
 
 class FeatureCarousel extends StatefulWidget {
   const FeatureCarousel({super.key});
@@ -73,7 +72,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: 170.h,
+          height: 80.h,
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: (index) => setState(() => _currentPage = index),
@@ -84,7 +83,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                 padding: EdgeInsets.symmetric(horizontal: 4.w),
                 child: Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20.r),
+                    borderRadius: BorderRadius.circular(16.r),
                     color: const Color(0xFF130F26).withValues(alpha: 0.8),
                     border: Border.all(
                       color: Colors.white.withValues(alpha: 0.1),
@@ -92,25 +91,25 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.all(20.w),
+                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
                     child: Row(
                       children: [
                         // Illustration Placeholder / Large Icon
                         Container(
-                          width: 60.w,
-                          height: 60.w,
+                          width: 44.w,
+                          height: 44.w,
                           decoration: BoxDecoration(
                             color: const Color(0xFF1A1633),
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
                           child: Icon(
                             feature['icon'],
                             color: SoteriaColors.gold,
-                            size: 30.sp,
+                            size: 22.sp,
                           ),
                         ),
 
-                        SizedBox(width: 20.w),
+                        SizedBox(width: 16.w),
 
                         Expanded(
                           child: Column(
@@ -123,17 +122,17 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                                 style: context.titleLarge.copyWith(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
-                                  fontSize: 20.sp,
+                                  fontSize: 18.sp,
                                 ),
                               ),
-                              SizedBox(height: 4.h),
+                              SizedBox(height: 2.h),
                               Text(
                                 feature['description'],
                                 style: context.bodySmall.copyWith(
                                   color: Colors.white.withValues(alpha: 0.6),
-                                  fontSize: 14.sp,
+                                  fontSize: 13.sp,
                                 ),
-                                maxLines: 2,
+                                maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
@@ -164,7 +163,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
           ),
         ),
 
-        SizedBox(height: SoteriaSpacing.xl),
+        SizedBox(height: 16.h),
 
         // Animated Page Indicator
         Row(

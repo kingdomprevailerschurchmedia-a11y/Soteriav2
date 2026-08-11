@@ -83,6 +83,7 @@ class AuthenticatedShellScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

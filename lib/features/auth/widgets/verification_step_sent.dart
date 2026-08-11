@@ -133,7 +133,9 @@ class VerificationStepSent extends ConsumerWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: 'Code ',
+                  text: type == VerificationType.passwordRecovery
+                      ? 'Link '
+                      : 'Code ',
                   style: context.displaySmall.copyWith(
                     color: SoteriaColors.textPrimary,
                     fontWeight: FontWeight.bold,
@@ -261,7 +263,9 @@ class VerificationStepSent extends ConsumerWidget {
             child: Column(
               children: [
                 Text(
-                  'Didn\'t get the email?',
+                  type == VerificationType.passwordRecovery
+                      ? 'Didn\'t get the link?'
+                      : 'Didn\'t get the email?',
                   style: context.titleSmall.copyWith(
                     color: SoteriaColors.textPrimary,
                   ),
@@ -280,7 +284,9 @@ class VerificationStepSent extends ConsumerWidget {
                     ),
                     _ActionItem(
                       icon: Icons.history_rounded,
-                      label: 'Resend Email',
+                      label: type == VerificationType.passwordRecovery
+                          ? 'Resend Link'
+                          : 'Resend Email',
                       subLabel: state.countdown > 0
                           ? 'in ${state.countdown}s'
                           : 'Send again',

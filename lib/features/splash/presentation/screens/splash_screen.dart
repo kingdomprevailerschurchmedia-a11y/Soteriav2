@@ -27,7 +27,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   late final Animation<double> _logoOpacity;
   late final Animation<double> _logoScale;
-  late final Animation<double> _textOpacity;
+  late final Animation<double> _wordmarkOpacity;
+  late final Animation<double> _taglineOpacity;
 
   // ===========================================================================
   // STARTUP STATE
@@ -71,9 +72,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
-        systemNavigationBarColor: SoteriaColors.backgroundBottomRight,
+        systemNavigationBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarDividerColor: SoteriaColors.backgroundBottomRight,
+        systemNavigationBarDividerColor: Colors.transparent,
       ),
     );
   }
@@ -114,14 +115,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
 
     // -------------------------------------------------------------------------
-    // WORDMARK + TAGLINE
-    //
-    // Begins around 500ms.
+    // WORDMARK + TAGLINE (SEQUENCED)
     // -------------------------------------------------------------------------
 
-    _textOpacity = CurvedAnimation(
+    _wordmarkOpacity = CurvedAnimation(
       parent: _controller,
       curve: const Interval(0.25, 0.45, curve: Curves.easeOut),
+    );
+
+    _taglineOpacity = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.40, 0.60, curve: Curves.easeOut),
     );
   }
 
@@ -292,9 +296,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         statusBarColor: Colors.transparent,
         statusBarIconBrightness: Brightness.light,
         statusBarBrightness: Brightness.dark,
-        systemNavigationBarColor: SoteriaColors.backgroundBottomRight,
+        systemNavigationBarColor: Colors.transparent,
         systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarDividerColor: SoteriaColors.backgroundBottomRight,
+        systemNavigationBarDividerColor: Colors.transparent,
       ),
     );
 
@@ -333,7 +337,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           SplashBranding(
             logoOpacity: _logoOpacity,
             logoScale: _logoScale,
-            textOpacity: _textOpacity,
+            wordmarkOpacity: _wordmarkOpacity,
+            taglineOpacity: _taglineOpacity,
           ),
         ],
       ),

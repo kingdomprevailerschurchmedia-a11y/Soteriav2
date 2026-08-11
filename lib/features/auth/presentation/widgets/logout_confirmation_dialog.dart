@@ -33,11 +33,24 @@ class LogoutConfirmationDialog extends ConsumerWidget {
             ),
           ],
         ),
-        content: Text(
-          'Are you sure you want to sign out of your account?',
-          style: context.bodyMedium.copyWith(
-            color: SoteriaColors.textSecondary,
-          ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Are you sure you want to sign out of your account?',
+              style: context.bodyMedium.copyWith(
+                color: SoteriaColors.textSecondary,
+              ),
+            ),
+            if (logoutState.status == LogoutStatus.failure) ...[
+              SizedBox(height: SoteriaSpacing.md),
+              Text(
+                logoutState.errorMessage ?? 'Logout failed',
+                style: context.bodySmall.copyWith(color: SoteriaColors.error),
+              ),
+            ],
+          ],
         ),
         actionsPadding: EdgeInsets.all(SoteriaSpacing.lg),
         actions: [

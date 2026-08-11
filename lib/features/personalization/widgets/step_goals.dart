@@ -58,37 +58,42 @@ class StepGoals extends ConsumerWidget {
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
         SizedBox(height: SoteriaSpacing.md),
-        RichText(
-          text: TextSpan(
-            children: [
-              TextSpan(
-                text: 'What are your ',
-                style: context.headlineMedium.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32.sp,
-                  color: Colors.white,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'What are your ',
+                      style: context.headlineMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32.sp,
+                        color: Colors.white,
+                      ),
+                    ),
+                    TextSpan(
+                      text: 'goals?',
+                      style: context.headlineMedium.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 32.sp,
+                        color: const Color(0xFF7C4DFF),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              TextSpan(
-                text: 'goals?',
-                style: context.headlineMedium.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 32.sp,
-                  color: const Color(0xFF7C4DFF),
-                ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 8.w, top: 4.h),
+              child: const Icon(
+                Icons.auto_awesome_rounded,
+                color: Color(0xFF7C4DFF),
+                size: 24,
               ),
-              WidgetSpan(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 8.w, bottom: 10.h),
-                  child: const Icon(
-                    Icons.auto_awesome_rounded,
-                    color: Color(0xFF7C4DFF),
-                    size: 24,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
         SizedBox(height: 8.h),
         Text(

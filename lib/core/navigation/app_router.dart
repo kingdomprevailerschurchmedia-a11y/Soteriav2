@@ -131,6 +131,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         return null;
       }
 
+      // Allow the Splash screen to handle the initial navigation flow
+      // only after it has finished its minimum duration.
+      if (location == SoteriaRoutes.splash) {
+        return null;
+      }
+
       if (lifecycle == AppStartupState.onboarding &&
           location != SoteriaRoutes.onboarding) {
         return SoteriaRoutes.onboarding;
@@ -160,12 +166,14 @@ final routerProvider = Provider<GoRouter>((ref) {
           if (session.uid != null && session.status == SessionStatus.guest) {
             return '${SoteriaRoutes.auth}/verify/emailVerification';
           }
-          if (location.startsWith(SoteriaRoutes.main))
+          if (location.startsWith(SoteriaRoutes.main)) {
             return SoteriaRoutes.auth;
+          }
         } else {
           // Already authenticated, shouldn't be on auth pages
-          if (location.startsWith(SoteriaRoutes.auth))
+          if (location.startsWith(SoteriaRoutes.auth)) {
             return SoteriaRoutes.main;
+          }
         }
       }
 
@@ -219,10 +227,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'versus',
-                    builder: (context, state) => const ComingSoonScreen(
-                      featureName: 'Versus Mode',
-                      category: 'Social',
-                    ),
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const ComingSoonScreen(
+                            featureName: 'Versus Mode',
+                            category: 'Social',
+                          ),
+                          key: state.pageKey,
+                        ),
                   ),
                   GoRoute(
                     path: 'tournaments',
@@ -281,10 +293,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/app/play',
-                builder: (context, state) => const ComingSoonScreen(
-                  featureName: 'Battle Hub',
-                  category: 'Game',
-                ),
+                pageBuilder: (context, state) =>
+                    SoteriaPageTransitions.fade(
+                      child: const ComingSoonScreen(
+                        featureName: 'Battle Hub',
+                        category: 'Game',
+                      ),
+                      key: state.pageKey,
+                    ),
               ),
             ],
           ),
@@ -293,10 +309,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.leaderboard,
-                builder: (context, state) => const ComingSoonScreen(
-                  featureName: 'Global Rankings',
-                  category: 'Social',
-                ),
+                pageBuilder: (context, state) =>
+                    SoteriaPageTransitions.fade(
+                      child: const ComingSoonScreen(
+                        featureName: 'Global Rankings',
+                        category: 'Social',
+                      ),
+                      key: state.pageKey,
+                    ),
               ),
             ],
           ),
@@ -305,10 +325,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.wallet,
-                builder: (context, state) => const ComingSoonScreen(
-                  featureName: 'Soteria Rewards',
-                  category: 'Finance',
-                ),
+                pageBuilder: (context, state) =>
+                    SoteriaPageTransitions.fade(
+                      child: const ComingSoonScreen(
+                        featureName: 'Soteria Rewards',
+                        category: 'Finance',
+                      ),
+                      key: state.pageKey,
+                    ),
               ),
             ],
           ),
@@ -317,7 +341,11 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.profile,
-                builder: (context, state) => const PlayerProfileScreen(),
+                pageBuilder: (context, state) =>
+                    SoteriaPageTransitions.fade(
+                      child: const PlayerProfileScreen(),
+                      key: state.pageKey,
+                    ),
               ),
             ],
           ),
@@ -567,21 +595,21 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'player',
             builder: (context, state) => const GalleryShell(
               title: 'Player Profile',
-              child: const PlayerPreviewPage(),
+              child: PlayerPreviewPage(),
             ),
           ),
           GoRoute(
             path: 'config-debug',
             builder: (context, state) => const GalleryShell(
               title: 'Config Debug',
-              child: const ConfigDebugScreen(),
+              child: ConfigDebugScreen(),
             ),
           ),
           GoRoute(
             path: 'security-status',
             builder: (context, state) => const GalleryShell(
               title: 'Security Status',
-              child: const SecurityStatusScreen(),
+              child: SecurityStatusScreen(),
             ),
           ),
           GoRoute(
