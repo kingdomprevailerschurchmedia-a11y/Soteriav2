@@ -130,4 +130,3 @@ class _ErrorIllustration extends StatelessWidget {
     );
   }
 }
-

@@ -63,7 +63,10 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
     final state = ref.watch(personalizationProvider);
     final isValid = state.isStepValid(state.currentStep);
 
-    ref.listen(personalizationProvider.select((s) => s.currentStep), (previous, next) {
+    ref.listen(personalizationProvider.select((s) => s.currentStep), (
+      previous,
+      next,
+    ) {
       if (_pageController.hasClients && _pageController.page?.round() != next) {
         _pageController.animateToPage(
           next,
@@ -75,13 +78,11 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
 
     return SafeGradientScaffold(
       body: PopScope(
-        canPop: false,
+        canPop: state.currentStep == 0,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
           if (state.currentStep > 0) {
             _onBack();
-          } else {
-            Navigator.of(context).pop();
           }
         },
         child: Column(
@@ -131,14 +132,20 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                             width: 48.w,
                             height: 48.w,
                             decoration: BoxDecoration(
-                              color: SoteriaColors.primary.withValues(alpha: 0.2),
+                              color: SoteriaColors.primary.withValues(
+                                alpha: 0.2,
+                              ),
                               borderRadius: BorderRadius.circular(12.r),
                               border: Border.all(
-                                color: SoteriaColors.primary.withValues(alpha: 0.5),
+                                color: SoteriaColors.primary.withValues(
+                                  alpha: 0.5,
+                                ),
                               ),
                               boxShadow: [
                                 BoxShadow(
-                                  color: SoteriaColors.primary.withValues(alpha: 0.3),
+                                  color: SoteriaColors.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
                                   blurRadius: 10,
                                   spreadRadius: 1,
                                 ),
@@ -195,15 +202,14 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                           child: Container(
                             decoration: BoxDecoration(
                               gradient: const LinearGradient(
-                                colors: [
-                                  SoteriaColors.gold,
-                                  Color(0xFFB8860B),
-                                ],
+                                colors: [SoteriaColors.gold, Color(0xFFB8860B)],
                               ),
                               borderRadius: BorderRadius.circular(3.r),
                               boxShadow: [
                                 BoxShadow(
-                                  color: SoteriaColors.gold.withValues(alpha: 0.4),
+                                  color: SoteriaColors.gold.withValues(
+                                    alpha: 0.4,
+                                  ),
                                   blurRadius: 8,
                                   spreadRadius: 1,
                                 ),
@@ -217,11 +223,16 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 4.h,
+                            ),
                             decoration: BoxDecoration(
                               color: Colors.white.withValues(alpha: 0.05),
                               borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+                              border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.1),
+                              ),
                             ),
                             child: Text(
                               'Step ${state.currentStep + 1} of 5',
@@ -262,8 +273,12 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SoteriaButton.primary(
-                    label: state.currentStep == 4 ? 'COMPLETE PROFILE' : 'CONTINUE',
-                    onPressed: isValid ? () => _onContinue(state.currentStep, isValid) : null,
+                    label: state.currentStep == 4
+                        ? 'COMPLETE PROFILE'
+                        : 'CONTINUE',
+                    onPressed: isValid
+                        ? () => _onContinue(state.currentStep, isValid)
+                        : null,
                     size: SoteriaButtonSize.lg,
                     icon: Icons.auto_awesome_rounded,
                     trailingIcon: Icons.arrow_forward_rounded,
@@ -275,13 +290,17 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                       Icon(
                         Icons.lock_outline_rounded,
                         size: 14.sp,
-                        color: SoteriaColors.textSecondary.withValues(alpha: 0.5),
+                        color: SoteriaColors.textSecondary.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                       SizedBox(width: 4.w),
                       Text(
                         'Your information is safe and secure with us.',
                         style: context.bodySmall.copyWith(
-                          color: SoteriaColors.textSecondary.withValues(alpha: 0.5),
+                          color: SoteriaColors.textSecondary.withValues(
+                            alpha: 0.5,
+                          ),
                           fontSize: 12.sp,
                         ),
                       ),

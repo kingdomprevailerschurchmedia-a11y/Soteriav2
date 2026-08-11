@@ -81,7 +81,11 @@ class StepSummary extends ConsumerWidget {
           title: 'Interests',
           icon: Icons.star_outline_rounded,
           onEdit: () => notifier.setStep(1),
-          child: _buildInterests(context, state.interests, (i) => notifier.toggleInterest(i)),
+          child: _buildInterests(
+            context,
+            state.interests,
+            (i) => notifier.toggleInterest(i),
+          ),
         ),
 
         SizedBox(height: 24.h),
@@ -141,27 +145,40 @@ class StepSummary extends ConsumerWidget {
                 children: [
                   Text(
                     level ?? 'Not selected',
-                    style: context.titleMedium.copyWith(color: Colors.white, fontWeight: FontWeight.w600),
+                    style: context.titleMedium.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   if (subtitle.isNotEmpty)
                     Text(
                       subtitle,
                       style: context.bodySmall.copyWith(
-                        color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
+                        color: SoteriaColors.textSecondary.withValues(
+                          alpha: 0.6,
+                        ),
                         fontSize: 12.sp,
                       ),
                     ),
                 ],
               ),
             ),
-            Icon(Icons.chevron_right_rounded, color: const Color(0xFF7C4DFF), size: 24.w),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: const Color(0xFF7C4DFF),
+              size: 24.w,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildInterests(BuildContext context, Set<String> interests, Function(String) onRemove) {
+  Widget _buildInterests(
+    BuildContext context,
+    Set<String> interests,
+    Function(String) onRemove,
+  ) {
     return GlassSurface(
       borderRadius: BorderRadius.circular(20.r),
       opacity: 0.05,
@@ -197,7 +214,9 @@ class StepSummary extends ConsumerWidget {
                 decoration: BoxDecoration(
                   color: const Color(0xFF5B3FD9).withValues(alpha: 0.2),
                   borderRadius: BorderRadius.circular(12.r),
-                  border: Border.all(color: const Color(0xFF7C4DFF).withValues(alpha: 0.3)),
+                  border: Border.all(
+                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
+                  ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -211,7 +230,11 @@ class StepSummary extends ConsumerWidget {
                     SizedBox(width: 8.w),
                     GestureDetector(
                       onTap: () => onRemove(interest),
-                      child: Icon(Icons.close, size: 14.w, color: Colors.white.withValues(alpha: 0.6)),
+                      child: Icon(
+                        Icons.close,
+                        size: 14.w,
+                        color: Colors.white.withValues(alpha: 0.6),
+                      ),
                     ),
                   ],
                 ),
@@ -221,16 +244,25 @@ class StepSummary extends ConsumerWidget {
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.2), style: BorderStyle.solid),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.2),
+                  style: BorderStyle.solid,
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.add, size: 16.w, color: SoteriaColors.textSecondary),
+                  Icon(
+                    Icons.add,
+                    size: 16.w,
+                    color: SoteriaColors.textSecondary,
+                  ),
                   SizedBox(width: 4.w),
                   Text(
                     'Add more',
-                    style: context.labelMedium.copyWith(color: SoteriaColors.textSecondary),
+                    style: context.labelMedium.copyWith(
+                      color: SoteriaColors.textSecondary,
+                    ),
                   ),
                 ],
               ),
@@ -280,7 +312,11 @@ class StepSummary extends ConsumerWidget {
                       color: const Color(0xFF7C4DFF).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(10.r),
                     ),
-                    child: Icon(icon, color: const Color(0xFF7C4DFF), size: 20.w),
+                    child: Icon(
+                      icon,
+                      color: const Color(0xFF7C4DFF),
+                      size: 20.w,
+                    ),
                   ),
                   SizedBox(width: 16.w),
                   Expanded(
@@ -289,13 +325,18 @@ class StepSummary extends ConsumerWidget {
                       children: [
                         Text(
                           goal,
-                          style: context.titleMedium.copyWith(color: Colors.white, fontSize: 16.sp),
+                          style: context.titleMedium.copyWith(
+                            color: Colors.white,
+                            fontSize: 16.sp,
+                          ),
                         ),
                         if (subtitle.isNotEmpty)
                           Text(
                             subtitle,
                             style: context.bodySmall.copyWith(
-                              color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
+                              color: SoteriaColors.textSecondary.withValues(
+                                alpha: 0.6,
+                              ),
                               fontSize: 12.sp,
                             ),
                           ),
@@ -309,7 +350,11 @@ class StepSummary extends ConsumerWidget {
                       shape: BoxShape.circle,
                       border: Border.all(color: SoteriaColors.gold, width: 1.5),
                     ),
-                    child: const Icon(Icons.check, color: SoteriaColors.gold, size: 16),
+                    child: const Icon(
+                      Icons.check,
+                      color: SoteriaColors.gold,
+                      size: 16,
+                    ),
                   ),
                 ],
               ),
@@ -363,10 +408,18 @@ class _SummarySection extends StatelessWidget {
                 children: [
                   Text(
                     'Edit',
-                    style: TextStyle(color: const Color(0xFF7C4DFF), fontSize: 14.sp, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      color: const Color(0xFF7C4DFF),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   SizedBox(width: 4.w),
-                  Icon(Icons.edit_outlined, color: const Color(0xFF7C4DFF), size: 16.w),
+                  Icon(
+                    Icons.edit_outlined,
+                    color: const Color(0xFF7C4DFF),
+                    size: 16.w,
+                  ),
                 ],
               ),
             ),

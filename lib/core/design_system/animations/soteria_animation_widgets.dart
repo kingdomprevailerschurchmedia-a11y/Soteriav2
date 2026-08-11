@@ -16,6 +16,9 @@ class SoteriaFadeIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reducedMotion = MediaQuery.of(context).disableAnimations;
+    if (reducedMotion) return child;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0.0, end: 1.0),
       duration: duration,
@@ -44,6 +47,9 @@ class SoteriaSlideUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reducedMotion = MediaQuery.of(context).disableAnimations;
+    if (reducedMotion) return child;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: offset, end: 0.0),
       duration: duration,
@@ -78,6 +84,9 @@ class SoteriaScaleIn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reducedMotion = MediaQuery.of(context).disableAnimations;
+    if (reducedMotion) return child;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: begin, end: 1.0),
       duration: duration,
@@ -112,6 +121,9 @@ class SoteriaSlideLeft extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reducedMotion = MediaQuery.of(context).disableAnimations;
+    if (reducedMotion) return child;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: offset, end: 0.0),
       duration: duration,
@@ -146,6 +158,9 @@ class SoteriaBlurTransition extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final reducedMotion = MediaQuery.of(context).disableAnimations;
+    if (reducedMotion) return child;
+
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: beginBlur, end: 0.0),
       duration: duration,

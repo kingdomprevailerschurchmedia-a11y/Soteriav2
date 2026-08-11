@@ -49,6 +49,7 @@ void main() {
             xpThreshold: 1000,
             coins: 100,
             rank: 'Scholar',
+            rankPoints: 125,
             progress: 0.5,
             xpRemaining: 500,
           ),

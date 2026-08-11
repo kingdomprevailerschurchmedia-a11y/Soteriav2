@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -10,6 +11,9 @@ import 'package:soteria/core/design_system/components/soteria_avatar.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';
 import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
+import '../providers/progression_providers.dart';
+import '../widgets/player_progression_card.dart';
+import '../widgets/rank_history_section.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
 
@@ -19,13 +23,14 @@ class PlayerProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider);
+    final progressionAsync = ref.watch(competitiveProgressionProvider);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        automaticallyImplyLeading: false, // Back button removed for bottom nav tab
+        automaticallyImplyLeading: false,
         title: Text(
           'PROFILE',
           style: context.titleMedium.copyWith(
@@ -54,6 +59,22 @@ class PlayerProfileScreen extends ConsumerWidget {
             SizedBox(
               height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
             ),
+            progressionAsync.when(
+              data: (progression) => PlayerProgressionCard(
+                progression: progression,
+                displayName: profile?.displayName ?? 'Anonymous',
+                avatarUrl: profile?.avatarUrl,
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (err, _) => Text('Error loading progression: $err'),
+            ),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+            ),
+            const RankHistorySection(),
+            SizedBox(
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+            ),
             _buildSection(
               context,
               title: 'ACCOUNT',
@@ -62,6 +83,11 @@ class PlayerProfileScreen extends ConsumerWidget {
                   icon: Icons.person_outline_rounded,
                   title: 'Personal Information',
                   onTap: () {},
+                ),
+                _ProfileTile(
+                  icon: Icons.history_rounded,
+                  title: 'Competitive History',
+                  onTap: () => context.push(SoteriaRoutes.competitiveHistory),
                 ),
                 _ProfileTile(
                   icon: Icons.emoji_events_outlined,

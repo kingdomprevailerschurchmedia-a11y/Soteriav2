@@ -77,10 +77,9 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
               borderRadius: BorderRadius.circular(16.r),
               color: const Color(0xFF0D0B1E),
               border: Border.all(
-                color:
-                    isEmail
-                        ? SoteriaColors.primary.withValues(alpha: 0.5)
-                        : Colors.white.withValues(alpha: 0.1),
+                color: isEmail
+                    ? SoteriaColors.primary.withValues(alpha: 0.5)
+                    : Colors.white.withValues(alpha: 0.1),
                 width: 1,
               ),
               boxShadow: [
@@ -93,35 +92,33 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
               ],
             ),
             child: Center(
-              child:
-                  widget.isLoading
-                      ? _buildLoader()
-                      : Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: SoteriaSpacing.lg,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildIcon(),
-                            SizedBox(width: 16.w),
-                            Flexible(
-                              child: Text(
-                                widget.provider.name,
-                                style: context.titleSmall.copyWith(
-                                  color:
-                                      isEmail
-                                          ? SoteriaColors.secondary
-                                          : Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18.sp,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
+              child: widget.isLoading
+                  ? _buildLoader()
+                  : Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SoteriaSpacing.lg,
                       ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          _buildIcon(),
+                          SizedBox(width: 16.w),
+                          Flexible(
+                            child: Text(
+                              widget.provider.name,
+                              style: context.titleSmall.copyWith(
+                                color: isEmail
+                                    ? SoteriaColors.secondary
+                                    : Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18.sp,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ),
           ),
         ),
@@ -135,9 +132,8 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
         'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png',
         width: 24.sp,
         height: 24.sp,
-        errorBuilder:
-            (_, _, _) =>
-                Icon(widget.provider.icon, color: Colors.blue, size: 24.sp),
+        errorBuilder: (_, _, _) =>
+            Icon(widget.provider.icon, color: Colors.blue, size: 24.sp),
       );
     }
     return Icon(

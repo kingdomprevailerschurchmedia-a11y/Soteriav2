@@ -41,7 +41,32 @@ This document describes the structure of the `users` collection in Cloud Firesto
 | `version` | `number` | `1` | Schema version for migration logic. |
 
 ### Expansion Strategy
-- **Seasons**: Add `currentSeasonStats` map.
+- **Season Results**: Use a sub-collection `season_results` under the user document for competitive history.
 - **Clubs**: Add `clubId` string and `clubRole` string.
 - **Friends**: Use a sub-collection `friends`.
 - **Learning Insights**: Use a sub-collection `insights` or a separate top-level collection linked by UID.
+
+## Sub-collection: `users/{userId}/season_results`
+- **Document ID**: `seasonId`
+- **Access Control**: Owner Read, System Write.
+
+### Fields
+
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `seasonId` | `string` | ID of the completed season. |
+| `userId` | `string` | Owner of the result. |
+| `seasonName` | `string` | Canonical name of the season. |
+| `seasonNumber` | `number` | Incremental season counter. |
+| `finalPosition` | `number` | Absolute rank on the season leaderboard. |
+| `finalRankPoints` | `number` | Total RP at the moment of season completion. |
+| `finalTier` | `string` | Final competitive tier (e.g., "Diamond"). |
+| `finalDivision` | `number` | Final division within the tier. |
+| `previousTier` | `string` | Tier at the start of the season. |
+| `previousDivision` | `number` | Division at the start of the season. |
+| `rankChange` | `number` | Net RP change throughout the season. |
+| `completedAt` | `timestamp` | Time when the season reached the "Completed" state. |
+| `createdAt` | `timestamp` | When this snapshot was generated. |
+| `status` | `string` | Processing status (usually "finalized"). |
+| `statistics` | `map` | Optional summary stats for the season. |
+

@@ -17,6 +17,7 @@ class HeroCard extends StatelessWidget {
     required this.xpThreshold,
     required this.coins,
     required this.rank,
+    this.rankPoints = 0,
     required this.progress,
     required this.xpRemaining,
     this.isDoubleXp = false,
@@ -27,6 +28,7 @@ class HeroCard extends StatelessWidget {
   final int xpThreshold;
   final int coins;
   final String rank;
+  final int rankPoints;
   final double progress;
   final int xpRemaining;
   final bool isDoubleXp;
@@ -80,14 +82,26 @@ class HeroCard extends StatelessWidget {
                           FittedBox(
                             fit: BoxFit.scaleDown,
                             alignment: Alignment.centerLeft,
-                            child: Text(
-                              rank.toUpperCase(),
-                              style: context.displaySmall.copyWith(
-                                color: SoteriaColors.textPrimary,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: -0.5,
-                                fontSize: isShort ? 22.sp : 28.sp,
-                              ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  rank.toUpperCase(),
+                                  style: context.displaySmall.copyWith(
+                                    color: SoteriaColors.textPrimary,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: -0.5,
+                                    fontSize: isShort ? 22.sp : 28.sp,
+                                  ),
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  '| $rankPoints RP',
+                                  style: context.titleMedium.copyWith(
+                                    color: SoteriaColors.gold,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],

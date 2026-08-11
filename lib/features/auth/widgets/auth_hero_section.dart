@@ -17,9 +17,7 @@ class AuthHeroSection extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(
-          height: 24.h,
-        ),
+        SizedBox(height: 24.h),
 
         // Premium Glowing Hero Area
         SoteriaScaleIn(
@@ -77,9 +75,7 @@ class AuthHeroSection extends StatelessWidget {
           ),
         ),
 
-        SizedBox(
-          height: 2.h,
-        ),
+        SizedBox(height: 2.h),
 
         // Welcome Text with Gradient
         SoteriaFadeIn(
@@ -97,9 +93,7 @@ class AuthHeroSection extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(
-                height: 8.h,
-              ),
+              SizedBox(height: 8.h),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.w),
@@ -118,9 +112,7 @@ class AuthHeroSection extends StatelessWidget {
           ),
         ),
 
-        SizedBox(
-          height: 32.h,
-        ),
+        SizedBox(height: 32.h),
       ],
     );
   }

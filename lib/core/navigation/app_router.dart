@@ -75,6 +75,7 @@ import 'package:soteria/features/preview_gallery/pages/pro_lobby_preview_page.da
 import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/player_profile_screen.dart';
+import 'package:soteria/features/player/presentation/screens/leaderboard_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_discovery_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_details_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_lobby_screen.dart';
@@ -83,6 +84,8 @@ import 'package:soteria/features/tournaments/presentation/pages/tournament_previ
 import 'package:soteria/features/preview_gallery/pages/player_preview_page.dart';
 import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
+
+import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
@@ -293,14 +296,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: '/app/play',
-                pageBuilder: (context, state) =>
-                    SoteriaPageTransitions.fade(
-                      child: const ComingSoonScreen(
-                        featureName: 'Battle Hub',
-                        category: 'Game',
-                      ),
-                      key: state.pageKey,
-                    ),
+                pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                  child: const ComingSoonScreen(
+                    featureName: 'Battle Hub',
+                    category: 'Game',
+                  ),
+                  key: state.pageKey,
+                ),
               ),
             ],
           ),
@@ -309,14 +311,10 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.leaderboard,
-                pageBuilder: (context, state) =>
-                    SoteriaPageTransitions.fade(
-                      child: const ComingSoonScreen(
-                        featureName: 'Global Rankings',
-                        category: 'Social',
-                      ),
-                      key: state.pageKey,
-                    ),
+                pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                  child: const LeaderboardScreen(),
+                  key: state.pageKey,
+                ),
               ),
             ],
           ),
@@ -325,14 +323,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.wallet,
-                pageBuilder: (context, state) =>
-                    SoteriaPageTransitions.fade(
-                      child: const ComingSoonScreen(
-                        featureName: 'Soteria Rewards',
-                        category: 'Finance',
-                      ),
-                      key: state.pageKey,
-                    ),
+                pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                  child: const ComingSoonScreen(
+                    featureName: 'Soteria Rewards',
+                    category: 'Finance',
+                  ),
+                  key: state.pageKey,
+                ),
               ),
             ],
           ),
@@ -341,11 +338,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: SoteriaRoutes.profile,
-                pageBuilder: (context, state) =>
-                    SoteriaPageTransitions.fade(
-                      child: const PlayerProfileScreen(),
-                      key: state.pageKey,
-                    ),
+                pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                  child: const PlayerProfileScreen(),
+                  key: state.pageKey,
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'history',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.slideUp(
+                          child: const CompetitiveHistoryScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                ],
               ),
             ],
           ),

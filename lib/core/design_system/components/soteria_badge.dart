@@ -40,13 +40,17 @@ class SoteriaBadge extends StatelessWidget {
             Icon(icon, size: 12.sp, color: _getColor()),
             SizedBox(width: 4.w),
           ],
-          Text(
-            label.toUpperCase(),
-            style: context.labelSmall.copyWith(
-              color: _getColor(),
-              fontWeight: FontWeight.w900,
-              fontSize: 10.sp,
-              letterSpacing: 1.2,
+          Flexible(
+            child: Text(
+              label.toUpperCase(),
+              style: context.labelSmall.copyWith(
+                color: _getColor(),
+                fontWeight: FontWeight.w900,
+                fontSize: 10.sp,
+                letterSpacing: 1.2,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

@@ -164,11 +164,7 @@ class VerificationStepSent extends ConsumerWidget {
                   endIndent: 10,
                 ),
               ),
-              Icon(
-                Icons.star_rounded,
-                color: SoteriaColors.gold,
-                size: 16.sp,
-              ),
+              Icon(Icons.star_rounded, color: SoteriaColors.gold, size: 16.sp),
               const Expanded(
                 child: Divider(
                   color: SoteriaColors.gold,

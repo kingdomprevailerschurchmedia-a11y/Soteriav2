@@ -73,7 +73,7 @@ class SplashBranding extends StatelessWidget {
             opacity: taglineOpacity,
             child: _Tagline(availableWidth: size.width),
           ),
-          
+
           // Add a bit of bottom padding to balance the logo's height
           SizedBox(height: size.height * 0.05),
         ],

@@ -68,17 +68,17 @@ class _LoginFormState extends ConsumerState<LoginForm> {
           onChanged: notifier.updatePassword,
           enabled: !state.isLoading,
           isPassword: true,
-          onToggleVisibility: () => setState(() => _obscurePassword = !_obscurePassword),
+          onToggleVisibility: () =>
+              setState(() => _obscurePassword = !_obscurePassword),
         ),
         SizedBox(height: 12.h),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             GestureDetector(
-              onTap:
-                  state.isLoading
-                      ? null
-                      : () => notifier.toggleRememberMe(!state.rememberMe),
+              onTap: state.isLoading
+                  ? null
+                  : () => notifier.toggleRememberMe(!state.rememberMe),
               child: Row(
                 children: [
                   Container(
@@ -90,19 +90,13 @@ class _LoginFormState extends ConsumerState<LoginForm> {
                         color: const Color(0xFF7C4DFF).withValues(alpha: 0.8),
                         width: 1.5,
                       ),
-                      color:
-                          state.rememberMe
-                              ? const Color(0xFF7C4DFF)
-                              : Colors.transparent,
+                      color: state.rememberMe
+                          ? const Color(0xFF7C4DFF)
+                          : Colors.transparent,
                     ),
-                    child:
-                        state.rememberMe
-                            ? const Icon(
-                              Icons.check,
-                              size: 16,
-                              color: Colors.white,
-                            )
-                            : null,
+                    child: state.rememberMe
+                        ? const Icon(Icons.check, size: 16, color: Colors.white)
+                        : null,
                   ),
                   SizedBox(width: 12.w),
                   Text(
@@ -116,14 +110,11 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               ),
             ),
             GestureDetector(
-              onTap:
-                  state.isLoading
-                      ? null
-                      : () => ref
-                          .read(navigationServiceProvider)
-                          .push(
-                            '${SoteriaRoutes.auth}/verify/passwordRecovery',
-                          ),
+              onTap: state.isLoading
+                  ? null
+                  : () => ref
+                        .read(navigationServiceProvider)
+                        .push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
               child: Row(
                 children: [
                   Text(
@@ -145,14 +136,6 @@ class _LoginFormState extends ConsumerState<LoginForm> {
             ),
           ],
         ),
-        if (state.error != null) ...[
-          SizedBox(height: 16.h),
-          Text(
-            state.error!,
-            style: context.bodySmall.copyWith(color: SoteriaColors.error),
-            textAlign: TextAlign.center,
-          ),
-        ],
         SizedBox(height: 24.h),
         SoteriaButton.primary(
           label: 'SIGN IN',
@@ -219,22 +202,21 @@ class _LoginFormState extends ConsumerState<LoginForm> {
               size: 22.sp,
             ),
           ),
-          suffixIcon:
-              isPassword
-                  ? Padding(
-                    padding: EdgeInsets.only(right: 8.w),
-                    child: IconButton(
-                      icon: Icon(
-                        obscureText
-                            ? Icons.visibility_off_rounded
-                            : Icons.visibility_rounded,
-                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.6),
-                        size: 20.sp,
-                      ),
-                      onPressed: onToggleVisibility,
+          suffixIcon: isPassword
+              ? Padding(
+                  padding: EdgeInsets.only(right: 8.w),
+                  child: IconButton(
+                    icon: Icon(
+                      obscureText
+                          ? Icons.visibility_off_rounded
+                          : Icons.visibility_rounded,
+                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.6),
+                      size: 20.sp,
                     ),
-                  )
-                  : null,
+                    onPressed: onToggleVisibility,
+                  ),
+                )
+              : null,
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 18.h),
         ),

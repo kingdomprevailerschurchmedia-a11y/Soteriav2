@@ -73,11 +73,11 @@ class LogoutConfirmationDialog extends ConsumerWidget {
                   onPressed: () async {
                     final navigator = Navigator.of(context);
                     final notifier = ref.read(logoutNotifierProvider.notifier);
-                    
-                    // We pop the dialog immediately to avoid it getting stuck 
+
+                    // We pop the dialog immediately to avoid it getting stuck
                     // during screen transitions.
                     navigator.pop();
-                    
+
                     // The notifier handles the async sequence.
                     // Redirection will happen automatically via router guards.
                     await notifier.logout();

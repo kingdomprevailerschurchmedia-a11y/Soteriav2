@@ -21,7 +21,8 @@ class SoteriaOnboardingButton extends StatefulWidget {
   final OnboardingButtonVariant variant;
 
   @override
-  State<SoteriaOnboardingButton> createState() => _SoteriaOnboardingButtonState();
+  State<SoteriaOnboardingButton> createState() =>
+      _SoteriaOnboardingButtonState();
 }
 
 class _SoteriaOnboardingButtonState extends State<SoteriaOnboardingButton>

@@ -35,7 +35,7 @@ class SessionNotifier extends Notifier<UserSession> {
   }
 
   Future<void> logout() async {
-    // We don't set state manually here. 
+    // We don't set state manually here.
     // The repository's clearSession will trigger authStateChangesProvider.
     await ref.read(identityRepositoryProvider).clearSession();
   }

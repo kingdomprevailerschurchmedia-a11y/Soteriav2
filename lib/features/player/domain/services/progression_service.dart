@@ -1,66 +1,83 @@
-import '../models/player_profile.dart';
+import 'dart:math';
+import '../models/player_progression.dart';
+import '../models/rank_tier.dart';
 import '../models/progression.dart';
+import '../models/player_profile.dart';
+import '../config/progression_config.dart';
 
 class ProgressionService {
-  /// XP Formula: XP for Level N = 1000 * N
-  /// Total XP to reach Level N = 500 * (N-1) * N
-
+  /// Calculates the legacy progression model for compatibility.
   Progression calculateProgression(PlayerProfile? player) {
     if (player == null) return Progression.initial();
 
-    int totalXp = player.xp;
-    if (totalXp < 0) totalXp = 0;
-
-    int level = 1;
-    int xpRemaining = totalXp;
-
-    // Find level
-    while (true) {
-      int xpForNext = calculateXpForLevel(level);
-      if (xpRemaining < xpForNext) {
-        break;
-      }
-      xpRemaining -= xpForNext;
-      level++;
-    }
-
-    final int nextLevelXpThreshold = calculateXpForLevel(level);
-    final double progress = (xpRemaining / nextLevelXpThreshold).clamp(
-      0.0,
-      1.0,
-    );
+    final level = player.level;
+    final totalXp = player.xp;
+    final xpForCurrent = ProgressionConfig.xpRequiredForLevel(level);
+    final xpForNext = ProgressionConfig.xpRequiredForLevel(level + 1);
+    final xpInLevel = totalXp - xpForCurrent;
+    final xpToNext = xpForNext - xpForCurrent;
 
     return Progression(
       level: level,
       currentXp: totalXp,
-      nextLevelXp: nextLevelXpThreshold,
-      xpInCurrentLevel: xpRemaining,
-      progressPercentage: progress,
-      xpRemaining: nextLevelXpThreshold - xpRemaining,
-      profileCompletion: calculateProfileCompletion(player),
+      nextLevelXp: xpForNext,
+      xpInCurrentLevel: xpInLevel,
+      progressPercentage: (xpInLevel / xpToNext).clamp(0.0, 1.0),
+      xpRemaining: xpForNext - totalXp,
     );
   }
 
-  double calculateProfileCompletion(PlayerProfile? player) {
-    if (player == null) return 0.0;
+  /// Calculates the new progression state after adding XP.
+  PlayerProgression addXp(PlayerProgression current, int amount) {
+    final newLifetimeXp = current.lifetimeXp + amount;
+    final newSeasonXp = current.seasonXp + amount;
 
-    int totalFields = 5;
-    int filledFields = 0;
+    // Calculate new level
+    int level = current.currentLevel;
+    int xpInCurrentLevel = current.currentXp + amount;
 
-    if (player.displayName.isNotEmpty && player.displayName != 'Scholar')
-      filledFields++;
-    if (player.photoUrl.isNotEmpty) filledFields++;
-    if (player.favoriteCategories.isNotEmpty) filledFields++;
-    if (player.email.isNotEmpty) filledFields++;
-    if (player.avatarFrame != 'default') filledFields++;
+    while (true) {
+      int xpToNext =
+          ProgressionConfig.xpRequiredForLevel(level + 1) -
+          ProgressionConfig.xpRequiredForLevel(level);
 
-    return (filledFields / totalFields).clamp(0.0, 1.0);
+      if (xpInCurrentLevel >= xpToNext) {
+        xpInCurrentLevel -= xpToNext;
+        level++;
+      } else {
+        break;
+      }
+    }
+
+    final xpRequiredForCurrent = ProgressionConfig.xpRequiredForLevel(level);
+    final xpRequiredForNext = ProgressionConfig.xpRequiredForLevel(level + 1);
+    final xpToNext = xpRequiredForNext - xpRequiredForCurrent;
+
+    return current.copyWith(
+      currentLevel: level,
+      currentXp: xpInCurrentLevel,
+      lifetimeXp: newLifetimeXp,
+      seasonXp: newSeasonXp,
+      xpRequiredForCurrentLevel: xpRequiredForCurrent,
+      xpRequiredForNextLevel: xpRequiredForNext,
+      xpProgress: (xpInCurrentLevel / xpToNext).clamp(0.0, 1.0),
+      lastUpdated: DateTime.now(),
+    );
   }
 
-  int calculateXpForLevel(int level) {
-    // 1 -> 2: 1000
-    // 2 -> 3: 2000
-    // 3 -> 4: 3000
-    return level * 1000;
+  /// Resolves the Rank Tier based on Rank Points.
+  RankTier resolveRankTier(int points) {
+    return ProgressionConfig.rankTiers.firstWhere(
+      (tier) => points >= tier.minPoints && points <= tier.maxPoints,
+      orElse: () => ProgressionConfig.rankTiers.first,
+    );
+  }
+
+  /// Calculates rank progress percentage.
+  double calculateRankProgress(int points, RankTier tier) {
+    if (tier.id == 'elite') return 1.0;
+    final range = tier.maxPoints - tier.minPoints;
+    if (range <= 0) return 0.0;
+    return ((points - tier.minPoints) / range).clamp(0.0, 1.0);
   }
 }

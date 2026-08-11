@@ -42,8 +42,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Widget _buildRichHeadline(BuildContext context) {
     final isShort = SoteriaResponsive.isShortScreen(context);
-    final style =
-        (isShort ? context.headlineLarge : context.displayMedium).copyWith(
+    final style = (isShort ? context.headlineLarge : context.displayMedium)
+        .copyWith(
           color: SoteriaColors.textPrimary,
           height: 1.1,
           fontWeight: FontWeight.w900,
@@ -85,7 +85,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 OnboardingPage(
                   title: 'Compete. Learn. Rise.',
                   titleWidget: _buildRichHeadline(context),
-                  description: "Africa's premium competitive learning platform.",
+                  description:
+                      "Africa's premium competitive learning platform.",
                   offset: _currentPage - 0,
                   backgroundGlowColor: SoteriaColors.primary,
                   illustration: Image.asset(

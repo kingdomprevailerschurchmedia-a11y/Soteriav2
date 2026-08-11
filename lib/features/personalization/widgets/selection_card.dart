@@ -67,7 +67,9 @@ class SelectionCard extends StatelessWidget {
                   child: Center(
                     child: Icon(
                       icon,
-                      color: isSelected ? SoteriaColors.gold : SoteriaColors.primary,
+                      color: isSelected
+                          ? SoteriaColors.gold
+                          : SoteriaColors.primary,
                       size: 28.w,
                     ),
                   ),
@@ -92,7 +94,9 @@ class SelectionCard extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: context.bodySmall.copyWith(
-                            color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
+                            color: SoteriaColors.textSecondary.withValues(
+                              alpha: 0.7,
+                            ),
                             fontSize: 13.sp,
                           ),
                         ),
@@ -115,7 +119,9 @@ class SelectionCard extends StatelessWidget {
                   ),
                   child: Icon(
                     isSelected ? Icons.check : Icons.chevron_right_rounded,
-                    color: isSelected ? Colors.black : Colors.white.withValues(alpha: 0.5),
+                    color: isSelected
+                        ? Colors.black
+                        : Colors.white.withValues(alpha: 0.5),
                     size: 20.w,
                   ),
                 ),

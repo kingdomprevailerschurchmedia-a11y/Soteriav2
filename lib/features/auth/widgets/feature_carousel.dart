@@ -91,7 +91,10 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                     ),
                   ),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 4.h,
+                    ),
                     child: Row(
                       children: [
                         // Illustration Placeholder / Large Icon
@@ -177,10 +180,9 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
               height: 8.w,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color:
-                    _currentPage == index
-                        ? SoteriaColors.primary
-                        : Colors.white.withValues(alpha: 0.15),
+                color: _currentPage == index
+                    ? SoteriaColors.primary
+                    : Colors.white.withValues(alpha: 0.15),
               ),
             ),
           ),

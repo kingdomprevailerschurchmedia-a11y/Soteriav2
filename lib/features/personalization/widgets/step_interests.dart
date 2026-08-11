@@ -98,7 +98,10 @@ class StepInterests extends ConsumerWidget {
                 onTap: () => notifier.toggleInterest(label),
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 16.w,
+                    vertical: 12.h,
+                  ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? const Color(0xFF5B3FD9)
@@ -112,10 +115,12 @@ class StepInterests extends ConsumerWidget {
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: const Color(0xFF5B3FD9).withValues(alpha: 0.4),
+                              color: const Color(
+                                0xFF5B3FD9,
+                              ).withValues(alpha: 0.4),
                               blurRadius: 10,
                               spreadRadius: 1,
-                            )
+                            ),
                           ]
                         : null,
                   ),
@@ -133,7 +138,9 @@ class StepInterests extends ConsumerWidget {
                         style: context.labelLarge.copyWith(
                           color: Colors.white,
                           fontSize: 15.sp,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                         ),
                       ),
                       if (isSelected) ...[
@@ -198,7 +205,9 @@ class StepInterests extends ConsumerWidget {
                           Text(
                             'We\'ll show you the best content based on your interests.',
                             style: context.bodySmall.copyWith(
-                              color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
+                              color: SoteriaColors.textSecondary.withValues(
+                                alpha: 0.7,
+                              ),
                               fontSize: 13.sp,
                             ),
                           ),
@@ -213,7 +222,11 @@ class StepInterests extends ConsumerWidget {
                         color: Colors.white.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12.r),
                       ),
-                      child: const Icon(Icons.description_outlined, color: Color(0xFF7C4DFF), size: 30),
+                      child: const Icon(
+                        Icons.description_outlined,
+                        color: Color(0xFF7C4DFF),
+                        size: 30,
+                      ),
                     ),
                   ],
                 ),

@@ -20,6 +20,7 @@ class SoteriaRoutes {
   static const String tournamentDetails = '/app/tournaments/details/:id';
   static const String tournamentGameplay = '/app/tournaments/play/:id';
   static const String leaderboard = '/app/leaderboard';
+  static const String competitiveHistory = '/app/profile/history';
   static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
   static const String settings = '/app/settings';

@@ -97,8 +97,11 @@ class _VerificationOrchestratorState
         canPop: false,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-          if (state.step == VerificationStep.sent || state.step == VerificationStep.otp) {
-            ref.read(verificationProvider(widget.type).notifier).setStep(VerificationStep.request);
+          if (state.step == VerificationStep.sent ||
+              state.step == VerificationStep.otp) {
+            ref
+                .read(verificationProvider(widget.type).notifier)
+                .setStep(VerificationStep.request);
           } else {
             Navigator.of(context).pop();
           }
@@ -122,8 +125,13 @@ class _VerificationOrchestratorState
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           onPressed: () {
-                            if (state.step == VerificationStep.sent || state.step == VerificationStep.otp) {
-                              ref.read(verificationProvider(widget.type).notifier).setStep(VerificationStep.request);
+                            if (state.step == VerificationStep.sent ||
+                                state.step == VerificationStep.otp) {
+                              ref
+                                  .read(
+                                    verificationProvider(widget.type).notifier,
+                                  )
+                                  .setStep(VerificationStep.request);
                             } else {
                               Navigator.of(context).pop();
                             }
@@ -133,7 +141,9 @@ class _VerificationOrchestratorState
                             color: Colors.white,
                           ),
                           style: IconButton.styleFrom(
-                            backgroundColor: Colors.white.withValues(alpha: 0.05),
+                            backgroundColor: Colors.white.withValues(
+                              alpha: 0.05,
+                            ),
                           ),
                         ),
                       ),

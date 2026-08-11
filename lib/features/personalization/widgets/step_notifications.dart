@@ -144,7 +144,9 @@ class StepNotifications extends ConsumerWidget {
                           Text(
                             pref['subtitle'] as String,
                             style: context.bodySmall.copyWith(
-                              color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
+                              color: SoteriaColors.textSecondary.withValues(
+                                alpha: 0.6,
+                              ),
                               fontSize: 12.sp,
                             ),
                           ),
@@ -154,8 +156,10 @@ class StepNotifications extends ConsumerWidget {
                     // Switch
                     Switch(
                       value: state.notificationPrefs[pref['key']] ?? true,
-                      onChanged: (val) =>
-                          notifier.updateNotificationPref(pref['key'] as String, val),
+                      onChanged: (val) => notifier.updateNotificationPref(
+                        pref['key'] as String,
+                        val,
+                      ),
                       activeThumbColor: Colors.white,
                       activeTrackColor: const Color(0xFF5B3FD9),
                       inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
@@ -182,7 +186,9 @@ class StepNotifications extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: SoteriaColors.gold.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
-                    border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.2)),
+                    border: Border.all(
+                      color: SoteriaColors.gold.withValues(alpha: 0.2),
+                    ),
                   ),
                   child: const Icon(
                     Icons.shield_outlined,
@@ -206,7 +212,9 @@ class StepNotifications extends ConsumerWidget {
                       Text(
                         'You can change these preferences anytime in settings.',
                         style: context.bodySmall.copyWith(
-                          color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
+                          color: SoteriaColors.textSecondary.withValues(
+                            alpha: 0.7,
+                          ),
                           fontSize: 13.sp,
                         ),
                       ),

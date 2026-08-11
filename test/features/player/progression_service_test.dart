@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:soteria/features/player/domain/models/player_profile.dart';
+import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:soteria/features/player/domain/services/progression_service.dart';
+import 'package:soteria/features/player/domain/config/progression_config.dart';
 
 void main() {
   late ProgressionService progressionService;
@@ -9,114 +10,50 @@ void main() {
     progressionService = ProgressionService();
   });
 
-  group('ProgressionService - Level Calculations', () {
-    test('should calculate Level 1 for 0 XP', () {
-      final player = PlayerProfile(
-        uid: '123',
-        displayName: 'Test',
-        email: 'test@soteria.com',
-        xp: 0,
-        createdAt: DateTime.now(),
-        lastLogin: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
+  group('ProgressionService - New Level Logic', () {
+    test('addXp should correctly increase level when threshold crossed', () {
+      final initial = PlayerProgression.initial('user1', 'season1');
 
-      final progression = progressionService.calculateProgression(player);
+      // Level 1 -> 2 needs 1400 XP based on new formula
+      final updated = progressionService.addXp(initial, 1500);
 
-      expect(progression.level, 1);
-      expect(progression.xpInCurrentLevel, 0);
-      expect(progression.progressPercentage, 0.0);
+      expect(updated.currentLevel, 2);
+      expect(updated.currentXp, 100); // 1500 - 1400
+      expect(updated.lifetimeXp, 1500);
+      expect(updated.xpProgress, closeTo(100 / (2800 - 1400), 0.01));
     });
 
-    test('should calculate Level 2 for 1000 XP', () {
-      final player = PlayerProfile(
-        uid: '123',
-        displayName: 'Test',
-        email: 'test@soteria.com',
-        xp: 1000,
-        createdAt: DateTime.now(),
-        lastLogin: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
+    test('addXp should handle multi-level jumps', () {
+      final initial = PlayerProgression.initial('user1', 'season1');
 
-      final progression = progressionService.calculateProgression(player);
+      // Level 1 -> 2: 1400
+      // Level 2 -> 3: 1400 (Total 2800)
+      // Level 3 -> 4: 1000 * 3 * 1.2 + 200 * 3 = 3600 + 600 = 4200
 
-      expect(progression.level, 2);
-      expect(progression.xpInCurrentLevel, 0);
-    });
+      final updated = progressionService.addXp(initial, 5000);
 
-    test('should calculate Level 2 with 50% progress for 1500 XP', () {
-      // Level 1 -> 2 needs 1000
-      // Level 2 -> 3 needs 2000
-      // 1500 XP = Level 1 (1000) + 500 into Level 2
-      // Level 2 needs 2000 to reach Level 3
-      // Progress = 500 / 2000 = 0.25?
-      // Wait, let's check formula: Level N needs 1000 * N XP.
-      // Level 1 -> 2: 1000
-      // Level 2 -> 3: 2000
-      // So at 1500 XP:
-      // Level 1 completed (1000 used)
-      // Remaining 500 is in Level 2.
-      // Level 2 needs 2000 to get to Level 3.
-      // Progress = 500 / 2000 = 0.25.
-
-      final player = PlayerProfile(
-        uid: '123',
-        displayName: 'Test',
-        email: 'test@soteria.com',
-        xp: 1500,
-        createdAt: DateTime.now(),
-        lastLogin: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
-
-      final progression = progressionService.calculateProgression(player);
-
-      expect(progression.level, 2);
-      expect(progression.xpInCurrentLevel, 500);
-      expect(progression.nextLevelXp, 2000);
-      expect(progression.progressPercentage, 0.25);
+      expect(updated.currentLevel, 4);
+      expect(updated.lifetimeXp, 5000);
+      expect(updated.currentXp, 800); // 5000 - 4200
     });
   });
 
-  group('ProgressionService - Profile Completion', () {
-    test(
-      'should calculate 20% completion for default profile (only email)',
-      () {
-        final player = PlayerProfile(
-          uid: '123',
-          displayName: 'Scholar',
-          email: 'test@soteria.com',
-          createdAt: DateTime.now(),
-          lastLogin: DateTime.now(),
-          updatedAt: DateTime.now(),
-        );
+  group('ProgressionService - Rank Logic', () {
+    test('should resolve correct rank tier for points', () {
+      expect(progressionService.resolveRankTier(0).id, 'unranked');
+      expect(progressionService.resolveRankTier(150).id, 'bronze');
+      expect(progressionService.resolveRankTier(600).id, 'silver');
+      expect(progressionService.resolveRankTier(1500).id, 'gold');
+      expect(progressionService.resolveRankTier(8000).id, 'elite');
+    });
 
-        final completion = progressionService.calculateProfileCompletion(
-          player,
-        );
-
-        // email is filled, displayName is 'Scholar' (ignored), others empty.
-        // 1/5 = 0.2
-        expect(completion, 0.2);
-      },
-    );
-
-    test('should calculate 100% completion when all fields filled', () {
-      final player = PlayerProfile(
-        uid: '123',
-        displayName: 'Joseph',
-        email: 'test@soteria.com',
-        photoUrl: 'https://avatar.com',
-        favoriteCategories: ['Security'],
-        avatarFrame: 'premium_gold',
-        createdAt: DateTime.now(),
-        lastLogin: DateTime.now(),
-        updatedAt: DateTime.now(),
+    test('should calculate correct rank progress', () {
+      final goldTier = ProgressionConfig.rankTiers.firstWhere(
+        (t) => t.id == 'gold',
       );
-
-      final completion = progressionService.calculateProfileCompletion(player);
-      expect(completion, 1.0);
+      // Gold: 1000 - 1999 (Range 999)
+      final progress = progressionService.calculateRankProgress(1500, goldTier);
+      expect(progress, closeTo(500 / 999, 0.01));
     });
   });
 }

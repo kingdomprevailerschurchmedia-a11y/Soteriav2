@@ -102,7 +102,8 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           canPop: false,
           onPopInvokedWithResult: (didPop, result) {
             if (didPop) return;
-            if (state.step.index > 0 && state.step != RegistrationStep.success) {
+            if (state.step.index > 0 &&
+                state.step != RegistrationStep.success) {
               _onBack(state);
             } else {
               Navigator.of(context).pop();
@@ -133,7 +134,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                             stops: const [0.0, 0.5, 1.0],
                           ),
                           border: Border.all(
-                            color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                            color: const Color(
+                              0xFF7C4DFF,
+                            ).withValues(alpha: 0.4),
                             width: 1.5,
                           ),
                         ),
@@ -207,9 +210,9 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                   borderRadius: BorderRadius.circular(3.r),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFFD4AF37).withValues(
-                                        alpha: 0.5,
-                                      ),
+                                      color: const Color(
+                                        0xFFD4AF37,
+                                      ).withValues(alpha: 0.5),
                                       blurRadius: 12,
                                       spreadRadius: 2,
                                     ),

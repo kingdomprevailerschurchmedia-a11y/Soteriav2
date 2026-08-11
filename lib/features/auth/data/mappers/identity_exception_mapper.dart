@@ -53,7 +53,10 @@ class IdentityExceptionMapper {
           'Sign in cancelled.',
         );
       }
-      return IdentityException(IdentityExceptionType.unknown, error.description);
+      return IdentityException(
+        IdentityExceptionType.unknown,
+        error.description,
+      );
     }
 
     return IdentityException(IdentityExceptionType.unknown, error.toString());

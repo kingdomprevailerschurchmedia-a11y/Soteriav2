@@ -81,16 +81,14 @@ class OnboardingPage extends StatelessWidget {
                               duration: const Duration(milliseconds: 400),
                               child: ConstrainedBox(
                                 constraints: BoxConstraints(
-                                  maxHeight:
-                                      isLandscape
-                                          ? maxHeight * 0.3
-                                          : maxHeight * 0.45,
-                                  maxWidth:
-                                      isLandscape
-                                          ? contentWidth * 0.4
-                                          : contentWidth * 0.85,
+                                  maxHeight: isLandscape
+                                      ? maxHeight * 0.3
+                                      : maxHeight * 0.45,
+                                  maxWidth: isLandscape
+                                      ? contentWidth * 0.4
+                                      : contentWidth * 0.85,
                                 ),
-                              child: AspectRatio(
+                                child: AspectRatio(
                                   aspectRatio: 1,
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(24.r),
@@ -123,14 +121,15 @@ class OnboardingPage extends StatelessWidget {
                             else
                               Text(
                                 title,
-                                style: (isShort
-                                        ? context.headlineLarge
-                                        : context.displayMedium)
-                                    .copyWith(
-                                  color: SoteriaColors.textPrimary,
-                                  height: 1.1,
-                                  fontWeight: FontWeight.w900,
-                                ),
+                                style:
+                                    (isShort
+                                            ? context.headlineLarge
+                                            : context.displayMedium)
+                                        .copyWith(
+                                          color: SoteriaColors.textPrimary,
+                                          height: 1.1,
+                                          fontWeight: FontWeight.w900,
+                                        ),
                                 textAlign: TextAlign.center,
                               ),
                             SizedBox(
@@ -140,13 +139,14 @@ class OnboardingPage extends StatelessWidget {
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
                               child: Text(
                                 description,
-                                style: (isShort || isLandscape
-                                        ? context.bodyMedium
-                                        : context.bodyLarge)
-                                    .copyWith(
-                                  color: SoteriaColors.textSecondary,
-                                  height: 1.6,
-                                ),
+                                style:
+                                    (isShort || isLandscape
+                                            ? context.bodyMedium
+                                            : context.bodyLarge)
+                                        .copyWith(
+                                          color: SoteriaColors.textSecondary,
+                                          height: 1.6,
+                                        ),
                                 textAlign: TextAlign.center,
                                 maxLines: isLandscape ? 2 : 3,
                                 overflow: TextOverflow.ellipsis,

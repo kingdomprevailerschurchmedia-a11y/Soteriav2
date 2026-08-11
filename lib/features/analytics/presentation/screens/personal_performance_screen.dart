@@ -107,7 +107,9 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       centerTitle: false,
       title: Text(
         'Your Performance',
-        style: SoteriaTypography.headlineMedium.copyWith(color: SoteriaColors.textPrimary),
+        style: SoteriaTypography.headlineMedium.copyWith(
+          color: SoteriaColors.textPrimary,
+        ),
       ),
       actions: [
         IconButton(
@@ -130,15 +132,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       sliver: SliverList(
         delegate: SliverChildListDelegate([
           _buildOverviewSection(context, analytics),
-          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          ),
           _buildTrendSection(context, analytics),
-          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          ),
           _buildInsightsSection(context, analytics),
-          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          ),
           _buildCategorySection(context, analytics),
-          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          ),
           _buildDifficultySection(context, analytics),
-          SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic)),
+          SizedBox(
+            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+          ),
           _buildConsistencySection(context, analytics),
         ]),
       ),
@@ -266,7 +278,9 @@ class PersonalPerformanceScreen extends ConsumerWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
+        SizedBox(
+          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        ),
         ...analytics.insights.map(
           (insight) => Padding(
             padding: EdgeInsets.only(bottom: 12.h),
@@ -293,7 +307,9 @@ class PersonalPerformanceScreen extends ConsumerWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
+        SizedBox(
+          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        ),
         Container(
           padding: EdgeInsets.all(16.w),
           decoration: BoxDecoration(
@@ -328,7 +344,9 @@ class PersonalPerformanceScreen extends ConsumerWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
+        SizedBox(
+          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        ),
         Row(
           children: analytics.difficultyPerformance
               .where((d) => d.totalQuizzes > 0)
@@ -365,7 +383,9 @@ class PersonalPerformanceScreen extends ConsumerWidget {
             fontWeight: FontWeight.w900,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic)),
+        SizedBox(
+          height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+        ),
         RecommendationCard(
           title:
               'Your Performance is ${analytics.consistency.consistencyLevel}',

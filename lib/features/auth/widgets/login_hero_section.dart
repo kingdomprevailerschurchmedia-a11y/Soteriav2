@@ -41,7 +41,7 @@ class LoginHeroSection extends StatelessWidget {
               ),
             ),
 
-            // Profile Icon Container
+            // App Logo Container
             Container(
               margin: EdgeInsets.only(top: 20.h),
               width: 140.w,
@@ -61,10 +61,11 @@ class LoginHeroSection extends StatelessWidget {
                 ],
               ),
               child: Center(
-                child: Icon(
-                  Icons.person_outline_rounded,
-                  color: const Color(0xFFD4AF37), // Gold profile icon
-                  size: 64.sp,
+                child: Image.asset(
+                  'assets/images/logo_icon.png',
+                  width: 80.w,
+                  height: 80.w,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),

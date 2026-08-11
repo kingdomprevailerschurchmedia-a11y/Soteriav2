@@ -28,9 +28,6 @@ class HomeShell extends ConsumerWidget {
   }
 
   void _onTabTapped(BuildContext context, int index) {
-    navigationShell.goBranch(
-      index,
-      initialLocation: true,
-    );
+    navigationShell.goBranch(index, initialLocation: true);
   }
 }

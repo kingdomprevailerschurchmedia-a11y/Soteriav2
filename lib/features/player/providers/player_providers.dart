@@ -11,6 +11,7 @@ import '../domain/use_cases/create_player_profile_use_case.dart';
 import '../domain/use_cases/update_player_profile_use_case.dart';
 import '../domain/use_cases/observe_player_profile_use_case.dart';
 import '../domain/models/progression.dart';
+import '../domain/models/player_statistics.dart';
 import '../services/player_bootstrap_service.dart';
 
 // --- Repositories ---

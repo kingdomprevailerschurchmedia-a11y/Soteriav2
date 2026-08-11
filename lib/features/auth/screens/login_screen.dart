@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_divider.dart';
+import 'package:soteria/core/widgets/feedback/feedback_components.dart';
 import '../providers/login_notifier.dart';
 import '../widgets/login_hero_section.dart';
 import '../widgets/login_form.dart';
@@ -15,6 +16,16 @@ class LoginScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen(loginProvider.select((s) => s.error), (previous, next) {
+      if (next != null) {
+        SoteriaFeedback.showSnackbar(
+          context,
+          message: next,
+          type: FeedbackType.error,
+        );
+      }
+    });
+
     final state = ref.watch(loginProvider);
 
     return Container(

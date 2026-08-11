@@ -120,8 +120,7 @@ class _SoteriaButtonState extends State<SoteriaButton>
       enabled: isEnabled,
       label: widget.label,
       child: GestureDetector(
-        onTapDown: (_) =>
-            isEnabled ? _controller.forward() : null,
+        onTapDown: (_) => isEnabled ? _controller.forward() : null,
         onTapUp: (_) => _controller.reverse(),
         onTapCancel: () => _controller.reverse(),
         onTap: () {
@@ -142,7 +141,9 @@ class _SoteriaButtonState extends State<SoteriaButton>
               padding: _getPadding(),
               decoration: _getDecoration(),
               child: Center(
-                child: widget.isLoading ? _buildLoader() : _buildContent(context),
+                child: widget.isLoading
+                    ? _buildLoader()
+                    : _buildContent(context),
               ),
             ),
           ),

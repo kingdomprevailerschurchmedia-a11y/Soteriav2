@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class FirebaseAuthRepository implements AuthRepository {
   FirebaseAuthRepository({required AuthDataSource dataSource})
-      : _dataSource = dataSource;
+    : _dataSource = dataSource;
 
   final AuthDataSource _dataSource;
 

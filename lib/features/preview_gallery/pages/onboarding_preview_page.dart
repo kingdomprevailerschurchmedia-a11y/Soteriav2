@@ -22,10 +22,7 @@ class OnboardingPreviewPage extends StatelessWidget {
         ),
         SizedBox(height: SoteriaSpacing.xl),
 
-        Text(
-          'Components',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text('Components', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
         const SoteriaCard(
           child: Column(
@@ -52,10 +49,7 @@ class OnboardingPreviewPage extends StatelessWidget {
                     variant: OnboardingButtonVariant.skip,
                     onPressed: () {},
                   ),
-                  SoteriaOnboardingButton(
-                    label: 'Next',
-                    onPressed: () {},
-                  ),
+                  SoteriaOnboardingButton(label: 'Next', onPressed: () {}),
                 ],
               ),
             ],

@@ -61,7 +61,8 @@ class LogoutNotifier extends StateNotifier<LogoutState> {
       );
       state = state.copyWith(
         status: LogoutStatus.failure,
-        errorMessage: 'An unexpected error occurred during logout. Please try again.',
+        errorMessage:
+            'An unexpected error occurred during logout. Please try again.',
       );
     }
   }

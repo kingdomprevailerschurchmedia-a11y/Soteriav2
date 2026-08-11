@@ -101,7 +101,10 @@ void main() {
       await tester.pump();
 
       // Verify label is present
-      expect(find.bySemanticsLabel(RegExp('Next', caseSensitive: false)), findsOneWidget);
+      expect(
+        find.bySemanticsLabel(RegExp('Next', caseSensitive: false)),
+        findsOneWidget,
+      );
     });
   });
 }

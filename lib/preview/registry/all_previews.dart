@@ -17,6 +17,10 @@ import '../../../features/quiz/preview/recovery_previews.dart';
 import '../../../features/quiz/preview/results_previews.dart';
 import '../../../features/quiz/preview/certification_previews.dart';
 import '../../../features/analytics/preview/analytics_previews.dart';
+import '../../../features/player/preview/progression_previews.dart';
+import '../../../features/player/preview/leaderboard_previews.dart';
+import '../../../features/player/preview/season_previews.dart';
+import '../../../features/player/preview/competitive_history_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -116,6 +120,187 @@ void registerAllPreviews() {
       description: 'User settings and account',
       category: PreviewCategory.profile,
       builder: (context) => const PlayerProfileScreen(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'progression-card-gold',
+      title: 'Progression Card - Gold',
+      description: 'Premium progression surface',
+      category: PreviewCategory.profile,
+      builder: (context) => ProgressionPreviews.cardGold(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'level-up-celebration',
+      title: 'Level Up Celebration',
+      description: 'Fullscreen achievement overlay',
+      category: PreviewCategory.profile,
+      builder: (context) => ProgressionPreviews.levelUp(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rank-promotion',
+      title: 'Rank Promotion',
+      description: 'Tier ascension celebration',
+      category: PreviewCategory.profile,
+      builder: (context) => ProgressionPreviews.promotion(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rank-demotion',
+      title: 'Rank Demotion',
+      description: 'Tier regression notice',
+      category: PreviewCategory.profile,
+      builder: (context) => ProgressionPreviews.demotion(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rank-badges',
+      title: 'Rank Badges',
+      description: 'Competitive tier identity',
+      category: PreviewCategory.profile,
+      builder: (context) => ProgressionPreviews.rankBadges(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'leaderboard-top',
+      title: 'Leaderboard - Top 20',
+      description: 'Global rankings with podium',
+      category: PreviewCategory.profile,
+      builder: (context) => LeaderboardPreviews.topList(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'leaderboard-mid',
+      title: 'Leaderboard - Mid Rank',
+      description: 'Surrounding rank position',
+      category: PreviewCategory.profile,
+      builder: (context) => LeaderboardPreviews.midRank(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'leaderboard-empty',
+      title: 'Leaderboard - Empty',
+      description: 'No competitive data state',
+      category: PreviewCategory.profile,
+      builder: (context) => LeaderboardPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-active',
+      title: 'Season - Active',
+      description: 'Standard season status',
+      category: PreviewCategory.profile,
+      builder: (context) => SeasonPreviews.active(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-ending',
+      title: 'Season - Ending Soon',
+      description: 'High urgency countdown',
+      category: PreviewCategory.profile,
+      builder: (context) => SeasonPreviews.endingSoon(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-upcoming',
+      title: 'Season - Upcoming',
+      description: 'Future season countdown',
+      category: PreviewCategory.profile,
+      builder: (context) => SeasonPreviews.upcoming(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-completed',
+      title: 'Season - Completed',
+      description: 'Post-season status',
+      category: PreviewCategory.profile,
+      builder: (context) => SeasonPreviews.completed(),
+    ),
+  );
+
+  // --- Competitive History ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-history',
+      title: 'Competitive History',
+      description: 'Career achievement archive',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveHistoryPreviews.fullHistory(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'history-empty',
+      title: 'History - Empty',
+      description: 'New player journey start',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveHistoryPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'history-loading',
+      title: 'History - Loading',
+      description: 'Skeleton loading state',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveHistoryPreviews.loading(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'history-error',
+      title: 'History - Error',
+      description: 'Failure state recovery',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveHistoryPreviews.error(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'history-unranked',
+      title: 'History - Unranked',
+      description: 'Participation without rank',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveHistoryPreviews.unranked(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'history-reduced-motion',
+      title: 'History - Reduced Motion',
+      description: 'Accessibility mode verification',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveHistoryPreviews.reducedMotion(),
     ),
   );
 
