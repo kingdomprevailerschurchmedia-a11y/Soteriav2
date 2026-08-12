@@ -183,9 +183,12 @@ class _NotificationTile extends ConsumerWidget {
       case NotificationType.tournamentResults:
         return SoteriaColors.primary;
       case NotificationType.achievementEarned:
+      case NotificationType.milestoneReached:
       case NotificationType.levelUp:
       case NotificationType.streakReminder:
         return SoteriaColors.gold;
+      case NotificationType.rewardReceived:
+        return SoteriaColors.xpColor;
       case NotificationType.practiceReminder:
       case NotificationType.dailyReminder:
         return SoteriaColors.secondary;
@@ -194,7 +197,11 @@ class _NotificationTile extends ConsumerWidget {
         return Colors.blue;
       case NotificationType.announcement:
       case NotificationType.promotion:
+      case NotificationType.seasonResult:
+      case NotificationType.seasonCompleted:
         return SoteriaColors.success;
+      case NotificationType.rankDemoted:
+        return SoteriaColors.error;
       default:
         return SoteriaColors.muted;
     }
@@ -207,10 +214,14 @@ class _NotificationTile extends ConsumerWidget {
       case NotificationType.tournamentResults:
         return Icons.emoji_events_rounded;
       case NotificationType.achievementEarned:
-      case NotificationType.levelUp:
+      case NotificationType.milestoneReached:
         return Icons.auto_awesome_rounded;
+      case NotificationType.levelUp:
+        return Icons.keyboard_double_arrow_up_rounded;
       case NotificationType.streakReminder:
         return Icons.local_fire_department_rounded;
+      case NotificationType.rewardReceived:
+        return Icons.card_giftcard_rounded;
       case NotificationType.practiceReminder:
       case NotificationType.dailyReminder:
         return Icons.timer_rounded;
@@ -221,6 +232,12 @@ class _NotificationTile extends ConsumerWidget {
         return Icons.campaign_rounded;
       case NotificationType.promotion:
         return Icons.star_rounded;
+      case NotificationType.rankDemoted:
+        return Icons.trending_down_rounded;
+      case NotificationType.seasonCompleted:
+        return Icons.event_available_rounded;
+      case NotificationType.seasonResult:
+        return Icons.assessment_rounded;
       default:
         return Icons.notifications_rounded;
     }

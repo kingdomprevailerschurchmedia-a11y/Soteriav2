@@ -32,18 +32,20 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
         playerLeaderboardEntryProvider.overrideWith(
           (ref) => Future.value(playerEntry),
         ),
-        currentSeasonProvider.overrideWith((ref) => Stream.value(
-          CompetitiveSeason(
-            seasonId: 's1',
-            name: 'Cyber Sentinel',
-            status: SeasonStatus.active,
-            startAt: now.subtract(const Duration(days: 10)),
-            endAt: now.add(const Duration(days: 20)),
-            createdAt: now,
-            updatedAt: now,
-            seasonNumber: 1,
+        currentSeasonProvider.overrideWith(
+          (ref) => Stream.value(
+            CompetitiveSeason(
+              seasonId: 's1',
+              name: 'Cyber Sentinel',
+              status: SeasonStatus.active,
+              startAt: now.subtract(const Duration(days: 10)),
+              endAt: now.add(const Duration(days: 20)),
+              createdAt: now,
+              updatedAt: now,
+              seasonNumber: 1,
+            ),
           ),
-        )),
+        ),
         timeServiceProvider.overrideWithValue(_MockTimeService(now)),
       ],
       child: const LeaderboardScreen(),

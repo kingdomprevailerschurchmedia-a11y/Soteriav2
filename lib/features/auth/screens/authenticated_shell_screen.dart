@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
 import '../../player/providers/player_providers.dart';
 import '../services/auth_coordinator.dart';
+import '../../notifications/widgets/competitive_notification_overlay.dart';
 
 class AuthenticatedShellScreen extends ConsumerWidget {
   const AuthenticatedShellScreen({super.key});
@@ -15,16 +16,21 @@ class AuthenticatedShellScreen extends ConsumerWidget {
     final playerAsync = ref.watch(currentPlayerStreamProvider);
 
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: SoteriaColors.backgroundGradient,
-        ),
-        child: playerAsync.when(
-          data: (player) => _buildContent(context, ref, player),
-          loading: () => const Center(child: SoteriaLoader()),
-          error: (error, _) =>
-              Center(child: Text('Error loading profile: $error')),
-        ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: SoteriaColors.backgroundGradient,
+            ),
+            child: playerAsync.when(
+              data: (player) => _buildContent(context, ref, player),
+              loading: () => const Center(child: SoteriaLoader()),
+              error: (error, _) =>
+                  Center(child: Text('Error loading profile: $error')),
+            ),
+          ),
+          const CompetitiveNotificationOverlay(),
+        ],
       ),
     );
   }

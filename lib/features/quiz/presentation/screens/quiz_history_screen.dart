@@ -122,7 +122,7 @@ class QuizHistoryScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 100.h)),
+            SliverToBoxAdapter(child: SizedBox(height: 10.h)),
           ],
         ),
       ),

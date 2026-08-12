@@ -24,7 +24,7 @@ class AppBootstrap {
         _initFeatureFlags(),
       ]);
 
-      await _initGoogleSignIn();
+      // await _initGoogleSignIn();
 
       LoggerService.i('Bootstrap: All systems healthy.');
     } catch (e, stack) {
@@ -44,10 +44,14 @@ class AppBootstrap {
     LoggerService.d('Bootstrap: Firebase initialized.');
   }
 
-  Future<void> _initGoogleSignIn() async {
-    await GoogleSignIn.instance.initialize();
-    LoggerService.d('Bootstrap: Google Sign-In ready.');
-  }
+  // Future<void> _initGoogleSignIn() async {
+  //   LoggerService.i('Bootstrap: Initializing Google Sign-In');
+  //   await GoogleSignIn.instance.initialize(
+  //     serverClientId:
+  //         '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
+  //   );
+  //   LoggerService.d('Bootstrap: Google Sign-In ready.');
+  // }
 
   Future<void> _initLocalStorage() async {
     await SharedPreferences.getInstance();

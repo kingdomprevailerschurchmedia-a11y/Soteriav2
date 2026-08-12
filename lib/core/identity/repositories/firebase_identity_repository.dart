@@ -71,6 +71,7 @@ class FirebaseIdentityRepository implements IdentityRepository {
       username: data['username'],
       email: data['email'],
       avatarUrl: data['avatarUrl'],
+      selectedAvatarId: data['selectedAvatarId'] ?? 'socrates',
       academicLevel: data['academicLevel'],
       institution: data['institution'],
       faculty: data['faculty'],
@@ -103,6 +104,14 @@ class FirebaseIdentityRepository implements IdentityRepository {
   @override
   Future<void> clearSession() async {
     await _auth.signOut();
+  }
+
+  @override
+  Future<void> updateUserProfile(String uid, UserProfile profile) async {
+    await _database
+        .collection('user_profiles')
+        .doc(uid)
+        .set(profile.toMap(), SetOptions(merge: true));
   }
 
   AccountStatus _mapStatus(String? status) {

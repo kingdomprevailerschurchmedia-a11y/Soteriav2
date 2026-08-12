@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
+import '../../../../core/avatar/data/avatar_catalog.dart';
+import '../../../../core/avatar/providers/avatar_providers.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
@@ -37,7 +41,6 @@ class LeaderboardPreview extends StatelessWidget {
             ],
           ),
           GlassSurface(
-            opacity: 0.05,
             borderRadius: BorderRadius.circular(24),
             child: Column(
               children: [
@@ -46,9 +49,20 @@ class LeaderboardPreview extends StatelessWidget {
                   name: 'Hypatia',
                   xp: 24500,
                   isGold: true,
+                  avatarId: 'athena',
                 ),
-                _LeaderboardRow(rank: 2, name: 'Archimedes', xp: 22100),
-                _LeaderboardRow(rank: 3, name: 'Euler', xp: 19800),
+                _LeaderboardRow(
+                  rank: 2,
+                  name: 'Archimedes',
+                  xp: 22100,
+                  avatarId: 'isaac',
+                ),
+                _LeaderboardRow(
+                  rank: 3,
+                  name: 'Euler',
+                  xp: 19800,
+                  avatarId: 'elias',
+                ),
                 const Divider(color: Colors.white10, height: 1),
                 _LeaderboardRow(rank: 42, name: 'You', xp: 12500, isMe: true),
               ],
@@ -60,13 +74,14 @@ class LeaderboardPreview extends StatelessWidget {
   }
 }
 
-class _LeaderboardRow extends StatelessWidget {
+class _LeaderboardRow extends ConsumerWidget {
   const _LeaderboardRow({
     required this.rank,
     required this.name,
     required this.xp,
     this.isGold = false,
     this.isMe = false,
+    this.avatarId,
   });
 
   final int rank;
@@ -74,9 +89,14 @@ class _LeaderboardRow extends StatelessWidget {
   final int xp;
   final bool isGold;
   final bool isMe;
+  final String? avatarId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final avatar = avatarId != null
+        ? ref.watch(avatarCatalogProvider).getById(avatarId!)
+        : null;
+
     return Container(
       padding: EdgeInsets.all(SoteriaSpacing.md),
       color: isMe ? SoteriaColors.primary.withValues(alpha: 0.05) : null,
@@ -93,7 +113,7 @@ class _LeaderboardRow extends StatelessWidget {
             ),
           ),
           SizedBox(width: SoteriaSpacing.sm),
-          const CircleAvatar(radius: 12, backgroundColor: Colors.white12),
+          SoteriaAvatar(avatar: avatar, size: 24, rank: rank, hasBorder: false),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(
             child: Text(

@@ -1,56 +1,91 @@
-# Soteria Navigation Foundation & Route Architecture Implementation Plan (Story 1.6)
+# Soteria Avatar Platform Implementation Plan
 
-This plan establishes a scalable, typed, and modular navigation architecture for Soteria using `GoRouter`. It focuses on separation of concerns, global navigation control via a service, and premium motion transitions.
+Implement a production-ready, scalable Avatar Platform for Soteria, integrating scholar avatars throughout the application.
+
+## User Review Required
+
+> [!IMPORTANT]
+> - **Schema Change**: `UserProfile` and `PlayerProfile` will now store `selectedAvatarId` instead of just `avatarUrl`.
+> - **Consolidation**: Existing `SoteriaAvatar` widgets will be unified into a single, modular implementation in `lib/core/avatar/`.
+> - **Asset Registration**: `pubspec.yaml` will be updated to include `assets/avatars/`.
 
 ## Proposed Changes
 
-### 1. Route Definitions & Constants
-Create a structured system for route names and paths to avoid hardcoded strings.
-- **[NEW] `lib/core/navigation/soteria_routes.dart`**: Define route constants using a `sealed class` or nested static classes organized by module (Foundation, Auth, Main App, etc.).
-- **[NEW] `lib/core/navigation/route_params.dart`**: Models for complex route parameters.
+### Core Avatar Module
 
-### 2. Navigation Service
-Implement a global service to decouple widgets from the `GoRouter` context where necessary.
-- **[NEW] `lib/core/navigation/navigation_service.dart`**: A Riverpod-based service wrapping `GoRouter` actions (`push`, `go`, `replace`, `pop`, `showDialog`, `showBottomSheet`).
+#### [NEW] [avatar.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/avatar/domain/avatar.dart)
+Define the strongly typed `Avatar` model, `AvatarCategory`, and `AvatarRarity`.
 
-### 3. Modular Route Architecture
-Reorganize `lib/core/navigation/app_router.dart` to support modular route definitions.
-- **[MODIFY] `AppRouter`**:
-    - Implement `ShellRoute` for the main app navigation (future).
-    - Configure `redirect` for global guards (Auth, Guest, Onboarding).
-    - Set up `errorBuilder` for unknown route handling with a premium error UI.
-    - Enable `debugLogDiagnostics` for development.
+#### [NEW] [avatar_catalog.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/avatar/data/avatar_catalog.dart)
+Central source of truth mapping `avatarId` to metadata and asset paths.
 
-### 4. Route Guards (Abstractions)
-- **[NEW] `lib/core/navigation/guards/`**:
-    - `BaseGuard`: Interface for all route guards.
-    - Implement abstract guards: `AuthGuard`, `GuestGuard`, `PremiumGuard`, `OnboardingGuard`.
-    - These will initially return `null` (no redirect) but provide the hook for future business logic.
+#### [NEW] [avatar_providers.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/avatar/providers/avatar_providers.dart)
+Riverpod providers for accessing the catalog and the user's selected avatar.
 
-### 5. Premium Transitions
-- **[NEW] `lib/core/navigation/transitions/soteria_page_transitions.dart`**:
-    - Factory for `CustomTransitionPage`.
-    - Support for: `Fade`, `Scale`, `Slide`, `Blur`, and `SharedAxis`.
-    - Global duration tokens (250-350ms).
+---
 
-### 6. Error & Deep Linking
-- **[NEW] `lib/features/error_routing/unknown_route_screen.dart`**: A premium "404" style screen.
-- **Preparation for Deep Linking**: Configure `GoRouter` with `configuration` and `initialLocation` handling ready for App Links/Universal Links.
+### Presentation Layer
 
-### 7. Developer Preview Gallery Expansion
-- **[NEW] `lib/features/preview_gallery/pages/navigation_foundation_page.dart`**:
-    - Route List visualization.
-    - Transition testing area (Buttons to trigger different transitions).
-    - Guard state simulation.
+#### [NEW] [soteria_avatar.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/avatar/presentation/widgets/soteria_avatar.dart)
+Unified reusable avatar widget supporting frames, ranks, status indicators, and glow effects.
+
+#### [NEW] [avatar_frame.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/avatar/presentation/widgets/avatar_frame.dart)
+Reusable frame treatments (Default, Purple, Gold, Silver, Bronze, Premium).
+
+#### [NEW] [avatar_selection_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/avatar/presentation/screens/avatar_selection_screen.dart)
+Premium selection UI for browsing and equipping avatars.
+
+---
+
+### Identity & Persistence Integration
+
+#### [MODIFY] [user_profile.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/identity/models/user_profile.dart)
+Add `selectedAvatarId` to the `UserProfile` model.
+
+#### [MODIFY] [player_profile.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/models/player_profile.dart)
+Ensure consistency with `selectedAvatarId`.
+
+#### [MODIFY] [firebase_identity_repository.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/identity/repositories/firebase_identity_repository.dart)
+Persist `selectedAvatarId` to Firestore.
+
+---
+
+### Feature Integration
+
+#### [MODIFY] [top_scholars_section.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/dashboard/presentation/widgets/top_scholars_section.dart)
+Replace hard-coded scholar representations with `SoteriaAvatar` resolved by `avatarId`.
+
+#### [MODIFY] [leaderboard_row.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/leaderboard_row.dart)
+Integrate `SoteriaAvatar` with rank-aware frames.
+
+#### [MODIFY] [tournament_lobby_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/tournaments/presentation/screens/tournament_lobby_screen.dart)
+Update player identities to use the new avatar system.
+
+---
+
+### Developer Experience
+
+#### [NEW] [avatar_gallery_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/preview/ide/screens/avatar_gallery_screen.dart)
+Auto-discovering gallery for the Developer Preview System.
+
+---
+
+### Configuration
+
+#### [MODIFY] [pubspec.yaml](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/pubspec.yaml)
+Register `assets/avatars/` directory.
 
 ## Verification Plan
 
 ### Automated Tests
-- **Navigation Tests**: Verify pushing/popping routes via `NavigationService`.
-- **Route Guard Tests**: Verify redirects trigger when state changes (using mocked providers).
-- **Unknown Route Test**: Attempt to navigate to a random path and verify the Error Screen is shown.
+- Unit tests for `AvatarCatalog` and `Avatar` model.
+- Widget tests for `SoteriaAvatar` permutations.
+- Golden tests for frame treatments.
+- Integration test for selection persistence.
 
 ### Manual Verification
-- Verify browser URL updates (if testing in web-enabled mode).
-- Check transition smoothness on device.
-- Verify state restoration after app suspension.
+- Deploy to emulator/device.
+- Verify avatar selection flow in Profile.
+- Verify avatars in Top Scholars, Leaderboards, and Tournaments.
+- Check Preview Gallery for all avatar states.
+- Verify logout/login isolation.

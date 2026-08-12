@@ -48,8 +48,13 @@ class _VerificationOrchestratorState
     if (state.step == VerificationStep.request) {
       await notifier.submitRequest();
     } else if (state.step == VerificationStep.sent) {
-      if (widget.type == VerificationType.emailVerification ||
-          widget.type == VerificationType.passwordRecovery) {
+      if (widget.type == VerificationType.passwordRecovery) {
+        // For password recovery, the user resets via email link then returns to login
+        ref.read(navigationServiceProvider).go(SoteriaRoutes.login);
+        return;
+      }
+
+      if (widget.type == VerificationType.emailVerification) {
         await notifier.checkVerificationStatus();
       } else {
         notifier.setStep(VerificationStep.otp);
@@ -231,6 +236,11 @@ class _VerificationOrchestratorState
     switch (step) {
       case VerificationStep.request:
         return 'Send Code';
+      case VerificationStep.sent:
+        if (widget.type == VerificationType.passwordRecovery) {
+          return 'Back to Login';
+        }
+        return 'Continue';
       case VerificationStep.otp:
         return 'Verify Code';
       case VerificationStep.resetPassword:

@@ -7,7 +7,8 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
-import 'package:soteria/core/design_system/components/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/screens/avatar_selection_screen.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';
 import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
@@ -53,11 +54,11 @@ class PlayerProfileScreen extends ConsumerWidget {
         child: Column(
           children: [
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
             ),
             _buildHeader(context, profile),
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
             ),
             progressionAsync.when(
               data: (progression) => PlayerProgressionCard(
@@ -69,11 +70,11 @@ class PlayerProfileScreen extends ConsumerWidget {
               error: (err, _) => Text('Error loading progression: $err'),
             ),
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
             ),
             const RankHistorySection(),
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
             ),
             _buildSection(
               context,
@@ -102,7 +103,7 @@ class PlayerProfileScreen extends ConsumerWidget {
               ],
             ),
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.smStatic),
             ),
             _buildSection(
               context,
@@ -121,7 +122,7 @@ class PlayerProfileScreen extends ConsumerWidget {
               ],
             ),
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.smStatic),
             ),
             _buildSection(
               context,
@@ -140,14 +141,10 @@ class PlayerProfileScreen extends ConsumerWidget {
               ],
             ),
             SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
+              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
             ),
             _buildLogoutButton(context),
-            SizedBox(
-              height:
-                  SoteriaSpacing.adaptive(context, SoteriaSpacing.xxlStatic) +
-                  MediaQuery.paddingOf(context).bottom,
-            ),
+            SizedBox(height: 10.h + MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),
@@ -156,24 +153,29 @@ class PlayerProfileScreen extends ConsumerWidget {
 
   Widget _buildHeader(BuildContext context, UserProfile? profile) {
     final isShort = SoteriaResponsive.isShortScreen(context);
-    final avatarSize = isShort ? 80.w : 100.w;
+    final avatarSize = isShort ? 64.w : 80.w;
 
     return Column(
       children: [
-        SoteriaAvatar(
-          url: profile?.avatarUrl,
-          size: avatarSize,
-          isOnline: true,
+        GestureDetector(
+          onTap: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (_) => const AvatarSelectionScreen()),
+          ),
+          child: SoteriaAvatar(
+            size: avatarSize,
+            isOnline: true,
+            showGlow: true,
+          ),
         ),
         SizedBox(height: SoteriaSpacing.smallGap(context)),
         Text(
           profile?.displayName ?? 'Anonymous User',
-          style: (isShort ? context.headlineSmall : context.headlineMedium)
+          style: (isShort ? context.titleLarge : context.headlineSmall)
               .copyWith(fontWeight: FontWeight.w900),
         ),
         Text(
           '@${profile?.username ?? 'guest'}',
-          style: context.bodyMedium.copyWith(color: SoteriaColors.muted),
+          style: context.bodySmall.copyWith(color: SoteriaColors.muted),
         ),
       ],
     );

@@ -9,6 +9,7 @@ abstract class LeaderboardEntry with _$LeaderboardEntry {
     required String userId,
     required String displayName,
     String? avatarUrl,
+    String? avatarId,
     required int rankPoints,
     required String rankTier,
     required int division,

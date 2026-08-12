@@ -77,13 +77,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                       .refresh(),
                   color: SoteriaColors.primary,
                   child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 100.h),
+                    padding: EdgeInsets.only(bottom: 10.h),
                     itemCount:
                         entries.length + 2, // +2 for SeasonHeader and Podium
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return const Padding(
-                          padding: EdgeInsets.only(top: 16),
+                          padding: EdgeInsets.only(top: 8),
                           child: SeasonHeader(),
                         );
                       }

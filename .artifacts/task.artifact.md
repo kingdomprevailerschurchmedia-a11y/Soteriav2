@@ -1,21 +1,31 @@
-# Soteria Navigation Foundation Task List (Story 1.6)
+# Soteria Avatar Platform Tasks
 
-- [ ] Implement Route Constants & Structure
-    - [ ] Create `soteria_routes.dart` with modular definitions
-    - [ ] Create `route_params.dart`
-- [ ] Implement Route Guards
-    - [ ] Create base guard abstractions in `guards/`
-- [ ] Implement Premium Transitions
-    - [ ] Create `soteria_page_transitions.dart`
-- [ ] Implement Navigation Service
-    - [ ] Create `navigation_service.dart` (Riverpod)
-- [ ] Refactor App Router
-    - [ ] Reorganize `app_router.dart` for scalability
-    - [ ] Implement `errorBuilder` with premium error UI
-    - [ ] Configure global redirects for guards
-- [ ] Expand Preview Gallery
-    - [ ] Create `NavigationFoundationPage`
-    - [ ] Register new previews
-- [ ] Verification
-    - [ ] Add Navigation and Guard tests
-    - [ ] Run `flutter analyze` & `flutter test`
+- [ ] **Infrastructure & Assets**
+    - [ ] Create `assets/avatars/` directory
+    - [ ] Update `pubspec.yaml` with `assets/avatars/`
+    - [ ] Run `flutter pub get`
+- [ ] **Core Platform Implementation**
+    - [ ] Implement `Avatar` model and enums (`rarity`, `category`)
+    - [ ] Implement `AvatarCatalog` with initial scholar entries
+    - [ ] Create Riverpod providers for avatars
+- [ ] **Presentation Components**
+    - [ ] Implement `AvatarFrame` widget and styles
+    - [ ] Implement unified `SoteriaAvatar` widget
+    - [ ] Create `AvatarSelectionScreen`
+- [ ] **Profile & Persistence Integration**
+    - [ ] Update `UserProfile` and `PlayerProfile` models
+    - [ ] Update `FirebaseIdentityRepository` for persistence
+    - [ ] Wire up avatar selection in `PlayerProfileScreen`
+- [ ] **App-wide Integration**
+    - [ ] Update `TopScholarsSection`
+    - [ ] Update `LeaderboardScreen` and rows
+    - [ ] Update Tournament and Versus screens
+    - [ ] Replace remaining placeholder `CircleAvatar` or `Icons.person`
+- [ ] **Developer Experience**
+    - [ ] Implement `AvatarGalleryScreen`
+    - [ ] Register previews in the system
+- [ ] **Quality Assurance**
+    - [ ] Add unit tests for catalog and model
+    - [ ] Add widget tests for `SoteriaAvatar`
+    - [ ] Run `flutter analyze` and `flutter test`
+    - [ ] Final verification in Preview app

@@ -3,40 +3,47 @@ import '../../domain/models/player_profile.dart';
 
 class PlayerProfileDto {
   static PlayerProfile fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>? ?? {};
 
     return PlayerProfile(
       uid: doc.id,
-      displayName: data['displayName'] ?? '',
-      email: data['email'] ?? '',
-      photoUrl: data['photoUrl'] ?? '',
-      level: data['level'] ?? 1,
-      xp: data['xp'] ?? 0,
-      coins: data['coins'] ?? 0,
-      currentStreak: data['currentStreak'] ?? 0,
-      highestStreak: data['highestStreak'] ?? 0,
-      totalQuestionsAnswered: data['totalQuestionsAnswered'] ?? 0,
-      correctAnswers: data['correctAnswers'] ?? 0,
+      displayName: data['displayName'] as String? ?? 'Scholar',
+      email: data['email'] as String? ?? '',
+      photoUrl: data['photoUrl'] as String? ?? '',
+      selectedAvatarId: data['selectedAvatarId'] as String? ?? 'socrates',
+      level: data['level'] as int? ?? 1,
+      xp: data['xp'] as int? ?? 0,
+      coins: data['coins'] as int? ?? 0,
+      currentStreak: data['currentStreak'] as int? ?? 0,
+      highestStreak: data['highestStreak'] as int? ?? 0,
+      totalQuestionsAnswered: data['totalQuestionsAnswered'] as int? ?? 0,
+      correctAnswers: data['correctAnswers'] as int? ?? 0,
       accuracy: (data['accuracy'] ?? 0.0).toDouble(),
-      gamesPlayed: data['gamesPlayed'] ?? 0,
-      gamesWon: data['gamesWon'] ?? 0,
-      practiceSessions: data['practiceSessions'] ?? 0,
-      proSessions: data['proSessions'] ?? 0,
-      versusMatches: data['versusMatches'] ?? 0,
-      tournamentMatches: data['tournamentMatches'] ?? 0,
+      gamesPlayed: data['gamesPlayed'] as int? ?? 0,
+      gamesWon: data['gamesWon'] as int? ?? 0,
+      practiceSessions: data['practiceSessions'] as int? ?? 0,
+      proSessions: data['proSessions'] as int? ?? 0,
+      versusMatches: data['versusMatches'] as int? ?? 0,
+      tournamentMatches: data['tournamentMatches'] as int? ?? 0,
       favoriteCategories: List<String>.from(data['favoriteCategories'] ?? []),
-      preferredLanguage: data['preferredLanguage'] ?? 'en',
-      avatarFrame: data['avatarFrame'] ?? 'default',
+      preferredLanguage: data['preferredLanguage'] as String? ?? 'en',
+      avatarFrame: data['avatarFrame'] as String? ?? 'default',
       badges: List<String>.from(data['badges'] ?? []),
       achievements: List<String>.from(data['achievements'] ?? []),
-      role: data['role'] ?? 'user',
-      accountStatus: data['accountStatus'] ?? 'active',
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
-      lastLogin: (data['lastLogin'] as Timestamp).toDate(),
-      updatedAt: (data['updatedAt'] as Timestamp).toDate(),
-      settings: data['settings'] ?? {},
-      version: data['version'] ?? 1,
+      role: data['role'] as String? ?? 'user',
+      accountStatus: data['accountStatus'] as String? ?? 'active',
+      createdAt: _parseDate(data['createdAt']),
+      lastLogin: _parseDate(data['lastLogin']),
+      updatedAt: _parseDate(data['updatedAt']),
+      settings: data['settings'] as Map<String, dynamic>? ?? {},
+      version: data['version'] as int? ?? 1,
     );
+  }
+
+  static DateTime _parseDate(dynamic value) {
+    if (value is Timestamp) return value.toDate();
+    if (value is String) return DateTime.tryParse(value) ?? DateTime.now();
+    return DateTime.now();
   }
 
   static Map<String, dynamic> toFirestore(PlayerProfile profile) {
@@ -44,6 +51,7 @@ class PlayerProfileDto {
       'displayName': profile.displayName,
       'email': profile.email,
       'photoUrl': profile.photoUrl,
+      'selectedAvatarId': profile.selectedAvatarId,
       'level': profile.level,
       'xp': profile.xp,
       'coins': profile.coins,

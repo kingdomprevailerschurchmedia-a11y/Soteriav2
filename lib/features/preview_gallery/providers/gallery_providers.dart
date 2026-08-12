@@ -281,6 +281,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       route: '/preview-gallery/quiz-history',
       icon: Icons.history_rounded,
     ),
+    const GalleryItem(
+      title: 'Avatar Platform',
+      description: 'Scholar avatars, metallic frames & ranks',
+      category: GalleryCategory.designSystem,
+      route: '/preview-gallery/avatars',
+      icon: Icons.face_rounded,
+      tags: ['avatar', 'scholar', 'profile'],
+    ),
   ];
 });
 

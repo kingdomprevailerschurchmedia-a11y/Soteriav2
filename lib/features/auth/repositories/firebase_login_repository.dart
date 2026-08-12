@@ -1,17 +1,17 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart' as gsi;
 import 'login_repository.dart';
 import '../models/authentication_result.dart';
 import '../../../core/identity/repositories/firebase_error_mapper.dart';
 import '../../../core/logging/logger_service.dart';
 
 class FirebaseLoginRepository implements LoginRepository {
-  FirebaseLoginRepository({FirebaseAuth? auth, GoogleSignIn? googleSignIn})
+  FirebaseLoginRepository({FirebaseAuth? auth, gsi.GoogleSignIn? googleSignIn})
     : _auth = auth ?? FirebaseAuth.instance,
-      _googleSignIn = googleSignIn ?? GoogleSignIn.instance;
+      _googleSignIn = googleSignIn ?? gsi.GoogleSignIn();
 
   final FirebaseAuth _auth;
-  final GoogleSignIn _googleSignIn;
+  final gsi.GoogleSignIn _googleSignIn;
 
   @override
   Future<AuthenticationResult> loginWithEmail({
@@ -45,16 +45,22 @@ class FirebaseLoginRepository implements LoginRepository {
   Future<AuthenticationResult> loginWithGoogle() async {
     try {
       LoggerService.i('Starting Google Sign-In...', feature: 'Auth');
-      // In v7.x+, authenticate() is the new standard for identity
-      final googleUser = await _googleSignIn.authenticate();
+      final dynamic signInFuture = _googleSignIn.signIn();
+      final gsi.GoogleSignInAccount? googleUser = await signInFuture;
+
+      if (googleUser == null) {
+        LoggerService.i('Google Sign-In cancelled by user', feature: 'Auth');
+        return const AuthenticationResult.failure(null);
+      }
 
       LoggerService.i(
         'Google user authenticated: ${googleUser.email}',
         feature: 'Auth',
       );
-      final googleAuth = googleUser.authentication;
+      final dynamic googleAuth = await googleUser.authentication;
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
+        accessToken: googleAuth.accessToken,
       );
 
       final userCredential = await _auth.signInWithCredential(credential);

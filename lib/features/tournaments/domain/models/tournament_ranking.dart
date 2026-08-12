@@ -7,6 +7,7 @@ class TournamentRanking {
   final String uid;
   final String displayName;
   final String photoUrl;
+  final String? avatarId;
   final int score;
   final double accuracy;
   final Duration completionTime;
@@ -19,6 +20,7 @@ class TournamentRanking {
     required this.uid,
     required this.displayName,
     required this.photoUrl,
+    this.avatarId,
     required this.score,
     required this.accuracy,
     required this.completionTime,
@@ -32,6 +34,7 @@ class TournamentRanking {
     'uid': uid,
     'displayName': displayName,
     'photoUrl': photoUrl,
+    'avatarId': avatarId,
     'score': score,
     'accuracy': accuracy,
     'completionTimeMs': completionTime.inMilliseconds,
@@ -46,6 +49,7 @@ class TournamentRanking {
         uid: json['uid'],
         displayName: json['displayName'],
         photoUrl: json['photoUrl'],
+        avatarId: json['avatarId'],
         score: json['score'],
         accuracy: json['accuracy'].toDouble(),
         completionTime: Duration(milliseconds: json['completionTimeMs']),

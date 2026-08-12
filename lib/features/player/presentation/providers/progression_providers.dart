@@ -10,6 +10,8 @@ import '../../domain/models/player_statistics.dart';
 import '../../domain/models/player_profile.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../providers/player_providers.dart';
+import '../../domain/repositories/competitive_result_repository.dart';
+import '../../data/repositories/firebase_competitive_result_repository.dart';
 
 // --- Services ---
 final progressionServiceProvider = Provider<ProgressionService>((ref) {
@@ -28,6 +30,11 @@ final playerProgressionRepositoryProvider =
         ref.watch(progressionServiceProvider),
         ref.watch(rankingEngineProvider),
       );
+    });
+
+final competitiveResultRepositoryProvider =
+    Provider<CompetitiveResultRepository>((ref) {
+      return FirebaseCompetitiveResultRepository(FirebaseFirestore.instance);
     });
 
 // --- Progression State ---

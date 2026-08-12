@@ -11,6 +11,7 @@ enum PreviewCategory {
   gameplay('Gameplay', Icons.play_circle_filled_rounded),
   quizData('Quiz Data Pipeline', Icons.data_usage_rounded),
   social('Social & Community', Icons.people_rounded),
+  notifications('Notifications', Icons.notifications_rounded),
   profile('Player Profile', Icons.badge_rounded),
   settings('Settings', Icons.settings_rounded),
   designSystem('Design System', Icons.token_rounded),

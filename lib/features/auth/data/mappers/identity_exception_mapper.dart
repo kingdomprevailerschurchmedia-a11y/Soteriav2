@@ -32,11 +32,14 @@ class IdentityExceptionMapper {
             'The password provided is too weak.',
           );
         case 'google-sign-in-cancelled':
-        case 'google-sign-in-failed':
-          // We'll handle this specially in the UseCase or Repository to avoid showing an error
           return const IdentityException(
             IdentityExceptionType.unknown,
             'Sign in cancelled.',
+          );
+        case 'google-sign-in-failed':
+          return IdentityException(
+            IdentityExceptionType.unknown,
+            error.message ?? 'Google sign in failed.',
           );
         default:
           return IdentityException(

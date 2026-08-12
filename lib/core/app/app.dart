@@ -41,6 +41,7 @@ class SoteriaApp extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(notificationCoordinatorProvider).initialize();
       ref.read(configurationCoordinatorProvider).initialize();
+      ref.read(competitiveEventObserverProvider);
       // Native splash removal is handled by SplashScreen for a smoother transition
     });
 

@@ -14,7 +14,6 @@ class SessionSummaryCard extends StatelessWidget {
     return GlassSurface(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       borderRadius: BorderRadius.circular(24),
-      opacity: 0.08,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

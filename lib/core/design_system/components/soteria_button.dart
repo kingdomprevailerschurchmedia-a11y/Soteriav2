@@ -59,6 +59,30 @@ class SoteriaButton extends StatefulWidget {
     this.uppercase = true,
   }) : variant = SoteriaButtonVariant.secondary;
 
+  const SoteriaButton.outline({
+    super.key,
+    required this.label,
+    this.onPressed,
+    this.size = SoteriaButtonSize.md,
+    this.icon,
+    this.trailingIcon,
+    this.isLoading = false,
+    this.isFullWidth = true,
+    this.uppercase = true,
+  }) : variant = SoteriaButtonVariant.outline;
+
+  const SoteriaButton.danger({
+    super.key,
+    required this.label,
+    this.onPressed,
+    this.size = SoteriaButtonSize.md,
+    this.icon,
+    this.trailingIcon,
+    this.isLoading = false,
+    this.isFullWidth = true,
+    this.uppercase = true,
+  }) : variant = SoteriaButtonVariant.danger;
+
   const SoteriaButton.ghost({
     super.key,
     required this.label,

@@ -42,6 +42,7 @@ class FirebaseBootstrapper {
 
       // 4. Defer non-critical services (don't await them here)
       unawaited(FirebaseInitializer.initializeAnalytics());
+      unawaited(FirebaseInitializer.initializePerformance());
       unawaited(FirebaseInitializer.configureFirestoreOffline());
 
       _status = BootstrapperStatus.success;

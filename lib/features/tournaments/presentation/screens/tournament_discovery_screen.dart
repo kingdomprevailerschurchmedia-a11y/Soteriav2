@@ -81,7 +81,7 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
           _SectionHeader(title: 'UPCOMING'),
           _TournamentList(tournaments: upcoming),
         ],
-        SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl + 100.h)),
+        SliverToBoxAdapter(child: SizedBox(height: 10.h)),
       ],
     );
   }

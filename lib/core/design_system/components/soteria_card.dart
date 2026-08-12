@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
+import 'package:soteria/core/design_system/blur/soteria_blur.dart';
 import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
@@ -14,6 +15,8 @@ class SoteriaCard extends StatelessWidget {
   final Color? glowColor;
   final VoidCallback? onTap;
   final bool isElevated;
+  final double? blur;
+  final double? opacity;
 
   const SoteriaCard({
     super.key,
@@ -26,6 +29,8 @@ class SoteriaCard extends StatelessWidget {
     this.glowColor,
     this.onTap,
     this.isElevated = false,
+    this.blur,
+    this.opacity,
   });
 
   @override
@@ -36,9 +41,10 @@ class SoteriaCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(effectiveRadius),
       padding:
           padding ?? EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
-      opacity: isElevated ? 0.12 : 0.08,
+      opacity: opacity ?? (isElevated ? 0.15 : 0.05),
+      blur: blur ?? SoteriaBlur.high,
       border: Border.all(
-        color: borderColor ?? Colors.white.withValues(alpha: 0.08),
+        color: borderColor ?? Colors.white.withValues(alpha: 0.12),
         width: 1,
       ),
       child: child,

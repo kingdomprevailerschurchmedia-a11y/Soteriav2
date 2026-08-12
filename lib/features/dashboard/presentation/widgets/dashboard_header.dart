@@ -5,7 +5,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
-import '../../../../core/design_system/components/soteria_avatar.dart';
+import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
 
 class DashboardHeader extends ConsumerWidget {
@@ -53,7 +53,7 @@ class DashboardHeader extends ConsumerWidget {
                         color: SoteriaColors.gold,
                         letterSpacing: 1.5,
                         fontWeight: FontWeight.bold,
-                        fontSize: 14.sp,
+                        fontSize: 12.sp,
                       ),
                     ),
                     Row(
@@ -64,16 +64,16 @@ class DashboardHeader extends ConsumerWidget {
                             style: context.displaySmall.copyWith(
                               fontWeight: FontWeight.w900,
                               letterSpacing: -1.0,
-                              fontSize: 36.sp,
+                              fontSize: 32.sp,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         SizedBox(width: 8.w),
-                        Text('👋', style: TextStyle(fontSize: 24.sp)),
+                        Text('👋', style: TextStyle(fontSize: 20.sp)),
                       ],
                     ),
-                    SizedBox(height: SoteriaSpacing.md),
+                    SizedBox(height: SoteriaSpacing.sm),
                     Row(
                       children: [
                         _HeaderBadge(
@@ -99,38 +99,15 @@ class DashboardHeader extends ConsumerWidget {
                     label: 'Day Streak',
                     color: Colors.orange,
                   ),
-                  SizedBox(width: SoteriaSpacing.md),
+                  SizedBox(width: SoteriaSpacing.sm),
                   GestureDetector(
                     onTap: () => nav.go('/app/profile'),
                     child: Hero(
                       tag: 'player_avatar',
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              SoteriaColors.primary.withValues(alpha: 0.6),
-                              SoteriaColors.primary.withValues(alpha: 0.0),
-                            ],
-                            stops: const [0.7, 1.0],
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: SoteriaColors.primary.withValues(
-                                alpha: 0.4,
-                              ),
-                              blurRadius: 20,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                        ),
-                        child: SoteriaAvatar(
-                          url: avatarUrl,
-                          isOnline: isOnline,
-                          size: 60,
-                          hasBorder: false,
-                        ),
+                      child: SoteriaAvatar(
+                        isOnline: isOnline,
+                        size: 52,
+                        showGlow: true,
                       ),
                     ),
                   ),
@@ -209,14 +186,14 @@ class _CompactStat extends StatelessWidget {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 24.sp, color: color),
-            SizedBox(width: 8.w),
+            Icon(icon, size: 20.sp, color: color),
+            SizedBox(width: 6.w),
             Text(
               value,
               style: context.headlineMedium.copyWith(
                 fontWeight: FontWeight.w900,
                 color: SoteriaColors.textPrimary,
-                fontSize: 28.sp,
+                fontSize: 24.sp,
               ),
             ),
           ],
@@ -225,7 +202,7 @@ class _CompactStat extends StatelessWidget {
           label,
           style: context.labelSmall.copyWith(
             color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
-            fontSize: 12.sp,
+            fontSize: 10.sp,
             fontWeight: FontWeight.w500,
           ),
         ),

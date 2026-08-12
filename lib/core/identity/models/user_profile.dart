@@ -8,6 +8,7 @@ class UserProfile {
   final String username;
   final String email;
   final String? avatarUrl;
+  final String selectedAvatarId;
   final String? academicLevel;
   final String? institution;
   final String? faculty;
@@ -23,6 +24,7 @@ class UserProfile {
     required this.username,
     required this.email,
     this.avatarUrl,
+    this.selectedAvatarId = 'socrates',
     this.academicLevel,
     this.institution,
     this.faculty,
@@ -41,6 +43,7 @@ class UserProfile {
     String? username,
     String? email,
     String? avatarUrl,
+    String? selectedAvatarId,
     String? academicLevel,
     String? institution,
     String? faculty,
@@ -56,6 +59,7 @@ class UserProfile {
       username: username ?? this.username,
       email: email ?? this.email,
       avatarUrl: avatarUrl ?? this.avatarUrl,
+      selectedAvatarId: selectedAvatarId ?? this.selectedAvatarId,
       academicLevel: academicLevel ?? this.academicLevel,
       institution: institution ?? this.institution,
       faculty: faculty ?? this.faculty,
@@ -64,5 +68,24 @@ class UserProfile {
       timezone: timezone ?? this.timezone,
       language: language ?? this.language,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'firstName': firstName,
+      'lastName': lastName,
+      'displayName': displayName,
+      'username': username,
+      'email': email,
+      'avatarUrl': avatarUrl,
+      'selectedAvatarId': selectedAvatarId,
+      'academicLevel': academicLevel,
+      'institution': institution,
+      'faculty': faculty,
+      'department': department,
+      'country': country,
+      'timezone': timezone,
+      'language': language,
+    };
   }
 }

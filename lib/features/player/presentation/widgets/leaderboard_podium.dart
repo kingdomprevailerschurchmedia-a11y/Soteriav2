@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/components/soteria_avatar.dart';
+import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
+import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../domain/models/leaderboard_entry.dart';
 import 'rank_badge.dart';
 
@@ -23,24 +24,38 @@ class LeaderboardPodium extends StatelessWidget {
     if (topEntries.length >= 3) podiumEntries[2] = topEntries[2];
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.lg),
+      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           if (podiumEntries[0] != null)
-            Flexible(child: _PodiumItem(entry: podiumEntries[0]!, rank: 2, height: 140.h)),
+            Flexible(
+              child: _PodiumItem(
+                entry: podiumEntries[0]!,
+                rank: 2,
+                height: 120.h,
+              ),
+            ),
           SizedBox(width: SoteriaSpacing.md),
           if (podiumEntries[1] != null)
-            Flexible(child: _PodiumItem(
-              entry: podiumEntries[1]!,
-              rank: 1,
-              height: 180.h,
-              isWinner: true,
-            )),
+            Flexible(
+              child: _PodiumItem(
+                entry: podiumEntries[1]!,
+                rank: 1,
+                height: 150.h,
+                isWinner: true,
+              ),
+            ),
           SizedBox(width: SoteriaSpacing.md),
           if (podiumEntries[2] != null)
-            Flexible(child: _PodiumItem(entry: podiumEntries[2]!, rank: 3, height: 120.h)),
+            Flexible(
+              child: _PodiumItem(
+                entry: podiumEntries[2]!,
+                rank: 3,
+                height: 100.h,
+              ),
+            ),
         ],
       ),
     );
@@ -68,21 +83,25 @@ class _PodiumItem extends StatelessWidget {
         Stack(
           alignment: Alignment.bottomCenter,
           children: [
-            SoteriaAvatar(url: entry.avatarUrl, size: isWinner ? 72.w : 60.w),
+            SoteriaAvatar(
+              avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+              size: isWinner ? 64 : 52,
+              rank: entry.position,
+            ),
             if (isWinner)
               Positioned(
-                top: -10.h,
+                top: -8.h,
                 child: Icon(
                   Icons.workspace_premium_rounded,
                   color: SoteriaColors.gold,
-                  size: 24.sp,
+                  size: 20.sp,
                 ),
               ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
               decoration: BoxDecoration(
                 color: isWinner ? SoteriaColors.gold : SoteriaColors.primary,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(10.r),
               ),
               child: Text(
                 '#$rank',

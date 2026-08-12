@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/components/soteria_avatar.dart';
+import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
+import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../domain/models/leaderboard_entry.dart';
 import 'rank_badge.dart';
 
@@ -30,7 +31,7 @@ class LeaderboardRow extends StatelessWidget {
             : Colors.transparent,
         border: isCurrentUser
             ? Border.symmetric(
-                vertical: BorderSide(color: SoteriaColors.primary, width: 2),
+                vertical: BorderSide(color: SoteriaColors.primary, width: 2.w),
               )
             : null,
       ),
@@ -48,7 +49,11 @@ class LeaderboardRow extends StatelessWidget {
               ),
             ),
           ),
-          SoteriaAvatar(url: entry.avatarUrl, size: 40.w),
+          SoteriaAvatar(
+            avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+            size: 40,
+            rank: entry.position,
+          ),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(
             child: Column(

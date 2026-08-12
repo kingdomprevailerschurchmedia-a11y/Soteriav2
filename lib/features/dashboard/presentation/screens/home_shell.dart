@@ -13,12 +13,16 @@ class HomeShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       extendBody: true,
-      backgroundColor: Colors.transparent,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: SoteriaColors.backgroundGradient,
-        ),
-        child: navigationShell,
+      backgroundColor: SoteriaColors.backgroundBottomRight,
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              gradient: SoteriaColors.backgroundGradient,
+            ),
+          ),
+          navigationShell,
+        ],
       ),
       bottomNavigationBar: SoteriaBottomNavBar(
         currentIndex: navigationShell.currentIndex,

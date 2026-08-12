@@ -7,6 +7,9 @@ import '../../data/repositories/firebase_rank_history_repository.dart';
 import '../../domain/services/competitive_ranking_engine.dart';
 import 'progression_providers.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
+import '../../domain/usecases/process_competitive_result_use_case.dart';
+import 'streak_providers.dart';
+import '../../../quiz/presentation/providers/history_providers.dart';
 
 // --- Services ---
 final rankingEngineProvider = Provider<CompetitiveRankingEngine>((ref) {
@@ -59,8 +62,25 @@ final currentRankNameProvider = Provider<String>((ref) {
 });
 
 // --- Actions ---
+final processCompetitiveResultUseCaseProvider =
+    Provider<ProcessCompetitiveResultUseCase>((ref) {
+      return ProcessCompetitiveResultUseCase(
+        ref.watch(playerProgressionRepositoryProvider),
+        ref.watch(competitiveResultRepositoryProvider),
+        ref.watch(streakServiceProvider),
+      );
+    });
+
 final applyCompetitiveResultProvider =
     Provider<Future<RankChange> Function(CompetitiveResult)>((ref) {
-      final repository = ref.watch(playerProgressionRepositoryProvider);
-      return (result) => repository.applyCompetitiveResult(result);
+      final useCase = ref.watch(processCompetitiveResultUseCaseProvider);
+
+      return (result) async {
+        final recentQuizResults = await ref.read(historyListProvider.future);
+
+        return useCase.execute(
+          result: result,
+          recentQuizResults: recentQuizResults,
+        );
+      };
     });

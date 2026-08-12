@@ -30,6 +30,7 @@ import 'package:soteria/features/preview_gallery/pages/startup_preview_page.dart
 import 'package:soteria/features/preview_gallery/pages/navigation_foundation_page.dart';
 import 'package:soteria/features/preview_gallery/pages/onboarding_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/personalization_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/avatar_platform_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/auth_landing_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/registration_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/login_preview_page.dart';
@@ -64,6 +65,7 @@ import 'package:soteria/features/notifications/screens/notification_center_scree
 
 import 'package:soteria/core/identity/models/user_session.dart';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:soteria/features/dashboard/presentation/screens/practice_lobby_screen.dart';
@@ -109,7 +111,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     debugLogDiagnostics: true,
     refreshListenable: listenable,
     observers: [
-      if (!Platform.environment.containsKey('FLUTTER_TEST'))
+      if (!Platform.environment.containsKey('FLUTTER_TEST') &&
+          Firebase.apps.isNotEmpty)
         FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
     ],
     redirect: (context, state) {
@@ -117,7 +120,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       final session = ref.read(sessionProvider);
       final location = state.uri.toString();
 
-      // Optimize: Only log non-verbose redirects or in debug mode
       if (kDebugMode && location != SoteriaRoutes.splash) {
         LoggerService.t(
           'Router Redirect Check: loc=$location, life=$lifecycle, auth=${session.status}',
@@ -125,67 +127,59 @@ final routerProvider = Provider<GoRouter>((ref) {
         );
       }
 
+      // 1. Loading State
       if (lifecycle == AppStartupState.loading) {
-        // FORCE the splash screen while loading.
-        // This prevents deep links or state restoration from flashing the Dashboard.
-        if (location != SoteriaRoutes.splash) {
-          return SoteriaRoutes.splash;
+        return location == SoteriaRoutes.splash ? null : SoteriaRoutes.splash;
+      }
+
+      // 2. Splash Screen bypass (once duration is complete, it will navigate anyway)
+      if (location == SoteriaRoutes.splash) return null;
+
+      // 3. Onboarding & Personalization Gates
+      if (lifecycle == AppStartupState.onboarding) {
+        return location == SoteriaRoutes.onboarding
+            ? null
+            : SoteriaRoutes.onboarding;
+      }
+
+      if (lifecycle == AppStartupState.personalization) {
+        // Allow auth routes during personalization (e.g. if they sign in during it)
+        if (location.startsWith(SoteriaRoutes.auth)) return null;
+        return location == SoteriaRoutes.personalization
+            ? null
+            : SoteriaRoutes.personalization;
+      }
+
+      // 4. Post-Setup Redirects (Prevent staying on setup screens)
+      if (location == SoteriaRoutes.onboarding ||
+          location == SoteriaRoutes.personalization) {
+        return session.isAuthenticated
+            ? SoteriaRoutes.main
+            : SoteriaRoutes.auth;
+      }
+
+      // 5. Authentication Logic
+      final isAuthenticated = session.isAuthenticated;
+      final isAuthRoute = location.startsWith(SoteriaRoutes.auth);
+      final isMainRoute = location.startsWith(SoteriaRoutes.main);
+
+      if (!isAuthenticated) {
+        // Not authenticated
+        if (isMainRoute) {
+          // If trying to access main app while not auth, go to auth landing
+          return SoteriaRoutes.auth;
         }
-        return null;
-      }
-
-      // Allow the Splash screen to handle the initial navigation flow
-      // only after it has finished its minimum duration.
-      if (location == SoteriaRoutes.splash) {
-        return null;
-      }
-
-      if (lifecycle == AppStartupState.onboarding &&
-          location != SoteriaRoutes.onboarding) {
-        return SoteriaRoutes.onboarding;
-      }
-
-      if (lifecycle == AppStartupState.personalization &&
-          location != SoteriaRoutes.personalization &&
-          !location.startsWith(SoteriaRoutes.auth)) {
-        return SoteriaRoutes.personalization;
-      }
-
-      if (lifecycle == AppStartupState.auth &&
-          !location.startsWith(SoteriaRoutes.auth)) {
-        // Allow unverified users to reach the verification screen
-        if (session.uid != null && session.status == SessionStatus.guest) {
+        // Guest user in auth flow but email unverified
+        if (session.uid != null &&
+            session.status == SessionStatus.guest &&
+            !location.contains('verify')) {
           return '${SoteriaRoutes.auth}/verify/emailVerification';
         }
-        return SoteriaRoutes.auth;
-      }
-
-      // Auth Guards for Protected Routes
-      if (location.startsWith(SoteriaRoutes.main) ||
-          location == SoteriaRoutes.auth ||
-          location == '${SoteriaRoutes.auth}/login') {
-        if (!session.isAuthenticated) {
-          // Check if it's just a verification pending state
-          if (session.uid != null && session.status == SessionStatus.guest) {
-            return '${SoteriaRoutes.auth}/verify/emailVerification';
-          }
-          if (location.startsWith(SoteriaRoutes.main)) {
-            return SoteriaRoutes.auth;
-          }
-        } else {
-          // Already authenticated, shouldn't be on auth pages
-          if (location.startsWith(SoteriaRoutes.auth)) {
-            return SoteriaRoutes.main;
-          }
-        }
-      }
-
-      // Default Ready state
-      if (lifecycle == AppStartupState.ready) {
-        if (location.startsWith(SoteriaRoutes.auth)) {
-          if (session.isAuthenticated) {
-            return SoteriaRoutes.main;
-          }
+      } else {
+        // Authenticated
+        if (isAuthRoute) {
+          // If already auth, don't stay on auth pages
+          return SoteriaRoutes.main;
         }
       }
 
@@ -197,6 +191,90 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: SoteriaRoutes.splash,
         builder: (context, state) => const SplashScreen(),
+      ),
+      GoRoute(
+        path: '/auth',
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const AuthLandingScreen(),
+          key: state.pageKey,
+        ),
+        routes: [
+          GoRoute(
+            path: 'login',
+            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+              child: const LoginScreen(),
+              key: state.pageKey,
+            ),
+          ),
+          GoRoute(
+            path: 'register',
+            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+              child: const RegistrationScreen(),
+              key: state.pageKey,
+            ),
+          ),
+          GoRoute(
+            path: 'verify/:type',
+            pageBuilder: (context, state) {
+              final typeStr = state.pathParameters['type']!;
+              final type = VerificationType.values.firstWhere(
+                (e) => e.name == typeStr,
+                orElse: () => VerificationType.emailVerification,
+              );
+              return SoteriaPageTransitions.fade(
+                child: VerificationOrchestrator(type: type),
+                key: state.pageKey,
+              );
+            },
+          ),
+        ],
+      ),
+      GoRoute(
+        path: SoteriaRoutes.onboarding,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const OnboardingScreen(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: SoteriaRoutes.personalization,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const PersonalizationScreen(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: SoteriaRoutes.quizGameplay,
+        pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
+          child: const QuizGameplayScreen(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: SoteriaRoutes.quizResults,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const QuizResultsScreen(),
+          key: state.pageKey,
+        ),
+      ),
+      GoRoute(
+        path: SoteriaRoutes.quizHistory,
+        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+          child: const QuizHistoryScreen(),
+          key: state.pageKey,
+        ),
+        routes: [
+          GoRoute(
+            path: 'detail',
+            pageBuilder: (context, state) {
+              final result = state.extra as QuizResult;
+              return SoteriaPageTransitions.fade(
+                child: QuizHistoryDetailScreen(result: result),
+                key: state.pageKey,
+              );
+            },
+          ),
+        ],
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, navigationShell) =>
@@ -363,90 +441,6 @@ final routerProvider = Provider<GoRouter>((ref) {
           child: const NotificationCenterScreen(),
           key: state.pageKey,
         ),
-      ),
-      GoRoute(
-        path: SoteriaRoutes.onboarding,
-        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-          child: const OnboardingScreen(),
-          key: state.pageKey,
-        ),
-      ),
-      GoRoute(
-        path: SoteriaRoutes.personalization,
-        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-          child: const PersonalizationScreen(),
-          key: state.pageKey,
-        ),
-      ),
-      GoRoute(
-        path: SoteriaRoutes.quizGameplay,
-        pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
-          child: const QuizGameplayScreen(),
-          key: state.pageKey,
-        ),
-      ),
-      GoRoute(
-        path: SoteriaRoutes.quizResults,
-        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-          child: const QuizResultsScreen(),
-          key: state.pageKey,
-        ),
-      ),
-      GoRoute(
-        path: SoteriaRoutes.quizHistory,
-        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-          child: const QuizHistoryScreen(),
-          key: state.pageKey,
-        ),
-        routes: [
-          GoRoute(
-            path: 'detail',
-            pageBuilder: (context, state) {
-              final result = state.extra as QuizResult;
-              return SoteriaPageTransitions.fade(
-                child: QuizHistoryDetailScreen(result: result),
-                key: state.pageKey,
-              );
-            },
-          ),
-        ],
-      ),
-      GoRoute(
-        path: SoteriaRoutes.auth,
-        pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-          child: const AuthLandingScreen(),
-          key: state.pageKey,
-        ),
-        routes: [
-          GoRoute(
-            path: 'login',
-            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-              child: const LoginScreen(),
-              key: state.pageKey,
-            ),
-          ),
-          GoRoute(
-            path: 'register',
-            pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-              child: const RegistrationScreen(),
-              key: state.pageKey,
-            ),
-          ),
-          GoRoute(
-            path: 'verify/:type',
-            pageBuilder: (context, state) {
-              final typeStr = state.pathParameters['type']!;
-              final type = VerificationType.values.firstWhere(
-                (e) => e.name == typeStr,
-                orElse: () => VerificationType.emailVerification,
-              );
-              return SoteriaPageTransitions.fade(
-                child: VerificationOrchestrator(type: type),
-                key: state.pageKey,
-              );
-            },
-          ),
-        ],
       ),
       GoRoute(
         path: SoteriaRoutes.previewGallery,
@@ -709,6 +703,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'dashboard-redesign',
             builder: (context, state) => const DashboardRedesignPreview(),
+          ),
+          GoRoute(
+            path: 'avatars',
+            builder: (context, state) => const GalleryShell(
+              title: 'Avatar Platform',
+              child: AvatarPlatformPreviewPage(),
+            ),
           ),
           GoRoute(
             path: 'tournaments',

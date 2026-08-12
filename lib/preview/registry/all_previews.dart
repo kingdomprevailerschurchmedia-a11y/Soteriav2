@@ -1,3 +1,4 @@
+import 'dart:ui';
 import '../models/preview_item.dart';
 import '../models/preview_category.dart';
 import 'preview_registry.dart';
@@ -21,6 +22,15 @@ import '../../../features/player/preview/progression_previews.dart';
 import '../../../features/player/preview/leaderboard_previews.dart';
 import '../../../features/player/preview/season_previews.dart';
 import '../../../features/player/preview/competitive_history_previews.dart';
+import '../../../features/player/preview/competitive_profile_previews.dart';
+import '../../../features/player/preview/statistics_previews.dart';
+import '../../../features/player/preview/milestone_previews.dart';
+import '../../../features/notifications/preview/notification_previews.dart';
+import '../../../features/player/preview/activity_previews.dart';
+import '../../../features/player/preview/goal_previews.dart';
+import '../../../features/player/preview/streak_previews.dart';
+import '../../../features/player/preview/match_history_previews.dart';
+import '../../../features/player/preview/reward_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -54,6 +64,116 @@ void registerAllPreviews() {
       description: 'Adaptive layout for large screens',
       category: PreviewCategory.onboarding,
       builder: (context) => const OnboardingScreen(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'notification-center',
+      title: 'Notification Center',
+      description: 'Unified event awareness',
+      category: PreviewCategory.notifications,
+      builder: (context) => NotificationPreviews.center(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'notification-banner',
+      title: 'In-App Banner',
+      description: 'Real-time competitive alert',
+      category: PreviewCategory.notifications,
+      builder: (context) => NotificationPreviews.banner(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'notification-empty',
+      title: 'Notifications - Empty',
+      description: 'All caught up state',
+      category: PreviewCategory.notifications,
+      builder: (context) => NotificationPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-activity',
+      title: 'Career Timeline',
+      description: 'Chronological career journal',
+      category: PreviewCategory.profile,
+      builder: (context) => ActivityPreviews.full(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'activity-empty',
+      title: 'Activity - Empty',
+      description: 'New journey start',
+      category: PreviewCategory.profile,
+      builder: (context) => ActivityPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-goals',
+      title: 'Missions & Goals',
+      description: 'Active player objectives',
+      category: PreviewCategory.profile,
+      builder: (context) => GoalPreviews.full(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'goals-empty',
+      title: 'Goals - Empty',
+      description: 'All missions completed',
+      category: PreviewCategory.profile,
+      builder: (context) => GoalPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'streak-win3',
+      title: 'Streak - 3 Wins',
+      description: 'Active win streak state',
+      category: PreviewCategory.profile,
+      builder: (context) => StreakPreviews.win3(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'streak-win10',
+      title: 'Streak - 10 Wins (Peak)',
+      description: 'Maximum momentum state',
+      category: PreviewCategory.profile,
+      builder: (context) => StreakPreviews.win10(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-match-history',
+      title: 'Match History',
+      description: 'Competitive results and performance',
+      category: PreviewCategory.profile,
+      builder: (context) => MatchHistoryPreviews.full(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'match-history-empty',
+      title: 'Match History - Empty',
+      description: 'New journey state',
+      category: PreviewCategory.profile,
+      builder: (context) => MatchHistoryPreviews.empty(),
     ),
   );
 
@@ -120,6 +240,127 @@ void registerAllPreviews() {
       description: 'User settings and account',
       category: PreviewCategory.profile,
       builder: (context) => const PlayerProfileScreen(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-profile',
+      title: 'Competitive Profile',
+      description: 'Athletic career identity',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveProfilePreviews.ranked(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-statistics',
+      title: 'Competitive Statistics',
+      description: 'Performance analytics center',
+      category: PreviewCategory.profile,
+      builder: (context) => StatisticsPreviews.standard(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'stats-improving',
+      title: 'Stats - Improving',
+      description: 'Upward performance trend',
+      category: PreviewCategory.profile,
+      builder: (context) => StatisticsPreviews.improving(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'stats-declining',
+      title: 'Stats - Declining',
+      description: 'Downward performance trend',
+      category: PreviewCategory.profile,
+      builder: (context) => StatisticsPreviews.declining(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'stats-empty',
+      title: 'Stats - Empty',
+      description: 'New player initial metrics',
+      category: PreviewCategory.profile,
+      builder: (context) => StatisticsPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'milestone-gallery',
+      title: 'Achievement Gallery',
+      description: 'Competitive career milestones',
+      category: PreviewCategory.profile,
+      builder: (context) => MilestonePreviews.gallery(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'milestone-empty',
+      title: 'Milestones - Empty',
+      description: 'No achievements state',
+      category: PreviewCategory.profile,
+      builder: (context) => MilestonePreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'profile-unranked',
+      title: 'Profile - Unranked',
+      description: 'New player initial state',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveProfilePreviews.unranked(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'profile-loading',
+      title: 'Profile - Loading',
+      description: 'Data aggregation state',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveProfilePreviews.loading(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'profile-error',
+      title: 'Profile - Error',
+      description: 'Sync failure recovery',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveProfilePreviews.error(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'profile-tablet',
+      title: 'Profile - Tablet',
+      description: 'Wide viewport adaptation',
+      category: PreviewCategory.profile,
+      builder: (context) =>
+          CompetitiveProfilePreviews.responsive(const Size(1024, 768)),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'profile-large-text',
+      title: 'Profile - Large Text',
+      description: 'Accessibility scaling',
+      category: PreviewCategory.profile,
+      builder: (context) => CompetitiveProfilePreviews.largeText(),
     ),
   );
 
@@ -301,6 +542,17 @@ void registerAllPreviews() {
       description: 'Accessibility mode verification',
       category: PreviewCategory.profile,
       builder: (context) => CompetitiveHistoryPreviews.reducedMotion(),
+    ),
+  );
+
+  // --- Rewards ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'reward-gallery',
+      title: 'Reward Gallery',
+      description: 'Competitive prizes & history',
+      category: PreviewCategory.profile,
+      builder: (context) => const RewardPreviews(),
     ),
   );
 

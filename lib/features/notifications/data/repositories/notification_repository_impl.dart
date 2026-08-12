@@ -23,6 +23,16 @@ class NotificationRepositoryImpl implements NotificationRepository {
   @override
   Future<void> saveNotification(AppNotification notification) async {
     final notifications = await getNotifications();
+
+    // Deduplication check
+    final dedupeKey = notification.payload['deduplicationKey'];
+    if (dedupeKey != null) {
+      final exists = notifications.any(
+        (n) => n.payload['deduplicationKey'] == dedupeKey,
+      );
+      if (exists) return;
+    }
+
     notifications.add(notification);
     await _persist(notifications);
   }

@@ -6,4 +6,5 @@ abstract class SeasonRepository {
   Future<CompetitiveSeason?> getSeason(String seasonId);
   Stream<CompetitiveSeason?> watchCurrentSeason();
   Future<List<CompetitiveSeason>> getSeasonHistory({int limit = 10});
+  Future<List<CompetitiveSeason>> getSeasons();
 }

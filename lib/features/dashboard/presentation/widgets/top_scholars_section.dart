@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
-import '../../../../core/design_system/components/soteria_avatar.dart';
+import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
+import '../../../../core/avatar/data/avatar_catalog.dart';
+import '../../../../core/avatar/providers/avatar_providers.dart';
 
 class TopScholarsSection extends StatelessWidget {
   const TopScholarsSection({super.key});
@@ -34,7 +37,7 @@ class TopScholarsSection extends StatelessWidget {
                       color: SoteriaColors.textSecondary,
                       letterSpacing: 2,
                       fontWeight: FontWeight.w900,
-                      fontSize: 14.sp,
+                      fontSize: 12.sp,
                     ),
                   ),
                 ],
@@ -44,7 +47,7 @@ class TopScholarsSection extends StatelessWidget {
                 style: context.labelSmall.copyWith(
                   color: SoteriaColors.secondary,
                   fontWeight: FontWeight.w900,
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                 ),
               ),
             ],
@@ -61,6 +64,7 @@ class TopScholarsSection extends StatelessWidget {
                   role: 'Master',
                   xp: 24500,
                   color: SoteriaColors.gold,
+                  avatarId: 'athena',
                 ),
                 _Divider(),
                 _ScholarRow(
@@ -69,6 +73,7 @@ class TopScholarsSection extends StatelessWidget {
                   role: 'Master',
                   xp: 22100,
                   color: const Color(0xFFC0C0C0),
+                  avatarId: 'isaac',
                 ),
                 _Divider(),
                 _ScholarRow(
@@ -77,6 +82,7 @@ class TopScholarsSection extends StatelessWidget {
                   role: 'Expert',
                   xp: 19800,
                   color: const Color(0xFFCD7F32),
+                  avatarId: 'elias',
                 ),
                 _UserHighlightRow(
                   rank: 42,
@@ -93,13 +99,14 @@ class TopScholarsSection extends StatelessWidget {
   }
 }
 
-class _ScholarRow extends StatelessWidget {
+class _ScholarRow extends ConsumerWidget {
   const _ScholarRow({
     required this.rank,
     required this.name,
     required this.role,
     required this.xp,
     required this.color,
+    required this.avatarId,
   });
 
   final int rank;
@@ -107,16 +114,18 @@ class _ScholarRow extends StatelessWidget {
   final String role;
   final int xp;
   final Color color;
+  final String avatarId;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final avatar = ref.watch(avatarCatalogProvider).getById(avatarId);
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
       child: Row(
         children: [
           _RankBadge(rank: rank, color: color),
           SizedBox(width: 16.w),
-          const SoteriaAvatar(size: 40, hasBorder: false),
+          SoteriaAvatar(avatar: avatar, size: 40, rank: rank),
           SizedBox(width: 16.w),
           Expanded(
             child: Column(
@@ -178,7 +187,7 @@ class _ScholarRow extends StatelessWidget {
   }
 }
 
-class _UserHighlightRow extends StatelessWidget {
+class _UserHighlightRow extends ConsumerWidget {
   const _UserHighlightRow({
     required this.rank,
     required this.name,
@@ -192,7 +201,7 @@ class _UserHighlightRow extends StatelessWidget {
   final int xp;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       margin: EdgeInsets.all(8.w),
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),

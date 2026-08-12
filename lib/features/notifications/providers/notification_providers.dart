@@ -5,9 +5,28 @@ import '../domain/models/app_notification.dart';
 import '../domain/repositories/notification_repository.dart';
 import '../data/repositories/notification_repository_impl.dart';
 import '../services/notification_coordinator.dart';
+import '../services/competitive_event_observer.dart';
+import '../../player/domain/models/competitive_event.dart';
+import '../../player/presentation/providers/activity_providers.dart';
 
 final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
   return NotificationRepositoryImpl(fcm: ref.watch(fcmServiceProvider));
+});
+
+final activeCompetitiveEventProvider = StateProvider<CompetitiveEvent?>(
+  (ref) => null,
+);
+
+final competitiveEventObserverProvider = Provider<CompetitiveEventObserver>((
+  ref,
+) {
+  final observer = CompetitiveEventObserver(
+    ref,
+    ref.watch(notificationRepositoryProvider),
+    ref.watch(activityRepositoryProvider),
+  );
+  observer.start();
+  return observer;
 });
 
 final notificationCoordinatorProvider = Provider<NotificationCoordinator>((

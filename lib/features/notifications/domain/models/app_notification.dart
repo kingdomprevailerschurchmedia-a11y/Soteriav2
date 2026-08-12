@@ -13,7 +13,16 @@ enum NotificationType {
   announcement,
   systemUpdate,
   maintenance,
-  promotion;
+  promotion,
+  rankDemoted,
+  rankChanged,
+  leaderboardChanged,
+  personalBest,
+  seasonEnding,
+  seasonCompleted,
+  seasonResult,
+  rewardReceived,
+  milestoneReached;
 
   static NotificationType fromString(String value) {
     return NotificationType.values.firstWhere(

@@ -85,6 +85,18 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    // SEASONS: Read-only for everyone
+    match /seasons/{seasonId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // SEASON RESULTS: Owner can read
+    match /season_results/{resultId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
     // ANNOUNCEMENTS: Publicly readable
     match /announcements/{announcementId} {
       allow read: if true;
@@ -101,6 +113,28 @@ service cloud.firestore {
     match /question_packs/{packId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin();
+    }
+
+    // SEASON REWARD DEFINITIONS: Read-only for authenticated users
+    match /season_reward_definitions/{rewardId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // SEASON REWARD GRANTS: Owner can read and request claim
+    match /season_reward_grants/{grantId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+
+      // Allow user to request a claim by updating status to 'claimed'
+      allow update: if isAuthenticated() &&
+                    resource.data.userId == request.auth.uid &&
+                    request.resource.data.status == 'claimed' &&
+                    resource.data.status in ['eligible', 'granted'] &&
+                    isNotModifying([
+                      'grantId', 'rewardId', 'seasonId', 'userId', 'type', 'amount', 'createdAt'
+                    ]);
+
+      allow create, delete: if isAdmin();
     }
 
     // PRACTICE SESSIONS: Ephemeral session data

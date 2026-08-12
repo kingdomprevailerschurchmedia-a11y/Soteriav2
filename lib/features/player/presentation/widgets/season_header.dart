@@ -25,7 +25,7 @@ class SeasonHeader extends ConsumerWidget {
         if (season == null) return const SizedBox.shrink();
 
         return SoteriaCard(
-          padding: EdgeInsets.all(SoteriaSpacing.md),
+          padding: EdgeInsets.all(SoteriaSpacing.sm),
           margin: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
           hasGlow: status == SeasonStatus.ending,
           glowColor: status == SeasonStatus.ending
@@ -47,11 +47,12 @@ class SeasonHeader extends ConsumerWidget {
                             color: SoteriaColors.muted,
                             letterSpacing: 2.0,
                             fontWeight: FontWeight.w900,
+                            fontSize: 10.sp,
                           ),
                         ),
                         Text(
                           season.name.toUpperCase(),
-                          style: context.headlineSmall.copyWith(
+                          style: context.titleMedium.copyWith(
                             fontWeight: FontWeight.w900,
                           ),
                           maxLines: 1,
@@ -64,7 +65,7 @@ class SeasonHeader extends ConsumerWidget {
                   _buildStatusBadge(status),
                 ],
               ),
-              SizedBox(height: SoteriaSpacing.md),
+              SizedBox(height: SoteriaSpacing.sm),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -78,9 +79,10 @@ class SeasonHeader extends ConsumerWidget {
                         style: context.labelSmall.copyWith(
                           color: SoteriaColors.muted,
                           fontWeight: FontWeight.bold,
+                          fontSize: 9.sp,
                         ),
                       ),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 2.h),
                       countdownAsync.when(
                         data: (countdown) => SeasonCountdownWidget(
                           countdown: countdown,
@@ -94,12 +96,13 @@ class SeasonHeader extends ConsumerWidget {
                   if (season.description != null)
                     Expanded(
                       child: Padding(
-                        padding: EdgeInsets.only(left: SoteriaSpacing.lg),
+                        padding: EdgeInsets.only(left: SoteriaSpacing.md),
                         child: Text(
                           season.description!,
                           style: context.bodySmall.copyWith(
                             color: SoteriaColors.textSecondary,
                             fontStyle: FontStyle.italic,
+                            fontSize: 10.sp,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,

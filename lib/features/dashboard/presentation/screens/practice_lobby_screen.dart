@@ -14,7 +14,7 @@ import 'package:soteria/features/dashboard/presentation/widgets/lobby/category_s
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/config_selectors.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/session_summary_card.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
-import 'package:soteria/core/design_system/components/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 
 class PracticeLobbyScreen extends ConsumerWidget {
   const PracticeLobbyScreen({super.key});
@@ -139,7 +139,11 @@ class _LobbyHeader extends StatelessWidget {
                   ],
                 ),
                 SizedBox(width: SoteriaSpacing.md),
-                SoteriaAvatar(url: player.photoUrl, size: 40, isOnline: true),
+                SoteriaAvatar(
+                  imageUrl: player.photoUrl,
+                  size: 40,
+                  isOnline: true,
+                ),
               ],
             ),
         ],

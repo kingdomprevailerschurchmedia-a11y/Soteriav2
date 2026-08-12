@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart' as gsi;
 
 abstract interface class AuthDataSource {
   Stream<auth.User?> get authStateChanges;
@@ -18,12 +18,12 @@ abstract interface class AuthDataSource {
 class FirebaseAuthDataSource implements AuthDataSource {
   FirebaseAuthDataSource({
     auth.FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn,
+    gsi.GoogleSignIn? googleSignIn,
   }) : _auth = firebaseAuth ?? auth.FirebaseAuth.instance,
        _googleSignIn = googleSignIn;
 
   final auth.FirebaseAuth _auth;
-  final GoogleSignIn? _googleSignIn;
+  final gsi.GoogleSignIn? _googleSignIn;
 
   @override
   Stream<auth.User?> get authStateChanges => _auth.authStateChanges();
@@ -46,7 +46,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
 
   @override
   Future<auth.UserCredential> signInWithGoogle() async {
-    final googleSignIn = _googleSignIn;
+    final gsi.GoogleSignIn? googleSignIn = _googleSignIn;
     if (googleSignIn == null) {
       throw auth.FirebaseAuthException(
         code: 'not-configured',
@@ -55,18 +55,61 @@ class FirebaseAuthDataSource implements AuthDataSource {
     }
 
     try {
-      final googleUser = await googleSignIn.authenticate();
-      final googleAuth = googleUser.authentication;
+      // Initialize Google Sign In (Required in v7.x+)
+      await googleSignIn.initialize(
+        serverClientId:
+            '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
+      );
+
+      final gsi.GoogleSignInAccount? googleUser = await googleSignIn
+          .authenticate();
+
+      if (googleUser == null) {
+        throw auth.FirebaseAuthException(
+          code: 'google-sign-in-cancelled',
+          message: 'User cancelled Google Sign In.',
+        );
+      }
+
+      final gsi.GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+
+      // In v7.x+, accessToken is retrieved via the authorizationClient.
+      // We request basic identity scopes to obtain the token.
+      final gsi.GoogleSignInClientAuthorization authz = await googleUser
+          .authorizationClient
+          .authorizeScopes(['email', 'profile']);
+      final String? accessToken = authz.accessToken;
+
+      if (idToken == null && accessToken == null) {
+        throw auth.FirebaseAuthException(
+          code: 'missing-tokens',
+          message: 'Google ID Token and Access Token are missing.',
+        );
+      }
 
       final auth.AuthCredential credential = auth.GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
+        idToken: idToken,
+        accessToken: accessToken,
       );
 
       return _auth.signInWithCredential(credential);
-    } on GoogleSignInException catch (e) {
+    } on gsi.GoogleSignInException catch (e) {
+      if (e.code == gsi.GoogleSignInExceptionCode.canceled) {
+        throw auth.FirebaseAuthException(
+          code: 'google-sign-in-cancelled',
+          message: 'User cancelled Google Sign In.',
+        );
+      }
       throw auth.FirebaseAuthException(
         code: 'google-sign-in-failed',
         message: e.description,
+      );
+    } catch (e) {
+      throw auth.FirebaseAuthException(
+        code: 'google-sign-in-failed',
+        message: e.toString(),
       );
     }
   }

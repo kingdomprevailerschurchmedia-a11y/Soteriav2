@@ -22,7 +22,7 @@ class SoteriaBottomNavBar extends StatelessWidget {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final isShort = SoteriaResponsive.isShortScreen(context);
 
-    return Container(
+    return Padding(
       padding: EdgeInsets.fromLTRB(
         SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
         0,
@@ -30,7 +30,6 @@ class SoteriaBottomNavBar extends StatelessWidget {
         (isShort ? SoteriaSpacing.smStatic : SoteriaSpacing.mdStatic) +
             bottomInset,
       ),
-      alignment: Alignment.bottomCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
         child: Container(
@@ -45,13 +44,15 @@ class SoteriaBottomNavBar extends StatelessWidget {
             ],
           ),
           child: GlassSurface(
-            blur: 32,
             borderRadius: BorderRadius.circular(SoteriaRadius.full),
             padding: EdgeInsets.symmetric(
-              vertical: isShort ? 8.h : 12.h,
+              vertical: isShort ? 6.h : 10.h,
               horizontal: 8.w,
             ),
-            opacity: 0.15,
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.12),
+              width: 1,
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -118,39 +119,51 @@ class _NavButton extends StatelessWidget {
         selected: isSelected,
         label: label,
         button: true,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: SoteriaAnimations.fast,
-              padding: EdgeInsets.symmetric(
-                horizontal: isShort ? 12.w : 16.w,
-                vertical: isShort ? 6.h : 8.h,
-              ),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? SoteriaColors.primary.withValues(alpha: 0.2)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(SoteriaRadius.full),
-              ),
-              child: Icon(
+        child: AnimatedContainer(
+          duration: SoteriaAnimations.fast,
+          padding: EdgeInsets.symmetric(
+            horizontal: isShort ? 12.w : 16.w,
+            vertical: isShort ? 8.h : 10.h,
+          ),
+          decoration: BoxDecoration(
+            gradient: isSelected
+                ? const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFF7C4DFF), Color(0xFF5B3FD9)],
+                  )
+                : null,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              if (isSelected)
+                BoxShadow(
+                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                  blurRadius: 15,
+                  spreadRadius: -2,
+                ),
+            ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
                 icon,
                 color: isSelected ? Colors.white : SoteriaColors.muted,
-                size: isShort ? 24.sp : 28.sp,
+                size: isShort ? 20.sp : 24.sp,
               ),
-            ),
-            if (isSelected) ...[
-              SizedBox(height: isShort ? 2.h : 4.h),
-              Container(
-                width: 4.w,
-                height: 4.w,
-                decoration: BoxDecoration(
-                  color: SoteriaColors.primary,
-                  shape: BoxShape.circle,
+              if (isSelected) ...[
+                SizedBox(height: 4.h),
+                Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
-              ),
+              ],
             ],
-          ],
+          ),
         ),
       ),
     );

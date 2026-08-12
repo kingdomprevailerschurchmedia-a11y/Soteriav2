@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:google_sign_in/google_sign_in.dart' as gsi;
 import 'package:soteria/core/firebase/data_sources/auth_data_source.dart';
 import '../data/repositories/firebase_auth_repository.dart';
 import '../domain/repositories/auth_repository.dart';
@@ -12,8 +12,12 @@ import '../domain/use_cases/sign_in_use_case.dart';
 import '../domain/use_cases/sign_up_use_case.dart';
 
 // --- Data Sources ---
+final googleSignInProvider = Provider<gsi.GoogleSignIn>((ref) {
+  return gsi.GoogleSignIn.instance;
+});
+
 final authDataSourceProvider = Provider<AuthDataSource>((ref) {
-  return FirebaseAuthDataSource(googleSignIn: GoogleSignIn.instance);
+  return FirebaseAuthDataSource(googleSignIn: ref.watch(googleSignInProvider));
 });
 
 // --- Repositories ---

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:soteria/core/avatar/presentation/widgets/avatar_frame.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/navigation/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_group_avatar.dart';
 import 'package:soteria/core/widgets/navigation/soteria_chip.dart';
 import 'package:soteria/core/design_system/components/soteria_text.dart';
 
@@ -16,9 +18,13 @@ class NavigationPreviewPage extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.md),
         Row(
           children: [
-            const SoteriaAvatar(initials: 'JD'),
+            const SoteriaAvatar(initials: 'JD', size: 40),
             SizedBox(width: SoteriaSpacing.md),
-            const SoteriaAvatar(initials: 'SK', isGold: true, size: 60),
+            const SoteriaAvatar(
+              initials: 'SK',
+              frameStyle: AvatarFrameStyle.gold,
+              size: 60,
+            ),
           ],
         ),
         SizedBox(height: SoteriaSpacing.md),

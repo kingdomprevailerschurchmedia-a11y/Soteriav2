@@ -137,21 +137,20 @@ class StepGoals extends ConsumerWidget {
                 ),
                 child: GlassSurface(
                   borderRadius: BorderRadius.circular(20.r),
-                  opacity: 0.05,
                   child: Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 16.w,
-                      vertical: 16.h,
+                      vertical: 12.h,
                     ),
                     child: Row(
                       children: [
                         // Icon Container
                         Container(
-                          width: 56.w,
-                          height: 56.w,
+                          width: 48.w,
+                          height: 48.w,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.05),
-                            borderRadius: BorderRadius.circular(16.r),
+                            borderRadius: BorderRadius.circular(12.r),
                             border: Border.all(
                               color: Colors.white.withValues(alpha: 0.1),
                             ),
@@ -162,11 +161,11 @@ class StepGoals extends ConsumerWidget {
                               color: isGold
                                   ? SoteriaColors.gold
                                   : const Color(0xFF7C4DFF),
-                              size: 28.w,
+                              size: 24.w,
                             ),
                           ),
                         ),
-                        SizedBox(width: 16.w),
+                        SizedBox(width: 14.w),
                         // Text Content
                         Expanded(
                           child: Column(
@@ -177,7 +176,7 @@ class StepGoals extends ConsumerWidget {
                                 style: context.titleMedium.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 18.sp,
+                                  fontSize: 16.sp,
                                 ),
                               ),
                               SizedBox(height: 2.h),
@@ -187,7 +186,7 @@ class StepGoals extends ConsumerWidget {
                                   color: SoteriaColors.textSecondary.withValues(
                                     alpha: 0.6,
                                   ),
-                                  fontSize: 13.sp,
+                                  fontSize: 12.sp,
                                 ),
                               ),
                             ],
@@ -195,13 +194,13 @@ class StepGoals extends ConsumerWidget {
                         ),
                         // Checkbox
                         Container(
-                          width: 28.w,
-                          height: 28.w,
+                          width: 24.w,
+                          height: 24.w,
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? const Color(0xFF5B3FD9)
                                 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8.r),
+                            borderRadius: BorderRadius.circular(6.r),
                             border: Border.all(
                               color: isSelected
                                   ? const Color(0xFF7C4DFF)
@@ -213,7 +212,7 @@ class StepGoals extends ConsumerWidget {
                               ? const Icon(
                                   Icons.check,
                                   color: Colors.white,
-                                  size: 18,
+                                  size: 16,
                                 )
                               : null,
                         ),

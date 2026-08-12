@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "464470460254-esbjup6n9n3fn2n6vv6n6k080tbgsad0.apps.googleusercontent.com",
+          "client_id": "464470460254-tehp3v99pbkjs23o15hkfvq7346jq8l2.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.soteria.app",
-            "certificate_hash": "3ff0fad302d16603a370f9316f9ff54290d1532b"
+            "certificate_hash": "d070a55c62defc83623b441a9e1e008d232ba42f"
           }
         },
         {

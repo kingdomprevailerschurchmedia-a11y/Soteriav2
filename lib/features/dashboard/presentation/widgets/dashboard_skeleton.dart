@@ -8,9 +8,10 @@ class DashboardSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('DashboardSkeleton Build');
     return Shimmer.fromColors(
-      baseColor: SoteriaColors.surface,
-      highlightColor: SoteriaColors.surface.withValues(alpha: 0.5),
+      baseColor: Colors.white.withValues(alpha: 0.15),
+      highlightColor: Colors.white.withValues(alpha: 0.3),
       child: SingleChildScrollView(
         physics: const NeverScrollableScrollPhysics(),
         child: Column(

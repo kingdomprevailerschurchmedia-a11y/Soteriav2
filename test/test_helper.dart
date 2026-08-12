@@ -26,6 +26,8 @@ class MockIdentityRepo extends IdentityRepository {
   Future<void> saveSession(UserSession session) async {}
   @override
   Future<void> clearSession() async {}
+  @override
+  Future<void> updateUserProfile(String uid, UserProfile profile) async {}
 }
 
 class MockAuthRepository extends Mock implements AuthRepository {

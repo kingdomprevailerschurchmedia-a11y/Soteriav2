@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/data/avatar_catalog.dart';
+import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import '../../domain/models/tournament_ranking.dart';
 import 'rank_badge.dart';
 
-class LeaderboardCard extends StatelessWidget {
+class LeaderboardCard extends ConsumerWidget {
   final TournamentRanking ranking;
   final bool isCurrentUser;
 
@@ -18,7 +22,11 @@ class LeaderboardCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final avatar = ranking.avatarId != null
+        ? ref.watch(avatarCatalogProvider).getById(ranking.avatarId!)
+        : null;
+
     return SoteriaCard(
       padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.md,
@@ -31,12 +39,11 @@ class LeaderboardCard extends StatelessWidget {
         children: [
           RankBadge(rank: ranking.rank, size: 36),
           SizedBox(width: SoteriaSpacing.md),
-          CircleAvatar(
-            radius: 18,
-            backgroundImage: ranking.photoUrl.isNotEmpty
-                ? NetworkImage(ranking.photoUrl)
-                : null,
-            child: ranking.photoUrl.isEmpty ? const Icon(Icons.person) : null,
+          SoteriaAvatar(
+            avatar: avatar,
+            imageUrl: ranking.photoUrl.isNotEmpty ? ranking.photoUrl : null,
+            size: 36,
+            rank: ranking.rank,
           ),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(

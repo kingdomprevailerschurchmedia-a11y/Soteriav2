@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/design_system/colors/soteria_colors.dart';
@@ -28,88 +29,100 @@ class SoteriaPage extends ConsumerWidget {
     final session = ref.watch(sessionProvider);
     final isOffline = session.isOffline;
 
-    return Stack(
-      children: [
-        if (useSafeArea) SafeArea(child: child) else child,
-        if (showOfflineBanner && isOffline)
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              child: Container(
-                width: double.infinity,
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                color: SoteriaColors.gold.withValues(alpha: 0.1),
-                child: Center(
-                  child: Text(
-                    'OFFLINE MODE • DATA FROM CACHE',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      fontWeight: FontWeight.bold,
+    return Material(
+      color: Colors.transparent,
+      type: MaterialType.transparency,
+      child: Stack(
+        children: [
+          if (useSafeArea) SafeArea(child: child) else child,
+          if (showOfflineBanner && isOffline)
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: SafeArea(
+                child: Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  color: SoteriaColors.gold.withValues(alpha: 0.1),
+                  child: Center(
+                    child: Text(
+                      'OFFLINE MODE • DATA FROM CACHE',
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.gold,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        if (isLoading)
-          const ColoredBox(
-            color: Colors.black54,
-            child: Center(
-              child: CircularProgressIndicator(color: SoteriaColors.primary),
-            ),
-          ),
-        if (error != null)
-          ColoredBox(
-            color: SoteriaColors.background,
-            child: Center(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.error_outline_rounded,
-                        color: SoteriaColors.error,
-                        size: 64,
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'SYSTEM ERROR',
-                        style: context.headlineSmall.copyWith(
-                          color: SoteriaColors.error,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        error!,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white70),
-                      ),
-                      if (onRetry != null) ...[
-                        const SizedBox(height: 24),
-                        ElevatedButton(
-                          onPressed: onRetry,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: SoteriaColors.error.withValues(
-                              alpha: 0.2,
-                            ),
-                            foregroundColor: SoteriaColors.error,
-                            side: const BorderSide(color: SoteriaColors.error),
-                          ),
-                          child: const Text('RETRY'),
-                        ),
-                      ],
-                    ],
+          if (isLoading)
+            Positioned.fill(
+              child: ColoredBox(
+                color: Colors.black.withValues(alpha: 0.4),
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: SoteriaColors.primary,
                   ),
                 ),
               ),
             ),
-          ),
-      ],
+          if (error != null)
+            Positioned.fill(
+              child: ColoredBox(
+                color: SoteriaColors.background,
+                child: Center(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.error_outline_rounded,
+                            color: SoteriaColors.error,
+                            size: 64,
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            'SYSTEM ERROR',
+                            style: context.headlineSmall.copyWith(
+                              color: SoteriaColors.error,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            error!,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(color: Colors.white70),
+                          ),
+                          if (onRetry != null) ...[
+                            const SizedBox(height: 24),
+                            ElevatedButton(
+                              onPressed: onRetry,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: SoteriaColors.error.withValues(
+                                  alpha: 0.2,
+                                ),
+                                foregroundColor: SoteriaColors.error,
+                                side: const BorderSide(
+                                  color: SoteriaColors.error,
+                                ),
+                              ),
+                              child: const Text('RETRY'),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
     );
   }
 }

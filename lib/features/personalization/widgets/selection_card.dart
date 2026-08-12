@@ -28,7 +28,7 @@ class SelectionCard extends StatelessWidget {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.r),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
             color: isSelected
                 ? SoteriaColors.gold.withValues(alpha: 0.8)
@@ -46,20 +46,18 @@ class SelectionCard extends StatelessWidget {
               : null,
         ),
         child: GlassSurface(
-          borderRadius: BorderRadius.circular(24.r),
-          opacity: 0.05,
-          blur: 10,
+          borderRadius: BorderRadius.circular(20.r),
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Row(
               children: [
                 // Icon Container
                 Container(
-                  width: 56.w,
-                  height: 56.w,
+                  width: 48.w,
+                  height: 48.w,
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(16.r),
+                    borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
                       color: Colors.white.withValues(alpha: 0.1),
                     ),
@@ -70,11 +68,11 @@ class SelectionCard extends StatelessWidget {
                       color: isSelected
                           ? SoteriaColors.gold
                           : SoteriaColors.primary,
-                      size: 28.w,
+                      size: 24.w,
                     ),
                   ),
                 ),
-                SizedBox(width: 16.w),
+                SizedBox(width: 14.w),
                 // Text Content
                 Expanded(
                   child: Column(
@@ -84,20 +82,20 @@ class SelectionCard extends StatelessWidget {
                       Text(
                         title,
                         style: context.titleMedium.copyWith(
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                           color: isSelected ? SoteriaColors.gold : Colors.white,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (subtitle != null) ...[
-                        SizedBox(height: 4.h),
+                        SizedBox(height: 2.h),
                         Text(
                           subtitle!,
                           style: context.bodySmall.copyWith(
                             color: SoteriaColors.textSecondary.withValues(
                               alpha: 0.7,
                             ),
-                            fontSize: 13.sp,
+                            fontSize: 12.sp,
                           ),
                         ),
                       ],
@@ -106,8 +104,8 @@ class SelectionCard extends StatelessWidget {
                 ),
                 // Trailing Icon
                 Container(
-                  width: 32.w,
-                  height: 32.w,
+                  width: 28.w,
+                  height: 28.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: isSelected
@@ -122,7 +120,7 @@ class SelectionCard extends StatelessWidget {
                     color: isSelected
                         ? Colors.black
                         : Colors.white.withValues(alpha: 0.5),
-                    size: 20.w,
+                    size: 18.w,
                   ),
                 ),
               ],

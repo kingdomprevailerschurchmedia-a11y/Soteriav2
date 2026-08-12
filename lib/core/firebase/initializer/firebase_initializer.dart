@@ -48,12 +48,7 @@ class FirebaseInitializer {
   }
 
   static Future<void> initializeGoogleSignIn() async {
-    LoggerService.i('Initializing Google Sign-In');
-    await GoogleSignIn.instance.initialize(
-      serverClientId:
-          '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
-    );
-    LoggerService.d('Google Sign-In ready.');
+    // Initialized via Provider now for cleaner lifecycle management
   }
 
   static Future<void> initializeAppCheck(

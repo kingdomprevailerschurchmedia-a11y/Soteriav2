@@ -5,7 +5,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/components/soteria_progress_bar.dart';
-import '../../../../core/design_system/components/soteria_avatar.dart';
+import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../domain/models/player_progression.dart';
 import 'rank_badge.dart';
 
@@ -32,8 +32,8 @@ class PlayerProgressionCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              SoteriaAvatar(url: avatarUrl, size: 48.w),
-              SizedBox(width: SoteriaSpacing.md),
+              const SoteriaAvatar(size: 48),
+              SizedBox(width: SoteriaSpacing.md.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

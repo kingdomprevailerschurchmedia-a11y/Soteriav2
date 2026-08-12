@@ -23,6 +23,7 @@ void main() {
 
       expect(result['displayName'], 'Test User');
       expect(result['email'], 'test@soteria.com');
+      expect(result['selectedAvatarId'], 'socrates');
       expect(result['level'], 1);
       expect(result['xp'], 0);
       expect(result['createdAt'], isA<Timestamp>());

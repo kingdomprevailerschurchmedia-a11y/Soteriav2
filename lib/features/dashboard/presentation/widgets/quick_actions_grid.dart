@@ -35,7 +35,7 @@ class QuickActionsGrid extends ConsumerWidget {
                   color: SoteriaColors.gold,
                   letterSpacing: 2,
                   fontWeight: FontWeight.w900,
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                 ),
               ),
               Row(
@@ -45,7 +45,7 @@ class QuickActionsGrid extends ConsumerWidget {
                     style: context.labelSmall.copyWith(
                       color: SoteriaColors.secondary,
                       fontWeight: FontWeight.w900,
-                      fontSize: 14.sp,
+                      fontSize: 12.sp,
                     ),
                   ),
                   SizedBox(width: 4.w),
@@ -65,9 +65,9 @@ class QuickActionsGrid extends ConsumerWidget {
             crossAxisCount: isTablet ? 4 : 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12.h,
-            crossAxisSpacing: 12.w,
-            childAspectRatio: isTablet ? 1.5 : 1.25,
+            mainAxisSpacing: 8.h,
+            crossAxisSpacing: 8.w,
+            childAspectRatio: isTablet ? 1.7 : 1.4,
             children: [
               _ActionCard(
                 title: 'Practice',
@@ -226,7 +226,7 @@ class _ActionCardState extends State<_ActionCard>
                         padding: EdgeInsets.all(
                           SoteriaSpacing.adaptive(
                             context,
-                            SoteriaSpacing.mdStatic,
+                            SoteriaSpacing.smStatic,
                           ),
                         ),
                         child: Column(
@@ -235,15 +235,15 @@ class _ActionCardState extends State<_ActionCard>
                             LayoutBuilder(
                               builder: (context, constraints) {
                                 return Container(
-                                  padding: const EdgeInsets.all(6),
+                                  padding: const EdgeInsets.all(4),
                                   decoration: BoxDecoration(
                                     color: Colors.white.withValues(alpha: 0.15),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Icon(
                                     widget.icon,
                                     color: Colors.white,
-                                    size: isShort ? 20.sp : 24.sp,
+                                    size: isShort ? 16.sp : 20.sp,
                                   ),
                                 );
                               },
@@ -267,7 +267,7 @@ class _ActionCardState extends State<_ActionCard>
                                           style: context.titleMedium.copyWith(
                                             fontWeight: FontWeight.w900,
                                             color: Colors.white,
-                                            fontSize: isShort ? 16.sp : 18.sp,
+                                            fontSize: isShort ? 14.sp : 16.sp,
                                           ),
                                         ),
                                       ),
@@ -281,7 +281,7 @@ class _ActionCardState extends State<_ActionCard>
                                               alpha: 0.7,
                                             ),
                                             fontWeight: FontWeight.bold,
-                                            fontSize: isShort ? 10.sp : 12.sp,
+                                            fontSize: isShort ? 9.sp : 11.sp,
                                           ),
                                         ),
                                       ),
@@ -290,7 +290,7 @@ class _ActionCardState extends State<_ActionCard>
                                 ),
                                 SizedBox(width: 4.w),
                                 Container(
-                                  padding: const EdgeInsets.all(4),
+                                  padding: const EdgeInsets.all(3),
                                   decoration: const BoxDecoration(
                                     color: Colors.white24,
                                     shape: BoxShape.circle,
@@ -298,7 +298,7 @@ class _ActionCardState extends State<_ActionCard>
                                   child: Icon(
                                     Icons.chevron_right_rounded,
                                     color: Colors.white,
-                                    size: 14.sp,
+                                    size: 12.sp,
                                   ),
                                 ),
                               ],

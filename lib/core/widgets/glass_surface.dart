@@ -8,8 +8,8 @@ class GlassSurface extends StatelessWidget {
   const GlassSurface({
     super.key,
     required this.child,
-    this.blur = SoteriaBlur.medium,
-    this.opacity = 0.08,
+    this.blur = SoteriaBlur.high,
+    this.opacity = 0.05,
     this.borderRadius,
     this.padding,
     this.border,

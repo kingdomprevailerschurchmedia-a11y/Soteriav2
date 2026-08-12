@@ -29,18 +29,21 @@ void main() {
         seasonHistoryProvider.overrideWith((ref) => Stream.value(results)),
         latestSeasonResultProvider.overrideWith((ref) => Future.value(latest)),
         bestSeasonResultProvider.overrideWith((ref) => Future.value(best)),
-        currentSeasonProvider.overrideWith((ref) => Stream.value(currentSeason)),
-        competitiveProgressionProvider.overrideWith((ref) => Stream.value(
-              progression ?? PlayerProgression.initial('u1', 's1'),
-            )),
+        currentSeasonProvider.overrideWith(
+          (ref) => Stream.value(currentSeason),
+        ),
+        competitiveProgressionProvider.overrideWith(
+          (ref) => Stream.value(
+            progression ?? PlayerProgression.initial('u1', 's1'),
+          ),
+        ),
         timeServiceProvider.overrideWithValue(MockTimeService(now)),
       ],
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,
-        builder: (context, child) => const MaterialApp(
-          home: CompetitiveHistoryScreen(),
-        ),
+        builder: (context, child) =>
+            const MaterialApp(home: CompetitiveHistoryScreen()),
       ),
     );
   }
@@ -53,7 +56,9 @@ void main() {
     expect(find.byType(SeasonResultCard), findsNothing);
   });
 
-  testWidgets('should show history list and highlighted results', (tester) async {
+  testWidgets('should show history list and highlighted results', (
+    tester,
+  ) async {
     final now = DateTime.now();
     final result = SeasonResult(
       seasonId: 's1',
@@ -72,15 +77,13 @@ void main() {
       updatedAt: now,
     );
 
-    await tester.pumpWidget(createTestWidget(
-      results: [result],
-      latest: result,
-      best: result,
-    ));
+    await tester.pumpWidget(
+      createTestWidget(results: [result], latest: result, best: result),
+    );
     await tester.pumpAndSettle();
 
     expect(find.text('LATEST COMPLETED'), findsOneWidget);
-    
+
     // Use scroll to find "SEASON HISTORY" if it's off-screen
     final historySectionFinder = find.text('SEASON HISTORY');
     await tester.scrollUntilVisible(
@@ -89,7 +92,7 @@ void main() {
       scrollable: find.byType(Scrollable).first,
     );
     expect(historySectionFinder, findsOneWidget);
-    
+
     final cardFinder = find.byType(SeasonResultCard);
     await tester.scrollUntilVisible(
       cardFinder,

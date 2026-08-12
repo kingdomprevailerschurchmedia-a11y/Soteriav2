@@ -62,6 +62,19 @@ class ProfileNotifier extends Notifier<UserProfile?> {
         .getUserProfile(uid);
     state = profile;
   }
+
+  Future<void> updateAvatar(String avatarId) async {
+    final session = ref.read(sessionProvider);
+    if (!session.isAuthenticated || session.uid == null || state == null) {
+      return;
+    }
+
+    final updatedProfile = state!.copyWith(selectedAvatarId: avatarId);
+    await ref
+        .read(identityRepositoryProvider)
+        .updateUserProfile(session.uid!, updatedProfile);
+    state = updatedProfile;
+  }
 }
 
 final profileProvider = NotifierProvider<ProfileNotifier, UserProfile?>(
@@ -96,20 +109,16 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
 
   @override
   AppStartupState build() {
-    // Watch session state
-    ref.watch(sessionProvider);
+    // Listen to session changes to automatically progress the lifecycle
+    ref.listen(sessionProvider, (previous, next) {
+      if (next.isAuthenticated && state == AppStartupState.auth) {
+        state = AppStartupState.ready;
+      }
+    });
 
     // Defer initialization to avoid reading 'state' before build() completes.
     Future.microtask(() => _init());
-    return stateOr(AppStartupState.loading);
-  }
-
-  AppStartupState stateOr(AppStartupState fallback) {
-    try {
-      return state;
-    } catch (_) {
-      return fallback;
-    }
+    return AppStartupState.loading;
   }
 
   void refresh() {

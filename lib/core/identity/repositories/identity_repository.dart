@@ -11,6 +11,7 @@ abstract class IdentityRepository {
   Future<UserGameProfile?> getUserGameProfile(String uid);
   Future<void> saveSession(UserSession session);
   Future<void> clearSession();
+  Future<void> updateUserProfile(String uid, UserProfile profile);
 }
 
 class MockIdentityRepository implements IdentityRepository {
@@ -37,4 +38,7 @@ class MockIdentityRepository implements IdentityRepository {
 
   @override
   Future<void> clearSession() async {}
+
+  @override
+  Future<void> updateUserProfile(String uid, UserProfile profile) async {}
 }

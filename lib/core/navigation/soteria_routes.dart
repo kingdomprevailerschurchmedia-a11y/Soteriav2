@@ -54,4 +54,5 @@ class SoteriaRoutes {
   static const String securityStatus = '/preview-gallery/security-status';
   static const String proLobby = '/preview-gallery/pro-lobby';
   static const String quizHistoryPreview = '/preview-gallery/quiz-history';
+  static const String avatarPlatform = '/preview-gallery/avatars';
 }

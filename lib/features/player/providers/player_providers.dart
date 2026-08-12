@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/firebase/providers/firebase_providers.dart';
+import '../../../core/identity/providers/identity_providers.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/repositories/player_repository.dart';
@@ -54,13 +55,13 @@ final playerBootstrapServiceProvider = Provider(
 
 /// A stream of the current player's profile, providing real-time updates.
 final currentPlayerStreamProvider = StreamProvider<PlayerProfile?>((ref) {
-  final authState = ref.watch(authDataSourceProvider).authStateChanges;
+  final session = ref.watch(sessionProvider);
 
-  // We need the UID from auth to observe the correct document
-  return authState.asyncExpand((user) {
-    if (user == null) return Stream.value(null);
-    return ref.watch(observePlayerProfileUseCaseProvider).execute(user.uid);
-  });
+  if (!session.isAuthenticated || session.uid == null) {
+    return Stream.value(null);
+  }
+
+  return ref.watch(observePlayerProfileUseCaseProvider).execute(session.uid!);
 });
 
 /// A convenience provider to access the current player profile data.

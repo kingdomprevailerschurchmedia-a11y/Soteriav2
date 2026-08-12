@@ -29,7 +29,7 @@ class PerformanceSection extends StatelessWidget {
                   color: SoteriaColors.textSecondary,
                   letterSpacing: 2,
                   fontWeight: FontWeight.w900,
-                  fontSize: 14.sp,
+                  fontSize: 12.sp,
                 ),
               ),
             ],

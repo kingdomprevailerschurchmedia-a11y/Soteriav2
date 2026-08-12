@@ -54,12 +54,11 @@ Future<void> _initializeDeferredServices() async {
   try {
     // Parallelize services that return Futures
     await Future.wait([
-      FirebaseInitializer.initializePerformance(),
+      DiagnosticsService.init(),
       // Add other Future-returning startup services here
     ]);
 
     // Synchronous or non-Future initializations
-    DiagnosticsService.init();
     PerformanceService.init();
     ErrorHandler.init();
 

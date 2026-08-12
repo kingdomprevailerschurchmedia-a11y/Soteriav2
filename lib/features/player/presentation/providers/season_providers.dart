@@ -15,6 +15,10 @@ final currentSeasonProvider = StreamProvider<CompetitiveSeason?>((ref) {
   return ref.watch(seasonRepositoryProvider).watchCurrentSeason();
 });
 
+final allSeasonsProvider = FutureProvider<List<CompetitiveSeason>>((ref) {
+  return ref.watch(seasonRepositoryProvider).getSeasons();
+});
+
 final seasonCountdownProvider = StreamProvider<SeasonCountdown>((ref) {
   final seasonAsync = ref.watch(currentSeasonProvider);
 

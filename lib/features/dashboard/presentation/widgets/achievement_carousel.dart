@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
@@ -20,6 +21,7 @@ class AchievementCarousel extends StatelessWidget {
               color: SoteriaColors.gold,
               letterSpacing: 2,
               fontWeight: FontWeight.bold,
+              fontSize: 12.sp,
             ),
           ),
         ),
@@ -76,7 +78,7 @@ class _AchievementCard extends StatelessWidget {
       margin: EdgeInsets.only(right: SoteriaSpacing.md),
       child: GlassSurface(
         borderRadius: BorderRadius.circular(20),
-        opacity: isUnlocked ? 0.08 : 0.03,
+        opacity: isUnlocked ? 0.05 : 0.02,
         child: Padding(
           padding: EdgeInsets.all(SoteriaSpacing.sm),
           child: Column(

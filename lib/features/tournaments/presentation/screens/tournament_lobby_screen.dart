@@ -7,6 +7,9 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/data/avatar_catalog.dart';
+import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import '../providers/tournament_details_provider.dart';
 import 'package:soteria/features/tournaments/presentation/providers/tournament_gameplay_provider.dart';
 import 'package:soteria/features/tournaments/presentation/widgets/tournament_countdown_widget.dart';
@@ -107,21 +110,26 @@ class _PlayersList extends StatelessWidget {
           child: ListView.builder(
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
             itemCount: registeredCount,
-            itemBuilder: (context, index) => ListTile(
-              leading: CircleAvatar(
-                backgroundColor: SoteriaColors.primary.withValues(alpha: 0.2),
-                child: Text(
-                  '${index + 1}',
-                  style: const TextStyle(color: SoteriaColors.primary),
-                ),
-              ),
-              title: Text('Player ${index + 1}', style: context.bodyMedium),
-              trailing: const Icon(
-                Icons.check_circle,
-                color: SoteriaColors.success,
-                size: 16,
-              ),
-            ),
+            itemBuilder: (context, index) {
+              return Consumer(
+                builder: (context, ref, child) {
+                  final avatars = ref.watch(avatarCatalogProvider).all;
+                  final avatar = avatars[index % avatars.length];
+                  return ListTile(
+                    leading: SoteriaAvatar(avatar: avatar, size: 40),
+                    title: Text(
+                      'Player ${index + 1}',
+                      style: context.bodyMedium,
+                    ),
+                    trailing: const Icon(
+                      Icons.check_circle,
+                      color: SoteriaColors.success,
+                      size: 16,
+                    ),
+                  );
+                },
+              );
+            },
           ),
         ),
       ],

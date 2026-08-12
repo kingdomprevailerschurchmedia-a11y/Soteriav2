@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/firebase/providers/firebase_providers.dart';
+import '../../../../core/logging/logger_service.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../domain/models/dashboard_state.dart';
 import '../../domain/repositories/home_repository.dart';
@@ -26,11 +28,15 @@ class DashboardNotifier extends Notifier<DashboardState> {
     final announcementsAsync = ref.watch(announcementsProvider);
     final challengeAsync = ref.watch(dailyChallengeProvider);
 
+    if (kDebugMode) {
+      LoggerService.d(
+        'Dashboard State: player=${playerAsync.value != null}, loading=${playerAsync.isLoading}, announcements=${announcementsAsync.value?.length ?? 0}',
+        feature: 'Dashboard',
+      );
+    }
+
     return DashboardState(
-      isLoading:
-          playerAsync.isLoading ||
-          announcementsAsync.isLoading ||
-          challengeAsync.isLoading,
+      isLoading: playerAsync.isLoading,
       player: playerAsync.value,
       announcements: announcementsAsync.value ?? const [],
       dailyChallenge: challengeAsync.value,

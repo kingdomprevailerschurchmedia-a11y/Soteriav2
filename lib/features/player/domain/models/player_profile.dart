@@ -6,6 +6,7 @@ class PlayerProfile {
   final String displayName;
   final String email;
   final String photoUrl;
+  final String selectedAvatarId;
 
   // Progression
   final int level;
@@ -48,6 +49,7 @@ class PlayerProfile {
     required this.displayName,
     required this.email,
     this.photoUrl = '',
+    this.selectedAvatarId = 'socrates',
     this.level = 1,
     this.xp = 0,
     this.coins = 0,
@@ -79,6 +81,7 @@ class PlayerProfile {
   PlayerProfile copyWith({
     String? displayName,
     String? photoUrl,
+    String? selectedAvatarId,
     int? level,
     int? xp,
     int? coins,
@@ -110,6 +113,7 @@ class PlayerProfile {
       displayName: displayName ?? this.displayName,
       email: email,
       photoUrl: photoUrl ?? this.photoUrl,
+      selectedAvatarId: selectedAvatarId ?? this.selectedAvatarId,
       level: level ?? this.level,
       xp: xp ?? this.xp,
       coins: coins ?? this.coins,

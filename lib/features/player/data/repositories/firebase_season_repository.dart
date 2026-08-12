@@ -70,4 +70,16 @@ class FirebaseSeasonRepository implements SeasonRepository {
         .map((doc) => CompetitiveSeason.fromJson(doc.data()))
         .toList();
   }
+
+  @override
+  Future<List<CompetitiveSeason>> getSeasons() async {
+    final snapshot = await _seasonsCollection
+        .where('isVisible', isEqualTo: true)
+        .orderBy('seasonNumber', descending: true)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => CompetitiveSeason.fromJson(doc.data()))
+        .toList();
+  }
 }

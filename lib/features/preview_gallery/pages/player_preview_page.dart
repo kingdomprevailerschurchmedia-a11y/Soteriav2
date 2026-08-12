@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/data/avatar_catalog.dart';
+import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -59,24 +63,17 @@ class PlayerPreviewPage extends StatelessWidget {
   }
 }
 
-class _IdentityCard extends StatelessWidget {
+class _IdentityCard extends ConsumerWidget {
   final PlayerProfile profile;
   const _IdentityCard({required this.profile});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final avatar = ref.watch(avatarCatalogProvider).getById('isaac');
     return SoteriaCard(
       child: Row(
         children: [
-          CircleAvatar(
-            radius: 32,
-            backgroundColor: SoteriaColors.primary.withValues(alpha: 0.2),
-            child: const Icon(
-              Icons.person_rounded,
-              color: SoteriaColors.primary,
-              size: 32,
-            ),
-          ),
+          SoteriaAvatar(avatar: avatar, size: 64),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(
             child: Column(

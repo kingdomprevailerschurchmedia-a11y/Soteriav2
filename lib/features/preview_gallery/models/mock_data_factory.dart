@@ -33,6 +33,7 @@ class MockDataFactory {
       displayName: name ?? 'Aria Sterling',
       email: 'aria@soteria.app',
       photoUrl: 'https://i.pravatar.cc/300?u=aria',
+      selectedAvatarId: 'athena',
       level: level ?? 42,
       xp: xp ?? 4250,
       coins: coins ?? 1500,
@@ -374,12 +375,14 @@ class MockDataFactory {
     int? score,
     double? accuracy,
     TournamentReward? prize,
+    String? avatarId,
   }) {
     return TournamentRanking(
       rank: rank ?? 1,
       uid: uid ?? const Uuid().v4(),
       displayName: name ?? 'Cyber Master',
       photoUrl: 'https://i.pravatar.cc/300?u=${const Uuid().v4()}',
+      avatarId: avatarId ?? 'augustus',
       score: score ?? 4500,
       accuracy: accuracy ?? 0.95,
       completionTime: const Duration(minutes: 4, seconds: 30),

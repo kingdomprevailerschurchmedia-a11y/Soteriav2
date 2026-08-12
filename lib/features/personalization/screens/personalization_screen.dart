@@ -127,51 +127,13 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                       // Logo & Title
                       Column(
                         children: [
-                          // Glassy Diamond Logo Placeholder
-                          Container(
-                            width: 48.w,
-                            height: 48.w,
-                            decoration: BoxDecoration(
-                              color: SoteriaColors.primary.withValues(
-                                alpha: 0.2,
-                              ),
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: SoteriaColors.primary.withValues(
-                                  alpha: 0.5,
-                                ),
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: SoteriaColors.primary.withValues(
-                                    alpha: 0.3,
-                                  ),
-                                  blurRadius: 10,
-                                  spreadRadius: 1,
-                                ),
-                              ],
-                            ),
-                            child: Transform.rotate(
-                              angle: 0.785, // 45 degrees
-                              child: Center(
-                                child: Transform.rotate(
-                                  angle: -0.785,
-                                  child: Image.asset(
-                                    'assets/images/personalisation_icon.png',
-                                    width: 24.w,
-                                    height: 24.w,
-                                    color: Colors.white,
-                                    errorBuilder: (_, __, ___) => const Icon(
-                                      Icons.auto_awesome_rounded,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
+                          Image.asset(
+                            'assets/images/personalisation_icon.png',
+                            width: 64.w,
+                            height: 64.w,
+                            fit: BoxFit.contain,
                           ),
-                          SizedBox(height: 12.h),
+                          SizedBox(height: 8.h),
                           Text(
                             'Personalization',
                             style: context.titleLarge.copyWith(

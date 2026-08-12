@@ -105,15 +105,25 @@ class NotificationCoordinator {
     switch (action) {
       case 'tournament':
         _navigation.go(SoteriaRoutes.tournaments);
+        break;
       case 'practice':
         _navigation.go(SoteriaRoutes.practice);
+        break;
       case 'leaderboard':
         _navigation.go(SoteriaRoutes.leaderboard);
+        break;
       case 'achievements':
-        // Assuming route exists or will exist
-        _navigation.go(SoteriaRoutes.main);
+        _navigation.go(SoteriaRoutes.profile);
+        break;
       case 'profile':
         _navigation.go(SoteriaRoutes.profile);
+        break;
+      case 'history':
+        _navigation.go(SoteriaRoutes.competitiveHistory);
+        break;
+      case 'rewards':
+        _navigation.go(SoteriaRoutes.wallet);
+        break;
       default:
         _navigation.go(SoteriaRoutes.main);
     }
