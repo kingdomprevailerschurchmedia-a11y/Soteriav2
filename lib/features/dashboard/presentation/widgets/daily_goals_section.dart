@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 
 class DailyGoalsSection extends StatelessWidget {
@@ -19,69 +18,95 @@ class DailyGoalsSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'DAILY GOALS',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.textSecondary,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
-                ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/daily_goals_icon_transparent.png',
+                    width: 28.w,
+                    height: 28.w,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(width: 10.w),
+                  Text(
+                    'DAILY GOALS',
+                    style: context.labelSmall.copyWith(
+                      color: SoteriaColors.gold,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                'See All',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.secondary,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Text(
+                      'See All',
+                      style: context.labelSmall.copyWith(
+                        color: const Color(0xFF9155FD),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: const Color(0xFF9155FD),
+                      size: 18.sp,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: 16.h),
           SoteriaCard(
-            padding: EdgeInsets.all(SoteriaSpacing.lg),
-            borderRadius: SoteriaRadius.xxl,
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+            borderRadius: 24,
             child: Row(
               children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Complete 3 goals to\nearn bonus XP!',
+                        'Complete 3 goals to earn bonus XP!',
                         style: context.titleMedium.copyWith(
-                          color: SoteriaColors.textPrimary,
-                          fontWeight: FontWeight.w900,
-                          height: 1.2,
-                          fontSize: 18.sp,
+                          color: SoteriaColors.muted,
+                          fontWeight: FontWeight.w600,
+                          height: 1.4,
+                          fontSize: 14.sp,
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: SoteriaSpacing.md),
+                SizedBox(width: 12.w),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    _GoalProgressRing(
+                    _GoalProgressIcon(
                       icon: Icons.menu_book_rounded,
-                      progress: 0.0,
+                      current: 0,
                       total: 1,
-                      color: Colors.purpleAccent,
+                      color: const Color(0xFF9155FD),
                     ),
-                    SizedBox(width: 18.w),
-                    _GoalProgressRing(
-                      icon: Icons.bolt_rounded,
-                      progress: 0.0,
+                    _VerticalDivider(),
+                    _GoalProgressIcon(
+                      icon: Icons.flash_on_rounded,
+                      current: 0,
                       total: 1,
-                      color: Colors.blueAccent,
+                      color: const Color(0xFF2196F3),
                     ),
-                    SizedBox(width: 18.w),
-                    _GoalProgressRing(
+                    _VerticalDivider(),
+                    _GoalProgressIcon(
                       icon: Icons.emoji_events_rounded,
-                      progress: 0.0,
+                      current: 0,
                       total: 1,
-                      color: Colors.orangeAccent,
+                      color: const Color(0xFFFF9F43),
                     ),
                   ],
                 ),
@@ -94,58 +119,74 @@ class DailyGoalsSection extends StatelessWidget {
   }
 }
 
-class _GoalProgressRing extends StatelessWidget {
-  const _GoalProgressRing({
+class _GoalProgressIcon extends StatelessWidget {
+  const _GoalProgressIcon({
     required this.icon,
-    required this.progress,
+    required this.current,
     required this.total,
     required this.color,
   });
 
   final IconData icon;
-  final double progress;
+  final int current;
   final int total;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              width: 56.w,
-              height: 56.w,
-              child: CircularProgressIndicator(
-                value: progress / total,
-                strokeWidth: 4,
-                backgroundColor: Colors.white.withValues(alpha: 0.05),
-                valueColor: AlwaysStoppedAnimation(color),
-              ),
+        Container(
+          width: 42.w,
+          height: 42.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color.withValues(alpha: 0.1),
+            border: Border.all(
+              color: color.withValues(alpha: 0.5),
+              width: 1.2,
             ),
-            Container(
-              width: 44.w,
-              height: 44.w,
-              decoration: BoxDecoration(
-                color: color.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
-                border: Border.all(color: color.withValues(alpha: 0.2)),
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.2),
+                blurRadius: 10,
+                spreadRadius: 1,
               ),
-              child: Icon(icon, size: 20.sp, color: color),
+            ],
+          ),
+          child: Center(
+            child: Icon(
+              icon,
+              size: 20.sp,
+              color: color,
             ),
-          ],
+          ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 6.h),
         Text(
-          '${progress.toInt()}/$total',
+          '$current/$total',
           style: context.labelSmall.copyWith(
-            fontSize: 12.sp,
-            color: SoteriaColors.textSecondary,
-            fontWeight: FontWeight.w900,
+            color: Colors.white,
+            fontWeight: FontWeight.w800,
+            fontSize: 11.sp,
           ),
         ),
       ],
+    );
+  }
+}
+
+class _VerticalDivider extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      child: Container(
+        height: 32.h,
+        width: 1,
+        color: Colors.white.withValues(alpha: 0.05),
+      ),
     );
   }
 }

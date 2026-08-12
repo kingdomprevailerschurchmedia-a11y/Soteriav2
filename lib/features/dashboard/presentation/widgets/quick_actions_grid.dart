@@ -6,8 +6,6 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
-import '../../../../core/design_system/components/soteria_card.dart';
-
 import '../../../../core/utils/soteria_responsive.dart';
 
 class QuickActionsGrid extends ConsumerWidget {
@@ -17,7 +15,6 @@ class QuickActionsGrid extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final nav = ref.watch(navigationCoordinatorProvider);
     final isTablet = SoteriaResponsive.isTablet(context);
-    final isShort = SoteriaResponsive.isShortScreen(context);
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -29,55 +26,63 @@ class QuickActionsGrid extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'QUICK ACTIONS',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.gold,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
-                ),
-              ),
               Row(
                 children: [
-                  Text(
-                    'See All',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.secondary,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12.sp,
-                    ),
+                  Image.asset(
+                    'assets/icons/quick_action_icon_transparent.png',
+                    width: 28.w,
+                    height: 28.w,
+                    fit: BoxFit.contain,
                   ),
-                  SizedBox(width: 4.w),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: SoteriaColors.secondary,
-                    size: 18.sp,
+                  SizedBox(width: 10.w),
+                  Text(
+                    'QUICK ACTIONS',
+                    style: context.labelSmall.copyWith(
+                      color: SoteriaColors.gold,
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.sp,
+                    ),
                   ),
                 ],
               ),
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Text(
+                      'See All',
+                      style: context.labelSmall.copyWith(
+                        color: const Color(0xFF9155FD),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: const Color(0xFF9155FD),
+                      size: 18.sp,
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-          ),
+          SizedBox(height: 16.h),
           GridView.count(
             crossAxisCount: isTablet ? 4 : 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 8.h,
-            crossAxisSpacing: 8.w,
-            childAspectRatio: isTablet ? 1.7 : 1.4,
+            mainAxisSpacing: 16.h,
+            crossAxisSpacing: 16.w,
+            childAspectRatio: 1.25,
             children: [
               _ActionCard(
                 title: 'Practice',
                 subtitle: 'Level Up',
                 icon: Icons.menu_book_rounded,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF8E24AA), Color(0xFF512DA8)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: const Color(0xFF9155FD),
                 delay: 100,
                 onTap: nav.playPractice,
               ),
@@ -85,35 +90,23 @@ class QuickActionsGrid extends ConsumerWidget {
                 title: 'Pro Mode',
                 subtitle: 'Win Coins',
                 icon: Icons.emoji_events_rounded,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFFF57C00), Color(0xFFE64A19)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                color: const Color(0xFFFF9F43),
                 delay: 200,
                 onTap: nav.playProMode,
               ),
               _ActionCard(
                 title: 'Versus',
                 subtitle: '1v1 Match',
-                icon: Icons.bolt_rounded,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF1976D2), Color(0xFF0D47A1)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                icon: Icons.flash_on_rounded,
+                color: const Color(0xFF2196F3),
                 delay: 300,
                 onTap: nav.playVersus,
               ),
               _ActionCard(
                 title: 'Tournament',
                 subtitle: 'Compete',
-                icon: Icons.emoji_events_rounded,
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF388E3C), Color(0xFF1B5E20)],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
+                icon: Icons.workspace_premium_rounded,
+                color: const Color(0xFF4CAF50),
                 delay: 400,
                 onTap: nav.playTournament,
               ),
@@ -130,7 +123,7 @@ class _ActionCard extends StatefulWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
-    required this.gradient,
+    required this.color,
     required this.delay,
     required this.onTap,
   });
@@ -138,7 +131,7 @@ class _ActionCard extends StatefulWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final Gradient gradient;
+  final Color color;
   final int delay;
   final VoidCallback onTap;
 
@@ -172,8 +165,6 @@ class _ActionCardState extends State<_ActionCard>
 
   @override
   Widget build(BuildContext context) {
-    final isShort = SoteriaResponsive.isShortScreen(context);
-
     return SoteriaFadeIn(
       delay: Duration(milliseconds: widget.delay),
       child: SoteriaScaleIn(
@@ -188,126 +179,101 @@ class _ActionCardState extends State<_ActionCard>
             scale: _scaleAnimation,
             child: Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                boxShadow: [
-                  BoxShadow(
-                    color: widget.gradient.colors.first.withValues(alpha: 0.2),
-                    blurRadius: 15,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
+                borderRadius: BorderRadius.circular(24.r),
+                color: Colors.white.withValues(alpha: 0.03),
+                border: Border.all(
+                  color: widget.color.withValues(alpha: 0.2),
+                  width: 1.2,
+                ),
               ),
-              child: SoteriaCard(
-                padding: EdgeInsets.zero,
-                borderRadius: 24,
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        widget.gradient.colors.first.withValues(alpha: 0.8),
-                        widget.gradient.colors.last.withValues(alpha: 0.4),
-                      ],
-                    ),
-                  ),
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: -10,
-                        top: -10,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24.r),
+                child: Stack(
+                  children: [
+                    // Ghost Icon
+                    Positioned(
+                      right: -10.w,
+                      top: 15.h,
+                      child: Opacity(
+                        opacity: 0.05,
                         child: Icon(
                           widget.icon,
                           size: 80.sp,
-                          color: Colors.white.withValues(alpha: 0.1),
+                          color: widget.color,
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(
-                          SoteriaSpacing.adaptive(
-                            context,
-                            SoteriaSpacing.smStatic,
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            LayoutBuilder(
-                              builder: (context, constraints) {
-                                return Container(
-                                  padding: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withValues(alpha: 0.15),
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Icon(
-                                    widget.icon,
-                                    color: Colors.white,
-                                    size: isShort ? 16.sp : 20.sp,
-                                  ),
-                                );
-                              },
-                            ),
-                            const Spacer(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          widget.title,
-                                          style: context.titleMedium.copyWith(
-                                            fontWeight: FontWeight.w900,
-                                            color: Colors.white,
-                                            fontSize: isShort ? 14.sp : 16.sp,
-                                          ),
-                                        ),
-                                      ),
-                                      FittedBox(
-                                        fit: BoxFit.scaleDown,
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          widget.subtitle,
-                                          style: context.labelSmall.copyWith(
-                                            color: Colors.white.withValues(
-                                              alpha: 0.7,
-                                            ),
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: isShort ? 9.sp : 11.sp,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(width: 4.w),
-                                Container(
-                                  padding: const EdgeInsets.all(3),
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white24,
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Icon(
-                                    Icons.chevron_right_rounded,
-                                    color: Colors.white,
-                                    size: 12.sp,
-                                  ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(16.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Glowing Icon Container
+                          Container(
+                            padding: EdgeInsets.all(8.w),
+                            decoration: BoxDecoration(
+                              color: widget.color.withValues(alpha: 0.3),
+                              borderRadius: BorderRadius.circular(14.r),
+                              border: Border.all(
+                                color: widget.color.withValues(alpha: 0.5),
+                                width: 1.5,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: widget.color.withValues(alpha: 0.6),
+                                  blurRadius: 15,
+                                  spreadRadius: 1,
                                 ),
                               ],
                             ),
-                          ],
+                            child: Icon(
+                              widget.icon,
+                              color: Colors.white,
+                              size: 22.sp,
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            widget.title,
+                            style: context.titleMedium.copyWith(
+                              fontWeight: FontWeight.w900,
+                              color: Colors.white,
+                              fontSize: 16.sp,
+                              letterSpacing: 0.2,
+                            ),
+                          ),
+                          Text(
+                            widget.subtitle,
+                            style: context.labelSmall.copyWith(
+                              color: Colors.white.withValues(alpha: 0.5),
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Action Arrow Button
+                    Positioned(
+                      right: 16.w,
+                      bottom: 16.h,
+                      child: Container(
+                        padding: EdgeInsets.all(6.w),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withValues(alpha: 0.08),
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            color: Colors.white.withValues(alpha: 0.1),
+                          ),
+                        ),
+                        child: Icon(
+                          Icons.keyboard_arrow_right_rounded,
+                          color: Colors.white,
+                          size: 16.sp,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),

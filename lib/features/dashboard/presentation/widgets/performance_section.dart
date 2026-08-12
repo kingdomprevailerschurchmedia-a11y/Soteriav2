@@ -19,57 +19,57 @@ class PerformanceSection extends StatelessWidget {
             children: [
               Icon(
                 Icons.insights_rounded,
-                color: SoteriaColors.secondary,
-                size: 18.sp,
+                color: SoteriaColors.gold,
+                size: 20.sp,
               ),
-              SizedBox(width: 8.w),
+              SizedBox(width: 10.w),
               Text(
                 'PERFORMANCE',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.textSecondary,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
+                  color: SoteriaColors.gold,
+                  letterSpacing: 1.5,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
                 ),
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: 16.h),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 16.h,
-            crossAxisSpacing: 16.w,
-            childAspectRatio: 1.3,
+            mainAxisSpacing: 10.h,
+            crossAxisSpacing: 10.w,
+            childAspectRatio: 2.3,
             children: [
               _PerformanceCard(
                 title: 'Answered',
                 value: '1,250',
                 icon: Icons.quiz_rounded,
-                color: Colors.deepPurpleAccent,
-                data: [0.2, 0.4, 0.3, 0.7, 0.5, 0.8],
+                color: const Color(0xFF9155FD),
+                data: [0.2, 0.4, 0.3, 0.7, 0.5, 0.8, 0.6, 0.9],
               ),
               _PerformanceCard(
                 title: 'Accuracy',
                 value: '85%',
                 icon: Icons.track_changes_rounded,
-                color: Colors.greenAccent,
-                data: [0.6, 0.5, 0.8, 0.7, 0.9, 0.85],
+                color: const Color(0xFF4CAF50),
+                data: [0.6, 0.5, 0.8, 0.7, 0.9, 0.85, 0.95, 0.8],
               ),
               _PerformanceCard(
                 title: 'Matches',
                 value: '142',
                 icon: Icons.sports_esports_rounded,
-                color: Colors.blueAccent,
-                data: [0.1, 0.3, 0.2, 0.5, 0.4, 0.6],
+                color: const Color(0xFF2196F3),
+                data: [0.1, 0.3, 0.2, 0.5, 0.4, 0.6, 0.5, 0.7],
               ),
               _PerformanceCard(
                 title: 'Best Streak',
                 value: '21',
                 icon: Icons.local_fire_department_rounded,
-                color: Colors.orangeAccent,
-                data: [0.2, 0.3, 0.5, 0.4, 0.7, 1.0],
+                color: const Color(0xFFFF9F43),
+                data: [0.2, 0.3, 0.5, 0.4, 0.7, 0.8, 0.6, 1.0],
               ),
             ],
           ),
@@ -97,52 +97,76 @@ class _PerformanceCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SoteriaCard(
-      padding: EdgeInsets.all(12.w),
-      borderRadius: 20,
-      child: Stack(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      borderRadius: 18.r,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Positioned(
-            right: 0,
-            bottom: 0,
-            top: 20.h,
-            width: 60.w,
-            child: CustomPaint(
-              painter: _SparklinePainter(data: data, color: color),
+          // Glowing Icon
+          Container(
+            width: 32.w,
+            height: 32.w,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: color.withValues(alpha: 0.15),
+              boxShadow: [
+                BoxShadow(
+                  color: color.withValues(alpha: 0.2),
+                  blurRadius: 8,
+                  spreadRadius: 1,
+                ),
+              ],
+            ),
+            child: Center(
+              child: Icon(
+                icon,
+                color: color,
+                size: 16.sp,
+              ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
-                  color: color.withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Icon(icon, color: color, size: 18.sp),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
+          SizedBox(width: 8.w),
+          // Value & Label
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
                     value,
                     style: context.titleLarge.copyWith(
                       fontWeight: FontWeight.w900,
                       color: Colors.white,
-                      fontSize: 20.sp,
+                      fontSize: 16.sp,
+                      height: 1.0,
                     ),
                   ),
-                  Text(
-                    title,
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.muted,
-                      fontWeight: FontWeight.bold,
-                    ),
+                ),
+                SizedBox(height: 1.h),
+                Text(
+                  title,
+                  style: context.labelSmall.copyWith(
+                    color: Colors.white.withValues(alpha: 0.4),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 9.sp,
+                    letterSpacing: 0.2,
                   ),
-                ],
-              ),
-            ],
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 4.w),
+          // Sparkline
+          SizedBox(
+            width: 38.w,
+            height: 18.h,
+            child: CustomPaint(
+              painter: _SparklinePainter(data: data, color: color),
+            ),
           ),
         ],
       ),
@@ -162,7 +186,7 @@ class _SparklinePainter extends CustomPainter {
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
+      ..strokeWidth = 1.5
       ..strokeCap = StrokeCap.round;
 
     final path = Path();
@@ -178,12 +202,30 @@ class _SparklinePainter extends CustomPainter {
       }
     }
 
-    // Glow effect
+    // Fill gradient
+    final fillPath = Path.from(path);
+    fillPath.lineTo(size.width, size.height);
+    fillPath.lineTo(0, size.height);
+    fillPath.close();
+
+    final fillPaint = Paint()
+      ..shader = LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          color.withValues(alpha: 0.25),
+          color.withValues(alpha: 0.0),
+        ],
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+
+    canvas.drawPath(fillPath, fillPaint);
+
+    // Glow line
     final glowPaint = Paint()
       ..color = color.withValues(alpha: 0.3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 4.0
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3);
+      ..strokeWidth = 3.0
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
 
     canvas.drawPath(path, glowPaint);
     canvas.drawPath(path, paint);

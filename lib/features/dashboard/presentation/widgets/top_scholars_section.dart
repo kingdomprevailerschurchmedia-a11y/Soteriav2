@@ -4,11 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/radius/soteria_radius.dart';
-import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
-import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../../../core/avatar/providers/avatar_providers.dart';
+import '../../../../core/avatar/presentation/widgets/avatar_frame.dart';
 
 class TopScholarsSection extends StatelessWidget {
   const TopScholarsSection({super.key});
@@ -26,36 +24,55 @@ class TopScholarsSection extends StatelessWidget {
               Row(
                 children: [
                   Icon(
-                    Icons.emoji_events_rounded,
+                    Icons.workspace_premium_rounded,
                     color: SoteriaColors.gold,
-                    size: 18.sp,
+                    size: 20.sp,
                   ),
-                  SizedBox(width: 8.w),
+                  SizedBox(width: 10.w),
                   Text(
                     'TOP SCHOLARS',
                     style: context.labelSmall.copyWith(
-                      color: SoteriaColors.textSecondary,
+                      color: SoteriaColors.gold,
                       letterSpacing: 2,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.sp,
                     ),
                   ),
                 ],
               ),
-              Text(
-                'View All',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.secondary,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
+              GestureDetector(
+                onTap: () {},
+                child: Row(
+                  children: [
+                    Text(
+                      'VIEW ALL',
+                      style: context.labelSmall.copyWith(
+                        color: const Color(0xFF9155FD),
+                        fontWeight: FontWeight.w900,
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.chevron_right_rounded,
+                      color: const Color(0xFF9155FD),
+                      size: 18.sp,
+                    ),
+                  ],
                 ),
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xl),
-          SoteriaCard(
-            padding: EdgeInsets.zero,
-            borderRadius: SoteriaRadius.xxl,
+          SizedBox(height: 16.h),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(28.r),
+              border: Border.all(
+                color: const Color(0xFF9155FD).withValues(alpha: 0.15),
+                width: 1.2,
+              ),
+              color: const Color(0xFF0B012A).withValues(alpha: 0.4),
+            ),
             child: Column(
               children: [
                 _ScholarRow(
@@ -120,13 +137,18 @@ class _ScholarRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final avatar = ref.watch(avatarCatalogProvider).getById(avatarId);
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       child: Row(
         children: [
-          _RankBadge(rank: rank, color: color),
-          SizedBox(width: 16.w),
-          SoteriaAvatar(avatar: avatar, size: 40, rank: rank),
-          SizedBox(width: 16.w),
+          _PositionBadge(rank: rank),
+          SizedBox(width: 12.w),
+          SoteriaAvatar(
+            avatar: avatar,
+            size: 33,
+            frameStyle: _getFrameStyle(rank),
+            showGlow: true,
+          ),
+          SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,55 +157,41 @@ class _ScholarRow extends ConsumerWidget {
                 Text(
                   name,
                   style: context.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: SoteriaColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.white,
+                    fontSize: 10.sp,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.stars_rounded,
-                      color: SoteriaColors.primary,
-                      size: 10.sp,
-                    ),
-                    SizedBox(width: 4.w),
-                    Flexible(
-                      child: Text(
-                        role,
-                        style: context.labelSmall.copyWith(
-                          color: SoteriaColors.muted,
-                          fontSize: 10.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
+                SizedBox(height: 2.h),
+                _RoleBadge(role: role, color: const Color(0xFF9155FD)),
               ],
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
+          Row(
+            mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '${xp.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} XP',
+                '${xp.toString().replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} XP',
                 style: context.bodyMedium.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: SoteriaColors.secondary,
+                  fontWeight: FontWeight.w800,
+                  color: color,
+                  fontSize: 13.sp,
                 ),
               ),
-              Icon(
-                Icons.emoji_events_rounded,
-                color: color.withValues(alpha: 0.5),
-                size: 14.sp,
-              ),
+              SizedBox(width: 8.w),
+              _TrophyIcon(color: color),
             ],
           ),
         ],
       ),
     );
+  }
+
+  AvatarFrameStyle _getFrameStyle(int rank) {
+    if (rank == 1) return AvatarFrameStyle.gold;
+    if (rank == 2) return AvatarFrameStyle.silver;
+    if (rank == 3) return AvatarFrameStyle.bronze;
+    return AvatarFrameStyle.none;
   }
 }
 
@@ -202,36 +210,35 @@ class _UserHighlightRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    const highlightColor = Color(0xFF9155FD);
     return Container(
-      margin: EdgeInsets.all(8.w),
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 12.h),
+      margin: EdgeInsets.all(6.w),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: SoteriaColors.primary.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: SoteriaColors.primary.withValues(alpha: 0.2)),
-        boxShadow: [
-          BoxShadow(
-            color: SoteriaColors.primary.withValues(alpha: 0.1),
-            blurRadius: 10,
-          ),
-        ],
+        color: highlightColor.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(20.r),
       ),
       child: Row(
         children: [
           SizedBox(
-            width: 32.w,
+            width: 24.w,
             child: Text(
               rank.toString(),
               style: context.titleMedium.copyWith(
                 fontWeight: FontWeight.w900,
-                color: SoteriaColors.secondary,
+                color: highlightColor,
+                fontSize: 12.sp,
               ),
               textAlign: TextAlign.center,
             ),
           ),
-          SizedBox(width: 12.w),
-          const SoteriaAvatar(size: 40, isOnline: true),
-          SizedBox(width: 16.w),
+          SizedBox(width: 10.w),
+          const SoteriaAvatar(
+            size: 36,
+            frameStyle: AvatarFrameStyle.purple,
+            showGlow: true,
+          ),
+          SizedBox(width: 14.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,34 +247,30 @@ class _UserHighlightRow extends ConsumerWidget {
                 Text(
                   name,
                   style: context.bodyLarge.copyWith(
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w700,
                     color: Colors.white,
+                    fontSize: 14.sp,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
-                Text(
-                  role,
-                  style: context.labelSmall.copyWith(
-                    color: SoteriaColors.textSecondary,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  overflow: TextOverflow.ellipsis,
-                ),
+                SizedBox(height: 2.h),
+                _RoleBadge(role: role, color: highlightColor),
               ],
             ),
           ),
-          Text(
-            '${xp.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')} XP',
-            style: context.bodyMedium.copyWith(
-              fontWeight: FontWeight.w900,
-              color: SoteriaColors.secondary,
-            ),
-          ),
-          SizedBox(width: 8.w),
-          Icon(
-            Icons.emoji_events_rounded,
-            color: SoteriaColors.secondary,
-            size: 18.sp,
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '${xp.toString().replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (Match m) => "${m[1]},")} XP',
+                style: context.bodyMedium.copyWith(
+                  fontWeight: FontWeight.w800,
+                  color: highlightColor,
+                  fontSize: 13.sp,
+                ),
+              ),
+              SizedBox(width: 8.w),
+              const _TrophyIcon(color: highlightColor),
+            ],
           ),
         ],
       ),
@@ -275,29 +278,102 @@ class _UserHighlightRow extends ConsumerWidget {
   }
 }
 
-class _RankBadge extends StatelessWidget {
-  const _RankBadge({required this.rank, required this.color});
-  final int rank;
+class _RoleBadge extends StatelessWidget {
+  const _RoleBadge({required this.role, required this.color});
+  final String role;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 32.w,
-      height: 32.w,
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        border: Border.all(color: color, width: 1.5),
-        color: color.withValues(alpha: 0.1),
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(100),
       ),
-      child: Center(
-        child: Text(
-          rank.toString(),
-          style: TextStyle(
-            color: color,
-            fontWeight: FontWeight.w900,
-            fontSize: 14.sp,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.star_rounded, color: color, size: 8.sp),
+          SizedBox(width: 4.w),
+          Text(
+            role,
+            style: context.labelSmall.copyWith(
+              color: color,
+              fontSize: 7.sp,
+              fontWeight: FontWeight.w800,
+            ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TrophyIcon extends StatelessWidget {
+  const _TrophyIcon({required this.color});
+  final Color color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          width: 6.w,
+          height: 6.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: color.withValues(alpha: 0.6),
+                blurRadius: 8,
+                spreadRadius: 1,
+              ),
+            ],
+          ),
+        ),
+        Icon(
+          Icons.emoji_events_rounded,
+          color: color,
+          size: 16.sp,
+        ),
+      ],
+    );
+  }
+}
+
+class _PositionBadge extends StatelessWidget {
+  const _PositionBadge({required this.rank});
+  final int rank;
+
+  @override
+  Widget build(BuildContext context) {
+    String? assetPath;
+    if (rank == 1) {
+      assetPath = 'assets/icons/first_position_badge_transparent.png';
+    } else if (rank == 2) {
+      assetPath = 'assets/icons/second_position_badge_transparent_clean.png';
+    } else if (rank == 3) {
+      assetPath = 'assets/icons/third_position_badge_transparent_clean.png';
+    }
+
+    if (assetPath != null) {
+      return Image.asset(
+        assetPath,
+        width: 24.w,
+        height: 24.w,
+        fit: BoxFit.contain,
+      );
+    }
+
+    return Center(
+      child: Text(
+        rank.toString(),
+        style: TextStyle(
+          color: Colors.white.withValues(alpha: 0.4),
+          fontWeight: FontWeight.w900,
+          fontSize: 10.sp,
         ),
       ),
     );
@@ -309,9 +385,10 @@ class _Divider extends StatelessWidget {
   Widget build(BuildContext context) {
     return Divider(
       height: 1,
+      thickness: 1,
       color: Colors.white.withValues(alpha: 0.05),
-      indent: 64.w,
-      endIndent: 20.w,
+      indent: 52.w,
+      endIndent: 16.w,
     );
   }
 }

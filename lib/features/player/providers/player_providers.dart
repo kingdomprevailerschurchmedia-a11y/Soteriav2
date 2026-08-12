@@ -14,6 +14,7 @@ import '../domain/use_cases/observe_player_profile_use_case.dart';
 import '../domain/models/progression.dart';
 import '../domain/models/player_statistics.dart';
 import '../services/player_bootstrap_service.dart';
+import '../../../core/avatar/providers/avatar_providers.dart';
 
 // --- Repositories ---
 final playerRepositoryProvider = Provider<PlayerRepository>((ref) {
@@ -81,4 +82,16 @@ final playerBootstrapStatusProvider = FutureProvider<void>((ref) async {
   if (authUser != null) {
     await ref.read(playerBootstrapServiceProvider).bootstrap(authUser);
   }
+});
+
+/// A provider that synchronizes the avatar selection between [UserProfile] and [PlayerProfile].
+/// This ensures that changes made in the [AvatarSelectionScreen] are reflected in the game profile.
+final playerAvatarSyncProvider = Provider<void>((ref) {
+  ref.listen<String>(selectedAvatarIdProvider, (previous, next) async {
+    final player = ref.read(currentPlayerProvider);
+    if (player != null && player.selectedAvatarId != next) {
+      final updatedPlayer = player.copyWith(selectedAvatarId: next);
+      await ref.read(updatePlayerProfileUseCaseProvider).execute(updatedPlayer);
+    }
+  });
 });

@@ -106,15 +106,15 @@ class AvatarFrame extends StatelessWidget {
         glowColor = SoteriaColors.gold.withValues(alpha: 0.3);
         break;
       case AvatarFrameStyle.purple:
-        glowColor = SoteriaColors.primary.withValues(alpha: 0.3);
+        glowColor = SoteriaColors.primary.withValues(alpha: 0.4);
         break;
       case AvatarFrameStyle.premium:
-        glowColor = SoteriaColors.secondary.withValues(alpha: 0.3);
+        glowColor = SoteriaColors.secondary.withValues(alpha: 0.4);
         break;
       default:
-        glowColor = SoteriaColors.primary.withValues(alpha: 0.2);
+        glowColor = SoteriaColors.primary.withValues(alpha: 0.4);
     }
 
-    return BoxShadow(color: glowColor, blurRadius: 12.w, spreadRadius: 2.w);
+    return BoxShadow(color: glowColor, blurRadius: 20.w, spreadRadius: 2.w);
   }
 }

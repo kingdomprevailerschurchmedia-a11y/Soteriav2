@@ -74,6 +74,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     playerName: player?.displayName ?? 'Scholar',
                     level: progression.currentLevel,
                     streak: player?.currentStreak ?? 0,
+                    coins: player?.coins ?? 0,
                     profileCompletion: 1.0,
                     avatarUrl: player?.photoUrl,
                     isOnline: true,
@@ -83,6 +84,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     playerName: player?.displayName ?? 'Scholar',
                     level: 1,
                     streak: 0,
+                    coins: 0,
                     profileCompletion: 1.0,
                     isOnline: true,
                   ),
@@ -91,6 +93,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     playerName: player?.displayName ?? 'Scholar',
                     level: 1,
                     streak: 0,
+                    coins: 0,
                     profileCompletion: 1.0,
                     isOnline: true,
                   ),
@@ -108,7 +111,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     xpThreshold:
                         progression.xpRequiredForNextLevel -
                         progression.xpRequiredForCurrentLevel,
-                    coins: player?.coins ?? 0,
+                    streak: player?.currentStreak ?? 0,
                     rank: progression.currentRank,
                     rankPoints: progression.rankPoints,
                     progress: progression.xpProgress,

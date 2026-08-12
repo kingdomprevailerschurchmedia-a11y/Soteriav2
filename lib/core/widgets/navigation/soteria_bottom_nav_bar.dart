@@ -27,8 +27,7 @@ class SoteriaBottomNavBar extends StatelessWidget {
         SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
         0,
         SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-        (isShort ? SoteriaSpacing.smStatic : SoteriaSpacing.mdStatic) +
-            bottomInset,
+        (isShort ? 4.h : 8.h) + bottomInset,
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
@@ -46,7 +45,7 @@ class SoteriaBottomNavBar extends StatelessWidget {
           child: GlassSurface(
             borderRadius: BorderRadius.circular(SoteriaRadius.full),
             padding: EdgeInsets.symmetric(
-              vertical: isShort ? 6.h : 10.h,
+              vertical: isShort ? 10.h : 12.h,
               horizontal: 8.w,
             ),
             border: Border.all(
@@ -122,23 +121,32 @@ class _NavButton extends StatelessWidget {
         child: AnimatedContainer(
           duration: SoteriaAnimations.fast,
           padding: EdgeInsets.symmetric(
-            horizontal: isShort ? 12.w : 16.w,
-            vertical: isShort ? 8.h : 10.h,
+            horizontal: isShort ? 12.w : 14.w,
+            vertical: isShort ? 4.h : 6.h,
           ),
           decoration: BoxDecoration(
             gradient: isSelected
-                ? const LinearGradient(
+                ? LinearGradient(
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
-                    colors: [Color(0xFF7C4DFF), Color(0xFF5B3FD9)],
+                    colors: [
+                      const Color(0xFF7C4DFF).withValues(alpha: 0.3),
+                      const Color(0xFF5B3FD9).withValues(alpha: 0.15),
+                    ],
                   )
                 : null,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(16),
+            border: isSelected
+                ? Border.all(
+                    color: Colors.white.withValues(alpha: 0.1),
+                    width: 1,
+                  )
+                : null,
             boxShadow: [
               if (isSelected)
                 BoxShadow(
-                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
-                  blurRadius: 15,
+                  color: const Color(0xFF7C4DFF).withValues(alpha: 0.15),
+                  blurRadius: 20,
                   spreadRadius: -2,
                 ),
             ],
@@ -149,19 +157,17 @@ class _NavButton extends StatelessWidget {
               Icon(
                 icon,
                 color: isSelected ? Colors.white : SoteriaColors.muted,
-                size: isShort ? 20.sp : 24.sp,
+                size: isShort ? 18.sp : 22.sp,
               ),
-              if (isSelected) ...[
-                SizedBox(height: 4.h),
-                Text(
-                  label,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w900,
-                  ),
+              SizedBox(height: 2.h),
+              Text(
+                label,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : SoteriaColors.muted,
+                  fontSize: 9.sp,
+                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
                 ),
-              ],
+              ),
             ],
           ),
         ),
@@ -169,3 +175,5 @@ class _NavButton extends StatelessWidget {
     );
   }
 }
+
+

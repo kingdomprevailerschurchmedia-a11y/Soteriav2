@@ -34,11 +34,14 @@ class SoteriaAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final hasImageUrl = imageUrl != null && imageUrl!.isNotEmpty;
+    final hasInitials = initials != null && initials!.isNotEmpty;
+
     final effectiveAvatar =
         avatar ??
-        (imageUrl == null && initials == null
-            ? ref.watch(selectedAvatarProvider)
-            : null);
+        (hasImageUrl || hasInitials
+            ? null
+            : ref.watch(selectedAvatarProvider));
 
     AvatarFrameStyle effectiveFrameStyle = frameStyle ?? AvatarFrameStyle.none;
     if (frameStyle == null && rank != null) {

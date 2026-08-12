@@ -39,16 +39,9 @@ class LeaderboardRow extends StatelessWidget {
         children: [
           SizedBox(
             width: 32.w,
-            child: Text(
-              '${entry.position}',
-              style: context.labelLarge.copyWith(
-                color: isCurrentUser
-                    ? SoteriaColors.primary
-                    : SoteriaColors.muted,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            child: _LeaderboardPositionBadge(rank: entry.position),
           ),
+          SizedBox(width: 8.w),
           SoteriaAvatar(
             avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
             size: 40,
@@ -62,12 +55,10 @@ class LeaderboardRow extends StatelessWidget {
                 Text(
                   entry.displayName,
                   style: context.bodyLarge.copyWith(
-                    fontWeight: isCurrentUser
-                        ? FontWeight.bold
-                        : FontWeight.normal,
+                    fontWeight: isCurrentUser ? FontWeight.bold : FontWeight.normal,
                     color: isCurrentUser
-                        ? SoteriaColors.textPrimary
-                        : SoteriaColors.textSecondary,
+                        ? SoteriaColors.gold
+                        : SoteriaColors.textPrimary,
                   ),
                 ),
                 Text(
@@ -88,13 +79,50 @@ class LeaderboardRow extends StatelessWidget {
                 ),
               ),
               RankBadge(
-                rankName:
-                    '', // Label hidden for compact row if needed, but RankBadge shows it.
+                rankName: '', // Label hidden for compact row
                 tierId: entry.rankTier.toLowerCase(),
               ),
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _LeaderboardPositionBadge extends StatelessWidget {
+  const _LeaderboardPositionBadge({required this.rank});
+  final int rank;
+
+  @override
+  Widget build(BuildContext context) {
+    String? assetPath;
+    if (rank == 1) {
+      assetPath = 'assets/icons/first_position_badge_transparent.png';
+    } else if (rank == 2) {
+      assetPath = 'assets/icons/second_position_badge_transparent_clean.png';
+    } else if (rank == 3) {
+      assetPath = 'assets/icons/third_position_badge_transparent_clean.png';
+    }
+
+    if (assetPath != null) {
+      return Center(
+        child: Image.asset(
+          assetPath,
+          width: 24.w,
+          height: 24.w,
+          fit: BoxFit.contain,
+        ),
+      );
+    }
+
+    return Center(
+      child: Text(
+        rank.toString(),
+        style: context.labelLarge.copyWith(
+          color: SoteriaColors.muted,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

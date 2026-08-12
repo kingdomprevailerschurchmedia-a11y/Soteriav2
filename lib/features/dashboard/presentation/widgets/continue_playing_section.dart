@@ -26,7 +26,7 @@ class ContinuePlayingSection extends StatelessWidget {
               fontSize: 12.sp,
             ),
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: 16.h),
           SoteriaCard(
             padding: EdgeInsets.all(SoteriaSpacing.lg),
             borderRadius: SoteriaRadius.xxl,

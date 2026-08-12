@@ -15,6 +15,7 @@ class DashboardHeader extends ConsumerWidget {
     required this.playerName,
     required this.level,
     required this.streak,
+    required this.coins,
     required this.profileCompletion,
     this.avatarUrl,
     this.isOnline = true,
@@ -24,6 +25,7 @@ class DashboardHeader extends ConsumerWidget {
   final String playerName;
   final int level;
   final int streak;
+  final int coins;
   final double profileCompletion;
   final String? avatarUrl;
   final bool isOnline;
@@ -64,7 +66,7 @@ class DashboardHeader extends ConsumerWidget {
                             style: context.displaySmall.copyWith(
                               fontWeight: FontWeight.w900,
                               letterSpacing: -1.0,
-                              fontSize: 32.sp,
+                              fontSize: 30.sp,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -94,10 +96,9 @@ class DashboardHeader extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _CompactStat(
-                    icon: Icons.local_fire_department_rounded,
-                    value: streak.toString(),
-                    label: 'Day Streak',
-                    color: Colors.orange,
+                    assetPath: 'assets/icons/coin_icon.png',
+                    value: coins.toString(),
+                    label: 'Coins',
                   ),
                   SizedBox(width: SoteriaSpacing.sm),
                   GestureDetector(
@@ -136,25 +137,32 @@ class _HeaderBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final badgeColor = SoteriaColors.primary;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: badgeColor.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
           color: badgeColor.withValues(alpha: 0.4),
-          width: 1.5,
+          width: 1.2,
         ),
+        boxShadow: [
+          BoxShadow(
+            color: badgeColor.withValues(alpha: 0.4),
+            blurRadius: 12,
+            spreadRadius: 1,
+          ),
+        ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12.sp, color: Colors.white),
-          SizedBox(width: 8.w),
+          Icon(icon, size: 10.sp, color: Colors.white),
+          SizedBox(width: 6.w),
           Text(
             label,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 11.sp,
+              fontSize: 9.sp,
               fontWeight: FontWeight.w900,
               letterSpacing: 1.2,
             ),
@@ -167,44 +175,54 @@ class _HeaderBadge extends StatelessWidget {
 
 class _CompactStat extends StatelessWidget {
   const _CompactStat({
-    required this.icon,
+    this.icon,
+    this.assetPath,
     required this.value,
     required this.label,
-    required this.color,
+    this.color,
   });
 
-  final IconData icon;
+  final IconData? icon;
+  final String? assetPath;
   final String value;
   final String label;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        Text(
+          value,
+          style: context.headlineMedium.copyWith(
+            fontWeight: FontWeight.w900,
+            color: SoteriaColors.textPrimary,
+            fontSize: 18.sp,
+          ),
+        ),
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(icon, size: 20.sp, color: color),
-            SizedBox(width: 6.w),
+            if (assetPath != null)
+              Image.asset(
+                assetPath!,
+                width: 15.sp,
+                height: 15.sp,
+                fit: BoxFit.contain,
+              )
+            else if (icon != null)
+              Icon(icon, size: 15.sp, color: color),
+            SizedBox(width: 2.w),
             Text(
-              value,
-              style: context.headlineMedium.copyWith(
-                fontWeight: FontWeight.w900,
-                color: SoteriaColors.textPrimary,
-                fontSize: 24.sp,
+              label,
+              style: context.labelSmall.copyWith(
+                color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
+                fontSize: 11.sp,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
-        ),
-        Text(
-          label,
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
-            fontSize: 10.sp,
-            fontWeight: FontWeight.w500,
-          ),
         ),
       ],
     );

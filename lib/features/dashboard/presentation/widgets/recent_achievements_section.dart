@@ -18,36 +18,42 @@ class RecentAchievementsSection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'RECENT ACHIEVEMENTS',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.gold,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
-                ),
+              Row(
+                children: [
+                  Image.asset(
+                    'assets/icons/recent_achievments.png',
+                    width: 28.w,
+                    height: 28.w,
+                    fit: BoxFit.contain,
+                  ),
+                  SizedBox(width: 10.w),
+                  Text(
+                    'RECENT ACHIEVEMENTS',
+                    style: context.labelSmall.copyWith(
+                      color: SoteriaColors.gold,
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 13.sp,
+                    ),
+                  ),
+                ],
               ),
-              TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
+              GestureDetector(
+                onTap: () {},
                 child: Row(
                   children: [
                     Text(
                       'View All',
                       style: context.labelSmall.copyWith(
-                        color: SoteriaColors.secondary,
+                        color: const Color(0xFF9155FD),
                         fontWeight: FontWeight.w900,
-                        fontSize: 12.sp,
+                        fontSize: 13.sp,
                       ),
                     ),
                     SizedBox(width: 4.w),
                     Icon(
                       Icons.chevron_right_rounded,
-                      color: SoteriaColors.secondary,
+                      color: const Color(0xFF9155FD),
                       size: 16.sp,
                     ),
                   ],
@@ -56,7 +62,7 @@ class RecentAchievementsSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: SoteriaSpacing.xl),
+        SizedBox(height: 16.h),
         SizedBox(
           height: 165.w,
           child: ListView(
@@ -120,8 +126,6 @@ class _AchievementCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardColor = isUnlocked ? color : Colors.white.withValues(alpha: 0.1);
-
     return Container(
       width: 165.w,
       margin: EdgeInsets.only(right: 12.w),
