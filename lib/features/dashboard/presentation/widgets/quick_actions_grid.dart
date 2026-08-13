@@ -24,47 +24,21 @@ class QuickActionsGrid extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/quick_action_icon_transparent.png',
-                    width: 28.w,
-                    height: 28.w,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'QUICK ACTIONS',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
+              Image.asset(
+                'assets/icons/quick_action_icon_transparent.png',
+                width: 28.w,
+                height: 28.w,
+                fit: BoxFit.contain,
               ),
-              GestureDetector(
-                onTap: () {},
-                child: Row(
-                  children: [
-                    Text(
-                      'See All',
-                      style: context.labelSmall.copyWith(
-                        color: const Color(0xFF9155FD),
-                        fontWeight: FontWeight.w900,
-                        fontSize: 13.sp,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    Icon(
-                      Icons.chevron_right_rounded,
-                      color: const Color(0xFF9155FD),
-                      size: 18.sp,
-                    ),
-                  ],
+              SizedBox(width: 10.w),
+              Text(
+                'QUICK ACTIONS',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
                 ),
               ),
             ],

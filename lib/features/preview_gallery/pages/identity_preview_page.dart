@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/identity/models/user_session.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/features/player/preview/competitive_identity_previews.dart';
 
 class IdentityPreviewPage extends StatelessWidget {
   const IdentityPreviewPage({super.key});
@@ -13,6 +15,10 @@ class IdentityPreviewPage extends StatelessWidget {
     return ListView(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       children: [
+        Text('Competitive Identity', style: Theme.of(context).textTheme.titleMedium),
+        SizedBox(height: SoteriaSpacing.md),
+        const CompetitiveIdentityPreviews(),
+        SizedBox(height: SoteriaSpacing.xl),
         Text('Session States', style: Theme.of(context).textTheme.titleMedium),
         SizedBox(height: SoteriaSpacing.md),
         const _SessionCard(status: SessionStatus.guest, label: 'Guest Session'),

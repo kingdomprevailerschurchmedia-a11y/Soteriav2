@@ -23,10 +23,11 @@ class TopScholarsSection extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.workspace_premium_rounded,
-                    color: SoteriaColors.gold,
-                    size: 20.sp,
+                  Image.asset(
+                    'assets/icons/top_scholars.png',
+                    width: 28.w,
+                    height: 28.w,
+                    fit: BoxFit.contain,
                   ),
                   SizedBox(width: 10.w),
                   Text(
@@ -45,7 +46,7 @@ class TopScholarsSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'VIEW ALL',
+                      'See All',
                       style: context.labelSmall.copyWith(
                         color: const Color(0xFF9155FD),
                         fontWeight: FontWeight.w900,

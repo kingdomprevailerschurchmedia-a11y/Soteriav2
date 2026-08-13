@@ -86,6 +86,7 @@ import 'package:soteria/features/tournaments/presentation/screens/tournament_gam
 import 'package:soteria/features/tournaments/presentation/pages/tournament_preview_gallery.dart';
 import 'package:soteria/features/preview_gallery/pages/player_preview_page.dart';
 import 'package:soteria/features/player/preview/personal_record_previews.dart';
+import 'package:soteria/features/player/preview/competitive_identity_previews.dart';
 import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
 
@@ -611,6 +612,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'personal-records',
             builder: (context, state) => PersonalRecordPreviews.gallery(),
+          ),
+          GoRoute(
+            path: 'competitive-identity',
+            builder: (context, state) => const GalleryShell(
+              title: 'Competitive Identity',
+              child: CompetitiveIdentityPreviews(),
+            ),
           ),
           GoRoute(
             path: 'config-debug',

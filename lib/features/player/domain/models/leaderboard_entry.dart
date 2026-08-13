@@ -14,6 +14,7 @@ abstract class LeaderboardEntry with _$LeaderboardEntry {
     required String rankTier,
     required int division,
     required int position,
+    String? titleId,
     required DateTime lastUpdated,
     @Default(1) int schemaVersion,
   }) = _LeaderboardEntry;

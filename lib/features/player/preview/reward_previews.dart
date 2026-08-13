@@ -156,5 +156,7 @@ class _MockRewardRepository implements RewardRepository {
   @override
   Future<List<RewardGrant>> getPendingRewards(String userId) async => [];
   @override
+  Future<void> grantReward(RewardGrant grant) async {}
+  @override
   Future<void> claimReward(String grantId) async {}
 }

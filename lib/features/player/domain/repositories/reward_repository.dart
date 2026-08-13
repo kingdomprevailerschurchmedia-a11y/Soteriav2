@@ -10,5 +10,6 @@ abstract class RewardRepository {
   Future<List<RewardGrant>> getSeasonRewards(String userId, String seasonId);
   Future<List<RewardGrant>> getPendingRewards(String userId);
 
+  Future<void> grantReward(RewardGrant grant);
   Future<void> claimReward(String grantId);
 }

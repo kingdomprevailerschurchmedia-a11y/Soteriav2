@@ -13,6 +13,9 @@ import '../../domain/models/rank_progress.dart';
 import '../widgets/competitive_rank_badge.dart';
 import '../widgets/rank_progress_bar.dart';
 import '../widgets/rank_history_section.dart';
+import '../widgets/milestone_card.dart';
+import '../providers/milestone_providers.dart';
+import 'milestones_screen.dart';
 
 class CompetitiveRankOverviewScreen extends ConsumerWidget {
   const CompetitiveRankOverviewScreen({super.key});
@@ -61,6 +64,11 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
 
           // Career Best
           _buildCareerBestSection(context, ref),
+
+          SizedBox(height: SoteriaSpacing.xxl),
+
+          // Milestone Progress
+          _buildMilestoneSection(context, ref),
 
           SizedBox(height: SoteriaSpacing.xxl),
 
@@ -166,6 +174,53 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
             );
           },
           loading: () => const LinearProgressIndicator(),
+          error: (_, __) => const SizedBox.shrink(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildMilestoneSection(BuildContext context, WidgetRef ref) {
+    final nextMilestoneAsync = ref.watch(nextCompetitiveMilestoneProvider);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'COMPETITIVE MILESTONES',
+              style: context.titleSmall.copyWith(
+                color: SoteriaColors.textSecondary,
+                letterSpacing: 1.2,
+              ),
+            ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const MilestonesScreen()),
+              ),
+              child: Text(
+                'VIEW ALL',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.primary,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: SoteriaSpacing.md),
+        nextMilestoneAsync.when(
+          data: (next) => next != null
+              ? MilestoneCard(
+                  progress: next,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const MilestonesScreen()),
+                  ),
+                )
+              : const SizedBox.shrink(),
+          loading: () => const Center(child: CircularProgressIndicator()),
           error: (_, __) => const SizedBox.shrink(),
         ),
       ],

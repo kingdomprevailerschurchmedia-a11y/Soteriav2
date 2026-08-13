@@ -7,7 +7,12 @@ import '../../domain/services/milestone_evaluation_service.dart';
 import 'statistics_providers.dart';
 import 'progression_providers.dart';
 import 'history_providers.dart';
+import 'season_providers.dart';
+import 'reward_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
+import 'package:uuid/uuid.dart';
+import '../../domain/models/reward_grant.dart';
+import '../../domain/models/season_reward_definition.dart';
 
 final milestoneRepositoryProvider = Provider<MilestoneRepository>((ref) {
   return FirebaseMilestoneRepository(FirebaseFirestore.instance);
@@ -71,6 +76,21 @@ final milestoneProgressProvider = Provider<AsyncValue<List<MilestoneProgress>>>(
   },
 );
 
+final nextCompetitiveMilestoneProvider = Provider<AsyncValue<MilestoneProgress?>>(
+  (ref) {
+    final milestonesAsync = ref.watch(milestoneProgressProvider);
+
+    return milestonesAsync.whenData((milestones) {
+      final inProgress = milestones.where((m) => !m.isCompleted).toList();
+      if (inProgress.isEmpty) return null;
+
+      // Sort by progress percentage descending to find the closest one
+      inProgress.sort((a, b) => b.progressPercentage.compareTo(a.progressPercentage));
+      return inProgress.first;
+    });
+  },
+);
+
 /// Orchestrator to trigger milestone evaluation when statistics change.
 final Provider<void> milestoneEvaluationProvider = Provider<void>((ref) {
   final statsAsync = ref.watch(competitiveStatisticsProvider);
@@ -78,20 +98,23 @@ final Provider<void> milestoneEvaluationProvider = Provider<void>((ref) {
   final historyAsync = ref.watch(competitiveHistorySummaryProvider);
   final definitionsAsync = ref.watch(milestoneDefinitionsProvider);
   final playerStatesAsync = ref.watch(playerMilestonesProvider);
+  final currentSeasonAsync = ref.watch(currentSeasonProvider);
 
   if (statsAsync.hasValue &&
       progressionAsync.hasValue &&
       historyAsync.hasValue &&
       definitionsAsync.hasValue &&
-      playerStatesAsync.hasValue) {
+      playerStatesAsync.hasValue &&
+      currentSeasonAsync.hasValue) {
     final userId = ref.watch(authRepositoryProvider).currentUserId;
     if (userId == null) return;
 
+    final definitions = definitionsAsync.value!;
     final updated = ref
         .read(milestoneEvaluationServiceProvider)
         .evaluate(
           userId: userId,
-          definitions: definitionsAsync.value!,
+          definitions: definitions,
           statistics: statsAsync.value!,
           progression: progressionAsync.value!,
           history: historyAsync.value!,
@@ -100,8 +123,33 @@ final Provider<void> milestoneEvaluationProvider = Provider<void>((ref) {
 
     if (updated.isNotEmpty) {
       final repository = ref.read(milestoneRepositoryProvider);
+      final rewardRepository = ref.read(rewardRepositoryProvider);
+      final seasonId = currentSeasonAsync.value?.seasonId ?? 'career';
+
       for (final milestone in updated) {
         repository.updateMilestoneState(milestone);
+
+        // Grant reward if completed
+        if (milestone.status == MilestoneStatus.completed) {
+          final definition = definitions.firstWhere(
+            (d) => d.id == milestone.milestoneId,
+          );
+
+          if (definition.rewardType != null && definition.rewardAmount != null) {
+            final grant = RewardGrant(
+              grantId: 'milestone_${milestone.milestoneId}_$userId',
+              rewardId: milestone.milestoneId,
+              seasonId: seasonId,
+              userId: userId,
+              type: definition.rewardType!,
+              amount: definition.rewardAmount!,
+              status: GrantStatus.eligible,
+              createdAt: DateTime.now(),
+              updatedAt: DateTime.now(),
+            );
+            rewardRepository.grantReward(grant);
+          }
+        }
       }
     }
   }

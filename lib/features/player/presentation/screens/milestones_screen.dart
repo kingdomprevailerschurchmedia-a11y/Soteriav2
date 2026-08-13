@@ -5,8 +5,12 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
+import '../../../auth/providers/auth_providers.dart';
 import '../providers/milestone_providers.dart';
+import '../providers/reward_providers.dart';
 import '../widgets/milestone_card.dart';
+import '../widgets/competitive_milestone_details.dart';
+import '../widgets/milestone_celebration.dart';
 import '../../domain/models/milestone.dart';
 
 class MilestonesScreen extends ConsumerWidget {
@@ -21,13 +25,13 @@ class MilestonesScreen extends ConsumerWidget {
 
     return SafeGradientScaffold(
       appBar: AppBar(
-        title: const Text('Achievements'),
+        title: const Text('ACHIEVEMENTS'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
       ),
       body: progressAsync.when(
-        data: (progressList) => _buildContent(context, progressList),
+        data: (progressList) => _buildContent(context, ref, progressList),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => _buildError(context, ref),
       ),
@@ -36,6 +40,7 @@ class MilestonesScreen extends ConsumerWidget {
 
   Widget _buildContent(
     BuildContext context,
+    WidgetRef ref,
     List<MilestoneProgress> progressList,
   ) {
     final completedCount = progressList.where((p) => p.isCompleted).length;
@@ -51,7 +56,12 @@ class MilestonesScreen extends ConsumerWidget {
           ...inProgress.map(
             (p) => Padding(
               padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-              child: SoteriaFadeIn(child: MilestoneCard(progress: p)),
+              child: SoteriaFadeIn(
+                child: MilestoneCard(
+                  progress: p,
+                  onTap: () => _showDetails(context, ref, p),
+                ),
+              ),
             ),
           ),
         ],
@@ -60,13 +70,57 @@ class MilestonesScreen extends ConsumerWidget {
           ...completed.map(
             (p) => Padding(
               padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-              child: SoteriaFadeIn(child: MilestoneCard(progress: p)),
+              child: SoteriaFadeIn(
+                child: MilestoneCard(
+                  progress: p,
+                  onTap: () => _showDetails(context, ref, p),
+                  onClaim: p.playerState?.status == MilestoneStatus.completed
+                      ? () => _claimReward(context, ref, p)
+                      : null,
+                  isClaiming: ref.watch(rewardClaimControllerProvider).isLoading,
+                ),
+              ),
             ),
           ),
         ],
         SizedBox(height: SoteriaSpacing.xxxl),
       ],
     );
+  }
+
+  void _showDetails(BuildContext context, WidgetRef ref, MilestoneProgress p) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => CompetitiveMilestoneDetails(
+        progress: p,
+        onClaim: p.playerState?.status == MilestoneStatus.completed
+            ? () => _claimReward(context, ref, p)
+            : null,
+        isClaiming: ref.watch(rewardClaimControllerProvider).isLoading,
+      ),
+    );
+  }
+
+  Future<void> _claimReward(
+    BuildContext context,
+    WidgetRef ref,
+    MilestoneProgress p,
+  ) async {
+    final userId = ref.read(authRepositoryProvider).currentUserId;
+    if (userId == null) return;
+
+    final grantId = 'milestone_${p.definition.id}_$userId';
+    await ref.read(rewardClaimControllerProvider.notifier).claim(grantId);
+
+    if (context.mounted) {
+      // If bottom sheet is open, pop it
+      if (Navigator.canPop(context)) Navigator.pop(context);
+
+      // Show celebration
+      MilestoneCelebration.show(context, definition: p.definition);
+    }
   }
 
   Widget _buildHeader(BuildContext context, int completed, int total) {

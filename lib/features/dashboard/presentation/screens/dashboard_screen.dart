@@ -8,7 +8,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/logging/logger_service.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
-import '../../../player/presentation/widgets/competitive_rank_card.dart';
+import '../../../player/presentation/providers/milestone_providers.dart';
 import '../../../player/presentation/screens/competitive_rank_overview_screen.dart';
 import '../providers/dashboard_providers.dart';
 import '../widgets/dashboard_header.dart';
@@ -16,6 +16,7 @@ import '../widgets/hero_card.dart';
 import '../widgets/quick_actions_grid.dart';
 import '../../../player/presentation/widgets/season_header.dart';
 import '../widgets/daily_goals_section.dart';
+import '../widgets/milestone_section.dart';
 import '../widgets/announcement_section.dart';
 import '../widgets/continue_playing_section.dart';
 import '../widgets/recent_achievements_section.dart';
@@ -91,7 +92,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     profileCompletion: 1.0,
                     isOnline: true,
                   ),
-                  error: (err, _) => DashboardHeader(
+                  error: (err, st) => DashboardHeader(
                     greeting: 'Error loading level',
                     playerName: player?.displayName ?? 'Scholar',
                     level: 1,
@@ -105,55 +106,56 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
 
-              // Hero Card
+              // Unified Profile & Rank Hero Card
               SliverToBoxAdapter(
                 child: progressionAsync.when(
-                  data: (progression) => HeroCard(
-                    level: progression.currentLevel,
-                    xpInCurrentLevel: progression.currentXp,
-                    xpThreshold:
-                        progression.xpRequiredForNextLevel -
-                        progression.xpRequiredForCurrentLevel,
-                    streak: player?.currentStreak ?? 0,
-                    rank: progression.currentRank,
-                    rankPoints: progression.rankPoints,
-                    progress: progression.xpProgress,
-                    xpRemaining:
-                        progression.xpRequiredForNextLevel -
-                        (progression.xpRequiredForCurrentLevel +
-                            progression.currentXp),
-                    isDoubleXp: state.announcements.any(
-                      (a) => a.toLowerCase().contains('double xp'),
-                    ),
-                  ),
-                  loading: () => const HeroCardLoading(),
-                  error: (_, __) => const HeroCardLoading(),
-                ),
-              ),
-
-              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-
-              // Competitive Rank
-              SliverToBoxAdapter(
-                child: ref.watch(rankProgressProvider).when(
-                      data: (progress) => CompetitiveRankCard(
-                        rankProgress: progress,
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                const CompetitiveRankOverviewScreen(),
+                  data: (progression) => ref.watch(rankProgressProvider).when(
+                        data: (rankProgress) => HeroCard(
+                          level: progression.currentLevel,
+                          xpInCurrentLevel: progression.currentXp,
+                          xpThreshold: progression.xpRequiredForNextLevel -
+                              progression.xpRequiredForCurrentLevel,
+                          streak: player?.currentStreak ?? 0,
+                          rankProgress: rankProgress,
+                          xpProgress: progression.xpProgress,
+                          xpRemaining: progression.xpRequiredForNextLevel -
+                              (progression.xpRequiredForCurrentLevel +
+                                  progression.currentXp),
+                          isDoubleXp: state.announcements.any(
+                            (a) => a.toLowerCase().contains('double xp'),
+                          ),
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  const CompetitiveRankOverviewScreen(),
+                            ),
                           ),
                         ),
+                        loading: () => const HeroCardLoading(),
+                        error: (err, st) => const HeroCardLoading(),
                       ),
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
-                    ),
+                  loading: () => const HeroCardLoading(),
+                  error: (err, st) => const HeroCardLoading(),
+                ),
               ),
 
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),
 
               // Season Status
               const SliverToBoxAdapter(child: SeasonHeader()),
+
+              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+
+              // Milestone Section
+              SliverToBoxAdapter(
+                child: ref.watch(nextCompetitiveMilestoneProvider).when(
+                      data: (next) => next != null
+                          ? MilestoneSection(progress: next)
+                          : const SizedBox.shrink(),
+                      loading: () => const SizedBox.shrink(),
+                      error: (err, st) => const SizedBox.shrink(),
+                    ),
+              ),
 
               SliverToBoxAdapter(child: SizedBox(height: 16.h)),
 

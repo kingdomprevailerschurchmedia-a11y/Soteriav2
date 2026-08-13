@@ -20,10 +20,10 @@ class ContinuePlayingSection extends StatelessWidget {
           Text(
             'CONTINUE PLAYING',
             style: context.labelSmall.copyWith(
-              color: SoteriaColors.textSecondary,
-              letterSpacing: 2,
-              fontWeight: FontWeight.w900,
-              fontSize: 12.sp,
+              color: SoteriaColors.gold,
+              letterSpacing: 2.0,
+              fontWeight: FontWeight.w800,
+              fontSize: 13.sp,
             ),
           ),
           SizedBox(height: 16.h),

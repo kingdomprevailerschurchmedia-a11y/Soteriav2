@@ -20,11 +20,17 @@ class LeaderboardNeighborhood extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final playerAboveLabel = playerAbove != null
+        ? 'Player #${playerAbove!.position} is above you by ${playerAbove!.rankPoints - currentPlayer.rankPoints} points. '
+        : '';
+    final playerBelowLabel =
+        playerBelow != null ? 'Player #${playerBelow!.position} is below you.' : '';
+
     return Semantics(
-      label: 'Players near you in the leaderboard. ' +
-             (playerAbove != null ? 'Player #${playerAbove!.position} is above you by ${playerAbove!.rankPoints - currentPlayer.rankPoints} points. ' : '') +
-             'You are at position #${currentPlayer.position}. ' +
-             (playerBelow != null ? 'Player #${playerBelow!.position} is below you.' : ''),
+      label: 'Players near you in the leaderboard. '
+          '$playerAboveLabel'
+          'You are at position #${currentPlayer.position}. '
+          '$playerBelowLabel',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -297,6 +297,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.emoji_events_rounded,
       tags: ['record', 'best', 'personal'],
     ),
+    const GalleryItem(
+      title: 'Competitive Identity',
+      description: 'Titles, badges, showcases & prestige',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/competitive-identity',
+      icon: Icons.assignment_ind_rounded,
+      tags: ['identity', 'title', 'badge', 'showcase'],
+    ),
   ];
 });
 

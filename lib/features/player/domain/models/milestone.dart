@@ -1,5 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
+import 'season_reward_definition.dart';
+
 part 'milestone.freezed.dart';
 part 'milestone.g.dart';
 
@@ -31,6 +33,10 @@ abstract class MilestoneDefinition with _$MilestoneDefinition {
     String? icon,
     @Default(true) bool isActive,
     @Default({}) Map<String, dynamic> metadata,
+    RewardType? rewardType,
+    int? rewardAmount,
+    String? achievementId,
+    @Default(0) int displayOrder,
   }) = _MilestoneDefinition;
 
   factory MilestoneDefinition.fromJson(Map<String, dynamic> json) =>

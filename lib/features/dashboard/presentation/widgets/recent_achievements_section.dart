@@ -43,7 +43,7 @@ class RecentAchievementsSection extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'View All',
+                      'See All',
                       style: context.labelSmall.copyWith(
                         color: const Color(0xFF9155FD),
                         fontWeight: FontWeight.w900,
@@ -54,7 +54,7 @@ class RecentAchievementsSection extends StatelessWidget {
                     Icon(
                       Icons.chevron_right_rounded,
                       color: const Color(0xFF9155FD),
-                      size: 16.sp,
+                      size: 18.sp,
                     ),
                   ],
                 ),

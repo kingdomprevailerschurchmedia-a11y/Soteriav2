@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
@@ -6,9 +7,11 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../domain/models/leaderboard_entry.dart';
+import '../providers/identity_providers.dart';
+import 'identity/competitive_title_widget.dart';
 import 'competitive_rank_badge.dart';
 
-class LeaderboardRow extends StatelessWidget {
+class LeaderboardRow extends ConsumerWidget {
   final LeaderboardEntry entry;
   final bool isCurrentUser;
 
@@ -19,7 +22,14 @@ class LeaderboardRow extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final titleDefinitionsAsync = ref.watch(titleDefinitionsProvider);
+    final title = entry.titleId != null
+        ? titleDefinitionsAsync.value
+            ?.where((t) => t.id == entry.titleId)
+            .firstOrNull
+        : null;
+
     return Container(
       padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.md,
@@ -52,14 +62,27 @@ class LeaderboardRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  entry.displayName,
-                  style: context.bodyLarge.copyWith(
-                    fontWeight: isCurrentUser ? FontWeight.bold : FontWeight.normal,
-                    color: isCurrentUser
-                        ? SoteriaColors.gold
-                        : SoteriaColors.textPrimary,
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        entry.displayName,
+                        style: context.bodyLarge.copyWith(
+                          fontWeight:
+                              isCurrentUser ? FontWeight.bold : FontWeight.normal,
+                          color: isCurrentUser
+                              ? SoteriaColors.gold
+                              : SoteriaColors.textPrimary,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    if (title != null) ...[
+                      SizedBox(width: 6.w),
+                      CompetitiveTitleWidget(title: title),
+                    ],
+                  ],
                 ),
                 Text(
                   '${entry.rankTier} ${entry.division}',

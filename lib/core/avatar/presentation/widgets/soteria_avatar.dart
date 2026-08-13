@@ -83,20 +83,23 @@ class SoteriaAvatar extends ConsumerWidget {
         ),
         if (isOnline)
           Positioned(
-            right: 0,
-            bottom: 0,
+            right: 2.w,
+            bottom: 2.w,
             child: Container(
-              width: (size * 0.25).w,
-              height: (size * 0.25).w,
+              width: (size * 0.28).w,
+              height: (size * 0.28).w,
               decoration: BoxDecoration(
-                color: SoteriaColors.success,
+                color: const Color(0xFF0B012A), // Matches background
                 shape: BoxShape.circle,
-                border: Border.all(color: SoteriaColors.background, width: 2.w),
+                border: Border.all(
+                  color: const Color(0xFF4CAF50), // Green ring
+                  width: 2.5.w,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.2),
-                    blurRadius: 4.w,
-                    offset: Offset(0, 2.w),
+                    color: const Color(0xFF4CAF50).withValues(alpha: 0.5),
+                    blurRadius: 8.w,
+                    spreadRadius: 1.w,
                   ),
                 ],
               ),

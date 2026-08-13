@@ -81,6 +81,11 @@ class FirebaseRewardRepository implements RewardRepository {
   }
 
   @override
+  Future<void> grantReward(RewardGrant grant) async {
+    await _grantsCollection.doc(grant.grantId).set(grant.toJson());
+  }
+
+  @override
   Future<void> claimReward(String grantId) async {
     // This would typically be a Cloud Function call in a real prod app
     // but for the sake of this story, we'll simulate the client-initiated claim

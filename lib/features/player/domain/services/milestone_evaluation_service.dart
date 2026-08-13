@@ -83,11 +83,12 @@ class MilestoneEvaluationService {
       case MilestoneType.statistic:
         return statistics.career.accuracy * 100; // Example: Accuracy %
       case MilestoneType.careerBest:
-        // Special logic for career bests
-        return 0.0;
+        // Achieved if current rank is the best rank
+        return progression.currentRank == statistics.career.bestRank ? 1.0 : 0.0;
       case MilestoneType.promotion:
-        // Evaluation based on progression events if available
-        return 0.0;
+        // This is tricky without event history, but we can check if they have any rank 
+        // that isn't Unranked as a proxy for "First Rank/Promotion"
+        return progression.currentRankTier != 'unranked' ? 1.0 : 0.0;
     }
   }
 

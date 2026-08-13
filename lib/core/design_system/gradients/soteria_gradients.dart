@@ -37,6 +37,37 @@ class SoteriaGradients {
     ],
   );
 
+  static const LinearGradient settingsCardBorder = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      SoteriaColors.secondary,
+      SoteriaColors.primary,
+      Colors.transparent,
+    ],
+    stops: [0.0, 0.3, 1.0],
+  );
+
+  static LinearGradient logoutCard = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      SoteriaColors.error.withValues(alpha: 0.2),
+      SoteriaColors.error.withValues(alpha: 0.05),
+    ],
+  );
+
+  static const LinearGradient logoutBorder = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      SoteriaColors.error,
+      Color(0xFFE91E63), // Accent pink for the logout gradient
+      Colors.transparent,
+    ],
+    stops: [0.0, 0.5, 1.0],
+  );
+
   static LinearGradient button = const LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,

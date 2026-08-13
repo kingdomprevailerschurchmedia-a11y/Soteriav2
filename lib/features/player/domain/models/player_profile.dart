@@ -1,146 +1,55 @@
-import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-@immutable
-class PlayerProfile {
-  final String uid;
-  final String displayName;
-  final String email;
-  final String photoUrl;
-  final String selectedAvatarId;
+part 'player_profile.freezed.dart';
+part 'player_profile.g.dart';
 
-  // Progression
-  final int level;
-  final int xp;
-  final int coins;
+@freezed
+abstract class PlayerProfile with _$PlayerProfile {
+  const factory PlayerProfile({
+    required String uid,
+    required String displayName,
+    required String email,
+    @Default('') String photoUrl,
+    @Default('socrates') String selectedAvatarId,
 
-  // Stats
-  final int currentStreak;
-  final int highestStreak;
-  final int totalQuestionsAnswered;
-  final int correctAnswers;
-  final double accuracy;
+    // Progression
+    @Default(1) int level,
+    @Default(0) int xp,
+    @Default(0) int coins,
 
-  // Match History
-  final int gamesPlayed;
-  final int gamesWon;
-  final int practiceSessions;
-  final int proSessions;
-  final int versusMatches;
-  final int tournamentMatches;
+    // Stats
+    @Default(0) int currentStreak,
+    @Default(0) int highestStreak,
+    @Default(0) int totalQuestionsAnswered,
+    @Default(0) int correctAnswers,
+    @Default(0.0) double accuracy,
 
-  // Customization & Metadata
-  final List<String> favoriteCategories;
-  final String preferredLanguage;
-  final String avatarFrame;
-  final List<String> badges;
-  final List<String> achievements;
-  final String role; // user, moderator, admin
-  final String accountStatus; // active, suspended, deleted
+    // Match History
+    @Default(0) int gamesPlayed,
+    @Default(0) int gamesWon,
+    @Default(0) int practiceSessions,
+    @Default(0) int proSessions,
+    @Default(0) int versusMatches,
+    @Default(0) int tournamentMatches,
 
-  final DateTime createdAt;
-  final DateTime lastLogin;
-  final DateTime updatedAt;
+    // Customization & Metadata
+    @Default([]) List<String> favoriteCategories,
+    @Default('en') String preferredLanguage,
+    @Default('default') String avatarFrame,
+    @Default([]) List<String> badges,
+    @Default([]) List<String> achievements,
+    String? equippedTitleId,
+    @Default([]) List<String> featuredBadgeIds,
+    @Default('user') String role, // user, moderator, admin
+    @Default('active') String accountStatus, // active, suspended, deleted
 
-  final Map<String, dynamic> settings;
-  final int version; // For schema migrations
+    required DateTime createdAt,
+    required DateTime lastLogin,
+    required DateTime updatedAt,
+    @Default({}) Map<String, dynamic> settings,
+    @Default(1) int version,
+  }) = _PlayerProfile;
 
-  const PlayerProfile({
-    required this.uid,
-    required this.displayName,
-    required this.email,
-    this.photoUrl = '',
-    this.selectedAvatarId = 'socrates',
-    this.level = 1,
-    this.xp = 0,
-    this.coins = 0,
-    this.currentStreak = 0,
-    this.highestStreak = 0,
-    this.totalQuestionsAnswered = 0,
-    this.correctAnswers = 0,
-    this.accuracy = 0.0,
-    this.gamesPlayed = 0,
-    this.gamesWon = 0,
-    this.practiceSessions = 0,
-    this.proSessions = 0,
-    this.versusMatches = 0,
-    this.tournamentMatches = 0,
-    this.favoriteCategories = const [],
-    this.preferredLanguage = 'en',
-    this.avatarFrame = 'default',
-    this.badges = const [],
-    this.achievements = const [],
-    this.role = 'user',
-    this.accountStatus = 'active',
-    required this.createdAt,
-    required this.lastLogin,
-    required this.updatedAt,
-    this.settings = const {},
-    this.version = 1,
-  });
-
-  PlayerProfile copyWith({
-    String? displayName,
-    String? photoUrl,
-    String? selectedAvatarId,
-    int? level,
-    int? xp,
-    int? coins,
-    int? currentStreak,
-    int? highestStreak,
-    int? totalQuestionsAnswered,
-    int? correctAnswers,
-    double? accuracy,
-    int? gamesPlayed,
-    int? gamesWon,
-    int? practiceSessions,
-    int? proSessions,
-    int? versusMatches,
-    int? tournamentMatches,
-    List<String>? favoriteCategories,
-    String? preferredLanguage,
-    String? avatarFrame,
-    List<String>? badges,
-    List<String>? achievements,
-    String? role,
-    String? accountStatus,
-    DateTime? lastLogin,
-    DateTime? updatedAt,
-    Map<String, dynamic>? settings,
-    int? version,
-  }) {
-    return PlayerProfile(
-      uid: uid,
-      displayName: displayName ?? this.displayName,
-      email: email,
-      photoUrl: photoUrl ?? this.photoUrl,
-      selectedAvatarId: selectedAvatarId ?? this.selectedAvatarId,
-      level: level ?? this.level,
-      xp: xp ?? this.xp,
-      coins: coins ?? this.coins,
-      currentStreak: currentStreak ?? this.currentStreak,
-      highestStreak: highestStreak ?? this.highestStreak,
-      totalQuestionsAnswered:
-          totalQuestionsAnswered ?? this.totalQuestionsAnswered,
-      correctAnswers: correctAnswers ?? this.correctAnswers,
-      accuracy: accuracy ?? this.accuracy,
-      gamesPlayed: gamesPlayed ?? this.gamesPlayed,
-      gamesWon: gamesWon ?? this.gamesWon,
-      practiceSessions: practiceSessions ?? this.practiceSessions,
-      proSessions: proSessions ?? this.proSessions,
-      versusMatches: versusMatches ?? this.versusMatches,
-      tournamentMatches: tournamentMatches ?? this.tournamentMatches,
-      favoriteCategories: favoriteCategories ?? this.favoriteCategories,
-      preferredLanguage: preferredLanguage ?? this.preferredLanguage,
-      avatarFrame: avatarFrame ?? this.avatarFrame,
-      badges: badges ?? this.badges,
-      achievements: achievements ?? this.achievements,
-      role: role ?? this.role,
-      accountStatus: accountStatus ?? this.accountStatus,
-      createdAt: createdAt,
-      lastLogin: lastLogin ?? this.lastLogin,
-      updatedAt: updatedAt ?? this.updatedAt,
-      settings: settings ?? this.settings,
-      version: version ?? this.version,
-    );
-  }
+  factory PlayerProfile.fromJson(Map<String, dynamic> json) =>
+      _$PlayerProfileFromJson(json);
 }

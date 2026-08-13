@@ -21,8 +21,10 @@ import 'package:soteria/features/player/presentation/widgets/competitive_rank_ca
 import 'package:soteria/features/player/presentation/widgets/profile/achievement_summary_section.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/match_history_summary_section.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/career_summary_card.dart';
-import 'package:soteria/features/player/presentation/widgets/profile/competitive_profile_header.dart';
+import 'package:soteria/features/player/presentation/widgets/identity/identity_showcase_header.dart';
+import 'package:soteria/features/player/presentation/providers/identity_providers.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/goal_summary_card.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_showcase_screen.dart';
 import 'package:soteria/features/player/presentation/widgets/streak/competitive_streak_card.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/reward_summary_section.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/statistic_card.dart';
@@ -70,14 +72,20 @@ class CompetitiveProfileScreen extends ConsumerWidget {
         ),
         children: [
           SizedBox(height: SoteriaSpacing.md),
-          SoteriaFadeIn(
-            duration: SoteriaAnimations.normal,
-            child: CompetitiveProfileHeader(
-              identity: profile.identity,
-              progression: profile.progression,
-              globalPosition: profile.globalPosition,
-            ),
-          ),
+          ref.watch(competitiveIdentityProvider).when(
+                data: (identity) => identity != null
+                    ? GestureDetector(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const CompetitiveShowcaseScreen(),
+                          ),
+                        ),
+                        child: IdentityShowcaseHeader(identity: identity),
+                      )
+                    : const SizedBox.shrink(),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (_, __) => const SizedBox.shrink(),
+              ),
           SizedBox(height: SoteriaSpacing.xl),
           ref.watch(rankProgressProvider).when(
                 data: (rankProgress) => SoteriaSlideUp(

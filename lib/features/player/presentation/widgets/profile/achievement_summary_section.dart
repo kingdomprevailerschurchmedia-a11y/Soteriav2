@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
+import '../../providers/milestone_providers.dart';
 import '../../../domain/models/milestone.dart';
 
-class AchievementSummarySection extends StatelessWidget {
+class AchievementSummarySection extends ConsumerWidget {
   final List<PlayerMilestone> completed;
   final int total;
   final VoidCallback? onViewAll;
@@ -20,7 +22,9 @@ class AchievementSummarySection extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final nextMilestoneAsync = ref.watch(nextCompetitiveMilestoneProvider);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -47,17 +51,9 @@ class AchievementSummarySection extends StatelessWidget {
           ],
         ),
         SizedBox(height: SoteriaSpacing.md),
-        if (completed.isEmpty)
-          SoteriaCard(
-            padding: EdgeInsets.all(SoteriaSpacing.lg),
-            child: Center(
-              child: Text(
-                'No achievements unlocked yet.',
-                style: context.bodyMedium.copyWith(color: SoteriaColors.muted),
-              ),
-            ),
-          )
-        else
+        
+        // Horizontal list of completed badges
+        if (completed.isNotEmpty) ...[
           SizedBox(
             height: 64.h,
             child: ListView.separated(
@@ -70,7 +66,97 @@ class AchievementSummarySection extends StatelessWidget {
               },
             ),
           ),
+          SizedBox(height: SoteriaSpacing.lg),
+        ],
+
+        // Next Milestone Card
+        nextMilestoneAsync.when(
+          data: (next) => next != null 
+            ? _NextMilestoneCard(progress: next, onTap: onViewAll)
+            : const SizedBox.shrink(),
+          loading: () => const SizedBox.shrink(),
+          error: (_, __) => const SizedBox.shrink(),
+        ),
+
+        if (completed.isEmpty && nextMilestoneAsync.value == null)
+          SoteriaCard(
+            padding: EdgeInsets.all(SoteriaSpacing.lg),
+            child: Center(
+              child: Text(
+                'No achievements unlocked yet.',
+                style: context.bodyMedium.copyWith(color: SoteriaColors.muted),
+              ),
+            ),
+          ),
       ],
+    );
+  }
+}
+
+class _NextMilestoneCard extends StatelessWidget {
+  final MilestoneProgress progress;
+  final VoidCallback? onTap;
+
+  const _NextMilestoneCard({required this.progress, this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return SoteriaCard(
+      onTap: onTap,
+      padding: EdgeInsets.all(SoteriaSpacing.md),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(SoteriaSpacing.sm),
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.03),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.flag_rounded,
+              color: SoteriaColors.primary,
+              size: 20.sp,
+            ),
+          ),
+          SizedBox(width: SoteriaSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'NEXT MILESTONE',
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.muted,
+                    fontSize: 8.sp,
+                  ),
+                ),
+                Text(
+                  progress.definition.name,
+                  style: context.bodyMedium.copyWith(fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 4.h),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(2),
+                  child: LinearProgressIndicator(
+                    value: progress.progressPercentage,
+                    backgroundColor: Colors.white10,
+                    valueColor: const AlwaysStoppedAnimation(SoteriaColors.primary),
+                    minHeight: 2,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: SoteriaSpacing.md),
+          Text(
+            '${(progress.progressPercentage * 100).toInt()}%',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -23,71 +23,62 @@ class PlayerProgressionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SoteriaCard(
-      hasGlow: true,
-      glowColor: SoteriaColors.primary,
-      padding: EdgeInsets.all(SoteriaSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(28),
+        gradient: SoteriaGradients.settingsCardBorder,
+      ),
+      padding: const EdgeInsets.all(1.5),
+      child: GlassSurface(
+        borderRadius: BorderRadius.circular(27),
+        opacity: 0.1,
+        padding: EdgeInsets.all(20.w),
+        child: IntrinsicHeight(
+          child: Row(
             children: [
-              const SoteriaAvatar(size: 48),
-              SizedBox(width: SoteriaSpacing.md.w),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      displayName,
-                      style: context.titleMedium,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      'Level ${progression.currentLevel}',
-                      style: context.bodySmall.copyWith(
-                        color: SoteriaColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                child: _ProgressBarSection(
+                  icon: Icons.stars_rounded,
+                  label: 'XP PROGRESS',
+                  value: '${progression.currentXp} / ${progression.xpRequiredForNextLevel} XP',
+                  progress: progression.xpProgress,
+                  color: const Color(0xFF7C4DFF),
                 ),
               ),
-              RankBadge(
-                rankName: progression.currentRank,
-                tierId: progression.currentRankTier,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 8.h),
+                child: VerticalDivider(
+                  color: Colors.white.withValues(alpha: 0.1),
+                  thickness: 1,
+                  width: 1,
+                ),
+              ),
+              Expanded(
+                child: _ProgressBarSection(
+                  icon: Icons.emoji_events_rounded,
+                  label: 'RANK PROGRESS',
+                  value: '${(progression.rankProgress * 100).toInt()}%',
+                  progress: progression.rankProgress,
+                  color: SoteriaColors.gold,
+                ),
               ),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.lg),
-          _ProgressBarSection(
-            label: 'XP PROGRESS',
-            value:
-                '${progression.currentXp} / ${progression.xpRequiredForNextLevel - progression.xpRequiredForCurrentLevel} XP',
-            progress: progression.xpProgress,
-            color: SoteriaColors.xpColor,
-          ),
-          SizedBox(height: SoteriaSpacing.md),
-          _ProgressBarSection(
-            label: 'RANK PROGRESS',
-            value: '${(progression.rankProgress * 100).toInt()}%',
-            progress: progression.rankProgress,
-            color: SoteriaColors.gold,
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
 class _ProgressBarSection extends StatelessWidget {
+  final IconData icon;
   final String label;
   final String value;
   final double progress;
   final Color color;
 
   const _ProgressBarSection({
+    required this.icon,
     required this.label,
     required this.value,
     required this.progress,
@@ -100,30 +91,32 @@ class _ProgressBarSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Icon(icon, color: color, size: 16.sp),
+            SizedBox(width: 8.w),
             Text(
               label,
               style: context.labelSmall.copyWith(
-                color: SoteriaColors.muted,
-                letterSpacing: 1.2,
-              ),
-            ),
-            Text(
-              value,
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.textPrimary,
-                fontWeight: FontWeight.bold,
+                color: SoteriaColors.textSecondary,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1,
               ),
             ),
           ],
         ),
-        SizedBox(height: SoteriaSpacing.xs),
+        SizedBox(height: 12.h),
+        Text(
+          value,
+          style: context.titleLarge.copyWith(
+            fontWeight: FontWeight.w900,
+            color: color,
+          ),
+        ),
+        SizedBox(height: 12.h),
         SoteriaProgressBar(
           progress: progress,
-          color: color,
-          height: 6,
-          hasGlow: true,
+          color: color.withValues(alpha: 0.3),
+          height: 8,
         ),
       ],
     );
