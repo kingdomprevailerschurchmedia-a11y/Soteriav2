@@ -22,8 +22,8 @@ class DailyGoalsSection extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/icons/daily_goals_icon_transparent.png',
-                    width: 28.w,
-                    height: 28.w,
+                    width: 24.w,
+                    height: 24.w,
                     fit: BoxFit.contain,
                   ),
                   SizedBox(width: 10.w),
@@ -61,8 +61,8 @@ class DailyGoalsSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 6.h),
-          SoteriaCard(
+        SizedBox(height: SoteriaSpacing.md),
+        SoteriaCard(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             borderRadius: 24,
             child: Row(

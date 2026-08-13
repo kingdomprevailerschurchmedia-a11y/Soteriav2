@@ -22,8 +22,8 @@ class PerformanceSection extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/icons/performance_icon.png',
-                    width: 28.w,
-                    height: 28.w,
+                    width: 24.w,
+                    height: 24.w,
                     fit: BoxFit.contain,
                   ),
                   SizedBox(width: 10.w),
@@ -61,7 +61,7 @@ class PerformanceSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: SoteriaSpacing.md),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,

@@ -15,26 +15,44 @@ class AnnouncementSection extends StatelessWidget {
   Widget build(BuildContext context) {
     if (announcements.isEmpty) return const SizedBox.shrink();
 
-    return SoteriaCard(
-      padding: EdgeInsets.zero,
-      borderRadius: SoteriaRadius.xxl,
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       child: Column(
-        children: List.generate(announcements.length, (index) {
-          final isLast = index == announcements.length - 1;
-          return Column(
-            children: [
-              _AnnouncementItem(message: announcements[index]),
-              if (!isLast)
-                Divider(
-                  height: 1,
-                  thickness: 1,
-                  color: Colors.white.withValues(alpha: 0.05),
-                  indent: 72.w,
-                  endIndent: SoteriaSpacing.lg,
-                ),
-            ],
-          );
-        }),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'ANNOUNCEMENTS',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.gold,
+              letterSpacing: 2.0,
+              fontWeight: FontWeight.w800,
+              fontSize: 13.sp,
+            ),
+          ),
+          SizedBox(height: SoteriaSpacing.md),
+          SoteriaCard(
+            padding: EdgeInsets.zero,
+            borderRadius: SoteriaRadius.xxl,
+            child: Column(
+              children: List.generate(announcements.length, (index) {
+                final isLast = index == announcements.length - 1;
+                return Column(
+                  children: [
+                    _AnnouncementItem(message: announcements[index]),
+                    if (!isLast)
+                      Divider(
+                        height: 1,
+                        thickness: 1,
+                        color: Colors.white.withValues(alpha: 0.05),
+                        indent: 72.w,
+                        endIndent: SoteriaSpacing.lg,
+                      ),
+                  ],
+                );
+              }),
+            ),
+          ),
+        ],
       ),
     );
   }

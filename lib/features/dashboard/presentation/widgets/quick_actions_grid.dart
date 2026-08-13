@@ -27,8 +27,8 @@ class QuickActionsGrid extends ConsumerWidget {
             children: [
               Image.asset(
                 'assets/icons/quick_action_icon_transparent.png',
-                width: 28.w,
-                height: 28.w,
+                width: 24.w,
+                height: 24.w,
                 fit: BoxFit.contain,
               ),
               SizedBox(width: 10.w),
@@ -43,7 +43,7 @@ class QuickActionsGrid extends ConsumerWidget {
               ),
             ],
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: SoteriaSpacing.md),
           GridView.count(
             crossAxisCount: isTablet ? 4 : 2,
             shrinkWrap: true,

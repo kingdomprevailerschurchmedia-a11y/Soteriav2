@@ -22,8 +22,8 @@ class RecentAchievementsSection extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/icons/recent_achievments.png',
-                    width: 28.w,
-                    height: 28.w,
+                    width: 24.w,
+                    height: 24.w,
                     fit: BoxFit.contain,
                   ),
                   SizedBox(width: 10.w),
@@ -62,7 +62,7 @@ class RecentAchievementsSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 6.h),
+        SizedBox(height: SoteriaSpacing.md),
         SizedBox(
           height: 165.w,
           child: ListView(

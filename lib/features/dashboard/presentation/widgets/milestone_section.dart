@@ -24,10 +24,11 @@ class MilestoneSection extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    Icons.flag_rounded,
-                    color: SoteriaColors.gold,
-                    size: 24.sp,
+                  Image.asset(
+                    'assets/icons/next_milestone.png',
+                    width: 24.w,
+                    height: 24.w,
+                    fit: BoxFit.contain,
                   ),
                   SizedBox(width: 10.w),
                   Text(
@@ -67,7 +68,7 @@ class MilestoneSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 6.h),
+        SizedBox(height: SoteriaSpacing.md),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
           child: _DashboardMilestoneCard(

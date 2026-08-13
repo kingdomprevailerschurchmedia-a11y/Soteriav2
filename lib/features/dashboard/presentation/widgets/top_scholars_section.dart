@@ -25,8 +25,8 @@ class TopScholarsSection extends StatelessWidget {
                 children: [
                   Image.asset(
                     'assets/icons/top_scholars.png',
-                    width: 28.w,
-                    height: 28.w,
+                    width: 24.w,
+                    height: 24.w,
                     fit: BoxFit.contain,
                   ),
                   SizedBox(width: 10.w),
@@ -64,7 +64,7 @@ class TopScholarsSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: SoteriaSpacing.md),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28.r),
