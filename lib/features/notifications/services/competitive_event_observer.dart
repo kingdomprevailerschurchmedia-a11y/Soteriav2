@@ -10,11 +10,15 @@ import '../../player/presentation/providers/reward_providers.dart';
 import '../../player/presentation/providers/milestone_providers.dart';
 import '../../player/presentation/providers/personal_record_providers.dart';
 import '../../player/domain/models/competitive_personal_record.dart';
+import '../../player/domain/models/player_profile.dart';
 import '../../player/domain/config/progression_config.dart';
 import '../../../core/services/time_service.dart';
 import '../domain/models/app_notification.dart';
 import '../domain/repositories/notification_repository.dart';
 import '../providers/notification_providers.dart';
+import '../../player/domain/models/competitive_badge.dart';
+import '../../player/domain/models/competitive_title.dart';
+import '../../player/providers/player_providers.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../player/domain/repositories/activity_repository.dart';
@@ -37,6 +41,105 @@ class CompetitiveEventObserver {
     _observeRewards();
     _observeMilestones();
     _observePersonalRecords();
+    _observeProfileChanges();
+  }
+
+  void _observeProfileChanges() {
+    _ref.listen<AsyncValue<PlayerProfile?>>(currentPlayerStreamProvider, (
+      previous,
+      next,
+    ) {
+      final oldData = previous?.value;
+      final newData = next.value;
+
+      if (oldData != null && newData != null) {
+        // 1. Badges
+        if (newData.badges.length > oldData.badges.length) {
+          final newBadgeIds = newData.badges.where(
+            (id) => !oldData.badges.contains(id),
+          );
+          for (final badgeId in newBadgeIds) {
+            _emitEvent(
+              CompetitiveEvent(
+                eventId: const Uuid().v4(),
+                userId: newData.uid,
+                type: CompetitiveEventType.badgeEarned,
+                title: 'New Badge Earned!',
+                body: 'You unlocked a new competitive badge.',
+                metadata: {'badgeId': badgeId},
+                createdAt: DateTime.now(),
+                priority: 2,
+                deduplicationKey: 'badge_${badgeId}_${newData.uid}',
+              ),
+            );
+          }
+        }
+
+        // 2. Titles (from achievements list)
+        if (newData.achievements.length > oldData.achievements.length) {
+          final newAchievementIds = newData.achievements.where(
+            (id) => !oldData.achievements.contains(id),
+          );
+          for (final achievementId in newAchievementIds) {
+            // We assume for now that new achievements might also be titles
+            // The activity card can resolve the actual name/type
+            _emitEvent(
+              CompetitiveEvent(
+                eventId: const Uuid().v4(),
+                userId: newData.uid,
+                type: CompetitiveEventType.titleEarned,
+                title: 'New Title Unlocked!',
+                body: 'A new title is now available for your profile.',
+                metadata: {'achievementId': achievementId},
+                createdAt: DateTime.now(),
+                priority: 2,
+                deduplicationKey: 'title_${achievementId}_${newData.uid}',
+              ),
+            );
+          }
+        }
+
+        // 3. Win Streaks
+        if (newData.currentStreak > oldData.currentStreak) {
+          final milestones = [5, 10, 20, 50, 100];
+          for (final milestone in milestones) {
+            if (newData.currentStreak == milestone &&
+                oldData.currentStreak < milestone) {
+              _emitEvent(
+                CompetitiveEvent(
+                  eventId: const Uuid().v4(),
+                  userId: newData.uid,
+                  type: CompetitiveEventType.streakReached,
+                  title: '$milestone Match Win Streak!',
+                  body: 'You are on fire! Keep it up.',
+                  metadata: {'streak': milestone},
+                  createdAt: DateTime.now(),
+                  priority: 2,
+                  deduplicationKey: 'streak_${milestone}_${newData.uid}',
+                ),
+              );
+            }
+          }
+        }
+
+        // 4. Matches Completed
+        if (newData.gamesPlayed > oldData.gamesPlayed) {
+          _emitEvent(
+            CompetitiveEvent(
+              eventId: const Uuid().v4(),
+              userId: newData.uid,
+              type: CompetitiveEventType.matchCompleted,
+              title: 'Match Completed',
+              body: 'You finished a competitive match.',
+              createdAt: DateTime.now(),
+              priority: 1,
+              deduplicationKey:
+                  'match_${newData.gamesPlayed}_${newData.uid}_${DateTime.now().millisecondsSinceEpoch}',
+            ),
+          );
+        }
+      }
+    });
   }
 
   void _observeProgression() {
@@ -312,6 +415,16 @@ class CompetitiveEventObserver {
         return NotificationType.milestoneReached;
       case CompetitiveEventType.careerMilestone:
         return NotificationType.milestoneReached;
+      case CompetitiveEventType.badgeEarned:
+        return NotificationType.milestoneReached;
+      case CompetitiveEventType.titleEarned:
+        return NotificationType.milestoneReached;
+      case CompetitiveEventType.tournamentResult:
+        return NotificationType.seasonResult;
+      case CompetitiveEventType.matchCompleted:
+        return NotificationType.personalBest;
+      case CompetitiveEventType.streakReached:
+        return NotificationType.personalBest;
     }
   }
 
@@ -330,13 +443,19 @@ class CompetitiveEventObserver {
       case CompetitiveEventType.careerMilestone:
       case CompetitiveEventType.gameMilestone:
       case CompetitiveEventType.winMilestone:
+      case CompetitiveEventType.badgeEarned:
+      case CompetitiveEventType.titleEarned:
         return 'achievements';
       case CompetitiveEventType.rewardReceived:
         return 'rewards';
       case CompetitiveEventType.seasonResultAvailable:
       case CompetitiveEventType.seasonResult:
       case CompetitiveEventType.seasonCompleted:
+      case CompetitiveEventType.tournamentResult:
         return 'history';
+      case CompetitiveEventType.matchCompleted:
+      case CompetitiveEventType.streakReached:
+        return 'profile';
       default:
         return null;
     }

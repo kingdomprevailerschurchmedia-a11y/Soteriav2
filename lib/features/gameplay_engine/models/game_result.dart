@@ -1,4 +1,5 @@
 import '../progression/models/reward_summary.dart';
+import '../answer/models/answer_result.dart';
 
 /// Final summary of a gameplay session performance.
 class GameResult {
@@ -16,6 +17,7 @@ class GameResult {
   final Duration avgResponseTime;
   final Duration fastestAnswerTime;
   final Duration slowestAnswerTime;
+  final List<AnswerResult> answers;
   final bool isSynced;
 
   const GameResult({
@@ -33,6 +35,7 @@ class GameResult {
     this.avgResponseTime = Duration.zero,
     this.fastestAnswerTime = Duration.zero,
     this.slowestAnswerTime = Duration.zero,
+    this.answers = const [],
     this.isSynced = true,
   });
 
@@ -51,6 +54,7 @@ class GameResult {
     'avgResponseTime': avgResponseTime.inMilliseconds,
     'fastestAnswerTime': fastestAnswerTime.inMilliseconds,
     'slowestAnswerTime': slowestAnswerTime.inMilliseconds,
+    'answers': answers.map((e) => e.toJson()).toList(),
     'isSynced': isSynced,
   };
 
@@ -69,6 +73,10 @@ class GameResult {
     avgResponseTime: Duration(milliseconds: json['avgResponseTime'] ?? 0),
     fastestAnswerTime: Duration(milliseconds: json['fastestAnswerTime'] ?? 0),
     slowestAnswerTime: Duration(milliseconds: json['slowestAnswerTime'] ?? 0),
+    answers: (json['answers'] as List?)
+            ?.map((e) => AnswerResult.fromJson(e))
+            .toList() ??
+        [],
     isSynced: json['isSynced'] ?? true,
   );
 }

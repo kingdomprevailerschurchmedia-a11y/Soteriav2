@@ -83,7 +83,6 @@ class ProgressionPreviews {
         xpProgress: 0.45,
         rankProgress: 0.2,
       ),
-      displayName: 'Joseph Ade',
     ),
   );
 
@@ -105,7 +104,6 @@ class ProgressionPreviews {
         xpProgress: 0.85,
         rankProgress: 0.9,
       ),
-      displayName: 'Joseph Ade',
     ),
   );
 

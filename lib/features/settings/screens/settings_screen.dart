@@ -21,8 +21,8 @@ class SettingsScreen extends StatelessWidget {
         title: Text(
           'SETTINGS',
           style: context.titleMedium.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 3,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 2.5,
           ),
         ),
         centerTitle: true,
@@ -30,17 +30,14 @@ class SettingsScreen extends StatelessWidget {
         leading: Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Center(
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-              ),
+            child: GlassSurface(
+              borderRadius: BorderRadius.circular(12),
+              opacity: 0.08,
+              padding: EdgeInsets.zero,
               child: IconButton(
                 icon: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 24),
                 onPressed: () => context.pop(),
+                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                 padding: EdgeInsets.zero,
               ),
             ),
@@ -48,45 +45,47 @@ class SettingsScreen extends StatelessWidget {
         ),
       ),
       body: ListView(
-        physics: const ClampingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
-          vertical: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
+          vertical: 24.h,
         ),
         children: [
           _SettingsSection(
             title: 'ACCOUNT',
             items: [
               _SettingsItem(
-                icon: Icons.person_outline_rounded,
+                icon: Icons.person_rounded,
+                iconColor: const Color(0xFF7C4DFF),
                 title: 'Profile Information',
                 subtitle: 'View and edit your profile details',
                 onTap: () {},
               ),
-              const _Divider(),
+              const _SettingsDivider(),
               _SettingsItem(
-                icon: Icons.security_rounded,
+                icon: Icons.shield_rounded,
+                iconColor: const Color(0xFF00E5FF),
                 title: 'Security & Password',
                 subtitle: 'Manage your password and security',
                 onTap: () {},
               ),
             ],
           ),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-          ),
+          SizedBox(height: 20.h),
           _SettingsSection(
             title: 'PREFERENCES',
             items: [
               _SettingsItem(
-                icon: Icons.notifications_none_rounded,
+                icon: Icons.notifications_rounded,
+                iconColor: SoteriaColors.gold,
                 title: 'Notifications',
                 subtitle: 'Manage your notification preferences',
                 onTap: () {},
               ),
-              const _Divider(),
+              const _SettingsDivider(),
               _SettingsItem(
-                icon: Icons.palette_outlined,
+                icon: Icons.palette_rounded,
+                iconColor: const Color(0xFFE91E63),
                 title: 'Theme & Appearance',
                 subtitle: 'Dark Mode',
                 isThemeItem: true,
@@ -94,32 +93,30 @@ class SettingsScreen extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-          ),
+          SizedBox(height: 20.h),
           _SettingsSection(
             title: 'SUPPORT',
             items: [
               _SettingsItem(
-                icon: Icons.help_outline_rounded,
+                icon: Icons.help_rounded,
+                iconColor: SoteriaColors.secondary,
                 title: 'Help Center',
                 subtitle: 'Get help and support',
                 onTap: () {},
               ),
-              const _Divider(),
+              const _SettingsDivider(),
               _SettingsItem(
-                icon: Icons.info_outline_rounded,
+                icon: Icons.info_rounded,
+                iconColor: Colors.white60,
                 title: 'About Soteria',
                 subtitle: 'App info, terms and more',
                 onTap: () {},
               ),
             ],
           ),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
-          ),
+          SizedBox(height: 32.h),
           _LogoutSection(onTap: () => _showLogoutDialog(context)),
-          const SizedBox(height: 16),
+          SizedBox(height: 12.h),
           Center(
             child: Text(
               'You will be logged out of your account.',
@@ -129,7 +126,7 @@ class SettingsScreen extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: MediaQuery.paddingOf(context).bottom + 20),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom + 20.h),
         ],
       ),
     );
@@ -155,27 +152,22 @@ class _SettingsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 16, bottom: 12),
+          padding: const EdgeInsets.only(left: 4, bottom: 12),
           child: Text(
             title,
             style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
+              color: SoteriaColors.muted,
               fontWeight: FontWeight.w900,
-              letterSpacing: 1.5,
+              letterSpacing: 2,
+              fontSize: 11.sp,
             ),
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
-            gradient: SoteriaGradients.settingsCardBorder,
-          ),
-          padding: const EdgeInsets.all(1.5),
-          child: GlassSurface(
-            borderRadius: BorderRadius.circular(27),
-            opacity: 0.1,
-            child: Column(children: items),
-          ),
+        GlassSurface(
+          borderRadius: BorderRadius.circular(24),
+          opacity: 0.05,
+          padding: EdgeInsets.zero,
+          child: Column(children: items),
         ),
       ],
     );
@@ -185,6 +177,7 @@ class _SettingsSection extends StatelessWidget {
 class _SettingsItem extends StatelessWidget {
   const _SettingsItem({
     required this.icon,
+    required this.iconColor,
     required this.title,
     this.subtitle,
     this.isThemeItem = false,
@@ -192,6 +185,7 @@ class _SettingsItem extends StatelessWidget {
   });
 
   final IconData icon;
+  final Color iconColor;
   final String title;
   final String? subtitle;
   final bool isThemeItem;
@@ -201,14 +195,14 @@ class _SettingsItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       leading: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(12),
+          color: iconColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(icon, color: SoteriaColors.secondary, size: 22),
+        child: Icon(icon, color: iconColor, size: 20),
       ),
       title: Text(
         title,
@@ -228,11 +222,15 @@ class _SettingsItem extends StatelessWidget {
                   ),
                   const SizedBox(width: 8),
                 ],
-                Text(
-                  subtitle!,
-                  style: context.labelSmall.copyWith(
-                    color: SoteriaColors.muted,
-                    fontWeight: FontWeight.w500,
+                Flexible(
+                  child: Text(
+                    subtitle!,
+                    style: context.labelSmall.copyWith(
+                      color: SoteriaColors.muted,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
               ],
@@ -240,23 +238,23 @@ class _SettingsItem extends StatelessWidget {
           : null,
       trailing: const Icon(
         Icons.chevron_right_rounded,
-        color: SoteriaColors.secondary,
-        size: 28,
+        color: Colors.white24,
+        size: 24,
       ),
     );
   }
 }
 
-class _Divider extends StatelessWidget {
-  const _Divider();
+class _SettingsDivider extends StatelessWidget {
+  const _SettingsDivider({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Divider(
       height: 1,
       thickness: 1,
-      color: Colors.white.withValues(alpha: 0.05),
-      indent: 70,
+      color: Colors.white.withValues(alpha: 0.03),
+      indent: 72,
     );
   }
 }
@@ -269,24 +267,27 @@ class _LogoutSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: SoteriaGradients.logoutBorder,
-        ),
-        padding: const EdgeInsets.all(1.5),
+      child: GlassSurface(
+        borderRadius: BorderRadius.circular(20),
+        opacity: 0.08,
+        padding: EdgeInsets.zero,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(19),
-            gradient: SoteriaGradients.logoutCard,
+            borderRadius: BorderRadius.circular(20),
+            gradient: LinearGradient(
+              colors: [
+                SoteriaColors.error.withValues(alpha: 0.1),
+                SoteriaColors.error.withValues(alpha: 0.02),
+              ],
+            ),
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
           child: Row(
             children: [
               const Icon(
                 Icons.logout_rounded,
                 color: SoteriaColors.error,
-                size: 24,
+                size: 20,
               ),
               const SizedBox(width: 16),
               Text(
@@ -301,7 +302,7 @@ class _LogoutSection extends StatelessWidget {
               const Icon(
                 Icons.chevron_right_rounded,
                 color: SoteriaColors.error,
-                size: 28,
+                size: 24,
               ),
             ],
           ),

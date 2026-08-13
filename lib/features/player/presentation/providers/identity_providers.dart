@@ -4,14 +4,16 @@ import '../../domain/models/competitive_title.dart';
 import '../../domain/models/competitive_badge.dart';
 import '../../domain/models/rank_progress.dart';
 import '../../domain/repositories/identity_repository.dart';
-import '../../data/repositories/static_identity_repository.dart';
+import '../../data/repositories/firebase_identity_repository.dart';
+import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import '../../domain/repositories/player_repository.dart';
 import 'progression_providers.dart';
 import 'rank_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../providers/player_providers.dart';
 
 final identityRepositoryProvider = Provider<IdentityRepository>((ref) {
-  return StaticIdentityRepository();
+  return FirebaseIdentityRepository(ref.watch(firestoreProvider));
 });
 
 final titleDefinitionsProvider = FutureProvider<List<CompetitiveTitle>>((ref) {

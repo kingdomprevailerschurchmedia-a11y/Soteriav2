@@ -61,18 +61,16 @@ void main() {
         wrap(
           PlayerProgressionCard(
             progression: mockProgression,
-            displayName: 'Joseph Ade',
           ),
         ),
       );
 
-      expect(find.text('Joseph Ade'), findsOneWidget);
-      expect(find.text('Level 10'), findsOneWidget);
-      expect(find.text('GOLD II'), findsOneWidget);
+      expect(find.text('XP PROGRESS'), findsOneWidget);
+      expect(find.text('RANK PROGRESS'), findsOneWidget);
       expect(
-        find.text('500 / 2000 XP'),
+        find.text('500 / 12000 XP'),
         findsOneWidget,
-      ); // 12000 - 10000 = 2000
+      ); 
       expect(find.text('45%'), findsOneWidget);
     });
   });

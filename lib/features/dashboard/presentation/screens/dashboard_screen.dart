@@ -58,6 +58,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       isLoading: state.isLoading && player == null,
       error: state.error,
       onRetry: () => ref.read(dashboardProvider.notifier).refresh(),
+      useSafeArea: false,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: RefreshIndicator(
@@ -68,7 +69,9 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
               parent: BouncingScrollPhysics(),
             ),
             slivers: [
-              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
+              SliverToBoxAdapter(
+                child: SizedBox(height: MediaQuery.paddingOf(context).top + 8.h),
+              ),
 
               // Header
               SliverToBoxAdapter(
@@ -104,7 +107,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Unified Profile & Rank Hero Card
               SliverToBoxAdapter(
@@ -139,12 +142,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                 ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Season Status
               const SliverToBoxAdapter(child: SeasonHeader()),
 
-              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Milestone Section
               SliverToBoxAdapter(
@@ -157,32 +160,32 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Quick Actions
               const SliverToBoxAdapter(child: QuickActionsGrid()),
 
-              SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Daily Goals
               const SliverToBoxAdapter(child: DailyGoalsSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Continue Playing
               const SliverToBoxAdapter(child: ContinuePlayingSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Recent Achievements
               const SliverToBoxAdapter(child: RecentAchievementsSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Top Scholars
               const SliverToBoxAdapter(child: TopScholarsSection()),
 
-              SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+              SliverToBoxAdapter(child: SizedBox(height: 8.h)),
 
               // Performance
               const SliverToBoxAdapter(child: PerformanceSection()),
@@ -198,7 +201,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ),
                 ),
 
-              SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 80.h + MediaQuery.paddingOf(context).bottom,
+                ),
+              ),
             ],
           ),
         ),

@@ -61,7 +61,7 @@ class DailyGoalsSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 6.h),
           SoteriaCard(
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
             borderRadius: 24,

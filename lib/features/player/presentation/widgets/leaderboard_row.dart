@@ -9,6 +9,7 @@ import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../domain/models/leaderboard_entry.dart';
 import '../providers/identity_providers.dart';
 import 'identity/competitive_title_widget.dart';
+import '../screens/public_competitive_profile_screen.dart';
 import 'competitive_rank_badge.dart';
 
 class LeaderboardRow extends ConsumerWidget {
@@ -30,85 +31,92 @@ class LeaderboardRow extends ConsumerWidget {
             .firstOrNull
         : null;
 
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: SoteriaSpacing.md,
-        vertical: SoteriaSpacing.sm,
+    return InkWell(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PublicCompetitiveProfileScreen(userId: entry.userId),
+        ),
       ),
-      decoration: BoxDecoration(
-        color: isCurrentUser
-            ? SoteriaColors.primary.withValues(alpha: 0.1)
-            : Colors.transparent,
-        border: isCurrentUser
-            ? Border.symmetric(
-                vertical: BorderSide(color: SoteriaColors.primary, width: 2.w),
-              )
-            : null,
-      ),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 32.w,
-            child: _LeaderboardPositionBadge(rank: entry.position),
-          ),
-          SizedBox(width: 8.w),
-          SoteriaAvatar(
-            avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
-            size: 40,
-            rank: entry.position,
-          ),
-          SizedBox(width: SoteriaSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Flexible(
-                      child: Text(
-                        entry.displayName,
-                        style: context.bodyLarge.copyWith(
-                          fontWeight:
-                              isCurrentUser ? FontWeight.bold : FontWeight.normal,
-                          color: isCurrentUser
-                              ? SoteriaColors.gold
-                              : SoteriaColors.textPrimary,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+          horizontal: SoteriaSpacing.md,
+          vertical: SoteriaSpacing.sm,
+        ),
+        decoration: BoxDecoration(
+          color: isCurrentUser
+              ? SoteriaColors.primary.withValues(alpha: 0.1)
+              : Colors.transparent,
+          border: isCurrentUser
+              ? Border.symmetric(
+                  vertical: BorderSide(color: SoteriaColors.primary, width: 2.w),
+                )
+              : null,
+        ),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 32.w,
+              child: _LeaderboardPositionBadge(rank: entry.position),
+            ),
+            SizedBox(width: 8.w),
+            SoteriaAvatar(
+              avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+              size: 40,
+              rank: entry.position,
+            ),
+            SizedBox(width: SoteriaSpacing.md),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Flexible(
+                        child: Text(
+                          entry.displayName,
+                          style: context.bodyLarge.copyWith(
+                            fontWeight:
+                                isCurrentUser ? FontWeight.bold : FontWeight.normal,
+                            color: isCurrentUser
+                                ? SoteriaColors.gold
+                                : SoteriaColors.textPrimary,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                    if (title != null) ...[
-                      SizedBox(width: 6.w),
-                      CompetitiveTitleWidget(title: title),
+                      if (title != null) ...[
+                        SizedBox(width: 6.w),
+                        CompetitiveTitleWidget(title: title),
+                      ],
                     ],
-                  ],
-                ),
+                  ),
+                  Text(
+                    '${entry.rankTier} ${entry.division}',
+                    style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
                 Text(
-                  '${entry.rankTier} ${entry.division}',
-                  style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                  '${entry.rankPoints} RP',
+                  style: context.titleSmall.copyWith(
+                    color: SoteriaColors.gold,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                CompetitiveRankBadge(
+                  rankName: '', // Label hidden for compact row
+                  tierId: entry.rankTier.toLowerCase(),
+                  size: RankBadgeSize.small,
                 ),
               ],
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                '${entry.rankPoints} RP',
-                style: context.titleSmall.copyWith(
-                  color: SoteriaColors.gold,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              CompetitiveRankBadge(
-                rankName: '', // Label hidden for compact row
-                tierId: entry.rankTier.toLowerCase(),
-                size: RankBadgeSize.small,
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

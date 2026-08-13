@@ -29,8 +29,12 @@ void main() {
       child: ScreenUtilInit(
         designSize: const Size(390, 844),
         minTextAdapt: true,
-        builder: (context, child) =>
-            const MaterialApp(home: CompetitiveStatisticsScreen()),
+        builder: (context, child) => MaterialApp(
+          home: MediaQuery(
+            data: const MediaQueryData(disableAnimations: true),
+            child: const CompetitiveStatisticsScreen(),
+          ),
+        ),
       ),
     );
   }
@@ -56,6 +60,9 @@ void main() {
   testWidgets('should show trends and insights', (tester) async {
     await tester.pumpWidget(createTestWidget());
     await tester.pumpAndSettle();
+
+    // Pump to handle SoteriaAnimation delays and clear pending timers
+    await tester.pump(const Duration(seconds: 1));
 
     final trendsSection = find.text('PERFORMANCE TRENDS');
     await tester.scrollUntilVisible(

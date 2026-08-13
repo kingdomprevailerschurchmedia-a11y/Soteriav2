@@ -23,7 +23,7 @@ class StatisticCard extends StatelessWidget {
     return Semantics(
       label: '$label: $value',
       child: SoteriaCard(
-        padding: EdgeInsets.all(SoteriaSpacing.md),
+        padding: EdgeInsets.all(SoteriaSpacing.sm),
         child: Row(
           children: [
             Container(
@@ -35,7 +35,7 @@ class StatisticCard extends StatelessWidget {
               child: Icon(
                 icon,
                 color: color ?? SoteriaColors.primary,
-                size: 20,
+                size: 18,
               ),
             ),
             SizedBox(width: SoteriaSpacing.md),

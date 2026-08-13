@@ -6,6 +6,9 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/features/player/domain/models/competitive_match.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_badge.dart';
+import 'package:soteria/features/player/presentation/screens/public_competitive_profile_screen.dart';
+
+import 'package:go_router/go_router.dart';
 
 class CompetitiveMatchDetailsSheet extends StatelessWidget {
   final CompetitiveMatch match;
@@ -47,6 +50,12 @@ class CompetitiveMatchDetailsSheet extends StatelessWidget {
                     SizedBox(height: SoteriaSpacing.xl),
                   ],
                   _buildMatchInfo(context, result),
+                  if (result.opponentId != null) ...[
+                    SizedBox(height: SoteriaSpacing.xl),
+                    _buildOpponentButton(context, result.opponentId!),
+                  ],
+                  SizedBox(height: SoteriaSpacing.md),
+                  _buildReplayButton(context, result.resultId),
                   SizedBox(height: SoteriaSpacing.xxl),
                   _buildBackButton(context),
                   SizedBox(height: SoteriaSpacing.xl),
@@ -348,6 +357,50 @@ class CompetitiveMatchDetailsSheet extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildOpponentButton(BuildContext context, String opponentId) {
+    return SizedBox(
+      width: double.infinity,
+      child: OutlinedButton.icon(
+        onPressed: () {
+          Navigator.pop(context);
+          GoRouter.of(context).push('/app/profile/public/$opponentId');
+        },
+        icon: const Icon(Icons.person_search_rounded),
+        label: const Text('VIEW OPPONENT PROFILE'),
+        style: OutlinedButton.styleFrom(
+          foregroundColor: SoteriaColors.secondary,
+          side: const BorderSide(color: SoteriaColors.secondary),
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildReplayButton(BuildContext context, String matchId) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () {
+          Navigator.pop(context);
+          GoRouter.of(context).push('/app/versus/replay/$matchId');
+        },
+        icon: const Icon(Icons.play_circle_fill_rounded),
+        label: const Text('WATCH MATCH REPLAY'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: SoteriaColors.primary,
+          foregroundColor: Colors.white,
+          padding: EdgeInsets.symmetric(vertical: 16.h),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.r),
+          ),
+        ),
       ),
     );
   }

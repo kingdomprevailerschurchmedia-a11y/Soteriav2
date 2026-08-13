@@ -1,5 +1,6 @@
 import '../../domain/models/competitive_title.dart';
 import '../../domain/models/competitive_badge.dart';
+import '../../domain/models/public_competitive_profile.dart';
 import '../../domain/repositories/identity_repository.dart';
 
 class StaticIdentityRepository implements IdentityRepository {
@@ -115,5 +116,15 @@ class StaticIdentityRepository implements IdentityRepository {
   Future<CompetitiveBadge?> getBadge(String badgeId) async {
     final badges = await getBadgeDefinitions();
     return badges.where((b) => b.id == badgeId).firstOrNull;
+  }
+
+  @override
+  Future<PublicCompetitiveProfile?> getPublicProfile(String userId) async {
+    return null;
+  }
+
+  @override
+  Future<List<PublicCompetitiveProfile>> searchPlayers(String query, {int limit = 20}) async {
+    return [];
   }
 }

@@ -7,6 +7,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
+import '../../../player/presentation/providers/challenge_providers.dart';
 
 class DashboardHeader extends ConsumerWidget {
   const DashboardHeader({
@@ -101,6 +102,8 @@ class DashboardHeader extends ConsumerWidget {
                     label: 'Coins',
                   ),
                   SizedBox(width: SoteriaSpacing.sm),
+                  _ChallengesAction(),
+                  SizedBox(width: SoteriaSpacing.sm),
                   GestureDetector(
                     onTap: () => nav.go('/app/profile'),
                     child: Hero(
@@ -118,6 +121,43 @@ class DashboardHeader extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _ChallengesAction extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final incomingCount = ref.watch(incomingChallengesProvider).value?.length ?? 0;
+    final nav = ref.watch(navigationCoordinatorProvider);
+
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        IconButton(
+          onPressed: nav.playChallenges,
+          icon: const Icon(Icons.bolt_rounded, color: SoteriaColors.gold),
+          style: IconButton.styleFrom(
+            backgroundColor: Colors.white.withValues(alpha: 0.05),
+          ),
+        ),
+        if (incomingCount > 0)
+          Positioned(
+            top: 2,
+            right: 2,
+            child: Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(color: SoteriaColors.error, shape: BoxShape.circle),
+              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+              child: Center(
+                child: Text(
+                  incomingCount.toString(),
+                  style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ),
+      ],
     );
   }
 }

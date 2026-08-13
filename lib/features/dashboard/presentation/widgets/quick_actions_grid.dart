@@ -43,14 +43,15 @@ class QuickActionsGrid extends ConsumerWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 6.h),
           GridView.count(
             crossAxisCount: isTablet ? 4 : 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 16.h,
-            crossAxisSpacing: 16.w,
-            childAspectRatio: 1.25,
+            padding: EdgeInsets.zero,
+            mainAxisSpacing: 12.h,
+            crossAxisSpacing: 12.w,
+            childAspectRatio: 1.38,
             children: [
               _ActionCard(
                 title: 'Practice',
@@ -178,13 +179,13 @@ class _ActionCardState extends State<_ActionCard>
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(16.w),
+                      padding: EdgeInsets.all(12.w),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Glowing Icon Container
                           Container(
-                            padding: EdgeInsets.all(8.w),
+                            padding: EdgeInsets.all(6.w),
                             decoration: BoxDecoration(
                               color: widget.color.withValues(alpha: 0.3),
                               borderRadius: BorderRadius.circular(14.r),
@@ -229,8 +230,8 @@ class _ActionCardState extends State<_ActionCard>
                     ),
                     // Action Arrow Button
                     Positioned(
-                      right: 16.w,
-                      bottom: 16.h,
+                      right: 12.w,
+                      bottom: 12.h,
                       child: Container(
                         padding: EdgeInsets.all(6.w),
                         decoration: BoxDecoration(

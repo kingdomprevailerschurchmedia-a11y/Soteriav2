@@ -1,0 +1,11 @@
+- `[x]` Extend `GameResult` to include `answers`.
+- `[x]` Implement `CompetitiveMatchReplay` model.
+- `[x]` Implement `matchReplayProvider` and `competitiveInsightsProvider`.
+- `[x]` Develop `CompetitiveMatchReplayScreen` with question navigation.
+- `[x]` Develop `CompetitiveInsightsScreen` with trends and category breakdown.
+- `[x]` Integrate Replay button into `CompetitiveMatchResultScreen`.
+- `[x]` Integrate Insights button into `CompetitiveMatchHistoryScreen`.
+- `[x]` Integrate Replay button into `CompetitiveMatchDetailsSheet`.
+- `[x]` Add Preview fixtures for Replay and Insights.
+- `[x]` Update Documentation.
+- `[ ]` Implement Domain and Repository tests for insights logic.

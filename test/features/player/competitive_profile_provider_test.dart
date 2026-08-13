@@ -13,6 +13,7 @@ import 'package:soteria/features/player/presentation/providers/reward_providers.
 import 'package:soteria/features/player/presentation/providers/milestone_providers.dart';
 import 'package:soteria/features/player/presentation/providers/personal_record_providers.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
+import 'package:soteria/features/auth/domain/repositories/auth_repository.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:soteria/features/auth/models/authentication_result.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
@@ -99,17 +100,26 @@ void main() {
             authRepositoryProvider.overrideWithValue(AuthMock()),
             sessionProvider.overrideWith(() => SessionMock()),
             currentPlayerStreamProvider.overrideWith(
-              (ref) => Stream.error('Auth failure'),
+              (ref) => Stream<PlayerProfile?>.error('Auth failure', StackTrace.current),
             ),
             competitiveProgressionProvider.overrideWith(
               (ref) => Stream.value(mockProgression),
             ),
+            competitiveHistorySummaryProvider.overrideWithValue(
+              AsyncValue.data(CompetitiveHistory(userId: 'u1')),
+            ),
+            playerRankPositionProvider.overrideWith((ref) => Future.value(-1)),
+            playerRewardsProvider.overrideWith((ref) => Stream.value([])),
             playerMilestonesProvider.overrideWith((ref) => Stream.value([])),
             milestoneDefinitionsProvider.overrideWith((ref) => Future.value([])),
             currentUserPersonalRecordsProvider.overrideWith((ref) => Stream.value([])),
           ],
         );
 
+        // Force rebuild and wait for error propagation
+        container.listen(competitiveProfileProvider, (prev, next) {});
+        await container.pump();
+        await container.pump();
         await container.pump();
 
         final profileAsync = container.read(competitiveProfileProvider);

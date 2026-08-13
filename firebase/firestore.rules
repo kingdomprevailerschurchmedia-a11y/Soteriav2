@@ -137,9 +137,65 @@ service cloud.firestore {
       allow create, delete: if isAdmin();
     }
 
+    // PUBLIC PROFILES: Read-only for authenticated users
+    match /public_profiles/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // CHALLENGES: Participants can read/write
+    match /challenges/{challengeId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.challengerId ||
+        request.auth.uid == resource.data.challengedPlayerId ||
+        isAdmin()
+      );
+
+      allow create: if isAuthenticated() &&
+                    request.resource.data.challengerId == request.auth.uid &&
+                    request.resource.data.status == 'pending';
+
+      allow update: if isAuthenticated() && (
+        // Challenger can cancel
+        (request.auth.uid == resource.data.challengerId && request.resource.data.status == 'cancelled') ||
+        // Challenged player can accept/decline
+        (request.auth.uid == resource.data.challengedPlayerId && request.resource.data.status in ['accepted', 'declined']) ||
+        isAdmin()
+      ) && isNotModifying(['challengeId', 'challengerId', 'challengedPlayerId', 'createdAt']);
+    }
+
+    // VERSUS MATCHES: Participants can read
+    match /versus_matches/{matchId} {
+      allow read: if isAuthenticated() && (
+        request.auth.uid == resource.data.playerAId ||
+        request.auth.uid == resource.data.playerBId ||
+        isAdmin()
+      );
+      allow write: if isAdmin(); // Match state managed by server/transactions
+    }
+
     // PRACTICE SESSIONS: Ephemeral session data
     match /practice_sessions/{sessionId} {
       allow read, write: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+    }
+
+    // MATCHMAKING POOL: Users can manage their own entry
+    match /matchmaking_pool/{sessionId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+
+      allow create: if isAuthenticated() &&
+                    request.resource.data.userId == request.auth.uid &&
+                    request.resource.data.status == 'searching';
+
+      allow update: if isAuthenticated() &&
+                    resource.data.userId == request.auth.uid &&
+                    (
+                      request.resource.data.status == 'cancelled' ||
+                      (request.resource.data.status == 'searching' && request.resource.data.isReady != resource.data.isReady)
+                    ) &&
+                    isNotModifying(['sessionId', 'userId', 'queuedAt']);
+
+      allow write: if isAdmin();
     }
   }
 }

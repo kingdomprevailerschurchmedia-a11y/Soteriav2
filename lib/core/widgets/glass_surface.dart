@@ -13,6 +13,7 @@ class GlassSurface extends StatelessWidget {
     this.borderRadius,
     this.padding,
     this.border,
+    this.onTap,
   });
 
   final Widget child;
@@ -21,10 +22,11 @@ class GlassSurface extends StatelessWidget {
   final BorderRadius? borderRadius;
   final EdgeInsetsGeometry? padding;
   final BoxBorder? border;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    Widget content = ClipRRect(
       borderRadius: borderRadius ?? SoteriaRadius.brMd,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: blur, sigmaY: blur),
@@ -39,5 +41,14 @@ class GlassSurface extends StatelessWidget {
         ),
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: content,
+      );
+    }
+
+    return content;
   }
 }

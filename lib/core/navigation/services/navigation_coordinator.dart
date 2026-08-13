@@ -46,6 +46,10 @@ class NavigationCoordinator {
     navigateTo('/app/versus');
   }
 
+  void playChallenges() {
+    navigateTo('/app/challenges');
+  }
+
   void playTournament() {
     navigateTo('/app/tournaments');
   }

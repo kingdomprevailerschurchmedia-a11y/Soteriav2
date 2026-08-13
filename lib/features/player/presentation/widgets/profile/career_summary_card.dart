@@ -33,13 +33,13 @@ class CareerSummaryCard extends StatelessWidget {
               letterSpacing: 1.5,
             ),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SizedBox(height: SoteriaSpacing.md),
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
-            childAspectRatio: 2.5,
-            mainAxisSpacing: SoteriaSpacing.md,
+            childAspectRatio: 3.0,
+            mainAxisSpacing: SoteriaSpacing.sm,
             crossAxisSpacing: SoteriaSpacing.md,
             children: [
               _SummaryItem(
@@ -48,14 +48,14 @@ class CareerSummaryCard extends StatelessWidget {
               ),
               _SummaryItem(label: 'Win Rate', value: '$winRate%'),
               _SummaryItem(
-                label: 'Best Rank',
-                value: history.bestResult?.finalTier ?? 'N/A',
+                label: 'Peak Rank',
+                value: history.bestResult?.finalTier.toUpperCase() ?? 'N/A',
                 isGold: true,
               ),
               _SummaryItem(
                 label: 'Peak Pos',
                 value: history.bestResult != null
-                    ? '#${history.bestResult!.finalPosition}'
+                    ? '#${history.bestResult!.finalPosition} GLOBAL'
                     : 'N/A',
               ),
             ],
@@ -84,7 +84,7 @@ class _SummaryItem extends StatelessWidget {
       children: [
         Text(
           value,
-          style: context.titleLarge.copyWith(
+          style: context.titleMedium.copyWith(
             color: isGold ? SoteriaColors.gold : SoteriaColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),

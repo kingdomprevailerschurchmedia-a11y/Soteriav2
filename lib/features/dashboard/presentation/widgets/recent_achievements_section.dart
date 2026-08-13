@@ -62,12 +62,13 @@ class RecentAchievementsSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 6.h),
         SizedBox(
           height: 165.w,
           child: ListView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+            physics: const BouncingScrollPhysics(),
             children: [
               _AchievementCard(
                 title: 'First Win',

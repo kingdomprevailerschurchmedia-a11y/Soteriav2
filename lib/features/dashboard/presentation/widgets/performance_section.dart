@@ -39,7 +39,7 @@ class PerformanceSection extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => context.push('/app/versus/insights'),
                 child: Row(
                   children: [
                     Text(
@@ -61,11 +61,12 @@ class PerformanceSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 6.h),
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
             mainAxisSpacing: 10.h,
             crossAxisSpacing: 10.w,
             childAspectRatio: 2.3,

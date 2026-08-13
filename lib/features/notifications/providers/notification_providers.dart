@@ -6,6 +6,7 @@ import '../domain/repositories/notification_repository.dart';
 import '../data/repositories/notification_repository_impl.dart';
 import '../services/notification_coordinator.dart';
 import '../services/competitive_event_observer.dart';
+import '../services/challenge_notification_service.dart';
 import '../../player/domain/models/competitive_event.dart';
 import '../../player/presentation/providers/activity_providers.dart';
 
@@ -27,6 +28,15 @@ final competitiveEventObserverProvider = Provider<CompetitiveEventObserver>((
   );
   observer.start();
   return observer;
+});
+
+final challengeNotificationServiceProvider = Provider<ChallengeNotificationService>((ref) {
+  final service = ChallengeNotificationService(
+    ref,
+    ref.watch(notificationRepositoryProvider),
+  );
+  service.start();
+  return service;
 });
 
 final notificationCoordinatorProvider = Provider<NotificationCoordinator>((

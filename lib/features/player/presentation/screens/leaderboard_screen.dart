@@ -16,6 +16,7 @@ import '../widgets/leaderboard/leaderboard_neighborhood.dart';
 import '../widgets/leaderboard/leaderboard_insight_card.dart';
 import '../widgets/leaderboard/rank_progress_card.dart';
 import '../widgets/season_header.dart';
+import 'player_search_screen.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -62,6 +63,15 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
             letterSpacing: 2,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search_rounded),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PlayerSearchScreen()),
+            ),
+          ),
+          SizedBox(width: SoteriaSpacing.sm),
+        ],
         bottom: TabBar(
           controller: _tabController,
           indicatorColor: SoteriaColors.primary,

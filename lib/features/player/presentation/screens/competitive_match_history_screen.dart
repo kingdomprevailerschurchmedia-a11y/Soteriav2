@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
@@ -70,6 +71,14 @@ class _CompetitiveMatchHistoryScreenState
             letterSpacing: 2,
           ),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.analytics_rounded, color: SoteriaColors.gold),
+            onPressed: () => GoRouter.of(context).push('/app/versus/insights'),
+            tooltip: 'Competitive Insights',
+          ),
+          SizedBox(width: 8.w),
+        ],
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,

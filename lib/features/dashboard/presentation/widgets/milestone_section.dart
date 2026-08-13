@@ -67,7 +67,7 @@ class MilestoneSection extends StatelessWidget {
             ],
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 6.h),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
           child: _DashboardMilestoneCard(

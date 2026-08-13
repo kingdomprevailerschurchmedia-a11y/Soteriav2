@@ -10,6 +10,7 @@ import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import '../../domain/models/tournament_ranking.dart';
 import 'rank_badge.dart';
+import 'package:soteria/features/player/presentation/screens/public_competitive_profile_screen.dart';
 
 class LeaderboardCard extends ConsumerWidget {
   final TournamentRanking ranking;
@@ -28,6 +29,11 @@ class LeaderboardCard extends ConsumerWidget {
         : null;
 
     return SoteriaCard(
+      onTap: () => Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => PublicCompetitiveProfileScreen(userId: ranking.uid),
+        ),
+      ),
       padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.md,
         vertical: SoteriaSpacing.sm,

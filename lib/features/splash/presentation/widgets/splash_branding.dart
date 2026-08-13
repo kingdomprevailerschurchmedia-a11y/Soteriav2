@@ -54,28 +54,34 @@ class SplashBranding extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 8.h),
+          // ============================================================
+          // WORDMARK + TAGLINE (GROUPED)
+          // ============================================================
+          Transform.translate(
+            offset: Offset(0, -8.h), // Pull text closer to logo
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // ============================================================
+                // SOTERIA WORDMARK
+                // ============================================================
+                FadeTransition(
+                  opacity: wordmarkOpacity,
+                  child: _Wordmark(availableWidth: size.width),
+                ),
 
-          // ============================================================
-          // SOTERIA WORDMARK
-          // ============================================================
-          FadeTransition(
-            opacity: wordmarkOpacity,
-            child: _Wordmark(availableWidth: size.width),
+                SizedBox(height: 1.h),
+
+                // ============================================================
+                // TAGLINE
+                // ============================================================
+                FadeTransition(
+                  opacity: taglineOpacity,
+                  child: _Tagline(availableWidth: size.width),
+                ),
+              ],
+            ),
           ),
-
-          SizedBox(height: 4.h),
-
-          // ============================================================
-          // TAGLINE
-          // ============================================================
-          FadeTransition(
-            opacity: taglineOpacity,
-            child: _Tagline(availableWidth: size.width),
-          ),
-
-          // Add a bit of bottom padding to balance the logo's height
-          SizedBox(height: size.height * 0.05),
         ],
       ),
     );

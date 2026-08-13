@@ -7,19 +7,13 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/gradients/soteria_gradients.dart';
-import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
-import 'package:soteria/core/avatar/presentation/screens/avatar_selection_screen.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';
-import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
 import '../providers/progression_providers.dart';
 import '../widgets/player_progression_card.dart';
-import '../widgets/rank_history_section.dart';
-import '../providers/identity_providers.dart';
-import '../widgets/identity/competitive_identity_header.dart';
-import 'competitive_showcase_screen.dart';
+import 'package:intl/intl.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
 
@@ -33,163 +27,71 @@ class PlayerProfileScreen extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.transparent,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        automaticallyImplyLeading: false,
-        title: Text(
-          'PROFILE',
-          style: context.titleMedium.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 3,
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16),
-            child: Container(
-              height: 40,
-              width: 40,
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-              ),
-              child: IconButton(
-                icon: const Icon(Icons.settings_rounded, color: Colors.white, size: 20),
-                onPressed: () => context.push('/app/settings'),
-                padding: EdgeInsets.zero,
-              ),
-            ),
-          ),
-        ],
-      ),
       body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-            ),
-            _buildHeader(context, profile),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-            ),
+            SizedBox(height: MediaQuery.paddingOf(context).top + 20.h),
+            _buildTopHeader(context),
+            SizedBox(height: 16.h),
+            _buildUserInfo(context, profile),
+            SizedBox(height: 24.h),
             progressionAsync.when(
               data: (progression) => PlayerProgressionCard(
                 progression: progression,
-                displayName: profile?.displayName ?? 'Anonymous',
-                avatarUrl: profile?.avatarUrl,
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (err, _) => Text('Error loading progression: $err'),
             ),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-            ),
-            _buildCompetitiveIdentity(context, ref),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-            ),
-            const RankHistorySection(),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-            ),
-            _buildSection(
-              context,
-              title: 'ACCOUNT',
-              items: [
-                _ProfileTile(
-                  icon: Icons.person_outline_rounded,
-                  title: 'Personal Information',
-                  onTap: () {},
-                ),
-                const _Divider(),
-                _ProfileTile(
-                  icon: Icons.history_rounded,
-                  title: 'Competitive History',
-                  onTap: () => context.push(SoteriaRoutes.competitiveHistory),
-                ),
-                const _Divider(),
-                _ProfileTile(
-                  icon: Icons.emoji_events_outlined,
-                  title: 'Personal Records',
-                  onTap: () => context.push(SoteriaRoutes.personalRecords),
-                ),
-                const _Divider(),
-                _ProfileTile(
-                  icon: Icons.bar_chart_rounded,
-                  title: 'Statistics',
-                  onTap: () {},
-                ),
-              ],
-            ),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-            ),
-            _buildSection(
-              context,
-              title: 'PREFERENCES',
-              items: [
-                _ProfileTile(
-                  icon: Icons.notifications_none_rounded,
-                  title: 'Notifications',
-                  onTap: () {},
-                ),
-                const _Divider(),
-                _ProfileTile(
-                  icon: Icons.privacy_tip_outlined,
-                  title: 'Privacy & Security',
-                  onTap: () {},
-                ),
-              ],
-            ),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-            ),
-            _buildSection(
-              context,
-              title: 'SUPPORT',
-              items: [
-                _ProfileTile(
-                  icon: Icons.help_outline_rounded,
-                  title: 'Help Center',
-                  onTap: () {},
-                ),
-                const _Divider(),
-                _ProfileTile(
-                  icon: Icons.info_outline_rounded,
-                  title: 'About Soteria',
-                  onTap: () {},
-                ),
-              ],
-            ),
-            SizedBox(
-              height: SoteriaSpacing.adaptive(context, SoteriaSpacing.xlStatic),
-            ),
-            _LogoutSection(onTap: () => _showLogoutDialog(context)),
-            SizedBox(height: 20.h + MediaQuery.paddingOf(context).bottom),
+            SizedBox(height: 24.h),
+            _buildCompetitiveHistory(context),
+            SizedBox(height: 24.h),
+            _buildAccountSection(context),
+            SizedBox(height: 32.h + MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCompetitiveIdentity(BuildContext context, WidgetRef ref) {
-    return const SizedBox.shrink(); // Hidden as per request to only redesign the top section
+  Widget _buildTopHeader(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Profile',
+              style: context.headlineLarge.copyWith(
+                fontWeight: FontWeight.w900,
+                color: Colors.white,
+                fontSize: 26.sp,
+              ),
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              'Learn. Compete. Become Legendary.',
+              style: context.bodyMedium.copyWith(
+                color: SoteriaColors.muted,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+        _SettingsButton(onTap: () => context.push('/app/settings')),
+      ],
+    );
   }
 
-  Widget _buildHeader(BuildContext context, UserProfile? profile) {
+  Widget _buildUserInfo(BuildContext context, UserProfile? profile) {
     return Row(
       children: [
-        SoteriaAvatar(
-          size: 100.w,
-          isOnline: true,
-          showGlow: true,
-        ),
+        const _AvatarWithRing(),
         SizedBox(width: 20.w),
         Expanded(
           child: Column(
@@ -199,22 +101,23 @@ class PlayerProfileScreen extends ConsumerWidget {
                 profile?.displayName ?? 'Anonymous User',
                 style: context.headlineSmall.copyWith(
                   fontWeight: FontWeight.w900,
-                  fontSize: 24.sp,
+                  fontSize: 20.sp,
+                  letterSpacing: -0.5,
                 ),
               ),
               Text(
                 '@${profile?.username ?? 'guest'}',
-                style: context.bodyMedium.copyWith(
+                style: context.bodyLarge.copyWith(
                   color: SoteriaColors.muted,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 12.h),
               Row(
                 children: [
-                  _LevelBadge(level: 1),
-                  SizedBox(width: 12.w),
-                  _RankBadge(rank: 'UNRANKED'),
+                  const _LevelBadge(level: 1),
+                  SizedBox(width: 10.w),
+                  const _RankBadge(rank: 'UNRANKED'),
                 ],
               ),
             ],
@@ -224,46 +127,193 @@ class PlayerProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildSection(
-    BuildContext context, {
-    required String title,
-    required List<Widget> items,
-  }) {
+  Widget _buildCompetitiveHistory(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 16, bottom: 12),
-          child: Text(
-            title,
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
-              letterSpacing: 2,
-              fontWeight: FontWeight.w900,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.emoji_events_rounded, color: SoteriaColors.gold, size: 18.sp),
+                SizedBox(width: 10.w),
+                Text(
+                  'COMPETITIVE HISTORY',
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.gold,
+                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 11.sp,
+                  ),
+                ),
+              ],
             ),
-          ),
+            GestureDetector(
+              onTap: () => context.push(SoteriaRoutes.competitiveHistory),
+              child: Row(
+                children: [
+                  Text(
+                    'View All',
+                    style: context.labelSmall.copyWith(
+                      color: SoteriaColors.muted,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Icon(Icons.chevron_right_rounded, color: SoteriaColors.muted, size: 16.sp),
+                ],
+              ),
+            ),
+          ],
         ),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
-            gradient: SoteriaGradients.settingsCardBorder,
-          ),
-          padding: const EdgeInsets.all(1.5),
-          child: GlassSurface(
-            borderRadius: BorderRadius.circular(27),
-            opacity: 0.1,
-            child: Column(children: items),
+        SizedBox(height: 16.h),
+        GlassSurface(
+          borderRadius: BorderRadius.circular(24),
+          opacity: 0.03,
+          padding: EdgeInsets.all(24.w),
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: SoteriaColors.secondary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Icon(
+                    Icons.calendar_today_rounded,
+                    color: SoteriaColors.secondary.withValues(alpha: 0.6),
+                    size: 24.sp,
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'No competitive matches played yet.',
+                  style: context.bodyMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'Jump in and start your journey!',
+                  style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                ),
+              ],
+            ),
           ),
         ),
       ],
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) => const LogoutConfirmationDialog(),
+  Widget _buildAccountSection(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 4, bottom: 12),
+          child: Text(
+            'ACCOUNT',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.muted,
+              letterSpacing: 1.5,
+              fontWeight: FontWeight.w900,
+              fontSize: 11.sp,
+            ),
+          ),
+        ),
+        GlassSurface(
+          borderRadius: BorderRadius.circular(24),
+          opacity: 0.05,
+          padding: EdgeInsets.zero,
+          child: Column(
+            children: [
+              _AccountTile(
+                icon: Icons.person_rounded,
+                iconColor: const Color(0xFF7C4DFF),
+                title: 'Personal Information',
+                subtitle: 'View and update your details',
+                onTap: () {},
+              ),
+              _AccountDivider(),
+              _AccountTile(
+                icon: Icons.history_rounded,
+                iconColor: const Color(0xFF00E5FF),
+                title: 'Competitive History',
+                subtitle: 'Your past matches and performance',
+                onTap: () => context.push(SoteriaRoutes.competitiveHistory),
+              ),
+              _AccountDivider(),
+              _AccountTile(
+                icon: Icons.emoji_events_rounded,
+                iconColor: SoteriaColors.gold,
+                title: 'Achievements',
+                subtitle: 'Your badges and milestones',
+                onTap: () => context.push(SoteriaRoutes.personalRecords),
+              ),
+              _AccountDivider(),
+              _AccountTile(
+                icon: Icons.settings_rounded,
+                iconColor: const Color(0xFFA1887F),
+                title: 'Settings',
+                subtitle: 'Preferences and app settings',
+                onTap: () => context.push('/app/settings'),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _SettingsButton extends StatelessWidget {
+  final VoidCallback onTap;
+  const _SettingsButton({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassSurface(
+      borderRadius: BorderRadius.circular(12),
+      opacity: 0.08,
+      padding: EdgeInsets.zero,
+      child: IconButton(
+        icon: const Icon(Icons.settings_outlined, color: Colors.white, size: 22),
+        onPressed: onTap,
+        constraints: const BoxConstraints(minWidth: 44, minHeight: 44),
+      ),
+    );
+  }
+}
+
+class _AvatarWithRing extends StatelessWidget {
+  const _AvatarWithRing();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 80.w,
+      height: 80.w,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        gradient: SoteriaGradients.avatarRingGradient,
+      ),
+      padding: const EdgeInsets.all(2),
+      child: Container(
+        decoration: const BoxDecoration(
+          color: SoteriaColors.background,
+          shape: BoxShape.circle,
+        ),
+        padding: const EdgeInsets.all(2),
+        child: const SoteriaAvatar(
+          size: 74,
+          isOnline: true,
+          hasBorder: false,
+        ),
+      ),
     );
   }
 }
@@ -275,10 +325,10 @@ class _LevelBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: const Color(0xFF7C4DFF).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        color: const Color(0xFF7C4DFF).withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
         ),
@@ -286,21 +336,7 @@ class _LevelBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            padding: const EdgeInsets.all(4),
-            decoration: const BoxDecoration(
-              color: Color(0xFF7C4DFF),
-              shape: BoxShape.circle,
-            ),
-            child: Text(
-              '$level',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
+          _HexagonLevel(level: level),
           SizedBox(width: 8.w),
           Text(
             'Level $level',
@@ -315,6 +351,33 @@ class _LevelBadge extends StatelessWidget {
   }
 }
 
+class _HexagonLevel extends StatelessWidget {
+  final int level;
+  const _HexagonLevel({required this.level});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 20.w,
+      height: 20.w,
+      decoration: BoxDecoration(
+        color: const Color(0xFF7C4DFF),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Center(
+        child: Text(
+          '$level',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w900,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _RankBadge extends StatelessWidget {
   final String rank;
   const _RankBadge({required this.rank});
@@ -322,10 +385,10 @@ class _RankBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
         color: const Color(0xFF2196F3).withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         border: Border.all(
           color: const Color(0xFF2196F3).withValues(alpha: 0.3),
         ),
@@ -340,7 +403,7 @@ class _RankBadge extends StatelessWidget {
             style: context.labelSmall.copyWith(
               color: const Color(0xFFBBDEFB),
               fontWeight: FontWeight.w900,
-              letterSpacing: 1,
+              letterSpacing: 0.5,
             ),
           ),
         ],
@@ -349,14 +412,18 @@ class _RankBadge extends StatelessWidget {
   }
 }
 
-class _ProfileTile extends StatelessWidget {
+class _AccountTile extends StatelessWidget {
   final IconData icon;
+  final Color iconColor;
   final String title;
+  final String? subtitle;
   final VoidCallback onTap;
 
-  const _ProfileTile({
+  const _AccountTile({
     required this.icon,
+    required this.iconColor,
     required this.title,
+    this.subtitle,
     required this.onTap,
   });
 
@@ -364,88 +431,45 @@ class _ProfileTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
       leading: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(12),
+          color: iconColor.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(10),
         ),
-        child: Icon(icon, color: SoteriaColors.secondary, size: 22),
+        child: Icon(icon, color: iconColor, size: 20),
       ),
       title: Text(
         title,
         style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
       ),
+      subtitle: subtitle != null
+          ? Text(
+              subtitle!,
+              style: context.labelSmall.copyWith(
+                color: SoteriaColors.muted,
+                fontWeight: FontWeight.w500,
+              ),
+            )
+          : null,
       trailing: const Icon(
         Icons.chevron_right_rounded,
-        color: SoteriaColors.secondary,
-        size: 28,
+        color: Colors.white24,
+        size: 24,
       ),
     );
   }
 }
 
-class _Divider extends StatelessWidget {
-  const _Divider();
-
+class _AccountDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Divider(
       height: 1,
       thickness: 1,
-      color: Colors.white.withValues(alpha: 0.05),
-      indent: 70,
-    );
-  }
-}
-
-class _LogoutSection extends StatelessWidget {
-  const _LogoutSection({required this.onTap});
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          gradient: SoteriaGradients.logoutBorder,
-        ),
-        padding: const EdgeInsets.all(1.5),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(19),
-            gradient: SoteriaGradients.logoutCard,
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.logout_rounded,
-                color: SoteriaColors.error,
-                size: 24,
-              ),
-              const SizedBox(width: 16),
-              Text(
-                'LOG OUT',
-                style: context.titleSmall.copyWith(
-                  color: SoteriaColors.error,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 2,
-                ),
-              ),
-              const Spacer(),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: SoteriaColors.error,
-                size: 28,
-              ),
-            ],
-          ),
-        ),
-      ),
+      color: Colors.white.withValues(alpha: 0.03),
+      indent: 72,
     );
   }
 }

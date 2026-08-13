@@ -18,6 +18,8 @@ import '../widgets/quiz_answer_option.dart';
 import '../widgets/quiz_power_up_bar.dart';
 import '../widgets/audience_distribution_overlay.dart';
 import '../widgets/score_gain_animation.dart';
+import '../../../matchmaking/presentation/widgets/versus_live_scoreboard.dart';
+import '../../../matchmaking/presentation/providers/match_lifecycle_providers.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
 
@@ -32,6 +34,10 @@ class QuizGameplayScreen extends ConsumerWidget {
 
     ref.listen(quizControllerProvider.select((s) => s.status), (prev, next) {
       if (next == QuizStatus.completed) {
+        if (ref.read(activeMatchIdProvider) != null) {
+          // Versus Match Orchestrator will handle the transition
+          return;
+        }
         context.go(SoteriaRoutes.quizResults);
       }
     });
@@ -88,10 +94,13 @@ class QuizGameplayScreen extends ConsumerWidget {
     final question = state.currentQuestion;
     if (question == null) return const SizedBox.shrink();
 
+    final isVersus = ref.watch(activeMatchIdProvider) != null;
+
     return Stack(
       children: [
         Column(
           children: [
+            if (isVersus) const VersusLiveScoreboard(),
             SizedBox(
               height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
             ),

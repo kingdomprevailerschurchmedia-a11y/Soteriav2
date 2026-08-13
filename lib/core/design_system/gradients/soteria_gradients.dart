@@ -41,11 +41,20 @@ class SoteriaGradients {
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
     colors: [
-      SoteriaColors.secondary,
-      SoteriaColors.primary,
+      Colors.white24,
       Colors.transparent,
+      Colors.white10,
     ],
-    stops: [0.0, 0.3, 1.0],
+    stops: [0.0, 0.5, 1.0],
+  );
+
+  static const SweepGradient avatarRingGradient = SweepGradient(
+    colors: [
+      Color(0xFF7C4DFF),
+      Color(0xFFFFD700),
+      Color(0xFF00E5FF),
+      Color(0xFF7C4DFF),
+    ],
   );
 
   static LinearGradient logoutCard = LinearGradient(

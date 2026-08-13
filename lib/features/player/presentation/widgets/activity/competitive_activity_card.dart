@@ -5,8 +5,11 @@ import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
+import '../../../../../core/design_system/gradients/soteria_gradients.dart';
+import '../../../../../core/widgets/glass_surface.dart';
 import '../../../domain/models/competitive_activity_event.dart';
 import '../../../domain/models/competitive_event.dart';
+import 'package:intl/intl.dart';
 
 class CompetitiveActivityCard extends StatelessWidget {
   final CompetitiveActivityEvent event;
@@ -33,48 +36,78 @@ class CompetitiveActivityCard extends StatelessWidget {
           Expanded(
             child: Padding(
               padding: EdgeInsets.only(bottom: SoteriaSpacing.lg),
-              child: SoteriaCard(
-                onTap: onTap,
-                hasGlow: event.importance == ActivityImportance.milestone,
-                glowColor: SoteriaColors.gold,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(SoteriaRadius.lg),
+                  gradient: event.importance == ActivityImportance.milestone
+                      ? SoteriaGradients.settingsCardBorder
+                      : null,
+                ),
+                padding: event.importance == ActivityImportance.milestone
+                    ? const EdgeInsets.all(1.5)
+                    : EdgeInsets.zero,
+                child: GlassSurface(
+                  onTap: onTap,
+                  opacity: event.importance == ActivityImportance.milestone ? 0.15 : 0.05,
+                  borderRadius: BorderRadius.circular(
+                    event.importance == ActivityImportance.milestone
+                        ? SoteriaRadius.lg - 1.5
+                        : SoteriaRadius.lg,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(SoteriaSpacing.lg),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildTypeIcon(color),
-                        SizedBox(width: SoteriaSpacing.sm),
-                        Expanded(
-                          child: Text(
-                            event.title,
-                            style: context.titleSmall.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color:
-                                  event.importance ==
-                                      ActivityImportance.milestone
-                                  ? SoteriaColors.gold
-                                  : SoteriaColors.textPrimary,
+                        Row(
+                          children: [
+                            _buildTypeIcon(color),
+                            SizedBox(width: SoteriaSpacing.md),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    event.title,
+                                    style: context.titleSmall.copyWith(
+                                      fontWeight: FontWeight.w900,
+                                      color: event.importance == ActivityImportance.milestone
+                                          ? SoteriaColors.gold
+                                          : SoteriaColors.textPrimary,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                  Text(
+                                    _formatRelativeDate(event.createdAt),
+                                    style: context.labelSmall.copyWith(
+                                      color: SoteriaColors.muted,
+                                      fontSize: 10.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
+                          ],
                         ),
+                        SizedBox(height: SoteriaSpacing.md),
                         Text(
-                          _formatDate(event.createdAt),
-                          style: context.labelSmall.copyWith(
-                            color: SoteriaColors.muted,
+                          event.description,
+                          style: context.bodyMedium.copyWith(
+                            color: Colors.white.withValues(alpha: 0.7),
+                            height: 1.4,
                           ),
                         ),
+                        if (event.metadata.isNotEmpty) ...[
+                          SizedBox(height: SoteriaSpacing.md),
+                          _buildMetadataDisplay(context),
+                        ],
+                        if (event.seasonId != null) ...[
+                          SizedBox(height: SoteriaSpacing.md),
+                          _buildSeasonBadge(context),
+                        ],
                       ],
                     ),
-                    SizedBox(height: SoteriaSpacing.xs),
-                    Text(
-                      event.description,
-                      style: context.bodyMedium.copyWith(color: Colors.white70),
-                    ),
-                    if (event.seasonId != null) ...[
-                      SizedBox(height: SoteriaSpacing.sm),
-                      _buildSeasonBadge(context),
-                    ],
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -88,14 +121,22 @@ class CompetitiveActivityCard extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 12.w,
-          height: 12.w,
-          margin: EdgeInsets.only(top: 16.h),
+          width: 14.w,
+          height: 14.w,
+          margin: EdgeInsets.only(top: 20.h),
           decoration: BoxDecoration(
             color: color,
             shape: BoxShape.circle,
+            border: Border.all(
+              color: color.withValues(alpha: 0.2),
+              width: 3.w,
+            ),
             boxShadow: [
-              BoxShadow(color: color.withValues(alpha: 0.5), blurRadius: 8),
+              BoxShadow(
+                color: color.withValues(alpha: 0.4),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
             ],
           ),
         ),
@@ -103,7 +144,17 @@ class CompetitiveActivityCard extends StatelessWidget {
           Expanded(
             child: Container(
               width: 2.w,
-              color: Colors.white.withValues(alpha: 0.05),
+              margin: EdgeInsets.symmetric(vertical: 4.h),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    color.withValues(alpha: 0.3),
+                    Colors.white.withValues(alpha: 0.02),
+                  ],
+                ),
+              ),
             ),
           ),
       ],
@@ -111,7 +162,57 @@ class CompetitiveActivityCard extends StatelessWidget {
   }
 
   Widget _buildTypeIcon(Color color) {
-    return Icon(_getIconData(), color: color, size: 16.sp);
+    return Container(
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Icon(_getIconData(), color: color, size: 18.sp),
+    );
+  }
+
+  Widget _buildMetadataDisplay(BuildContext context) {
+    if (event.type == CompetitiveEventType.rankPromoted ||
+        event.type == CompetitiveEventType.rankDemoted) {
+      final rank = event.metadata['rank'] as String?;
+      if (rank == null) return const SizedBox.shrink();
+      return Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+        decoration: BoxDecoration(
+          color: SoteriaColors.primary.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(color: SoteriaColors.primary.withValues(alpha: 0.2)),
+        ),
+        child: Text(
+          rank.toUpperCase(),
+          style: context.labelSmall.copyWith(
+            color: SoteriaColors.secondary,
+            fontWeight: FontWeight.w900,
+            fontSize: 10.sp,
+          ),
+        ),
+      );
+    }
+
+    if (event.type == CompetitiveEventType.streakReached) {
+      final streak = event.metadata['streak'];
+      return Row(
+        children: [
+          Icon(Icons.local_fire_department_rounded, color: SoteriaColors.error, size: 16.sp),
+          SizedBox(width: 4.w),
+          Text(
+            '$streak MATCH STREAK',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.error,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
   Widget _buildSeasonBadge(BuildContext context) {
@@ -166,17 +267,30 @@ class CompetitiveActivityCard extends StatelessWidget {
         return Icons.star_rounded;
       case CompetitiveEventType.leaderboardMilestone:
         return Icons.public_rounded;
+      case CompetitiveEventType.badgeEarned:
+        return Icons.verified_rounded;
+      case CompetitiveEventType.titleEarned:
+        return Icons.title_rounded;
+      case CompetitiveEventType.tournamentResult:
+        return Icons.emoji_events_rounded;
+      case CompetitiveEventType.matchCompleted:
+        return Icons.check_circle_outline_rounded;
+      case CompetitiveEventType.streakReached:
+        return Icons.local_fire_department_rounded;
       default:
         return Icons.stars_rounded;
     }
   }
 
-  String _formatDate(DateTime date) {
+  String _formatRelativeDate(DateTime date) {
     final now = DateTime.now();
     final diff = now.difference(date);
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m';
-    if (diff.inHours < 24) return '${diff.inHours}h';
-    if (diff.inDays < 7) return '${diff.inDays}d';
-    return '${date.day}/${date.month}';
+
+    if (diff.inSeconds < 60) return 'Just now';
+    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
+    if (diff.inHours < 24) return '${diff.inHours}h ago';
+    if (diff.inDays == 1) return 'Yesterday';
+    if (diff.inDays < 7) return '${diff.inDays} days ago';
+    return DateFormat('MMM d').format(date);
   }
 }

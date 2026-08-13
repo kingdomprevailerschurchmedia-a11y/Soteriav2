@@ -32,5 +32,21 @@ void main() {
       expect(ActivityImportance.values[2], ActivityImportance.high);
       expect(ActivityImportance.values[3], ActivityImportance.milestone);
     });
+
+    test('should support new activity types', () {
+      final streakJson = {
+        'id': 'streak_10',
+        'userId': 'u1',
+        'type': 'streakReached',
+        'title': '10 Win Streak!',
+        'description': 'Unstoppable!',
+        'createdAt': DateTime.now().toIso8601String(),
+        'metadata': {'streak': 10},
+        'importance': 'high',
+      };
+
+      final event = CompetitiveActivityEvent.fromJson(streakJson);
+      expect(event.type, CompetitiveEventType.streakReached);
+    });
   });
 }

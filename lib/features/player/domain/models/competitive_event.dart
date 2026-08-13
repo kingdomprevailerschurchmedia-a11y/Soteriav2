@@ -23,6 +23,11 @@ enum CompetitiveEventType {
   gameMilestone,
   winMilestone,
   careerMilestone,
+  badgeEarned,
+  titleEarned,
+  tournamentResult,
+  matchCompleted,
+  streakReached,
 }
 
 @freezed

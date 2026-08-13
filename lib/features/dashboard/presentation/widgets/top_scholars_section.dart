@@ -64,7 +64,7 @@ class TopScholarsSection extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(height: 16.h),
+          SizedBox(height: 6.h),
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28.r),

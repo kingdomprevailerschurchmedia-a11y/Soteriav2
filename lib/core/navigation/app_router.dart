@@ -91,6 +91,14 @@ import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
+import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/versus_lobby_screen.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/matchmaking_screen.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/match_found_screen.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/versus_match_orchestrator.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/competitive_match_result_screen.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/competitive_match_replay_screen.dart';
+import 'package:soteria/features/matchmaking/presentation/screens/competitive_insights_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
@@ -313,10 +321,68 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'versus',
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.fade(
-                          child: const ComingSoonScreen(
-                            featureName: 'Versus Mode',
-                            category: 'Social',
-                          ),
+                          child: const VersusLobbyScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                  GoRoute(
+                    path: 'matchmaking',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const MatchmakingScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                  GoRoute(
+                    path: 'match-found',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const MatchFoundScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                  GoRoute(
+                    path: 'versus/:id',
+                    pageBuilder: (context, state) {
+                      final id = state.pathParameters['id']!;
+                      return SoteriaPageTransitions.fade(
+                        child: VersusMatchOrchestrator(matchId: id),
+                        key: state.pageKey,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'versus/result/:id',
+                    pageBuilder: (context, state) {
+                      final id = state.pathParameters['id']!;
+                      return SoteriaPageTransitions.fade(
+                        child: CompetitiveMatchResultScreen(matchId: id),
+                        key: state.pageKey,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'versus/replay/:id',
+                    pageBuilder: (context, state) {
+                      final id = state.pathParameters['id']!;
+                      return SoteriaPageTransitions.fade(
+                        child: CompetitiveMatchReplayScreen(matchId: id),
+                        key: state.pageKey,
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: 'versus/insights',
+                    pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
+                      child: const CompetitiveInsightsScreen(),
+                      key: state.pageKey,
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'challenges',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const ChallengeCenterScreen(),
                           key: state.pageKey,
                         ),
                   ),

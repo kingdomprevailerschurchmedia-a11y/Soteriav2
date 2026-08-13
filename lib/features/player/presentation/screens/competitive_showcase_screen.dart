@@ -12,6 +12,9 @@ import 'package:soteria/features/player/presentation/widgets/identity/identity_s
 import 'package:soteria/features/player/presentation/widgets/identity/featured_badges_row.dart';
 import 'package:soteria/features/player/presentation/widgets/identity/title_selection_sheet.dart';
 import 'package:soteria/features/player/presentation/widgets/identity/badge_customization_sheet.dart';
+import 'package:soteria/features/player/presentation/providers/activity_providers.dart';
+import 'package:soteria/features/player/domain/models/competitive_activity_event.dart';
+import 'package:soteria/features/player/domain/models/competitive_event.dart';
 import 'package:soteria/features/player/domain/models/competitive_identity.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/statistic_card.dart';
 
@@ -63,7 +66,12 @@ class CompetitiveShowcaseScreen extends ConsumerWidget {
         ),
         
         SizedBox(height: SoteriaSpacing.xxl),
-        _buildSectionHeader(context, 'CAREER HIGHLIGHTS'),
+        _buildSectionHeader(context, 'RECENT HIGHLIGHTS'),
+        SizedBox(height: SoteriaSpacing.md),
+        _buildHighlightsSection(context, ref),
+        
+        SizedBox(height: SoteriaSpacing.xxl),
+        _buildSectionHeader(context, 'CAREER STATS'),
         SizedBox(height: SoteriaSpacing.md),
         _buildHighlightsGrid(context, identity),
         
@@ -135,6 +143,105 @@ class CompetitiveShowcaseScreen extends ConsumerWidget {
           ),
       ],
     );
+  }
+
+  Widget _buildHighlightsSection(BuildContext context, WidgetRef ref) {
+    final highlightsAsync = ref.watch(activityHighlightsProvider);
+
+    return highlightsAsync.when(
+      data: (highlights) {
+        if (highlights.isEmpty) {
+          return SoteriaCard(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.all(SoteriaSpacing.lg),
+                child: Text(
+                  'No recent highlights yet. Keep competing!',
+                  style: context.bodyMedium.copyWith(color: SoteriaColors.muted),
+                ),
+              ),
+            ),
+          );
+        }
+
+        return Column(
+          children: highlights.take(3).map((event) => Padding(
+            padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+            child: SoteriaCard(
+              padding: EdgeInsets.all(SoteriaSpacing.lg),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: _getHighlightColor(event.type).withValues(alpha: 0.1),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      _getHighlightIcon(event.type),
+                      color: _getHighlightColor(event.type),
+                      size: 20.sp,
+                    ),
+                  ),
+                  SizedBox(width: SoteriaSpacing.md),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          event.title,
+                          style: context.titleSmall.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          event.description,
+                          style: context.labelSmall.copyWith(color: SoteriaColors.muted),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          )).toList(),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+
+  IconData _getHighlightIcon(CompetitiveEventType type) {
+    switch (type) {
+      case CompetitiveEventType.rankPromoted:
+        return Icons.trending_up_rounded;
+      case CompetitiveEventType.milestoneCompleted:
+      case CompetitiveEventType.achievementUnlocked:
+        return Icons.emoji_events_rounded;
+      case CompetitiveEventType.streakReached:
+        return Icons.local_fire_department_rounded;
+      case CompetitiveEventType.tournamentResult:
+        return Icons.emoji_events_rounded;
+      case CompetitiveEventType.personalBest:
+        return Icons.auto_awesome_rounded;
+      default:
+        return Icons.stars_rounded;
+    }
+  }
+
+  Color _getHighlightColor(CompetitiveEventType type) {
+    switch (type) {
+      case CompetitiveEventType.rankPromoted:
+        return SoteriaColors.secondary;
+      case CompetitiveEventType.milestoneCompleted:
+      case CompetitiveEventType.achievementUnlocked:
+        return SoteriaColors.gold;
+      case CompetitiveEventType.streakReached:
+        return SoteriaColors.error;
+      case CompetitiveEventType.personalBest:
+        return SoteriaColors.xpColor;
+      default:
+        return SoteriaColors.primary;
+    }
   }
 
   Widget _buildHighlightsGrid(BuildContext context, CompetitiveIdentity identity) {

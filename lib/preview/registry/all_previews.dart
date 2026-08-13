@@ -34,6 +34,12 @@ import '../../../features/player/preview/streak_previews.dart';
 import '../../../features/player/preview/match_history_previews.dart';
 import '../../../features/player/preview/reward_previews.dart';
 import '../../../features/player/preview/rank_polish_previews.dart';
+import '../../../features/player/preview/public_profile_preview.dart';
+import '../../../features/player/preview/challenge_previews.dart';
+import '../../../features/matchmaking/preview/matchmaking_previews.dart';
+import '../../../features/matchmaking/preview/match_lifecycle_previews.dart';
+import '../../../features/matchmaking/preview/competitive_insights_previews.dart';
+import '../../../features/matchmaking/preview/match_replay_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -177,6 +183,176 @@ void registerAllPreviews() {
       description: 'New journey state',
       category: PreviewCategory.profile,
       builder: (context) => MatchHistoryPreviews.empty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'player-search',
+      title: 'Player Search',
+      description: 'Find competitors by name',
+      category: PreviewCategory.profile,
+      builder: (context) => PublicProfilePreviews.search(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'public-profile-elite',
+      title: 'Public Profile - Elite',
+      description: 'Prestigious competitor view',
+      category: PreviewCategory.profile,
+      builder: (context) => PublicProfilePreviews.elite(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'public-profile-new',
+      title: 'Public Profile - New',
+      description: 'Initial competitive identity',
+      category: PreviewCategory.profile,
+      builder: (context) => PublicProfilePreviews.newPlayer(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'challenge-center',
+      title: 'Challenge Center',
+      description: 'Manage invitations',
+      category: PreviewCategory.profile,
+      builder: (context) => ChallengePreviews.center(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'challenge-sheet',
+      title: 'Challenge Sheet',
+      description: 'Configure 1v1 match',
+      category: PreviewCategory.profile,
+      builder: (context) => ChallengePreviews.sheet(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'matchmaking-lobby',
+      title: 'Versus Lobby',
+      description: 'Configure 1v1',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchmakingPreviews.lobby(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'matchmaking-searching',
+      title: 'Searching...',
+      description: 'Queue status',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchmakingPreviews.searching(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'matchmaking-found',
+      title: 'Match Found',
+      description: 'Opponent revealed',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchmakingPreviews.matchFound(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'matchmaking-confirmed',
+      title: 'Match Ready',
+      description: 'Both players ready',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchmakingPreviews.matchFound(meReady: true, oppReady: true),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-ready',
+      title: 'Versus: Preparing',
+      description: 'Side-by-side ready check',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchLifecyclePreviews.ready(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-countdown',
+      title: 'Versus: Countdown',
+      description: 'Start sequence',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchLifecyclePreviews.countdown(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-victory',
+      title: 'Versus: Victory',
+      description: 'Match result summary',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchLifecyclePreviews.victory(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-defeat',
+      title: 'Versus: Defeat',
+      description: 'Match result summary',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchLifecyclePreviews.defeat(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-draw',
+      title: 'Versus: Draw',
+      description: 'Match result summary',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchLifecyclePreviews.draw(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-rank-up',
+      title: 'Versus: Rank Up',
+      description: 'Victory with promotion',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchLifecyclePreviews.rankUp(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-insights',
+      title: 'Competitive Insights',
+      description: 'Performance trends',
+      category: PreviewCategory.gameplay,
+      builder: (context) => CompetitiveInsightsPreviews.standard(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'versus-replay',
+      title: 'Versus Replay',
+      description: 'Step-by-step review',
+      category: PreviewCategory.gameplay,
+      builder: (context) => MatchReplayPreviews.standard(),
     ),
   );
 
