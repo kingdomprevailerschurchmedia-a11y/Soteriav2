@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/leaderboard_entry.dart';
 import '../domain/models/competitive_season.dart';
+import '../domain/models/rank_movement_event.dart';
 import '../domain/repositories/leaderboard_repository.dart';
 import '../presentation/providers/leaderboard_providers.dart';
 import '../presentation/providers/season_providers.dart';
@@ -9,6 +10,8 @@ import '../presentation/screens/leaderboard_screen.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../../../core/identity/models/user_session.dart';
 import '../../../../core/services/time_service.dart';
+
+import '../../../../core/identity/models/user_profile.dart';
 
 class LeaderboardPreviewWrapper extends StatelessWidget {
   final List<LeaderboardEntry> mockEntries;
@@ -26,11 +29,46 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
     return ProviderScope(
       overrides: [
         sessionProvider.overrideWith(() => SessionMock()),
+        profileProvider.overrideWith(() => ProfileMock()),
         leaderboardControllerProvider.overrideWith(
           (ref) => LeaderboardControllerMock(mockEntries),
         ),
         playerLeaderboardEntryProvider.overrideWith(
           (ref) => Future.value(playerEntry),
+        ),
+        leaderboardTotalPlayersProvider.overrideWith(
+          (ref) => Future.value(mockEntries.length + 100),
+        ),
+        leaderboardAroundPlayerProvider.overrideWith(
+          (ref) {
+            final entries = mockEntries.take(5).toList();
+            final myEntry = LeaderboardEntry(
+              userId: 'me',
+              displayName: 'Joseph Ade',
+              rankPoints: 2895,
+              rankTier: 'Platinum',
+              division: 2,
+              position: 115,
+              lastUpdated: DateTime.now(),
+            );
+            return Future.value([myEntry, ...entries]);
+          },
+        ),
+        rankMovementHistoryProvider.overrideWith(
+          (ref) => Future.value([
+            RankMovementEvent(
+              id: 'm1',
+              userId: 'me',
+              previousPosition: (playerEntry?.position ?? 0) + 12,
+              currentPosition: playerEntry?.position ?? 0,
+              positionDelta: 12,
+              previousRank: 'Platinum II',
+              currentRank: 'Platinum II',
+              rankPoints: playerEntry?.rankPoints ?? 0,
+              type: RankMovementType.positionImproved,
+              timestamp: DateTime.now(),
+            ),
+          ]),
         ),
         currentSeasonProvider.overrideWith(
           (ref) => Stream.value(
@@ -49,6 +87,19 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
         timeServiceProvider.overrideWithValue(_MockTimeService(now)),
       ],
       child: const LeaderboardScreen(),
+    );
+  }
+}
+
+class ProfileMock extends ProfileNotifier {
+  @override
+  UserProfile? build() {
+    return const UserProfile(
+      firstName: 'Joseph',
+      lastName: 'Ade',
+      displayName: 'Joseph Ade',
+      username: 'me',
+      email: 'joseph@ade.com',
     );
   }
 }
@@ -106,6 +157,19 @@ class _MockLeaderboardRepository implements LeaderboardRepository {
     required String userId,
     String? seasonId,
   }) async => 0;
+
+  @override
+  Future<int> getTotalPlayers({String? seasonId}) async => 0;
+
+  @override
+  Future<List<RankMovementEvent>> getPositionHistory({
+    required String userId,
+    String? seasonId,
+    int limit = 50,
+  }) async => [];
+
+  @override
+  Future<void> recordMovement(RankMovementEvent event) async {}
 }
 
 class LeaderboardPreviews {

@@ -16,6 +16,11 @@ class FirebaseRankHistoryRepository implements RankHistoryRepository {
   }
 
   @override
+  Future<void> acknowledgeRankChange(String changeId) async {
+    await _historyCollection.doc(changeId).update({'acknowledged': true});
+  }
+
+  @override
   Stream<List<RankChange>> watchRankHistory(String userId, {int limit = 50}) {
     return _historyCollection
         .where('userId', isEqualTo: userId)
@@ -49,10 +54,37 @@ class FirebaseRankHistoryRepository implements RankHistoryRepository {
   }) async {
     final snapshot = await _historyCollection
         .where('userId', isEqualTo: userId)
-        .where('type', isEqualTo: RankChangeType.promotion.name)
+        .where('type', whereIn: [
+          RankChangeType.promotion.name,
+          RankChangeType.divisionPromotion.name,
+        ])
         .orderBy('createdAt', descending: true)
         .limit(limit)
         .get();
     return snapshot.docs.map((doc) => RankChange.fromJson(doc.data())).toList();
+  }
+
+  @override
+  Future<List<RankChange>> getUnacknowledgedChanges(String userId) async {
+    final snapshot = await _historyCollection
+        .where('userId', isEqualTo: userId)
+        .where('acknowledged', isEqualTo: false)
+        .orderBy('createdAt', descending: true)
+        .get();
+    return snapshot.docs.map((doc) => RankChange.fromJson(doc.data())).toList();
+  }
+
+  @override
+  Stream<List<RankChange>> watchUnacknowledgedChanges(String userId) {
+    return _historyCollection
+        .where('userId', isEqualTo: userId)
+        .where('acknowledged', isEqualTo: false)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => RankChange.fromJson(doc.data()))
+              .toList(),
+        );
   }
 }

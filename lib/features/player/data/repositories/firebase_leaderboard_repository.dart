@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/models/leaderboard_entry.dart';
+import '../../domain/models/rank_movement_event.dart';
 import '../../domain/repositories/leaderboard_repository.dart';
 import '../../domain/config/leaderboard_config.dart';
 
@@ -14,8 +15,6 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
         LeaderboardConfig.globalLeaderboardCollection,
       );
     } else {
-      // Assuming a flattened collection for simpler querying at scale
-      // Index: seasonId (ASC), rankPoints (DESC), userId (ASC)
       return _firestore
           .collection(LeaderboardConfig.seasonLeaderboardCollection)
           .where('seasonId', isEqualTo: seasonId);
@@ -30,7 +29,7 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
   }) async {
     var query = _getBaseQuery(seasonId)
         .orderBy('rankPoints', descending: true)
-        .orderBy('userId', descending: false) // Tie-breaker
+        .orderBy('userId', descending: false)
         .limit(limit);
 
     if (lastCursor != null) {
@@ -66,22 +65,19 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
     final entry = await getPlayerEntry(userId: userId, seasonId: seasonId);
     if (entry == null) return -1;
 
-    // Efficiently count entries with higher rank points
-    // Index needed: seasonId (ASC), rankPoints (DESC), userId (ASC)
     final countQuery = _getBaseQuery(
       seasonId,
     ).where('rankPoints', isGreaterThan: entry.rankPoints);
 
     final countSnapshot = await countQuery.count().get();
 
-    // Also handle ties: count users with same points but "lower" tie-breaker (userId)
     final tieQuery = _getBaseQuery(seasonId)
         .where('rankPoints', isEqualTo: entry.rankPoints)
         .where('userId', isLessThan: userId);
 
     final tieSnapshot = await tieQuery.count().get();
 
-    return countSnapshot.count! + tieSnapshot.count! + 1;
+    return (countSnapshot.count ?? 0) + (tieSnapshot.count ?? 0) + 1;
   }
 
   @override
@@ -93,14 +89,12 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
     final entry = await getPlayerEntry(userId: userId, seasonId: seasonId);
     if (entry == null) return [];
 
-    // Fetch entries with higher points (Above)
     final aboveQuery = _getBaseQuery(seasonId)
         .orderBy('rankPoints', descending: false)
         .orderBy('userId', descending: true)
         .startAfter([entry.rankPoints, entry.userId])
         .limit(windowSize);
 
-    // Fetch entries with lower points (Below)
     final belowQuery = _getBaseQuery(seasonId)
         .orderBy('rankPoints', descending: true)
         .orderBy('userId', descending: false)
@@ -112,7 +106,7 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
     final aboveEntries = results[0].docs
         .map((doc) => LeaderboardEntry.fromJson(doc.data()))
         .toList()
-        .reversed // Correct order
+        .reversed
         .toList();
 
     final belowEntries = results[1].docs
@@ -120,5 +114,43 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
         .toList();
 
     return [...aboveEntries, entry, ...belowEntries];
+  }
+
+  @override
+  Future<int> getTotalPlayers({String? seasonId}) async {
+    final snapshot = await _getBaseQuery(seasonId).count().get();
+    return snapshot.count ?? 0;
+  }
+
+  @override
+  Future<List<RankMovementEvent>> getPositionHistory({
+    required String userId,
+    String? seasonId,
+    int limit = 50,
+  }) async {
+    var query = _firestore
+        .collection('rank_movement_history')
+        .where('userId', isEqualTo: userId);
+
+    if (seasonId != null) {
+      query = query.where('seasonId', isEqualTo: seasonId);
+    }
+
+    final snapshot = await query
+        .orderBy('timestamp', descending: true)
+        .limit(limit)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => RankMovementEvent.fromJson(doc.data()))
+        .toList();
+  }
+
+  @override
+  Future<void> recordMovement(RankMovementEvent event) async {
+    await _firestore
+        .collection('rank_movement_history')
+        .doc(event.id)
+        .set(event.toJson());
   }
 }

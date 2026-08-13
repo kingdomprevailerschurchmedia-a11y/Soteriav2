@@ -49,6 +49,14 @@ class SoteriaColors {
   static const Color coinColor = Color(0xFFFFD700);
   static const Color levelColor = Color(0xFF7C4DFF);
 
+  // Rank Colors
+  static const Color bronze = Color(0xFFCD7F32);
+  static const Color silver = Color(0xFFC0C0C0);
+  static const Color platinum = Color(0xFFE5E4E2);
+  static const Color diamond = Color(0xFFB9F2FF);
+  static const Color master = Color(0xFFFF4DFF);
+  static const Color elite = Color(0xFF00E5FF);
+
   // Shadow & Glow Colors
   static const Color shadowColor = Color(0xFF000000);
   static const Color primaryGlow = Color(0x335B3FD9);

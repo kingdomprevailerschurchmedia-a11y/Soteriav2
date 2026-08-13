@@ -7,6 +7,9 @@ import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/logging/logger_service.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
+import '../../../player/presentation/providers/rank_providers.dart';
+import '../../../player/presentation/widgets/competitive_rank_card.dart';
+import '../../../player/presentation/screens/competitive_rank_overview_screen.dart';
 import '../providers/dashboard_providers.dart';
 import '../widgets/dashboard_header.dart';
 import '../widgets/hero_card.dart';
@@ -126,6 +129,25 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   loading: () => const HeroCardLoading(),
                   error: (_, __) => const HeroCardLoading(),
                 ),
+              ),
+
+              SliverToBoxAdapter(child: SizedBox(height: 12.h)),
+
+              // Competitive Rank
+              SliverToBoxAdapter(
+                child: ref.watch(rankProgressProvider).when(
+                      data: (progress) => CompetitiveRankCard(
+                        rankProgress: progress,
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                const CompetitiveRankOverviewScreen(),
+                          ),
+                        ),
+                      ),
+                      loading: () => const SizedBox.shrink(),
+                      error: (_, __) => const SizedBox.shrink(),
+                    ),
               ),
 
               SliverToBoxAdapter(child: SizedBox(height: 12.h)),

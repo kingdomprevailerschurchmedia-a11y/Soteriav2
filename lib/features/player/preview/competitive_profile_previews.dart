@@ -160,6 +160,7 @@ class CompetitiveProfilePreviews {
         ),
       ],
       totalMilestones: 40,
+      personalRecords: [],
     );
   }
 
@@ -174,6 +175,7 @@ class CompetitiveProfilePreviews {
       totalRewards: 0,
       completedMilestones: [],
       totalMilestones: 40,
+      personalRecords: [],
     );
   }
 

@@ -12,7 +12,7 @@ class CompetitiveStreakService {
 
   CompetitiveStreakService(this._repository, this._engine);
 
-  Future<void> processResult({
+  Future<CompetitiveStreak> processResult({
     required String userId,
     required CompetitiveResult result,
     required List<CompetitiveResult> recentResults,
@@ -48,5 +48,7 @@ class CompetitiveStreakService {
     );
 
     await _repository.updateMomentum(updatedMomentum);
+
+    return updatedStreak;
   }
 }

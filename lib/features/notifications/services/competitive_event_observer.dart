@@ -8,6 +8,8 @@ import '../../player/presentation/providers/progression_providers.dart';
 import '../../player/presentation/providers/season_providers.dart';
 import '../../player/presentation/providers/reward_providers.dart';
 import '../../player/presentation/providers/milestone_providers.dart';
+import '../../player/presentation/providers/personal_record_providers.dart';
+import '../../player/domain/models/competitive_personal_record.dart';
 import '../../player/domain/config/progression_config.dart';
 import '../../../core/services/time_service.dart';
 import '../domain/models/app_notification.dart';
@@ -34,6 +36,7 @@ class CompetitiveEventObserver {
     _observeSeason();
     _observeRewards();
     _observeMilestones();
+    _observePersonalRecords();
   }
 
   void _observeProgression() {
@@ -45,29 +48,41 @@ class CompetitiveEventObserver {
       final newData = next.value;
 
       if (oldData != null && newData != null) {
-        // 1. Rank Change
-        if (oldData.currentRankTier != newData.currentRankTier) {
-          final isPromotion = _isPromotion(
-            oldData.currentRankTier,
-            newData.currentRankTier,
-          );
+        // 1. Rank Change (Tier or Division)
+        if (oldData.currentRank != newData.currentRank) {
+          final oldOrder = _getTierOrder(oldData.currentRankTier);
+          final newOrder = _getTierOrder(newData.currentRankTier);
+
+          final oldDiv = _getDivision(oldData.currentRank);
+          final newDiv = _getDivision(newData.currentRank);
+
+          final isPromotion =
+              newOrder > oldOrder || (newOrder == oldOrder && newDiv < oldDiv);
+          final isTierChange = newOrder != oldOrder;
+
           _emitEvent(
             CompetitiveEvent(
               eventId: const Uuid().v4(),
               userId: newData.userId,
-              type: isPromotion
-                  ? CompetitiveEventType.rankPromoted
-                  : CompetitiveEventType.rankDemoted,
-              title: isPromotion ? 'Promotion Achieved' : 'Rank Adjusted',
+              type:
+                  isPromotion
+                      ? CompetitiveEventType.rankPromoted
+                      : CompetitiveEventType.rankDemoted,
+              title:
+                  isPromotion
+                      ? (isTierChange ? 'Tier Promotion!' : 'Division Rank Up!')
+                      : 'Rank Adjusted',
               body: newData.currentRank,
               metadata: {
                 'tier': newData.currentRankTier,
                 'rank': newData.currentRank,
+                'previousRank': oldData.currentRank,
+                'isTierChange': isTierChange,
               },
               createdAt: DateTime.now(),
-              priority: 2, // High
+              priority: isTierChange ? 3 : 2, // Milestone for Tier change
               deduplicationKey:
-                  'rank_change_${newData.userId}_${newData.currentRankTier}',
+                  'rank_change_${newData.userId}_${newData.currentRank}_${newData.rankPoints}',
             ),
           );
         }
@@ -327,19 +342,90 @@ class CompetitiveEventObserver {
     }
   }
 
-  bool _isPromotion(String oldTier, String newTier) {
-    final oldOrder = ProgressionConfig.rankTiers
+  void _observePersonalRecords() {
+    _ref.listen<AsyncValue<List<CompetitivePersonalRecord>>>(
+      currentUserPersonalRecordsProvider,
+      (previous, next) {
+        final oldList = previous?.value ?? [];
+        final newList = next.value ?? [];
+
+        if (newList.length > oldList.length) {
+          final newRecords = newList.where(
+            (n) => !oldList.any((o) => o.id == n.id),
+          );
+
+          for (final record in newRecords) {
+            // We only notify for career records or significant seasonal records
+            if (record.isCareerRecord) {
+              _emitEvent(
+                CompetitiveEvent(
+                  eventId: const Uuid().v4(),
+                  userId: record.userId,
+                  type: CompetitiveEventType.personalBest,
+                  title: 'New Career Best!',
+                  body: 'You just set a new record for ${_formatRecordType(record.type)}: ${record.displayValue}',
+                  createdAt: DateTime.now(),
+                  metadata: {
+                    'recordType': record.type.name,
+                    'value': record.value,
+                    'displayValue': record.displayValue,
+                  },
+                  priority: 2,
+                  deduplicationKey: 'record_${record.id}',
+                ),
+              );
+            }
+          }
+        }
+      },
+    );
+  }
+
+  String _formatRecordType(CompetitiveRecordType type) {
+    switch (type) {
+      case CompetitiveRecordType.highestScore:
+        return 'Highest Score';
+      case CompetitiveRecordType.bestAccuracy:
+        return 'Best Accuracy';
+      case CompetitiveRecordType.longestWinStreak:
+        return 'Longest Win Streak';
+      case CompetitiveRecordType.mostRankPointsGained:
+        return 'Rank Points Gained';
+      case CompetitiveRecordType.bestRankReached:
+        return 'Best Rank Reached';
+      case CompetitiveRecordType.bestLeaderboardPosition:
+        return 'Best Leaderboard Position';
+      case CompetitiveRecordType.bestSeasonPosition:
+        return 'Best Season Position';
+      case CompetitiveRecordType.mostWinsInSeason:
+        return 'Most Wins in Season';
+      case CompetitiveRecordType.bestModeScore:
+        return 'Best Mode Score';
+    }
+  }
+
+  int _getTierOrder(String tierId) {
+    return ProgressionConfig.rankTiers
         .firstWhere(
-          (t) => t.id == oldTier.toLowerCase(),
+          (t) => t.id == tierId.toLowerCase(),
           orElse: () => ProgressionConfig.rankTiers.first,
         )
         .displayOrder;
-    final newOrder = ProgressionConfig.rankTiers
-        .firstWhere(
-          (t) => t.id == newTier.toLowerCase(),
-          orElse: () => ProgressionConfig.rankTiers.first,
-        )
-        .displayOrder;
-    return newOrder > oldOrder;
+  }
+
+  int _getDivision(String rankName) {
+    final parts = rankName.split(' ');
+    if (parts.length < 2) return 0;
+    final roman = parts[1];
+    switch (roman) {
+      case 'I':
+        return 1;
+      case 'II':
+        return 2;
+      case 'III':
+        return 3;
+      default:
+        return 0;
+    }
   }
 }

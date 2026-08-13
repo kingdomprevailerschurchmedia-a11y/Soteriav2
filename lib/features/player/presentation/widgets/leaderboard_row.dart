@@ -6,7 +6,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../domain/models/leaderboard_entry.dart';
-import 'rank_badge.dart';
+import 'competitive_rank_badge.dart';
 
 class LeaderboardRow extends StatelessWidget {
   final LeaderboardEntry entry;
@@ -78,9 +78,10 @@ class LeaderboardRow extends StatelessWidget {
                   fontWeight: FontWeight.w900,
                 ),
               ),
-              RankBadge(
+              CompetitiveRankBadge(
                 rankName: '', // Label hidden for compact row
                 tierId: entry.rankTier.toLowerCase(),
+                size: RankBadgeSize.small,
               ),
             ],
           ),

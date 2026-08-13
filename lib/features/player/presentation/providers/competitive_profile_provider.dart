@@ -7,6 +7,7 @@ import 'leaderboard_providers.dart';
 import 'history_providers.dart';
 import 'reward_providers.dart';
 import 'milestone_providers.dart';
+import 'personal_record_providers.dart';
 import '../../providers/player_providers.dart';
 
 final Provider<AsyncValue<CompetitiveProfile>>
@@ -19,6 +20,7 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   final rewardsAsync = ref.watch(playerRewardsProvider);
   final milestonesAsync = ref.watch(playerMilestonesProvider);
   final milestoneDefinitionsAsync = ref.watch(milestoneDefinitionsProvider);
+  final personalRecordsAsync = ref.watch(currentUserPersonalRecordsProvider);
 
   // Evaluation is triggered by separate orchestrator or screen to avoid cycles
 
@@ -27,7 +29,8 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
       playerAsync.isLoading ||
       progressionAsync.isLoading ||
       historyAsync.isLoading ||
-      milestonesAsync.isLoading;
+      milestonesAsync.isLoading ||
+      personalRecordsAsync.isLoading;
 
   if (isLoading) {
     return const AsyncValue.loading();
@@ -59,6 +62,7 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   final globalPosition = positionAsync.value ?? -1;
   final milestones = milestonesAsync.value ?? [];
   final definitionsCount = milestoneDefinitionsAsync.value?.length ?? 0;
+  final personalRecords = personalRecordsAsync.value ?? [];
 
   return AsyncValue.data(
     CompetitiveProfile(
@@ -76,6 +80,7 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
           )
           .toList(),
       totalMilestones: definitionsCount,
+      personalRecords: personalRecords,
     ),
   );
 });

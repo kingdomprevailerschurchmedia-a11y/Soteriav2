@@ -5,6 +5,7 @@ import 'competitive_season.dart';
 import 'season_result.dart';
 import 'reward_grant.dart';
 import 'milestone.dart';
+import 'competitive_personal_record.dart';
 
 @immutable
 class CompetitiveProfile {
@@ -17,6 +18,7 @@ class CompetitiveProfile {
   final int totalRewards;
   final List<PlayerMilestone> completedMilestones;
   final int totalMilestones;
+  final List<CompetitivePersonalRecord> personalRecords;
 
   const CompetitiveProfile({
     required this.identity,
@@ -28,6 +30,7 @@ class CompetitiveProfile {
     required this.totalRewards,
     required this.completedMilestones,
     required this.totalMilestones,
+    required this.personalRecords,
   });
 
   CompetitiveProfile copyWith({
@@ -40,6 +43,7 @@ class CompetitiveProfile {
     int? totalRewards,
     List<PlayerMilestone>? completedMilestones,
     int? totalMilestones,
+    List<CompetitivePersonalRecord>? personalRecords,
   }) {
     return CompetitiveProfile(
       identity: identity ?? this.identity,
@@ -51,6 +55,7 @@ class CompetitiveProfile {
       totalRewards: totalRewards ?? this.totalRewards,
       completedMilestones: completedMilestones ?? this.completedMilestones,
       totalMilestones: totalMilestones ?? this.totalMilestones,
+      personalRecords: personalRecords ?? this.personalRecords,
     );
   }
 }

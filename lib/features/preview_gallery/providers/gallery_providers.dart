@@ -289,6 +289,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.face_rounded,
       tags: ['avatar', 'scholar', 'profile'],
     ),
+    const GalleryItem(
+      title: 'Personal Records',
+      description: 'Career bests, Season records, Match evidence',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/personal-records',
+      icon: Icons.emoji_events_rounded,
+      tags: ['record', 'best', 'personal'],
+    ),
   ];
 });
 

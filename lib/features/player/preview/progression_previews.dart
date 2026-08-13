@@ -8,6 +8,10 @@ import '../presentation/widgets/level_up_celebration.dart';
 import '../presentation/widgets/rank_promotion_celebration.dart';
 import '../presentation/widgets/rank_demotion_notice.dart';
 import '../domain/models/rank_change.dart';
+import '../presentation/screens/rank_promotion_screen.dart';
+import '../presentation/screens/rank_demotion_screen.dart';
+import '../presentation/widgets/competitive_rank_badge.dart';
+import '../presentation/widgets/rank_change_details.dart';
 
 class ProgressionPreviewWrapper extends StatelessWidget {
   final Widget child;
@@ -108,7 +112,7 @@ class ProgressionPreviews {
   static Widget levelUp() =>
       LevelUpCelebration(previousLevel: 14, newLevel: 15, onContinue: () {});
 
-  static Widget promotion() => RankPromotionCelebration(
+  static Widget promotion() => RankPromotionScreen(
     rankChange: RankChange(
       changeId: 'mock_promotion',
       userId: 'mock_user',
@@ -119,12 +123,13 @@ class ProgressionPreviews {
       newRankPoints: 1005,
       changeAmount: 25,
       type: RankChangeType.promotion,
+      isTierChange: true,
       createdAt: DateTime.now(),
     ),
     onContinue: () {},
   );
 
-  static Widget demotion() => RankDemotionNotice(
+  static Widget demotion() => RankDemotionScreen(
     rankChange: RankChange(
       changeId: 'mock_demotion',
       userId: 'mock_user',
@@ -147,14 +152,14 @@ class ProgressionPreviews {
         spacing: 16,
         runSpacing: 16,
         children: const [
-          RankBadge(rankName: 'Unranked', tierId: 'none'),
-          RankBadge(rankName: 'Bronze III', tierId: 'bronze'),
-          RankBadge(rankName: 'Silver II', tierId: 'silver'),
-          RankBadge(rankName: 'Gold I', tierId: 'gold'),
-          RankBadge(rankName: 'Platinum IV', tierId: 'platinum'),
-          RankBadge(rankName: 'Diamond III', tierId: 'diamond'),
-          RankBadge(rankName: 'Master II', tierId: 'master'),
-          RankBadge(rankName: 'Elite', tierId: 'elite'),
+          CompetitiveRankBadge(rankName: 'Unranked', tierId: 'none'),
+          CompetitiveRankBadge(rankName: 'Bronze III', tierId: 'bronze'),
+          CompetitiveRankBadge(rankName: 'Silver II', tierId: 'silver'),
+          CompetitiveRankBadge(rankName: 'Gold I', tierId: 'gold'),
+          CompetitiveRankBadge(rankName: 'Platinum IV', tierId: 'platinum'),
+          CompetitiveRankBadge(rankName: 'Diamond III', tierId: 'diamond'),
+          CompetitiveRankBadge(rankName: 'Master II', tierId: 'master'),
+          CompetitiveRankBadge(rankName: 'Elite', tierId: 'elite'),
         ],
       ),
     ),

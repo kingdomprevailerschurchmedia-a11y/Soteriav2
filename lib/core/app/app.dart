@@ -10,6 +10,7 @@ import 'package:soteria/core/errors/error_handler.dart';
 import 'package:soteria/features/auth/services/auth_coordinator.dart';
 import 'package:soteria/features/notifications/providers/notification_providers.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
+import 'package:soteria/features/player/presentation/widgets/rank_celebration_listener.dart';
 import '../firebase/providers/bootstrapper_provider.dart';
 
 class SoteriaApp extends ConsumerWidget {
@@ -55,7 +56,7 @@ class SoteriaApp extends ConsumerWidget {
         if (!kDebugMode || !Platform.environment.containsKey('FLUTTER_TEST')) {
           ErrorWidget.builder = ErrorHandler.errorWidgetBuilder;
         }
-        return child!;
+        return RankCelebrationListener(child: child!);
       },
     );
   }

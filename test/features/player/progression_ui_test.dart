@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:soteria/features/player/presentation/widgets/player_progression_card.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_badge.dart';
 import 'package:soteria/core/design_system/themes/soteria_theme.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
+import 'package:soteria/core/identity/models/user_profile.dart';
 
 void main() {
   Widget wrap(Widget child) {
-    return ScreenUtilInit(
-      designSize: const Size(390, 844),
-      builder: (context, _) => MaterialApp(
-        theme: SoteriaTheme.darkTheme,
-        home: Scaffold(body: Center(child: child)),
+    return ProviderScope(
+      overrides: [
+        profileProvider.overrideWith(() => ProfileMock()),
+      ],
+      child: ScreenUtilInit(
+        designSize: const Size(390, 844),
+        builder: (context, _) => MaterialApp(
+          theme: SoteriaTheme.darkTheme,
+          home: Scaffold(body: Center(child: child)),
+        ),
       ),
     );
   }
@@ -68,4 +76,9 @@ void main() {
       expect(find.text('45%'), findsOneWidget);
     });
   });
+}
+
+class ProfileMock extends ProfileNotifier {
+  @override
+  UserProfile? build() => null;
 }

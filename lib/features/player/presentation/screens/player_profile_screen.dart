@@ -92,8 +92,8 @@ class PlayerProfileScreen extends ConsumerWidget {
                 ),
                 _ProfileTile(
                   icon: Icons.emoji_events_outlined,
-                  title: 'Achievements',
-                  onTap: () {},
+                  title: 'Personal Records',
+                  onTap: () => context.push(SoteriaRoutes.personalRecords),
                 ),
                 _ProfileTile(
                   icon: Icons.bar_chart_rounded,

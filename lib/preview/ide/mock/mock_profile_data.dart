@@ -57,5 +57,6 @@ class MockProfileData {
     totalRewards: 12,
     completedMilestones: [],
     totalMilestones: 25,
+    personalRecords: [],
   );
 }

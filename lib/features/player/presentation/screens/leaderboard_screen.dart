@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
-import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/components/soteria_card.dart';
-import '../../../../core/identity/providers/identity_providers.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
+import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
+import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
+import '../../domain/models/leaderboard_entry.dart';
 import '../providers/leaderboard_providers.dart';
 import '../widgets/leaderboard_podium.dart';
 import '../widgets/leaderboard_row.dart';
+import '../widgets/leaderboard/player_leaderboard_position_card.dart';
+import '../widgets/leaderboard/leaderboard_neighborhood.dart';
+import '../widgets/leaderboard/leaderboard_insight_card.dart';
+import '../widgets/leaderboard/rank_progress_card.dart';
 import '../widgets/season_header.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
@@ -39,6 +45,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     final session = ref.watch(sessionProvider);
     final leaderboardState = ref.watch(leaderboardControllerProvider);
     final playerEntryAsync = ref.watch(playerLeaderboardEntryProvider);
+    final totalPlayersAsync = ref.watch(leaderboardTotalPlayersProvider);
+    final neighborhoodAsync = ref.watch(leaderboardNeighborhoodProvider);
+    final insightsAsync = ref.watch(leaderboardInsightsProvider);
+    final movementHistoryAsync = ref.watch(rankMovementHistoryProvider);
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -72,27 +82,108 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                   return _buildEmptyState();
                 }
                 return RefreshIndicator(
-                  onRefresh: () => ref
-                      .read(leaderboardControllerProvider.notifier)
-                      .refresh(),
+                  onRefresh: () async {
+                    await ref.read(leaderboardControllerProvider.notifier).refresh();
+                    ref.invalidate(playerLeaderboardEntryProvider);
+                    ref.invalidate(leaderboardTotalPlayersProvider);
+                  },
                   color: SoteriaColors.primary,
                   child: ListView.builder(
-                    padding: EdgeInsets.only(bottom: 10.h),
-                    itemCount:
-                        entries.length + 2, // +2 for SeasonHeader and Podium
+                    padding: EdgeInsets.only(
+                      left: SoteriaSpacing.md,
+                      right: SoteriaSpacing.md,
+                      bottom: 100.h,
+                    ),
+                    itemCount: entries.length + 6,
                     itemBuilder: (context, index) {
                       if (index == 0) {
                         return const Padding(
-                          padding: EdgeInsets.only(top: 8),
+                          padding: EdgeInsets.only(top: 8, bottom: 16),
                           child: SeasonHeader(),
                         );
                       }
+                      
                       if (index == 1) {
-                        return LeaderboardPodium(
-                          topEntries: entries.take(3).toList(),
+                        return playerEntryAsync.when(
+                          data: (entry) {
+                            if (entry == null) return const SizedBox.shrink();
+                            final movement = movementHistoryAsync.value?.firstOrNull;
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: PlayerLeaderboardPositionCard(
+                                entry: entry,
+                                totalPlayers: totalPlayersAsync.value ?? 0,
+                                delta: movement?.positionDelta ?? 0,
+                              ),
+                            );
+                          },
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
                         );
                       }
-                      final entry = entries[index - 2];
+
+                      if (index == 2) {
+                        return insightsAsync.when(
+                          data: (insights) {
+                            if (insights.isEmpty) return const SizedBox.shrink();
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: Column(
+                                children: insights.map((i) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: LeaderboardInsightCard(insight: i),
+                                )).toList(),
+                              ),
+                            );
+                          },
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
+                        );
+                      }
+
+                      if (index == 3) {
+                        return neighborhoodAsync.when(
+                          data: (neighborhood) {
+                            if (neighborhood.currentPlayer == null) return const SizedBox.shrink();
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16),
+                              child: LeaderboardNeighborhood(
+                                playerAbove: neighborhood.playerAbove,
+                                currentPlayer: neighborhood.currentPlayer!,
+                                playerBelow: neighborhood.playerBelow,
+                              ),
+                            );
+                          },
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
+                        );
+                      }
+
+                      if (index == 4) {
+                        return playerEntryAsync.when(
+                          data: (entry) {
+                            if (entry == null) return const SizedBox.shrink();
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 24),
+                              child: RankProgressCard(entry: entry),
+                            );
+                          },
+                          loading: () => const SizedBox.shrink(),
+                          error: (_, __) => const SizedBox.shrink(),
+                        );
+                      }
+
+                      if (index == 5) {
+                        return Column(
+                          children: [
+                            _buildSectionDivider('TOP PERFORMERS'),
+                            const SizedBox(height: 16),
+                            LeaderboardPodium(topEntries: entries.take(3).toList()),
+                          ],
+                        );
+                      }
+
+                      final entry = entries[index - 6];
                       return LeaderboardRow(
                         entry: entry,
                         isCurrentUser: entry.userId == session.uid,
@@ -137,11 +228,23 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
       ),
     );
   }
+
+  Widget _buildSectionDivider(String title) {
+    return Row(
+      children: [
+        SoteriaText.caption(
+          title,
+          color: Colors.white.withValues(alpha: 0.4),
+        ),
+        const SizedBox(width: 12),
+        const Expanded(child: Divider(color: Colors.white10)),
+      ],
+    );
+  }
 }
 
 class _CurrentUserStickyRow extends StatelessWidget {
-  final dynamic
-  entry; // Using dynamic for now to avoid redundant imports if needed
+  final LeaderboardEntry entry;
 
   const _CurrentUserStickyRow({required this.entry});
 

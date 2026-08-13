@@ -25,12 +25,15 @@ import '../../../features/player/preview/competitive_history_previews.dart';
 import '../../../features/player/preview/competitive_profile_previews.dart';
 import '../../../features/player/preview/statistics_previews.dart';
 import '../../../features/player/preview/milestone_previews.dart';
+import '../../../features/player/preview/leaderboard_insights_previews.dart';
+import '../../../features/player/preview/personal_record_previews.dart';
 import '../../../features/notifications/preview/notification_previews.dart';
 import '../../../features/player/preview/activity_previews.dart';
 import '../../../features/player/preview/goal_previews.dart';
 import '../../../features/player/preview/streak_previews.dart';
 import '../../../features/player/preview/match_history_previews.dart';
 import '../../../features/player/preview/reward_previews.dart';
+import '../../../features/player/preview/rank_polish_previews.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -315,6 +318,16 @@ void registerAllPreviews() {
 
   r.registerPreview(
     PreviewItem(
+      id: 'personal-records',
+      title: 'Personal Records',
+      description: 'Career bests & Season records',
+      category: PreviewCategory.profile,
+      builder: (context) => PersonalRecordPreviews.gallery(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
       id: 'profile-unranked',
       title: 'Profile - Unranked',
       description: 'New player initial state',
@@ -446,6 +459,36 @@ void registerAllPreviews() {
 
   r.registerPreview(
     PreviewItem(
+      id: 'leaderboard-neighborhood',
+      title: 'Leaderboard Neighborhood',
+      description: 'Players above and below',
+      category: PreviewCategory.profile,
+      builder: (context) => LeaderboardInsightsPreviews.neighborhood(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rank-progress',
+      title: 'Rank Progress',
+      description: 'Promotion threshold tracking',
+      category: PreviewCategory.profile,
+      builder: (context) => LeaderboardInsightsPreviews.rankProgress(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'leaderboard-insight',
+      title: 'Leaderboard Insight',
+      description: 'Deterministic performance analysis',
+      category: PreviewCategory.profile,
+      builder: (context) => LeaderboardInsightsPreviews.insightCard(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
       id: 'season-active',
       title: 'Season - Active',
       description: 'Standard season status',
@@ -553,6 +596,16 @@ void registerAllPreviews() {
       description: 'Competitive prizes & history',
       category: PreviewCategory.profile,
       builder: (context) => const RewardPreviews(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rank-polish',
+      title: 'Rank Progression Polish',
+      description: 'Unified rank experience and cards',
+      category: PreviewCategory.profile,
+      builder: (context) => const RankPolishPreviews(),
     ),
   );
 

@@ -47,7 +47,7 @@ void main() {
             level: 5,
             xpInCurrentLevel: 500,
             xpThreshold: 1000,
-            coins: 100,
+            streak: 7,
             rank: 'Scholar',
             rankPoints: 125,
             progress: 0.5,
@@ -61,7 +61,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('5'), findsOneWidget);
-    expect(find.text('100'), findsOneWidget);
+    expect(find.text('7'), findsOneWidget);
     expect(find.text('SCHOLAR'), findsOneWidget);
   });
 }

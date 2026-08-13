@@ -77,6 +77,7 @@ import 'package:soteria/features/preview_gallery/pages/pro_lobby_preview_page.da
 import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/player_profile_screen.dart';
+import 'package:soteria/features/player/presentation/screens/personal_records_screen.dart';
 import 'package:soteria/features/player/presentation/screens/leaderboard_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_discovery_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_details_screen.dart';
@@ -84,6 +85,7 @@ import 'package:soteria/features/tournaments/presentation/screens/tournament_lob
 import 'package:soteria/features/tournaments/presentation/screens/tournament_gameplay_screen.dart';
 import 'package:soteria/features/tournaments/presentation/pages/tournament_preview_gallery.dart';
 import 'package:soteria/features/preview_gallery/pages/player_preview_page.dart';
+import 'package:soteria/features/player/preview/personal_record_previews.dart';
 import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
 
@@ -429,6 +431,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                           key: state.pageKey,
                         ),
                   ),
+                  GoRoute(
+                    path: 'records',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.slideUp(
+                          child: const PersonalRecordsScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
                 ],
               ),
             ],
@@ -597,6 +607,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               title: 'Player Profile',
               child: PlayerPreviewPage(),
             ),
+          ),
+          GoRoute(
+            path: 'personal-records',
+            builder: (context, state) => PersonalRecordPreviews.gallery(),
           ),
           GoRoute(
             path: 'config-debug',

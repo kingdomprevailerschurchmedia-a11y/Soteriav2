@@ -9,7 +9,7 @@ import '../../../../../core/design_system/components/soteria_card.dart';
 import '../../../domain/models/player_profile.dart';
 import '../../../domain/models/player_progression.dart';
 import '../../providers/streak_providers.dart';
-import '../rank_badge.dart';
+import '../competitive_rank_badge.dart';
 import '../streak/momentum_indicator.dart';
 
 class CompetitiveProfileHeader extends ConsumerWidget {
@@ -97,10 +97,10 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    RankBadge(
+                    CompetitiveRankBadge(
                       rankName: progression.currentRank,
                       tierId: progression.currentRankTier,
-                      isLarge: true,
+                      size: RankBadgeSize.large,
                     ),
                     SizedBox(height: SoteriaSpacing.xs),
                     Text(

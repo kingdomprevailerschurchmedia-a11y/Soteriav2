@@ -8,6 +8,8 @@ enum RankChangeType {
   decrease,
   promotion,
   demotion,
+  divisionPromotion,
+  divisionDemotion,
   placement,
   seasonReset,
   protection,
@@ -28,6 +30,9 @@ abstract class RankChange with _$RankChange {
     String? referenceResultId,
     required DateTime createdAt,
     @Default(1) int schemaVersion,
+    @Default(false) bool acknowledged,
+    @Default(false) bool isTierChange,
+    @Default(false) bool isDivisionChange,
   }) = _RankChange;
 
   factory RankChange.fromJson(Map<String, dynamic> json) =>

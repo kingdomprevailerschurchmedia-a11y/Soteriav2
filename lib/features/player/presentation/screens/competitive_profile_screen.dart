@@ -10,18 +10,20 @@ import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 import 'package:soteria/features/player/domain/models/competitive_profile.dart';
 import 'package:soteria/features/player/domain/models/season_result.dart';
 import 'package:soteria/features/player/presentation/providers/competitive_profile_provider.dart';
+import 'package:soteria/features/player/presentation/providers/rank_providers.dart';
 import 'package:soteria/features/player/presentation/providers/goal_providers.dart';
+import 'package:soteria/features/player/presentation/providers/streak_providers.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_goals_screen.dart';
 import 'package:soteria/features/player/presentation/screens/milestones_screen.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_match_history_screen.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_rank_overview_screen.dart';
+import 'package:soteria/features/player/presentation/widgets/competitive_rank_card.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/achievement_summary_section.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/match_history_summary_section.dart';
-import 'package:soteria/features/player/presentation/screens/competitive_match_history_screen.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/career_summary_card.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/competitive_profile_header.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/goal_summary_card.dart';
 import 'package:soteria/features/player/presentation/widgets/streak/competitive_streak_card.dart';
-import 'package:soteria/features/player/presentation/providers/streak_providers.dart';
-import 'package:soteria/features/player/presentation/widgets/profile/rank_progress_section.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/reward_summary_section.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/statistic_card.dart';
 import 'package:soteria/features/player/presentation/widgets/season_result_card.dart';
@@ -77,10 +79,21 @@ class CompetitiveProfileScreen extends ConsumerWidget {
             ),
           ),
           SizedBox(height: SoteriaSpacing.xl),
-          SoteriaSlideUp(
-            duration: SoteriaAnimations.normal,
-            child: RankProgressSection(progression: profile.progression),
-          ),
+          ref.watch(rankProgressProvider).when(
+                data: (rankProgress) => SoteriaSlideUp(
+                  duration: SoteriaAnimations.normal,
+                  child: CompetitiveRankCard(
+                    rankProgress: rankProgress,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const CompetitiveRankOverviewScreen(),
+                      ),
+                    ),
+                  ),
+                ),
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (_, _) => const SizedBox.shrink(),
+              ),
           SizedBox(height: SoteriaSpacing.xxl),
           goalsAsync.when(
             data: (goals) => SoteriaSlideUp(
@@ -108,7 +121,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
                       )
                     : const SizedBox.shrink(),
                 loading: () => const SizedBox.shrink(),
-                error: (_, __) => const SizedBox.shrink(),
+                error: (_, _) => const SizedBox.shrink(),
               ),
           SizedBox(height: SoteriaSpacing.xxl),
           SoteriaSlideUp(
