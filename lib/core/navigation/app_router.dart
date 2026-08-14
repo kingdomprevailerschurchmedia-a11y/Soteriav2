@@ -72,6 +72,7 @@ import 'package:soteria/features/dashboard/presentation/screens/practice_lobby_s
 import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart';
 import 'package:soteria/shared/screens/coming_soon_screen.dart';
 import 'package:soteria/features/settings/screens/settings_screen.dart';
+import 'package:soteria/features/settings/screens/notification_settings_screen.dart';
 
 import 'package:soteria/features/preview_gallery/pages/pro_lobby_preview_page.dart';
 import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
@@ -85,6 +86,7 @@ import 'package:soteria/features/tournaments/presentation/screens/tournament_lob
 import 'package:soteria/features/tournaments/presentation/screens/tournament_gameplay_screen.dart';
 import 'package:soteria/features/tournaments/presentation/pages/tournament_preview_gallery.dart';
 import 'package:soteria/features/preview_gallery/pages/player_preview_page.dart';
+import 'package:soteria/features/player/preview/live_event_previews.dart';
 import 'package:soteria/features/player/preview/personal_record_previews.dart';
 import 'package:soteria/features/player/preview/competitive_identity_previews.dart';
 import 'package:soteria/features/player/screens/config_debug_screen.dart';
@@ -93,6 +95,8 @@ import 'package:soteria/features/player/screens/security_status_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_season_screen.dart';
+import 'package:soteria/features/player/presentation/screens/live_events_screen.dart';
+import 'package:soteria/features/player/presentation/screens/live_event_details_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/versus_lobby_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/matchmaking_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/match_found_screen.dart';
@@ -396,6 +400,26 @@ final routerProvider = Provider<GoRouter>((ref) {
                         ),
                   ),
                   GoRoute(
+                    path: 'events',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const LiveEventsScreen(),
+                          key: state.pageKey,
+                        ),
+                    routes: [
+                      GoRoute(
+                        path: 'details/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.slideUp(
+                            child: LiveEventDetailsScreen(eventId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                  GoRoute(
                     path: 'tournaments',
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.fade(
@@ -442,6 +466,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                           child: const SettingsScreen(),
                           key: state.pageKey,
                         ),
+                    routes: [
+                      GoRoute(
+                        path: 'notifications',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.slideUp(
+                              child: const NotificationSettingsScreen(),
+                              key: state.pageKey,
+                            ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -813,6 +847,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const GalleryShell(
               title: 'Tournament Engine',
               child: TournamentPreviewGallery(),
+            ),
+          ),
+          GoRoute(
+            path: 'live-events',
+            builder: (context, state) => GalleryShell(
+              title: 'Live Events',
+              child: LiveEventPreviews.discovery(),
             ),
           ),
         ],

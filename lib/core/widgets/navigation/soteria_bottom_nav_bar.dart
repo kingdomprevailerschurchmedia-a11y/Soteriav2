@@ -12,10 +12,12 @@ class SoteriaBottomNavBar extends StatelessWidget {
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.unreadCount = 0,
   });
 
   final int currentIndex;
   final ValueChanged<int> onTap;
+  final int unreadCount;
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +85,7 @@ class SoteriaBottomNavBar extends StatelessWidget {
                   icon: Icons.person_rounded,
                   label: 'Profile',
                   isSelected: currentIndex == 4,
+                  badgeCount: unreadCount,
                   onTap: () => onTap(4),
                 ),
               ],
@@ -100,12 +103,14 @@ class _NavButton extends StatelessWidget {
     required this.label,
     required this.isSelected,
     required this.onTap,
+    this.badgeCount = 0,
   });
 
   final IconData icon;
   final String label;
   final bool isSelected;
   final VoidCallback onTap;
+  final int badgeCount;
 
   @override
   Widget build(BuildContext context) {
@@ -168,6 +173,31 @@ class _NavButton extends StatelessWidget {
                 ],
               ),
             ),
+            if (badgeCount > 0)
+              Positioned(
+                top: 2,
+                right: 2,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: const BoxDecoration(
+                    color: SoteriaColors.error,
+                    shape: BoxShape.circle,
+                  ),
+                  constraints: const BoxConstraints(
+                    minWidth: 16,
+                    minHeight: 16,
+                  ),
+                  child: Text(
+                    badgeCount > 9 ? '9+' : '$badgeCount',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 8,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
             if (isSelected)
               Positioned(
                 bottom: 0,

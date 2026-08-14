@@ -34,7 +34,8 @@ class LeaderboardPreview extends StatelessWidget {
                 child: Text(
                   'VIEW ALL',
                   style: context.labelSmall.copyWith(
-                    color: SoteriaColors.primary,
+                    color: SoteriaColors.muted,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),

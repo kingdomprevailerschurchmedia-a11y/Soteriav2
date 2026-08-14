@@ -3,15 +3,21 @@ import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import '../domain/models/app_notification.dart';
 import '../domain/repositories/notification_repository.dart';
-import '../data/repositories/notification_repository_impl.dart';
+import '../data/repositories/firestore_notification_repository.dart';
 import '../services/notification_coordinator.dart';
 import '../services/competitive_event_observer.dart';
 import '../services/challenge_notification_service.dart';
+import '../../../core/identity/providers/identity_providers.dart';
 import '../../player/domain/models/competitive_event.dart';
 import '../../player/presentation/providers/activity_providers.dart';
 
 final notificationRepositoryProvider = Provider<NotificationRepository>((ref) {
-  return NotificationRepositoryImpl(fcm: ref.watch(fcmServiceProvider));
+  final session = ref.watch(sessionProvider);
+  return FirestoreNotificationRepository(
+    database: ref.watch(firestoreDatabaseServiceProvider),
+    fcm: ref.watch(fcmServiceProvider),
+    userId: session.uid,
+  );
 });
 
 final activeCompetitiveEventProvider = StateProvider<CompetitiveEvent?>(

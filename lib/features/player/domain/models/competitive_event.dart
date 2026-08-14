@@ -28,6 +28,10 @@ enum CompetitiveEventType {
   tournamentResult,
   matchCompleted,
   streakReached,
+  liveEventStarted,
+  liveEventEnding,
+  systemAnnouncement,
+  rematchRequest,
 }
 
 @freezed

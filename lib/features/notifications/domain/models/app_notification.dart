@@ -28,7 +28,12 @@ enum NotificationType {
   seasonCompleted,
   seasonResult,
   rewardReceived,
-  milestoneReached;
+  milestoneReached,
+  seasonStarted,
+  liveEventStarted,
+  liveEventEnding,
+  rematchRequest,
+  systemAnnouncement;
 
   static NotificationType fromString(String value) {
     return NotificationType.values.firstWhere(

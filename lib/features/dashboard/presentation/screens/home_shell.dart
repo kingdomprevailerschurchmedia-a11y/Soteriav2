@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/widgets/navigation/soteria_bottom_nav_bar.dart';
+import '../../../notifications/providers/notification_providers.dart';
 import '../../../player/providers/player_providers.dart';
 
 class HomeShell extends ConsumerWidget {
@@ -14,6 +15,7 @@ class HomeShell extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // Keep providers active
     ref.watch(playerAvatarSyncProvider);
+    final unreadCount = ref.watch(unreadCountProvider);
 
     return Scaffold(
       extendBody: true,
@@ -31,6 +33,7 @@ class HomeShell extends ConsumerWidget {
       bottomNavigationBar: SoteriaBottomNavBar(
         currentIndex: navigationShell.currentIndex,
         onTap: (index) => _onTabTapped(context, index),
+        unreadCount: unreadCount,
       ),
     );
   }

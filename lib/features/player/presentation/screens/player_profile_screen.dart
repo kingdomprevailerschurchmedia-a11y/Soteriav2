@@ -80,7 +80,7 @@ class PlayerProfileScreen extends ConsumerWidget {
               style: context.bodyMedium.copyWith(
                 color: SoteriaColors.muted,
                 fontWeight: FontWeight.w500,
-                fontSize: 10.sp,
+                fontSize: 11.sp,
               ),
             ),
           ],
@@ -106,7 +106,7 @@ class PlayerProfileScreen extends ConsumerWidget {
                 profile?.displayName ?? 'Anonymous User',
                 style: context.headlineSmall.copyWith(
                   fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
+                  fontSize: 14.sp,
                   letterSpacing: -0.5,
                 ),
               ),

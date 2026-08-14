@@ -46,7 +46,7 @@ class PerformanceSection extends StatelessWidget {
                     Text(
                       'See All',
                       style: context.labelSmall.copyWith(
-                        color: const Color(0xFF9155FD),
+                        color: SoteriaColors.muted,
                         fontWeight: FontWeight.w900,
                         fontSize: 13.sp,
                       ),
@@ -54,7 +54,7 @@ class PerformanceSection extends StatelessWidget {
                     SizedBox(width: 4.w),
                     Icon(
                       Icons.chevron_right_rounded,
-                      color: const Color(0xFF9155FD),
+                      color: SoteriaColors.muted,
                       size: 18.sp,
                     ),
                   ],

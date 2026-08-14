@@ -7,7 +7,9 @@ import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/widgets/feedback/soteria_empty_state.dart';
 import '../domain/models/app_notification.dart';
+import '../widgets/competitive_notification_card.dart';
 import '../providers/notification_providers.dart';
+import 'package:intl/intl.dart';
 
 class NotificationCenterScreen extends ConsumerWidget {
   const NotificationCenterScreen({super.key});
@@ -32,6 +34,15 @@ class NotificationCenterScreen extends ConsumerWidget {
         actions: [
           IconButton(
             icon: const Icon(
+              Icons.done_all_rounded,
+              color: SoteriaColors.muted,
+            ),
+            onPressed: () {
+              // Mark all as read logic if available
+            },
+          ),
+          IconButton(
+            icon: const Icon(
               Icons.clear_all_rounded,
               color: SoteriaColors.muted,
             ),
@@ -45,46 +56,103 @@ class NotificationCenterScreen extends ConsumerWidget {
           gradient: SoteriaColors.backgroundGradient,
         ),
         child: notificationsAsync.when(
-          data: (notifications) => notifications.isEmpty
-              ? const Center(
-                  child: SoteriaEmptyState(
-                    title: 'ALL CAUGHT UP',
-                    subtitle:
-                        'Your notification center is clear. New updates will appear here.',
-                    icon: Icons.notifications_none_rounded,
-                  ),
-                )
-              : ListView.builder(
-                  padding: EdgeInsets.fromLTRB(
-                    SoteriaSpacing.lg,
-                    kToolbarHeight + SoteriaSpacing.xl,
-                    SoteriaSpacing.lg,
-                    SoteriaSpacing.xl,
-                  ),
-                  itemCount: notifications.length,
-                  itemBuilder: (context, index) {
-                    return _NotificationTile(
-                      notification: notifications[index],
-                    );
-                  },
+          data: (notifications) {
+            if (notifications.isEmpty) {
+              return const Center(
+                child: SoteriaEmptyState(
+                  title: 'ALL CAUGHT UP',
+                  subtitle:
+                      'Your notification center is clear. New updates will appear here.',
+                  icon: Icons.notifications_none_rounded,
                 ),
+              );
+            }
+
+            final grouped = _groupNotifications(notifications);
+            final categories = grouped.keys.toList();
+
+            return ListView.builder(
+              padding: EdgeInsets.fromLTRB(
+                SoteriaSpacing.lg,
+                kToolbarHeight + SoteriaSpacing.xl,
+                SoteriaSpacing.lg,
+                SoteriaSpacing.xl,
+              ),
+              itemCount: categories.length,
+              itemBuilder: (context, catIndex) {
+                final category = categories[catIndex];
+                final items = grouped[category]!;
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
+                      child: Text(
+                        category.toUpperCase(),
+                        style: context.labelMedium.copyWith(
+                          color: SoteriaColors.muted,
+                          letterSpacing: 2,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    ...items.map((n) => _NotificationWrapper(notification: n)),
+                  ],
+                );
+              },
+            );
+          },
           loading: () => const Center(child: SoteriaLoader()),
           error: (error, _) => Center(child: Text('Error: $error')),
         ),
       ),
     );
   }
+
+  Map<String, List<AppNotification>> _groupNotifications(
+    List<AppNotification> notifications,
+  ) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    
+    final groups = <String, List<AppNotification>>{};
+    
+    for (final n in notifications) {
+      String key;
+      if (n.type == NotificationType.seasonStarted || 
+          n.type == NotificationType.seasonEnding ||
+          n.type == NotificationType.seasonCompleted ||
+          n.type == NotificationType.seasonResult) {
+        key = 'Season';
+      } else {
+        final nDate = DateTime(n.createdAt.year, n.createdAt.month, n.createdAt.day);
+        if (nDate == today) {
+          key = 'Today';
+        } else {
+          key = 'Earlier';
+        }
+      }
+      
+      groups.putIfAbsent(key, () => []).add(n);
+    }
+    
+    // Sort keys: Today first, then Season, then Earlier
+    final sortedGroups = <String, List<AppNotification>>{};
+    if (groups.containsKey('Today')) sortedGroups['Today'] = groups['Today']!;
+    if (groups.containsKey('Season')) sortedGroups['Season'] = groups['Season']!;
+    if (groups.containsKey('Earlier')) sortedGroups['Earlier'] = groups['Earlier']!;
+    
+    return sortedGroups;
+  }
 }
 
-class _NotificationTile extends ConsumerWidget {
+class _NotificationWrapper extends ConsumerWidget {
   final AppNotification notification;
-  const _NotificationTile({required this.notification});
+  const _NotificationWrapper({required this.notification});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final color = _getTypeColor(notification.type);
-    final icon = _getTypeIcon(notification.type);
-
     return Padding(
       padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
       child: Dismissible(
@@ -104,150 +172,18 @@ class _NotificationTile extends ConsumerWidget {
             color: SoteriaColors.error,
           ),
         ),
-        child: SoteriaCard(
-          padding: EdgeInsets.zero,
-          child: InkWell(
-            onTap: () {
-              if (!notification.read) {
-                ref
-                    .read(notificationListProvider.notifier)
-                    .markAsRead(notification.id);
-              }
-              // Potential: Trigger navigation based on notification.action
-            },
-            borderRadius: BorderRadius.circular(16),
-            child: Container(
-              padding: EdgeInsets.all(SoteriaSpacing.md),
-              decoration: BoxDecoration(
-                border: notification.read
-                    ? null
-                    : Border(left: BorderSide(color: color, width: 4)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CircleAvatar(
-                    backgroundColor: color.withValues(alpha: 0.1),
-                    child: Icon(icon, color: color, size: 20),
-                  ),
-                  SizedBox(width: SoteriaSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              notification.title,
-                              style: context.bodyLarge.copyWith(
-                                fontWeight: notification.read
-                                    ? FontWeight.normal
-                                    : FontWeight.bold,
-                                color: notification.read
-                                    ? Colors.white70
-                                    : Colors.white,
-                              ),
-                            ),
-                            Text(
-                              _formatDate(notification.createdAt),
-                              style: context.labelSmall.copyWith(
-                                color: SoteriaColors.muted,
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: SoteriaSpacing.xs),
-                        Text(
-                          notification.body,
-                          style: context.bodyMedium.copyWith(
-                            color: Colors.white60,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+        child: CompetitiveNotificationCard(
+          notification: notification,
+          onTap: () {
+            if (!notification.read) {
+              ref
+                  .read(notificationListProvider.notifier)
+                  .markAsRead(notification.id);
+            }
+            // Coordinator will handle navigation
+          },
         ),
       ),
     );
-  }
-
-  Color _getTypeColor(NotificationType type) {
-    switch (type) {
-      case NotificationType.tournamentInvitation:
-      case NotificationType.tournamentStart:
-      case NotificationType.tournamentResults:
-        return SoteriaColors.primary;
-      case NotificationType.achievementEarned:
-      case NotificationType.milestoneReached:
-      case NotificationType.levelUp:
-      case NotificationType.streakReminder:
-        return SoteriaColors.gold;
-      case NotificationType.rewardReceived:
-        return SoteriaColors.xpColor;
-      case NotificationType.practiceReminder:
-      case NotificationType.dailyReminder:
-        return SoteriaColors.secondary;
-      case NotificationType.systemUpdate:
-      case NotificationType.maintenance:
-        return Colors.blue;
-      case NotificationType.announcement:
-      case NotificationType.promotion:
-      case NotificationType.seasonResult:
-      case NotificationType.seasonCompleted:
-        return SoteriaColors.success;
-      case NotificationType.rankDemoted:
-        return SoteriaColors.error;
-      default:
-        return SoteriaColors.muted;
-    }
-  }
-
-  IconData _getTypeIcon(NotificationType type) {
-    switch (type) {
-      case NotificationType.tournamentInvitation:
-      case NotificationType.tournamentStart:
-      case NotificationType.tournamentResults:
-        return Icons.emoji_events_rounded;
-      case NotificationType.achievementEarned:
-      case NotificationType.milestoneReached:
-        return Icons.auto_awesome_rounded;
-      case NotificationType.levelUp:
-        return Icons.keyboard_double_arrow_up_rounded;
-      case NotificationType.streakReminder:
-        return Icons.local_fire_department_rounded;
-      case NotificationType.rewardReceived:
-        return Icons.card_giftcard_rounded;
-      case NotificationType.practiceReminder:
-      case NotificationType.dailyReminder:
-        return Icons.timer_rounded;
-      case NotificationType.systemUpdate:
-      case NotificationType.maintenance:
-        return Icons.settings_suggest_rounded;
-      case NotificationType.announcement:
-        return Icons.campaign_rounded;
-      case NotificationType.promotion:
-        return Icons.star_rounded;
-      case NotificationType.rankDemoted:
-        return Icons.trending_down_rounded;
-      case NotificationType.seasonCompleted:
-        return Icons.event_available_rounded;
-      case NotificationType.seasonResult:
-        return Icons.assessment_rounded;
-      default:
-        return Icons.notifications_rounded;
-    }
-  }
-
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final difference = now.difference(date);
-    if (difference.inMinutes < 60) return '${difference.inMinutes}m';
-    if (difference.inHours < 24) return '${difference.inHours}h';
-    return '${difference.inDays}d';
   }
 }

@@ -305,6 +305,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.assignment_ind_rounded,
       tags: ['identity', 'title', 'badge', 'showcase'],
     ),
+    const GalleryItem(
+      title: 'Live Events',
+      description: 'Discovery, Details & Countdown',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/live-events',
+      icon: Icons.bolt_rounded,
+      tags: ['live', 'event', 'countdown'],
+    ),
   ];
 });
 

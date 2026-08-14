@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/design_system/gradients/soteria_gradients.dart';
 import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 import '../../../core/design_system/colors/soteria_colors.dart';
@@ -80,7 +81,7 @@ class SettingsScreen extends StatelessWidget {
                 iconColor: SoteriaColors.gold,
                 title: 'Notifications',
                 subtitle: 'Manage your notification preferences',
-                onTap: () {},
+                onTap: () => context.push(SoteriaRoutes.notificationSettings),
               ),
               const _SettingsDivider(),
               _SettingsItem(

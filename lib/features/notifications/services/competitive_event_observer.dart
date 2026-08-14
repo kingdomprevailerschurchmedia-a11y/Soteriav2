@@ -10,6 +10,8 @@ import '../../player/presentation/providers/reward_providers.dart';
 import '../../player/presentation/providers/milestone_providers.dart';
 import '../../player/presentation/providers/personal_record_providers.dart';
 import '../../player/domain/models/competitive_personal_record.dart';
+import '../../player/domain/models/live_event.dart';
+import '../../player/presentation/providers/live_event_providers.dart';
 import '../../player/domain/models/player_profile.dart';
 import '../../player/domain/config/progression_config.dart';
 import '../../../core/services/time_service.dart';
@@ -42,6 +44,38 @@ class CompetitiveEventObserver {
     _observeMilestones();
     _observePersonalRecords();
     _observeProfileChanges();
+    _observeLiveEvents();
+  }
+
+  void _observeLiveEvents() {
+    _ref.listen<AsyncValue<List<LiveEvent>>>(activeLiveEventsProvider, (
+      previous,
+      next,
+    ) {
+      final oldList = previous?.value ?? [];
+      final newList = next.value ?? [];
+
+      if (newList.length > oldList.length) {
+        final newEvents = newList.where(
+          (n) => !oldList.any((o) => o.eventId == n.eventId),
+        );
+        for (final event in newEvents) {
+          _emitEvent(
+            CompetitiveEvent(
+              eventId: const Uuid().v4(),
+              userId: 'all',
+              type: CompetitiveEventType.liveEventStarted,
+              title: 'New Live Event!',
+              body: '${event.name} is now active.',
+              metadata: {'eventId': event.eventId},
+              createdAt: DateTime.now(),
+              priority: 2,
+              deduplicationKey: 'live_event_start_${event.eventId}',
+            ),
+          );
+        }
+      }
+    });
   }
 
   void _observeProfileChanges() {
@@ -425,6 +459,14 @@ class CompetitiveEventObserver {
         return NotificationType.personalBest;
       case CompetitiveEventType.streakReached:
         return NotificationType.personalBest;
+      case CompetitiveEventType.liveEventStarted:
+        return NotificationType.liveEventStarted;
+      case CompetitiveEventType.liveEventEnding:
+        return NotificationType.liveEventEnding;
+      case CompetitiveEventType.rematchRequest:
+        return NotificationType.rematchRequest;
+      case CompetitiveEventType.systemAnnouncement:
+        return NotificationType.systemAnnouncement;
     }
   }
 
@@ -452,10 +494,17 @@ class CompetitiveEventObserver {
       case CompetitiveEventType.seasonResult:
       case CompetitiveEventType.seasonCompleted:
       case CompetitiveEventType.tournamentResult:
-        return 'history';
+      case CompetitiveEventType.newSeasonStarted:
+      case CompetitiveEventType.seasonStarted:
+        return 'season';
       case CompetitiveEventType.matchCompleted:
       case CompetitiveEventType.streakReached:
         return 'profile';
+      case CompetitiveEventType.liveEventStarted:
+      case CompetitiveEventType.liveEventEnding:
+        return 'events';
+      case CompetitiveEventType.rematchRequest:
+        return 'versus';
       default:
         return null;
     }

@@ -6,6 +6,14 @@
         <entry key="Firebase Crashlytics">
           <value>
             <InsightsFilterSettings>
+              <option name="connection">
+                <ConnectionSetting>
+                  <option name="appId" value="com.soteria.app" />
+                  <option name="mobileSdkAppId" value="1:464470460254:android:989bc6dca720635016b1cf" />
+                  <option name="projectId" value="soteriav2-b4042" />
+                  <option name="projectNumber" value="464470460254" />
+                </ConnectionSetting>
+              </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />
               <option name="timeIntervalDays" value="THIRTY_DAYS" />
               <option name="visibilityType" value="ALL" />

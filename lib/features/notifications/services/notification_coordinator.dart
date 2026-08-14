@@ -124,6 +124,22 @@ class NotificationCoordinator {
       case 'rewards':
         _navigation.go(SoteriaRoutes.wallet);
         break;
+      case 'season':
+        _navigation.go(SoteriaRoutes.season);
+        break;
+      case 'events':
+        final eventId = data['eventId'];
+        if (eventId != null) {
+          _navigation.go(
+            SoteriaRoutes.liveEventDetails.replaceAll(':id', eventId),
+          );
+        } else {
+          _navigation.go(SoteriaRoutes.liveEvents);
+        }
+        break;
+      case 'versus':
+        _navigation.go(SoteriaRoutes.versus);
+        break;
       default:
         _navigation.go(SoteriaRoutes.main);
     }
