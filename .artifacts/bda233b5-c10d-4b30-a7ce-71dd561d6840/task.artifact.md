@@ -1,11 +1,9 @@
-- `[x]` Extend `GameResult` to include `answers`.
-- `[x]` Implement `CompetitiveMatchReplay` model.
-- `[x]` Implement `matchReplayProvider` and `competitiveInsightsProvider`.
-- `[x]` Develop `CompetitiveMatchReplayScreen` with question navigation.
-- `[x]` Develop `CompetitiveInsightsScreen` with trends and category breakdown.
-- `[x]` Integrate Replay button into `CompetitiveMatchResultScreen`.
-- `[x]` Integrate Insights button into `CompetitiveMatchHistoryScreen`.
-- `[x]` Integrate Replay button into `CompetitiveMatchDetailsSheet`.
-- `[x]` Add Preview fixtures for Replay and Insights.
+- `[x]` Extend `reward_providers.dart` with `seasonRewardDefinitionsProvider`.
+- `[x]` Create `SeasonRewardCard` widget.
+- `[x]` Develop `CompetitiveSeasonScreen` with status-aware UI.
+- `[x]` Integrate `SeasonHeader` with navigation to the season dashboard.
+- `[x]` Update routing with `/app/season` and register in `AppRouter`.
+- `[x]` Implement comprehensive `SeasonPreviews` for all lifecycle states.
+- `[x]` Update and verify `test/features/player/season_ui_test.dart`.
+- `[x]` Fix all analysis warnings and compilation errors.
 - `[x]` Update Documentation.
-- `[ ]` Implement Domain and Repository tests for insights logic.

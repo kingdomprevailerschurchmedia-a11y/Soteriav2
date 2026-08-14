@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../design_system/colors/soteria_colors.dart';
 import '../../domain/avatar.dart';
 import '../../providers/avatar_providers.dart';
+import '../../../identity/providers/identity_providers.dart';
 import 'avatar_frame.dart';
 
 class SoteriaAvatar extends ConsumerWidget {
@@ -34,8 +35,12 @@ class SoteriaAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final hasImageUrl = imageUrl != null && imageUrl!.isNotEmpty;
+    final profile = ref.watch(profileProvider);
+    final hasImageUrl = (imageUrl != null && imageUrl!.isNotEmpty) ||
+        (profile?.avatarUrl != null && profile!.avatarUrl!.isNotEmpty);
     final hasInitials = initials != null && initials!.isNotEmpty;
+
+    final effectiveImageUrl = imageUrl ?? profile?.avatarUrl;
 
     final effectiveAvatar =
         avatar ??
@@ -77,7 +82,7 @@ class SoteriaAvatar extends ConsumerWidget {
                   : null,
             ),
             child: ClipOval(
-              child: _buildAvatarContent(context, effectiveAvatar),
+              child: _buildAvatarContent(context, effectiveAvatar, effectiveImageUrl),
             ),
           ),
         ),
@@ -86,19 +91,19 @@ class SoteriaAvatar extends ConsumerWidget {
             right: 2.w,
             bottom: 2.w,
             child: Container(
-              width: (size * 0.28).w,
-              height: (size * 0.28).w,
+              width: (size * 0.24).w,
+              height: (size * 0.24).w,
               decoration: BoxDecoration(
-                color: const Color(0xFF0B012A), // Matches background
+                color: SoteriaColors.success, // Full green from design system
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: const Color(0xFF4CAF50), // Green ring
-                  width: 2.5.w,
+                  color: const Color(0xFF0B012A), // Dark separator border
+                  width: 1.5.w,
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF4CAF50).withValues(alpha: 0.5),
-                    blurRadius: 8.w,
+                    color: SoteriaColors.success.withValues(alpha: 0.4),
+                    blurRadius: 6.w,
                     spreadRadius: 1.w,
                   ),
                 ],
@@ -109,7 +114,19 @@ class SoteriaAvatar extends ConsumerWidget {
     );
   }
 
-  Widget _buildAvatarContent(BuildContext context, Avatar? avatar) {
+  Widget _buildAvatarContent(
+    BuildContext context,
+    Avatar? avatar,
+    String? effectiveImageUrl,
+  ) {
+    if (effectiveImageUrl != null && effectiveImageUrl.isNotEmpty) {
+      return Image.network(
+        effectiveImageUrl,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+      );
+    }
+
     if (avatar != null) {
       return Image.asset(
         avatar.assetPath,

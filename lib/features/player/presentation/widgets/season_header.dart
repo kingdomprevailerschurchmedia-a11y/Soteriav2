@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
@@ -25,6 +26,7 @@ class SeasonHeader extends ConsumerWidget {
         if (season == null) return const SizedBox.shrink();
 
         return SoteriaCard(
+          onTap: () => context.push('/app/season'),
           padding: EdgeInsets.all(SoteriaSpacing.sm),
           margin: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
           hasGlow: status == SeasonStatus.ending,

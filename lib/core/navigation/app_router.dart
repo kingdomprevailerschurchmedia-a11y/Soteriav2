@@ -92,6 +92,7 @@ import 'package:soteria/features/player/screens/security_status_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_season_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/versus_lobby_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/matchmaking_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/match_found_screen.dart';
@@ -383,6 +384,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.fade(
                           child: const ChallengeCenterScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                  GoRoute(
+                    path: 'season',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const CompetitiveSeasonScreen(),
                           key: state.pageKey,
                         ),
                   ),

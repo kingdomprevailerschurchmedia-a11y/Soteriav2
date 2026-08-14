@@ -18,7 +18,6 @@ import '../../../player/presentation/widgets/season_header.dart';
 import '../widgets/daily_goals_section.dart';
 import '../widgets/milestone_section.dart';
 import '../widgets/announcement_section.dart';
-import '../widgets/continue_playing_section.dart';
 import '../widgets/recent_achievements_section.dart';
 import '../widgets/top_scholars_section.dart';
 import '../widgets/performance_section.dart';
@@ -172,11 +171,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
 
-              // Continue Playing
-              const SliverToBoxAdapter(child: ContinuePlayingSection()),
-
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
-
               // Recent Achievements
               const SliverToBoxAdapter(child: RecentAchievementsSection()),
 
@@ -202,7 +196,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               SliverToBoxAdapter(
                 child: SizedBox(
-                  height: 80.h + MediaQuery.paddingOf(context).bottom,
+                  height: 40.h + MediaQuery.paddingOf(context).bottom,
                 ),
               ),
             ],

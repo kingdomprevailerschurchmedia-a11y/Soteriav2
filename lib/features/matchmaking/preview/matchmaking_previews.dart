@@ -6,7 +6,8 @@ import '../presentation/providers/matchmaking_providers.dart';
 import '../presentation/screens/matchmaking_screen.dart';
 import '../presentation/screens/match_found_screen.dart';
 import '../presentation/screens/versus_lobby_screen.dart';
-import '../../../player/preview/public_profile_preview.dart';
+import 'package:soteria/features/player/preview/public_profile_preview.dart';
+import 'package:soteria/features/player/presentation/providers/public_profile_providers.dart';
 
 class MatchmakingPreviews {
   static Widget lobby() => const VersusLobbyScreen();

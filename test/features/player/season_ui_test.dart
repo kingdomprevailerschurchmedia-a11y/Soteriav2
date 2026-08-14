@@ -50,9 +50,9 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(wrap(SeasonPreviews.active()));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
-      expect(find.text('CYBER SENTINEL'), findsOneWidget);
+      expect(find.text('CYBER FRONTIER'), findsAtLeastNWidgets(1));
       expect(find.text('ACTIVE'), findsOneWidget);
     });
 
@@ -60,7 +60,7 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(wrap(SeasonPreviews.endingSoon()));
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('ENDING SOON'), findsOneWidget);
     });

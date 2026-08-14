@@ -47,8 +47,8 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
     );
   }
 
-  final player = playerAsync.value;
-  final progression = progressionAsync.value;
+  final player = playerAsync.valueOrNull;
+  final progression = progressionAsync.valueOrNull;
 
   // If we don't have basic player/progression data, we can't show the profile
   if (player == null || progression == null) {
@@ -56,13 +56,13 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   }
 
   // Handle partial data for history, season, rewards, and position
-  final history = historyAsync.value ?? CompetitiveHistory(userId: player.uid);
-  final currentSeason = seasonAsync.value;
-  final rewards = rewardsAsync.value ?? [];
-  final globalPosition = positionAsync.value ?? -1;
-  final milestones = milestonesAsync.value ?? [];
-  final definitionsCount = milestoneDefinitionsAsync.value?.length ?? 0;
-  final personalRecords = personalRecordsAsync.value ?? [];
+  final history = historyAsync.valueOrNull ?? CompetitiveHistory(userId: player.uid);
+  final currentSeason = seasonAsync.valueOrNull;
+  final rewards = rewardsAsync.valueOrNull ?? [];
+  final globalPosition = positionAsync.valueOrNull ?? -1;
+  final milestones = milestonesAsync.valueOrNull ?? [];
+  final definitionsCount = milestoneDefinitionsAsync.valueOrNull?.length ?? 0;
+  final personalRecords = personalRecordsAsync.valueOrNull ?? [];
 
   return AsyncValue.data(
     CompetitiveProfile(

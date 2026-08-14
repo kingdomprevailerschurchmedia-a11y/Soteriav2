@@ -1,82 +1,53 @@
-# Implementation Plan - Competitive Matchmaking & Opponent Discovery
+# Implementation Plan - Competitive Seasons & Live Experience
 
-Allow players to enter a competitive queue and be matched with an opponent for 1v1 Versus matches using a server-authoritative matchmaking system.
+Implement the complete live competitive season experience, allowing players to track their progress, view rewards, and compete on season-specific leaderboards.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> The matchmaking logic will use Firestore to coordinate between players. While a dedicated backend (Cloud Functions) would be ideal for a production game, we will implement a robust Firestore-based approach using transactions to ensure fairness and prevent race conditions.
+> The season dashboard acts as a central hub for the current competitive period. It integrates multiple existing systems (Rank, Leaderboard, Milestones, Rewards) into a single, cohesive experience.
 
-- Players will enter a `matchmaking_pool` collection.
-- A "Match Found" state will be triggered when two compatible sessions are paired.
-- Both players must confirm (READY) before the `VersusMatch` is created.
+- Navigation to this screen is added to the `SeasonHeader` on the main dashboard.
+- Season transitions are handled reactively via Firestore streams.
 
 ## Proposed Changes
 
-### Matchmaking Domain & Models
+### Presentation Layer
 
-#### [NEW] [matchmaking_session.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/domain/models/matchmaking_session.dart)
-- `MatchmakingSession` model with `sessionId`, `userId`, `status`, `configuration`, `rankSnapshot`, etc.
-- `MatchmakingStatus` enum: `idle`, `queuing`, `searching`, `matchFound`, `confirming`, `matched`, `cancelled`, `expired`, `failed`.
+#### [NEW] [competitive_season_screen.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/player/presentation/screens/competitive_season_screen.dart)
+- The main Season Dashboard.
+- Features: Season Hero (Countdown), Your Standing (Rank/RP), Leaderboard Preview, Season Milestones, and Reward Preview.
 
-#### [NEW] [matchmaking_repository.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/domain/repositories/matchmaking_repository.dart)
-- Interface for matchmaking operations: `enterQueue`, `cancelQueue`, `confirmMatch`, `observeSession`.
+#### [MODIFY] [season_header.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/player/presentation/widgets/season_header.dart)
+- Add `onTap` to navigate to the new `CompetitiveSeasonScreen`.
 
----
-
-### Data Layer
-
-#### [NEW] [firebase_matchmaking_repository.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/data/repositories/firebase_matchmaking_repository.dart)
-- Implementation using Firestore.
-- Handles atomic entry into the pool.
-- Observes the session document for status changes (e.g., when an opponent is assigned).
+#### [MODIFY] [reward_providers.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/player/presentation/providers/reward_providers.dart)
+- Add `seasonRewardDefinitionsProvider` to fetch authoritative reward metadata for a given season.
 
 ---
 
-### Presentation Layer (Riverpod & Screens)
-
-#### [NEW] [matchmaking_providers.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/presentation/providers/matchmaking_providers.dart)
-- `matchmakingProvider`: Manages the current matchmaking state and timer.
-- `matchmakingSessionProvider`: Streams the active session from the repository.
-
-#### [NEW] [versus_lobby_screen.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/presentation/screens/versus_lobby_screen.dart)
-- Entry point for Versus mode.
-- Allows configuration of the match (Category, Difficulty - though ranked usually has fixed rules).
-- Reuses `CategorySelector` and `DifficultySelector`.
-
-#### [NEW] [matchmaking_screen.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/presentation/screens/matchmaking_screen.dart)
-- Displays "Searching..." state, elapsed time, and player rank.
-- Allows cancellation.
-
-#### [NEW] [match_found_screen.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/matchmaking/presentation/screens/match_found_screen.dart)
-- Reveals the opponent.
-- Comparison view (You vs. Opponent).
-- "READY" confirmation button.
-
----
-
-### Integration & Navigation
+### Navigation & Previews
 
 #### [MODIFY] [soteria_routes.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/core/navigation/soteria_routes.dart)
-- Add `/app/versus/lobby`, `/app/matchmaking`, `/app/match-found`.
+- Add `/app/season` route constant.
 
 #### [MODIFY] [app_router.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/core/navigation/app_router.dart)
-- Register new routes.
-- Replace "Coming Soon" for Versus with the new `VersusLobbyScreen`.
+- Register `CompetitiveSeasonScreen` route.
 
-#### [MODIFY] [firestore.rules](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/firebase/firestore.rules)
-- Add security rules for the `matchmaking_pool` collection.
+#### [NEW] [season_previews.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/features/player/preview/season_previews.dart)
+- Add comprehensive previews for Active, Upcoming, Ending Soon, and Completed season states.
+
+#### [MODIFY] [all_previews.dart](file:///C:/Users/GiftOgbonna/Joseph%20Projects/Soteria/lib/preview/registry/all_previews.dart)
+- Register the new season previews in the developer gallery.
 
 ## Verification Plan
 
 ### Automated Tests
-- **Domain Tests**: Test `MatchmakingStatus` transitions.
-- **Repository Tests**: Mock Firestore to verify `enterQueue` and `confirmMatch` logic.
-- **Provider Tests**: Verify `matchmakingProvider` emits correct states (Searching -> MatchFound -> Matched).
+- **UI Tests**: Update `test/features/player/season_ui_test.dart` to verify the new dashboard components and state handling.
+- **Analysis**: Run `flutter analyze` to ensure no regressions.
 
 ### Manual Verification
-- Deploy to device/emulator.
-- Enter Versus Lobby -> Configure -> Search.
-- Verify searching animation and timer.
-- Use Previews to verify "Match Found" UI with different ranks/opponents.
-- Test cancellation flow.
+- Launch Preview Gallery -> Gameplay -> Season Dashboard.
+- Verify real-time countdown synchronization.
+- Test navigation from Dashboard -> Season Header -> Season Dashboard -> Leaderboard.
+- Check responsiveness on different screen sizes (Phone/Tablet).

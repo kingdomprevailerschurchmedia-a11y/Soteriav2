@@ -28,7 +28,11 @@ class _VersusMatchOrchestratorState extends ConsumerState<VersusMatchOrchestrato
 
   @override
   void dispose() {
-    ref.read(activeMatchIdProvider.notifier).state = null;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref.read(activeMatchIdProvider.notifier).state = null;
+      }
+    });
     super.dispose();
   }
 
@@ -75,12 +79,6 @@ class _MatchEndFallback extends StatelessWidget {
   const _MatchEndFallback({required this.status});
 
   @override
-  void dispose() {
-    ref.read(activeMatchIdProvider.notifier).state = null;
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -90,7 +88,7 @@ class _MatchEndFallback extends StatelessWidget {
             Text('Match Ended: ${status.name.toUpperCase()}'),
             const SizedBox(height: 20),
             ElevatedButton(
-              onPressed: () => context.go('/app/versus'),
+              onPressed: () => GoRouter.of(context).go('/app/versus'),
               child: const Text('RETURN TO LOBBY'),
             ),
           ],

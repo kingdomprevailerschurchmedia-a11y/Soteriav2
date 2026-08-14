@@ -21,7 +21,7 @@ class RecentAchievementsSection extends StatelessWidget {
               Row(
                 children: [
                   Image.asset(
-                    'assets/icons/recent_achievments.png',
+                    'assets/icons/recent_achievement.png',
                     width: 24.w,
                     height: 24.w,
                     fit: BoxFit.contain,
@@ -74,27 +74,41 @@ class RecentAchievementsSection extends StatelessWidget {
                 title: 'First Win',
                 description: 'Win your first match',
                 date: 'May 20, 2024',
-                icon: Icons.workspace_premium_rounded,
                 color: SoteriaColors.gold,
                 isUnlocked: true,
+                icon: Image.asset(
+                  'assets/icons/first_position_badge_transparent.png',
+                  width: 28.w,
+                  height: 28.w,
+                  fit: BoxFit.contain,
+                ),
               ),
               _AchievementCard(
                 title: 'Logic Master',
                 description: 'Answer 10 logic questions correctly',
                 date: 'May 20, 2024',
-                icon: Icons.psychology_rounded,
                 color: const Color(0xFF7C4DFF),
                 isUnlocked: true,
+                icon: Icon(
+                  Icons.psychology_rounded,
+                  color: Colors.white,
+                  size: 24.w,
+                ),
               ),
               _AchievementCard(
                 title: 'Century',
                 description: 'Score 100 points in a single match',
                 date: '',
-                icon: Icons.shield_outlined,
                 color: SoteriaColors.muted,
                 isUnlocked: false,
                 currentProgress: 72,
                 totalProgress: 100,
+                icon: Image.asset(
+                  'assets/icons/coin_icon.png',
+                  width: 24.w,
+                  height: 24.w,
+                  fit: BoxFit.contain,
+                ),
               ),
             ],
           ),
@@ -109,9 +123,9 @@ class _AchievementCard extends StatelessWidget {
     required this.title,
     required this.description,
     required this.date,
-    required this.icon,
     required this.color,
     required this.isUnlocked,
+    required this.icon,
     this.currentProgress = 0,
     this.totalProgress = 100,
   });
@@ -119,9 +133,9 @@ class _AchievementCard extends StatelessWidget {
   final String title;
   final String description;
   final String date;
-  final IconData icon;
   final Color color;
   final bool isUnlocked;
+  final Widget icon;
   final int currentProgress;
   final int totalProgress;
 
@@ -161,7 +175,7 @@ class _AchievementCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    // Icon Badge
+                    // Achievement Icon
                     Container(
                       width: 44.w,
                       height: 44.w,
@@ -190,13 +204,13 @@ class _AchievementCard extends StatelessWidget {
                         ],
                       ),
                       child: Center(
-                        child: Icon(
-                          isUnlocked ? icon : Icons.lock_rounded,
-                          color: isUnlocked
-                              ? color
-                              : SoteriaColors.muted.withValues(alpha: 0.5),
-                          size: 22.sp,
-                        ),
+                        child: isUnlocked
+                            ? icon
+                            : Icon(
+                                Icons.lock_rounded,
+                                color: SoteriaColors.muted.withValues(alpha: 0.5),
+                                size: 22.sp,
+                              ),
                       ),
                     ),
                     SizedBox(height: 8.h),

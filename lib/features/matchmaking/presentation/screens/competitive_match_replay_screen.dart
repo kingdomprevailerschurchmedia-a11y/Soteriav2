@@ -6,6 +6,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/components/soteria_state_views.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import 'package:soteria/features/matchmaking/presentation/providers/match_result_providers.dart';
@@ -40,7 +41,13 @@ class _CompetitiveMatchReplayScreenState extends ConsumerState<CompetitiveMatchR
         ),
         body: replayAsync.when(
           data: (replay) {
-            if (replay == null) return const SoteriaEmptyView(title: 'NO DATA', message: 'Match details not found.');
+            if (replay == null) {
+              return const SoteriaEmptyView(
+                title: 'NO DATA',
+                message: 'Match details not found.',
+                icon: Icons.history_rounded,
+              );
+            }
             
             final question = replay.questions[_currentIndex];
             final playerAnswer = replay.result.playerPerformance.answers.firstWhere(

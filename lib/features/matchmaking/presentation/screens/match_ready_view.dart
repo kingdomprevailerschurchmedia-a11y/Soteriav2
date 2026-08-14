@@ -7,6 +7,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../player/presentation/providers/public_profile_providers.dart';
+import '../../../player/providers/player_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../gameplay_engine/models/versus_match.dart';
 import '../providers/match_lifecycle_providers.dart';

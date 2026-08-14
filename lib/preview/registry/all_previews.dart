@@ -356,6 +356,46 @@ void registerAllPreviews() {
     ),
   );
 
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-active',
+      title: 'Season - Active',
+      description: 'Season dashboard',
+      category: PreviewCategory.gameplay,
+      builder: (context) => SeasonPreviews.active(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-upcoming',
+      title: 'Season - Upcoming',
+      description: 'Next season info',
+      category: PreviewCategory.gameplay,
+      builder: (context) => SeasonPreviews.upcoming(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-ending',
+      title: 'Season - Ending',
+      description: 'Urgency phase',
+      category: PreviewCategory.gameplay,
+      builder: (context) => SeasonPreviews.endingSoon(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'season-completed',
+      title: 'Season - Completed',
+      description: 'Review phase',
+      category: PreviewCategory.gameplay,
+      builder: (context) => SeasonPreviews.completed(),
+    ),
+  );
+
   // --- Pro Mode ---
   r.registerPreview(
     PreviewItem(

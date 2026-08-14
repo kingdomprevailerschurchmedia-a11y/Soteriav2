@@ -52,9 +52,9 @@ class _ChallengeCenterScreenState extends ConsumerState<ChallengeCenterScreen>
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('INCOMING'),
-                  if (incomingAsync.value?.isNotEmpty ?? false) ...[
+                  if (incomingAsync.valueOrNull?.isNotEmpty ?? false) ...[
                     SizedBox(width: 8.w),
-                    _buildBadge(incomingAsync.value!.length),
+                    _buildBadge(incomingAsync.valueOrNull!.length),
                   ],
                 ],
               ),

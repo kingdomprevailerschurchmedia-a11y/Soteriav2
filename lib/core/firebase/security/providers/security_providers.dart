@@ -15,6 +15,6 @@ final securityStatusProvider = StreamProvider<SecurityStatus>((ref) {
 });
 
 final currentSecurityStatusProvider = Provider<SecurityStatus>((ref) {
-  return ref.watch(securityStatusProvider).value ??
+  return ref.watch(securityStatusProvider).valueOrNull ??
       ref.read(securityCoordinatorProvider).currentStatus;
 });

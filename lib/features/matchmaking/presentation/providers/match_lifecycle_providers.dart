@@ -6,6 +6,8 @@ import '../../domain/repositories/versus_match_repository.dart';
 import '../../data/repositories/firebase_versus_match_repository.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../quiz/presentation/providers/quiz_providers.dart';
+import '../../../quiz/domain/models/quiz_enums.dart';
+import '../../../quiz/domain/models/quiz_enums.dart';
 
 final versusMatchRepositoryProvider = Provider<VersusMatchRepository>((ref) {
   return FirebaseVersusMatchRepository(ref.watch(firestoreProvider));

@@ -1,4 +1,6 @@
+import 'dart:io' as io;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart' as storage;
 import '../../firebase/services/firebase_interfaces.dart';
 import 'identity_repository.dart';
 import '../models/user_identity.dart';
@@ -10,11 +12,14 @@ class FirebaseIdentityRepository implements IdentityRepository {
   FirebaseIdentityRepository({
     required IAuthService auth,
     required IDatabaseService database,
+    required IStorageService storage,
   }) : _auth = auth,
-       _database = database;
+       _database = database,
+       _storage = storage;
 
   final IAuthService _auth;
   final IDatabaseService _database;
+  final IStorageService _storage;
 
   @override
   Stream<UserSession?> get sessionChanges => _auth.authStateChanges.map((user) {
@@ -112,6 +117,17 @@ class FirebaseIdentityRepository implements IdentityRepository {
         .collection('user_profiles')
         .doc(uid)
         .set(profile.toMap(), SetOptions(merge: true));
+  }
+
+  @override
+  Future<String> uploadProfilePicture(String uid, String filePath) async {
+    final ref = _storage.ref().child('profile_pictures').child('$uid.jpg');
+    final uploadTask = ref.putFile(
+      io.File(filePath),
+      storage.SettableMetadata(contentType: 'image/jpeg'),
+    );
+    final snapshot = await uploadTask;
+    return await snapshot.ref.getDownloadURL();
   }
 
   AccountStatus _mapStatus(String? status) {

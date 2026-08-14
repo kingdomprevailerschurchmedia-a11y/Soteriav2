@@ -4,7 +4,7 @@ import '../../../../core/firebase/providers/firebase_providers.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../../question_content/domain/entities/category.dart';
 import '../../../question_content/domain/repositories/category_repository.dart';
-import '../../../question_content/data/repositories/firestore_category_repository.dart';
+import '../../../question_content/presentation/providers/category_providers.dart';
 import '../../../gameplay_engine/models/practice_session_config.dart';
 import '../../../gameplay_engine/models/practice_session.dart';
 import '../../../gameplay_engine/services/session_validator.dart';
@@ -13,12 +13,6 @@ import '../../../gameplay_engine/domain/repositories/practice_repository.dart';
 import '../../../gameplay_engine/data/repositories/firestore_practice_repository.dart';
 
 // --- Repositories ---
-final categoryRepositoryProvider = Provider<CategoryRepository>((ref) {
-  return FirestoreCategoryRepository(
-    ref.watch(firestoreDatabaseServiceProvider),
-  );
-});
-
 final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
   return FirestorePracticeRepository(
     ref.watch(firestoreDatabaseServiceProvider),

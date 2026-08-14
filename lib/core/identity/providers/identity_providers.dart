@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:image_picker/image_picker.dart';
 import '../models/user_profile.dart';
 import '../models/user_game_profile.dart';
 import '../models/user_session.dart';
@@ -14,6 +15,7 @@ final identityRepositoryProvider = Provider<IdentityRepository>((ref) {
   return FirebaseIdentityRepository(
     auth: ref.watch(firebaseAuthServiceProvider),
     database: ref.watch(firestoreDatabaseServiceProvider),
+    storage: ref.watch(firebaseStorageServiceProvider),
   );
 });
 
@@ -26,7 +28,7 @@ class SessionNotifier extends Notifier<UserSession> {
   @override
   UserSession build() {
     final asyncSession = ref.watch(authStateChangesProvider);
-    return asyncSession.value ?? const UserSession(status: SessionStatus.guest);
+    return asyncSession.valueOrNull ?? const UserSession(status: SessionStatus.guest);
   }
 
   void setSession(UserSession session) {
@@ -69,13 +71,47 @@ class ProfileNotifier extends Notifier<UserProfile?> {
       return;
     }
 
-    final updatedProfile = state!.copyWith(selectedAvatarId: avatarId);
+    final updatedProfile = state!.copyWith(
+      selectedAvatarId: avatarId,
+      avatarUrl: '', // Clear custom photo if selecting preset avatar
+    );
     await ref
         .read(identityRepositoryProvider)
         .updateUserProfile(session.uid!, updatedProfile);
     state = updatedProfile;
   }
+
+  Future<void> updateProfilePicture(XFile image) async {
+    final session = ref.read(sessionProvider);
+    if (!session.isAuthenticated || session.uid == null || state == null) {
+      return;
+    }
+
+    ref.read(profileUploadProvider.notifier).state = true;
+    try {
+      final downloadUrl = await ref
+          .read(identityRepositoryProvider)
+          .uploadProfilePicture(session.uid!, image.path);
+
+      final updatedProfile = state!.copyWith(
+        avatarUrl: downloadUrl,
+        selectedAvatarId: '', // Clear avatar ID if using custom photo
+      );
+
+      await ref
+          .read(identityRepositoryProvider)
+          .updateUserProfile(session.uid!, updatedProfile);
+      state = updatedProfile;
+    } catch (e) {
+      LoggerService.e('Failed to upload profile picture', error: e);
+      rethrow;
+    } finally {
+      ref.read(profileUploadProvider.notifier).state = false;
+    }
+  }
 }
+
+final profileUploadProvider = StateProvider<bool>((ref) => false);
 
 final profileProvider = NotifierProvider<ProfileNotifier, UserProfile?>(
   ProfileNotifier.new,

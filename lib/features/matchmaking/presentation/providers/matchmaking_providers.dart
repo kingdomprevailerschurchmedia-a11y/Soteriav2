@@ -9,6 +9,7 @@ import '../../../player/presentation/providers/progression_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
 import '../../../question_content/domain/entities/category.dart';
 import '../../../question_content/domain/repositories/category_repository.dart';
+import '../../../question_content/presentation/providers/category_providers.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
 
 // --- Lobby ---
@@ -117,14 +118,14 @@ class MatchmakingNotifier extends AutoDisposeAsyncNotifier<void> {
   }) async {
     state = const AsyncValue.loading();
     try {
-      final rankProgress = ref.read(rankProgressProvider).value;
-      final progression = ref.read(competitiveProgressionProvider).value;
+      final rankProgress = ref.read(rankProgressProvider).valueOrNull;
+      final level = ref.read(currentCompetitiveLevelProvider);
 
       final rankSnapshot = {
-        'rankName': rankProgress?.currentRank.name ?? 'Bronze',
-        'tier': rankProgress?.currentRank.tier.name ?? 'III',
-        'points': rankProgress?.currentPoints ?? 0,
-        'level': progression?.currentLevel ?? 1,
+        'rankName': rankProgress?.currentRank ?? 'Bronze',
+        'tier': rankProgress?.tier.name ?? 'III',
+        'points': rankProgress?.currentRP ?? 0,
+        'level': level,
       };
 
       final session = await ref.read(matchmakingRepositoryProvider).enterQueue(

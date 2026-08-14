@@ -44,51 +44,80 @@ class DashboardHeader extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: SoteriaSlideLeft(
-                duration: const Duration(milliseconds: 600),
-                child: Column(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      greeting,
-                      style: context.labelSmall.copyWith(
-                        color: SoteriaColors.gold,
-                        letterSpacing: 1.5,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12.sp,
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Flexible(
-                          child: Text(
-                            playerName,
-                            style: context.displaySmall.copyWith(
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -1.0,
-                              fontSize: 30.sp,
-                            ),
-                            overflow: TextOverflow.ellipsis,
+                    SizedBox(width: SoteriaSpacing.xs),
+                    SoteriaScaleIn(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 200),
+                      child: GestureDetector(
+                        onTap: () => nav.go('/app/profile'),
+                        child: Hero(
+                          tag: 'player_avatar',
+                          child: SoteriaAvatar(
+                            isOnline: isOnline,
+                            size: 52,
+                            showGlow: true,
                           ),
                         ),
-                        SizedBox(width: 8.w),
-                        Text('👋', style: TextStyle(fontSize: 20.sp)),
-                      ],
+                      ),
                     ),
-                    SizedBox(height: SoteriaSpacing.sm),
-                    Row(
-                      children: [
-                        _HeaderBadge(
-                          label: 'LEVEL $level',
-                          icon: Icons.auto_awesome_rounded,
-                          color: SoteriaColors.primary,
-                        ),
-                      ],
+                    SizedBox(width: 8.w),
+                    SoteriaSlideLeft(
+                      duration: const Duration(milliseconds: 600),
+                      offset: 10.0,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            greeting,
+                            style: context.labelSmall.copyWith(
+                              color: SoteriaColors.gold,
+                              letterSpacing: 1.5,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 10.sp,
+                            ),
+                          ),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                playerName,
+                                style: context.displaySmall.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: -1.0,
+                                  fontSize: 24.sp,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Text('👋', style: TextStyle(fontSize: 20.sp)),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
-              ),
+                SizedBox(height: SoteriaSpacing.sm),
+                Padding(
+                  padding: EdgeInsets.only(left: SoteriaSpacing.xs),
+                  child: SoteriaScaleIn(
+                    duration: const Duration(milliseconds: 700),
+                    delay: const Duration(milliseconds: 400),
+                    child: _HeaderBadge(
+                      label: 'LEVEL $level',
+                      icon: Icons.auto_awesome_rounded,
+                      color: SoteriaColors.primary,
+                    ),
+                  ),
+                ),
+              ],
             ),
             SoteriaScaleIn(
               duration: const Duration(milliseconds: 700),
@@ -103,18 +132,6 @@ class DashboardHeader extends ConsumerWidget {
                   ),
                   SizedBox(width: SoteriaSpacing.sm),
                   _ChallengesAction(),
-                  SizedBox(width: SoteriaSpacing.sm),
-                  GestureDetector(
-                    onTap: () => nav.go('/app/profile'),
-                    child: Hero(
-                      tag: 'player_avatar',
-                      child: SoteriaAvatar(
-                        isOnline: isOnline,
-                        size: 52,
-                        showGlow: true,
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
@@ -128,7 +145,7 @@ class DashboardHeader extends ConsumerWidget {
 class _ChallengesAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final incomingCount = ref.watch(incomingChallengesProvider).value?.length ?? 0;
+    final incomingCount = ref.watch(incomingChallengesProvider).valueOrNull?.length ?? 0;
     final nav = ref.watch(navigationCoordinatorProvider);
 
     return Stack(
@@ -247,12 +264,12 @@ class _CompactStat extends StatelessWidget {
             if (assetPath != null)
               Image.asset(
                 assetPath!,
-                width: 15.sp,
-                height: 15.sp,
+                width: 20.sp,
+                height: 20.sp,
                 fit: BoxFit.contain,
               )
             else if (icon != null)
-              Icon(icon, size: 15.sp, color: color),
+              Icon(icon, size: 20.sp, color: color),
             SizedBox(width: 2.w),
             Text(
               label,

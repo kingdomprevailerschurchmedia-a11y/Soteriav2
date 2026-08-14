@@ -19,6 +19,7 @@ class SoteriaRoutes {
   static const String matchmaking = '/app/matchmaking';
   static const String matchFound = '/app/match-found';
   static const String challenges = '/app/challenges';
+  static const String season = '/app/season';
   static const String tournaments = '/app/tournaments';
   static const String tournamentLobby = '/app/tournaments/lobby/:id';
   static const String tournamentDetails = '/app/tournaments/details/:id';

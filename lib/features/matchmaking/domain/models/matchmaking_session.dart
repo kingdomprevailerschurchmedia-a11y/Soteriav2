@@ -5,7 +5,7 @@ part 'matchmaking_session.freezed.dart';
 part 'matchmaking_session.g.dart';
 
 @freezed
-class MatchmakingSession with _$MatchmakingSession {
+abstract class MatchmakingSession with _$MatchmakingSession {
   const factory MatchmakingSession({
     required String sessionId,
     required String userId,

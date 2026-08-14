@@ -8,6 +8,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/gradients/soteria_gradients.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/widgets/avatar_selection_dialog.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
@@ -79,6 +80,7 @@ class PlayerProfileScreen extends ConsumerWidget {
               style: context.bodyMedium.copyWith(
                 color: SoteriaColors.muted,
                 fontWeight: FontWeight.w500,
+                fontSize: 10.sp,
               ),
             ),
           ],
@@ -91,7 +93,10 @@ class PlayerProfileScreen extends ConsumerWidget {
   Widget _buildUserInfo(BuildContext context, UserProfile? profile) {
     return Row(
       children: [
-        const _AvatarWithRing(),
+        GestureDetector(
+          onTap: () => AvatarSelectionDialog.show(context),
+          child: const _AvatarWithRing(),
+        ),
         SizedBox(width: 20.w),
         Expanded(
           child: Column(
@@ -101,7 +106,7 @@ class PlayerProfileScreen extends ConsumerWidget {
                 profile?.displayName ?? 'Anonymous User',
                 style: context.headlineSmall.copyWith(
                   fontWeight: FontWeight.w900,
-                  fontSize: 20.sp,
+                  fontSize: 12.sp,
                   letterSpacing: -0.5,
                 ),
               ),
@@ -289,31 +294,65 @@ class _SettingsButton extends StatelessWidget {
   }
 }
 
-class _AvatarWithRing extends StatelessWidget {
+class _AvatarWithRing extends ConsumerWidget {
   const _AvatarWithRing();
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 80.w,
-      height: 80.w,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        gradient: SoteriaGradients.avatarRingGradient,
-      ),
-      padding: const EdgeInsets.all(2),
-      child: Container(
-        decoration: const BoxDecoration(
-          color: SoteriaColors.background,
-          shape: BoxShape.circle,
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profile = ref.watch(profileProvider);
+
+    return Stack(
+      children: [
+        Container(
+          width: 80.w,
+          height: 80.w,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: SoteriaGradients.avatarRingGradient,
+          ),
+          padding: const EdgeInsets.all(2),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: SoteriaColors.background,
+              shape: BoxShape.circle,
+            ),
+            padding: const EdgeInsets.all(2),
+            child: Hero(
+              tag: 'player_avatar',
+              child: SoteriaAvatar(
+                size: 74,
+                imageUrl: profile?.avatarUrl,
+                isOnline: true,
+                hasBorder: false,
+              ),
+            ),
+          ),
         ),
-        padding: const EdgeInsets.all(2),
-        child: const SoteriaAvatar(
-          size: 74,
-          isOnline: true,
-          hasBorder: false,
+        Positioned(
+          right: 0,
+          bottom: 0,
+          child: Container(
+            padding: EdgeInsets.all(6.w),
+            decoration: BoxDecoration(
+              color: SoteriaColors.gold,
+              shape: BoxShape.circle,
+              border: Border.all(color: SoteriaColors.background, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.2),
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Icon(
+              Icons.camera_alt_rounded,
+              size: 14.sp,
+              color: SoteriaColors.background,
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

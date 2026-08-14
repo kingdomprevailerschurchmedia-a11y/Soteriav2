@@ -31,26 +31,45 @@ class AchievementCarousel extends StatelessWidget {
           child: ListView(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-            children: const [
+            children: [
               _AchievementCard(
                 title: 'First Win',
-                icon: Icons.workspace_premium_rounded,
                 isUnlocked: true,
+                icon: Image.asset(
+                  'assets/icons/first_position_badge_transparent.png',
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.contain,
+                ),
               ),
               _AchievementCard(
                 title: 'Logic Master',
-                icon: Icons.psychology_rounded,
                 isUnlocked: true,
+                icon: const Icon(
+                  Icons.psychology_rounded,
+                  color: Colors.white,
+                  size: 32,
+                ),
               ),
               _AchievementCard(
                 title: 'Century',
-                icon: Icons.history_edu_rounded,
                 isUnlocked: false,
+                icon: Image.asset(
+                  'assets/icons/coin_icon.png',
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.contain,
+                ),
               ),
               _AchievementCard(
                 title: 'Streak 7',
-                icon: Icons.local_fire_department_rounded,
                 isUnlocked: false,
+                icon: Image.asset(
+                  'assets/icons/streak_icon.png',
+                  width: 32,
+                  height: 32,
+                  fit: BoxFit.contain,
+                ),
               ),
             ],
           ),
@@ -63,13 +82,13 @@ class AchievementCarousel extends StatelessWidget {
 class _AchievementCard extends StatelessWidget {
   const _AchievementCard({
     required this.title,
-    required this.icon,
     required this.isUnlocked,
+    required this.icon,
   });
 
   final String title;
-  final IconData icon;
   final bool isUnlocked;
+  final Widget icon;
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +103,13 @@ class _AchievementCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                icon,
-                color: isUnlocked
-                    ? SoteriaColors.gold
-                    : SoteriaColors.muted.withValues(alpha: 0.3),
-                size: 32,
-              ),
+              isUnlocked
+                  ? icon
+                  : Icon(
+                      Icons.lock_rounded,
+                      color: SoteriaColors.muted.withValues(alpha: 0.3),
+                      size: 32,
+                    ),
               SizedBox(height: SoteriaSpacing.sm),
               Text(
                 title,

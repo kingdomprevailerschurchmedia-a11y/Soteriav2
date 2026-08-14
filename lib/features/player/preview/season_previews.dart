@@ -1,125 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/competitive_season.dart';
+import '../domain/models/milestone.dart';
+import '../domain/models/rank_progress.dart';
+import '../domain/models/rank_tier.dart';
+import '../domain/models/season_reward_definition.dart';
 import '../presentation/providers/season_providers.dart';
-import '../presentation/widgets/season_header.dart';
-import '../../../../core/services/time_service.dart';
+import '../presentation/providers/rank_providers.dart';
+import '../presentation/providers/milestone_providers.dart';
+import '../presentation/providers/reward_providers.dart';
+import '../presentation/providers/leaderboard_providers.dart';
+import '../presentation/screens/competitive_season_screen.dart';
+import '../domain/models/leaderboard_entry.dart';
+import '../domain/repositories/leaderboard_repository.dart';
+import '../domain/models/rank_movement_event.dart';
 
-class SeasonPreviewWrapper extends StatelessWidget {
-  final CompetitiveSeason? mockSeason;
-  final DateTime mockNow;
-
-  const SeasonPreviewWrapper({
-    super.key,
-    required this.mockSeason,
-    required this.mockNow,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ProviderScope(
-      overrides: [
-        currentSeasonProvider.overrideWith((ref) => Stream.value(mockSeason)),
-        timeServiceProvider.overrideWithValue(_MockTimeService(mockNow)),
-      ],
-      child: Scaffold(
-        backgroundColor: const Color(0xFF0B012A),
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [SeasonHeader()],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _MockTimeService implements TimeService {
-  final DateTime _now;
-  _MockTimeService(this._now);
-
-  @override
-  DateTime now() => _now;
-  @override
-  DateTime nowUtc() => _now.toUtc();
+class MockLeaderboardRepository implements LeaderboardRepository {
+  @override Future<List<LeaderboardEntry>> getLeaderboardPage({String? seasonId, int limit = 50, lastCursor}) async => [];
+  @override Future<LeaderboardEntry?> getPlayerEntry({required String userId, String? seasonId}) async => null;
+  @override Future<List<LeaderboardEntry>> getLeaderboardAroundPlayer({required String userId, String? seasonId, int windowSize = 5}) async => [];
+  @override Future<int> getPlayerRankPosition({required String userId, String? seasonId}) async => 0;
+  @override Future<int> getTotalPlayers({String? seasonId}) async => 0;
+  @override Future<List<RankMovementEvent>> getPositionHistory({required String userId, String? seasonId, int limit = 50}) async => [];
+  @override Future<void> recordMovement(RankMovementEvent event) async {}
 }
 
 class SeasonPreviews {
-  static CompetitiveSeason mock({
-    required String name,
-    required SeasonStatus status,
-    required DateTime start,
-    required DateTime end,
-    int number = 1,
-    bool isCurrent = true,
+  static List<Override> _overrides({
+    required CompetitiveSeason season,
+    RankProgress? rank,
   }) {
-    return CompetitiveSeason(
-      seasonId: 's_$number',
-      name: name,
-      status: status,
-      startAt: start,
-      endAt: end,
-      createdAt: DateTime.now(),
-      updatedAt: DateTime.now(),
-      seasonNumber: number,
-      isCurrent: isCurrent,
-      description: 'The ultimate battle for cybersecurity supremacy.',
-    );
+    return [
+      currentSeasonProvider.overrideWith((ref) => Stream.value(season)),
+      if (rank != null) rankProgressProvider.overrideWithValue(AsyncValue.data(rank)),
+      milestoneProgressProvider.overrideWithValue(const AsyncValue.data([])),
+      seasonRewardDefinitionsProvider(season.seasonId).overrideWith((ref) => Future.value([])),
+      leaderboardRepositoryProvider.overrideWithValue(MockLeaderboardRepository()),
+    ];
   }
 
-  static Widget active() {
-    final now = DateTime.now();
-    return SeasonPreviewWrapper(
-      mockNow: now,
-      mockSeason: mock(
-        name: 'Cyber Sentinel',
+  static Widget active() => ProviderScope(
+    overrides: _overrides(
+      season: CompetitiveSeason(
+        seasonId: 's1',
+        name: 'Cyber Frontier',
         status: SeasonStatus.active,
-        start: now.subtract(const Duration(days: 10)),
-        end: now.add(const Duration(days: 20)),
+        startAt: DateTime.now().subtract(const Duration(days: 10)),
+        endAt: DateTime.now().add(const Duration(days: 12)),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        seasonNumber: 1,
+        description: 'Master the digital world and claim your rewards.',
       ),
-    );
-  }
-
-  static Widget endingSoon() {
-    final now = DateTime.now();
-    return SeasonPreviewWrapper(
-      mockNow: now,
-      mockSeason: mock(
-        name: 'Binary Breach',
-        status: SeasonStatus.active,
-        start: now.subtract(const Duration(days: 29)),
-        end: now.add(const Duration(hours: 3, minutes: 45)),
-        number: 2,
+      rank: RankProgress(
+        currentRank: 'Gold II',
+        currentRP: 2450,
+        minimumRP: 2000,
+        maximumRP: 3000,
+        progressPercentage: 0.45,
+        tier: const RankTier(id: 'gold', name: 'Gold', promotionThreshold: 2000, demotionThreshold: 1500, displayOrder: 3, maxPoints: 3000, minPoints: 2000, visualToken: 'gold_token'),
+        division: 2,
       ),
-    );
-  }
+    ),
+    child: const CompetitiveSeasonScreen(),
+  );
 
-  static Widget upcoming() {
-    final now = DateTime.now();
-    return SeasonPreviewWrapper(
-      mockNow: now,
-      mockSeason: mock(
-        name: 'Quantum Shield',
+  static Widget upcoming() => ProviderScope(
+    overrides: _overrides(
+      season: CompetitiveSeason(
+        seasonId: 's2',
+        name: 'Neon Nights',
         status: SeasonStatus.upcoming,
-        start: now.add(const Duration(days: 2)),
-        end: now.add(const Duration(days: 32)),
-        number: 3,
+        startAt: DateTime.now().add(const Duration(days: 5)),
+        endAt: DateTime.now().add(const Duration(days: 35)),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        seasonNumber: 2,
       ),
-    );
-  }
+    ),
+    child: const CompetitiveSeasonScreen(),
+  );
 
-  static Widget completed() {
-    final now = DateTime.now();
-    return SeasonPreviewWrapper(
-      mockNow: now,
-      mockSeason: mock(
-        name: 'Legacy Protocol',
-        status: SeasonStatus.completed,
-        start: now.subtract(const Duration(days: 40)),
-        end: now.subtract(const Duration(days: 10)),
-        number: 1,
+  static Widget endingSoon() => ProviderScope(
+    overrides: _overrides(
+      season: CompetitiveSeason(
+        seasonId: 's1',
+        name: 'Cyber Frontier',
+        status: SeasonStatus.ending,
+        startAt: DateTime.now().subtract(const Duration(days: 28)),
+        endAt: DateTime.now().add(const Duration(hours: 4)),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        seasonNumber: 1,
       ),
-    );
-  }
+    ),
+    child: const CompetitiveSeasonScreen(),
+  );
+
+  static Widget completed() => ProviderScope(
+    overrides: _overrides(
+      season: CompetitiveSeason(
+        seasonId: 's0',
+        name: 'Legacy Void',
+        status: SeasonStatus.completed,
+        startAt: DateTime.now().subtract(const Duration(days: 60)),
+        endAt: DateTime.now().subtract(const Duration(days: 30)),
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        seasonNumber: 0,
+      ),
+    ),
+    child: const CompetitiveSeasonScreen(),
+  );
 }

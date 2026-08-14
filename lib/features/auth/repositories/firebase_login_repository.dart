@@ -8,7 +8,7 @@ import '../../../core/logging/logger_service.dart';
 class FirebaseLoginRepository implements LoginRepository {
   FirebaseLoginRepository({FirebaseAuth? auth, gsi.GoogleSignIn? googleSignIn})
     : _auth = auth ?? FirebaseAuth.instance,
-      _googleSignIn = googleSignIn ?? gsi.GoogleSignIn();
+      _googleSignIn = googleSignIn ?? gsi.GoogleSignIn.instance;
 
   final FirebaseAuth _auth;
   final gsi.GoogleSignIn _googleSignIn;
@@ -45,8 +45,15 @@ class FirebaseLoginRepository implements LoginRepository {
   Future<AuthenticationResult> loginWithGoogle() async {
     try {
       LoggerService.i('Starting Google Sign-In...', feature: 'Auth');
-      final dynamic signInFuture = _googleSignIn.signIn();
-      final gsi.GoogleSignInAccount? googleUser = await signInFuture;
+
+      // Initialize Google Sign In (Required in v7.x+)
+      await _googleSignIn.initialize(
+        serverClientId:
+            '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
+      );
+
+      final gsi.GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
 
       if (googleUser == null) {
         LoggerService.i('Google Sign-In cancelled by user', feature: 'Auth');
@@ -57,10 +64,20 @@ class FirebaseLoginRepository implements LoginRepository {
         'Google user authenticated: ${googleUser.email}',
         feature: 'Auth',
       );
-      final dynamic googleAuth = await googleUser.authentication;
+
+      final gsi.GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final String? idToken = googleAuth.idToken;
+
+      // In v7.x+, accessToken is retrieved via the authorizationClient.
+      final gsi.GoogleSignInClientAuthorization authz = await googleUser
+          .authorizationClient
+          .authorizeScopes(['email', 'profile']);
+      final String? accessToken = authz.accessToken;
+
       final credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-        accessToken: googleAuth.accessToken,
+        idToken: idToken,
+        accessToken: accessToken,
       );
 
       final userCredential = await _auth.signInWithCredential(credential);

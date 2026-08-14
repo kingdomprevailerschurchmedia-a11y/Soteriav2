@@ -12,7 +12,7 @@ import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/presentation/providers/public_profile_providers.dart';
 import '../../../player/providers/player_providers.dart';
 import '../providers/matchmaking_providers.dart';
-import '../domain/models/matchmaking_status.dart';
+import '../../domain/models/matchmaking_status.dart';
 
 class MatchFoundScreen extends ConsumerWidget {
   const MatchFoundScreen({super.key});

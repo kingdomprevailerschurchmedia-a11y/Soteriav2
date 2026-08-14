@@ -12,6 +12,7 @@ abstract class IdentityRepository {
   Future<void> saveSession(UserSession session);
   Future<void> clearSession();
   Future<void> updateUserProfile(String uid, UserProfile profile);
+  Future<String> uploadProfilePicture(String uid, String filePath);
 }
 
 class MockIdentityRepository implements IdentityRepository {
@@ -41,4 +42,7 @@ class MockIdentityRepository implements IdentityRepository {
 
   @override
   Future<void> updateUserProfile(String uid, UserProfile profile) async {}
+
+  @override
+  Future<String> uploadProfilePicture(String uid, String filePath) async => '';
 }

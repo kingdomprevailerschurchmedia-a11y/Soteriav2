@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../question_content/domain/entities/category.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
 import 'challenge_providers.dart';
-import '../../../../features/dashboard/presentation/providers/practice_lobby_providers.dart';
+import '../../../question_content/presentation/providers/category_providers.dart';
 
 class ChallengeLobbyState {
   final Category? category;

@@ -17,6 +17,13 @@ final playerRewardsProvider = StreamProvider<List<RewardGrant>>((ref) {
   return ref.watch(rewardRepositoryProvider).watchPlayerRewards(userId);
 });
 
+final seasonRewardDefinitionsProvider = FutureProvider.family<List<SeasonRewardDefinition>, String>((
+  ref,
+  seasonId,
+) async {
+  return ref.watch(rewardRepositoryProvider).getRewardDefinitions(seasonId);
+});
+
 final seasonRewardsProvider = FutureProvider.family<List<RewardGrant>, String>((
   ref,
   seasonId,

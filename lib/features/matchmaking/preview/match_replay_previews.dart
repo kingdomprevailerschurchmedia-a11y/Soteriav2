@@ -4,10 +4,10 @@ import '../domain/models/competitive_match_result.dart';
 import '../domain/models/competitive_match_replay.dart';
 import '../presentation/providers/match_result_providers.dart';
 import '../presentation/screens/competitive_match_replay_screen.dart';
-import '../../../gameplay_engine/models/game_result.dart';
-import '../../../gameplay_engine/answer/models/answer_result.dart';
-import '../../../gameplay_engine/answer/models/answer_decision.dart';
-import '../../../question_content/domain/entities/question.dart';
+import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
+import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
+import 'package:soteria/features/question_content/domain/entities/question.dart';
 
 class MatchReplayPreviews {
   static Widget standard() => ProviderScope(

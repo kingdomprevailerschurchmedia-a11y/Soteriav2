@@ -13,7 +13,7 @@ enum MatchOutcome {
 }
 
 @freezed
-class CompetitiveMatchResult with _$CompetitiveMatchResult {
+abstract class CompetitiveMatchResult with _$CompetitiveMatchResult {
   const factory CompetitiveMatchResult({
     required String matchId,
     required String playerId,

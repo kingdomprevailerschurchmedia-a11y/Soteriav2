@@ -84,14 +84,34 @@ final playerBootstrapStatusProvider = FutureProvider<void>((ref) async {
   }
 });
 
-/// A provider that synchronizes the avatar selection between [UserProfile] and [PlayerProfile].
-/// This ensures that changes made in the [AvatarSelectionScreen] are reflected in the game profile.
+/// A provider that synchronizes the avatar selection and profile picture between [UserProfile] and [PlayerProfile].
+/// This ensures that changes made in the [AvatarSelectionDialog] are reflected across both identity models.
 final playerAvatarSyncProvider = Provider<void>((ref) {
-  ref.listen<String>(selectedAvatarIdProvider, (previous, next) async {
-    final player = ref.read(currentPlayerProvider);
-    if (player != null && player.selectedAvatarId != next) {
-      final updatedPlayer = player.copyWith(selectedAvatarId: next);
-      await ref.read(updatePlayerProfileUseCaseProvider).execute(updatedPlayer);
-    }
-  });
+  // Sync Avatar ID
+  ref.listen<String?>(
+    profileProvider.select((p) => p?.selectedAvatarId),
+    (previous, next) async {
+      if (next != null) {
+        final player = ref.read(currentPlayerProvider);
+        if (player != null && player.selectedAvatarId != next) {
+          final updatedPlayer = player.copyWith(selectedAvatarId: next);
+          await ref.read(updatePlayerProfileUseCaseProvider).execute(updatedPlayer);
+        }
+      }
+    },
+  );
+
+  // Sync Custom Avatar URL
+  ref.listen<String?>(
+    profileProvider.select((p) => p?.avatarUrl),
+    (previous, next) async {
+      if (next != null) {
+        final player = ref.read(currentPlayerProvider);
+        if (player != null && player.photoUrl != next) {
+          final updatedPlayer = player.copyWith(photoUrl: next);
+          await ref.read(updatePlayerProfileUseCaseProvider).execute(updatedPlayer);
+        }
+      }
+    },
+  );
 });

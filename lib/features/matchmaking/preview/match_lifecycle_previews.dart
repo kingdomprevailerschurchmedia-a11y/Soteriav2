@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../gameplay_engine/models/versus_match.dart';
+import 'package:soteria/features/gameplay_engine/models/versus_match.dart';
 import '../domain/models/competitive_match_result.dart';
 import '../presentation/providers/match_lifecycle_providers.dart';
 import '../presentation/providers/match_result_providers.dart';
 import '../presentation/screens/versus_match_orchestrator.dart';
 import '../presentation/screens/competitive_match_result_screen.dart';
-import '../../../gameplay_engine/models/game_result.dart';
-import '../../../gameplay_engine/progression/models/reward_summary.dart';
+import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/progression/models/reward_summary.dart';
 
 class MatchLifecyclePreviews {
   static Widget ready() => ProviderScope(

@@ -41,6 +41,7 @@ enum NotificationType {
 @immutable
 class AppNotification {
   final String id;
+  final String? userId;
   final String title;
   final String body;
   final NotificationType type;
@@ -53,6 +54,7 @@ class AppNotification {
 
   const AppNotification({
     required this.id,
+    this.userId,
     required this.title,
     required this.body,
     required this.type,
@@ -64,9 +66,10 @@ class AppNotification {
     this.imageUrl,
   });
 
-  AppNotification copyWith({bool? read}) {
+  AppNotification copyWith({bool? read, String? userId}) {
     return AppNotification(
       id: id,
+      userId: userId ?? this.userId,
       title: title,
       body: body,
       type: type,
@@ -81,6 +84,7 @@ class AppNotification {
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'userId': userId,
     'title': title,
     'body': body,
     'type': type.name,
@@ -95,6 +99,7 @@ class AppNotification {
   factory AppNotification.fromJson(Map<String, dynamic> json) =>
       AppNotification(
         id: json['id'],
+        userId: json['userId'],
         title: json['title'],
         body: json['body'],
         type: NotificationType.fromString(json['type']),

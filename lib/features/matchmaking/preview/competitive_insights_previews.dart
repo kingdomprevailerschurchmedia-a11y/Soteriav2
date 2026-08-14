@@ -3,8 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/services/competitive_insights_service.dart';
 import '../presentation/providers/match_result_providers.dart';
 import '../presentation/screens/competitive_insights_screen.dart';
-import '../../../analytics/domain/models/performance_trend.dart';
-import '../../../player/domain/models/competitive_result.dart';
+import 'package:soteria/features/analytics/domain/models/performance_trend.dart';
+import 'package:soteria/features/player/domain/models/competitive_result.dart';
 
 class CompetitiveInsightsPreviews {
   static Widget standard() => ProviderScope(

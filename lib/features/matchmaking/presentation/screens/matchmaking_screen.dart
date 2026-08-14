@@ -8,7 +8,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/matchmaking_providers.dart';
-import '../domain/models/matchmaking_status.dart';
+import '../../domain/models/matchmaking_status.dart';
 
 class MatchmakingScreen extends ConsumerWidget {
   const MatchmakingScreen({super.key});

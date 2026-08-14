@@ -55,9 +55,9 @@ class VersusLobbyScreen extends ConsumerWidget {
                             SizedBox(height: SoteriaSpacing.xl),
                             ref.watch(rankProgressProvider).when(
                               data: (rank) => MatchmakingRankCard(
-                                rankName: rank.currentRank.name,
-                                tier: rank.currentRank.tier.name,
-                                points: rank.currentPoints,
+                                rankName: rank.currentRank,
+                                tier: rank.tier.name,
+                                points: rank.currentRP,
                               ),
                               loading: () => const SizedBox.shrink(),
                               error: (_, __) => const SizedBox.shrink(),
