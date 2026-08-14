@@ -9,11 +9,13 @@ import '../../../domain/models/player_profile.dart';
 class CareerSummaryCard extends StatelessWidget {
   final CompetitiveHistory history;
   final PlayerProfile identity;
+  final VoidCallback? onTap;
 
   const CareerSummaryCard({
     super.key,
     required this.history,
     required this.identity,
+    this.onTap,
   });
 
   @override
@@ -23,6 +25,7 @@ class CareerSummaryCard extends StatelessWidget {
         : '0.0';
 
     return SoteriaCard(
+      onTap: onTap,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

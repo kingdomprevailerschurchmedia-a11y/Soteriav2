@@ -53,7 +53,7 @@ class SocialPreviews extends StatelessWidget {
           ListTile(
             title: const Text('Head-to-Head Screen'),
             onTap: () => _show(context, const HeadToHeadScreen(rivalId: 'rival_alex'), overrides: [
-              headToHeadProvider('rival_alex').overrideWith((ref) => Future.value(RivalryFixtures.rivalry())),
+              headToHeadProvider('rival_alex').overrideWith((ref) => Future.value(RivalryFixtures.headToHeadSummary())),
               headToHeadMatchesProvider('rival_alex').overrideWith((ref) => Future.value([])),
             ]),
           ),

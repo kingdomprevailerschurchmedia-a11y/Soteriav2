@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
-import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
-import '../../../../core/avatar/data/avatar_catalog.dart';
-import '../../../../core/widgets/glass_surface.dart';
-import '../../../player/presentation/providers/public_profile_providers.dart';
-import '../../../player/presentation/widgets/match_history/competitive_match_history_card.dart';
-import '../../../player/domain/models/competitive_result.dart';
-import '../providers/rivalry_providers.dart';
+import 'package:go_router/go_router.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
+import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
+import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/data/avatar_catalog.dart';
+import 'package:soteria/core/widgets/glass_surface.dart';
+import 'package:soteria/features/player/presentation/providers/public_profile_providers.dart';
+import 'package:soteria/features/player/presentation/widgets/match_history/competitive_match_history_card.dart';
+import 'package:soteria/features/player/domain/models/competitive_result.dart';
+import 'package:soteria/features/social/domain/models/head_to_head_summary.dart';
+import 'package:soteria/features/social/presentation/providers/rivalry_providers.dart';
 
 class HeadToHeadScreen extends ConsumerWidget {
   final String rivalId;
@@ -20,7 +22,7 @@ class HeadToHeadScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final rivalryAsync = ref.watch(headToHeadProvider(rivalId));
+    final summaryAsync = ref.watch(headToHeadProvider(rivalId));
     final matchesAsync = ref.watch(headToHeadMatchesProvider(rivalId));
     final rivalProfileAsync = ref.watch(publicProfileProvider(rivalId));
 
@@ -40,11 +42,13 @@ class HeadToHeadScreen extends ConsumerWidget {
                 children: [
                   _buildVersusHeader(context, rivalProfileAsync),
                   SizedBox(height: SoteriaSpacing.lg),
-                  rivalryAsync.when(
-                    data: (rivalry) => _buildStatsSummary(context, rivalry),
+                  summaryAsync.when(
+                    data: (summary) => _buildStatsSummary(context, summary),
                     loading: () => const Center(child: CircularProgressIndicator()),
                     error: (err, _) => Text('Error loading stats: $err'),
                   ),
+                  SizedBox(height: SoteriaSpacing.xl),
+                  _buildActions(context),
                 ],
               ),
             ),
@@ -118,39 +122,69 @@ class HeadToHeadScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildStatsSummary(BuildContext context, dynamic rivalry) {
+  Widget _buildStatsSummary(BuildContext context, HeadToHeadSummary summary) {
     return Column(
       children: [
         GlassSurface(
           borderRadius: BorderRadius.circular(16.r),
           padding: EdgeInsets.all(SoteriaSpacing.lg),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+          child: Column(
             children: [
-              _StatItem(label: 'YOU', value: rivalry.wins.toString()),
-              _StatItem(label: 'MATCHES', value: rivalry.matchesPlayed.toString(), isMuted: true),
-              _StatItem(label: 'RIVAL', value: rivalry.losses.toString()),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _StatItem(label: 'YOU', value: summary.playerAWins.toString()),
+                  _StatItem(label: 'MATCHES', value: summary.totalMatches.toString(), isMuted: true),
+                  _StatItem(label: 'RIVAL', value: summary.playerBWins.toString()),
+                ],
+              ),
+              const Divider(color: SoteriaColors.border, height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _StatDetail(label: 'WIN RATE', value: '${(summary.playerAWinRate * 100).toInt()}%'),
+                  _StatDetail(label: 'STREAK', value: summary.playerACurrentStreak.toString(), 
+                    color: summary.playerACurrentStreak > 0 ? SoteriaColors.success : null),
+                ],
+              ),
             ],
           ),
         ),
         SizedBox(height: SoteriaSpacing.md),
-        if (rivalry.recentForm.isNotEmpty)
+        if (summary.recentResults.isNotEmpty)
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('FORM: ', style: context.labelSmall.copyWith(color: SoteriaColors.muted)),
-              ...rivalry.recentForm.map<Widget>((outcome) => Container(
+              Text('RECENT: ', style: context.labelSmall.copyWith(color: SoteriaColors.muted)),
+              ...summary.recentResults.map<Widget>((outcome) => Container(
                 margin: const EdgeInsets.symmetric(horizontal: 2),
                 width: 12,
                 height: 12,
                 decoration: BoxDecoration(
-                  color: outcome == CompetitiveOutcome.win ? SoteriaColors.success : SoteriaColors.error,
+                  color: outcome == CompetitiveOutcome.win ? SoteriaColors.success : 
+                        (outcome == CompetitiveOutcome.loss ? SoteriaColors.error : SoteriaColors.muted),
                   shape: BoxShape.circle,
                 ),
-              )).toList(),
+              )),
             ],
           ),
       ],
+    );
+  }
+
+  Widget _buildActions(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton.icon(
+        onPressed: () => context.push('/challenges/create?opponentId=$rivalId'),
+        icon: const Icon(Icons.bolt),
+        label: const Text('CHALLENGE AGAIN'),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: SoteriaColors.primary,
+          padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+        ),
+      ),
     );
   }
 }
@@ -168,6 +202,24 @@ class _StatItem extends StatelessWidget {
       children: [
         Text(value, style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900, color: isMuted ? SoteriaColors.muted : Colors.white)),
         Text(label, style: context.labelSmall.copyWith(color: SoteriaColors.muted)),
+      ],
+    );
+  }
+}
+
+class _StatDetail extends StatelessWidget {
+  final String label;
+  final String value;
+  final Color? color;
+
+  const _StatDetail({required this.label, required this.value, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(value, style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold, color: color ?? Colors.white)),
+        Text(label, style: context.labelSmall.copyWith(color: SoteriaColors.muted, fontSize: 10)),
       ],
     );
   }

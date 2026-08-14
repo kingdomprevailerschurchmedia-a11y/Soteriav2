@@ -44,6 +44,7 @@ void main() {
       final now = DateTime.now();
       final goal = CompetitiveGoal(
         id: 'g1',
+        userId: 'u1',
         type: GoalType.daily,
         category: GoalCategory.gameCount,
         title: 'Play Games',
@@ -124,6 +125,7 @@ void main() {
       final now = DateTime.now();
       final goal = CompetitiveGoal(
         id: 'g2',
+        userId: 'u1',
         type: GoalType.daily,
         category: GoalCategory.win,
         title: 'Win Games',
@@ -172,6 +174,89 @@ void main() {
 
       expect(updated.first.status, GoalStatus.completed);
       expect(updated.first.currentProgress, 1.0);
+    });
+
+    test('should calculate progress for rank goal', () {
+      final now = DateTime.now();
+      final goal = CompetitiveGoal(
+        id: 'g3',
+        userId: 'u1',
+        type: GoalType.career,
+        category: GoalCategory.rank,
+        title: 'Reach Gold',
+        description: 'Reach Gold tier',
+        target: 1,
+        currentProgress: 0,
+        status: GoalStatus.active,
+        startAt: now.subtract(const Duration(days: 1)),
+        endAt: now.add(const Duration(days: 30)),
+        metadata: {'targetTier': 'Gold'},
+      );
+
+      final updated = service.evaluate(
+        activeGoals: [goal],
+        recentResults: [],
+        statistics: mockStats,
+        progression: mockProgression.copyWith(currentRankTier: 'Gold'),
+      );
+
+      expect(updated.first.currentProgress, 1.0);
+      expect(updated.first.status, GoalStatus.completed);
+    });
+
+    test('should NOT complete rank goal if tier is lower', () {
+      final now = DateTime.now();
+      final goal = CompetitiveGoal(
+        id: 'g3',
+        userId: 'u1',
+        type: GoalType.career,
+        category: GoalCategory.rank,
+        title: 'Reach Platinum',
+        description: 'Reach Platinum tier',
+        target: 1,
+        currentProgress: 0,
+        status: GoalStatus.active,
+        startAt: now.subtract(const Duration(days: 1)),
+        endAt: now.add(const Duration(days: 30)),
+        metadata: {'targetTier': 'Platinum'},
+      );
+
+      final updated = service.evaluate(
+        activeGoals: [goal],
+        recentResults: [],
+        statistics: mockStats,
+        progression: mockProgression.copyWith(currentRankTier: 'Gold'),
+      );
+
+      expect(updated, isEmpty);
+    });
+
+    test('should update streak goal progress', () {
+      final now = DateTime.now();
+      final goal = CompetitiveGoal(
+        id: 'g4',
+        userId: 'u1',
+        type: GoalType.career,
+        category: GoalCategory.streak,
+        title: 'Hot Streak',
+        description: 'Achieve a 5-win streak',
+        target: 5,
+        currentProgress: 0,
+        status: GoalStatus.active,
+        startAt: now.subtract(const Duration(days: 1)),
+        endAt: now.add(const Duration(days: 30)),
+      );
+
+      final updated = service.evaluate(
+        activeGoals: [goal],
+        recentResults: [],
+        statistics: mockStats.copyWith(
+          career: mockStats.career.copyWith(currentStreak: 3),
+        ),
+        progression: mockProgression,
+      );
+
+      expect(updated.first.currentProgress, 3.0);
     });
   });
 }

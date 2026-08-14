@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/models/competitive_challenge.dart';
 import '../../domain/repositories/challenge_repository.dart';
-import '../../../gameplay_engine/models/versus_match.dart';
-import 'package:uuid/uuid.dart';
 
 class FirebaseChallengeRepository implements ChallengeRepository {
   final FirebaseFirestore _firestore;
@@ -12,9 +10,6 @@ class FirebaseChallengeRepository implements ChallengeRepository {
   CollectionReference<Map<String, dynamic>> get _challenges =>
       _firestore.collection('challenges');
 
-  CollectionReference<Map<String, dynamic>> get _matches =>
-      _firestore.collection('versus_matches');
-
   @override
   Future<void> sendChallenge(CompetitiveChallenge challenge) async {
     await _challenges.doc(challenge.challengeId).set(challenge.toJson());
@@ -22,54 +17,23 @@ class FirebaseChallengeRepository implements ChallengeRepository {
 
   @override
   Future<void> acceptChallenge(String challengeId) async {
-    await _firestore.runTransaction((transaction) async {
-      final challengeDoc = _challenges.doc(challengeId);
-      final snapshot = await transaction.get(challengeDoc);
-
-      if (!snapshot.exists) throw Exception('Challenge not found');
-      
-      final challenge = CompetitiveChallenge.fromJson(snapshot.data()!);
-      
-      if (challenge.status != ChallengeStatus.pending) {
-        throw Exception('Challenge is no longer pending');
-      }
-
-      if (challenge.expiresAt.isBefore(DateTime.now())) {
-        transaction.update(challengeDoc, {'status': 'expired'});
-        throw Exception('Challenge has expired');
-      }
-
-      final matchId = const Uuid().v4();
-      final match = VersusMatch(
-        matchId: matchId,
-        playerAId: challenge.challengerId,
-        playerBId: challenge.challengedPlayerId,
-        status: MatchStatus.created,
-        createdAt: DateTime.now(),
-        mode: challenge.mode,
-        configuration: challenge.configuration,
-      );
-
-      transaction.update(challengeDoc, {
-        'status': 'accepted',
-        'matchId': matchId,
-      });
-
-      transaction.set(_matches.doc(matchId), match.toJson());
+    await _challenges.doc(challengeId).update({
+      'status': ChallengeStatus.active.name,
+      'startAt': FieldValue.serverTimestamp(),
     });
   }
 
   @override
   Future<void> declineChallenge(String challengeId) async {
     await _challenges.doc(challengeId).update({
-      'status': 'declined',
+      'status': ChallengeStatus.declined.name,
     });
   }
 
   @override
   Future<void> cancelChallenge(String challengeId) async {
     await _challenges.doc(challengeId).update({
-      'status': 'cancelled',
+      'status': ChallengeStatus.cancelled.name,
     });
   }
 
@@ -77,7 +41,7 @@ class FirebaseChallengeRepository implements ChallengeRepository {
   Stream<List<CompetitiveChallenge>> watchIncomingChallenges(String userId) {
     return _challenges
         .where('challengedPlayerId', isEqualTo: userId)
-        .where('status', isEqualTo: 'pending')
+        .where('status', isEqualTo: ChallengeStatus.pending.name)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
@@ -89,11 +53,52 @@ class FirebaseChallengeRepository implements ChallengeRepository {
   Stream<List<CompetitiveChallenge>> watchOutgoingChallenges(String userId) {
     return _challenges
         .where('challengerId', isEqualTo: userId)
+        .where('status', isEqualTo: ChallengeStatus.pending.name)
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map((snapshot) => snapshot.docs
             .map((doc) => CompetitiveChallenge.fromJson(doc.data()))
             .toList());
+  }
+
+  @override
+  Stream<List<CompetitiveChallenge>> watchActiveChallenges(String userId) {
+    // Challenges where the user is either challenger or opponent and status is active
+    return _firestore.collectionGroup('challenges') 
+        .where('status', isEqualTo: ChallengeStatus.active.name)
+        .snapshots()
+        .map((snapshot) {
+          final challenges = snapshot.docs
+              .map((doc) => CompetitiveChallenge.fromJson(doc.data()))
+              .toList();
+          return challenges.where((c) => c.challengerId == userId || c.challengedPlayerId == userId).toList();
+        });
+  }
+
+  @override
+  Future<List<CompetitiveChallenge>> getChallengeHistory(String userId) async {
+    final challengerQuery = await _challenges
+        .where('challengerId', isEqualTo: userId)
+        .where('status', whereIn: [
+          ChallengeStatus.completed.name,
+          ChallengeStatus.expired.name,
+          ChallengeStatus.declined.name,
+        ])
+        .get();
+
+    final opponentQuery = await _challenges
+        .where('challengedPlayerId', isEqualTo: userId)
+        .where('status', whereIn: [
+          ChallengeStatus.completed.name,
+          ChallengeStatus.expired.name,
+          ChallengeStatus.declined.name,
+        ])
+        .get();
+
+    final allDocs = [...challengerQuery.docs, ...opponentQuery.docs];
+    final challenges = allDocs.map((doc) => CompetitiveChallenge.fromJson(doc.data())).toList();
+    challenges.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return challenges;
   }
 
   @override

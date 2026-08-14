@@ -12,4 +12,10 @@ abstract interface class GoalRepository {
 
   /// Generates or fetches initial goals for a new period (day/week).
   Future<List<CompetitiveGoal>> refreshGoals(String userId);
+
+  /// Creates a new goal for a user.
+  Future<void> createGoal(CompetitiveGoal goal);
+
+  /// Deletes a goal.
+  Future<void> deleteGoal(String userId, String goalId);
 }

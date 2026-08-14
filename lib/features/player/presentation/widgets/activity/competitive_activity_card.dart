@@ -11,7 +11,12 @@ import '../../../domain/models/competitive_activity_event.dart';
 import '../../../domain/models/competitive_event.dart';
 import 'package:intl/intl.dart';
 
-class CompetitiveActivityCard extends StatelessWidget {
+import '../../presentation/providers/public_profile_providers.dart';
+import '../../presentation/widgets/presence/player_presence_indicator.dart';
+import '../../../../auth/providers/auth_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class CompetitiveActivityCard extends ConsumerWidget {
   final CompetitiveActivityEvent event;
   final bool isLast;
   final VoidCallback? onTap;
@@ -24,8 +29,11 @@ class CompetitiveActivityCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final color = _getImportanceColor();
+    final currentUserId = ref.watch(authRepositoryProvider).currentUserId;
+    final isMe = event.userId == currentUserId;
+    final profileAsync = ref.watch(publicProfileProvider(event.userId));
 
     return IntrinsicHeight(
       child: Row(
@@ -61,12 +69,58 @@ class CompetitiveActivityCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            _buildTypeIcon(color),
+                            profileAsync.when(
+                              data: (profile) => Stack(
+                                clipBehavior: Visibility.visible,
+                                children: [
+                                  CircleAvatar(
+                                    radius: 18.r,
+                                    backgroundColor: SoteriaColors.surface,
+                                    backgroundImage: profile?.photoUrl != null 
+                                      ? NetworkImage(profile!.photoUrl!) 
+                                      : null,
+                                    child: profile?.photoUrl == null 
+                                      ? Icon(Icons.person, color: SoteriaColors.muted, size: 20.sp)
+                                      : null,
+                                  ),
+                                  Positioned(
+                                    right: -2,
+                                    bottom: -2,
+                                    child: PlayerPresenceIndicator(userId: event.userId, size: 10),
+                                  ),
+                                ],
+                              ),
+                              loading: () => CircleAvatar(radius: 18.r, backgroundColor: SoteriaColors.surface),
+                              error: (_, __) => CircleAvatar(radius: 18.r, backgroundColor: SoteriaColors.surface),
+                            ),
                             SizedBox(width: SoteriaSpacing.md),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  Row(
+                                    children: [
+                                      profileAsync.when(
+                                        data: (profile) => Text(
+                                          isMe ? 'YOU' : (profile?.displayName ?? 'Player'),
+                                          style: context.labelSmall.copyWith(
+                                            color: isMe ? SoteriaColors.primary : SoteriaColors.muted,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        loading: () => const Text('...'),
+                                        error: (_, __) => const Text('Player'),
+                                      ),
+                                      const Spacer(),
+                                      Text(
+                                        _formatRelativeDate(event.createdAt),
+                                        style: context.labelSmall.copyWith(
+                                          color: SoteriaColors.muted.withValues(alpha: 0.5),
+                                          fontSize: 9.sp,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   Text(
                                     event.title,
                                     style: context.titleSmall.copyWith(
@@ -75,13 +129,6 @@ class CompetitiveActivityCard extends StatelessWidget {
                                           ? SoteriaColors.gold
                                           : SoteriaColors.textPrimary,
                                       letterSpacing: 0.5,
-                                    ),
-                                  ),
-                                  Text(
-                                    _formatRelativeDate(event.createdAt),
-                                    style: context.labelSmall.copyWith(
-                                      color: SoteriaColors.muted,
-                                      fontSize: 10.sp,
                                     ),
                                   ),
                                 ],

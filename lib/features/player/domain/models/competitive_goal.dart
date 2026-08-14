@@ -21,6 +21,7 @@ enum GoalStatus { locked, active, completed, expired, claimed }
 abstract class CompetitiveGoal with _$CompetitiveGoal {
   const factory CompetitiveGoal({
     required String id,
+    required String userId,
     required GoalType type,
     required GoalCategory category,
     required String title,
@@ -30,6 +31,7 @@ abstract class CompetitiveGoal with _$CompetitiveGoal {
     required GoalStatus status,
     required DateTime startAt,
     required DateTime endAt,
+    DateTime? completedAt,
     String? seasonId,
     String? rewardId,
     @Default({}) Map<String, dynamic> metadata,

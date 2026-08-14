@@ -31,6 +31,10 @@ import 'package:soteria/features/player/presentation/widgets/profile/statistic_c
 import 'package:soteria/features/player/presentation/widgets/season_result_card.dart';
 import 'package:soteria/features/player/presentation/widgets/season_result_details.dart';
 
+import 'package:soteria/features/player/presentation/screens/competitive_career_screen.dart';
+
+import 'package:soteria/features/player/presentation/widgets/profile/next_goal_section.dart';
+
 class CompetitiveProfileScreen extends ConsumerWidget {
   const CompetitiveProfileScreen({super.key});
 
@@ -103,6 +107,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
                 error: (_, _) => const SizedBox.shrink(),
               ),
           SizedBox(height: SoteriaSpacing.lg),
+          const NextGoalSection(),
           goalsAsync.when(
             data: (goals) => SoteriaSlideUp(
               delay: const Duration(milliseconds: 50),
@@ -137,6 +142,11 @@ class CompetitiveProfileScreen extends ConsumerWidget {
             child: CareerSummaryCard(
               history: profile.history,
               identity: profile.identity,
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const CompetitiveCareerScreen(),
+                ),
+              ),
             ),
           ),
           SizedBox(height: SoteriaSpacing.lg),

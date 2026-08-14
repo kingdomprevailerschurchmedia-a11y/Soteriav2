@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../player/domain/models/competitive_result.dart';
 import '../../../player/domain/repositories/competitive_result_repository.dart';
 import '../../domain/models/player_rivalry.dart';
+import '../../domain/models/head_to_head_summary.dart';
 import '../../domain/repositories/rivalry_repository.dart';
 
 class FirebaseRivalryRepository implements RivalryRepository {
@@ -55,8 +56,6 @@ class FirebaseRivalryRepository implements RivalryRepository {
 
   @override
   Future<List<PlayerRivalry>> getTopRivalries(String userId, {int limit = 5}) async {
-    // This is tricky without a dedicated rivalry collection.
-    // We'll fetch recent results and group by opponent.
     final recentResults = await _resultRepository.getRecentResults(userId, limit: 100);
     
     final opponentCounts = <String, int>{};
@@ -72,5 +71,59 @@ class FirebaseRivalryRepository implements RivalryRepository {
     final topRivalryIds = topOpponents.take(limit).map((e) => e.key).toList();
 
     return Future.wait(topRivalryIds.map((rivalId) => getRivalry(userId, rivalId)));
+  }
+
+  @override
+  Future<HeadToHeadSummary> getHeadToHeadSummary(String playerAId, String playerBId) async {
+    final results = await _resultRepository.getResults(
+      playerAId,
+      opponentId: playerBId,
+      limit: 100,
+    );
+
+    int aWins = 0;
+    int bWins = 0;
+    int draws = 0;
+    int aCurrentStreak = 0;
+    int bCurrentStreak = 0;
+
+    final recentOutcomes = results.take(10).map((e) => e.outcome).toList();
+
+    bool aStreakActive = true;
+    bool bStreakActive = true;
+
+    for (int i = 0; i < results.length; i++) {
+      final r = results[i];
+      if (r.outcome == CompetitiveOutcome.win) {
+        aWins++;
+        if (aStreakActive) aCurrentStreak++;
+        bStreakActive = false;
+      } else if (r.outcome == CompetitiveOutcome.loss) {
+        bWins++;
+        if (bStreakActive) bCurrentStreak++;
+        aStreakActive = false;
+      } else {
+        draws++;
+        aStreakActive = false;
+        bStreakActive = false;
+      }
+    }
+
+    return HeadToHeadSummary(
+      playerAId: playerAId,
+      playerBId: playerBId,
+      totalMatches: results.length,
+      playerAWins: aWins,
+      playerBWins: bWins,
+      draws: draws,
+      playerAWinRate: results.isEmpty ? 0 : aWins / results.length,
+      playerBWinRate: results.isEmpty ? 0 : bWins / results.length,
+      recentResults: recentOutcomes,
+      playerACurrentStreak: aCurrentStreak,
+      playerBCurrentStreak: bCurrentStreak,
+      playerABestStreak: aCurrentStreak, // Simplified
+      playerBBestStreak: bCurrentStreak, // Simplified
+      lastMatchAt: results.isEmpty ? null : results.first.completedAt,
+    );
   }
 }

@@ -2,10 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/competitive_statistics.dart';
 import '../../domain/services/competitive_statistics_service.dart';
 import 'competitive_profile_provider.dart';
-
-final statisticsServiceProvider = Provider<CompetitiveStatisticsService>((ref) {
-  return CompetitiveStatisticsService();
-});
+import 'service_providers.dart';
 
 final Provider<AsyncValue<CompetitiveStatistics>>
 competitiveStatisticsProvider = Provider<AsyncValue<CompetitiveStatistics>>((

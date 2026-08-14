@@ -36,6 +36,7 @@ class GoalPreviews {
     return [
       CompetitiveGoal(
         id: '1',
+        userId: 'u1',
         type: GoalType.daily,
         category: GoalCategory.gameCount,
         title: 'Daily Participation',
@@ -48,6 +49,7 @@ class GoalPreviews {
       ),
       CompetitiveGoal(
         id: '2',
+        userId: 'u1',
         type: GoalType.daily,
         category: GoalCategory.win,
         title: 'Winner',
@@ -60,6 +62,7 @@ class GoalPreviews {
       ),
       CompetitiveGoal(
         id: '3',
+        userId: 'u1',
         type: GoalType.weekly,
         category: GoalCategory.win,
         title: 'Weekly Dominance',
@@ -70,6 +73,20 @@ class GoalPreviews {
         startAt: now,
         endAt: nextWeek,
         rewardId: 'rew_123',
+      ),
+      CompetitiveGoal(
+        id: '4',
+        userId: 'u1',
+        type: GoalType.career,
+        category: GoalCategory.rank,
+        title: 'Reach Gold I',
+        description: 'Climb to the top of Gold tier.',
+        target: 1,
+        currentProgress: 0,
+        status: GoalStatus.active,
+        startAt: now,
+        endAt: now.add(const Duration(days: 30)),
+        metadata: {'targetTier': 'Gold I'},
       ),
     ];
   }

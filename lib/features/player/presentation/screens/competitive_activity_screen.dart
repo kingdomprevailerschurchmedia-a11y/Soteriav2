@@ -60,7 +60,7 @@ class _CompetitiveActivityScreenState
 
     return SafeGradientScaffold(
       appBar: AppBar(
-        title: const Text('CAREER TIMELINE'),
+        title: const Text('COMPETITIVE FEED'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
@@ -68,6 +68,12 @@ class _CompetitiveActivityScreenState
           fontWeight: FontWeight.w900,
           letterSpacing: 2,
         ),
+        actions: [
+          IconButton(
+            onPressed: () => ref.read(activityFeedProvider(userId).notifier).loadInitial(),
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -91,10 +97,10 @@ class _CompetitiveActivityScreenState
     if (events.isEmpty) {
       return Center(
         child: SoteriaEmptyState(
-          title: 'Journey Starting',
+          title: 'Quiet Field',
           subtitle:
-              'Your competitive accomplishments will appear here. Play your first game to start your timeline.',
-          icon: Icons.timeline_rounded,
+              'Activities from your network will appear here. Start competing to liven up your feed.',
+          icon: Icons.rss_feed_rounded,
           actionLabel: 'START COMPETING',
           onActionPressed: () => context.go('/app/practice'),
         ),
@@ -120,7 +126,7 @@ class _CompetitiveActivityScreenState
         itemCount: timelineItems.length + (hasMore ? 1 : 0),
         itemBuilder: (context, index) {
           if (index == timelineItems.length) {
-            return hasMore ? _buildLoadMoreIndicator() : _buildEndOfList();
+            return _buildLoadMoreIndicator();
           }
 
           final item = timelineItems[index];
@@ -130,7 +136,7 @@ class _CompetitiveActivityScreenState
 
           return CompetitiveActivityCard(
             event: item.event!,
-            isLast: _isLastInGlobalList(index, timelineItems, hasMore),
+            isLast: index == timelineItems.length - 1 || timelineItems[index + 1].isHeader,
             onTap: () => _showEventDetails(context, item.event!),
           );
         },

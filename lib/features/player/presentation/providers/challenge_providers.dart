@@ -22,6 +22,18 @@ final outgoingChallengesProvider = StreamProvider<List<CompetitiveChallenge>>((r
   return ref.watch(challengeRepositoryProvider).watchOutgoingChallenges(userId);
 });
 
+final activeChallengesProvider = StreamProvider<List<CompetitiveChallenge>>((ref) {
+  final userId = ref.watch(authRepositoryProvider).currentUserId;
+  if (userId == null) return Stream.value([]);
+  return ref.watch(challengeRepositoryProvider).watchActiveChallenges(userId);
+});
+
+final challengeHistoryProvider = FutureProvider<List<CompetitiveChallenge>>((ref) async {
+  final currentUserId = ref.watch(authRepositoryProvider).currentUserId;
+  if (currentUserId == null) return [];
+  return ref.watch(challengeRepositoryProvider).getChallengeHistory(currentUserId);
+});
+
 class ChallengeController extends StateNotifier<AsyncValue<void>> {
   ChallengeController(this.ref) : super(const AsyncValue.data(null));
 
@@ -29,20 +41,26 @@ class ChallengeController extends StateNotifier<AsyncValue<void>> {
 
   Future<void> sendChallenge({
     required String challengedPlayerId,
-    required Map<String, dynamic> configuration,
+    required ChallengeType type,
+    required double target,
+    required Duration duration,
+    Map<String, dynamic> configuration = const {},
   }) async {
     state = const AsyncValue.loading();
     try {
       final challengerId = ref.read(authRepositoryProvider).currentUserId;
       if (challengerId == null) throw Exception('User not authenticated');
+      if (challengerId == challengedPlayerId) throw Exception('You cannot challenge yourself');
 
       final challenge = CompetitiveChallenge(
         challengeId: const Uuid().v4(),
         challengerId: challengerId,
         challengedPlayerId: challengedPlayerId,
+        type: type,
+        target: target,
         status: ChallengeStatus.pending,
         createdAt: DateTime.now(),
-        expiresAt: DateTime.now().add(const Duration(hours: 24)),
+        expiresAt: DateTime.now().add(duration),
         configuration: configuration,
       );
 

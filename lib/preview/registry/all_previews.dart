@@ -30,6 +30,7 @@ import '../../../features/player/preview/personal_record_previews.dart';
 import '../../../features/notifications/preview/notification_previews.dart';
 import '../../../features/player/preview/activity_previews.dart';
 import '../../../features/player/preview/goal_previews.dart';
+import '../../../features/player/preview/mission_previews.dart';
 import '../../../features/player/preview/streak_previews.dart';
 import '../../../features/player/preview/match_history_previews.dart';
 import '../../../features/player/preview/reward_previews.dart';
@@ -129,10 +130,50 @@ void registerAllPreviews() {
   r.registerPreview(
     PreviewItem(
       id: 'competitive-goals',
-      title: 'Missions & Goals',
-      description: 'Active player objectives',
+      title: 'Competitive Goals',
+      description: 'Long-term player objectives',
       category: PreviewCategory.profile,
       builder: (context) => GoalPreviews.full(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-missions',
+      title: 'Competitive Missions',
+      description: 'Daily & Weekly objectives',
+      category: PreviewCategory.profile,
+      builder: (context) => MissionPreviews.full(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'mission-details',
+      title: 'Mission Details',
+      description: 'Objective deep dive',
+      category: PreviewCategory.profile,
+      builder: (context) => MissionPreviews.details(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'mission-history',
+      title: 'Mission History',
+      description: 'Completed career objectives',
+      category: PreviewCategory.profile,
+      builder: (context) => MissionPreviews.history(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'missions-empty',
+      title: 'Missions - Empty',
+      description: 'All caught up state',
+      category: PreviewCategory.profile,
+      builder: (context) => MissionPreviews.empty(),
     ),
   );
 
@@ -223,6 +264,26 @@ void registerAllPreviews() {
       description: 'Manage invitations',
       category: PreviewCategory.profile,
       builder: (context) => ChallengePreviews.center(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'challenge-create',
+      title: 'Create Challenge',
+      description: 'Send new showdown',
+      category: PreviewCategory.profile,
+      builder: (context) => ChallengePreviews.create(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'challenge-history',
+      title: 'Challenge History',
+      description: 'Past competitive results',
+      category: PreviewCategory.profile,
+      builder: (context) => ChallengePreviews.history(),
     ),
   );
 

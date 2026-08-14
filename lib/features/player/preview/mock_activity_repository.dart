@@ -8,8 +8,9 @@ class MockActivityRepository extends ActivityRepository {
   final bool _isLoading;
 
   @override
-  Future<List<CompetitiveActivityEvent>> getActivityEvents(
-    String userId, {
+  Future<List<CompetitiveActivityEvent>> getSocialActivityFeed(
+    String userId,
+    List<String> userIds, {
     int limit = 20,
     CompetitiveActivityEvent? lastEvent,
   }) async {
@@ -23,9 +24,9 @@ class MockActivityRepository extends ActivityRepository {
   Future<void> recordActivityEvent(CompetitiveActivityEvent event) async {}
 
   @override
-  Stream<List<CompetitiveActivityEvent>> watchRecentActivity(
-    String userId, {
-    int limit = 10,
+  Stream<List<CompetitiveActivityEvent>> watchSocialActivity(
+    List<String> userIds, {
+    int limit = 20,
   }) {
     return Stream.value(_events.take(limit).toList());
   }

@@ -1,55 +1,56 @@
-# Competitive Goals, Challenges & Objectives
+# Competitive Goals & Progression Roadmap
 
-Soteria provides players with dynamic and persistent competitive objectives to encourage participation and provide a sense of direction within the competitive ecosystem.
+This document outlines the goal system and progression roadmap in Soteria, designed to motivate players through clear, attainable objectives.
 
-## Architecture
+## Goal Architecture
 
-The Goal System is an **Observation & Evaluation Layer** that aggregates data from authoritative systems (Ranking, Statistics, Seasons, Gameplay) to track progress without duplicating primary data.
+Soteria uses a tiered goal system that automatically tracks progress from server-authoritative competitive data.
 
-### Data Flow
+### Goal Types
+- **Daily**: Short-term objectives (e.g., play 3 games).
+- **Weekly**: Medium-term challenges (e.g., win 10 matches).
+- **Seasonal**: Tied to the current competitive season (e.g., reach Gold I).
+- **Career**: Long-term milestones (e.g., achieve 90% all-time accuracy).
 
-```mermaid
-graph TD
-    STAT[Statistics System] --> EVAL[GoalEvaluationService]
-    RANK[Ranking System] --> EVAL
-    QUIZ[Quiz Results] --> EVAL
-    
-    EVAL --> |CompetitiveGoal| REPO[GoalRepository]
-    REPO --> |Firestore| DB[(users/{userId}/competitive_goals)]
-    
-    REPO --> |State| PROV[goalProviders]
-    PROV --> UI[CompetitiveGoalsScreen]
-```
+### Goal Categories
+- `win`: Number of competitive wins.
+- `gameCount`: Total games played.
+- `rank`: Specific rank tier targets.
+- `score`: Single match or total score targets.
+- `streak`: Win streak milestones.
+- `personalBest`: Breaking records (e.g., peak global position).
 
-## Goal Types
+## Progression Roadmap
 
-- **DAILY**: Short-term objectives refreshed every 24 hours (e.g., "Play 3 competitive games").
-- **WEEKLY**: Medium-term challenges (e.g., "Win 10 games this week").
-- **SEASONAL**: Objectives tied to the lifecycle of a specific season (e.g., "Reach Diamond Tier").
-- **CAREER**: Long-term milestones (e.g., "Reach 1,000 career wins").
+The Progression Roadmap provides a visual path of all competitive ranks in Soteria.
 
-## Evaluation Rules
+- **Current State**: Highlights the player's current rank and RP.
+- **Future Targets**: Shows upcoming tiers and the requirements to reach them.
+- **History**: Marks completed tiers.
 
-- **Game Count**: Tracks participation in competitive modes (Tournament, Versus, Pro).
-- **Wins**: Tracks successes based on performance ratings (S/A tier results).
-- **Rank**: Evaluates if the player has reached or exceeded a target Rank Tier.
-- **Personal Best**: Compares current performance against historical records in statistics.
-- **Streak**: Evaluates current or highest winning streaks.
+## Goal Evaluation
 
-## Implementation Details
+Goal progress is calculated deterministically by the `CompetitiveGoalEvaluationService` using:
+1. `QuizResult` history.
+2. `CompetitiveStatistics` (streaks, records).
+3. `PlayerProgression` (current rank, points).
 
-- **Authoritative Progress**: Progress is recalculated from raw game results and stats to ensure integrity. Evaluation occurs whenever authoritative providers emit new state.
-- **Idempotency**: Goal completion and reward distribution are idempotent to prevent duplicate grants.
-- **Expiration**: Goals use server-authoritative time to manage transition between Daily/Weekly periods.
-- **Deep Links**: Tapping a goal card routes the player back to the relevant feature (e.g., "Continue Mission" routes to the shell).
+Evaluation is triggered automatically after matches or when viewing the goals screen.
 
-## UI Components
+## Security & Integrity
 
-- **Missions & Goals Screen**: A dedicated dashboard categorized by period (Today, This Week, Season, Career).
-- **Goal Card**: Premium card with progress bars, type badges, and expiry timers.
-- **Profile Integration**: A summary card on the Competitive Profile showing high-level mission progress.
+- **Authoritative Data**: Goals are evaluated against server-verified match results.
+- **Immutable Progress**: The client cannot directly increment progress or mark goals as complete.
+- **Reward Claims**: Rewards are granted once per goal completion through an idempotent claim process.
 
-## Security
+## Privacy
 
-- **User Isolation**: Goal progress and status are strictly private to the owner.
-- **Server Authority**: While the client observes and evaluated for immediate feedback, authoritative completion and reward eligibility are determined by server-side logic in the production environment.
+- Goals are **private by default**.
+- Users can choose to share certain "Public Goals" (e.g., "Chasing Platinum") if supported by their privacy settings.
+- Private performance targets (e.g., "Improve Science Accuracy") are never exposed to others.
+
+## UI Integration
+
+- **Competitive Goals Screen**: The main hub for all missions and historical goals.
+- **Next Goal Section**: A compact hero card in the Competitive Profile showing the highest priority objective.
+- **Goal Details**: Deep dive into target values, deadlines, and rewards.

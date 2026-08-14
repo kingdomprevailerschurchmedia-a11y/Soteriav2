@@ -6,8 +6,47 @@ import '../models/season_result.dart';
 import '../models/competitive_season.dart';
 import '../models/competitive_match.dart';
 import '../models/competitive_result.dart';
+import '../models/competitive_career_summary.dart';
+import '../models/competitive_personal_record.dart';
 
 class CompetitiveStatisticsService {
+  CompetitiveCareerSummary calculateCareerSummary({
+    required String userId,
+    required PlayerProfile profile,
+    required CompetitiveHistory history,
+    required List<CompetitivePersonalRecord> records,
+    List<String> recentForm = const [],
+  }) {
+    final highestScoreRecord = records.firstWhere(
+      (r) => r.type == CompetitiveRecordType.highestScore && r.isCareerRecord,
+      orElse: () => CompetitivePersonalRecord(
+        id: '',
+        userId: userId,
+        type: CompetitiveRecordType.highestScore,
+        value: 0,
+        displayValue: '0',
+        achievedAt: DateTime.now(),
+      ),
+    );
+
+    return CompetitiveCareerSummary(
+      userId: userId,
+      totalSeasons: history.results.length,
+      bestRank: history.bestResult?.finalTier ?? 'N/A',
+      bestPosition: history.bestResult?.finalPosition ?? -1,
+      totalMatches: profile.gamesPlayed,
+      totalWins: profile.gamesWon,
+      totalLosses: max(0, profile.gamesPlayed - profile.gamesWon),
+      winRate: profile.gamesPlayed > 0 ? profile.gamesWon / profile.gamesPlayed : 0,
+      bestStreak: profile.highestStreak,
+      highestScore: highestScoreRecord.value.toInt(),
+      totalXp: profile.xp,
+      bestSeason: history.bestResult,
+      careerRecords: records.where((r) => r.isCareerRecord).toList(),
+      recentForm: recentForm,
+    );
+  }
+
   CompetitiveStatistics calculate({
     required String userId,
     required PlayerProfile profile,

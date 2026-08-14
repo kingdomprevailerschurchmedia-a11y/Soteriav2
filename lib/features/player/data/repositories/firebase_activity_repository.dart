@@ -15,19 +15,20 @@ class FirebaseActivityRepository implements ActivityRepository {
       .collection('competitive_activity');
 
   @override
-  Future<List<CompetitiveActivityEvent>> getActivityEvents(
-    String userId, {
+  Future<List<CompetitiveActivityEvent>> getSocialActivityFeed(
+    String userId,
+    List<String> userIds, {
     int limit = 20,
     CompetitiveActivityEvent? lastEvent,
   }) async {
-    var query = _activityCollection(
-      userId,
-    ).orderBy('createdAt', descending: true).limit(limit);
+    if (userIds.isEmpty) return [];
+
+    var query = _firestore.collectionGroup('competitive_activity')
+        .where('userId', whereIn: userIds.take(30).toList())
+        .orderBy('createdAt', descending: true)
+        .limit(limit);
 
     if (lastEvent != null) {
-      // In a real Firestore implementation, we'd use a DocumentSnapshot for startAfter.
-      // For this simplified repository, we'll use the createdAt timestamp if unique,
-      // but ideally we should fetch the actual document snapshot.
       query = query.startAfter([lastEvent.createdAt]);
     }
 
@@ -38,16 +39,31 @@ class FirebaseActivityRepository implements ActivityRepository {
   }
 
   @override
+  Future<List<CompetitiveActivityEvent>> getActivityEvents(
+    String userId, {
+    int limit = 20,
+    CompetitiveActivityEvent? lastEvent,
+  }) async {
+    return getSocialActivityFeed(userId, [userId], limit: limit, lastEvent: lastEvent);
+  }
+
+  @override
   Future<void> recordActivityEvent(CompetitiveActivityEvent event) async {
     await _activityCollection(event.userId).doc(event.id).set(event.toJson());
   }
 
   @override
-  Stream<List<CompetitiveActivityEvent>> watchRecentActivity(
-    String userId, {
-    int limit = 10,
+  Stream<List<CompetitiveActivityEvent>> watchSocialActivity(
+    List<String> userIds, {
+    int limit = 20,
   }) {
-    return _activityCollection(userId)
+    if (userIds.isEmpty) return Stream.value([]);
+
+    // Using collectionGroup to find activities across all users
+    // Then filtering by userId in the list. 
+    // In a high-scale app, we might want a flat root collection 'activities' with visibility rules.
+    return _firestore.collectionGroup('competitive_activity')
+        .where('userId', whereIn: userIds.take(30).toList())
         .orderBy('createdAt', descending: true)
         .limit(limit)
         .snapshots()

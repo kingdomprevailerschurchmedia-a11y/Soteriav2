@@ -9,6 +9,7 @@ import 'reward_providers.dart';
 import 'milestone_providers.dart';
 import 'personal_record_providers.dart';
 import '../../providers/player_providers.dart';
+import 'service_providers.dart';
 
 final Provider<AsyncValue<CompetitiveProfile>>
 competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
@@ -21,6 +22,7 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   final milestonesAsync = ref.watch(playerMilestonesProvider);
   final milestoneDefinitionsAsync = ref.watch(milestoneDefinitionsProvider);
   final personalRecordsAsync = ref.watch(currentUserPersonalRecordsProvider);
+  final statsService = ref.watch(statisticsServiceProvider);
 
   // Evaluation is triggered by separate orchestrator or screen to avoid cycles
 
@@ -56,13 +58,21 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   }
 
   // Handle partial data for history, season, rewards, and position
-  final history = historyAsync.valueOrNull ?? CompetitiveHistory(userId: player.uid);
+  final history =
+      historyAsync.valueOrNull ?? CompetitiveHistory(userId: player.uid);
   final currentSeason = seasonAsync.valueOrNull;
   final rewards = rewardsAsync.valueOrNull ?? [];
   final globalPosition = positionAsync.valueOrNull ?? -1;
   final milestones = milestonesAsync.valueOrNull ?? [];
   final definitionsCount = milestoneDefinitionsAsync.valueOrNull?.length ?? 0;
   final personalRecords = personalRecordsAsync.valueOrNull ?? [];
+
+  final careerSummary = statsService.calculateCareerSummary(
+    userId: player.uid,
+    profile: player,
+    history: history,
+    records: personalRecords,
+  );
 
   return AsyncValue.data(
     CompetitiveProfile(
@@ -81,6 +91,7 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
           .toList(),
       totalMilestones: definitionsCount,
       personalRecords: personalRecords,
+      careerSummary: careerSummary,
     ),
   );
 });

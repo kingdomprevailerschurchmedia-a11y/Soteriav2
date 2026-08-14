@@ -30,6 +30,7 @@ class CompetitiveGoalEvaluationService {
           goal.copyWith(
             currentProgress: progress,
             status: isNewlyCompleted ? GoalStatus.completed : GoalStatus.active,
+            completedAt: isNewlyCompleted ? DateTime.now() : null,
           ),
         );
       }
@@ -82,9 +83,10 @@ class CompetitiveGoalEvaluationService {
             .toDouble();
 
       case GoalCategory.rank:
+        final targetTier = goal.metadata['targetTier'] ?? '';
         return _evaluateRankTier(
           progression.currentRankTier,
-          goal.metadata['targetTier'] ?? '',
+          targetTier,
         ).toDouble();
 
       case GoalCategory.streak:

@@ -58,6 +58,25 @@ final careerGoalsProvider = Provider<AsyncValue<List<CompetitiveGoal>>>((ref) {
       );
 });
 
+final nextGoalProvider = Provider<AsyncValue<CompetitiveGoal?>>((ref) {
+  return ref.watch(playerGoalsProvider).whenData((goals) {
+    if (goals.isEmpty) return null;
+    
+    // Prioritize nearly completed goals
+    final activeGoals = goals.where((g) => g.status == GoalStatus.active).toList();
+    if (activeGoals.isEmpty) return null;
+    
+    activeGoals.sort((a, b) => b.progressPercentage.compareTo(a.progressPercentage));
+    return activeGoals.first;
+  });
+});
+
+final goalHistoryProvider = FutureProvider<List<CompetitiveGoal>>((ref) async {
+  final userId = ref.watch(authRepositoryProvider).currentUserId;
+  if (userId == null) return [];
+  return ref.read(goalRepositoryProvider).getGoalHistory(userId);
+});
+
 /// Orchestrator to trigger goal evaluation.
 final goalEvaluationProvider = Provider<void>((ref) {
   final goalsAsync = ref.watch(playerGoalsProvider);

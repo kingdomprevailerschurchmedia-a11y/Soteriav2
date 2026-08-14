@@ -42,7 +42,17 @@ class FirebaseGoalRepository implements GoalRepository {
 
   @override
   Future<void> updateGoalProgress(CompetitiveGoal goal) async {
-    await _goalsCollection(goal.id).doc(goal.id).set(goal.toJson());
+    await _goalsCollection(goal.userId).doc(goal.id).set(goal.toJson());
+  }
+
+  @override
+  Future<void> createGoal(CompetitiveGoal goal) async {
+    await _goalsCollection(goal.userId).doc(goal.id).set(goal.toJson());
+  }
+
+  @override
+  Future<void> deleteGoal(String userId, String goalId) async {
+    await _goalsCollection(userId).doc(goalId).delete();
   }
 
   @override
@@ -73,6 +83,7 @@ class FirebaseGoalRepository implements GoalRepository {
     final newGoals = [
       CompetitiveGoal(
         id: 'daily_games_${todayStart.millisecondsSinceEpoch}',
+        userId: userId,
         type: GoalType.daily,
         category: GoalCategory.gameCount,
         title: 'Daily Participation',
@@ -85,6 +96,7 @@ class FirebaseGoalRepository implements GoalRepository {
       ),
       CompetitiveGoal(
         id: 'daily_wins_${todayStart.millisecondsSinceEpoch}',
+        userId: userId,
         type: GoalType.daily,
         category: GoalCategory.win,
         title: 'Winning Streak',

@@ -6,14 +6,14 @@ import '../../data/repositories/firebase_activity_repository.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../domain/models/competitive_event.dart';
 
+import '../../../social/presentation/providers/social_providers.dart';
+import '../../../social/presentation/providers/rivalry_providers.dart';
+
 enum ActivityFilter {
   all,
-  rank,
-  achievements,
-  milestones,
-  tournaments,
-  seasons,
-  records,
+  friends,
+  rivals,
+  you,
 }
 
 final activityRepositoryProvider = Provider<ActivityRepository>((ref) {
@@ -22,23 +22,16 @@ final activityRepositoryProvider = Provider<ActivityRepository>((ref) {
 
 final activityFilterProvider = StateProvider<ActivityFilter>((ref) => ActivityFilter.all);
 
-final recentActivityProvider = StreamProvider<List<CompetitiveActivityEvent>>((
-  ref,
-) {
-  final userId = ref.watch(authRepositoryProvider).currentUserId;
-  if (userId == null) return Stream.value([]);
-  return ref.watch(activityRepositoryProvider).watchRecentActivity(userId);
-});
-
 class ActivityFeedNotifier
     extends StateNotifier<AsyncValue<List<CompetitiveActivityEvent>>> {
   final ActivityRepository _repository;
   final String _userId;
   final ActivityFilter _filter;
+  final Ref ref;
   bool _hasMore = true;
   CompetitiveActivityEvent? _lastEvent;
 
-  ActivityFeedNotifier(this._repository, this._userId, this._filter)
+  ActivityFeedNotifier(this._repository, this._userId, this._filter, this.ref)
     : super(const AsyncValue.loading()) {
     loadInitial();
   }
@@ -78,67 +71,36 @@ class ActivityFeedNotifier
   Future<List<CompetitiveActivityEvent>> _fetchEvents({
     CompetitiveActivityEvent? lastEvent,
   }) async {
-    // In a real implementation, we would pass the filter to the repository.
-    // For now, we'll fetch all and filter in memory if the repository doesn't support it,
-    // OR we could extend the repository. The instructions say "FIRST inspect... find and reuse".
-    // The current repository doesn't have filtering.
-    // I'll stick to fetching all for now as the volume might not be huge yet,
-    // but I should consider if I should add filtering to the repository.
-    // Given the instruction "implement efficient pagination", repository filtering is better.
+    final friendsAsync = ref.read(friendsProvider);
+    final rivalsAsync = ref.read(topRivalriesProvider);
     
-    // I'll assume for now the repository can be extended or we just do it here.
-    final allEvents = await _repository.getActivityEvents(
-      _userId,
+    final socialIds = friendsAsync.maybeWhen(
+      data: (friends) => friends.map((f) => f.friendId).toList(),
+      orElse: () => <String>[],
+    );
+
+    final rivalIds = rivalsAsync.maybeWhen(
+      data: (rivals) => rivals.map((r) => r.rivalId).toList(),
+      orElse: () => <String>[],
+    );
+    
+    final allSocialIds = {...socialIds, ...rivalIds}.toList();
+    final allIds = [_userId, ...allSocialIds];
+    
+    // Fetch aggregated feed from repository
+    final allEvents = await _repository.getSocialActivityFeed(
+      _userId, 
+      allIds,
       limit: 20,
       lastEvent: lastEvent,
     );
     
     if (_filter == ActivityFilter.all) return allEvents;
+    if (_filter == ActivityFilter.you) return allEvents.where((e) => e.userId == _userId).toList();
+    if (_filter == ActivityFilter.friends) return allEvents.where((e) => socialIds.contains(e.userId)).toList();
+    if (_filter == ActivityFilter.rivals) return allEvents.where((e) => rivalIds.contains(e.userId)).toList();
     
-    return allEvents.where((e) => _matchesFilter(e.type, _filter)).toList();
-  }
-
-  bool _matchesFilter(CompetitiveEventType type, ActivityFilter filter) {
-    switch (filter) {
-      case ActivityFilter.rank:
-        return [
-          CompetitiveEventType.rankPromoted,
-          CompetitiveEventType.rankDemoted,
-          CompetitiveEventType.rankReached,
-          CompetitiveEventType.rankChanged,
-        ].contains(type);
-      case ActivityFilter.achievements:
-        return [
-          CompetitiveEventType.achievementUnlocked,
-          CompetitiveEventType.badgeEarned,
-          CompetitiveEventType.titleEarned,
-        ].contains(type);
-      case ActivityFilter.milestones:
-        return [
-          CompetitiveEventType.milestoneCompleted,
-          CompetitiveEventType.gameMilestone,
-          CompetitiveEventType.winMilestone,
-          CompetitiveEventType.careerMilestone,
-        ].contains(type);
-      case ActivityFilter.tournaments:
-        return type == CompetitiveEventType.tournamentResult;
-      case ActivityFilter.seasons:
-        return [
-          CompetitiveEventType.seasonEnding,
-          CompetitiveEventType.seasonStarted,
-          CompetitiveEventType.seasonCompleted,
-          CompetitiveEventType.seasonResult,
-          CompetitiveEventType.newSeasonStarted,
-        ].contains(type);
-      case ActivityFilter.records:
-        return [
-          CompetitiveEventType.personalBest,
-          CompetitiveEventType.leaderboardMilestone,
-          CompetitiveEventType.streakReached,
-        ].contains(type);
-      default:
-        return true;
-    }
+    return allEvents;
   }
 
   bool get hasMore => _hasMore;
@@ -155,6 +117,7 @@ final activityFeedProvider =
         ref.watch(activityRepositoryProvider),
         userId,
         filter,
+        ref,
       );
     });
 
@@ -165,11 +128,9 @@ final currentUserActivityFeedProvider =
       return ref.watch(activityFeedProvider(userId));
     });
 
-final activityHighlightsProvider = StreamProvider<List<CompetitiveActivityEvent>>((ref) {
+final rivalryActivityProvider = FutureProvider.family<List<CompetitiveActivityEvent>, String>((ref, rivalId) async {
   final userId = ref.watch(authRepositoryProvider).currentUserId;
-  if (userId == null) return Stream.value([]);
+  if (userId == null) return [];
   
-  return ref.watch(activityRepositoryProvider).watchRecentActivity(userId, limit: 5).map(
-    (events) => events.where((e) => e.importance.index >= ActivityImportance.high.index).toList(),
-  );
+  return ref.watch(activityRepositoryProvider).getSocialActivityFeed(userId, [userId, rivalId], limit: 10);
 });
