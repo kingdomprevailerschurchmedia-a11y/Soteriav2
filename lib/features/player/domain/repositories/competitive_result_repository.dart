@@ -18,6 +18,7 @@ abstract interface class CompetitiveResultRepository {
     String? seasonId,
     String? mode,
     CompetitiveOutcome? outcome,
+    String? opponentId,
   });
 
   /// Watches for new results.

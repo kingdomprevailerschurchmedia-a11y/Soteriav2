@@ -23,6 +23,7 @@ class MockLeaderboardRepository implements LeaderboardRepository {
   @override Future<int> getTotalPlayers({String? seasonId}) async => 0;
   @override Future<List<RankMovementEvent>> getPositionHistory({required String userId, String? seasonId, int limit = 50}) async => [];
   @override Future<void> recordMovement(RankMovementEvent event) async {}
+  @override Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId}) async => [];
 }
 
 class SeasonPreviews {

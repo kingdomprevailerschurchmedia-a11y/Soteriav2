@@ -313,6 +313,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.bolt_rounded,
       tags: ['live', 'event', 'countdown'],
     ),
+    const GalleryItem(
+      title: 'Social & Connections',
+      description: 'Friends list, Requests, Relationship status',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/social',
+      icon: Icons.people_rounded,
+      tags: ['friend', 'social', 'request'],
+    ),
   ];
 });
 

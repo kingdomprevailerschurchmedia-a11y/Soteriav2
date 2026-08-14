@@ -93,6 +93,8 @@ import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
+import 'package:soteria/features/social/presentation/screens/friends_screen.dart';
+import 'package:soteria/features/social/presentation/screens/friend_requests_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_season_screen.dart';
 import 'package:soteria/features/player/presentation/screens/live_events_screen.dart';
@@ -104,6 +106,8 @@ import 'package:soteria/features/matchmaking/presentation/screens/versus_match_o
 import 'package:soteria/features/matchmaking/presentation/screens/competitive_match_result_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/competitive_match_replay_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/competitive_insights_screen.dart';
+
+import 'package:soteria/features/social/preview/social_previews.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
@@ -542,6 +546,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                         ),
                   ),
                   GoRoute(
+                    path: 'friends',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const FriendsScreen(),
+                          key: state.pageKey,
+                        ),
+                    routes: [
+                      GoRoute(
+                        path: 'requests',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.slideUp(
+                              child: const FriendRequestsScreen(),
+                              key: state.pageKey,
+                            ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
                     path: 'records',
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.slideUp(
@@ -854,6 +876,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => GalleryShell(
               title: 'Live Events',
               child: LiveEventPreviews.discovery(),
+            ),
+          ),
+          GoRoute(
+            path: 'social',
+            builder: (context, state) => const GalleryShell(
+              title: 'Social & Connections',
+              child: SocialPreviews(),
             ),
           ),
         ],

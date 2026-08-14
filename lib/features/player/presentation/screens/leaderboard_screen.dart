@@ -8,6 +8,8 @@ import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/design_system/components/soteria_text.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import '../../domain/models/leaderboard_entry.dart';
+import '../../domain/models/rank_movement_event.dart';
+import '../../domain/services/leaderboard_insights_service.dart';
 import '../providers/leaderboard_providers.dart';
 import '../widgets/leaderboard_podium.dart';
 import '../widgets/leaderboard_row.dart';
@@ -17,6 +19,7 @@ import '../widgets/leaderboard/leaderboard_insight_card.dart';
 import '../widgets/leaderboard/rank_progress_card.dart';
 import '../widgets/season_header.dart';
 import 'player_search_screen.dart';
+import '../../../social/presentation/providers/social_leaderboard_providers.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -32,7 +35,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -45,6 +48,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   Widget build(BuildContext context) {
     final session = ref.watch(sessionProvider);
     final leaderboardState = ref.watch(leaderboardControllerProvider);
+    final friendsLeaderboardAsync = ref.watch(friendsLeaderboardProvider);
     final playerEntryAsync = ref.watch(playerLeaderboardEntryProvider);
     final totalPlayersAsync = ref.watch(leaderboardTotalPlayersProvider);
     final neighborhoodAsync = ref.watch(leaderboardNeighborhoodProvider);
@@ -78,134 +82,18 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           labelColor: SoteriaColors.textPrimary,
           unselectedLabelColor: SoteriaColors.muted,
           tabs: const [
+            Tab(text: 'FRIENDS'),
             Tab(text: 'SEASON'),
             Tab(text: 'GLOBAL'),
           ],
         ),
       ),
-      body: Column(
+      body: TabBarView(
+        controller: _tabController,
         children: [
-          Expanded(
-            child: leaderboardState.when(
-              data: (entries) {
-                if (entries.isEmpty) {
-                  return _buildEmptyState();
-                }
-                return RefreshIndicator(
-                  onRefresh: () async {
-                    await ref.read(leaderboardControllerProvider.notifier).refresh();
-                    ref.invalidate(playerLeaderboardEntryProvider);
-                    ref.invalidate(leaderboardTotalPlayersProvider);
-                  },
-                  color: SoteriaColors.primary,
-                  child: ListView.builder(
-                    padding: EdgeInsets.only(
-                      left: SoteriaSpacing.md,
-                      right: SoteriaSpacing.md,
-                      bottom: 100.h,
-                    ),
-                    itemCount: entries.length + 6,
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return const Padding(
-                          padding: EdgeInsets.only(top: 8, bottom: 16),
-                          child: SeasonHeader(),
-                        );
-                      }
-                      
-                      if (index == 1) {
-                        return playerEntryAsync.when(
-                          data: (entry) {
-                            if (entry == null) return const SizedBox.shrink();
-                            final movement = movementHistoryAsync.value?.firstOrNull;
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: PlayerLeaderboardPositionCard(
-                                entry: entry,
-                                totalPlayers: totalPlayersAsync.value ?? 0,
-                                delta: movement?.positionDelta ?? 0,
-                              ),
-                            );
-                          },
-                          loading: () => const SizedBox.shrink(),
-                          error: (_, __) => const SizedBox.shrink(),
-                        );
-                      }
-
-                      if (index == 2) {
-                        return insightsAsync.when(
-                          data: (insights) {
-                            if (insights.isEmpty) return const SizedBox.shrink();
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: Column(
-                                children: insights.map((i) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 8),
-                                  child: LeaderboardInsightCard(insight: i),
-                                )).toList(),
-                              ),
-                            );
-                          },
-                          loading: () => const SizedBox.shrink(),
-                          error: (_, __) => const SizedBox.shrink(),
-                        );
-                      }
-
-                      if (index == 3) {
-                        return neighborhoodAsync.when(
-                          data: (neighborhood) {
-                            if (neighborhood.currentPlayer == null) return const SizedBox.shrink();
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: LeaderboardNeighborhood(
-                                playerAbove: neighborhood.playerAbove,
-                                currentPlayer: neighborhood.currentPlayer!,
-                                playerBelow: neighborhood.playerBelow,
-                              ),
-                            );
-                          },
-                          loading: () => const SizedBox.shrink(),
-                          error: (_, __) => const SizedBox.shrink(),
-                        );
-                      }
-
-                      if (index == 4) {
-                        return playerEntryAsync.when(
-                          data: (entry) {
-                            if (entry == null) return const SizedBox.shrink();
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 24),
-                              child: RankProgressCard(entry: entry),
-                            );
-                          },
-                          loading: () => const SizedBox.shrink(),
-                          error: (_, __) => const SizedBox.shrink(),
-                        );
-                      }
-
-                      if (index == 5) {
-                        return Column(
-                          children: [
-                            _buildSectionDivider('TOP PERFORMERS'),
-                            const SizedBox(height: 16),
-                            LeaderboardPodium(topEntries: entries.take(3).toList()),
-                          ],
-                        );
-                      }
-
-                      final entry = entries[index - 6];
-                      return LeaderboardRow(
-                        entry: entry,
-                        isCurrentUser: entry.userId == session.uid,
-                      );
-                    },
-                  ),
-                );
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (err, _) => Center(child: Text('Error: $err')),
-            ),
-          ),
+          _buildFriendsLeaderboard(context, friendsLeaderboardAsync, session.uid),
+          _buildStandardLeaderboard(context, leaderboardState, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid),
+          _buildStandardLeaderboard(context, leaderboardState, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid), // Global
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -218,6 +106,137 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         loading: () => null,
         error: (_, __) => null,
       ),
+    );
+  }
+
+  Widget _buildStandardLeaderboard(
+    BuildContext context,
+    AsyncValue<List<LeaderboardEntry>> leaderboardState,
+    AsyncValue<LeaderboardEntry?> playerEntryAsync,
+    AsyncValue<int> totalPlayersAsync,
+    AsyncValue<LeaderboardNeighborhoodData> neighborhoodAsync,
+    AsyncValue<List<LeaderboardInsight>> insightsAsync,
+    AsyncValue<List<RankMovementEvent>> movementHistoryAsync,
+    String? currentUserId,
+  ) {
+    return leaderboardState.when(
+      data: (entries) {
+        if (entries.isEmpty) {
+          return _buildEmptyState();
+        }
+        return RefreshIndicator(
+          onRefresh: () async {
+            await ref.read(leaderboardControllerProvider.notifier).refresh();
+            ref.invalidate(playerLeaderboardEntryProvider);
+            ref.invalidate(leaderboardTotalPlayersProvider);
+          },
+          color: SoteriaColors.primary,
+          child: ListView.builder(
+            padding: EdgeInsets.only(
+              left: SoteriaSpacing.md,
+              right: SoteriaSpacing.md,
+              bottom: 100.h,
+            ),
+            itemCount: entries.length + 6,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return const Padding(
+                  padding: EdgeInsets.only(top: 8, bottom: 16),
+                  child: SeasonHeader(),
+                );
+              }
+              
+              if (index == 1) {
+                return playerEntryAsync.when(
+                  data: (entry) {
+                    if (entry == null) return const SizedBox.shrink();
+                    final movement = movementHistoryAsync.value?.firstOrNull;
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: PlayerLeaderboardPositionCard(
+                        entry: entry,
+                        totalPlayers: totalPlayersAsync.value ?? 0,
+                        delta: movement?.positionDelta ?? 0,
+                      ),
+                    );
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                );
+              }
+
+              if (index == 2) {
+                return insightsAsync.when(
+                  data: (insights) {
+                    if (insights.isEmpty) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: Column(
+                        children: insights.map<Widget>((LeaderboardInsight i) => Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: LeaderboardInsightCard(insight: i),
+                        )).toList(),
+                      ),
+                    );
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                );
+              }
+
+              if (index == 3) {
+                return neighborhoodAsync.when(
+                  data: (neighborhood) {
+                    if (neighborhood.currentPlayer == null) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: LeaderboardNeighborhood(
+                        playerAbove: neighborhood.playerAbove,
+                        currentPlayer: neighborhood.currentPlayer!,
+                        playerBelow: neighborhood.playerBelow,
+                      ),
+                    );
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                );
+              }
+
+              if (index == 4) {
+                return playerEntryAsync.when(
+                  data: (entry) {
+                    if (entry == null) return const SizedBox.shrink();
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 24),
+                      child: RankProgressCard(entry: entry),
+                    );
+                  },
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                );
+              }
+
+              if (index == 5) {
+                return Column(
+                  children: [
+                    _buildSectionDivider('TOP PERFORMERS'),
+                    const SizedBox(height: 16),
+                    LeaderboardPodium(topEntries: entries.take(3).toList()),
+                  ],
+                );
+              }
+
+              final entry = entries[index - 6];
+              return LeaderboardRow(
+                entry: entry,
+                isCurrentUser: entry.userId == currentUserId,
+              );
+            },
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, _) => Center(child: Text('Error: $err')),
     );
   }
 
@@ -234,6 +253,56 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           SizedBox(height: SoteriaSpacing.md),
           Text('No data available', style: context.titleMedium),
           Text('Be the first to climb the ranks!', style: context.bodySmall),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFriendsLeaderboard(BuildContext context, AsyncValue<List<LeaderboardEntry>> friendsLeaderboardAsync, String? currentUserId) {
+    return friendsLeaderboardAsync.when(
+      data: (entries) {
+        if (entries.isEmpty) {
+          return _buildFriendsEmptyState(context);
+        }
+        return ListView.builder(
+          padding: EdgeInsets.all(SoteriaSpacing.md),
+          itemCount: entries.length + 1,
+          itemBuilder: (context, index) {
+            if (index == 0) {
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: _buildSectionDivider('YOUR COMPETITIVE CIRCLE'),
+              );
+            }
+            final entry = entries[index - 1];
+            return LeaderboardRow(
+              entry: entry,
+              isCurrentUser: entry.userId == currentUserId,
+            );
+          },
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, _) => Center(child: Text('Error: $err')),
+    );
+  }
+
+  Widget _buildFriendsEmptyState(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.people_outline_rounded, size: 64.sp, color: SoteriaColors.muted),
+          SizedBox(height: SoteriaSpacing.md),
+          Text('No friends on the leaderboard yet.', style: context.titleMedium),
+          Text('Add competitors to see how you stack up!', style: context.bodySmall),
+          SizedBox(height: SoteriaSpacing.lg),
+          ElevatedButton(
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const PlayerSearchScreen()),
+            ),
+            child: const Text('FIND FRIENDS'),
+          ),
         ],
       ),
     );

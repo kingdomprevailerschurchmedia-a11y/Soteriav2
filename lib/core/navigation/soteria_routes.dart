@@ -34,6 +34,8 @@ class SoteriaRoutes {
   static const String competitiveInsights = '/app/versus/insights';
   static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
+  static const String friends = '/app/profile/friends';
+  static const String friendRequests = '/app/profile/friends/requests';
   static const String settings = '/app/settings';
   static const String notificationSettings = '/app/settings/notifications';
 
@@ -68,4 +70,5 @@ class SoteriaRoutes {
   static const String proLobby = '/preview-gallery/pro-lobby';
   static const String quizHistoryPreview = '/preview-gallery/quiz-history';
   static const String avatarPlatform = '/preview-gallery/avatars';
+  static const String socialPreview = '/preview-gallery/social';
 }

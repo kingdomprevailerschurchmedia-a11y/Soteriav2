@@ -101,4 +101,39 @@ class FirebaseMatchHistoryRepository implements MatchHistoryRepository {
       quizResult: quizResult,
     );
   }
+
+  @override
+  Future<List<CompetitiveMatch>> getHeadToHeadMatches(
+    String userId,
+    String opponentId, {
+    int limit = 50,
+  }) async {
+    final results = await _resultRepository.getResults(
+      userId,
+      limit: limit,
+      opponentId: opponentId,
+    );
+
+    if (results.isEmpty) return [];
+
+    // For H2H, we might not always need full rank change details, but let's be consistent.
+    final rankChanges = await _rankRepository.getRankHistory(userId, limit: limit * 2);
+    final rankChangesMap = {
+      for (var rc in rankChanges)
+        if (rc.referenceResultId != null) rc.referenceResultId!: rc,
+    };
+
+    final matches = await Future.wait(
+      results.map((result) async {
+        final quizResult = await _quizRepository.getResult(result.resultId);
+        return CompetitiveMatch(
+          result: result,
+          rankChange: rankChangesMap[result.resultId],
+          quizResult: quizResult,
+        );
+      }),
+    );
+
+    return matches;
+  }
 }

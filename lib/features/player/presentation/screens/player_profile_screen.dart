@@ -261,6 +261,14 @@ class PlayerProfileScreen extends ConsumerWidget {
               ),
               _AccountDivider(),
               _AccountTile(
+                icon: Icons.people_rounded,
+                iconColor: SoteriaColors.primary,
+                title: 'Friends',
+                subtitle: 'Manage your competitive connections',
+                onTap: () => context.push(SoteriaRoutes.friends),
+              ),
+              _AccountDivider(),
+              _AccountTile(
                 icon: Icons.settings_rounded,
                 iconColor: const Color(0xFFA1887F),
                 title: 'Settings',

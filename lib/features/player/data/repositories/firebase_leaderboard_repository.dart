@@ -153,4 +153,30 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
         .doc(event.id)
         .set(event.toJson());
   }
+
+  @override
+  Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId}) async {
+    if (userIds.isEmpty) return [];
+
+    final docIdSuffix = seasonId == null ? '' : '_$seasonId';
+    final collection = seasonId == null
+        ? LeaderboardConfig.globalLeaderboardCollection
+        : LeaderboardConfig.seasonLeaderboardCollection;
+
+    // Firestore whereIn limit is 30.
+    final chunks = <List<String>>[];
+    for (var i = 0; i < userIds.length; i += 30) {
+      chunks.add(userIds.sublist(i, i + 30 > userIds.length ? userIds.length : i + 30));
+    }
+
+    final results = await Future.wait(chunks.map((chunk) {
+      return _firestore.collection(collection)
+          .where('userId', whereIn: chunk)
+          .get();
+    }));
+
+    return results.expand((snapshot) => snapshot.docs)
+        .map((doc) => LeaderboardEntry.fromJson(doc.data()))
+        .toList();
+  }
 }

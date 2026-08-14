@@ -120,6 +120,9 @@ class FakeMatchHistoryRepository implements MatchHistoryRepository {
     String userId,
     String resultId,
   ) async => null;
+
+  @override
+  Future<List<CompetitiveMatch>> getHeadToHeadMatches(String userId, String opponentId, {int limit = 50}) async => [];
 }
 
 class MatchHistoryPreviews {

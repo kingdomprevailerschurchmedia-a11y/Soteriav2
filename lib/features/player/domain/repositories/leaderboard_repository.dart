@@ -38,4 +38,7 @@ abstract class LeaderboardRepository {
 
   /// Records a new rank movement event.
   Future<void> recordMovement(RankMovementEvent event);
+
+  /// Fetches entries for a specific list of user IDs.
+  Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId});
 }

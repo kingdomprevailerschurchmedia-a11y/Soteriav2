@@ -43,6 +43,7 @@ class FirebaseCompetitiveResultRepository
     String? seasonId,
     String? mode,
     CompetitiveOutcome? outcome,
+    String? opponentId,
   }) async {
     var query = _resultsCollection(
       userId,
@@ -56,6 +57,9 @@ class FirebaseCompetitiveResultRepository
     }
     if (outcome != null) {
       query = query.where('outcome', isEqualTo: outcome.name);
+    }
+    if (opponentId != null) {
+      query = query.where('opponentId', isEqualTo: opponentId);
     }
     if (lastResult != null) {
       query = query.startAfter([lastResult.completedAt]);

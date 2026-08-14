@@ -14,4 +14,7 @@ abstract interface class MatchHistoryRepository {
 
   /// Fetches a single match detail by ID.
   Future<CompetitiveMatch?> getMatchDetail(String userId, String resultId);
+
+  /// Fetches head-to-head matches between two users.
+  Future<List<CompetitiveMatch>> getHeadToHeadMatches(String userId, String opponentId, {int limit = 50});
 }

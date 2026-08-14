@@ -16,6 +16,8 @@ import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../widgets/identity/competitive_title_widget.dart';
 import '../../../auth/providers/auth_providers.dart';
+import '../../../social/domain/models/relationship_status.dart';
+import '../../../social/presentation/providers/social_providers.dart';
 import '../../domain/models/public_competitive_profile.dart';
 
 class PublicCompetitiveProfileScreen extends ConsumerWidget {
@@ -26,6 +28,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(publicProfileProvider(userId));
+    final relationshipAsync = ref.watch(relationshipStatusProvider(userId));
     final currentUserId = ref.watch(authRepositoryProvider).currentUserId;
 
     return SafeGradientScaffold(
@@ -38,7 +41,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
       body: profileAsync.when(
         data: (profile) {
           if (profile == null) return _buildNotFound(context);
-          return _buildContent(context, ref, profile, currentUserId);
+          return _buildContent(context, ref, profile, currentUserId, relationshipAsync.value ?? RelationshipStatus.none);
         },
         loading: () => const Center(
           child: CircularProgressIndicator(color: SoteriaColors.primary),
@@ -48,14 +51,14 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildContent(BuildContext context, WidgetRef ref, PublicCompetitiveProfile profile, String? currentUserId) {
+  Widget _buildContent(BuildContext context, WidgetRef ref, PublicCompetitiveProfile profile, String? currentUserId, RelationshipStatus relationship) {
     return ListView(
       padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.containerPadding(context),
       ),
       children: [
         SizedBox(height: SoteriaSpacing.md),
-        _buildHeader(context, profile, currentUserId),
+        _buildHeader(context, ref, profile, currentUserId, relationship),
         SizedBox(height: SoteriaSpacing.lg),
         _buildStatsGrid(context, profile),
         SizedBox(height: SoteriaSpacing.lg),
@@ -65,7 +68,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildHeader(BuildContext context, PublicCompetitiveProfile profile, String? currentUserId) {
+  Widget _buildHeader(BuildContext context, WidgetRef ref, PublicCompetitiveProfile profile, String? currentUserId, RelationshipStatus relationship) {
     return SoteriaSlideUp(
       child: Container(
         padding: EdgeInsets.all(SoteriaSpacing.lg),
@@ -124,16 +127,125 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
             ],
             if (currentUserId != userId) ...[
               SizedBox(height: SoteriaSpacing.xl),
-              SoteriaButton.primary(
-                label: 'CHALLENGE',
-                onPressed: () => _showChallengeSheet(context, profile),
-              ),
+              _buildActions(context, ref, relationship, profile),
             ],
           ],
         ),
       ),
     );
   }
+
+  Widget _buildActions(BuildContext context, WidgetRef ref, RelationshipStatus relationship, PublicCompetitiveProfile profile) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: SoteriaButton.primary(
+                label: 'CHALLENGE',
+                onPressed: () => _showChallengeSheet(context, profile),
+              ),
+            ),
+            SizedBox(width: SoteriaSpacing.md),
+            _buildRelationshipButton(context, ref, relationship),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildRelationshipButton(BuildContext context, WidgetRef ref, RelationshipStatus relationship) {
+    switch (relationship) {
+      case RelationshipStatus.none:
+        return Expanded(
+          child: SoteriaButton.secondary(
+            label: 'ADD FRIEND',
+            onPressed: () => ref.read(socialControllerProvider.notifier).sendRequest(userId),
+          ),
+        );
+      case RelationshipStatus.requestSent:
+        return Expanded(
+          child: SoteriaButton.outline(
+            label: 'PENDING',
+            onPressed: null, // Could add cancel logic
+          ),
+        );
+      case RelationshipStatus.requestReceived:
+        return Expanded(
+          child: Row(
+            children: [
+              Expanded(
+                child: SoteriaButton.secondary(
+                  label: 'ACCEPT',
+                  onPressed: () => _handleAcceptRequest(ref),
+                ),
+              ),
+              SizedBox(width: SoteriaSpacing.sm),
+              IconButton(
+                icon: const Icon(Icons.close_rounded, color: SoteriaColors.error),
+                onPressed: () => _handleDeclineRequest(ref),
+              ),
+            ],
+          ),
+        );
+      case RelationshipStatus.friends:
+        return Expanded(
+          child: SoteriaButton.outline(
+            label: 'REMOVE',
+            onPressed: () => _showRemoveFriendDialog(context, ref),
+          ),
+        );
+      case RelationshipStatus.blocked:
+        return Expanded(
+          child: SoteriaButton.outline(
+            label: 'UNBLOCK',
+            onPressed: () {},
+          ),
+        );
+      case RelationshipStatus.blockedBy:
+        return const SizedBox.shrink();
+    }
+  }
+
+  void _handleAcceptRequest(WidgetRef ref) {
+    final requests = ref.read(incomingRequestsProvider).value ?? [];
+    final request = requests.where((r) => r.senderId == userId).firstOrNull;
+    if (request != null) {
+      ref.read(socialControllerProvider.notifier).acceptRequest(request.id, userId);
+    }
+  }
+
+  void _handleDeclineRequest(WidgetRef ref) {
+    final requests = ref.read(incomingRequestsProvider).value ?? [];
+    final request = requests.where((r) => r.senderId == userId).firstOrNull;
+    if (request != null) {
+      ref.read(socialControllerProvider.notifier).declineRequest(request.id, userId);
+    }
+  }
+
+  void _showRemoveFriendDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Remove Friend'),
+        content: const Text('Are you sure you want to remove this friend?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('CANCEL'),
+          ),
+          TextButton(
+            onPressed: () {
+              ref.read(socialControllerProvider.notifier).removeFriend(userId);
+              Navigator.pop(context);
+            },
+            child: const Text('REMOVE', style: TextStyle(color: SoteriaColors.error)),
+          ),
+        ],
+      ),
+    );
+  }
+
 
   void _showChallengeSheet(BuildContext context, PublicCompetitiveProfile profile) {
     showModalBottomSheet(

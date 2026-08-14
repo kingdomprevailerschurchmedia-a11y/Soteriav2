@@ -170,6 +170,9 @@ class _MockLeaderboardRepository implements LeaderboardRepository {
 
   @override
   Future<void> recordMovement(RankMovementEvent event) async {}
+
+  @override
+  Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId}) async => [];
 }
 
 class LeaderboardPreviews {
