@@ -138,7 +138,6 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
 
     final snapshot = await query
         .orderBy('timestamp', descending: true)
-        .limit(limit)
         .get();
 
     return snapshot.docs

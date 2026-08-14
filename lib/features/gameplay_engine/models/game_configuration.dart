@@ -10,6 +10,7 @@ class GameConfiguration {
   final bool allowLifelines;
   final double difficultyMultiplier;
   final int xpPerCorrectAnswer;
+  final String? categoryId;
   final Map<String, dynamic> metadata;
 
   const GameConfiguration({
@@ -21,6 +22,7 @@ class GameConfiguration {
     this.allowLifelines = true,
     this.difficultyMultiplier = 1.0,
     this.xpPerCorrectAnswer = 10,
+    this.categoryId,
     this.metadata = const {},
   });
 

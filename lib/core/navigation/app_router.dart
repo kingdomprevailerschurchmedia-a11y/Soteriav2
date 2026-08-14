@@ -97,8 +97,12 @@ import 'package:soteria/features/social/presentation/screens/friends_screen.dart
 import 'package:soteria/features/social/presentation/screens/friend_requests_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_season_screen.dart';
-import 'package:soteria/features/player/presentation/screens/live_events_screen.dart';
-import 'package:soteria/features/player/presentation/screens/live_event_details_screen.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_events_screen.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_event_details_screen.dart';
+import 'package:soteria/features/player/presentation/screens/event_gameplay_screen.dart';
+import 'package:soteria/features/player/presentation/screens/event_result_screen.dart';
+import 'package:soteria/features/player/presentation/screens/event_leaderboard_screen.dart';
+import 'package:soteria/features/player/presentation/screens/event_history_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/versus_lobby_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/matchmaking_screen.dart';
 import 'package:soteria/features/matchmaking/presentation/screens/match_found_screen.dart';
@@ -407,7 +411,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'events',
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.fade(
-                          child: const LiveEventsScreen(),
+                          child: const CompetitiveEventsScreen(),
                           key: state.pageKey,
                         ),
                     routes: [
@@ -416,10 +420,52 @@ final routerProvider = Provider<GoRouter>((ref) {
                         pageBuilder: (context, state) {
                           final id = state.pathParameters['id']!;
                           return SoteriaPageTransitions.slideUp(
-                            child: LiveEventDetailsScreen(eventId: id),
+                            child: CompetitiveEventDetailsScreen(eventId: id),
                             key: state.pageKey,
                           );
                         },
+                      ),
+                      GoRoute(
+                        path: 'play/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.fade(
+                            child: EventGameplayScreen(eventId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'result/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          final score = int.tryParse(
+                                state.uri.queryParameters['score'] ?? '0',
+                              ) ??
+                              0;
+                          return SoteriaPageTransitions.fade(
+                            child: EventResultScreen(eventId: id, score: score),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'leaderboard/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.slideUp(
+                            child: EventLeaderboardScreen(eventId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'history',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.fade(
+                              child: const EventHistoryScreen(),
+                              key: state.pageKey,
+                            ),
                       ),
                     ],
                   ),

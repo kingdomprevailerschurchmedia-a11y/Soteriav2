@@ -17,4 +17,7 @@ enum GameMode {
 
   /// Daily unique set of questions.
   dailyQuiz,
+
+  /// Temporary competitive events.
+  event,
 }

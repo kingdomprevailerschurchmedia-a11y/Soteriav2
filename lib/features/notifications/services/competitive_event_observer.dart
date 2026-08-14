@@ -11,7 +11,7 @@ import '../../player/presentation/providers/milestone_providers.dart';
 import '../../player/presentation/providers/personal_record_providers.dart';
 import '../../player/domain/models/competitive_personal_record.dart';
 import '../../player/domain/models/live_event.dart';
-import '../../player/presentation/providers/live_event_providers.dart';
+import '../../player/presentation/providers/event_providers.dart';
 import '../../player/domain/models/player_profile.dart';
 import '../../player/domain/config/progression_config.dart';
 import '../../../core/services/time_service.dart';
@@ -48,7 +48,7 @@ class CompetitiveEventObserver {
   }
 
   void _observeLiveEvents() {
-    _ref.listen<AsyncValue<List<LiveEvent>>>(activeLiveEventsProvider, (
+    _ref.listen<AsyncValue<List<LiveEvent>>>(liveEventsProvider, (
       previous,
       next,
     ) {
@@ -66,7 +66,7 @@ class CompetitiveEventObserver {
               userId: 'all',
               type: CompetitiveEventType.liveEventStarted,
               title: 'New Live Event!',
-              body: '${event.name} is now active.',
+              body: '${event.title} is now active.',
               metadata: {'eventId': event.eventId},
               createdAt: DateTime.now(),
               priority: 2,

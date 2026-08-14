@@ -131,10 +131,10 @@ class NotificationCoordinator {
         final eventId = data['eventId'];
         if (eventId != null) {
           _navigation.go(
-            SoteriaRoutes.liveEventDetails.replaceAll(':id', eventId),
+            SoteriaRoutes.competitiveEventDetails.replaceAll(':id', eventId),
           );
         } else {
-          _navigation.go(SoteriaRoutes.liveEvents);
+          _navigation.go(SoteriaRoutes.competitiveEvents);
         }
         break;
       case 'versus':

@@ -35,6 +35,7 @@ class AnswerPolicyResolver {
       case GameMode.tournament:
       case GameMode.challenge:
       case GameMode.dailyQuiz:
+      case GameMode.event:
         return ProAnswerPolicy();
     }
   }

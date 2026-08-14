@@ -24,8 +24,12 @@ class SoteriaRoutes {
   static const String tournamentLobby = '/app/tournaments/lobby/:id';
   static const String tournamentDetails = '/app/tournaments/details/:id';
   static const String tournamentGameplay = '/app/tournaments/play/:id';
-  static const String liveEvents = '/app/events';
-  static const String liveEventDetails = '/app/events/details/:id';
+  static const String competitiveEvents = '/app/events';
+  static const String competitiveEventDetails = '/app/events/details/:id';
+  static const String eventGameplay = '/app/events/play/:id';
+  static const String eventResult = '/app/events/result/:id';
+  static const String eventLeaderboard = '/app/events/leaderboard/:id';
+  static const String eventHistory = '/app/events/history';
   static const String leaderboard = '/app/leaderboard';
   static const String competitiveHistory = '/app/profile/history';
   static const String personalRecords = '/app/profile/records';
