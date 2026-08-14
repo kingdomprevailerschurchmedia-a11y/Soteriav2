@@ -121,7 +121,7 @@ class QuestionPresenter extends ConsumerWidget {
                       child: QuestionContentCard(
                         key: ValueKey(question.id),
                         text: question.text,
-                        category: question.category,
+                        category: question.categoryId,
                         difficulty: question.difficulty.name,
                       ),
                     ),

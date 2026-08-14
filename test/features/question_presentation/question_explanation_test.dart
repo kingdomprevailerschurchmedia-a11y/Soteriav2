@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/question_presentation/widgets/question_explanation_view.dart';
 
 void main() {
   final mockQuestion = Question(
     id: 'q1',
-    version: '1',
     text: 'Test?',
     explanation: 'This is why it is correct.',
-    difficulty: QuestionDifficulty.easy,
-    category: 'C',
+    difficulty: Difficulty.easy,
+    categoryId: 'C',
     type: QuestionType.multipleChoice,
-    options: const [],
-    correctAnswers: const [],
+    options: const [
+      Answer(id: 'o1', text: 'A'),
+      Answer(id: 'o2', text: 'B'),
+    ],
+    correctOptionIds: const ['o1'],
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
     source: 'Ref 123',
-    schemaVersion: 1,
-    contentHash: 'H',
   );
 
   Widget createTestableWidget(Widget child) {

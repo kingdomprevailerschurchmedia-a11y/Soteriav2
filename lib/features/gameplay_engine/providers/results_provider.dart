@@ -105,7 +105,7 @@ final answerReviewProvider = Provider.family<List<AnswerReview>, GameState>((
         submissionId: 'skipped',
         questionId: question.id,
         decision: AnswerDecision.wrong,
-        correctOptionIds: question.correctAnswers,
+        correctOptionIds: question.correctOptionIds,
         timestamp: DateTime.now(),
       ),
     );

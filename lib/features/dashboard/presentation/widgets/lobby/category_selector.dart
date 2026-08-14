@@ -33,14 +33,14 @@ class CategorySelector extends ConsumerWidget {
             itemCount: state.categories.length,
             itemBuilder: (context, index) {
               final category = state.categories[index];
-              final isSelected = state.config.category?.id == category.id;
+              final isSelected = state.config.categoryIds.contains(category.id);
 
               return _CategoryCard(
                 category: category,
                 isSelected: isSelected,
                 onTap: () => ref
                     .read(practiceLobbyProvider.notifier)
-                    .updateCategory(category),
+                    .toggleCategory(category.id),
               );
             },
           ),

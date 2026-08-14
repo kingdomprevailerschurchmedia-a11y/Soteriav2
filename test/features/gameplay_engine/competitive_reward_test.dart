@@ -7,6 +7,7 @@ import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.
 import 'package:soteria/features/gameplay_engine/providers/competitive_gameplay_providers.dart';
 
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 class MockGameEngine extends GameEngine {
   MockGameEngine(GameState initialState)
@@ -32,10 +33,13 @@ void main() {
             id: '$i',
             version: '1',
             text: 'T',
-            options: [],
-            correctAnswers: [],
-            difficulty: QuestionDifficulty.easy,
-            category: 'C',
+            options: [
+              const Answer(id: 'o1', text: 'A'),
+              const Answer(id: 'o2', text: 'B'),
+            ],
+            correctOptionIds: ['o1'],
+            difficulty: Difficulty.easy,
+            categoryId: 'C',
             type: QuestionType.multipleChoice,
             createdAt: DateTime.now(),
             updatedAt: DateTime.now(),

@@ -10,7 +10,9 @@ import '../../../../core/design_system/animations/soteria_animations.dart';
 import '../providers/public_profile_providers.dart';
 import '../widgets/profile/statistic_card.dart';
 import '../widgets/competitive_rank_badge.dart';
-import '../widgets/challenge/challenge_player_sheet.dart';
+import '../widgets/presence/player_presence_indicator.dart';
+import '../widgets/presence/presence_label.dart';
+import '../widgets/presence/competitive_quick_actions.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
@@ -19,6 +21,7 @@ import '../../../auth/providers/auth_providers.dart';
 import '../../../social/domain/models/relationship_status.dart';
 import '../../../social/presentation/providers/social_providers.dart';
 import '../../domain/models/public_competitive_profile.dart';
+import '../widgets/challenge/challenge_player_sheet.dart';
 
 class PublicCompetitiveProfileScreen extends ConsumerWidget {
   final String userId;
@@ -79,10 +82,19 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
         ),
         child: Column(
           children: [
-            SoteriaAvatar(
-              avatar: AvatarCatalog().getById(profile.avatarId),
-              size: 80,
-              imageUrl: profile.photoUrl,
+            Stack(
+              children: [
+                SoteriaAvatar(
+                  avatar: AvatarCatalog().getById(profile.avatarId),
+                  size: 80,
+                  imageUrl: profile.photoUrl,
+                ),
+                Positioned(
+                  right: 4,
+                  bottom: 4,
+                  child: PlayerPresenceIndicator(userId: userId, size: 20),
+                ),
+              ],
             ),
             SizedBox(height: SoteriaSpacing.md),
             Text(
@@ -93,6 +105,8 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
               SizedBox(height: SoteriaSpacing.xs),
               CompetitiveTitleWidget(title: profile.equippedTitle!),
             ],
+            SizedBox(height: SoteriaSpacing.xs),
+            PresenceLabel(userId: userId),
             SizedBox(height: SoteriaSpacing.lg),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -138,18 +152,9 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
   Widget _buildActions(BuildContext context, WidgetRef ref, RelationshipStatus relationship, PublicCompetitiveProfile profile) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-              child: SoteriaButton.primary(
-                label: 'CHALLENGE',
-                onPressed: () => _showChallengeSheet(context, profile),
-              ),
-            ),
-            SizedBox(width: SoteriaSpacing.md),
-            _buildRelationshipButton(context, ref, relationship),
-          ],
-        ),
+        CompetitiveQuickActions(userId: userId, profile: profile),
+        SizedBox(height: SoteriaSpacing.md),
+        _buildRelationshipButton(context, ref, relationship),
       ],
     );
   }

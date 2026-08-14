@@ -53,9 +53,9 @@ class _QuestionListContent extends ConsumerWidget {
               child: ListTile(
                 title: Text(q.text, style: context.titleSmall),
                 subtitle: Text(
-                  '${q.category} • ${q.difficulty.name.toUpperCase()}',
+                  '${q.categoryId} • ${q.difficulty.name.toUpperCase()}',
                 ),
-                trailing: Text('${q.xpValue} XP'),
+                trailing: const Text('100 XP'),
               ),
             );
           },

@@ -1,37 +1,20 @@
-import 'package:flutter/foundation.dart' hide Category;
+import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../question_content/domain/entities/difficulty.dart';
 import '../../question_content/domain/entities/category.dart';
 
-enum PracticeDifficulty { beginner, intermediate, advanced, adaptive }
+part 'practice_session_config.freezed.dart';
 
-@immutable
-class PracticeSessionConfig {
-  final Category? category;
-  final PracticeDifficulty difficulty;
-  final int questionCount;
-  final bool timerEnabled;
-  final String practiceType; // standard, focus, marathon
-
-  const PracticeSessionConfig({
-    this.category,
-    this.difficulty = PracticeDifficulty.beginner,
-    this.questionCount = 10,
-    this.timerEnabled = true,
-    this.practiceType = 'standard',
-  });
-
-  PracticeSessionConfig copyWith({
+@freezed
+abstract class PracticeSessionConfig with _$PracticeSessionConfig {
+  const factory PracticeSessionConfig({
     Category? category,
-    PracticeDifficulty? difficulty,
-    int? questionCount,
-    bool? timerEnabled,
-    String? practiceType,
-  }) {
-    return PracticeSessionConfig(
-      category: category ?? this.category,
-      difficulty: difficulty ?? this.difficulty,
-      questionCount: questionCount ?? this.questionCount,
-      timerEnabled: timerEnabled ?? this.timerEnabled,
-      practiceType: practiceType ?? this.practiceType,
-    );
-  }
+    @Default([]) List<String> categoryIds,
+    @Default(Difficulty.medium) Difficulty difficulty,
+    @Default(10) int questionCount,
+    @Default(true) bool timerEnabled,
+    @Default('standard') String practiceType, // standard, focus, marathon
+    @Default(true) bool useInterests,
+  }) = _PracticeSessionConfig;
+
+  const PracticeSessionConfig._();
 }

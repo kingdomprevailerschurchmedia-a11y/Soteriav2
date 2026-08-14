@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../question_content/domain/entities/category.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
 import 'challenge_providers.dart';
+import '../../domain/models/competitive_challenge.dart';
 import '../../../question_content/presentation/providers/category_providers.dart';
 
 class ChallengeLobbyState {
@@ -86,6 +87,9 @@ class ChallengeLobbyNotifier extends FamilyNotifier<ChallengeLobbyState, String>
 
     await ref.read(challengeControllerProvider.notifier).sendChallenge(
       challengedPlayerId: arg,
+      type: ChallengeType.matchScore,
+      target: 1000, // Default target score
+      duration: const Duration(hours: 24),
       configuration: configuration,
     );
   }

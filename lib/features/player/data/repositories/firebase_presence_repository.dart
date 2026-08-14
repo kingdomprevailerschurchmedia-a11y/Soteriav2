@@ -22,9 +22,7 @@ class FirebasePresenceRepository implements PresenceRepository {
   Stream<Map<String, PlayerPresence>> watchPresenceMultiple(List<String> userIds) {
     if (userIds.isEmpty) return Stream.value({});
     
-    // Firestore IN queries are limited to 10/30 items depending on version.
-    // For a real app, we might need to chunk this or use multiple listeners.
-    // Assuming friends list is reasonably small or chunked elsewhere.
+    // Firestore IN queries are limited.
     return _presenceCollection
         .where(FieldPath.documentId, whereIn: userIds.take(30).toList())
         .snapshots()
@@ -38,28 +36,32 @@ class FirebasePresenceRepository implements PresenceRepository {
   }
 
   @override
-  Future<void> updateStatus(String userId, PresenceStatus status, {String? matchId}) async {
-    await _presenceCollection.doc(userId).set({
-      'userId': userId,
-      'status': status.name,
-      'lastSeenAt': FieldValue.serverTimestamp(),
-      'currentMatchId': matchId,
-    }, SetOptions(merge: true));
-  }
+  Future<void> updatePresence(String userId, {
+    PresenceStatus? status,
+    String? matchId,
+    bool? showOnlineStatus,
+    bool? showActivity,
+    bool? showMatchStatus,
+    bool heartbeatOnly = false,
+  }) async {
+    final updates = <String, dynamic>{
+      'lastHeartbeatAt': FieldValue.serverTimestamp(),
+    };
 
-  @override
-  Future<void> updatePrivacy(String userId, {bool? showOnlineStatus, bool? showActivity}) async {
-    final updates = <String, dynamic>{};
-    if (showOnlineStatus != null) updates['showOnlineStatus'] = showOnlineStatus;
-    if (showActivity != null) updates['showActivity'] = showActivity;
-    
-    if (updates.isNotEmpty) {
-      await _presenceCollection.doc(userId).update(updates);
+    if (!heartbeatOnly) {
+      updates['lastSeenAt'] = FieldValue.serverTimestamp();
+      if (status != null) updates['status'] = status.name;
+      if (matchId != null) updates['currentMatchId'] = matchId;
+      if (showOnlineStatus != null) updates['showOnlineStatus'] = showOnlineStatus;
+      if (showActivity != null) updates['showActivity'] = showActivity;
+      if (showMatchStatus != null) updates['showMatchStatus'] = showMatchStatus;
     }
+
+    await _presenceCollection.doc(userId).set(updates, SetOptions(merge: true));
   }
 
   @override
   Future<void> setOffline(String userId) async {
-    await updateStatus(userId, PresenceStatus.offline);
+    await updatePresence(userId, status: PresenceStatus.offline);
   }
 }

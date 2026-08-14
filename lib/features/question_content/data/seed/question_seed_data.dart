@@ -1,0 +1,82 @@
+import '../../domain/entities/question.dart';
+import '../../domain/entities/difficulty.dart';
+
+class QuestionSeedData {
+  static final List<Question> questions = [
+    Question(
+      id: 'q1',
+      text: 'What is the capital of France?',
+      explanation: 'Paris is the largest city and capital of France.',
+      difficulty: Difficulty.easy,
+      categoryId: 'geography',
+      type: QuestionType.multipleChoice,
+      options: [
+        const Answer(id: 'o1', text: 'London'),
+        const Answer(id: 'o2', text: 'Berlin'),
+        const Answer(id: 'o3', text: 'Paris'),
+        const Answer(id: 'o4', text: 'Madrid'),
+      ],
+      correctOptionIds: ['o3'],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      source: 'Internal',
+      status: QuestionStatus.published,
+    ),
+    Question(
+      id: 'q2',
+      text: 'Which planet is known as the Red Planet?',
+      explanation: 'Mars is often called the Red Planet because of iron oxide on its surface.',
+      difficulty: Difficulty.easy,
+      categoryId: 'science',
+      subcategoryId: 'astronomy',
+      type: QuestionType.multipleChoice,
+      options: [
+        const Answer(id: 'o1', text: 'Venus'),
+        const Answer(id: 'o2', text: 'Mars'),
+        const Answer(id: 'o3', text: 'Jupiter'),
+        const Answer(id: 'o4', text: 'Saturn'),
+      ],
+      correctOptionIds: ['o2'],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      source: 'Internal',
+      status: QuestionStatus.published,
+    ),
+    Question(
+      id: 'q3',
+      text: 'What is the powerhouse of the cell?',
+      explanation: 'Mitochondria generate most of the cell\'s supply of adenosine triphosphate (ATP).',
+      difficulty: Difficulty.medium,
+      categoryId: 'science',
+      subcategoryId: 'biology',
+      type: QuestionType.multipleChoice,
+      options: [
+        const Answer(id: 'o1', text: 'Nucleus'),
+        const Answer(id: 'o2', text: 'Ribosome'),
+        const Answer(id: 'o3', text: 'Mitochondria'),
+        const Answer(id: 'o4', text: 'Endoplasmic Reticulum'),
+      ],
+      correctOptionIds: ['o3'],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      source: 'Internal',
+      status: QuestionStatus.published,
+    ),
+    Question(
+      id: 'q4',
+      text: 'Draft Question Example',
+      difficulty: Difficulty.hard,
+      categoryId: 'technology',
+      type: QuestionType.multipleChoice,
+      options: [
+        const Answer(id: 'o1', text: 'Opt 1'),
+        const Answer(id: 'o2', text: 'Opt 2'),
+      ],
+      correctOptionIds: ['o1'],
+      createdAt: DateTime.now(),
+      updatedAt: DateTime.now(),
+      source: 'Internal',
+      status: QuestionStatus.draft,
+    ),
+  ];
+}

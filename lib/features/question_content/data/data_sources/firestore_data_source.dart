@@ -1,47 +1,78 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:soteria/features/question_content/data/models/question_model.dart';
+import 'package:soteria/core/firebase/services/firebase_interfaces.dart';
+import '../models/question_dto.dart';
 
-/// Data source for interacting with Firebase Firestore.
+/// Data source for interacting with Firebase Firestore for Question Bank.
 class FirestoreQuestionDataSource {
-  final FirebaseFirestore _firestore;
+  final IDatabaseService _database;
 
-  FirestoreQuestionDataSource({FirebaseFirestore? firestore})
-    : _firestore = firestore ?? FirebaseFirestore.instance;
+  FirestoreQuestionDataSource(this._database);
 
   static const String _collectionPath = 'questions';
 
   /// Fetches questions from Firestore based on filters.
-  Future<List<QuestionModel>> fetchQuestions({
-    String? category,
-    String? topic,
+  Future<List<QuestionDto>> fetchQuestions({
+    String? categoryId,
+    String? subcategoryId,
+    String? topicId,
     String? difficulty,
+    String? status,
     int limit = 10,
+    String? startAfterId,
   }) async {
-    Query query = _firestore.collection(_collectionPath);
+    Query query = _database.collection(_collectionPath);
 
-    if (category != null) {
-      query = query.where('category', isEqualTo: category);
+    if (status != null) {
+      query = query.where('status', isEqualTo: status);
+    } else {
+      // Default to only published questions for normal users
+      query = query.where('status', isEqualTo: 'published');
     }
-    if (topic != null) {
-      query = query.where('topic', isEqualTo: topic);
+
+    if (categoryId != null) {
+      query = query.where('categoryId', isEqualTo: categoryId);
+    }
+    if (subcategoryId != null) {
+      query = query.where('subcategoryId', isEqualTo: subcategoryId);
+    }
+    if (topicId != null) {
+      query = query.where('topicId', isEqualTo: topicId);
     }
     if (difficulty != null) {
       query = query.where('difficulty', isEqualTo: difficulty);
+    }
+
+    // Ordering for pagination
+    query = query.orderBy('createdAt', descending: true);
+
+    if (startAfterId != null) {
+      final startAfterDoc = await _database.collection(_collectionPath).doc(startAfterId).get();
+      if (startAfterDoc.exists) {
+        query = query.startAfterDocument(startAfterDoc);
+      }
     }
 
     final snapshot = await query.limit(limit).get();
 
     return snapshot.docs
         .map(
-          (doc) => QuestionModel.fromJson(doc.data() as Map<String, dynamic>),
+          (doc) => QuestionDto.fromJson({'id': doc.id, ...doc.data() as Map<String, dynamic>}),
         )
         .toList();
   }
 
   /// Fetches a specific question by ID.
-  Future<QuestionModel?> fetchQuestionById(String id) async {
-    final doc = await _firestore.collection(_collectionPath).doc(id).get();
+  Future<QuestionDto?> fetchQuestionById(String id) async {
+    final doc = await _database.collection(_collectionPath).doc(id).get();
     if (!doc.exists) return null;
-    return QuestionModel.fromJson(doc.data() as Map<String, dynamic>);
+    return QuestionDto.fromJson({'id': doc.id, ...doc.data()!});
+  }
+
+  /// Watches a question for real-time updates.
+  Stream<QuestionDto?> watchQuestion(String id) {
+    return _database.collection(_collectionPath).doc(id).snapshots().map((doc) {
+      if (!doc.exists) return null;
+      return QuestionDto.fromJson({'id': doc.id, ...doc.data()!});
+    });
   }
 }

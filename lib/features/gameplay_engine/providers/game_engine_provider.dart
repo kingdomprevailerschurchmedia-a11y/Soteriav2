@@ -75,7 +75,7 @@ class GameEngine extends StateNotifier<GameState> {
       submissionId: 'timeout_${DateTime.now().millisecondsSinceEpoch}',
       questionId: state.currentQuestion?.id ?? 'unknown',
       decision: AnswerDecision.wrong, // Timeout counts as wrong
-      correctOptionIds: state.currentQuestion?.correctAnswers ?? [],
+      correctOptionIds: state.currentQuestion?.correctOptionIds ?? [],
       timestamp: DateTime.now(),
       metadata: {'timeout': true},
     );
@@ -276,14 +276,16 @@ class GameEngine extends StateNotifier<GameState> {
           state.score ~/
           100; // This is a bit loose now, but keeping for compatibility
       _progression?.handleRoundEnd(
-        state.questions.length,
-        correctCount,
-        progressionPolicy,
+        sessionId: state.sessionId,
+        totalQuestions: state.questions.length,
+        correctAnswers: correctCount,
+        policy: progressionPolicy,
       );
     }
 
     final result = GameResult(
       sessionId: state.sessionId,
+      mode: config.mode,
       finalScore: state.score,
       totalXP: _progression?.state.totalXP ?? state.xp,
       totalQuestions: state.questions.length,
@@ -292,6 +294,8 @@ class GameEngine extends StateNotifier<GameState> {
       totalDuration: DateTime.now().difference(state.startTime!),
       accuracy: (state.score / (state.questions.length * 100)) * 100,
       maxStreak: _progression?.state.maxStreak ?? state.streak,
+      answers: state.answerHistory,
+      timestamp: DateTime.now(),
     );
 
     analytics?.trackEvent('Session Ended', {

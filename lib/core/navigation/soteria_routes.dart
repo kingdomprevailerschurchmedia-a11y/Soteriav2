@@ -13,12 +13,15 @@ class SoteriaRoutes {
   // Main App (Shell)
   static const String main = '/app';
   static const String practice = '/app/practice';
+  static const String practiceSession = '/app/practice/session';
+  static const String practiceResults = '/app/practice/results';
   static const String proMode = '/app/pro-mode';
   static const String versus = '/app/versus';
   static const String versusLobby = '/app/versus/lobby';
   static const String matchmaking = '/app/matchmaking';
   static const String matchFound = '/app/match-found';
   static const String challenges = '/app/challenges';
+  static const String createChallenge = '/app/challenges/create';
   static const String season = '/app/season';
   static const String tournaments = '/app/tournaments';
   static const String tournamentLobby = '/app/tournaments/lobby/:id';
@@ -38,6 +41,7 @@ class SoteriaRoutes {
   static const String competitiveInsights = '/app/versus/insights';
   static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
+  static const String publicProfile = '/app/profile/external/:id';
   static const String friends = '/app/profile/friends';
   static const String friendRequests = '/app/profile/friends/requests';
   static const String settings = '/app/settings';

@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
-import 'package:soteria/features/quiz/domain/models/question.dart';
+import 'package:soteria/features/question_content/domain/entities/question.dart' as qc;
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart' as qc_difficulty;
 import 'package:soteria/features/quiz/domain/models/player_answer.dart';
 import 'package:soteria/features/quiz/domain/models/scoring_configuration.dart';
 import 'package:soteria/features/quiz/domain/services/quiz_scoring_engine.dart';
@@ -11,17 +12,21 @@ void main() {
     final config = ScoringConfiguration.standard();
     final engine = QuizScoringEngine(config: config);
 
-    final mockQuestion = Question(
+    final mockQuestion = qc.Question(
       id: 'q1',
-      type: QuestionType.multipleChoice,
-      category: 'Science',
-      difficulty: Difficulty.medium,
+      type: qc.QuestionType.multipleChoice,
+      categoryId: 'Science',
+      difficulty: qc_difficulty.Difficulty.medium,
       text: 'Test?',
-      options: [],
+      options: [
+        const qc.Answer(id: 'o1', text: 'Ans1'),
+        const qc.Answer(id: 'o2', text: 'Ans2'),
+      ],
       correctOptionIds: ['o1'],
-      estimatedTime: 30,
+      estimatedTime: const Duration(seconds: 30),
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      source: 'Internal',
     );
 
     test('Correct answer awards base score + difficulty bonus', () {

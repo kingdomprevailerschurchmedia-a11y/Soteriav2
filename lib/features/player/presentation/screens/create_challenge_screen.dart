@@ -9,10 +9,13 @@ import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
+import '../../../auth/providers/auth_providers.dart';
 import '../../../social/domain/models/friendship.dart';
 import '../../../social/presentation/providers/social_providers.dart';
 import '../providers/challenge_providers.dart';
-import '../models/competitive_challenge.dart';
+import '../../domain/models/competitive_challenge.dart';
+import '../providers/public_profile_providers.dart';
+import '../providers/presence_providers.dart';
 
 class CreateChallengeScreen extends ConsumerStatefulWidget {
   final String? initialOpponentId;
@@ -82,53 +85,24 @@ class _CreateChallengeScreenState extends ConsumerState<CreateChallengeScreen> {
       return const Text('You need friends to create a challenge.');
     }
 
+    final currentUserId = ref.read(authRepositoryProvider).currentUserId;
+
     return SizedBox(
       height: 100.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: friends.length,
         itemBuilder: (context, index) {
-          final friend = friends[index];
-          final isSelected = _selectedOpponentId == friend.friendId;
-          return GestureDetector(
-            onTap: () => setState(() => _selectedOpponentId = friend.friendId),
-            child: Container(
-              width: 80.w,
-              margin: const EdgeInsets.only(right: 12),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      SoteriaAvatar(
-                        avatar: AvatarCatalog().getById(friend.friendAvatarId),
-                        size: 56,
-                        imageUrl: friend.friendPhotoUrl,
-                      ),
-                      if (isSelected)
-                        Positioned(
-                          right: 0,
-                          bottom: 0,
-                          child: Container(
-                            decoration: const BoxDecoration(color: SoteriaColors.success, shape: BoxShape.circle),
-                            padding: const EdgeInsets.all(2),
-                            child: const Icon(Icons.check, size: 14, color: Colors.white),
-                          ),
-                        ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    friend.friendName,
-                    style: context.bodySmall.copyWith(
-                      color: isSelected ? Colors.white : SoteriaColors.muted,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
+          final friendship = friends[index];
+          final otherUserId = friendship.userIds.firstWhere(
+            (id) => id != currentUserId,
+            orElse: () => '',
+          );
+          
+          return _FriendSelectorItem(
+            userId: otherUserId,
+            isSelected: _selectedOpponentId == otherUserId,
+            onTap: () => setState(() => _selectedOpponentId = otherUserId),
           );
         },
       ),
@@ -249,5 +223,73 @@ class _CreateChallengeScreenState extends ConsumerState<CreateChallengeScreen> {
         context.pop();
       }
     }
+  }
+}
+
+class _FriendSelectorItem extends ConsumerWidget {
+  final String userId;
+  final bool isSelected;
+  final VoidCallback onTap;
+
+  const _FriendSelectorItem({
+    required this.userId,
+    required this.isSelected,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileAsync = ref.watch(publicProfileProvider(userId));
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 80.w,
+        margin: const EdgeInsets.only(right: 12),
+        child: profileAsync.when(
+          data: (profile) {
+            if (profile == null) return const SizedBox.shrink();
+            return Column(
+              children: [
+                Stack(
+                  children: [
+                    SoteriaAvatar(
+                      avatar: AvatarCatalog().getById(profile.avatarId),
+                      size: 56,
+                      imageUrl: profile.photoUrl,
+                    ),
+                    if (isSelected)
+                      Positioned(
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: SoteriaColors.success,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(2),
+                          child: const Icon(Icons.check, size: 14, color: Colors.white),
+                        ),
+                      ),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  profile.displayName,
+                  style: context.bodySmall.copyWith(
+                    color: isSelected ? Colors.white : SoteriaColors.muted,
+                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          error: (_, __) => const Icon(Icons.error_outline, color: SoteriaColors.error),
+        ),
+      ),
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/question_presentation/widgets/question_presenter.dart';
 import 'package:soteria/features/question_presentation/providers/presentation_providers.dart';
 
@@ -113,11 +114,11 @@ class _QuestionPreview extends ConsumerWidget {
 final List<Question> _mockQuestions = [
   Question(
     id: '1',
-    version: '1.0',
+    version: '1.0.0',
     text:
         'Which architectural pattern does Soteria use for its Core Gameplay Engine?',
-    difficulty: QuestionDifficulty.hard,
-    category: 'Architecture',
+    difficulty: Difficulty.hard,
+    categoryId: 'architecture',
     type: QuestionType.multipleChoice,
     options: [
       const Answer(id: '1', text: 'Clean Architecture'),
@@ -125,29 +126,25 @@ final List<Question> _mockQuestions = [
       const Answer(id: '3', text: 'Monolithic Structure'),
       const Answer(id: '4', text: 'Hexagonal Architecture'),
     ],
-    correctAnswers: ['1'],
+    correctOptionIds: ['1'],
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
     source: 'Soteria internal',
-    schemaVersion: 1,
-    contentHash: 'hash',
   ),
   Question(
     id: '2',
-    version: '1.0',
+    version: '1.0.0',
     text: 'Soteria Design Language v2.1 supports only Dark Theme.',
-    difficulty: QuestionDifficulty.easy,
-    category: 'Design',
-    type: QuestionType.trueFalse,
+    difficulty: Difficulty.easy,
+    categoryId: 'design',
+    type: QuestionType.multipleChoice,
     options: [
       const Answer(id: '1', text: 'True'),
       const Answer(id: '2', text: 'False'),
     ],
-    correctAnswers: ['1'],
+    correctOptionIds: ['1'],
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
     source: 'Soteria internal',
-    schemaVersion: 1,
-    contentHash: 'hash',
   ),
 ];

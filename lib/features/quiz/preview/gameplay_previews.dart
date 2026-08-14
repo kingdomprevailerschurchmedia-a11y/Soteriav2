@@ -45,21 +45,22 @@ class GameplayPreviews {
   static final mockQuestion = Question(
     id: 'q1',
     type: QuestionType.multipleChoice,
-    category: 'Cybersecurity',
+    categoryId: 'Cybersecurity',
     difficulty: Difficulty.hard,
     text:
         'Which encryption algorithm is considered the current standard for securing sensitive data?',
     options: [
-      const AnswerOption(id: 'o1', text: 'AES-256'),
-      const AnswerOption(id: 'o2', text: 'DES'),
-      const AnswerOption(id: 'o3', text: 'MD5'),
-      const AnswerOption(id: 'o4', text: 'RC4'),
+      const Answer(id: 'o1', text: 'AES-256'),
+      const Answer(id: 'o2', text: 'DES'),
+      const Answer(id: 'o3', text: 'MD5'),
+      const Answer(id: 'o4', text: 'RC4'),
     ],
     correctOptionIds: ['o1'],
     explanation:
         'AES-256 is the Advanced Encryption Standard with a 256-bit key length.',
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
+    source: 'Mock',
   );
 
   static final mockPowerUps = [

@@ -15,7 +15,9 @@ import '../../domain/models/head_to_head_summary.dart';
 import '../../../player/domain/models/competitive_activity_event.dart';
 import '../../../player/presentation/providers/activity_providers.dart';
 import '../../../player/presentation/widgets/activity/competitive_activity_card.dart';
-import '../../../player/domain/models/competitive_result.dart';
+import '../../../player/presentation/widgets/presence/competitive_quick_actions.dart';
+import '../../../player/presentation/widgets/presence/player_presence_indicator.dart';
+import '../../../player/presentation/widgets/presence/presence_label.dart';
 
 class RivalryScreen extends ConsumerWidget {
   final String rivalId;
@@ -49,7 +51,10 @@ class RivalryScreen extends ConsumerWidget {
                   SizedBox(height: SoteriaSpacing.xl),
                   _buildActivitySection(context, activityAsync),
                   SizedBox(height: SoteriaSpacing.xxl),
-                  _buildActions(context),
+                  rivalProfileAsync.maybeWhen(
+                    data: (profile) => _buildActions(context, profile),
+                    orElse: () => const SizedBox.shrink(),
+                  ),
                 ],
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
@@ -67,18 +72,28 @@ class RivalryScreen extends ConsumerWidget {
         profileAsync.when(
           data: (profile) => Column(
             children: [
-              SoteriaAvatar(
-                avatar: AvatarCatalog().getById(profile?.avatarId ?? 'socrates'),
-                size: 100,
-                imageUrl: profile?.photoUrl,
+              Stack(
+                children: [
+                  SoteriaAvatar(
+                    avatar: AvatarCatalog().getById(profile?.avatarId ?? 'socrates'),
+                    size: 100,
+                    imageUrl: profile?.photoUrl,
+                  ),
+                  Positioned(
+                    right: 4,
+                    bottom: 4,
+                    child: PlayerPresenceIndicator(userId: rivalId, size: 24),
+                  ),
+                ],
               ),
               SizedBox(height: SoteriaSpacing.md),
               Text(
                 profile?.displayName ?? 'Rival',
                 style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
               ),
+              PresenceLabel(userId: rivalId),
               Text(
-                profile?.currentRankTier ?? 'Unranked',
+                profile?.rankTier ?? 'Unranked',
                 style: context.bodyMedium.copyWith(color: SoteriaColors.gold, fontWeight: FontWeight.bold),
               ),
             ],
@@ -179,21 +194,11 @@ class RivalryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildActions(BuildContext context) {
+  Widget _buildActions(BuildContext context, dynamic profile) {
     return Column(
       children: [
-        SizedBox(
-          width: double.infinity,
-          height: 56.h,
-          child: ElevatedButton(
-            onPressed: () => context.push('/challenges/create?opponentId=$rivalId'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: SoteriaColors.primary,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-            ),
-            child: const Text('NEW CHALLENGE', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ),
+        if (profile != null)
+          CompetitiveQuickActions(userId: rivalId, profile: profile),
         SizedBox(height: SoteriaSpacing.md),
         TextButton(
           onPressed: () => context.push('/social/head-to-head/$rivalId'),

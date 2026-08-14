@@ -125,10 +125,34 @@ class ProgressionEngine {
       events.add(LevelUpEvent(newLevel, 0));
     }
 
+    // Daily Streak Logic
+    final now = DateTime.now();
+    int newDailyStreak = current.dailyStreak;
+    DateTime? newLastUpdate = current.lastDailyStreakUpdate;
+
+    if (newLastUpdate == null) {
+      newDailyStreak = 1;
+      newLastUpdate = now;
+      events.add(StreakMilestoneEvent(newDailyStreak));
+    } else {
+      final difference = now.difference(newLastUpdate).inDays;
+      if (difference == 1) {
+        newDailyStreak++;
+        newLastUpdate = now;
+        events.add(StreakMilestoneEvent(newDailyStreak));
+      } else if (difference > 1) {
+        newDailyStreak = 1;
+        newLastUpdate = now;
+      }
+      // If difference is 0, same day, no change to streak count
+    }
+
     final updatedSnapshot = current.copyWith(
       totalXP: newTotalXP,
       level: newLevel,
-      timestamp: DateTime.now(),
+      dailyStreak: newDailyStreak,
+      lastDailyStreakUpdate: newLastUpdate,
+      timestamp: now,
     );
 
     return ProgressionResult(

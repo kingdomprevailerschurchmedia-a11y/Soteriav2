@@ -5,9 +5,14 @@ abstract class PresenceRepository {
   
   Stream<Map<String, PlayerPresence>> watchPresenceMultiple(List<String> userIds);
   
-  Future<void> updateStatus(String userId, PresenceStatus status, {String? matchId});
-  
-  Future<void> updatePrivacy(String userId, {bool? showOnlineStatus, bool? showActivity});
+  Future<void> updatePresence(String userId, {
+    PresenceStatus? status,
+    String? matchId,
+    bool? showOnlineStatus,
+    bool? showActivity,
+    bool? showMatchStatus,
+    bool heartbeatOnly = false,
+  });
   
   Future<void> setOffline(String userId);
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/reward_summary.dart';
 import 'package:soteria/features/gameplay_engine/models/answer_review.dart';
@@ -69,12 +70,11 @@ class MockDataFactory {
       count,
       (index) => Question(
         id: 'q_$index',
-        version: '1',
         text: 'What is the primary goal of the Soteria security protocol?',
         explanation:
             'Soteria is designed to provide end-to-end encryption for all player data while maintaining sub-50ms latency.',
-        difficulty: QuestionDifficulty.medium,
-        category: 'Cybersecurity',
+        difficulty: Difficulty.medium,
+        categoryId: 'Cybersecurity',
         type: QuestionType.multipleChoice,
         options: const [
           Answer(id: 'a1', text: 'Data Encryption'),
@@ -82,12 +82,10 @@ class MockDataFactory {
           Answer(id: 'a3', text: 'Malware Detection'),
           Answer(id: 'a4', text: 'Network Scanning'),
         ],
-        correctAnswers: const ['a1'],
+        correctOptionIds: const ['a1'],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         source: 'Soteria Handbook v2',
-        schemaVersion: 1,
-        contentHash: 'hash_$index',
       ),
     );
   }
@@ -105,6 +103,7 @@ class MockDataFactory {
   static GameResult createMockResult({bool isPerfect = false}) {
     return GameResult(
       sessionId: 'session_mock',
+      mode: GameMode.practice,
       finalScore: isPerfect ? 1000 : 850,
       totalXP: isPerfect ? 1500 : 1250,
       totalQuestions: 10,
@@ -117,12 +116,14 @@ class MockDataFactory {
       avgResponseTime: const Duration(seconds: 12),
       fastestAnswerTime: const Duration(seconds: 4),
       slowestAnswerTime: const Duration(seconds: 25),
+      timestamp: DateTime.now(),
     );
   }
 
   static GameResult createFailedResult() {
     return GameResult(
       sessionId: 'session_failed',
+      mode: GameMode.practice,
       finalScore: 120,
       totalXP: 50,
       totalQuestions: 10,
@@ -135,6 +136,7 @@ class MockDataFactory {
       avgResponseTime: const Duration(seconds: 8),
       fastestAnswerTime: const Duration(seconds: 3),
       slowestAnswerTime: const Duration(seconds: 45),
+      timestamp: DateTime.now(),
     );
   }
 
@@ -395,6 +397,7 @@ class MockDataFactory {
 extension GameResultExtension on GameResult {
   GameResult copyWith({
     String? sessionId,
+    GameMode? mode,
     int? finalScore,
     int? totalXP,
     int? totalQuestions,
@@ -408,10 +411,12 @@ extension GameResultExtension on GameResult {
     Duration? avgResponseTime,
     Duration? fastestAnswerTime,
     Duration? slowestAnswerTime,
+    DateTime? timestamp,
     bool? isSynced,
   }) {
     return GameResult(
       sessionId: sessionId ?? this.sessionId,
+      mode: mode ?? this.mode,
       finalScore: finalScore ?? this.finalScore,
       totalXP: totalXP ?? this.totalXP,
       totalQuestions: totalQuestions ?? this.totalQuestions,
@@ -425,6 +430,7 @@ extension GameResultExtension on GameResult {
       avgResponseTime: avgResponseTime ?? this.avgResponseTime,
       fastestAnswerTime: fastestAnswerTime ?? this.fastestAnswerTime,
       slowestAnswerTime: slowestAnswerTime ?? this.slowestAnswerTime,
+      timestamp: timestamp ?? this.timestamp,
       isSynced: isSynced ?? this.isSynced,
     );
   }

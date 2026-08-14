@@ -21,6 +21,7 @@ import '../widgets/announcement_section.dart';
 import '../widgets/recent_achievements_section.dart';
 import '../widgets/top_scholars_section.dart';
 import '../widgets/performance_section.dart';
+import '../../../player/presentation/widgets/presence/recent_opponents_section.dart';
 import '../../../quiz/presentation/widgets/session_recovery_dialog.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 
@@ -178,6 +179,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               // Top Scholars
               const SliverToBoxAdapter(child: TopScholarsSection()),
+
+              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+
+              // Recent Opponents
+              const SliverToBoxAdapter(child: RecentOpponentsSection()),
 
               SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
 

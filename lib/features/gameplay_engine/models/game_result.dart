@@ -1,9 +1,11 @@
+import 'game_mode.dart';
 import '../progression/models/reward_summary.dart';
 import '../answer/models/answer_result.dart';
 
 /// Final summary of a gameplay session performance.
 class GameResult {
   final String sessionId;
+  final GameMode mode;
   final int finalScore;
   final int totalXP;
   final int totalQuestions;
@@ -18,10 +20,12 @@ class GameResult {
   final Duration fastestAnswerTime;
   final Duration slowestAnswerTime;
   final List<AnswerResult> answers;
+  final DateTime timestamp;
   final bool isSynced;
 
   const GameResult({
     required this.sessionId,
+    required this.mode,
     required this.finalScore,
     required this.totalXP,
     required this.totalQuestions,
@@ -36,11 +40,13 @@ class GameResult {
     this.fastestAnswerTime = Duration.zero,
     this.slowestAnswerTime = Duration.zero,
     this.answers = const [],
+    required this.timestamp,
     this.isSynced = true,
   });
 
   Map<String, dynamic> toJson() => {
     'sessionId': sessionId,
+    'mode': mode.name,
     'finalScore': finalScore,
     'totalXP': totalXP,
     'totalQuestions': totalQuestions,
@@ -55,11 +61,13 @@ class GameResult {
     'fastestAnswerTime': fastestAnswerTime.inMilliseconds,
     'slowestAnswerTime': slowestAnswerTime.inMilliseconds,
     'answers': answers.map((e) => e.toJson()).toList(),
+    'timestamp': timestamp.toIso8601String(),
     'isSynced': isSynced,
   };
 
   factory GameResult.fromJson(Map<String, dynamic> json) => GameResult(
     sessionId: json['sessionId'],
+    mode: GameMode.values.byName(json['mode'] ?? 'practice'),
     finalScore: json['finalScore'],
     totalXP: json['totalXP'],
     totalQuestions: json['totalQuestions'],
@@ -77,6 +85,9 @@ class GameResult {
             ?.map((e) => AnswerResult.fromJson(e))
             .toList() ??
         [],
+    timestamp: json['timestamp'] != null
+        ? DateTime.parse(json['timestamp'])
+        : DateTime.now(),
     isSynced: json['isSynced'] ?? true,
   );
 }

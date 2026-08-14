@@ -1,5 +1,6 @@
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 /// Repository interface for managing gameplay sessions and persistence.
 abstract interface class GameplayRepository {
@@ -20,4 +21,7 @@ abstract interface class GameplayRepository {
 
   /// Clears the active session state.
   Future<void> clearActiveSession();
+
+  /// Fetches recent game results for a user.
+  Future<List<GameResult>> getRecentResults(String uid, {GameMode? mode, int limit = 10});
 }

@@ -3,6 +3,7 @@ import 'package:soteria/features/gameplay_engine/models/game_configuration.dart'
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
 import 'package:soteria/features/gameplay_engine/answer/services/answer_processor.dart';
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
@@ -26,9 +27,9 @@ void main() {
           Answer(id: 'a', text: 'Correct'),
           Answer(id: 'b', text: 'Wrong'),
         ],
-        correctAnswers: const ['a'],
-        difficulty: QuestionDifficulty.easy,
-        category: 'Test',
+        correctOptionIds: const ['a'],
+        difficulty: Difficulty.easy,
+        categoryId: 'Test',
         type: QuestionType.multipleChoice,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
@@ -44,9 +45,9 @@ void main() {
           Answer(id: 'c', text: 'Correct'),
           Answer(id: 'd', text: 'Wrong'),
         ],
-        correctAnswers: const ['c'],
-        difficulty: QuestionDifficulty.easy,
-        category: 'Test',
+        correctOptionIds: const ['c'],
+        difficulty: Difficulty.easy,
+        categoryId: 'Test',
         type: QuestionType.multipleChoice,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),

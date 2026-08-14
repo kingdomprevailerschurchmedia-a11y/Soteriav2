@@ -12,7 +12,7 @@ class FiftyFiftyEngine implements LifelineEngine {
     required Question question,
     Map<String, dynamic>? context,
   }) async {
-    final correctIds = question.correctAnswers;
+    final correctIds = question.correctOptionIds;
     final incorrectOptions = question.options
         .where((o) => !correctIds.contains(o.id))
         .toList();

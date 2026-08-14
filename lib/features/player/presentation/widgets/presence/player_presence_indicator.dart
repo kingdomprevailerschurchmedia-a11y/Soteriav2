@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../domain/models/player_presence.dart';
-import '../../providers/presence_providers.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
+import 'package:soteria/features/player/domain/models/player_presence.dart';
+import 'package:soteria/features/player/presentation/providers/presence_providers.dart';
 
 class PlayerPresenceIndicator extends ConsumerWidget {
   final String userId;
@@ -21,47 +21,55 @@ class PlayerPresenceIndicator extends ConsumerWidget {
     return presenceAsync.when(
       data: (presence) {
         if (presence == null || !presence.showOnlineStatus) return const SizedBox.shrink();
-        return _buildDot(presence.status);
+        if (presence.status == PresenceStatus.inMatch) {
+          return _buildIcon(Icons.flash_on_rounded, SoteriaColors.primary);
+        }
+        if (presence.status == PresenceStatus.recentlyActive) {
+          return _buildDot(SoteriaColors.warning, isHollow: true);
+        }
+        return _buildDot(_getStatusColor(presence.status));
       },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
     );
   }
 
-  Widget _buildDot(PresenceStatus status) {
-    Color color;
-    switch (status) {
-      case PresenceStatus.online:
-        color = SoteriaColors.success;
-        break;
-      case PresenceStatus.inMatch:
-        color = SoteriaColors.primary;
-        break;
-      case PresenceStatus.recentlyActive:
-        color = SoteriaColors.warning;
-        break;
-      case PresenceStatus.offline:
-      case PresenceStatus.unavailable:
-        color = SoteriaColors.muted;
-        break;
-    }
-
+  Widget _buildDot(Color color, {bool isHollow = false}) {
     return Container(
       width: size,
       height: size,
       decoration: BoxDecoration(
-        color: color,
+        color: isHollow ? Colors.transparent : color,
         shape: BoxShape.circle,
-        border: Border.all(color: SoteriaColors.background, width: 2),
-        boxShadow: [
-          if (status == PresenceStatus.online || status == PresenceStatus.inMatch)
-            BoxShadow(
-              color: color.withValues(alpha: 0.5),
-              blurRadius: 4,
-              spreadRadius: 1,
-            ),
-        ],
+        border: Border.all(
+          color: isHollow ? color : SoteriaColors.background, 
+          width: 2,
+        ),
       ),
     );
+  }
+
+  Widget _buildIcon(IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(2),
+      decoration: const BoxDecoration(
+        color: SoteriaColors.background,
+        shape: BoxShape.circle,
+      ),
+      child: Icon(icon, color: color, size: size),
+    );
+  }
+
+  Color _getStatusColor(PresenceStatus status) {
+    switch (status) {
+      case PresenceStatus.online:
+        return SoteriaColors.success;
+      case PresenceStatus.inMatch:
+        return SoteriaColors.primary;
+      case PresenceStatus.recentlyActive:
+        return SoteriaColors.warning;
+      default:
+        return SoteriaColors.muted;
+    }
   }
 }

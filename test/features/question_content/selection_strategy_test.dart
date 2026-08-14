@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/question_content/domain/selection/selection_strategy.dart';
 
 void main() {
@@ -8,18 +9,18 @@ void main() {
       10,
       (i) => Question(
         id: 'id_$i',
-        version: '1',
         text: 'Q$i',
-        difficulty: i < 5 ? QuestionDifficulty.easy : QuestionDifficulty.hard,
-        category: 'C',
+        difficulty: i < 5 ? Difficulty.easy : Difficulty.hard,
+        categoryId: 'C',
         type: QuestionType.multipleChoice,
-        options: [],
-        correctAnswers: [],
+        options: const [
+          Answer(id: 'o1', text: 'A'),
+          Answer(id: 'o2', text: 'B'),
+        ],
+        correctOptionIds: const ['o1'],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         source: 'S',
-        schemaVersion: 1,
-        contentHash: 'H',
       ),
     );
 
@@ -34,8 +35,8 @@ void main() {
       final strategy = ProgressiveDifficultyStrategy();
       final result = strategy.select(pool, 10);
 
-      expect(result.first.difficulty, QuestionDifficulty.easy);
-      expect(result.last.difficulty, QuestionDifficulty.hard);
+      expect(result.first.difficulty, Difficulty.easy);
+      expect(result.last.difficulty, Difficulty.hard);
     });
   });
 }

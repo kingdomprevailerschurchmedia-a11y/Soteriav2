@@ -29,9 +29,11 @@ class AnswerDecisionEngine {
       submissionId: submission.submissionId,
       questionId: question.id,
       decision: decision,
-      correctOptionIds: question.correctAnswers,
+      selectedOptionIds: submission.selectedOptionIds,
+      correctOptionIds: question.correctOptionIds,
       xpEarned: xp,
       timestamp: DateTime.now(),
+      responseTime: submission.responseTime,
       metadata: {'responseTimeMs': submission.responseTime.inMilliseconds},
     );
   }

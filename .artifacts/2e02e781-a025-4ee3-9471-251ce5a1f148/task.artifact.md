@@ -1,0 +1,23 @@
+- [x] Domain Layer Consolidation
+    - [x] Create `Difficulty` enum
+    - [x] Update `Category`, `Subcategory`, `Topic` to `freezed`
+    - [x] Implement `Question` and `Answer` with `freezed`
+    - [x] Update `QuestionRepository` interface
+- [x] Data Layer Implementation
+    - [x] Create `QuestionDto`
+    - [x] Create `QuestionMapper`
+    - [x] Update `FirestoreQuestionDataSource`
+    - [x] Update `QuestionRepositoryImpl` with local caching
+    - [x] Enhance `QuestionValidator`
+- [x] Presentation Layer Implementation
+    - [x] Create `question_bank_providers.dart`
+- [x] Infrastructure & Security
+    - [x] Update `firestore.rules` for question lifecycle and security
+- [x] Seed Data & Previews
+    - [x] Create `question_seed_data.dart`
+    - [x] Create `question_bank_preview.dart`
+    - [x] Register previews in `all_previews.dart`
+- [x] Documentation & Testing
+    - [x] Create `docs/question_bank.md`
+    - [x] Add unit tests for new models, mapper, and validator
+    - [x] Add repository and integration tests

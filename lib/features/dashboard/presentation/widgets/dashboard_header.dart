@@ -40,99 +40,93 @@ class DashboardHeader extends ConsumerWidget {
       label: 'Dashboard Header. Player: $playerName. Level: $level',
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(width: SoteriaSpacing.xs),
-                    SoteriaScaleIn(
-                      duration: const Duration(milliseconds: 700),
-                      delay: const Duration(milliseconds: 200),
-                      child: GestureDetector(
-                        onTap: () => nav.go('/app/profile'),
-                        child: Hero(
-                          tag: 'player_avatar',
-                          child: SoteriaAvatar(
-                            isOnline: isOnline,
-                            size: 52,
-                            showGlow: true,
-                          ),
+                SizedBox(width: SoteriaSpacing.xs),
+                SoteriaScaleIn(
+                  duration: const Duration(milliseconds: 700),
+                  delay: const Duration(milliseconds: 200),
+                  child: GestureDetector(
+                    onTap: () => nav.go('/app/profile'),
+                    child: Hero(
+                      tag: 'player_avatar',
+                      child: SoteriaAvatar(
+                        isOnline: isOnline,
+                        size: 52,
+                        showGlow: true,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                SoteriaSlideLeft(
+                  duration: const Duration(milliseconds: 600),
+                  offset: 10.0,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        greeting,
+                        style: context.labelSmall.copyWith(
+                          color: SoteriaColors.gold,
+                          letterSpacing: 1.5,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 10.sp,
                         ),
                       ),
-                    ),
-                    SizedBox(width: 8.w),
-                    SoteriaSlideLeft(
-                      duration: const Duration(milliseconds: 600),
-                      offset: 10.0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            greeting,
-                            style: context.labelSmall.copyWith(
-                              color: SoteriaColors.gold,
-                              letterSpacing: 1.5,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10.sp,
+                            playerName,
+                            style: context.displaySmall.copyWith(
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: -1.0,
+                              fontSize: 24.sp,
                             ),
                           ),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                playerName,
-                                style: context.displaySmall.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -1.0,
-                                  fontSize: 24.sp,
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              Text('👋', style: TextStyle(fontSize: 20.sp)),
-                            ],
-                          ),
+                          SizedBox(width: 8.w),
+                          Text('👋', style: TextStyle(fontSize: 20.sp)),
                         ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-                SizedBox(height: SoteriaSpacing.sm),
-                Padding(
-                  padding: EdgeInsets.only(left: SoteriaSpacing.xs),
-                  child: SoteriaScaleIn(
-                    duration: const Duration(milliseconds: 700),
-                    delay: const Duration(milliseconds: 400),
-                    child: _HeaderBadge(
-                      label: 'LEVEL $level',
-                      icon: Icons.auto_awesome_rounded,
-                      color: SoteriaColors.primary,
-                    ),
+                const Spacer(),
+                SoteriaScaleIn(
+                  duration: const Duration(milliseconds: 700),
+                  delay: const Duration(milliseconds: 300),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _CompactStat(
+                        assetPath: 'assets/icons/coin_icon.png',
+                        value: coins.toString(),
+                        label: 'Coins',
+                      ),
+                      SizedBox(width: SoteriaSpacing.sm),
+                      _ChallengesAction(),
+                    ],
                   ),
                 ),
               ],
             ),
-            SoteriaScaleIn(
-              duration: const Duration(milliseconds: 700),
-              delay: const Duration(milliseconds: 300),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  _CompactStat(
-                    assetPath: 'assets/icons/coin_icon.png',
-                    value: coins.toString(),
-                    label: 'Coins',
-                  ),
-                  SizedBox(width: SoteriaSpacing.sm),
-                  _ChallengesAction(),
-                ],
+            SizedBox(height: SoteriaSpacing.sm),
+            Padding(
+              padding: EdgeInsets.only(left: SoteriaSpacing.xs),
+              child: SoteriaScaleIn(
+                duration: const Duration(milliseconds: 700),
+                delay: const Duration(milliseconds: 400),
+                child: _HeaderBadge(
+                  label: 'LEVEL $level',
+                  icon: Icons.auto_awesome_rounded,
+                  color: SoteriaColors.primary,
+                ),
               ),
             ),
           ],

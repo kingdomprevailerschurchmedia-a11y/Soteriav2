@@ -75,16 +75,19 @@ class ActivityFeedNotifier
     final rivalsAsync = ref.read(topRivalriesProvider);
     
     final socialIds = friendsAsync.maybeWhen(
-      data: (friends) => friends.map((f) => f.friendId).toList(),
+      data: (friends) {
+        final userId = ref.read(authRepositoryProvider).currentUserId ?? '';
+        return friends.map((f) => f.userIds.firstWhere((id) => id != userId, orElse: () => '')).where((id) => id.isNotEmpty).toList().cast<String>();
+      },
       orElse: () => <String>[],
     );
 
     final rivalIds = rivalsAsync.maybeWhen(
-      data: (rivals) => rivals.map((r) => r.rivalId).toList(),
+      data: (rivals) => rivals.map((r) => r.rivalId).toList().cast<String>(),
       orElse: () => <String>[],
     );
     
-    final allSocialIds = {...socialIds, ...rivalIds}.toList();
+    final allSocialIds = <String>{...socialIds, ...rivalIds}.toList();
     final allIds = [_userId, ...allSocialIds];
     
     // Fetch aggregated feed from repository
@@ -133,4 +136,11 @@ final rivalryActivityProvider = FutureProvider.family<List<CompetitiveActivityEv
   if (userId == null) return [];
   
   return ref.watch(activityRepositoryProvider).getSocialActivityFeed(userId, [userId, rivalId], limit: 10);
+});
+
+final activityHighlightsProvider = Provider<AsyncValue<List<CompetitiveActivityEvent>>>((ref) {
+  final activityFeed = ref.watch(currentUserActivityFeedProvider);
+  return activityFeed.whenData((events) {
+    return events.where((e) => e.importance == ActivityImportance.high || e.importance == ActivityImportance.milestone).toList();
+  });
 });

@@ -1,77 +1,81 @@
 import '../../domain/models/question.dart';
 import '../../domain/models/quiz_enums.dart';
-import '../../domain/models/answer_option.dart';
 import '../../domain/repositories/question_repository.dart';
+import '../../../question_content/domain/repositories/question_repository.dart' as canonical;
 
-class MockQuestionRepository implements IQuestionRepository {
+class MockQuestionRepository implements IQuestionRepository, canonical.QuestionRepository {
   final List<Question> _mockQuestions = [
     Question(
       id: 'q1',
       type: QuestionType.multipleChoice,
-      category: 'Science',
+      categoryId: 'Science',
       difficulty: Difficulty.easy,
       text: 'What is the chemical symbol for water?',
       options: [
-        const AnswerOption(id: 'o1', text: 'H2O'),
-        const AnswerOption(id: 'o2', text: 'CO2'),
-        const AnswerOption(id: 'o3', text: 'O2'),
-        const AnswerOption(id: 'o4', text: 'NaCl'),
+        const Answer(id: 'o1', text: 'H2O'),
+        const Answer(id: 'o2', text: 'CO2'),
+        const Answer(id: 'o3', text: 'O2'),
+        const Answer(id: 'o4', text: 'NaCl'),
       ],
       correctOptionIds: ['o1'],
       explanation:
           'Water is composed of two hydrogen atoms and one oxygen atom.',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      source: 'Mock',
     ),
     Question(
       id: 'q2',
-      type: QuestionType.trueFalse,
-      category: 'History',
+      type: QuestionType.multipleChoice,
+      categoryId: 'History',
       difficulty: Difficulty.medium,
       text: 'The Great Wall of China is visible from space with the naked eye.',
       options: [
-        const AnswerOption(id: 'o1', text: 'True'),
-        const AnswerOption(id: 'o2', text: 'False'),
+        const Answer(id: 'o1', text: 'True'),
+        const Answer(id: 'o2', text: 'False'),
       ],
       correctOptionIds: ['o2'],
       explanation:
           'While an impressive structure, it is not easily visible from space without magnification.',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      source: 'Mock',
     ),
     Question(
       id: 'q3',
       type: QuestionType.multipleChoice,
-      category: 'Technology',
+      categoryId: 'Technology',
       difficulty: Difficulty.hard,
       text: 'Which of the following is NOT a programming language?',
       options: [
-        const AnswerOption(id: 'o1', text: 'Python'),
-        const AnswerOption(id: 'o2', text: 'Java'),
-        const AnswerOption(id: 'o3', text: 'HTML'),
-        const AnswerOption(id: 'o4', text: 'C++'),
+        const Answer(id: 'o1', text: 'Python'),
+        const Answer(id: 'o2', text: 'Java'),
+        const Answer(id: 'o3', text: 'HTML'),
+        const Answer(id: 'o4', text: 'C++'),
       ],
       correctOptionIds: ['o3'],
       explanation: 'HTML is a markup language, not a programming language.',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      source: 'Mock',
     ),
     Question(
       id: 'q4',
       type: QuestionType.multipleChoice,
-      category: 'Arts',
+      categoryId: 'Arts',
       difficulty: Difficulty.expert,
       text: 'Who painted the "Starry Night"?',
       options: [
-        const AnswerOption(id: 'o1', text: 'Pablo Picasso'),
-        const AnswerOption(id: 'o2', text: 'Vincent van Gogh'),
-        const AnswerOption(id: 'o3', text: 'Leonardo da Vinci'),
-        const AnswerOption(id: 'o4', text: 'Claude Monet'),
+        const Answer(id: 'o1', text: 'Pablo Picasso'),
+        const Answer(id: 'o2', text: 'Vincent van Gogh'),
+        const Answer(id: 'o3', text: 'Leonardo da Vinci'),
+        const Answer(id: 'o4', text: 'Claude Monet'),
       ],
       correctOptionIds: ['o2'],
       explanation: 'Starry Night was painted by Vincent van Gogh in 1889.',
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
+      source: 'Mock',
     ),
   ];
 
@@ -84,7 +88,7 @@ class MockQuestionRepository implements IQuestionRepository {
     await Future.delayed(const Duration(milliseconds: 500));
     return _mockQuestions.where((q) {
       bool matches = true;
-      if (categoryId != null && q.category != categoryId) matches = false;
+      if (categoryId != null && q.categoryId != categoryId) matches = false;
       if (difficulty != null && q.difficulty != difficulty) matches = false;
       return matches;
     }).toList();
@@ -115,6 +119,40 @@ class MockQuestionRepository implements IQuestionRepository {
     Difficulty? difficulty,
   }) async {
     await Future.delayed(const Duration(milliseconds: 500));
+  }
+
+  @override
+  Future<List<Question>> getQuestions({
+    String? categoryId,
+    String? subcategoryId,
+    String? topicId,
+    Difficulty? difficulty,
+    int limit = 10,
+    String? startAfterId,
+    List<String>? tags,
+  }) async {
+    return loadQuestions(categoryId: categoryId, difficulty: difficulty);
+  }
+
+  @override
+  Future<void> syncQuestionsPool({
+    String? categoryId,
+    Difficulty? difficulty,
+  }) async {}
+
+  @override
+  Future<List<Question>> getQuestionsByStatus(QuestionStatus status, {int limit = 50}) async {
+    return _mockQuestions;
+  }
+
+  @override
+  Future<Question?> getQuestionById(String id) async {
+    return _mockQuestions.firstWhere((q) => q.id == id);
+  }
+
+  @override
+  Stream<Question?> watchQuestion(String id) {
+    return Stream.value(_mockQuestions.firstWhere((q) => q.id == id));
   }
 
   @override

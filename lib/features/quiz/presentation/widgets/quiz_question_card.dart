@@ -118,6 +118,8 @@ class QuizQuestionCard extends StatelessWidget {
         return SoteriaColors.error;
       case Difficulty.expert:
         return SoteriaColors.gold;
+      case Difficulty.adaptive:
+        return SoteriaColors.primary;
     }
   }
 }

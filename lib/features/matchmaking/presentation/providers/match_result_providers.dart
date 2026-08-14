@@ -40,7 +40,7 @@ final competitiveInsightsProvider = FutureProvider<CompetitiveInsights>((ref) as
 
 final questionRepositoryProvider = Provider<QuestionRepository>((ref) {
   return QuestionRepositoryImpl(
-    remoteSource: FirestoreQuestionDataSource(firestore: ref.watch(firestoreProvider)),
+    remoteSource: FirestoreQuestionDataSource(ref.watch(firestoreDatabaseServiceProvider)),
   );
 });
 

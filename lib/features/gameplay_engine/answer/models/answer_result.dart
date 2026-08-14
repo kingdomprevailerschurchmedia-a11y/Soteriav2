@@ -5,18 +5,22 @@ class AnswerResult {
   final String submissionId;
   final String questionId;
   final AnswerDecision decision;
+  final List<String> selectedOptionIds;
   final List<String> correctOptionIds;
   final int xpEarned;
   final DateTime timestamp;
+  final Duration responseTime;
   final Map<String, dynamic> metadata;
 
   const AnswerResult({
     required this.submissionId,
     required this.questionId,
     required this.decision,
+    this.selectedOptionIds = const [],
     required this.correctOptionIds,
     this.xpEarned = 0,
     required this.timestamp,
+    this.responseTime = Duration.zero,
     this.metadata = const {},
   });
 
@@ -27,9 +31,11 @@ class AnswerResult {
     'submissionId': submissionId,
     'questionId': questionId,
     'decision': decision.name,
+    'selectedOptionIds': selectedOptionIds,
     'correctOptionIds': correctOptionIds,
     'xpEarned': xpEarned,
     'timestamp': timestamp.toIso8601String(),
+    'responseTime': responseTime.inMilliseconds,
     'metadata': metadata,
   };
 
@@ -37,9 +43,11 @@ class AnswerResult {
     submissionId: json['submissionId'],
     questionId: json['questionId'],
     decision: AnswerDecision.values.byName(json['decision']),
+    selectedOptionIds: List<String>.from(json['selectedOptionIds'] ?? []),
     correctOptionIds: List<String>.from(json['correctOptionIds']),
     xpEarned: json['xpEarned'] ?? 0,
     timestamp: DateTime.parse(json['timestamp']),
+    responseTime: Duration(milliseconds: json['responseTime'] ?? 0),
     metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
   );
 }

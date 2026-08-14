@@ -63,12 +63,24 @@ service cloud.firestore {
 
     // QUESTIONS: Read-only for authenticated users
     match /questions/{questionId} {
-      allow read: if isAuthenticated();
+      allow read: if isAuthenticated() && (resource.data.status == 'published' || isAdmin());
       allow write: if isAdmin();
     }
 
     // CATEGORIES: Read-only for everyone
     match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // SUBCATEGORIES: Read-only for everyone
+    match /subcategories/{subcategoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // TOPICS: Read-only for everyone
+    match /topics/{topicId} {
       allow read: if true;
       allow write: if isAdmin();
     }

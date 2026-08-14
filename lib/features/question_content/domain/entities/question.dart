@@ -1,150 +1,83 @@
-import 'package:uuid/uuid.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'difficulty.dart';
 
-/// Represents the different types of questions supported by the engine.
+part 'question.freezed.dart';
+part 'question.g.dart';
+
+/// Represents the different types of questions supported by Soteria.
 enum QuestionType {
   multipleChoice,
   trueFalse,
+  multipleSelect,
   image,
   audio,
   video,
   fillInBlank,
   ordering,
   matching,
-  code,
-  mathematics,
-  aiGenerated,
 }
 
-/// Represents the difficulty levels for a question.
-enum QuestionDifficulty { easy, medium, hard, expert, adaptive }
-
 /// Represents the lifecycle status of a question in the content bank.
-enum QuestionStatus { draft, review, published, archived, deprecated }
+enum QuestionStatus {
+  draft,
+  review,
+  approved,
+  published,
+  archived,
+  rejected,
+}
 
-/// Domain entity representing a single question and its associated metadata.
-class Question {
-  final String id;
-  final String version;
-  final String text;
-  final String? explanation;
-  final QuestionDifficulty difficulty;
-  final String category;
-  final String? subcategory;
-  final String? topic;
-  final QuestionType type;
-  final List<Answer> options;
-  final List<String> correctAnswers; // IDs of the correct answers
-  final List<String> tags;
-  final String language;
-  final Duration estimatedTime;
-  final int xpValue;
-  final QuestionStatus status;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String? author;
-  final String source;
-  final int schemaVersion;
-  final String contentHash; // For integrity validation
+@freezed
+abstract class Question with _$Question {
+  const factory Question({
+    required String id,
+    required String text,
+    String? explanation,
+    required Difficulty difficulty,
+    required String categoryId,
+    String? subcategoryId,
+    String? topicId,
+    required QuestionType type,
+    required List<Answer> options,
+    /// Authoritative correct answer IDs. 
+    /// CRITICAL: This must be stripped in client-facing competitive payloads.
+    required List<String> correctOptionIds,
+    @Default([]) List<String> tags,
+    @Default('en') String language,
+    @Default(Duration(seconds: 30)) Duration estimatedTime,
+    @Default(10) int xpValue,
+    @Default(5) int coinValue,
+    @Default(QuestionStatus.draft) QuestionStatus status,
+    @Default('1.0.0') String version,
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    String? author,
+    required String source,
+    @Default(1) int schemaVersion,
+    String? contentHash,
+    @Default({}) Map<String, dynamic> metadata,
+  }) = _Question;
 
-  Question({
-    String? id,
-    required this.version,
-    required this.text,
-    this.explanation,
-    required this.difficulty,
-    required this.category,
-    this.subcategory,
-    this.topic,
-    required this.type,
-    required this.options,
-    required this.correctAnswers,
-    this.tags = const [],
-    this.language = 'en',
-    this.estimatedTime = const Duration(seconds: 30),
-    this.xpValue = 10,
-    this.status = QuestionStatus.published,
-    required this.createdAt,
-    required this.updatedAt,
-    this.author,
-    required this.source,
-    required this.schemaVersion,
-    required this.contentHash,
-  }) : id = id ?? const Uuid().v4();
+  factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'version': version,
-    'text': text,
-    'explanation': explanation,
-    'difficulty': difficulty.name,
-    'category': category,
-    'subcategory': subcategory,
-    'topic': topic,
-    'type': type.name,
-    'options': options.map((e) => e.toJson()).toList(),
-    'correctAnswers': correctAnswers,
-    'tags': tags,
-    'language': language,
-    'estimatedTime': estimatedTime.inSeconds,
-    'xpValue': xpValue,
-    'status': status.name,
-    'createdAt': createdAt.toIso8601String(),
-    'updatedAt': updatedAt.toIso8601String(),
-    'author': author,
-    'source': source,
-    'schemaVersion': schemaVersion,
-    'contentHash': contentHash,
-  };
+  const Question._();
 
-  factory Question.fromJson(Map<String, dynamic> json) => Question(
-    id: json['id'],
-    version: json['version'],
-    text: json['text'],
-    explanation: json['explanation'],
-    difficulty: QuestionDifficulty.values.byName(json['difficulty']),
-    category: json['category'],
-    subcategory: json['subcategory'],
-    topic: json['topic'],
-    type: QuestionType.values.byName(json['type']),
-    options: (json['options'] as List).map((e) => Answer.fromJson(e)).toList(),
-    correctAnswers: List<String>.from(json['correctAnswers']),
-    tags: List<String>.from(json['tags']),
-    language: json['language'],
-    estimatedTime: Duration(seconds: json['estimatedTime']),
-    xpValue: json['xpValue'],
-    status: QuestionStatus.values.byName(json['status']),
-    createdAt: DateTime.parse(json['createdAt']),
-    updatedAt: DateTime.parse(json['updatedAt']),
-    author: json['author'],
-    source: json['source'],
-    schemaVersion: json['schemaVersion'],
-    contentHash: json['contentHash'],
-  );
+  bool isAnswerCorrect(String answerId) => correctOptionIds.contains(answerId);
 
-  /// Logic to check if a provided answer is correct.
-  bool isAnswerCorrect(String answerId) => correctAnswers.contains(answerId);
-
-  /// Logic to check if multiple answers provided are all correct (for multi-select).
   bool areAnswersCorrect(List<String> answerIds) {
-    if (answerIds.length != correctAnswers.length) return false;
-    return answerIds.every((id) => correctAnswers.contains(id));
+    if (answerIds.length != correctOptionIds.length) return false;
+    return answerIds.every((id) => correctOptionIds.contains(id));
   }
 }
 
-/// Domain entity representing a potential answer to a question.
-class Answer {
-  final String id;
-  final String text;
-  final String? mediaUrl; // For image/audio options
+@freezed
+abstract class Answer with _$Answer {
+  const factory Answer({
+    required String id,
+    required String text,
+    String? mediaUrl,
+    @Default(0) int displayOrder,
+  }) = _Answer;
 
-  const Answer({required this.id, required this.text, this.mediaUrl});
-
-  Map<String, dynamic> toJson() => {
-    'id': id,
-    'text': text,
-    'mediaUrl': mediaUrl,
-  };
-
-  factory Answer.fromJson(Map<String, dynamic> json) =>
-      Answer(id: json['id'], text: json['text'], mediaUrl: json['mediaUrl']);
+  factory Answer.fromJson(Map<String, dynamic> json) => _$AnswerFromJson(json);
 }

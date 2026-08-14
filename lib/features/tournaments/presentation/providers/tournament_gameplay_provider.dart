@@ -5,7 +5,7 @@ import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
-import 'package:soteria/features/question_content/presentation/providers/question_providers.dart';
+import 'package:soteria/features/question_content/presentation/providers/question_bank_providers.dart';
 import '../../domain/models/tournament_status.dart';
 import 'tournament_realtime_provider.dart';
 import '../../data/repositories/tournament_repository_provider.dart';

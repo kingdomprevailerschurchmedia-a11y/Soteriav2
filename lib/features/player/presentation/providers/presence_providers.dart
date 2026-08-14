@@ -20,8 +20,11 @@ final socialPresenceProvider = StreamProvider<Map<String, PlayerPresence>>((ref)
   return friendsAsync.when(
     data: (friends) {
       if (friends.isEmpty) return Stream.value({});
-      final friendIds = friends.map((f) => f.friendId).toList();
-      return ref.watch(presenceRepositoryProvider).watchPresenceMultiple(friendIds);
+      final currentUserId = ref.watch(authRepositoryProvider).currentUserId ?? '';
+      final friendIds = friends.map((f) {
+        return f.userIds.firstWhere((id) => id != currentUserId, orElse: () => '');
+      }).where((id) => id.isNotEmpty).toList();
+      return ref.watch(presenceRepositoryProvider).watchPresenceMultiple(friendIds.cast<String>());
     },
     loading: () => Stream.value({}),
     error: (_, __) => Stream.value({}),

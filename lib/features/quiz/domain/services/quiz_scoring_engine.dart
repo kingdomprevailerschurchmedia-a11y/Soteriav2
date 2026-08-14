@@ -29,7 +29,7 @@ class QuizScoringEngine {
 
     // 3. Speed Bonus
     int speedBonus = 0;
-    final totalAvailableTime = Duration(seconds: question.estimatedTime);
+    final totalAvailableTime = question.estimatedTime;
     if (totalAvailableTime.inMilliseconds > 0) {
       final responseRatio =
           answer.responseTime.inMilliseconds /

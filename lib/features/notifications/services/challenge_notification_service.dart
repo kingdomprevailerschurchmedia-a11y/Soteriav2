@@ -62,7 +62,7 @@ class ChallengeNotificationService {
         body: 'Your challenge has been accepted. Get ready!',
         type: NotificationType.challengeAccepted,
         createdAt: DateTime.now(),
-        payload: {'matchId': challenge.matchId},
+        payload: {'challengeId': challenge.challengeId},
       ),
     );
   }

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../gameplay_engine/models/practice_session_config.dart';
+import '../../../../question_content/domain/entities/difficulty.dart';
 import '../../providers/practice_lobby_providers.dart';
 
 class DifficultySelector extends ConsumerWidget {
@@ -27,7 +27,7 @@ class DifficultySelector extends ConsumerWidget {
         SizedBox(height: SoteriaSpacing.md),
         Wrap(
           spacing: 8,
-          children: PracticeDifficulty.values.map((diff) {
+          children: Difficulty.values.map((diff) {
             final isSelected = selected == diff;
             return ChoiceChip(
               label: Text(diff.name.toUpperCase()),

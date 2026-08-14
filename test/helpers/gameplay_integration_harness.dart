@@ -1,4 +1,5 @@
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
@@ -16,9 +17,9 @@ class GameplayIntegrationHarness {
           Answer(id: 'c', text: 'Option C'),
           Answer(id: 'd', text: 'Option D'),
         ],
-        correctAnswers: const ['a'],
-        difficulty: QuestionDifficulty.medium,
-        category: 'General',
+        correctOptionIds: const ['a'],
+        difficulty: Difficulty.medium,
+        categoryId: 'general',
         type: QuestionType.multipleChoice,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),

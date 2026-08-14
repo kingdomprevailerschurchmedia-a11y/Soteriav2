@@ -6,6 +6,7 @@ import 'package:soteria/features/gameplay_engine/answer/services/answer_decision
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/gameplay_engine/timer/models/timer_status.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 void main() {
   group('AnswerValidator Tests', () {
@@ -55,11 +56,14 @@ void main() {
       id: 'q1',
       version: '1',
       text: 'Test?',
-      difficulty: QuestionDifficulty.easy,
-      category: 'C',
+      difficulty: Difficulty.easy,
+      categoryId: 'C',
       type: QuestionType.multipleChoice,
-      options: [const Answer(id: 'a', text: 'Ans')],
-      correctAnswers: ['a'],
+      options: [
+        const Answer(id: 'a', text: 'Ans1'),
+        const Answer(id: 'b', text: 'Ans2'),
+      ],
+      correctOptionIds: ['a'],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       source: 'S',

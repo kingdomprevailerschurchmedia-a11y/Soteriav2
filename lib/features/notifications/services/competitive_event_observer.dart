@@ -461,6 +461,14 @@ class CompetitiveEventObserver {
         return NotificationType.personalBest;
       case CompetitiveEventType.liveEventStarted:
         return NotificationType.liveEventStarted;
+      case CompetitiveEventType.missionCompleted:
+        return NotificationType.milestoneReached;
+      case CompetitiveEventType.challengeAccepted:
+        return NotificationType.challengeAccepted;
+      case CompetitiveEventType.challengeCompleted:
+        return NotificationType.personalBest;
+      case CompetitiveEventType.rivalryMilestone:
+        return NotificationType.milestoneReached;
       case CompetitiveEventType.liveEventEnding:
         return NotificationType.liveEventEnding;
       case CompetitiveEventType.rematchRequest:

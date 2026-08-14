@@ -77,7 +77,7 @@ class QuizController extends Notifier<QuizState> {
       await _persistSession();
 
       if (state.currentQuestion != null) {
-        _startTimer(Duration(seconds: state.currentQuestion!.estimatedTime));
+        _startTimer(state.currentQuestion!.estimatedTime);
       }
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
@@ -139,7 +139,7 @@ class QuizController extends Notifier<QuizState> {
   void _recoverTimer(QuizSession session) {
     if (session.timerState == null || session.questionStartTime == null) {
       _startTimer(
-        Duration(seconds: state.currentQuestion?.estimatedTime ?? 30),
+        state.currentQuestion?.estimatedTime ?? const Duration(seconds: 30),
       );
       return;
     }
@@ -338,7 +338,7 @@ class QuizController extends Notifier<QuizState> {
         powerUpTimer: null,
       );
       _persistSession();
-      _startTimer(Duration(seconds: nextQuestion.estimatedTime));
+      _startTimer(nextQuestion.estimatedTime);
     } else {
       finishQuiz();
     }
@@ -526,7 +526,7 @@ class QuizController extends Notifier<QuizState> {
       final selectedOption = answer.selectedOptionIds.isNotEmpty
           ? question.options.firstWhere(
               (o) => o.id == answer.selectedOptionIds.first,
-              orElse: () => const AnswerOption(id: '', text: 'N/A'),
+              orElse: () => const Answer(id: '', text: 'N/A'),
             )
           : null;
 
@@ -782,7 +782,7 @@ class QuizController extends Notifier<QuizState> {
   }
 
   Map<String, double> _generateAudienceDistribution(
-    List<AnswerOption> availableOptions,
+    List<Answer> availableOptions,
     List<String> correctIds,
   ) {
     final Map<String, double> distribution = {};

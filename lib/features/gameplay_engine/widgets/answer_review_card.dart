@@ -100,7 +100,7 @@ class AnswerReviewCard extends StatelessWidget {
 
   String _getCorrectOptionText() {
     return review.question.options
-        .firstWhere((o) => o.id == review.question.correctAnswers.first)
+        .firstWhere((o) => o.id == review.question.correctOptionIds.first)
         .text;
   }
 }

@@ -35,11 +35,14 @@ class ProgressionNotifier extends StateNotifier<ProgressSnapshot> {
   }
 
   /// Updates progression based on round completion.
-  void handleRoundEnd(
-    int totalQuestions,
-    int correctAnswers,
-    ProgressionPolicy policy,
-  ) {
+  void handleRoundEnd({
+    required String sessionId,
+    required int totalQuestions,
+    required int correctAnswers,
+    required ProgressionPolicy policy,
+  }) {
+    if (state.lastProcessedSessionId == sessionId) return;
+
     final outcome = _engine.processRoundEnd(
       current: state,
       totalQuestions: totalQuestions,
@@ -47,7 +50,7 @@ class ProgressionNotifier extends StateNotifier<ProgressSnapshot> {
       policy: policy,
     );
 
-    state = outcome.after;
+    state = outcome.after.copyWith(lastProcessedSessionId: sessionId);
 
     for (final event in outcome.events) {
       _onEvent?.call(event);

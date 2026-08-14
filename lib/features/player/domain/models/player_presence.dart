@@ -9,6 +9,7 @@ enum PresenceStatus {
   offline,
   inMatch,
   unavailable,
+  hidden,
 }
 
 @freezed
@@ -17,8 +18,10 @@ abstract class PlayerPresence with _$PlayerPresence {
     required String userId,
     required PresenceStatus status,
     required DateTime lastSeenAt,
+    required DateTime lastHeartbeatAt,
     @Default(true) bool showOnlineStatus,
     @Default(true) bool showActivity,
+    @Default(true) bool showMatchStatus,
     String? currentMatchId,
     @Default(1) int schemaVersion,
   }) = _PlayerPresence;

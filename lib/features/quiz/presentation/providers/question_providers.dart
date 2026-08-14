@@ -1,32 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../domain/models/question.dart';
-import '../../domain/models/quiz_enums.dart';
-import '../../domain/repositories/question_repository.dart';
-import '../../data/repository/question_repository_impl.dart';
-import '../../data/repository/mock_question_repository.dart';
-import '../../data/datasource/question_remote_data_source.dart';
-import '../../data/datasource/question_local_data_source.dart';
-import '../../../../core/firebase/providers/firebase_providers.dart';
+import '../../../../features/question_content/domain/entities/question.dart';
+import '../../../../features/question_content/domain/entities/difficulty.dart';
+import '../../../../features/question_content/domain/repositories/question_repository.dart';
+import '../../../../features/question_content/presentation/providers/question_bank_providers.dart' as canonical;
 
-// Repository Provider
-final questionRepositoryProvider = Provider<IQuestionRepository>((ref) {
-  // Check if we are in preview mode or test environment
-  // In a real app, this might use a configuration provider
-  const bool useMock = false;
+// Redirection to the canonical Question Bank providers for backward compatibility.
 
-  if (useMock) {
-    return MockQuestionRepository();
-  }
-
-  return QuestionRepositoryImpl(
-    remoteDataSource: FirestoreQuestionRemoteDataSource(
-      ref.watch(firestoreDatabaseServiceProvider),
-    ),
-    localDataSource: SprefsQuestionLocalDataSource(),
-  );
+/// The canonical provider for the Question Repository.
+final questionRepositoryProvider = Provider<QuestionRepository>((ref) {
+  return ref.watch(canonical.questionRepositoryProvider);
 });
 
-// Loader parameters
+/// Parameters for querying questions (compatible with the new system).
 class QuestionQuery {
   final String? categoryId;
   final Difficulty? difficulty;
@@ -42,24 +27,23 @@ class QuestionQuery {
           difficulty == other.difficulty;
 
   @override
-  int get hashCode => categoryId.hashCode ^ difficulty.hashCode;
+  int get hashCode => categoryId.hashCode ^ (difficulty?.hashCode ?? 0);
 }
 
-// Question Loader Provider
+/// Redirects to the canonical question bank provider.
 final questionLoaderProvider =
     FutureProvider.family<List<Question>, QuestionQuery>((ref, query) async {
-      final repository = ref.watch(questionRepositoryProvider);
-      return repository.loadQuestions(
+      return ref.watch(canonical.questionBankProvider(canonical.QuestionBankQuery(
         categoryId: query.categoryId,
         difficulty: query.difficulty,
-      );
+      )).future);
     });
 
-// Random Questions Provider
+/// Redirects to the canonical random questions provider.
 final randomQuestionsProvider = FutureProvider.family<List<Question>, int>((
   ref,
   limit,
 ) async {
   final repository = ref.watch(questionRepositoryProvider);
-  return repository.loadRandomQuestions(limit: limit);
+  return repository.getQuestions(limit: limit);
 });

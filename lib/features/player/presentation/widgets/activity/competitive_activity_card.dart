@@ -11,8 +11,8 @@ import '../../../domain/models/competitive_activity_event.dart';
 import '../../../domain/models/competitive_event.dart';
 import 'package:intl/intl.dart';
 
-import '../../presentation/providers/public_profile_providers.dart';
-import '../../presentation/widgets/presence/player_presence_indicator.dart';
+import 'package:soteria/features/player/presentation/providers/public_profile_providers.dart';
+import '../presence/player_presence_indicator.dart';
 import '../../../../auth/providers/auth_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -71,7 +71,7 @@ class CompetitiveActivityCard extends ConsumerWidget {
                           children: [
                             profileAsync.when(
                               data: (profile) => Stack(
-                                clipBehavior: Visibility.visible,
+                                clipBehavior: Clip.none,
                                 children: [
                                   CircleAvatar(
                                     radius: 18.r,

@@ -12,6 +12,8 @@ import '../../../gameplay_engine/services/reward_estimator.dart';
 import '../../../gameplay_engine/domain/repositories/practice_repository.dart';
 import '../../../gameplay_engine/data/repositories/firestore_practice_repository.dart';
 
+import '../../../question_content/domain/entities/difficulty.dart';
+
 // --- Repositories ---
 final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
   return FirestorePracticeRepository(
@@ -82,6 +84,7 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
           categories: categories,
           config: state.config.copyWith(
             category: categories.isNotEmpty ? categories.first : null,
+            categoryIds: categories.isNotEmpty ? [categories.first.id] : [],
           ),
         );
         _updateSummary();
@@ -94,11 +97,39 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
   }
 
   void updateCategory(Category category) {
-    state = state.copyWith(config: state.config.copyWith(category: category));
+    state = state.copyWith(
+      config: state.config.copyWith(
+        category: category,
+        categoryIds: [category.id],
+        useInterests: false,
+      ),
+    );
     _updateSummary();
   }
 
-  void updateDifficulty(PracticeDifficulty difficulty) {
+  void updateCategoryById(String categoryId) {
+    final category = state.categories.firstWhere((c) => c.id == categoryId, orElse: () => state.categories.first);
+    updateCategory(category);
+  }
+
+  void toggleCategory(String categoryId) {
+    final currentIds = List<String>.from(state.config.categoryIds);
+    if (currentIds.contains(categoryId)) {
+      currentIds.remove(categoryId);
+    } else {
+      currentIds.add(categoryId);
+    }
+    state = state.copyWith(
+      config: state.config.copyWith(
+        categoryIds: currentIds,
+        category: null, // Clear single category if using multi
+        useInterests: false,
+      ),
+    );
+    _updateSummary();
+  }
+
+  void updateDifficulty(Difficulty difficulty) {
     state = state.copyWith(
       config: state.config.copyWith(difficulty: difficulty),
     );
@@ -107,6 +138,13 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
 
   void updateQuestionCount(int count) {
     state = state.copyWith(config: state.config.copyWith(questionCount: count));
+    _updateSummary();
+  }
+
+  void setUseInterests(bool value) {
+    state = state.copyWith(
+      config: state.config.copyWith(useInterests: value),
+    );
     _updateSummary();
   }
 

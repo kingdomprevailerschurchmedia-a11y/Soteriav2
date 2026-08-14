@@ -1,14 +1,17 @@
-# Tasks - Competitive Social Activity & Presence
+# Tasks - Competitive Invitations & Rematches
 
-- `[x]` Define PlayerPresence model
-- `[x]` Implement PresenceRepository interface
-- `[x]` Implement FirebasePresenceRepository
-- `[x]` Update ActivityRepository for social aggregation
-- `[x]` Implement Presence providers
-- `[x]` Implement Social Activity Feed provider
-- `[x]` Build PlayerPresenceIndicator widget
-- `[x]` Update CompetitiveActivityCard for social events
-- `[x]` Update CompetitiveActivityScreen with filters
-- `[x]` Integrate social feed into RivalryScreen
-- `[x]` Add Preview fixtures and screens
+- `[x]` Update PlayerPresence model & states
+- `[x]` Refine PresenceRepository interface
+- `[x]` Update FirebasePresenceRepository
+- `[x]` Implement PresenceCoordinator (Heartbeat & Lifecycle)
+- `[x]` Add PresenceLabel widget
+- `[x]` Update PlayerPresenceIndicator visuals
+- `[x]` Build CompetitivePlayerCard widget
+- `[x]` Implement CompetitiveQuickActions (Challenge, Rematch, Accept/Decline)
+- `[x]` Implement RecentOpponentsSection (Horizontal dashboard view)
+- `[x]` Implement RecentOpponentsList (Vertical detail view)
+- `[x]` Integrate Quick Actions into Profile, Rivalry, and H2H screens
+- `[x]` Add ChallengeStatusBadge
+- `[x]` Fix app routing for challenges and public profiles
+- `[x]` Prepare Preview fixtures and Gallery updates
 - `[x]` Final verification and documentation

@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/gameplay_engine/logic/competitive_settlement_engine.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
@@ -27,6 +28,7 @@ void main() {
     test('validateResult returns true for consistent data', () {
       final result = GameResult(
         sessionId: 'test_session',
+        mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 500,
         totalQuestions: 10,
@@ -35,6 +37,7 @@ void main() {
         totalDuration: const Duration(minutes: 2),
         accuracy: 1.0,
         maxStreak: 10,
+        timestamp: DateTime.now(),
       );
 
       expect(
@@ -46,6 +49,7 @@ void main() {
     test('validateResult returns false if question count mismatch', () {
       final result = GameResult(
         sessionId: 'test_session',
+        mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 500,
         totalQuestions: 5, // Mismatch
@@ -54,6 +58,7 @@ void main() {
         totalDuration: const Duration(minutes: 2),
         accuracy: 1.0,
         maxStreak: 5,
+        timestamp: DateTime.now(),
       );
 
       expect(
@@ -65,6 +70,7 @@ void main() {
     test('calculateRewards grants 1.5x coins for 90%+ accuracy', () {
       final result = GameResult(
         sessionId: 'test_session',
+        mode: GameMode.pro,
         finalScore: 900,
         totalXP: 450,
         totalQuestions: 10,
@@ -73,6 +79,7 @@ void main() {
         totalDuration: const Duration(minutes: 2),
         accuracy: 0.9,
         maxStreak: 9,
+        timestamp: DateTime.now(),
       );
 
       final rewards = CompetitiveSettlementEngine.calculateRewards(
@@ -86,6 +93,7 @@ void main() {
     test('calculateRewards grants money back for 70%-89% accuracy', () {
       final result = GameResult(
         sessionId: 'test_session',
+        mode: GameMode.pro,
         finalScore: 700,
         totalXP: 350,
         totalQuestions: 10,
@@ -94,6 +102,7 @@ void main() {
         totalDuration: const Duration(minutes: 2),
         accuracy: 0.7,
         maxStreak: 7,
+        timestamp: DateTime.now(),
       );
 
       final rewards = CompetitiveSettlementEngine.calculateRewards(
@@ -107,6 +116,7 @@ void main() {
     test('calculateRewards grants 0 coins for < 70% accuracy', () {
       final result = GameResult(
         sessionId: 'test_session',
+        mode: GameMode.pro,
         finalScore: 500,
         totalXP: 250,
         totalQuestions: 10,
@@ -115,6 +125,7 @@ void main() {
         totalDuration: const Duration(minutes: 2),
         accuracy: 0.5,
         maxStreak: 5,
+        timestamp: DateTime.now(),
       );
 
       final rewards = CompetitiveSettlementEngine.calculateRewards(

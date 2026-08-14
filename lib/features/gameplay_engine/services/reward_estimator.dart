@@ -1,4 +1,5 @@
 import '../models/practice_session_config.dart';
+import '../../question_content/domain/entities/difficulty.dart';
 
 class EstimatedRewards {
   final int xp;
@@ -21,9 +22,10 @@ class RewardEstimator {
           {
             'xp_base': 10,
             'coin_base': 2,
-            'mult_beginner': 1.0,
-            'mult_intermediate': 1.25,
-            'mult_advanced': 1.5,
+            'mult_easy': 1.0,
+            'mult_medium': 1.25,
+            'mult_hard': 1.5,
+            'mult_expert': 2.0,
             'mult_adaptive': 1.3,
           };
 
@@ -47,15 +49,17 @@ class RewardEstimator {
     );
   }
 
-  double _getDifficultyMultiplier(PracticeDifficulty diff) {
+  double _getDifficultyMultiplier(Difficulty diff) {
     switch (diff) {
-      case PracticeDifficulty.beginner:
-        return _multipliers['mult_beginner'] ?? 1.0;
-      case PracticeDifficulty.intermediate:
-        return _multipliers['mult_intermediate'] ?? 1.25;
-      case PracticeDifficulty.advanced:
-        return _multipliers['mult_advanced'] ?? 1.5;
-      case PracticeDifficulty.adaptive:
+      case Difficulty.easy:
+        return _multipliers['mult_easy'] ?? 1.0;
+      case Difficulty.medium:
+        return _multipliers['mult_medium'] ?? 1.25;
+      case Difficulty.hard:
+        return _multipliers['mult_hard'] ?? 1.5;
+      case Difficulty.expert:
+        return _multipliers['mult_expert'] ?? 2.0;
+      case Difficulty.adaptive:
         return _multipliers['mult_adaptive'] ?? 1.3;
     }
   }

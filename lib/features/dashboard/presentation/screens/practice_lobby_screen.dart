@@ -15,6 +15,9 @@ import 'package:soteria/features/dashboard/presentation/widgets/lobby/config_sel
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/session_summary_card.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/features/gameplay_engine/models/practice_session_config.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 
 class PracticeLobbyScreen extends ConsumerWidget {
   const PracticeLobbyScreen({super.key});
@@ -55,8 +58,12 @@ class PracticeLobbyScreen extends ConsumerWidget {
                               ),
                             ),
                             SizedBox(height: SoteriaSpacing.xl),
-                            const CategorySelector(),
-                            SizedBox(height: SoteriaSpacing.xxl),
+                            _buildInterestsToggle(ref, state.config),
+                            SizedBox(height: SoteriaSpacing.xl),
+                            if (!state.config.useInterests) ...[
+                              const CategorySelector(),
+                              SizedBox(height: SoteriaSpacing.xxl),
+                            ],
                             const DifficultySelector(),
                             SizedBox(height: SoteriaSpacing.xl),
                             const QuestionCountSelector(),
@@ -80,14 +87,7 @@ class PracticeLobbyScreen extends ConsumerWidget {
                         .read(practiceLobbyProvider.notifier)
                         .startSession();
                     if (session != null && context.mounted) {
-                      // Navigate to Game Screen (Coming in 5.2)
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            'Session Initialized: ${session.sessionId}',
-                          ),
-                        ),
-                      );
+                      context.push(SoteriaRoutes.practiceSession);
                     }
                   },
                 ),
@@ -95,6 +95,37 @@ class PracticeLobbyScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+  Widget _buildInterestsToggle(WidgetRef ref, PracticeSessionConfig config) {
+    return SoteriaCard(
+      onTap: () => ref.read(practiceLobbyProvider.notifier).setUseInterests(!config.useInterests),
+      child: Row(
+        children: [
+          const Icon(Icons.auto_awesome_rounded, color: SoteriaColors.gold),
+          SizedBox(width: SoteriaSpacing.md),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Use My Interests',
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Personalized mix based on your profile',
+                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
+                ),
+              ],
+            ),
+          ),
+          Switch(
+            value: config.useInterests,
+            onChanged: (val) => ref.read(practiceLobbyProvider.notifier).setUseInterests(val),
+            activeColor: SoteriaColors.gold,
+          ),
+        ],
       ),
     );
   }

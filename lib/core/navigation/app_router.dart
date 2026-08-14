@@ -58,6 +58,9 @@ import 'package:soteria/features/quiz/presentation/screens/quiz_gameplay_screen.
 import 'package:soteria/features/quiz/presentation/screens/quiz_results_screen.dart';
 import 'package:soteria/features/quiz/presentation/screens/quiz_history_screen.dart';
 import 'package:soteria/features/quiz/presentation/screens/quiz_history_detail_screen.dart';
+import 'package:soteria/features/practice/presentation/screens/practice_gameplay_screen.dart';
+import 'package:soteria/features/practice/presentation/screens/practice_results_screen.dart';
+import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
 import 'package:soteria/features/splash/presentation/screens/splash_screen.dart';
@@ -93,6 +96,9 @@ import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
+import 'package:soteria/features/player/presentation/screens/create_challenge_screen.dart';
+import 'package:soteria/features/player/presentation/screens/public_competitive_profile_screen.dart';
+import 'package:soteria/features/player/presentation/screens/competitive_match_history_screen.dart';
 import 'package:soteria/features/social/presentation/screens/friends_screen.dart';
 import 'package:soteria/features/social/presentation/screens/friend_requests_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
@@ -321,6 +327,26 @@ final routerProvider = Provider<GoRouter>((ref) {
                           child: const PracticeLobbyScreen(),
                           key: state.pageKey,
                         ),
+                    routes: [
+                      GoRoute(
+                        path: 'session',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.slideUp(
+                              child: const PracticeGameplayScreen(),
+                              key: state.pageKey,
+                            ),
+                      ),
+                      GoRoute(
+                        path: 'results',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.fade(
+                              child: PracticeResultsScreen(
+                                gameState: state.extra as GameState,
+                              ),
+                              key: state.pageKey,
+                            ),
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'pro-mode',
@@ -398,6 +424,18 @@ final routerProvider = Provider<GoRouter>((ref) {
                           child: const ChallengeCenterScreen(),
                           key: state.pageKey,
                         ),
+                    routes: [
+                      GoRoute(
+                        path: 'create',
+                        pageBuilder: (context, state) {
+                          final opponentId = state.uri.queryParameters['opponentId'];
+                          return SoteriaPageTransitions.slideUp(
+                            child: CreateChallengeScreen(initialOpponentId: opponentId),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'season',
@@ -583,6 +621,16 @@ final routerProvider = Provider<GoRouter>((ref) {
                   key: state.pageKey,
                 ),
                 routes: [
+                  GoRoute(
+                    path: 'external/:id',
+                    pageBuilder: (context, state) {
+                      final id = state.pathParameters['id']!;
+                      return SoteriaPageTransitions.slideUp(
+                        child: PublicCompetitiveProfileScreen(userId: id),
+                        key: state.pageKey,
+                      );
+                    },
+                  ),
                   GoRoute(
                     path: 'history',
                     pageBuilder: (context, state) =>

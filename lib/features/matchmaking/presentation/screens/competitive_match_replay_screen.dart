@@ -12,6 +12,7 @@ import '../../../../shared/widgets/soteria_page.dart';
 import 'package:soteria/features/matchmaking/presentation/providers/match_result_providers.dart';
 import 'package:soteria/features/matchmaking/domain/models/competitive_match_replay.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 
@@ -196,7 +197,7 @@ class _QuestionReplayCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                question.category.toUpperCase(),
+                question.categoryId.toUpperCase(),
                 style: context.labelSmall.copyWith(color: SoteriaColors.gold, fontWeight: FontWeight.bold),
               ),
               _DifficultyBadge(difficulty: question.difficulty),
@@ -214,7 +215,7 @@ class _QuestionReplayCard extends StatelessWidget {
 }
 
 class _DifficultyBadge extends StatelessWidget {
-  final QuestionDifficulty difficulty;
+  final Difficulty difficulty;
   const _DifficultyBadge({required this.difficulty});
 
   @override
@@ -243,7 +244,7 @@ class _AnswersList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: question.options.map((option) {
-        final isCorrect = question.correctAnswers.contains(option.id);
+        final isCorrect = question.correctOptionIds.contains(option.id);
         final isSelected = playerAnswer.submissionId == option.id; // Corrected: usage of submissionId for selectedId for demo
 
         Color color = Colors.white.withValues(alpha: 0.05);

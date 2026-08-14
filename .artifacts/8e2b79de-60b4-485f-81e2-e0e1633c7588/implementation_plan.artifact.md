@@ -1,66 +1,52 @@
-# Implementation Plan - Competitive Social Activity, Rivalry Feed & Player Presence
+# Implementation Plan - Competitive Invitations, Rematches & Quick Match Actions
 
-Implement a lightweight competitive social layer that keeps players informed about their network's competitive status and activities.
+Streamline the transition from discovery to competition by implementing a context-aware invitation and rematch system.
 
 ## User Review Required
 
 > [!IMPORTANT]
-> Presence states will be coarse (Online, Recently Active, Offline) to respect privacy.
-> Activity feed will be aggregated from friends and rivals based on existing social connections.
+> - Recent opponents are derived from the last 10 unique completed matches in the player's match history.
+> - "Rematch" actions will redirect to the challenge creation screen to allow for configuration (Category, Difficulty) before sending the invitation.
+> - Blocked users are strictly excluded from all competitive interactions.
 
 ## Proposed Changes
 
-### Domain Layer - Models
+### Domain & Data Layer
 
-#### [NEW] [player_presence.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/models/player_presence.dart)
-- `PlayerPresence` model with status (online, away, offline, inMatch) and privacy controls.
+#### [MODIFY] [match_history_providers.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/providers/match_history_providers.dart)
+- Implement `recentOpponentsProvider` and `isRecentOpponentProvider`.
 
-#### [MODIFY] [competitive_activity_event.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/models/competitive_activity_event.dart)
-- Add optional actor profile data to the model if it helps avoid extra lookups, or rely on existing profile providers.
+### Presentation & UI Components
 
-### Data Layer - Repositories
+#### [NEW] [competitive_quick_actions.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/competitive_quick_actions.dart)
+- Unified component for contextual actions (Challenge, Rematch, Accept, etc.).
 
-#### [NEW] [presence_repository.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/repositories/presence_repository.dart)
-- Interface for updating and observing player presence.
+#### [NEW] [recent_opponents_section.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/recent_opponents_section.dart)
+- Horizontal quick-scroll section for the dashboard.
 
-#### [NEW] [firebase_presence_repository.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/data/repositories/firebase_presence_repository.dart)
-- Firestore Realtime Database or Firestore implementation for presence tracking.
+#### [NEW] [challenge_status_badge.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/challenge/challenge_status_badge.dart)
+- Small visual indicators for lifecycle states.
 
-#### [MODIFY] [activity_repository.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/repositories/activity_repository.dart)
-- Add `getSocialActivityFeed(String userId, List<String> socialIds)` to aggregate friend/rival activity.
+### Screen Enhancements
 
-### Presentation Layer - Providers & UI
+#### [MODIFY] [public_competitive_profile_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/screens/public_competitive_profile_screen.dart)
+- Integrate presence indicators and the quick action framework.
 
-#### [NEW] [presence_providers.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/providers/presence_providers.dart)
-- Providers to observe presence of friends and rivals.
+#### [MODIFY] [dashboard_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/dashboard/presentation/screens/dashboard_screen.dart)
+- Add `RecentOpponentsSection`.
 
-#### [MODIFY] [activity_providers.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/providers/activity_providers.dart)
-- Aggregate feed provider that combines user, friend, and rival activity.
+### Navigation & Routing
 
-#### [MODIFY] [competitive_activity_card.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/activity/competitive_activity_card.dart)
-- Update to show actor name and avatar for social activities.
-
-#### [MODIFY] [competitive_activity_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/screens/competitive_activity_screen.dart)
-- Add filters: ALL, FRIENDS, RIVALS, YOU.
-- Integrate presence indicators.
-
-#### [NEW] [player_presence_indicator.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/player_presence_indicator.dart)
-- Visual indicator for online/offline/in-match status.
-
-### Integration
-
-#### [MODIFY] [rivalry_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/social/presentation/screens/rivalry_screen.dart)
-- Display filtered activity feed for the specific rivalry.
+#### [MODIFY] [app_router.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/navigation/app_router.dart)
+- Register routes for `CreateChallengeScreen` and `PublicCompetitiveProfileScreen`.
 
 ## Verification Plan
 
 ### Automated Tests
-- Unit tests for `PlayerPresence` and `CompetitiveActivity` logic.
-- Repository tests for social feed aggregation.
-- Security tests ensuring private activities are not exposed.
+- **Logic Tests**: Verify rematch eligibility based on match history.
+- **Privacy Tests**: Ensure blocked users cannot be challenged.
 
 ### Manual Verification
-- Verify activity feed updates when a friend/rival completes a match (mocked).
-- Verify presence transitions (Online -> Offline -> In Match).
-- Verify privacy settings (Presence visibility).
-- Test responsiveness on multiple device sizes.
+- **Quick Actions**: Test all states of `CompetitiveQuickActions` (Online vs In Match, Friend vs Stranger).
+- **Rematch Flow**: Complete a match and verify the opponent appears in the "Recent Opponents" section.
+- **Responsive UI**: Verify `RecentOpponentCard` on small and large screens.

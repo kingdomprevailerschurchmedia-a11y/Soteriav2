@@ -12,6 +12,7 @@ import '../../../player/providers/player_providers.dart';
 import '../providers/matchmaking_providers.dart';
 import '../widgets/versus_config_selectors.dart';
 import '../widgets/matchmaking_rank_card.dart';
+import '../../../player/presentation/widgets/presence/recent_opponents_section.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
 
@@ -68,7 +69,9 @@ class VersusLobbyScreen extends ConsumerWidget {
                             const VersusDifficultySelector(),
                             SizedBox(height: SoteriaSpacing.xl),
                             const VersusQuestionCountSelector(),
-                            SizedBox(height: SoteriaSpacing.xxl * 2),
+                            SizedBox(height: SoteriaSpacing.xxl),
+                            const RecentOpponentsSection(),
+                            SizedBox(height: SoteriaSpacing.xxl),
                           ]),
                         ),
                       ),

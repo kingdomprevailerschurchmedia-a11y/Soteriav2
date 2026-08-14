@@ -5,6 +5,7 @@ import 'package:soteria/features/gameplay_engine/data/repositories/local_gamepla
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 class FakeSharedPreferences implements SharedPreferences {
   final Map<String, dynamic> _data = {};
@@ -47,11 +48,14 @@ void main() {
         id: 'q1',
         version: '1',
         text: 'Test?',
-        difficulty: QuestionDifficulty.easy,
-        category: 'C',
+        difficulty: Difficulty.easy,
+        categoryId: 'C',
         type: QuestionType.multipleChoice,
-        options: const [],
-        correctAnswers: const [],
+        options: const [
+          Answer(id: 'o1', text: 'Ans1'),
+          Answer(id: 'o2', text: 'Ans2'),
+        ],
+        correctOptionIds: const ['o1'],
         createdAt: DateTime.parse('2023-01-01T00:00:00.000Z'),
         updatedAt: DateTime.parse('2023-01-01T00:00:00.000Z'),
         source: 'S',

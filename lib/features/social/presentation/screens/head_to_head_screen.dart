@@ -13,7 +13,10 @@ import 'package:soteria/features/player/presentation/providers/public_profile_pr
 import 'package:soteria/features/player/presentation/widgets/match_history/competitive_match_history_card.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import 'package:soteria/features/social/domain/models/head_to_head_summary.dart';
-import 'package:soteria/features/social/presentation/providers/rivalry_providers.dart';
+import '../providers/rivalry_providers.dart';
+import '../../../player/presentation/widgets/presence/competitive_quick_actions.dart';
+import '../../../player/presentation/widgets/presence/player_presence_indicator.dart';
+import '../../../player/presentation/widgets/presence/presence_label.dart';
 
 class HeadToHeadScreen extends ConsumerWidget {
   final String rivalId;
@@ -48,7 +51,12 @@ class HeadToHeadScreen extends ConsumerWidget {
                     error: (err, _) => Text('Error loading stats: $err'),
                   ),
                   SizedBox(height: SoteriaSpacing.xl),
-                  _buildActions(context),
+                  rivalProfileAsync.maybeWhen(
+                    data: (profile) => profile != null 
+                      ? CompetitiveQuickActions(userId: rivalId, profile: profile)
+                      : const SizedBox.shrink(),
+                    orElse: () => const SizedBox.shrink(),
+                  ),
                 ],
               ),
             ),
@@ -106,13 +114,23 @@ class HeadToHeadScreen extends ConsumerWidget {
         rivalProfileAsync.when(
           data: (profile) => Column(
             children: [
-              SoteriaAvatar(
-                avatar: AvatarCatalog().getById(profile?.avatarId ?? 'socrates'),
-                size: 64,
-                imageUrl: profile?.photoUrl,
+              Stack(
+                children: [
+                  SoteriaAvatar(
+                    avatar: AvatarCatalog().getById(profile?.avatarId ?? 'socrates'),
+                    size: 64,
+                    imageUrl: profile?.photoUrl,
+                  ),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: PlayerPresenceIndicator(userId: rivalId, size: 16),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(profile?.displayName ?? 'Rival', style: const TextStyle(fontWeight: FontWeight.bold)),
+              PresenceLabel(userId: rivalId),
             ],
           ),
           loading: () => const SizedBox(width: 64, height: 64, child: CircularProgressIndicator()),
@@ -169,22 +187,6 @@ class HeadToHeadScreen extends ConsumerWidget {
             ],
           ),
       ],
-    );
-  }
-
-  Widget _buildActions(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton.icon(
-        onPressed: () => context.push('/challenges/create?opponentId=$rivalId'),
-        icon: const Icon(Icons.bolt),
-        label: const Text('CHALLENGE AGAIN'),
-        style: ElevatedButton.styleFrom(
-          backgroundColor: SoteriaColors.primary,
-          padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-        ),
-      ),
     );
   }
 }

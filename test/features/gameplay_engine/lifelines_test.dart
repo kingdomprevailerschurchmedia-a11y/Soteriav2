@@ -2,14 +2,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/services/fifty_fifty_engine.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/services/audience_simulation_strategy.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 void main() {
   final mockQuestion = Question(
     id: 'q1',
-    version: '1',
     text: 'Test?',
-    difficulty: QuestionDifficulty.easy,
-    category: 'C',
+    difficulty: Difficulty.easy,
+    categoryId: 'C',
     type: QuestionType.multipleChoice,
     options: const [
       Answer(id: 'a', text: 'Ans A'),
@@ -17,12 +17,10 @@ void main() {
       Answer(id: 'c', text: 'Ans C'),
       Answer(id: 'd', text: 'Ans D'),
     ],
-    correctAnswers: const ['a'],
+    correctOptionIds: const ['a'],
     createdAt: DateTime.now(),
     updatedAt: DateTime.now(),
     source: 'S',
-    schemaVersion: 1,
-    contentHash: 'H',
   );
 
   group('FiftyFiftyEngine Tests', () {
@@ -65,18 +63,15 @@ void main() {
       final strategy = DifficultyBasedSimulationStrategy();
       final expertQuestion = Question(
         id: 'q_expert',
-        version: '1',
         text: 'Expert?',
-        difficulty: QuestionDifficulty.expert,
-        category: 'C',
+        difficulty: Difficulty.expert,
+        categoryId: 'C',
         type: QuestionType.multipleChoice,
         options: mockQuestion.options,
-        correctAnswers: ['a'],
+        correctOptionIds: ['a'],
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
         source: 'S',
-        schemaVersion: 1,
-        contentHash: 'H',
       );
 
       final results = strategy.simulate(expertQuestion);

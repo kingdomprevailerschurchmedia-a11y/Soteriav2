@@ -11,7 +11,6 @@ import 'package:soteria/features/quiz/domain/models/question.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_session.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
 import 'package:soteria/features/quiz/domain/models/player_answer.dart';
-import 'package:soteria/features/quiz/domain/models/answer_option.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_session.dart';
 
@@ -25,18 +24,19 @@ class MockQuizRepository implements QuizRepository {
     return [
       Question(
         id: 'q1',
-        type: quiz_enums.QuestionType.multipleChoice,
-        category: 'Math',
+        type: QuestionType.multipleChoice,
+        categoryId: 'Math',
         difficulty: quiz_enums.Difficulty.easy,
         text: 'What is 1+1?',
         options: [
-          const AnswerOption(id: 'a1', text: '2'),
-          const AnswerOption(id: 'a2', text: '3'),
+          const Answer(id: 'a1', text: '2'),
+          const Answer(id: 'a2', text: '3'),
         ],
         correctOptionIds: ['a1'],
-        estimatedTime: 30,
+        estimatedTime: const Duration(seconds: 30),
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
+        source: 'Internal',
       ),
     ];
   }

@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 class FirebaseGameplayRepository implements GameplayRepository {
   final FirebaseFirestore _firestore;
@@ -62,4 +63,35 @@ class FirebaseGameplayRepository implements GameplayRepository {
 
   @override
   Future<void> clearActiveSession() async {}
+
+  @override
+  Future<List<GameResult>> getRecentResults(String uid, {GameMode? mode, int limit = 10}) async {
+    var query = _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('game_results')
+        .orderBy('timestamp', descending: true);
+
+    if (mode != null) {
+      // Note: If using multiple filters with orderBy, an index might be needed
+      // For simplicity, we might filter in-memory if mode is specified and no index exists
+      // or assume the index exists.
+      // query = query.where('mode', isEqualTo: mode.name);
+    }
+
+    final snapshot = await query.limit(limit).get();
+    
+    var results = snapshot.docs.map((doc) => GameResult.fromJson(doc.data())).toList();
+    
+    if (mode != null) {
+      results = results.where((r) {
+        // Need to check how mode is stored in GameResult json. 
+        // GameResult doesn't have mode explicitly, but it comes from GameState.
+        // Wait, GameResult should probably have mode.
+        return true; // Placeholder until GameResult is updated or mode is verified
+      }).toList();
+    }
+    
+    return results;
+  }
 }

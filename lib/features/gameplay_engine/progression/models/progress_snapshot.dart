@@ -7,7 +7,9 @@ class ProgressSnapshot {
   final int maxStreak;
   final int sessionScore;
   final int sessionStreak;
+  final int dailyStreak;
   final DateTime? lastDailyStreakUpdate;
+  final String? lastProcessedSessionId;
   final DateTime timestamp;
 
   const ProgressSnapshot({
@@ -18,7 +20,9 @@ class ProgressSnapshot {
     required this.maxStreak,
     required this.sessionScore,
     required this.sessionStreak,
+    required this.dailyStreak,
     this.lastDailyStreakUpdate,
+    this.lastProcessedSessionId,
     required this.timestamp,
   });
 
@@ -30,6 +34,7 @@ class ProgressSnapshot {
     maxStreak: 0,
     sessionScore: 0,
     sessionStreak: 0,
+    dailyStreak: 0,
     timestamp: DateTime.now(),
   );
 
@@ -41,7 +46,9 @@ class ProgressSnapshot {
     int? maxStreak,
     int? sessionScore,
     int? sessionStreak,
+    int? dailyStreak,
     DateTime? lastDailyStreakUpdate,
+    String? lastProcessedSessionId,
     DateTime? timestamp,
   }) {
     return ProgressSnapshot(
@@ -52,8 +59,11 @@ class ProgressSnapshot {
       maxStreak: maxStreak ?? this.maxStreak,
       sessionScore: sessionScore ?? this.sessionScore,
       sessionStreak: sessionStreak ?? this.sessionStreak,
+      dailyStreak: dailyStreak ?? this.dailyStreak,
       lastDailyStreakUpdate:
           lastDailyStreakUpdate ?? this.lastDailyStreakUpdate,
+      lastProcessedSessionId:
+          lastProcessedSessionId ?? this.lastProcessedSessionId,
       timestamp: timestamp ?? this.timestamp,
     );
   }
@@ -66,7 +76,9 @@ class ProgressSnapshot {
     'maxStreak': maxStreak,
     'sessionScore': sessionScore,
     'sessionStreak': sessionStreak,
+    'dailyStreak': dailyStreak,
     'lastDailyStreakUpdate': lastDailyStreakUpdate?.toIso8601String(),
+    'lastProcessedSessionId': lastProcessedSessionId,
     'timestamp': timestamp.toIso8601String(),
   };
 }

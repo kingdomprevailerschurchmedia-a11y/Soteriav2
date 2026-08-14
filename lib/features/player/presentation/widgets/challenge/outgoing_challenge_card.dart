@@ -7,7 +7,8 @@ import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/features/player/domain/models/competitive_challenge.dart';
-import 'package:soteria/features/player/presentation/widgets/competitive_rank_badge.dart';
+import '../presence/player_presence_indicator.dart';
+import '../competitive_rank_badge.dart';
 import 'package:soteria/features/player/presentation/providers/public_profile_providers.dart';
 import 'package:soteria/features/player/presentation/providers/challenge_providers.dart';
 
@@ -46,9 +47,18 @@ class OutgoingChallengeCard extends ConsumerWidget {
   Widget _buildProfileInfo(BuildContext context, dynamic profile) {
     return Row(
       children: [
-        SoteriaAvatar(
-          avatar: AvatarCatalog().getById(profile.avatarId),
-          size: 48,
+        Stack(
+          children: [
+            SoteriaAvatar(
+              avatar: AvatarCatalog().getById(profile.avatarId),
+              size: 48,
+            ),
+            Positioned(
+              right: 0,
+              bottom: 0,
+              child: PlayerPresenceIndicator(userId: challenge.challengedPlayerId, size: 12),
+            ),
+          ],
         ),
         const SizedBox(width: 12),
         Expanded(

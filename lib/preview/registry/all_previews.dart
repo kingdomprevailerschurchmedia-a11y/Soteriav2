@@ -33,6 +33,8 @@ import '../../../features/player/preview/goal_previews.dart';
 import '../../../features/player/preview/mission_previews.dart';
 import '../../../features/player/preview/streak_previews.dart';
 import '../../../features/player/preview/match_history_previews.dart';
+import '../../../features/player/preview/rematch_previews.dart';
+import 'package:soteria/features/player/preview/presence_previews.dart';
 import '../../../features/player/preview/reward_previews.dart';
 import '../../../features/player/preview/rank_polish_previews.dart';
 import '../../../features/player/preview/public_profile_preview.dart';
@@ -41,6 +43,14 @@ import '../../../features/matchmaking/preview/matchmaking_previews.dart';
 import '../../../features/matchmaking/preview/match_lifecycle_previews.dart';
 import '../../../features/matchmaking/preview/competitive_insights_previews.dart';
 import '../../../features/matchmaking/preview/match_replay_previews.dart';
+import '../categories/taxonomy_preview.dart';
+import '../categories/question_bank_preview.dart';
+import '../personalization/personalization_preview.dart';
+import '../practice/practice_previews.dart';
+import '../../features/dashboard/presentation/screens/practice_lobby_screen.dart';
+import '../../features/practice/presentation/screens/practice_gameplay_screen.dart';
+import '../../features/practice/presentation/screens/practice_results_screen.dart';
+import '../../features/gameplay_engine/models/game_state.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;
@@ -53,6 +63,106 @@ void registerAllPreviews() {
       description: 'Colors, Typography, Spacing',
       category: PreviewCategory.designSystem,
       builder: (context) => const TokenViewer(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'taxonomy-foundation',
+      title: 'Question Taxonomy',
+      description: 'Categories, Subcategories, and Topics',
+      category: PreviewCategory.gameplay,
+      builder: (context) => const TaxonomyPreview(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'question-bank-foundation',
+      title: 'Question Bank',
+      description: 'Unified repository for all game modes',
+      category: PreviewCategory.gameplay,
+      builder: (context) => const QuestionBankPreview(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'personalization-bridge',
+      title: 'Personalization & Selection',
+      description: 'User interests mapping to question pool',
+      category: PreviewCategory.gameplay,
+      builder: (context) => const PersonalizationPreview(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-setup',
+      title: 'Practice Mode - Setup',
+      description: 'Configuration for category and difficulty',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.setup(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-results-perfect',
+      title: 'Practice Mode - Results (Perfect)',
+      description: '100% accuracy screen',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.resultsPerfect(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-results-average',
+      title: 'Practice Mode - Results (Average)',
+      description: 'Mixed performance summary',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.resultsAverage(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-results-poor',
+      title: 'Practice Mode - Results (Poor)',
+      description: 'Low accuracy screen with review',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.resultsPoor(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-improvement',
+      title: 'Practice Mode - Improvement',
+      description: 'Showing comparison with previous session',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.improvementInsight(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-weakness',
+      title: 'Practice Mode - Weakness Insight',
+      description: 'Identified learning gap',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.weakCategoryInsight(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-difficulty-insight',
+      title: 'Practice Mode - Difficulty Insight',
+      description: 'Performance by level',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.difficultyInsight(),
     ),
   );
 
@@ -259,6 +369,15 @@ void registerAllPreviews() {
 
   r.registerPreview(
     PreviewItem(
+      id: 'quick-actions',
+      title: 'Competitive Quick Actions',
+      description: 'Contextual player buttons',
+      category: PreviewCategory.profile,
+      builder: (context) => RematchPreviews.opponentCard(),
+    ),
+  );
+  r.registerPreview(
+    PreviewItem(
       id: 'challenge-center',
       title: 'Challenge Center',
       description: 'Manage invitations',
@@ -284,6 +403,26 @@ void registerAllPreviews() {
       description: 'Past competitive results',
       category: PreviewCategory.profile,
       builder: (context) => ChallengePreviews.history(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'recent-opponents',
+      title: 'Recent Opponents Section',
+      description: 'Horizontal quick-scroll opponents',
+      category: PreviewCategory.profile,
+      builder: (context) => RematchPreviews.recentSection(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'recent-opponents-list',
+      title: 'Recent Opponents List',
+      description: 'Vertical list of opponent cards',
+      category: PreviewCategory.profile,
+      builder: (context) => RematchPreviews.recentList(),
     ),
   );
 
@@ -515,11 +654,21 @@ void registerAllPreviews() {
   // --- Profile ---
   r.registerPreview(
     PreviewItem(
-      id: 'player-profile',
-      title: 'Player Profile',
-      description: 'User settings and account',
+      id: 'player-presence',
+      title: 'Player Presence',
+      description: 'Live availability indicators',
       category: PreviewCategory.profile,
-      builder: (context) => const PlayerProfileScreen(),
+      builder: (context) => PresencePreviews.indicators(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'competitive-player-card',
+      title: 'Competitive Player Card',
+      description: 'Unified player profile row',
+      category: PreviewCategory.profile,
+      builder: (context) => PresencePreviews.playerCard(),
     ),
   );
 

@@ -1,36 +1,36 @@
-# Walkthrough - Competitive Social Activity & Presence
+# Walkthrough - Competitive Invitations & Rematches
 
-Created a lightweight competitive social layer that makes the Soteria ecosystem feel alive through privacy-aware presence and an aggregated activity feed.
+Implemented a high-polish system for competitive interactions, allowing players to quickly challenge, rematch, and manage invitations with minimal friction.
 
 ## Changes Made
 
-### Core Domain
-- **[NEW] [player_presence.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/models/player_presence.dart)**: Defined coarse presence states (Online, In Match, Recently Active) with privacy toggles.
-- **[MODIFY] [competitive_activity_event.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/domain/models/competitive_activity_event.dart)**: Optimized for social aggregation.
+### Infrastructure & Orchestration
+- **[MODIFY] [app_router.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/core/navigation/app_router.dart)**: Registered new routes for `CreateChallengeScreen` and `PublicCompetitiveProfileScreen`.
+- **[MODIFY] [match_history_providers.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/providers/match_history_providers.dart)**: Added `recentOpponentsProvider` to derive authoritative opponent history for rematches.
 
-### Repositories & Data
-- **[NEW] [firebase_presence_repository.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/data/repositories/firebase_presence_repository.dart)**: Implemented real-time presence tracking using Firestore.
-- **[MODIFY] [firebase_activity_repository.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/data/repositories/firebase_activity_repository.dart)**: Added `getSocialActivityFeed` to aggregate events across friends and rivals using cursor-based pagination.
+### Context-Aware UI Components
+- **[NEW] [competitive_quick_actions.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/competitive_quick_actions.dart)**: A logic-heavy component that dynamically shows `CHALLENGE`, `REMATCH`, `ACCEPT/DECLINE`, or `CANCEL` based on the player's status and relationship.
+- **[NEW] [recent_opponents_section.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/recent_opponents_section.dart)**: A premium horizontal quick-scroll section for the Dashboard.
+- **[NEW] [recent_opponent_card.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/recent_opponent_card.dart)**: Specialized card with immediate `REMATCH` capability.
+- **[NEW] [challenge_status_badge.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/challenge/challenge_status_badge.dart)**: Visual indicators for invitation states.
 
-### Presentation & UI
-- **[NEW] [presence_providers.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/providers/presence_providers.dart)**: Reactive providers for individual and network-wide presence.
-- **[NEW] [player_presence_indicator.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/presence/player_presence_indicator.dart)**: Subtle dot indicator for avatars.
-- **[MODIFY] [competitive_activity_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/screens/competitive_activity_screen.dart)**: Re-engineered as a social hub with filters (ALL, FRIENDS, RIVALS, YOU).
-- **[MODIFY] [competitive_activity_card.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/widgets/activity/competitive_activity_card.dart)**: Now resolves and displays actor profiles (Name, Avatar) for social events.
-- **[MODIFY] [rivalry_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/social/presentation/screens/rivalry_screen.dart)**: Integrated a specialized rivalry-only activity feed.
+### Screen Enhancements
+- **[MODIFY] [public_competitive_profile_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/player/presentation/screens/public_competitive_profile_screen.dart)**: Integrated real-time presence indicators and the new quick action framework.
+- **[MODIFY] [rivalry_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/social/presentation/screens/rivalry_screen.dart)** & **[head_to_head_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/social/presentation/screens/head_to_head_screen.dart)**: Streamlined the "Challenge Again" flow using unified quick actions.
+- **[MODIFY] [dashboard_screen.dart](file:///C:/Users/GiftOgbonna/Joseph Projects/Soteria/lib/features/dashboard/presentation/screens/dashboard_screen.dart)**: Added `RecentOpponentsSection` to encourage repeat play.
 
 ## Verification Results
 
 ### Automated Tests
-- ✅ **Build Runner**: Succeeded.
-- ✅ **Flutter Analyze**: Passes for all new/modified files (pre-existing warnings elsewhere ignored).
-- ✅ **Domain Logic**: Verified presence state transitions and social filtering logic.
+- ✅ **Code Integrity**: `flutter analyze` passes for all new/modified files.
+- ✅ **Domain Logic**: Verified `isRecentOpponent` logic against match history.
+- ✅ **Routing**: Verified deep links to challenge creation and public profiles.
 
 ### Manual Verification
-- **Privacy Enforcement**: Verified that hidden online status is respected in the UI.
-- **Aggregation**: Verified that the feed correctly combines "YOU" activities with friend milestones.
-- **Responsiveness**: Tested on phone and tablet previews.
+- **Invitation Flow**: Verified that incoming challenges show `ACCEPT/DECLINE` while outgoing ones show `CANCEL`.
+- **Rematch Awareness**: Verified that recent opponents correctly trigger the `REMATCH` UI state instead of generic `CHALLENGE`.
+- **Presence Integration**: Observed status dots and labels updating correctly based on player lifecycle.
 
 ## Known Limitations
-- Real-time aggregation of activity across 30+ friends might require a dedicated "activities" root collection in a high-scale environment (current implementation uses `collectionGroup` with `whereIn`).
-- "Recently Active" state currently relies on manual updates during app interaction.
+- Rematch requests currently redirect to the challenge creation screen for configuration; a "One-Tap Rematch" with previous settings could be a future optimization.
+- The `RecentOpponentsSection` assumes the last 10 unique opponents are sufficient for discovery.

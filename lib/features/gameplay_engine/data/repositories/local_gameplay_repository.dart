@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 class LocalGameplayRepository implements GameplayRepository {
   static const String _activeSessionKey = 'active_game_session';
@@ -55,5 +56,12 @@ class LocalGameplayRepository implements GameplayRepository {
   @override
   Future<void> syncSessionMetadata(GameState state) async {
     // Local repository doesn't handle remote sync, but we could track sync status here
+  }
+
+  @override
+  Future<List<GameResult>> getRecentResults(String uid, {GameMode? mode, int limit = 10}) async {
+    // Local storage implementation could search for all keys starting with _resultPrefix
+    // For now, return empty as the primary source for history is Firebase
+    return [];
   }
 }

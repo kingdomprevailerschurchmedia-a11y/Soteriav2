@@ -7,6 +7,7 @@ import 'package:soteria/features/gameplay_engine/data/repositories/local_gamepla
 import 'package:soteria/features/gameplay_engine/data/repositories/firebase_gameplay_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Initialize this in main.dart and override it');
@@ -72,4 +73,10 @@ class CompositeGameplayRepository implements GameplayRepository {
 
   @override
   Future<void> clearActiveSession() => local.clearActiveSession();
+
+  @override
+  Future<List<GameResult>> getRecentResults(String uid, {GameMode? mode, int limit = 10}) {
+    // Try to get from remote primarily for history
+    return remote.getRecentResults(uid, mode: mode, limit: limit);
+  }
 }

@@ -9,6 +9,7 @@ import '../../data/repositories/firebase_match_history_repository.dart';
 import 'progression_providers.dart';
 import 'rank_providers.dart';
 import 'statistics_providers.dart';
+import 'service_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../quiz/data/repository/quiz_repository_provider.dart';
 
@@ -144,3 +145,22 @@ final matchHistoryInsightsProvider =
         (matches) => service.generateMatchInsights(matches),
       );
     });
+
+final recentOpponentsProvider = Provider<AsyncValue<List<String>>>((ref) {
+  final historyAsync = ref.watch(currentUserMatchHistoryProvider);
+
+  return historyAsync.whenData((matches) {
+    final opponentIds = <String>{};
+    for (final match in matches) {
+      if (match.result.opponentId != null) {
+        opponentIds.add(match.result.opponentId!);
+      }
+    }
+    return opponentIds.take(10).toList();
+  });
+});
+
+final isRecentOpponentProvider = Provider.family<bool, String>((ref, userId) {
+  final recentOpponents = ref.watch(recentOpponentsProvider).value ?? [];
+  return recentOpponents.contains(userId);
+});

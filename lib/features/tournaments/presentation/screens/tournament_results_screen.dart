@@ -9,9 +9,9 @@ import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import '../../domain/models/tournament_ranking.dart';
 import '../providers/tournament_results_provider.dart';
-import '../widgets/rank_badge.dart';
 import '../widgets/tournament_prize_card.dart';
 import '../../../gameplay_engine/widgets/competitive_statistics_card.dart';
+import '../../../gameplay_engine/models/game_mode.dart';
 import '../../../gameplay_engine/models/game_result.dart';
 
 class TournamentResultsScreen extends ConsumerWidget {
@@ -152,6 +152,7 @@ class TournamentResultsScreen extends ConsumerWidget {
     // Reusing CompetitiveStatisticsCard but needs GameResult
     final mockResult = GameResult(
       sessionId: 'tournament',
+      mode: GameMode.tournament,
       finalScore: ranking.score,
       totalXP: ranking.prize?.xp ?? 0,
       totalQuestions: 20, // Mock
@@ -163,6 +164,7 @@ class TournamentResultsScreen extends ConsumerWidget {
       avgResponseTime: Duration(
         milliseconds: (ranking.completionTime.inMilliseconds / 20).toInt(),
       ),
+      timestamp: DateTime.now(),
     );
 
     return CompetitiveStatisticsCard(result: mockResult);

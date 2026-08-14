@@ -33,11 +33,11 @@ class MultipleChoiceRenderer extends QuestionRenderingStrategy {
 
         final isSelected = selectedAnswerId == answer.id;
         final isCorrect =
-            isRevealed && question.correctAnswers.contains(answer.id);
+            isRevealed && question.correctOptionIds.contains(answer.id);
         final isWrong =
             isRevealed &&
             isSelected &&
-            !question.correctAnswers.contains(answer.id);
+            !question.correctOptionIds.contains(answer.id);
 
         AnswerVisualState visualState = AnswerVisualState.normal;
         if (isCorrect) {
