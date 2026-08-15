@@ -107,6 +107,7 @@ final answerReviewProvider = Provider.family<List<AnswerReview>, GameState>((
         decision: AnswerDecision.wrong,
         correctOptionIds: question.correctOptionIds,
         timestamp: DateTime.now(),
+        questionVersion: question.version,
       ),
     );
 

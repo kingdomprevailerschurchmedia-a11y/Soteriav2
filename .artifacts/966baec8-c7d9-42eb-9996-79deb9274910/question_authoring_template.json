@@ -1,0 +1,32 @@
+[
+  {
+    "id": "geo_cap_001",
+    "version": "1.0.0",
+    "status": "published",
+    "text": "What is the capital of Japan?",
+    "explanation": "Tokyo has been the capital of Japan since 1868.",
+    "difficulty": "easy",
+    "categoryId": "geography",
+    "subcategoryId": null,
+    "topicId": null,
+    "type": "multipleChoice",
+    "options": [
+      { "id": "ans_1", "text": "Kyoto", "displayOrder": 0 },
+      { "id": "ans_2", "text": "Osaka", "displayOrder": 1 },
+      { "id": "ans_3", "text": "Tokyo", "displayOrder": 2 },
+      { "id": "ans_4", "text": "Hiroshima", "displayOrder": 3 }
+    ],
+    "correctOptionIds": ["ans_3"],
+    "tags": ["capitals", "asia"],
+    "language": "en",
+    "estimatedTimeSeconds": 15,
+    "xpValue": 10,
+    "coinValue": 5,
+    "source": "Soteria Internal",
+    "author": "editor_01",
+    "createdAt": "2026-08-14T12:00:00Z",
+    "updatedAt": "2026-08-14T12:00:00Z",
+    "schemaVersion": 1,
+    "metadata": {}
+  }
+]

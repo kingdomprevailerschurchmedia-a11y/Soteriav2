@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_type.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_status.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_state.dart';

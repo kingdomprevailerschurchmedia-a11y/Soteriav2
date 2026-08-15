@@ -75,4 +75,20 @@ class FirestoreQuestionDataSource {
       return QuestionDto.fromJson({'id': doc.id, ...doc.data()!});
     });
   }
+
+  /// Saves or updates a question in Firestore.
+  Future<void> saveQuestion(QuestionDto question) async {
+    final data = question.toJson();
+    data.remove('id'); // ID is the document ID
+    await _database.collection(_collectionPath).doc(question.id).set(data);
+  }
+
+  /// Batch saves multiple questions.
+  Future<void> saveQuestionsBatch(List<QuestionDto> questions) async {
+    // Note: IDatabaseService might not support batch yet, 
+    // we'll loop for now or update IDatabaseService if needed.
+    for (final q in questions) {
+      await saveQuestion(q);
+    }
+  }
 }

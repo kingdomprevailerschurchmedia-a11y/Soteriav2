@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../models/integrity_signal.dart';
 import '../models/integrity_event.dart';
 import '../models/integrity_policy.dart';

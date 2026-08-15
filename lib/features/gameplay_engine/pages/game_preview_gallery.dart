@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
@@ -9,7 +9,6 @@ import 'package:soteria/features/gameplay_engine/pages/results_screen.dart';
 import 'package:soteria/features/gameplay_engine/pages/competitive_results_screen.dart';
 import 'package:soteria/features/gameplay_engine/pages/competitive_review_screen.dart';
 import 'package:soteria/features/gameplay_engine/pages/answer_review_screen.dart';
-import 'package:soteria/features/gameplay_engine/providers/competitive_results_provider.dart';
 import 'package:soteria/features/gameplay_engine/providers/settlement_provider.dart';
 import 'package:soteria/features/gameplay_engine/models/competitive_settlement.dart';
 import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
@@ -342,9 +341,12 @@ class _GamePreview extends ConsumerWidget {
 }
 
 class _MockGameEngine extends GameEngine {
-  _MockGameEngine(GameState initialState)
+  final GameState initialState;
+  _MockGameEngine(this.initialState)
     : super(config: const GameConfiguration(mode: GameMode.pro)) {
-    state = initialState;
+      // In Riverpod 3.0, we can't easily override state in constructor for StateNotifier legacy
+      // but the legacy bridge should still allow 'state = '
+      Future.microtask(() => state = initialState);
   }
 }
 
@@ -362,13 +364,15 @@ class _MockSettlementNotifier extends SettlementNotifier {
          statsRepo: _MockStatsRepo(),
          ref: ProviderContainer().read(providerContainerProvider),
        ) {
-    if (isLoading) {
-      state = const AsyncValue.loading();
-    } else if (error != null) {
-      state = AsyncValue.error(error!, StackTrace.current);
-    } else {
-      state = AsyncValue.data(mockSettlement);
-    }
+    Future.microtask(() {
+      if (isLoading) {
+        state = const AsyncValue.loading();
+      } else if (error != null) {
+        state = AsyncValue.error(error!, StackTrace.current);
+      } else {
+        state = AsyncValue.data(mockSettlement);
+      }
+    });
   }
 
   @override

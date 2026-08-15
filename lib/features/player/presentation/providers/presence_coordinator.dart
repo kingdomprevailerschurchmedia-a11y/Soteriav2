@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:soteria/features/matchmaking/presentation/providers/match_lifecycle_providers.dart';
 import 'package:soteria/core/logging/logger_service.dart';
@@ -41,7 +42,7 @@ class PresenceCoordinator extends WidgetsBindingObserver {
   }
 
   void _listenToMatchState() {
-    _ref.listen(activeMatchIdProvider, (prev, next) {
+    _ref.listen<String?>(activeMatchIdProvider, (prev, next) {
       final userId = _ref.read(authRepositoryProvider).currentUserId;
       if (userId == null) return;
 

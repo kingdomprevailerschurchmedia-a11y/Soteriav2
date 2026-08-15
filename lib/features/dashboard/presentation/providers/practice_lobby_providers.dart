@@ -67,8 +67,8 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
   PracticeLobbyState build() {
     _mounted = true;
     ref.onDispose(() => _mounted = false);
-    // Initial state
-    _init();
+    // Initial state - use microtask to ensure build finishes first
+    Future.microtask(_init);
     return const PracticeLobbyState();
   }
 

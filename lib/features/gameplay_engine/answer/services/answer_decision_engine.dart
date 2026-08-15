@@ -34,6 +34,7 @@ class AnswerDecisionEngine {
       xpEarned: xp,
       timestamp: DateTime.now(),
       responseTime: submission.responseTime,
+      questionVersion: question.version,
       metadata: {'responseTimeMs': submission.responseTime.inMilliseconds},
     );
   }

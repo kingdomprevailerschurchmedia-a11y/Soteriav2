@@ -15,7 +15,12 @@ class SoteriaRoutes {
   static const String practice = '/app/practice';
   static const String practiceSession = '/app/practice/session';
   static const String practiceResults = '/app/practice/results';
+  static const String practiceHistory = '/app/practice/history';
+  static const String practiceHistoryDetail = '/app/practice/history/:id';
   static const String proMode = '/app/pro-mode';
+  static const String proGameplay = '/app/pro-mode/play';
+  static const String proResults = '/app/pro-mode/results';
+  static const String proReview = '/app/pro-mode/review/:id';
   static const String versus = '/app/versus';
   static const String versusLobby = '/app/versus/lobby';
   static const String matchmaking = '/app/matchmaking';
@@ -76,6 +81,7 @@ class SoteriaRoutes {
   static const String configDebug = '/preview-gallery/config-debug';
   static const String securityStatus = '/preview-gallery/security-status';
   static const String proLobby = '/preview-gallery/pro-lobby';
+  static const String proResultsPreview = '/preview-gallery/pro-results';
   static const String quizHistoryPreview = '/preview-gallery/quiz-history';
   static const String avatarPlatform = '/preview-gallery/avatars';
   static const String socialPreview = '/preview-gallery/social';

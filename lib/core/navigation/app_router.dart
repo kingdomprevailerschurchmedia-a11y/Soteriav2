@@ -60,6 +60,9 @@ import 'package:soteria/features/quiz/presentation/screens/quiz_history_screen.d
 import 'package:soteria/features/quiz/presentation/screens/quiz_history_detail_screen.dart';
 import 'package:soteria/features/practice/presentation/screens/practice_gameplay_screen.dart';
 import 'package:soteria/features/practice/presentation/screens/practice_results_screen.dart';
+import 'package:soteria/features/practice/presentation/screens/practice_history_screen.dart';
+import 'package:soteria/features/practice/presentation/screens/practice_history_detail_screen.dart';
+import 'package:soteria/features/practice/domain/models/practice_result.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
 import 'package:soteria/features/error_routing/unknown_route_screen.dart';
@@ -78,7 +81,12 @@ import 'package:soteria/features/settings/screens/settings_screen.dart';
 import 'package:soteria/features/settings/screens/notification_settings_screen.dart';
 
 import 'package:soteria/features/preview_gallery/pages/pro_lobby_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/pro_mode_results_preview_page.dart';
 import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
+import 'package:soteria/features/dashboard/presentation/screens/pro_gameplay_screen.dart';
+import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
+import 'package:soteria/features/gameplay_engine/pages/pro_mode_results_screen.dart';
+import 'package:soteria/features/gameplay_engine/pages/pro_mode_question_review_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/player_profile_screen.dart';
 import 'package:soteria/features/player/presentation/screens/personal_records_screen.dart';
@@ -98,7 +106,6 @@ import 'package:soteria/features/player/screens/security_status_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
 import 'package:soteria/features/player/presentation/screens/create_challenge_screen.dart';
 import 'package:soteria/features/player/presentation/screens/public_competitive_profile_screen.dart';
-import 'package:soteria/features/player/presentation/screens/competitive_match_history_screen.dart';
 import 'package:soteria/features/social/presentation/screens/friends_screen.dart';
 import 'package:soteria/features/social/presentation/screens/friend_requests_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
@@ -346,6 +353,28 @@ final routerProvider = Provider<GoRouter>((ref) {
                               key: state.pageKey,
                             ),
                       ),
+                      GoRoute(
+                        path: 'history',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.fade(
+                              child: const PracticeHistoryScreen(),
+                              key: state.pageKey,
+                            ),
+                        routes: [
+                          GoRoute(
+                            path: ':id',
+                            pageBuilder: (context, state) {
+                              final result = state.extra as PracticeResult;
+                              return SoteriaPageTransitions.fade(
+                                child: PracticeHistoryDetailScreen(
+                                  result: result,
+                                ),
+                                key: state.pageKey,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                   GoRoute(
@@ -355,6 +384,42 @@ final routerProvider = Provider<GoRouter>((ref) {
                           child: const ProLobbyScreen(),
                           key: state.pageKey,
                         ),
+                    routes: [
+                      GoRoute(
+                        path: 'play',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.slideUp(
+                              child: ProGameplayScreen(
+                                session: state.extra as CompetitiveSession,
+                              ),
+                              key: state.pageKey,
+                            ),
+                      ),
+                      GoRoute(
+                        path: 'results',
+                        pageBuilder: (context, state) {
+                          final gameState = state.extra as GameState?;
+                          final sessionId = state.uri.queryParameters['sessionId'];
+                          return SoteriaPageTransitions.fade(
+                            child: ProModeResultsScreen(
+                              gameState: gameState,
+                              sessionId: sessionId,
+                            ),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: 'review/:id',
+                        pageBuilder: (context, state) {
+                          final id = state.pathParameters['id']!;
+                          return SoteriaPageTransitions.fade(
+                            child: ProModeQuestionReviewScreen(sessionId: id),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                   GoRoute(
                     path: 'versus',
@@ -930,6 +995,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'pro-lobby',
             builder: (context, state) => const ProLobbyPreviewPage(),
+          ),
+          GoRoute(
+            path: 'pro-results',
+            builder: (context, state) => const ProModeResultsPreviewPage(),
           ),
           GoRoute(
             path: 'results-redesign',

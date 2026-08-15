@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/competitive_identity.dart';
 import '../../domain/models/competitive_title.dart';
 import '../../domain/models/competitive_badge.dart';

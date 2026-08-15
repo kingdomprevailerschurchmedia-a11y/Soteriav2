@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
@@ -129,7 +130,7 @@ class SocialPreviews extends StatelessWidget {
     );
   }
 
-  void _show(BuildContext context, Widget screen, {List<Override> overrides = const []}) {
+  void _show(BuildContext context, Widget screen, {List<dynamic> overrides = const []}) {
     Navigator.push(
       context,
       MaterialPageRoute(

@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
@@ -77,6 +77,7 @@ class GameEngine extends StateNotifier<GameState> {
       decision: AnswerDecision.wrong, // Timeout counts as wrong
       correctOptionIds: state.currentQuestion?.correctOptionIds ?? [],
       timestamp: DateTime.now(),
+      questionVersion: state.currentQuestion?.version,
       metadata: {'timeout': true},
     );
 
@@ -303,7 +304,7 @@ class GameEngine extends StateNotifier<GameState> {
       'score': result.finalScore,
     });
 
-    if (finalLifecycle == GameLifecycle.completed) {
+    if (finalLifecycle == GameLifecycle.completed || finalLifecycle == GameLifecycle.failed) {
       _repository?.recordGameResult(result);
       _repository?.clearActiveSession();
     }

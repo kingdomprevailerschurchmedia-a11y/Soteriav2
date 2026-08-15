@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
@@ -9,6 +10,7 @@ import 'package:soteria/features/gameplay_engine/models/game_configuration.dart'
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
+import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/question_presentation/widgets/question_presenter.dart';
 import 'package:soteria/features/gameplay_engine/timer/widgets/adaptive_timer_display.dart';
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
@@ -40,7 +42,7 @@ class EventGameplayScreen extends ConsumerWidget {
         final gameState = ref.watch(gameEngineProvider(config));
         
         // Listen for game completion
-        ref.listen(gameEngineProvider(config), (prev, next) {
+        ref.listen<GameState>(gameEngineProvider(config), (prev, next) {
           if (next.lifecycle == GameLifecycle.completed) {
             ref.read(eventControllerProvider.notifier).submitScore(eventId, next.score);
             context.go('/app/events/result/$eventId?score=${next.score}');

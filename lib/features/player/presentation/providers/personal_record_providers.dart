@@ -25,7 +25,8 @@ final personalRecordsProvider = StreamProvider.family<List<CompetitivePersonalRe
 final currentUserPersonalRecordsProvider = StreamProvider<List<CompetitivePersonalRecord>>((ref) {
   final userId = ref.watch(authRepositoryProvider).currentUserId;
   if (userId == null) return Stream.value([]);
-  return ref.watch(personalRecordsProvider(userId).stream);
+  final repository = ref.watch(personalRecordRepositoryProvider);
+  return repository.watchPersonalRecords(userId);
 });
 
 final careerRecordsProvider = Provider<AsyncValue<List<CompetitivePersonalRecord>>>((ref) {

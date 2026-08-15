@@ -549,6 +549,7 @@ class QuizController extends Notifier<QuizState> {
           scoreEarned: answer.isCorrect ? 100 : 0,
           difficulty: question.difficulty,
           explanation: question.explanation,
+          questionVersion: question.version,
         ),
       );
     }

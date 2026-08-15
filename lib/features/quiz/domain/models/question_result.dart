@@ -21,6 +21,7 @@ abstract class QuestionResult with _$QuestionResult {
     required int scoreEarned,
     Difficulty? difficulty,
     String? explanation,
+    String? questionVersion,
   }) = _QuestionResult;
 
   factory QuestionResult.fromJson(Map<String, dynamic> json) =>

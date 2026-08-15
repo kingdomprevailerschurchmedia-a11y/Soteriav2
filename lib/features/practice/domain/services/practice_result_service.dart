@@ -9,7 +9,7 @@ import 'practice_recommendation_service.dart';
 
 class PracticeResultService {
   /// Finalizes a practice session by calculating detailed results and performance metrics.
-  static PracticeResult calculateResult(GameState state, {List<GameResult> history = const []}) {
+  static PracticeResult calculateResult(GameState state, String userId, {List<GameResult> history = const []}) {
     final now = DateTime.now();
     final totalQuestions = state.questions.length;
     final answers = state.answerHistory;
@@ -31,6 +31,7 @@ class PracticeResultService {
           decision: AnswerDecision.wrong,
           correctOptionIds: question.correctOptionIds,
           timestamp: DateTime.now(),
+          questionVersion: question.version,
         ),
       );
 
@@ -88,6 +89,7 @@ class PracticeResultService {
 
     var result = PracticeResult(
       sessionId: state.sessionId,
+      userId: userId,
       completedAt: now,
       totalQuestions: totalQuestions,
       answeredQuestions: answeredQuestions,

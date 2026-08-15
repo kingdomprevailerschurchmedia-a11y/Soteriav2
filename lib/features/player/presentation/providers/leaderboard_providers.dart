@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/models/leaderboard_entry.dart';
 import '../../domain/repositories/leaderboard_repository.dart';

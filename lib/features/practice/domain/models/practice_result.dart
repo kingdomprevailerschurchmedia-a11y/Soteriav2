@@ -10,6 +10,7 @@ part 'practice_result.g.dart';
 abstract class PracticeResult with _$PracticeResult {
   const factory PracticeResult({
     required String sessionId,
+    required String userId,
     required DateTime completedAt,
     required int totalQuestions,
     required int answeredQuestions,

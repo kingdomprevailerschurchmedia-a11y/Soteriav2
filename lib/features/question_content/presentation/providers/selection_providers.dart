@@ -17,7 +17,7 @@ final personalizedQuestionSelectionProvider = FutureProvider.family<QuestionSele
   
   // If request has no categories, try to use user's favorite categories
   if (request.categoryIds.isEmpty) {
-    final profile = ref.watch(currentPlayerStreamProvider).valueOrNull;
+    final profile = ref.watch(currentPlayerStreamProvider).value;
     if (profile != null && profile.favoriteCategories.isNotEmpty) {
       final updatedRequest = request.copyWith(categoryIds: profile.favoriteCategories);
       return service.selectQuestions(updatedRequest);

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import '../../domain/models/competitive_match_result.dart';
 import '../../domain/repositories/match_result_repository.dart';
@@ -64,7 +65,7 @@ final matchReplayProvider = FutureProvider.family<CompetitiveMatchReplay?, Strin
   );
 });
 
-class RematchNotifier extends AutoDisposeAsyncNotifier<void> {
+class RematchNotifier extends AsyncNotifier<void> {
   @override
   FutureOr<void> build() {}
 
@@ -82,7 +83,7 @@ class RematchNotifier extends AutoDisposeAsyncNotifier<void> {
   }
 }
 
-final rematchControllerProvider =
-    AutoDisposeAsyncNotifierProvider<RematchNotifier, void>(
-  RematchNotifier.new,
+final rematchControllerProvider = AsyncNotifierProvider<RematchNotifier, void>(
+  () => RematchNotifier(),
+  isAutoDispose: true,
 );

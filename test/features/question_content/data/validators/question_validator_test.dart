@@ -83,5 +83,24 @@ void main() {
       final errors = QuestionValidator.validate(q);
       expect(errors, contains('Question contains duplicate option text.'));
     });
+
+    test('invalid correct option ID fails', () {
+      final q = Question(
+        id: '1',
+        text: 'Test?',
+        difficulty: Difficulty.easy,
+        categoryId: 'cat1',
+        type: QuestionType.multipleChoice,
+        options: [
+          const Answer(id: 'o1', text: 'Ans1'),
+        ],
+        correctOptionIds: ['invalid_id'],
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        source: 'S',
+      );
+      final errors = QuestionValidator.validate(q);
+      expect(errors, contains('Correct option ID "invalid_id" does not exist in options.'));
+    });
   });
 }

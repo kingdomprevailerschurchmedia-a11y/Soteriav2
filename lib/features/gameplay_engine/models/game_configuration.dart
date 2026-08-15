@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 /// Configuration for a gameplay session, determining rules and constraints.
@@ -43,4 +44,34 @@ class GameConfiguration {
     questionTimer: Duration(seconds: 15),
     difficultyMultiplier: 1.5,
   );
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is GameConfiguration &&
+          runtimeType == other.runtimeType &&
+          mode == other.mode &&
+          questionCount == other.questionCount &&
+          questionTimer == other.questionTimer &&
+          sessionTimer == other.sessionTimer &&
+          initialLives == other.initialLives &&
+          allowLifelines == other.allowLifelines &&
+          difficultyMultiplier == other.difficultyMultiplier &&
+          xpPerCorrectAnswer == other.xpPerCorrectAnswer &&
+          categoryId == other.categoryId &&
+          mapEquals(metadata, other.metadata);
+
+  @override
+  int get hashCode =>
+      mode.hashCode ^
+      questionCount.hashCode ^
+      questionTimer.hashCode ^
+      sessionTimer.hashCode ^
+      initialLives.hashCode ^
+      allowLifelines.hashCode ^
+      difficultyMultiplier.hashCode ^
+      xpPerCorrectAnswer.hashCode ^
+      categoryId.hashCode ^
+      Object.hashAll(metadata.keys) ^
+      Object.hashAll(metadata.values);
 }

@@ -8,6 +8,7 @@ void main() {
     test('should recommend weak area if detected', () {
       final result = PracticeResult(
         sessionId: 'test',
+        userId: 'test_user',
         completedAt: DateTime.now(),
         totalQuestions: 10,
         answeredQuestions: 10,
@@ -58,6 +59,7 @@ void main() {
     test('should recommend higher difficulty on mastery', () {
       final result = PracticeResult(
         sessionId: 'test',
+        userId: 'test_user',
         completedAt: DateTime.now(),
         totalQuestions: 5,
         answeredQuestions: 5,

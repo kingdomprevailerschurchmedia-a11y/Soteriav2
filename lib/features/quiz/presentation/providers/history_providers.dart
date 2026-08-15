@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/quiz_enums.dart';
 import '../../domain/models/quiz_result.dart';
 import 'quiz_providers.dart';

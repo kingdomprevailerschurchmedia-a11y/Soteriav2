@@ -61,9 +61,13 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
 
         final engineState = ref.watch(gameEngineProvider(gameConfig));
 
-        if (engineState.lifecycle == GameLifecycle.loading || engineState.lifecycle == GameLifecycle.initializing) {
-          // Initialize engine if not already done
+        if (engineState.lifecycle == GameLifecycle.initializing) {
+          // Initialize engine only once
           Future.microtask(() => ref.read(gameEngineProvider(gameConfig).notifier).startSession(selectionResult.questions));
+          return const SafeGradientScaffold(body: Center(child: SoteriaLoader()));
+        }
+
+        if (engineState.lifecycle == GameLifecycle.loading) {
           return const SafeGradientScaffold(body: Center(child: SoteriaLoader()));
         }
 

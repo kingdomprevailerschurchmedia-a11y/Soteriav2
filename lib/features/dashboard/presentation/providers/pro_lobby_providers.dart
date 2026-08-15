@@ -5,8 +5,12 @@ import '../../../../core/firebase/providers/firebase_providers.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../../question_content/domain/entities/category.dart';
 import '../../../question_content/presentation/providers/question_providers.dart';
+import '../../../question_content/domain/selection/selection_models.dart';
+import '../../../question_content/presentation/providers/selection_providers.dart';
 import '../../../../features/gameplay_engine/models/pro_mode_config.dart';
+import '../../../../features/gameplay_engine/models/game_mode.dart';
 import '../../../../features/gameplay_engine/models/pro_session_config.dart';
+import '../../../../features/gameplay_engine/models/pro_mode_access.dart';
 import '../../../../features/gameplay_engine/models/competitive_session.dart';
 import '../../../../features/gameplay_engine/domain/repositories/pro_mode_repository.dart';
 import '../../../../features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart';
@@ -24,16 +28,14 @@ class ProLobbyState {
   final String? error;
   final ProSessionConfig config;
   final bool isOffline;
-  final bool hasInsufficientCoins;
-  final String? validationError;
+  final ProModeAccessResult access;
 
   const ProLobbyState({
     this.isLoading = false,
     this.error,
     this.config = const ProSessionConfig(),
     this.isOffline = false,
-    this.hasInsufficientCoins = false,
-    this.validationError,
+    this.access = const ProModeAccessResult.loading(),
   });
 
   ProLobbyState copyWith({
@@ -41,18 +43,19 @@ class ProLobbyState {
     String? error,
     ProSessionConfig? config,
     bool? isOffline,
-    bool? hasInsufficientCoins,
-    String? validationError,
+    ProModeAccessResult? access,
   }) {
     return ProLobbyState(
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       config: config ?? this.config,
       isOffline: isOffline ?? this.isOffline,
-      hasInsufficientCoins: hasInsufficientCoins ?? this.hasInsufficientCoins,
-      validationError: validationError ?? this.validationError,
+      access: access ?? this.access,
     );
   }
+
+  bool get hasInsufficientCoins => access.state == ProModeAccessState.insufficientTokens;
+  String? get validationError => access.message;
 }
 
 // --- Notifiers ---
@@ -68,30 +71,34 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
     const config = ProSessionConfig();
     final fee = proConfig.entryFees[config.questionCount] ?? 100;
-    final updatedConfig = config.copyWith(entryFee: fee);
+    final updatedConfig = config.copyWith(
+      entryFee: fee,
+      minLevelRequirement: proConfig.minLevelRequirement,
+    );
 
-    bool hasInsufficientCoins = false;
-    String? validationError;
+    ProModeAccessResult access = const ProModeAccessResult.available();
 
     if (player != null) {
-      hasInsufficientCoins = player.coins < updatedConfig.entryFee;
-      if (player.level < proConfig.minLevelRequirement) {
-        validationError =
-            'MINIMUM LEVEL ${proConfig.minLevelRequirement} REQUIRED';
+      if (player.level < updatedConfig.minLevelRequirement) {
+        access = ProModeAccessResult(
+          state: ProModeAccessState.locked,
+          message: 'MINIMUM LEVEL ${updatedConfig.minLevelRequirement} REQUIRED',
+        );
+      } else if (player.coins < updatedConfig.entryFee) {
+        access = const ProModeAccessResult(state: ProModeAccessState.insufficientTokens);
       }
     }
 
     return ProLobbyState(
       config: updatedConfig,
-      hasInsufficientCoins: hasInsufficientCoins,
-      validationError: validationError,
-      isOffline: false, // Assume online initially
+      access: access,
+      isOffline: false,
     );
   }
 
   Future<void> checkConnection() async {
-    // Simulated
     state = state.copyWith(isOffline: false);
+    _updateValidation();
   }
 
   void updateCategory(Category? category) {
@@ -101,8 +108,6 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
   void updateDifficulty(ProDifficulty difficulty) {
     final proConfig = ref.read(configurationProvider).proMode;
-    final multiplier = proConfig.difficultyMultipliers[difficulty.name] ?? 1.0;
-
     state = state.copyWith(
       config: state.config.copyWith(difficulty: difficulty),
     );
@@ -128,36 +133,73 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
   void _updateValidation() {
     final player = ref.read(currentPlayerProvider);
-    if (player == null) return;
-
-    final hasInsufficientCoins = player.coins < state.config.entryFee;
-
-    // Check if player meets level requirement (from Remote Config)
-    final proConfig = ref.read(configurationProvider).proMode;
-    String? validationError;
-    if (player.level < proConfig.minLevelRequirement) {
-      validationError =
-          'MINIMUM LEVEL ${proConfig.minLevelRequirement} REQUIRED';
+    if (player == null) {
+      state = state.copyWith(access: const ProModeAccessResult(state: ProModeAccessState.locked));
+      return;
     }
 
-    state = state.copyWith(
-      hasInsufficientCoins: hasInsufficientCoins,
-      validationError: validationError,
+    ProModeAccessResult access = const ProModeAccessResult.available();
+
+    if (player.level < state.config.minLevelRequirement) {
+      access = ProModeAccessResult(
+        state: ProModeAccessState.locked,
+        message: 'MINIMUM LEVEL ${state.config.minLevelRequirement} REQUIRED',
+      );
+    } else if (player.coins < state.config.entryFee) {
+      access = const ProModeAccessResult(state: ProModeAccessState.insufficientTokens);
+    }
+
+    state = state.copyWith(access: access);
+    
+    if (access.isAllowed) {
+      _checkAvailability();
+    }
+  }
+
+  Future<void> _checkAvailability() async {
+    final count = await ref.read(proModeRepositoryProvider).getAvailableQuestionCount(
+      categoryId: state.config.category?.id,
+      difficulty: state.config.difficulty.toBaseDifficulty(),
     );
+
+    if (count < state.config.questionCount) {
+      state = state.copyWith(
+        access: ProModeAccessResult(
+          state: ProModeAccessState.insufficientContent,
+          message: 'Not enough questions available for this configuration.',
+          metadata: {'available': count, 'required': state.config.questionCount},
+        ),
+      );
+    }
   }
 
   Future<CompetitiveSession?> startSession() async {
     final player = ref.read(currentPlayerProvider);
-    if (player == null ||
-        state.hasInsufficientCoins ||
-        state.validationError != null)
-      return null;
+    if (player == null || !state.access.isAllowed) return null;
 
     state = state.copyWith(isLoading: true);
     try {
+      // 1. Select Questions first (Fail-fast content check)
+      final selectionResult = await ref.read(questionSelectionServiceProvider).selectQuestions(
+        QuestionSelectionRequest(
+          categoryIds: state.config.category != null ? [state.config.category!.id] : [],
+          difficulty: state.config.difficulty.toBaseDifficulty(),
+          questionCount: state.config.questionCount,
+          mode: GameMode.pro,
+        ),
+      );
+
+      if (selectionResult.status != SelectionStatus.success) {
+        state = state.copyWith(
+          isLoading: false,
+          access: const ProModeAccessResult(state: ProModeAccessState.insufficientContent),
+        );
+        return null;
+      }
+
       final sessionId = const Uuid().v4();
 
-      // Reserve Fee first
+      // 2. Reserve Fee (Authoritative atomic check)
       await ref
           .read(proModeRepositoryProvider)
           .reserveEntryFee(player.uid, sessionId, state.config.entryFee);
@@ -166,10 +208,12 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         sessionId: sessionId,
         uid: player.uid,
         config: state.config,
+        questions: selectionResult.questions,
         startTime: DateTime.now(),
         reservedFee: state.config.entryFee,
       );
 
+      // 3. Create Session Record
       await ref
           .read(proModeRepositoryProvider)
           .createCompetitiveSession(session);

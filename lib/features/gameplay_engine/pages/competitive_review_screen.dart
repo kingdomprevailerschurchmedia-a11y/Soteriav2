@@ -10,13 +10,18 @@ import '../models/competitive_review_item.dart';
 
 class CompetitiveReviewScreen extends StatelessWidget {
   final List<CompetitiveReviewItem> items;
+  final String title;
 
-  const CompetitiveReviewScreen({super.key, required this.items});
+  const CompetitiveReviewScreen({
+    super.key,
+    required this.items,
+    this.title = 'Answer Review',
+  });
 
   @override
   Widget build(BuildContext context) {
     return SoteriaPageWrapper(
-      title: 'Answer Review',
+      title: title,
       showAppBar: true,
       body: ListView.separated(
         padding: EdgeInsets.all(SoteriaSpacing.xl),

@@ -41,9 +41,12 @@ class ChallengeLobbyState {
   }
 }
 
-class ChallengeLobbyNotifier extends FamilyNotifier<ChallengeLobbyState, String> {
+class ChallengeLobbyNotifier extends Notifier<ChallengeLobbyState> {
+  final String arg;
+  ChallengeLobbyNotifier(this.arg);
+
   @override
-  ChallengeLobbyState build(String arg) {
+  ChallengeLobbyState build() {
     _init();
     return const ChallengeLobbyState();
   }
@@ -97,5 +100,6 @@ class ChallengeLobbyNotifier extends FamilyNotifier<ChallengeLobbyState, String>
 
 final challengeLobbyProvider =
     NotifierProvider.family<ChallengeLobbyNotifier, ChallengeLobbyState, String>(
-      ChallengeLobbyNotifier.new,
+      (arg) => ChallengeLobbyNotifier(arg),
+      isAutoDispose: true,
     );

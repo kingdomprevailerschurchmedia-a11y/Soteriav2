@@ -10,6 +10,7 @@ void main() {
     test('should detect strong category with enough samples', () {
       final result = PracticeResult(
         sessionId: 'test',
+        userId: 'test_user',
         completedAt: DateTime.now(),
         totalQuestions: 5,
         answeredQuestions: 5,
@@ -40,6 +41,7 @@ void main() {
     test('should NOT detect weakness with small sample size', () {
       final result = PracticeResult(
         sessionId: 'test',
+        userId: 'test_user',
         completedAt: DateTime.now(),
         totalQuestions: 5,
         answeredQuestions: 1,
@@ -69,6 +71,7 @@ void main() {
     test('should detect improvement from history', () {
       final current = PracticeResult(
         sessionId: 'current',
+        userId: 'test_user',
         completedAt: DateTime.now(),
         totalQuestions: 5,
         answeredQuestions: 5,

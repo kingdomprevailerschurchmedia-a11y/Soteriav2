@@ -10,6 +10,7 @@ class AnswerResult {
   final int xpEarned;
   final DateTime timestamp;
   final Duration responseTime;
+  final String? questionVersion;
   final Map<String, dynamic> metadata;
 
   const AnswerResult({
@@ -21,11 +22,14 @@ class AnswerResult {
     this.xpEarned = 0,
     required this.timestamp,
     this.responseTime = Duration.zero,
+    this.questionVersion,
     this.metadata = const {},
   });
 
   bool get isCorrect => decision == AnswerDecision.correct;
   bool get isWrong => decision == AnswerDecision.wrong;
+  bool get isTimedOut => decision == AnswerDecision.timeout;
+  bool get isSkipped => decision == AnswerDecision.skipped;
 
   Map<String, dynamic> toJson() => {
     'submissionId': submissionId,
@@ -36,6 +40,7 @@ class AnswerResult {
     'xpEarned': xpEarned,
     'timestamp': timestamp.toIso8601String(),
     'responseTime': responseTime.inMilliseconds,
+    'questionVersion': questionVersion,
     'metadata': metadata,
   };
 
@@ -48,6 +53,7 @@ class AnswerResult {
     xpEarned: json['xpEarned'] ?? 0,
     timestamp: DateTime.parse(json['timestamp']),
     responseTime: Duration(milliseconds: json['responseTime'] ?? 0),
+    questionVersion: json['questionVersion'],
     metadata: Map<String, dynamic>.from(json['metadata'] ?? {}),
   );
 }

@@ -139,7 +139,7 @@ class DashboardHeader extends ConsumerWidget {
 class _ChallengesAction extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final incomingCount = ref.watch(incomingChallengesProvider).valueOrNull?.length ?? 0;
+    final incomingCount = ref.watch(incomingChallengesProvider).value?.length ?? 0;
     final nav = ref.watch(navigationCoordinatorProvider);
 
     return Stack(

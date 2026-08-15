@@ -47,6 +47,8 @@ import '../categories/taxonomy_preview.dart';
 import '../categories/question_bank_preview.dart';
 import '../personalization/personalization_preview.dart';
 import '../practice/practice_previews.dart';
+import '../pro_mode/pro_mode_previews.dart';
+import '../pro_mode/pro_gameplay_previews.dart';
 import '../../features/dashboard/presentation/screens/practice_lobby_screen.dart';
 import '../../features/practice/presentation/screens/practice_gameplay_screen.dart';
 import '../../features/practice/presentation/screens/practice_results_screen.dart';
@@ -163,6 +165,26 @@ void registerAllPreviews() {
       description: 'Performance by level',
       category: PreviewCategory.gameplay,
       builder: (context) => PracticePreviews.difficultyInsight(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-history-empty',
+      title: 'Practice Journey - Empty',
+      description: 'New user history state',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.historyEmpty(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'practice-history-full',
+      title: 'Practice Journey - Active',
+      description: 'History with trends and stats',
+      category: PreviewCategory.gameplay,
+      builder: (context) => PracticePreviews.historyFull(),
     ),
   );
 
@@ -604,6 +626,96 @@ void registerAllPreviews() {
       description: 'Competitive session setup',
       category: PreviewCategory.pro,
       builder: (context) => const ProLobbyScreen(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-available',
+      title: 'Pro Mode - Available',
+      description: 'Standard access state',
+      category: PreviewCategory.pro,
+      builder: (context) => ProModePreviews.available(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-locked',
+      title: 'Pro Mode - Locked',
+      description: 'Level requirement not met',
+      category: PreviewCategory.pro,
+      builder: (context) => ProModePreviews.locked(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-insufficient-coins',
+      title: 'Pro Mode - Insufficient Coins',
+      description: 'Entry fee check fail',
+      category: PreviewCategory.pro,
+      builder: (context) => ProModePreviews.insufficientCoins(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-insufficient-questions',
+      title: 'Pro Mode - Insufficient Questions',
+      description: 'Bank pool check fail',
+      category: PreviewCategory.pro,
+      builder: (context) => ProModePreviews.insufficientQuestions(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-offline',
+      title: 'Pro Mode - Offline',
+      description: 'Connection required overlay',
+      category: PreviewCategory.pro,
+      builder: (context) => ProModePreviews.offline(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-gameplay-start',
+      title: 'Pro Gameplay - Start',
+      description: 'First question of premium match',
+      category: PreviewCategory.pro,
+      builder: (context) => ProGameplayPreviews.active(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-gameplay-mid',
+      title: 'Pro Gameplay - Mid Session',
+      description: 'Active match with progress',
+      category: PreviewCategory.pro,
+      builder: (context) => ProGameplayPreviews.midSession(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-gameplay-final',
+      title: 'Pro Gameplay - Final Question',
+      description: 'High stakes last challenge',
+      category: PreviewCategory.pro,
+      builder: (context) => ProGameplayPreviews.finalQuestion(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'pro-gameplay-correct',
+      title: 'Pro Gameplay - Correct Feedback',
+      description: 'Reveal state after correct answer',
+      category: PreviewCategory.pro,
+      builder: (context) => ProGameplayPreviews.answeredCorrect(),
     ),
   );
 

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/competitive_challenge.dart';
 import '../../domain/repositories/challenge_repository.dart';
 import '../../data/repositories/firebase_challenge_repository.dart';

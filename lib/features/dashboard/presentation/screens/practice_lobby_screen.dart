@@ -148,6 +148,13 @@ class _LobbyHeader extends StatelessWidget {
             ),
             onPressed: () => context.pop(),
           ),
+          IconButton(
+            icon: const Icon(
+              Icons.history_rounded,
+              color: Colors.white70,
+            ),
+            onPressed: () => context.push(SoteriaRoutes.practiceHistory),
+          ),
           const Spacer(),
           if (player != null)
             Row(

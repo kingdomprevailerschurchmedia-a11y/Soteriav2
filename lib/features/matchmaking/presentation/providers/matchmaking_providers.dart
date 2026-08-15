@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import '../../domain/models/matchmaking_session.dart';
 import '../../domain/models/matchmaking_status.dart';
@@ -50,7 +51,7 @@ class VersusLobbyState {
   }
 }
 
-class VersusLobbyNotifier extends AutoDisposeNotifier<VersusLobbyState> {
+class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
   @override
   VersusLobbyState build() {
     _init();
@@ -76,9 +77,9 @@ class VersusLobbyNotifier extends AutoDisposeNotifier<VersusLobbyState> {
   void updateQuestionCount(int count) => state = state.copyWith(questionCount: count);
 }
 
-final versusLobbyProvider =
-    NotifierProvider.autoDispose<VersusLobbyNotifier, VersusLobbyState>(
-  VersusLobbyNotifier.new,
+final versusLobbyProvider = NotifierProvider<VersusLobbyNotifier, VersusLobbyState>(
+  () => VersusLobbyNotifier(),
+  isAutoDispose: true,
 );
 
 // --- Matchmaking ---
@@ -99,7 +100,7 @@ final matchmakingSessionProvider = StreamProvider<MatchmakingSession?>((ref) {
   return ref.watch(matchmakingRepositoryProvider).observeSession(sessionId);
 });
 
-class MatchmakingNotifier extends AutoDisposeAsyncNotifier<void> {
+class MatchmakingNotifier extends AsyncNotifier<void> {
   @override
   FutureOr<void> build() {
     // Initial check for active session
@@ -118,7 +119,7 @@ class MatchmakingNotifier extends AutoDisposeAsyncNotifier<void> {
   }) async {
     state = const AsyncValue.loading();
     try {
-      final rankProgress = ref.read(rankProgressProvider).valueOrNull;
+      final rankProgress = ref.read(rankProgressProvider).value;
       final level = ref.read(currentCompetitiveLevelProvider);
 
       final rankSnapshot = {
@@ -166,9 +167,9 @@ class MatchmakingNotifier extends AutoDisposeAsyncNotifier<void> {
   }
 }
 
-final matchmakingControllerProvider =
-    AutoDisposeAsyncNotifierProvider<MatchmakingNotifier, void>(
-  MatchmakingNotifier.new,
+final matchmakingControllerProvider = AsyncNotifierProvider<MatchmakingNotifier, void>(
+  () => MatchmakingNotifier(),
+  isAutoDispose: true,
 );
 
 final queueTimerProvider = StreamProvider.autoDispose<int>((ref) {

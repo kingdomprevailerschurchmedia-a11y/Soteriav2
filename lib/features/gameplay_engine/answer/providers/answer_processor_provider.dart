@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
 import 'package:soteria/features/gameplay_engine/answer/services/answer_processor.dart';
 

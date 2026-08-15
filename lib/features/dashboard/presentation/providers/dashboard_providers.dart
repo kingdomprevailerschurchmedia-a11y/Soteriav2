@@ -30,16 +30,16 @@ class DashboardNotifier extends Notifier<DashboardState> {
 
     if (kDebugMode) {
       LoggerService.d(
-        'Dashboard State: player=${playerAsync.valueOrNull != null}, loading=${playerAsync.isLoading}, announcements=${announcementsAsync.valueOrNull?.length ?? 0}',
+        'Dashboard State: player=${playerAsync.value != null}, loading=${playerAsync.isLoading}, announcements=${announcementsAsync.value?.length ?? 0}',
         feature: 'Dashboard',
       );
     }
 
     return DashboardState(
       isLoading: playerAsync.isLoading,
-      player: playerAsync.valueOrNull,
-      announcements: announcementsAsync.valueOrNull ?? const [],
-      dailyChallenge: challengeAsync.valueOrNull,
+      player: playerAsync.value,
+      announcements: announcementsAsync.value ?? const [],
+      dailyChallenge: challengeAsync.value,
       error: _getError(playerAsync, announcementsAsync, challengeAsync),
       greeting: _getGreeting(),
     );

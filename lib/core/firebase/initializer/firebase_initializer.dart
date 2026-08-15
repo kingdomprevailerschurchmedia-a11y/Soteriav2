@@ -61,4 +61,12 @@ class FirebaseInitializer {
     LoggerService.i('Configuring Firestore Offline Persistence');
     await FirestoreDatabaseService().enablePersistence();
   }
+
+  static String getProjectId() {
+    try {
+      return Firebase.app().options.projectId;
+    } catch (e) {
+      return 'UNKNOWN';
+    }
+  }
 }

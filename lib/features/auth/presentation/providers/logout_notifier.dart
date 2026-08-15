@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/auth/domain/use_cases/logout_use_case.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';

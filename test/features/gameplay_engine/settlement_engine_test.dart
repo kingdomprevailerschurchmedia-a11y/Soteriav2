@@ -20,6 +20,7 @@ void main() {
           entryFee: 100,
           timerEnabled: true,
         ),
+        questions: const [],
         startTime: DateTime.now(),
         reservedFee: 100,
       );

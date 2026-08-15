@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/live_event.dart';
 import '../../domain/models/event_participation.dart';
 import '../../domain/repositories/event_repository.dart';

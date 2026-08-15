@@ -1,4 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_profile.dart';
@@ -28,7 +31,7 @@ class SessionNotifier extends Notifier<UserSession> {
   @override
   UserSession build() {
     final asyncSession = ref.watch(authStateChangesProvider);
-    return asyncSession.valueOrNull ?? const UserSession(status: SessionStatus.guest);
+    return asyncSession.value ?? const UserSession(status: SessionStatus.guest);
   }
 
   void setSession(UserSession session) {

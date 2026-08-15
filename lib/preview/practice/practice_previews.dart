@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/dashboard/presentation/screens/practice_lobby_screen.dart';
 import 'package:soteria/features/practice/presentation/screens/practice_results_screen.dart';
+import 'package:soteria/features/practice/presentation/screens/practice_history_screen.dart';
+import 'package:soteria/features/practice/domain/models/practice_result.dart';
+import 'package:soteria/features/practice/domain/models/practice_history.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_lifecycle.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
@@ -124,23 +127,28 @@ class PracticePreviews {
     );
 
     // Provide history with lower accuracy
+    final pastResults = [
+      PracticeResult(
+        sessionId: 'prev',
+        userId: 'u1',
+        completedAt: DateTime.now().subtract(const Duration(days: 1)),
+        totalQuestions: 5,
+        answeredQuestions: 5,
+        correctAnswers: 2,
+        incorrectAnswers: 3,
+        skippedQuestions: 0,
+        accuracy: 0.4,
+        score: 100,
+        totalTime: const Duration(minutes: 2),
+        categoryPerformance: {},
+        difficultyPerformance: {},
+        reviewItems: [],
+      ),
+    ];
+
     return ProviderScope(
       overrides: [
-        practiceHistoryProvider.overrideWith((ref) => Future.value([
-          GameResult(
-            sessionId: 'prev',
-            mode: GameMode.practice,
-            finalScore: 100,
-            totalXP: 20,
-            totalQuestions: 5,
-            correctAnswers: 2,
-            wrongAnswers: 3,
-            totalDuration: const Duration(minutes: 2),
-            accuracy: 0.4,
-            maxStreak: 2,
-            timestamp: DateTime.now().subtract(const Duration(days: 1)),
-          ),
-        ])),
+        practiceHistoryProvider.overrideWith((ref) => Future.value(PracticeHistory.fromResults(pastResults))),
       ],
       child: PracticeResultsScreen(gameState: currentState),
     );
@@ -194,6 +202,82 @@ class PracticePreviews {
       startTime: DateTime.now().subtract(const Duration(minutes: 5)),
     );
     return PracticeResultsScreen(gameState: state);
+  }
+
+  static Widget historyEmpty() {
+    return ProviderScope(
+      overrides: [
+        practiceHistoryProvider.overrideWith((ref) => Future.value(PracticeHistory.empty())),
+      ],
+      child: const PracticeHistoryScreen(),
+    );
+  }
+
+  static Widget historyFull() {
+    final results = [
+      PracticeResult(
+        sessionId: 'h1',
+        userId: 'u1',
+        completedAt: DateTime.now().subtract(const Duration(hours: 1)),
+        totalQuestions: 10,
+        answeredQuestions: 10,
+        correctAnswers: 9,
+        incorrectAnswers: 1,
+        skippedQuestions: 0,
+        accuracy: 0.9,
+        score: 900,
+        totalTime: const Duration(minutes: 6),
+        categoryPerformance: {
+          'science': const CategoryPerformance(categoryId: 'science', total: 6, correct: 5, accuracy: 0.83),
+          'history': const CategoryPerformance(categoryId: 'history', total: 4, correct: 4, accuracy: 1.0),
+        },
+        difficultyPerformance: {},
+        reviewItems: [],
+      ),
+      PracticeResult(
+        sessionId: 'h2',
+        userId: 'u1',
+        completedAt: DateTime.now().subtract(const Duration(days: 1)),
+        totalQuestions: 10,
+        answeredQuestions: 10,
+        correctAnswers: 7,
+        incorrectAnswers: 3,
+        skippedQuestions: 0,
+        accuracy: 0.7,
+        score: 700,
+        totalTime: const Duration(minutes: 8),
+        categoryPerformance: {
+          'science': const CategoryPerformance(categoryId: 'science', total: 10, correct: 7, accuracy: 0.7),
+        },
+        difficultyPerformance: {},
+        reviewItems: [],
+      ),
+      PracticeResult(
+        sessionId: 'h3',
+        userId: 'u1',
+        completedAt: DateTime.now().subtract(const Duration(days: 2)),
+        totalQuestions: 10,
+        answeredQuestions: 10,
+        correctAnswers: 5,
+        incorrectAnswers: 5,
+        skippedQuestions: 0,
+        accuracy: 0.5,
+        score: 500,
+        totalTime: const Duration(minutes: 10),
+        categoryPerformance: {
+          'math': const CategoryPerformance(categoryId: 'math', total: 10, correct: 5, accuracy: 0.5),
+        },
+        difficultyPerformance: {},
+        reviewItems: [],
+      ),
+    ];
+
+    return ProviderScope(
+      overrides: [
+        practiceHistoryProvider.overrideWith((ref) => Future.value(PracticeHistory.fromResults(results))),
+      ],
+      child: const PracticeHistoryScreen(),
+    );
   }
 
   static List<Question> _createMockQuestions(int count) {

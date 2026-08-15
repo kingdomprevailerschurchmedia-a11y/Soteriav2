@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import '../../../gameplay_engine/models/versus_match.dart';
 import '../../domain/repositories/versus_match_repository.dart';
 import '../../data/repositories/firebase_versus_match_repository.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../quiz/presentation/providers/quiz_providers.dart';
-import '../../../quiz/domain/models/quiz_enums.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
 
 final versusMatchRepositoryProvider = Provider<VersusMatchRepository>((ref) {
@@ -22,7 +22,7 @@ final activeMatchProvider = StreamProvider<VersusMatch?>((ref) {
   return ref.watch(versusMatchRepositoryProvider).observeMatch(matchId);
 });
 
-class MatchLifecycleNotifier extends AutoDisposeAsyncNotifier<void> {
+class MatchLifecycleNotifier extends AsyncNotifier<void> {
   @override
   FutureOr<void> build() {}
 
@@ -51,9 +51,9 @@ class MatchLifecycleNotifier extends AutoDisposeAsyncNotifier<void> {
   }
 }
 
-final matchLifecycleControllerProvider =
-    AutoDisposeAsyncNotifierProvider<MatchLifecycleNotifier, void>(
-  MatchLifecycleNotifier.new,
+final matchLifecycleControllerProvider = AsyncNotifierProvider<MatchLifecycleNotifier, void>(
+  () => MatchLifecycleNotifier(),
+  isAutoDispose: true,
 );
 
 final matchCountdownProvider = StreamProvider.autoDispose<int>((ref) {

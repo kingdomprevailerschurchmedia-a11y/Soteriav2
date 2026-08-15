@@ -10,7 +10,7 @@ final missionRepositoryProvider = Provider<MissionRepository>((ref) {
 });
 
 final activeMissionsProvider = StreamProvider<List<CompetitiveMission>>((ref) {
-  final user = ref.watch(currentUserProvider).valueOrNull;
+  final user = ref.watch(currentUserProvider).value;
   if (user == null) return Stream.value([]);
   
   return ref.watch(missionRepositoryProvider).watchActiveMissions(user.uid);
@@ -35,7 +35,7 @@ final seasonalMissionsProvider = Provider<AsyncValue<List<CompetitiveMission>>>(
 });
 
 final missionHistoryProvider = FutureProvider<List<CompetitiveMission>>((ref) async {
-  final user = ref.watch(currentUserProvider).valueOrNull;
+  final user = ref.watch(currentUserProvider).value;
   if (user == null) return [];
   
   return ref.read(missionRepositoryProvider).getMissionHistory(user.uid);

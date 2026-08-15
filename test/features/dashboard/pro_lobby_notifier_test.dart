@@ -7,6 +7,7 @@ import 'package:soteria/features/gameplay_engine/domain/repositories/pro_mode_re
 import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 class ManualMockProModeRepository implements ProModeRepository {
   @override
@@ -17,6 +18,12 @@ class ManualMockProModeRepository implements ProModeRepository {
 
   @override
   Future<bool> validateEntry(String uid, int fee) async => true;
+
+  @override
+  Future<int> getAvailableQuestionCount({
+    String? categoryId,
+    required Difficulty difficulty,
+  }) async => 100;
 }
 
 void main() {

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
 import 'package:soteria/core/app/app.dart';
 import 'package:soteria/core/errors/error_handler.dart';
 import 'package:soteria/core/logging/logger_service.dart';
@@ -14,6 +16,7 @@ void main() {
   runZonedGuarded(
     () async {
       WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      final sharedPrefs = await SharedPreferences.getInstance();
 
       // Enable Edge-to-Edge mode
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
@@ -33,10 +36,16 @@ void main() {
 
       runApp(
         ProviderScope(
+          overrides: [
+            sharedPreferencesProvider.overrideWithValue(sharedPrefs),
+          ],
           observers: [SoteriaProviderObserver()],
           child: const SoteriaApp(),
         ),
       );
+
+      // Log the runtime Firebase project ID safely
+      LoggerService.i('Runtime Firebase Project ID: ${FirebaseInitializer.getProjectId()}');
 
       // 2. Defer all non-critical background services to post-startup
       WidgetsBinding.instance.addPostFrameCallback((_) {

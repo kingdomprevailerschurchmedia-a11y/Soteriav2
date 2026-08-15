@@ -399,6 +399,13 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
         ),
         SizedBox(height: SoteriaSpacing.md),
         SoteriaButton.secondary(
+          label: 'VIEW HISTORY',
+          onPressed: () => context.push(SoteriaRoutes.practiceHistory),
+          size: SoteriaButtonSize.lg,
+          icon: Icons.history_rounded,
+        ),
+        SizedBox(height: SoteriaSpacing.md),
+        SoteriaButton.secondary(
           label: 'RETURN HOME',
           onPressed: () => context.go(SoteriaRoutes.main),
           size: SoteriaButtonSize.lg,

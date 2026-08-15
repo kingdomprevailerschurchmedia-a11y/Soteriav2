@@ -25,6 +25,27 @@ abstract class ScoringConfiguration with _$ScoringConfiguration {
     Difficulty.expert: 500,
   }.asStandard();
 
+  factory ScoringConfiguration.pro() => ScoringConfiguration(
+    basePoints: {
+      Difficulty.easy: 150,
+      Difficulty.medium: 300,
+      Difficulty.hard: 450,
+      Difficulty.expert: 750,
+    },
+    difficultyMultipliers: {
+      Difficulty.easy: 1.0,
+      Difficulty.medium: 1.5,
+      Difficulty.hard: 2.0,
+      Difficulty.expert: 3.0,
+    },
+    streakBonusMultiplier: 0.2, // 2x standard streak bonus
+    maxStreakBonus: 2.0,
+    maxSpeedBonus: 100, // 2x standard speed bonus
+    speedBonusThreshold: 0.6, // More generous threshold but higher reward
+    xpPerCorrect: 15,
+    xpMultiplier: 1.5,
+  );
+
   factory ScoringConfiguration.fromJson(Map<String, dynamic> json) =>
       _$ScoringConfigurationFromJson(json);
 }

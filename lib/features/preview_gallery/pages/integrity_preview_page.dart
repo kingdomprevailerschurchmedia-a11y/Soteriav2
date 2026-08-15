@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -137,7 +138,9 @@ class IntegrityNotifierMock extends IntegrityNotifier {
   final List<IntegritySignal>? mockSignals;
 
   IntegrityNotifierMock(this.mockAssessment, this.mockSignals) : super() {
-    if (mockAssessment != null) state = mockAssessment!;
+    if (mockAssessment != null) {
+      Future.microtask(() => state = mockAssessment!);
+    }
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../../gameplay_engine/models/practice_session_config.dart';
 import '../../../question_content/domain/selection/selection_models.dart';
 import '../../../question_content/presentation/providers/selection_providers.dart';
@@ -6,6 +7,7 @@ import '../../../question_content/domain/entities/difficulty.dart';
 import '../../../gameplay_engine/models/game_state.dart';
 import '../../../gameplay_engine/models/game_mode.dart';
 import '../../../player/providers/player_providers.dart';
+import '../../../auth/providers/auth_providers.dart';
 import '../../../dashboard/presentation/providers/practice_lobby_providers.dart';
 import 'practice_history_providers.dart';
 
@@ -75,9 +77,22 @@ class PracticeResultNotifier extends StateNotifier<PracticeResultState> {
   Future<void> finalize(GameState gameState) async {
     state = const PracticeResultState.calculating();
     try {
-      final history = await ref.read(practiceHistoryProvider.future);
-      final result = PracticeResultService.calculateResult(gameState, history: history);
+      final userId = ref.read(authRepositoryProvider).currentUserId;
+      if (userId == null) throw Exception('User not authenticated');
+
+      final history = await ref.read(practiceHistoryListProvider.future);
+      // Convert PracticeResult list to GameResult list if needed, or update service to use PracticeResult
+      // For now, let's assume history is needed for insights
+      
+      final result = PracticeResultService.calculateResult(gameState, userId);
+      
+      // Persist the result
+      await ref.read(practiceResultRepositoryProvider).recordResult(result);
+      
       state = PracticeResultState.success(result);
+      
+      // Refresh history
+      ref.invalidate(practiceHistoryListProvider);
     } catch (e) {
       state = PracticeResultState.error(e.toString());
     }

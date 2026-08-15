@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/analytics/domain/models/analytics_enums.dart';
 import 'package:soteria/features/analytics/domain/models/performance_analytics.dart';
 import 'package:soteria/features/analytics/domain/repositories/performance_analytics_repository.dart';

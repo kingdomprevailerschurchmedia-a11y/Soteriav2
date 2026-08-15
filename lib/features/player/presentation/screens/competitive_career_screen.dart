@@ -33,7 +33,7 @@ class CompetitiveCareerScreen extends ConsumerWidget {
         centerTitle: true,
       ),
       body: profileAsync.when(
-        data: (profile) => _buildContent(context, profile, analyticsAsync.valueOrNull),
+        data: (profile) => _buildContent(context, profile, analyticsAsync.value),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text(e.toString())),
       ),

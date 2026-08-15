@@ -205,6 +205,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.security_rounded,
     ),
     const GalleryItem(
+      title: 'Pro Results',
+      description: 'Premium competitive results, Ratings (S-D) & Rewards',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/pro-results',
+      icon: Icons.auto_awesome_rounded,
+      tags: ['pro', 'results', 'rating', 'reward'],
+    ),
+    const GalleryItem(
       title: 'Session Results',
       description: 'Post-game rewards, XP & Analytics',
       category: GalleryCategory.screens,

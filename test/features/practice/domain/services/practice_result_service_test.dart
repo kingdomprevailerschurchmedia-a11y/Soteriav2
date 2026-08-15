@@ -76,7 +76,7 @@ void main() {
         startTime: DateTime.now().subtract(const Duration(minutes: 1)),
       );
 
-      final result = PracticeResultService.calculateResult(state);
+      final result = PracticeResultService.calculateResult(state, 'test_user');
 
       expect(result.totalQuestions, 3);
       expect(result.answeredQuestions, 2);
@@ -113,7 +113,7 @@ void main() {
         )).toList(),
       );
 
-      final result = PracticeResultService.calculateResult(state);
+      final result = PracticeResultService.calculateResult(state, 'test_user');
 
       expect(result.metadata['strengths'], contains('science'));
     });

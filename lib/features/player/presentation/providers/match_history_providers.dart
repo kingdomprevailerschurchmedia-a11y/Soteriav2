@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/competitive_match.dart';
 import '../../domain/models/competitive_result.dart';
 import '../../domain/usecases/fetch_match_history_use_case.dart';

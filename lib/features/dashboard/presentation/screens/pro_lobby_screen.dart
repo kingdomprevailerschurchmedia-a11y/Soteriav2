@@ -13,14 +13,15 @@ import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../../../features/gameplay_engine/models/pro_session_config.dart';
 import '../providers/pro_lobby_providers.dart';
-import '../widgets/lobby/config_selectors.dart';
 import '../widgets/lobby/pro/pro_reward_card.dart';
 import '../widgets/lobby/pro/pro_risk_card.dart';
 import '../widgets/lobby/pro/pro_entry_fee_widget.dart';
 import '../widgets/lobby/pro/pro_confirmation_dialog.dart';
 import '../widgets/lobby/pro/competitive_badge.dart';
 import '../../../../features/tournaments/domain/models/tournament.dart';
+import '../../../../features/gameplay_engine/models/pro_mode_access.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 
 class ProLobbyScreen extends ConsumerWidget {
   final Tournament? tournament;
@@ -76,15 +77,19 @@ class ProLobbyScreen extends ConsumerWidget {
                                   ),
                                 ),
                                 SizedBox(height: SoteriaSpacing.xl),
-                                const ProEntryFeeWidget(),
-                                SizedBox(height: SoteriaSpacing.xxl),
-                                const DifficultySelectorSection(),
-                                SizedBox(height: SoteriaSpacing.xl),
-                                const QuestionCountSelectorSection(),
-                                SizedBox(height: SoteriaSpacing.xxl),
-                                const ProRewardCard(),
-                                SizedBox(height: SoteriaSpacing.lg),
-                                const ProRiskCard(),
+                                if (state.access.state == ProModeAccessState.locked)
+                                  _LockedStateCard(message: state.access.message)
+                                else ...[
+                                  const ProEntryFeeWidget(),
+                                  SizedBox(height: SoteriaSpacing.xxl),
+                                  const DifficultySelectorSection(),
+                                  SizedBox(height: SoteriaSpacing.xl),
+                                  const QuestionCountSelectorSection(),
+                                  SizedBox(height: SoteriaSpacing.xxl),
+                                  const ProRewardCard(),
+                                  SizedBox(height: SoteriaSpacing.lg),
+                                  const ProRiskCard(),
+                                ],
                                 SizedBox(height: SoteriaSpacing.xxl * 2),
                               ]),
                             ),
@@ -93,10 +98,8 @@ class ProLobbyScreen extends ConsumerWidget {
                       ),
                     ),
                     _StartAction(
-                      enabled:
-                          !state.hasInsufficientCoins &&
-                          state.validationError == null,
-                      error: state.validationError,
+                      enabled: state.access.isAllowed,
+                      error: _getErrorMessage(state.access),
                       onStart: () {
                         showDialog(
                           context: context,
@@ -108,13 +111,7 @@ class ProLobbyScreen extends ConsumerWidget {
                                   .startSession();
                               if (session != null && context.mounted) {
                                 // Navigate to Game
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      'Pro Session Started: ${session.sessionId}',
-                                    ),
-                                  ),
-                                );
+                                context.push(SoteriaRoutes.proGameplay, extra: session);
                               }
                             },
                           ),
@@ -132,6 +129,52 @@ class ProLobbyScreen extends ConsumerWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  String? _getErrorMessage(ProModeAccessResult access) {
+    switch (access.state) {
+      case ProModeAccessState.insufficientTokens:
+        return 'INSUFFICIENT COINS';
+      case ProModeAccessState.insufficientContent:
+        return 'NOT ENOUGH QUESTIONS AVAILABLE';
+      case ProModeAccessState.locked:
+        return access.message?.toUpperCase();
+      default:
+        return null;
+    }
+  }
+}
+
+class _LockedStateCard extends StatelessWidget {
+  final String? message;
+  const _LockedStateCard({this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(SoteriaSpacing.xl),
+      decoration: BoxDecoration(
+        color: SoteriaColors.error.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(SoteriaRadius.lg),
+        border: Border.all(color: SoteriaColors.error.withValues(alpha: 0.3)),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.lock_person_rounded, color: SoteriaColors.error, size: 48),
+          SizedBox(height: SoteriaSpacing.md),
+          Text(
+            'PRO MODE LOCKED',
+            style: context.titleMedium.copyWith(color: SoteriaColors.error, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: SoteriaSpacing.sm),
+          Text(
+            message ?? 'Increase your level to unlock Pro Mode.',
+            style: context.bodySmall.copyWith(color: Colors.white70),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
