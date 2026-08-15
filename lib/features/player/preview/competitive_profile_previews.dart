@@ -7,9 +7,10 @@ import '../domain/models/competitive_season.dart';
 import '../domain/models/season_result.dart';
 import '../domain/models/reward_grant.dart';
 import '../domain/models/milestone.dart';
-import '../domain/models/season_reward_definition.dart';
+import '../domain/models/achievement.dart';
+import '../domain/models/competitive_streak.dart';
 import '../presentation/providers/competitive_profile_provider.dart';
-import '../presentation/screens/competitive_profile_screen.dart';
+import '../presentation/screens/player_profile_screen.dart';
 import 'competitive_history_previews.dart';
 
 class CompetitiveProfilePreviewWrapper extends StatelessWidget {
@@ -32,11 +33,11 @@ class CompetitiveProfilePreviewWrapper extends StatelessWidget {
           isLoading
               ? const AsyncValue.loading()
               : error != null
-              ? AsyncValue.error(error!, StackTrace.current)
-              : AsyncValue.data(profile),
+                  ? AsyncValue.error(error!, StackTrace.current)
+                  : AsyncValue.data(profile),
         ),
       ],
-      child: const CompetitiveProfileScreen(),
+      child: const PlayerProfileScreen(),
     );
   }
 }
@@ -81,6 +82,21 @@ class CompetitiveProfilePreviews {
       seasonXp: 12000,
       seasonRankPoints: 450,
       lastUpdated: DateTime.now(),
+      dailyStreak: 7,
+      longestStreak: 14,
+    );
+  }
+
+  static CompetitiveStreak mockWinStreak() {
+    return CompetitiveStreak(
+      userId: 'u1',
+      type: StreakType.win,
+      current: 5,
+      best: 12,
+      seasonBest: 8,
+      startedAt: DateTime.now().subtract(const Duration(days: 2)),
+      lastQualifiedAt: DateTime.now(),
+      updatedAt: DateTime.now(),
     );
   }
 
@@ -111,28 +127,6 @@ class CompetitiveProfilePreviews {
         createdAt: now.subtract(const Duration(days: 92)),
         updatedAt: now.subtract(const Duration(days: 90)),
       ),
-      RewardGrant(
-        grantId: 'g2',
-        rewardId: 'r2',
-        seasonId: 's4',
-        userId: 'u1',
-        type: RewardType.tokens,
-        amount: 500,
-        status: GrantStatus.claimed,
-        createdAt: now.subtract(const Duration(days: 92)),
-        updatedAt: now.subtract(const Duration(days: 90)),
-      ),
-      RewardGrant(
-        grantId: 'g3',
-        rewardId: 'r3',
-        seasonId: 's3',
-        userId: 'u1',
-        type: RewardType.achievement,
-        amount: 1,
-        status: GrantStatus.claimed,
-        createdAt: now.subtract(const Duration(days: 182)),
-        updatedAt: now.subtract(const Duration(days: 180)),
-      ),
     ];
   }
 
@@ -160,7 +154,17 @@ class CompetitiveProfilePreviews {
         ),
       ],
       totalMilestones: 40,
+      earnedAchievements: [
+        PlayerAchievement(
+          userId: 'u1',
+          achievementId: 'a1',
+          status: AchievementStatus.unlocked,
+          unlockedAt: DateTime.now().subtract(const Duration(days: 5)),
+        ),
+      ],
+      totalAchievements: 50,
       personalRecords: [],
+      streak: mockWinStreak(),
     );
   }
 
@@ -175,7 +179,16 @@ class CompetitiveProfilePreviews {
       totalRewards: 0,
       completedMilestones: [],
       totalMilestones: 40,
+      earnedAchievements: [],
+      totalAchievements: 50,
       personalRecords: [],
+    );
+  }
+
+  static CompetitiveProfile highLevelPlayer() {
+    return rankedPlayer().copyWith(
+      progression: mockProgression(tier: 'Legend', points: 9999, progress: 1.0),
+      globalPosition: 1,
     );
   }
 
@@ -183,6 +196,8 @@ class CompetitiveProfilePreviews {
       CompetitiveProfilePreviewWrapper(profile: rankedPlayer());
   static Widget unranked() =>
       CompetitiveProfilePreviewWrapper(profile: unrankedPlayer());
+  static Widget highLevel() =>
+      CompetitiveProfilePreviewWrapper(profile: highLevelPlayer());
 
   static Widget loading() => CompetitiveProfilePreviewWrapper(
     profile: rankedPlayer(),

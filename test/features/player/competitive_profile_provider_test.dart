@@ -12,6 +12,8 @@ import 'package:soteria/features/player/presentation/providers/history_providers
 import 'package:soteria/features/player/presentation/providers/reward_providers.dart';
 import 'package:soteria/features/player/presentation/providers/milestone_providers.dart';
 import 'package:soteria/features/player/presentation/providers/personal_record_providers.dart';
+import 'package:soteria/features/player/presentation/providers/streak_providers.dart';
+import 'package:soteria/features/player/presentation/providers/achievement_providers.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/auth/domain/repositories/auth_repository.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
@@ -42,16 +44,19 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(AuthMock()),
           sessionProvider.overrideWith(() => SessionMock()),
-          currentPlayerStreamProvider.overrideWith(
-            (ref) => const Stream.empty(),
+          currentPlayerStreamProvider.overrideWithValue(
+            const AsyncValue.loading(),
           ),
-          competitiveProgressionProvider.overrideWith(
-            (ref) => Stream.value(mockProgression),
+          competitiveProgressionProvider.overrideWithValue(
+            AsyncValue.data(mockProgression),
           ),
           competitiveHistorySummaryProvider.overrideWithValue(
             const AsyncValue.loading(),
           ),
-          currentUserPersonalRecordsProvider.overrideWith((ref) => const Stream.empty()),
+          currentUserPersonalRecordsProvider.overrideWithValue(const AsyncValue.loading()),
+          currentWinStreakProvider.overrideWithValue(const AsyncValue.loading()),
+          playerAchievementsStreamProvider.overrideWithValue(const AsyncValue.loading()),
+          achievementDefinitionsProvider.overrideWithValue([]),
         ],
       );
 
@@ -64,32 +69,42 @@ void main() {
         overrides: [
           authRepositoryProvider.overrideWithValue(AuthMock()),
           sessionProvider.overrideWith(() => SessionMock()),
-          currentPlayerStreamProvider.overrideWith(
-            (ref) => Stream.value(mockIdentity),
+          currentPlayerStreamProvider.overrideWithValue(
+            AsyncValue.data(mockIdentity),
           ),
-          competitiveProgressionProvider.overrideWith(
-            (ref) => Stream.value(mockProgression),
+          competitiveProgressionProvider.overrideWithValue(
+            AsyncValue.data(mockProgression),
           ),
-          currentSeasonProvider.overrideWith((ref) => Stream.value(null)),
-          playerRankPositionProvider.overrideWith((ref) => Future.value(-1)),
+          currentSeasonProvider.overrideWithValue(const AsyncValue.data(null)),
+          playerRankPositionProvider.overrideWithValue(const AsyncValue.data(-1)),
           competitiveHistorySummaryProvider.overrideWithValue(
             AsyncValue.data(CompetitiveHistory(userId: 'u1')),
           ),
-          playerRewardsProvider.overrideWith((ref) => Stream.value([])),
-          playerMilestonesProvider.overrideWith((ref) => Stream.value([])),
-          milestoneDefinitionsProvider.overrideWith((ref) => Future.value([])),
-          currentUserPersonalRecordsProvider.overrideWith((ref) => Stream.value([])),
+          playerRewardsProvider.overrideWithValue(const AsyncValue.data([])),
+          playerMilestonesProvider.overrideWithValue(const AsyncValue.data([])),
+          milestoneDefinitionsProvider.overrideWithValue(const AsyncValue.data([])),
+          currentUserPersonalRecordsProvider.overrideWithValue(const AsyncValue.data([])),
+          currentWinStreakProvider.overrideWithValue(const AsyncValue.data(null)),
+          playerAchievementsStreamProvider.overrideWithValue(const AsyncValue.data([])),
+          achievementDefinitionsProvider.overrideWithValue([]),
         ],
       );
 
       // Wait for the providers to settle
       container.listen(competitiveProfileProvider, (prev, next) {});
       await container.pump();
-      await container.pump(); // Double pump for nested streams
+      await container.pump();
+      await container.pump();
 
       final profileAsync = container.read(competitiveProfileProvider);
-      expect(profileAsync.hasValue, isTrue);
-      final profile = profileAsync.value!;
+      if (profileAsync.isLoading) {
+        // One more try
+        await container.pump();
+      }
+      
+      expect(container.read(competitiveProfileProvider).hasValue, isTrue, 
+          reason: 'Provider state: ${container.read(competitiveProfileProvider)}');
+      final profile = container.read(competitiveProfileProvider).value!;
       expect(profile.identity.uid, 'u1');
       expect(profile.progression.userId, 'u1');
     });
@@ -99,20 +114,23 @@ void main() {
           overrides: [
             authRepositoryProvider.overrideWithValue(AuthMock()),
             sessionProvider.overrideWith(() => SessionMock()),
-            currentPlayerStreamProvider.overrideWith(
-              (ref) => Stream<PlayerProfile?>.error('Auth failure', StackTrace.current),
+            currentPlayerStreamProvider.overrideWithValue(
+              AsyncValue.error('Auth failure', StackTrace.current),
             ),
-            competitiveProgressionProvider.overrideWith(
-              (ref) => Stream.value(mockProgression),
+            competitiveProgressionProvider.overrideWithValue(
+              AsyncValue.data(mockProgression),
             ),
             competitiveHistorySummaryProvider.overrideWithValue(
               AsyncValue.data(CompetitiveHistory(userId: 'u1')),
             ),
-            playerRankPositionProvider.overrideWith((ref) => Future.value(-1)),
-            playerRewardsProvider.overrideWith((ref) => Stream.value([])),
-            playerMilestonesProvider.overrideWith((ref) => Stream.value([])),
-            milestoneDefinitionsProvider.overrideWith((ref) => Future.value([])),
-            currentUserPersonalRecordsProvider.overrideWith((ref) => Stream.value([])),
+            playerRankPositionProvider.overrideWithValue(const AsyncValue.data(-1)),
+            playerRewardsProvider.overrideWithValue(const AsyncValue.data([])),
+            playerMilestonesProvider.overrideWithValue(const AsyncValue.data([])),
+            milestoneDefinitionsProvider.overrideWithValue(const AsyncValue.data([])),
+            currentUserPersonalRecordsProvider.overrideWithValue(const AsyncValue.data([])),
+            currentWinStreakProvider.overrideWithValue(const AsyncValue.data(null)),
+            playerAchievementsStreamProvider.overrideWithValue(const AsyncValue.data([])),
+            achievementDefinitionsProvider.overrideWithValue([]),
           ],
         );
 

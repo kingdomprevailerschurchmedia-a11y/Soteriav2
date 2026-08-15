@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../domain/models/question.dart';
 import '../domain/models/quiz_enums.dart';
 import '../presentation/providers/question_providers.dart';
@@ -11,7 +12,7 @@ import '../../../../core/widgets/feedback/soteria_error_widget.dart';
 
 class QuestionLoaderPreview extends ConsumerWidget {
   final String title;
-  final Override? providerOverride;
+  final dynamic providerOverride;
 
   const QuestionLoaderPreview({
     super.key,

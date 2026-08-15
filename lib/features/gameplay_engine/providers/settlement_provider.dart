@@ -10,10 +10,13 @@ import '../data/repositories/firestore_competitive_stats_repository.dart';
 import '../../../core/firebase/providers/firebase_providers.dart';
 import '../logic/competitive_settlement_engine.dart';
 
+import '../../player/presentation/providers/progression_providers.dart';
+
 final competitiveSettlementRepositoryProvider =
     Provider<CompetitiveSettlementRepository>((ref) {
       return FirestoreCompetitiveSettlementRepository(
         ref.watch(firestoreDatabaseServiceProvider),
+        ref.watch(playerProgressionRepositoryProvider),
       );
     });
 

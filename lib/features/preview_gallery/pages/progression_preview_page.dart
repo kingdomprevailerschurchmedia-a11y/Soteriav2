@@ -12,6 +12,9 @@ import 'package:soteria/features/gameplay_engine/progression/widgets/level_up_ba
 import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progress_snapshot.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/progression_engine.dart';
+import 'package:soteria/features/player/presentation/widgets/streak_card.dart';
+import 'package:soteria/features/player/presentation/widgets/daily_engagement_calendar.dart';
+import 'package:soteria/features/player/domain/services/engagement_service.dart';
 
 class ProgressionPreviewPage extends StatelessWidget {
   const ProgressionPreviewPage({super.key});
@@ -23,6 +26,25 @@ class ProgressionPreviewPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildSection('Streak Details', [
+            const StreakCard(
+              currentStreak: 7,
+              longestStreak: 12,
+              isEngagedToday: true,
+            ),
+            const SizedBox(height: 16),
+            const StreakCard(
+              currentStreak: 0,
+              longestStreak: 10,
+              isEngagedToday: false,
+            ),
+          ]),
+          _buildSection('Weekly Activity', [
+            const DailyEngagementCalendar(
+              engagedDates: ['2026-08-15', '2026-08-14', '2026-08-12'],
+              timezone: 'Africa/Lagos',
+            ),
+          ]),
           _buildSection('Score Widgets', [
             _MockedProgression(
               snapshot: ProgressSnapshot(
@@ -33,6 +55,8 @@ class ProgressionPreviewPage extends StatelessWidget {
                 maxStreak: 10,
                 sessionScore: 1250,
                 sessionStreak: 0,
+                sessionCorrectAnswers: 0,
+                lives: 3,
                 dailyStreak: 3,
                 timestamp: DateTime.now(),
               ),
@@ -49,6 +73,8 @@ class ProgressionPreviewPage extends StatelessWidget {
                 maxStreak: 0,
                 sessionScore: 0,
                 sessionStreak: 0,
+                sessionCorrectAnswers: 0,
+                lives: 3,
                 dailyStreak: 0,
                 timestamp: DateTime.now(),
               ),
@@ -64,6 +90,8 @@ class ProgressionPreviewPage extends StatelessWidget {
                 maxStreak: 10,
                 sessionScore: 0,
                 sessionStreak: 7,
+                sessionCorrectAnswers: 0,
+                lives: 3,
                 dailyStreak: 5,
                 timestamp: DateTime.now(),
               ),
@@ -80,6 +108,8 @@ class ProgressionPreviewPage extends StatelessWidget {
                 maxStreak: 0,
                 sessionScore: 0,
                 sessionStreak: 0,
+                sessionCorrectAnswers: 0,
+                lives: 3,
                 dailyStreak: 0,
                 timestamp: DateTime.now(),
               ),
@@ -95,6 +125,8 @@ class ProgressionPreviewPage extends StatelessWidget {
                 maxStreak: 0,
                 sessionScore: 0,
                 sessionStreak: 0,
+                sessionCorrectAnswers: 0,
+                lives: 3,
                 dailyStreak: 12,
                 timestamp: DateTime.now(),
               ),
@@ -111,6 +143,8 @@ class ProgressionPreviewPage extends StatelessWidget {
                 maxStreak: 0,
                 sessionScore: 0,
                 sessionStreak: 0,
+                sessionCorrectAnswers: 0,
+                lives: 3,
                 dailyStreak: 1,
                 timestamp: DateTime.now(),
               ),
@@ -171,7 +205,10 @@ class _MockedProgression extends StatelessWidget {
 class ProgressionNotifierMock extends ProgressionNotifier {
   final ProgressSnapshot snapshot;
   ProgressionNotifierMock(this.snapshot)
-    : super(engine: ProgressionEngine()) {
+    : super(
+        engine: ProgressionEngine(),
+        engagementService: EngagementService(),
+      ) {
     Future.microtask(() => state = snapshot);
   }
 }

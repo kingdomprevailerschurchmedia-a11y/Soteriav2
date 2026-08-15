@@ -43,4 +43,12 @@ class FirestorePlayerRepository implements PlayerRepository {
             ..remove('createdAt'), // Never update createdAt
         );
   }
+
+  @override
+  Future<void> patchPlayerProfile(String uid, Map<String, dynamic> data) async {
+    await _database
+        .collection('users')
+        .doc(uid)
+        .update(data..remove('createdAt'));
+  }
 }

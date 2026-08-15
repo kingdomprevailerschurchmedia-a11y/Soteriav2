@@ -21,15 +21,6 @@ class RewardCalculator {
       );
     }
 
-    // Achievement Hooks
-    if (result.after.score >= 1000 && result.before.score < 1000) {
-      events.add(AchievementUnlockedEvent('score_1k'));
-    }
-
-    if (result.after.currentStreak >= 50 && result.before.currentStreak < 50) {
-      events.add(AchievementUnlockedEvent('streak_50'));
-    }
-
     return events;
   }
 }

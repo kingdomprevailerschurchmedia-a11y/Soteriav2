@@ -8,7 +8,7 @@ abstract interface class ProModeRepository {
   Future<void> reserveEntryFee(String uid, String sessionId, int fee);
   Future<void> createCompetitiveSession(CompetitiveSession session);
   Future<int> getAvailableQuestionCount({
-    String? categoryId,
+    List<String>? categoryIds,
     required Difficulty difficulty,
   });
   Future<ProModeResult> completeSession(String sessionId, GameState finalState);

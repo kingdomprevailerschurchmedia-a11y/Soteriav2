@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
-import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
+import 'tournament_gameplay_provider.dart';
 
 class TournamentProgress {
   final int currentQuestion;
@@ -21,7 +20,7 @@ final tournamentProgressProvider = Provider.family<TournamentProgress, String>((
   ref,
   tournamentId,
 ) {
-  final config = GameConfiguration(mode: GameMode.tournament);
+  final config = ref.watch(tournamentConfigProvider(tournamentId));
   final gameState = ref.watch(gameEngineProvider(config));
 
   return TournamentProgress(

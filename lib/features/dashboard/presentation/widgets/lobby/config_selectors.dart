@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
-import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../question_content/domain/entities/difficulty.dart';
 import '../../providers/practice_lobby_providers.dart';
+import 'lobby_config_widgets.dart';
 
 class DifficultySelector extends ConsumerWidget {
   const DifficultySelector({super.key});
@@ -16,43 +17,55 @@ class DifficultySelector extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'DIFFICULTY',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
+        const LobbySectionHeader(
+          label: 'DIFFICULTY',
+          icon: Icons.track_changes_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
-        Wrap(
-          spacing: 8,
-          children: Difficulty.values.map((diff) {
-            final isSelected = selected == diff;
-            return ChoiceChip(
-              label: Text(diff.name.toUpperCase()),
-              selected: isSelected,
-              onSelected: (_) => ref
-                  .read(practiceLobbyProvider.notifier)
-                  .updateDifficulty(diff),
-              selectedColor: SoteriaColors.primary.withValues(alpha: 0.2),
-              backgroundColor: Colors.white.withValues(alpha: 0.05),
-              labelStyle: TextStyle(
-                color: isSelected ? SoteriaColors.primary : Colors.white60,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                fontSize: 10,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-                side: BorderSide(
-                  color: isSelected
-                      ? SoteriaColors.primary
-                      : Colors.transparent,
-                ),
-              ),
-              showCheckmark: false,
-            );
-          }).toList(),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 4,
+          mainAxisSpacing: 8.w,
+          crossAxisSpacing: 8.w,
+          childAspectRatio: 1.1,
+          children: [
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.easy,
+              label: 'EASY',
+              icon: Icons.eco_rounded,
+              color: const Color(0xFF4CAF50),
+              onTap: () => ref.read(practiceLobbyProvider.notifier).updateDifficulty(Difficulty.easy),
+            ),
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.medium,
+              label: 'MEDIUM',
+              icon: Icons.bar_chart_rounded,
+              color: const Color(0xFF7C4DFF),
+              onTap: () => ref.read(practiceLobbyProvider.notifier).updateDifficulty(Difficulty.medium),
+            ),
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.hard,
+              label: 'HARD',
+              icon: Icons.whatshot_rounded,
+              color: const Color(0xFFFFAB40),
+              onTap: () => ref.read(practiceLobbyProvider.notifier).updateDifficulty(Difficulty.hard),
+            ),
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.expert,
+              label: 'EXPERT',
+              icon: Icons.workspace_premium_rounded,
+              color: const Color(0xFFFF5252),
+              onTap: () => ref.read(practiceLobbyProvider.notifier).updateDifficulty(Difficulty.expert),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        LobbyAdaptiveToggle(
+          isSelected: selected == Difficulty.adaptive,
+          onTap: () => ref.read(practiceLobbyProvider.notifier).updateDifficulty(
+            selected == Difficulty.adaptive ? Difficulty.medium : Difficulty.adaptive,
+          ),
         ),
       ],
     );
@@ -70,43 +83,19 @@ class QuestionCountSelector extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'QUESTION COUNT',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
+        const LobbySectionHeader(
+          label: 'QUESTION COUNT',
+          icon: Icons.list_alt_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: counts.map((count) {
             final isSelected = selected == count;
-            return GestureDetector(
-              onTap: () => ref
-                  .read(practiceLobbyProvider.notifier)
-                  .updateQuestionCount(count),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                decoration: BoxDecoration(
-                  color: isSelected
-                      ? SoteriaColors.primary
-                      : Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.white60,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            return LobbyCountCircle(
+              count: count,
+              isSelected: isSelected,
+              onTap: () => ref.read(practiceLobbyProvider.notifier).updateQuestionCount(count),
             );
           }).toList(),
         ),

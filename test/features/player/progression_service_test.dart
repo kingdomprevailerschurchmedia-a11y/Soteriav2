@@ -14,27 +14,24 @@ void main() {
     test('addXp should correctly increase level when threshold crossed', () {
       final initial = PlayerProgression.initial('user1', 'season1');
 
-      // Level 1 -> 2 needs 1400 XP based on new formula
+      // Unified Formula: Level 2 needs 150 XP. Level 6 needs 1368 XP. Level 7 needs 1769 XP.
       final updated = progressionService.addXp(initial, 1500);
 
-      expect(updated.currentLevel, 2);
-      expect(updated.currentXp, 100); // 1500 - 1400
+      expect(updated.currentLevel, 6);
       expect(updated.lifetimeXp, 1500);
-      expect(updated.xpProgress, closeTo(100 / (2800 - 1400), 0.01));
+      expect(updated.currentXp, 132); // 1500 - 1368
+      expect(updated.xpProgress, closeTo(132 / 401, 0.01));
     });
 
     test('addXp should handle multi-level jumps', () {
       final initial = PlayerProgression.initial('user1', 'season1');
 
-      // Level 1 -> 2: 1400
-      // Level 2 -> 3: 1400 (Total 2800)
-      // Level 3 -> 4: 1000 * 3 * 1.2 + 200 * 3 = 3600 + 600 = 4200
-
+      // Level 13 needs 4757 XP. Level 14 needs 5337 XP.
       final updated = progressionService.addXp(initial, 5000);
 
-      expect(updated.currentLevel, 4);
+      expect(updated.currentLevel, 13);
       expect(updated.lifetimeXp, 5000);
-      expect(updated.currentXp, 800); // 5000 - 4200
+      expect(updated.currentXp, 244); // 5000 - 4756
     });
   });
 

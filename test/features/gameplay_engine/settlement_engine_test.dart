@@ -28,7 +28,8 @@ void main() {
 
     test('validateResult returns true for consistent data', () {
       final result = GameResult(
-        sessionId: 'test_session',
+        playerId: 'test-player',
+      sessionId: 'test_session',
         mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 500,
@@ -49,7 +50,8 @@ void main() {
 
     test('validateResult returns false if question count mismatch', () {
       final result = GameResult(
-        sessionId: 'test_session',
+        playerId: 'test-player',
+      sessionId: 'test_session',
         mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 500,
@@ -70,7 +72,8 @@ void main() {
 
     test('calculateRewards grants 1.5x coins for 90%+ accuracy', () {
       final result = GameResult(
-        sessionId: 'test_session',
+        playerId: 'test-player',
+      sessionId: 'test_session',
         mode: GameMode.pro,
         finalScore: 900,
         totalXP: 450,
@@ -93,7 +96,8 @@ void main() {
 
     test('calculateRewards grants money back for 70%-89% accuracy', () {
       final result = GameResult(
-        sessionId: 'test_session',
+        playerId: 'test-player',
+      sessionId: 'test_session',
         mode: GameMode.pro,
         finalScore: 700,
         totalXP: 350,
@@ -116,7 +120,8 @@ void main() {
 
     test('calculateRewards grants 0 coins for < 70% accuracy', () {
       final result = GameResult(
-        sessionId: 'test_session',
+        playerId: 'test-player',
+      sessionId: 'test_session',
         mode: GameMode.pro,
         finalScore: 500,
         totalXP: 250,

@@ -15,12 +15,17 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
+    // Robust admin check
     function isAdmin() {
-      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      return isAuthenticated() &&
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
     }
 
     function isModerator() {
-      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'moderator'];
+      return isAuthenticated() &&
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role in ['admin', 'moderator'];
     }
 
     // Checks if the request is trying to modify restricted fields
@@ -40,174 +45,225 @@ service cloud.firestore {
     // COLLECTIONS
     // -------------------------------------------------------------------------
 
-    // USERS: Profile and Progression
+    // USERS: Profile and Progression (Game Identity)
     match /users/{userId} {
-      allow read: if isOwner(userId) || isAdmin();
+      allow read: if isAuthenticated();
 
       // Allow creation for new users (Bootstrap)
-      allow create: if isOwner(userId) &&
-                    request.resource.data.level == 1 &&
-                    request.resource.data.xp == 0 &&
-                    request.resource.data.coins == 0 &&
-                    request.resource.data.role == 'user' &&
-                    request.resource.data.accountStatus == 'active';
+      allow create: if isOwner(userId);
 
       // Restrict updates to safe fields only
+      // Allows updating profile fields (avatar, bio, favoriteCategories) but protects progression stats
       allow update: if isOwner(userId) &&
                     isNotModifying([
                       'xp', 'level', 'coins', 'badges', 'achievements',
                       'gamesPlayed', 'gamesWon', 'accuracy', 'currentStreak',
                       'highestStreak', 'role', 'accountStatus', 'createdAt', 'email'
                     ]);
+
+      // Subcollections
+      match /notifications/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /competitive_activity/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if isOwner(userId) || isAdmin();
+      }
+
+      match /personal_records/{docId} {
+        allow read: if isAuthenticated();
+        allow write: if isOwner(userId) || isAdmin();
+      }
+
+      match /milestones/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /season_results/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /competitive_results/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /competitive_goals/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+
+      match /competitive_stats/{docId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
     }
 
-    // QUESTIONS: Read-only for authenticated users
-    match /questions/{questionId} {
-      allow read: if isAuthenticated() && (resource.data.status == 'published' || isAdmin());
-      allow write: if isAdmin();
-    }
-
-    // CATEGORIES: Read-only for everyone
-    match /categories/{categoryId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // SUBCATEGORIES: Read-only for everyone
-    match /subcategories/{subcategoryId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // TOPICS: Read-only for everyone
-    match /topics/{topicId} {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // LEADERBOARDS: Read-only for authenticated users
-    match /leaderboards/{boardId} {
+    // IDENTITY: Personal information (Sync layers)
+    match /user_profiles/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
     }
 
-    // TOURNAMENTS: Read-only for authenticated users
-    match /tournaments/{tournamentId} {
+    // PRESENCE: Real-time status
+    match /presence/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
     }
 
-    // SEASONS: Read-only for everyone
-    match /seasons/{seasonId} {
-      allow read: if true;
-      allow write: if isAdmin();
+    // LEGACY: Support for older progression models if still in use
+    match /players/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId) || isAdmin();
     }
 
-    // SEASON RESULTS: Owner can read
-    match /season_results/{resultId} {
+    match /player_progression/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) || isAdmin();
+      allow update: if (isOwner(userId) && (
+        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['lastXpTransactionId']) &&
+         existsAfter(/databases/$(database)/documents/xp_transactions/$(request.resource.data.lastXpTransactionId))) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasAny(['lastRankTransactionId']) &&
+         existsAfter(/databases/$(database)/documents/rank_transactions/$(request.resource.data.lastRankTransactionId)))
+      )) || isAdmin();
+    }
+
+    match /xp_transactions/{txId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isOwner(request.resource.data.userId) &&
+                    request.resource.data.amount >= 0 && request.resource.data.amount < 5000;
+    }
+
+    match /rank_transactions/{txId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isOwner(request.resource.data.userId);
+    }
+
+    match /rank_history/{docId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isOwner(request.resource.data.userId) &&
+                    existsAfter(/databases/$(database)/documents/rank_transactions/$(request.resource.data.referenceResultId + '_tx'));
+      allow update: if isOwner(resource.data.userId) && isNotModifying(['changeId', 'userId', 'newRankPoints']);
+    }
+
+    match /rank_movement_history/{docId} {
       allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
       allow write: if isAdmin();
     }
+
+    // TOURNAMENTS & EVENTS
+    match /tournaments/{tournamentId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /competitive_events/{docId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /daily_challenges/{docId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+
+    // SEASONS
+    match /seasons/{seasonId} { allow read: if true; allow write: if isAdmin(); }
 
     // ANNOUNCEMENTS: Publicly readable
-    match /announcements/{announcementId} {
-      allow read: if true;
-      allow write: if isModerator();
-    }
+    match /announcements/{announcementId} { allow read: if true; allow write: if isModerator(); }
 
     // SYSTEM CONFIG: App settings and feature flags
-    match /system_config/{configId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
-    }
+    match /system_config/{configId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
 
-    // QUESTION PACKS: Premium or downloadable content
-    match /question_packs/{packId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
-    }
+    // QUESTION PACKS
+    match /question_packs/{packId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
 
-    // SEASON REWARD DEFINITIONS: Read-only for authenticated users
-    match /season_reward_definitions/{rewardId} {
-      allow read: if isAuthenticated();
-      allow write: if isAdmin();
-    }
-
-    // SEASON REWARD GRANTS: Owner can read and request claim
+    // SEASON REWARD GRANTS
     match /season_reward_grants/{grantId} {
       allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
-
-      // Allow user to request a claim by updating status to 'claimed'
-      allow update: if isAuthenticated() &&
-                    resource.data.userId == request.auth.uid &&
-                    request.resource.data.status == 'claimed' &&
-                    resource.data.status in ['eligible', 'granted'] &&
-                    isNotModifying([
-                      'grantId', 'rewardId', 'seasonId', 'userId', 'type', 'amount', 'createdAt'
-                    ]);
-
-      allow create, delete: if isAdmin();
+      allow write: if isAdmin() || (isAuthenticated() && request.resource.data.userId == request.auth.uid);
     }
 
     // PUBLIC PROFILES: Read-only for authenticated users
-    match /public_profiles/{userId} {
+    match /public_profiles/{userId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+
+    // SOCIAL & CHALLENGES
+    match /friendships/{docId} {
       allow read: if isAuthenticated();
-      allow write: if isAdmin();
+      allow write: if isAuthenticated() && (request.auth.uid in request.resource.data.userIds || isAdmin());
     }
 
-    // CHALLENGES: Participants can read/write
     match /challenges/{challengeId} {
-      allow read: if isAuthenticated() && (
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.resource.data.challengerId == request.auth.uid;
+      allow update: if isAuthenticated() && (
         request.auth.uid == resource.data.challengerId ||
         request.auth.uid == resource.data.challengedPlayerId ||
         isAdmin()
       );
-
-      allow create: if isAuthenticated() &&
-                    request.resource.data.challengerId == request.auth.uid &&
-                    request.resource.data.status == 'pending';
-
-      allow update: if isAuthenticated() && (
-        // Challenger can cancel
-        (request.auth.uid == resource.data.challengerId && request.resource.data.status == 'cancelled') ||
-        // Challenged player can accept/decline
-        (request.auth.uid == resource.data.challengedPlayerId && request.resource.data.status in ['accepted', 'declined']) ||
-        isAdmin()
-      ) && isNotModifying(['challengeId', 'challengerId', 'challengedPlayerId', 'createdAt']);
     }
 
-    // VERSUS MATCHES: Participants can read
     match /versus_matches/{matchId} {
       allow read: if isAuthenticated() && (
         request.auth.uid == resource.data.playerAId ||
         request.auth.uid == resource.data.playerBId ||
         isAdmin()
       );
-      allow write: if isAdmin(); // Match state managed by server/transactions
+      allow write: if isAdmin();
     }
 
-    // PRACTICE SESSIONS: Ephemeral session data
+    // GAMEPLAY SESSIONS
     match /practice_sessions/{sessionId} {
-      allow read, write: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
     }
 
-    // MATCHMAKING POOL: Users can manage their own entry
+    match /competitive_sessions/{sessionId} {
+      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
+
+      match /answers/{docId} {
+        allow read, write: if isAuthenticated() && (get(/databases/$(database)/documents/competitive_sessions/$(sessionId)).data.uid == request.auth.uid || isAdmin());
+      }
+
+      match /checkpoints/{docId} {
+        allow read, write: if isAuthenticated() && (get(/databases/$(database)/documents/competitive_sessions/$(sessionId)).data.uid == request.auth.uid || isAdmin());
+      }
+    }
+
+    match /pro_reservations/{sessionId} {
+      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
+    }
+
+    match /pro_results/{sessionId} {
+      allow read: if isAuthenticated() && (resource.data.playerId == request.auth.uid || isAdmin());
+      allow write: if isAuthenticated() && (request.resource.data.playerId == request.auth.uid || isAdmin());
+    }
+
+    // MATCHMAKING POOL
     match /matchmaking_pool/{sessionId} {
       allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
-
-      allow create: if isAuthenticated() &&
-                    request.resource.data.userId == request.auth.uid &&
-                    request.resource.data.status == 'searching';
-
-      allow update: if isAuthenticated() &&
-                    resource.data.userId == request.auth.uid &&
-                    (
-                      request.resource.data.status == 'cancelled' ||
-                      (request.resource.data.status == 'searching' && request.resource.data.isReady != resource.data.isReady)
-                    ) &&
-                    isNotModifying(['sessionId', 'userId', 'queuedAt']);
-
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
       allow write: if isAdmin();
+    }
+
+    // ANALYTICS
+    match /question_analytics_events/{eventId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    match /question_performance/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // LEADERBOARDS
+    match /leaderboard_global/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+
+    match /leaderboard_seasons/{docId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && docId.endsWith('_' + request.auth.uid);
+    }
+
+    match /rank_movement_history/{eventId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
     }
   }
 }

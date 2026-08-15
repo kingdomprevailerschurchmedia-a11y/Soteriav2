@@ -3,13 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../domain/models/competitive_goal.dart';
+import '../../../domain/models/goal.dart';
 
 class NextGoalCard extends StatelessWidget {
-  final CompetitiveGoal goal;
+  final GoalProgress progress;
   final VoidCallback? onTap;
 
-  const NextGoalCard({super.key, required this.goal, this.onTap});
+  const NextGoalCard({super.key, required this.progress, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -47,12 +47,12 @@ class NextGoalCard extends StatelessWidget {
             ),
             SizedBox(height: SoteriaSpacing.md),
             Text(
-              goal.title,
+              progress.definition.title,
               style: context.titleLarge.copyWith(fontWeight: FontWeight.w900),
             ),
             SizedBox(height: SoteriaSpacing.xs),
             Text(
-              goal.description,
+              progress.definition.description,
               style: context.bodySmall.copyWith(color: SoteriaColors.textSecondary),
             ),
             SizedBox(height: SoteriaSpacing.lg),
@@ -62,7 +62,7 @@ class NextGoalCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(4.r),
                     child: LinearProgressIndicator(
-                      value: goal.progressPercentage,
+                      value: progress.progressPercentage,
                       backgroundColor: SoteriaColors.border,
                       color: SoteriaColors.primary,
                       minHeight: 8.h,
@@ -71,7 +71,7 @@ class NextGoalCard extends StatelessWidget {
                 ),
                 SizedBox(width: SoteriaSpacing.md),
                 Text(
-                  '${(goal.progressPercentage * 100).toInt()}%',
+                  '${(progress.progressPercentage * 100).toInt()}%',
                   style: context.labelSmall.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],

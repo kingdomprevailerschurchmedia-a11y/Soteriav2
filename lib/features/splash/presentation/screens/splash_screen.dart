@@ -92,25 +92,24 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     // -------------------------------------------------------------------------
     // LOGO OPACITY
     //
-    // Begins at approximately 150ms.
+    // Begins immediately.
     // -------------------------------------------------------------------------
 
     _logoOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0.075, 0.30, curve: Curves.easeOut),
+      curve: const Interval(0.0, 0.20, curve: Curves.easeOut),
     );
 
     // -------------------------------------------------------------------------
     // LOGO SCALE
     //
-    // Very subtle:
     // 94% → 100%
     // -------------------------------------------------------------------------
 
     _logoScale = Tween<double>(begin: 0.94, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.075, 0.30, curve: Curves.easeOutCubic),
+        curve: const Interval(0.0, 0.20, curve: Curves.easeOutCubic),
       ),
     );
 
@@ -120,12 +119,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     _wordmarkOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0.25, 0.45, curve: Curves.easeOut),
+      curve: const Interval(0.15, 0.35, curve: Curves.easeOut),
     );
 
     _taglineOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0.40, 0.60, curve: Curves.easeOut),
+      curve: const Interval(0.30, 0.50, curve: Curves.easeOut),
     );
   }
 

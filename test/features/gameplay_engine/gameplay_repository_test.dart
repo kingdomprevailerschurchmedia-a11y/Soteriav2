@@ -39,6 +39,7 @@ void main() {
   });
 
   final mockState = GameState(
+    playerId: 'test-player',
     sessionId: 'session_123',
     lifecycle: GameLifecycle.playing,
     currentQuestionIndex: 2,

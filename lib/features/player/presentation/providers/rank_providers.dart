@@ -14,6 +14,8 @@ import '../../../quiz/presentation/providers/history_providers.dart';
 import 'personal_record_providers.dart';
 import 'leaderboard_providers.dart';
 
+import 'achievement_providers.dart';
+
 // --- Services ---
 final rankingEngineProvider = Provider<CompetitiveRankingEngine>((ref) {
   return CompetitiveRankingEngine();
@@ -102,6 +104,7 @@ final processCompetitiveResultUseCaseProvider =
         ref.watch(streakServiceProvider),
         ref.watch(personalRecordServiceProvider),
         ref.watch(leaderboardRepositoryProvider),
+        ref.watch(achievementServiceProvider),
       );
     });
 

@@ -14,6 +14,7 @@ class UserGameProfile {
   final int campusRank;
   final int dailyStreak;
   final int longestStreak;
+  final String? lastEngagementDate; // YYYY-MM-DD
   final int questionsAnswered;
   final double accuracy;
 
@@ -30,6 +31,7 @@ class UserGameProfile {
     this.campusRank = 0,
     this.dailyStreak = 0,
     this.longestStreak = 0,
+    this.lastEngagementDate,
     this.questionsAnswered = 0,
     this.accuracy = 0.0,
   });
@@ -47,6 +49,7 @@ class UserGameProfile {
     int? campusRank,
     int? dailyStreak,
     int? longestStreak,
+    String? lastEngagementDate,
     int? questionsAnswered,
     double? accuracy,
   }) {
@@ -63,8 +66,29 @@ class UserGameProfile {
       campusRank: campusRank ?? this.campusRank,
       dailyStreak: dailyStreak ?? this.dailyStreak,
       longestStreak: longestStreak ?? this.longestStreak,
+      lastEngagementDate: lastEngagementDate ?? this.lastEngagementDate,
       questionsAnswered: questionsAnswered ?? this.questionsAnswered,
       accuracy: accuracy ?? this.accuracy,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'xp': xp,
+      'level': level,
+      'coins': coins,
+      'tokens': tokens,
+      'lives': lives,
+      'achievements': achievements,
+      'badges': badges,
+      'rank': rank,
+      'globalRank': globalRank,
+      'campusRank': campusRank,
+      'dailyStreak': dailyStreak,
+      'longestStreak': longestStreak,
+      'lastEngagementDate': lastEngagementDate,
+      'questionsAnswered': questionsAnswered,
+      'accuracy': accuracy,
+    };
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/firebase/providers/firebase_providers.dart';
 import '../../../core/navigation/providers/navigation_providers.dart';
@@ -49,7 +50,7 @@ class MockRecoveryNotifier extends RecoveryNotifier {
   Future<void> checkForRecoverableSession() async {}
 }
 
-List<Override> getBasePreviewOverrides() {
+List<dynamic> getBasePreviewOverrides() {
   return [
     firebaseAuthServiceProvider.overrideWith(
       (ref) => ref.watch(fakeAuthServiceProvider),

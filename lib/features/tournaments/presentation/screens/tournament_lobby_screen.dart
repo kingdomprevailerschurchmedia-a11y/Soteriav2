@@ -13,6 +13,8 @@ import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import '../providers/tournament_details_provider.dart';
 import 'package:soteria/features/tournaments/presentation/providers/tournament_gameplay_provider.dart';
 import 'package:soteria/features/tournaments/presentation/widgets/tournament_countdown_widget.dart';
+import 'package:soteria/features/dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TournamentLobbyScreen extends ConsumerWidget {
   final String tournamentId;
@@ -35,9 +37,27 @@ class TournamentLobbyScreen extends ConsumerWidget {
 
     return SafeGradientScaffold(
       appBar: AppBar(
-        title: const Text('Tournament Lobby'),
         backgroundColor: Colors.transparent,
-        leading: const BackButton(),
+        elevation: 0,
+        leading: Padding(
+          padding: EdgeInsets.all(8.w),
+          child: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
+              onPressed: () => context.pop(),
+            ),
+          ),
+        ),
       ),
       body: tournamentAsync.when(
         data: (tournament) {
@@ -49,13 +69,23 @@ class TournamentLobbyScreen extends ConsumerWidget {
             );
           }
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: SoteriaSpacing.xxl),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+                child: const LobbyHeroHeader(
+                  part1: 'TOURNAMENT',
+                  part2: 'LIVE',
+                  part3: 'ARENA',
+                  subtitle: "Maintain focus. Integrity is paramount.",
+                ),
+              ),
+              SizedBox(height: SoteriaSpacing.lg),
               TournamentCountdownWidget(
                 targetDate: tournament.startTime,
                 label: 'Match Starts In',
               ),
-              SizedBox(height: SoteriaSpacing.xxl),
+              SizedBox(height: SoteriaSpacing.xl),
               Expanded(
                 child: _PlayersList(
                   registeredCount: tournament.registeredPlayers,

@@ -38,4 +38,11 @@ class SoteriaSpacing {
   static double itemGap(BuildContext context) => adaptive(context, md);
   static double containerPadding(BuildContext context) => adaptive(context, lg);
   static double smallGap(BuildContext context) => adaptive(context, sm);
+
+  // Constant heights for performance-critical layouts (avoiding ScreenUtil in lists)
+  static const gapXS = SizedBox(height: 4.0, width: 4.0);
+  static const gapSM = SizedBox(height: 8.0, width: 8.0);
+  static const gapMD = SizedBox(height: 16.0, width: 16.0);
+  static const gapLG = SizedBox(height: 24.0, width: 24.0);
+  static const gapXL = SizedBox(height: 32.0, width: 32.0);
 }

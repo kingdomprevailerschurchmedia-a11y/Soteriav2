@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../core/design_system/themes/soteria_theme.dart';
 import '../providers/preview_provider_overrides.dart';
 
 class PreviewScaffold extends StatelessWidget {
   final Widget child;
-  final List<Override> overrides;
+  final List<dynamic> overrides;
   final Size? designSize;
 
   const PreviewScaffold({

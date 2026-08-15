@@ -40,6 +40,7 @@ class SoteriaRoutes {
   static const String eventHistory = '/app/events/history';
   static const String leaderboard = '/app/leaderboard';
   static const String competitiveHistory = '/app/profile/history';
+  static const String achievements = '/app/profile/achievements';
   static const String personalRecords = '/app/profile/records';
   static const String versusMatchResult = '/app/versus/result/:id';
   static const String versusMatchReplay = '/app/versus/replay/:id';
@@ -47,6 +48,7 @@ class SoteriaRoutes {
   static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
   static const String publicProfile = '/app/profile/external/:id';
+  static const String playerSearch = '/app/profile/search';
   static const String friends = '/app/profile/friends';
   static const String friendRequests = '/app/profile/friends/requests';
   static const String settings = '/app/settings';

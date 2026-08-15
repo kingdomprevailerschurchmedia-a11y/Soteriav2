@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
@@ -27,7 +28,7 @@ class CategorySelector extends ConsumerWidget {
         ),
         SizedBox(height: SoteriaSpacing.md),
         SizedBox(
-          height: 120,
+          height: 100.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: state.categories.length,
@@ -67,10 +68,10 @@ class _CategoryCard extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
-        width: 140,
+        width: 120.w,
         margin: EdgeInsets.only(right: SoteriaSpacing.md),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
             color: isSelected
                 ? SoteriaColors.primary
@@ -81,33 +82,35 @@ class _CategoryCard extends StatelessWidget {
               ? [
                   BoxShadow(
                     color: SoteriaColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 12,
-                    spreadRadius: 2,
+                    blurRadius: 10,
+                    spreadRadius: 1,
                   ),
                 ]
               : null,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(14.r),
           child: GlassSurface(
             opacity: isSelected ? 0.15 : 0.05,
             child: Padding(
-              padding: EdgeInsets.all(SoteriaSpacing.md),
+              padding: EdgeInsets.all(SoteriaSpacing.sm),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     _getIcon(category.icon),
                     color: isSelected ? SoteriaColors.primary : Colors.white70,
-                    size: 32,
+                    size: 24.sp,
                   ),
-                  SizedBox(height: SoteriaSpacing.sm),
+                  SizedBox(height: SoteriaSpacing.xs),
                   Text(
                     category.name,
-                    style: context.bodyMedium.copyWith(
+                    style: context.bodySmall.copyWith(
                       fontWeight: isSelected
                           ? FontWeight.bold
                           : FontWeight.normal,
+                      fontSize: 11.sp,
+                      color: isSelected ? Colors.white : Colors.white70,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,

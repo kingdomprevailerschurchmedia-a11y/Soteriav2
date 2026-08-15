@@ -31,15 +31,22 @@ class SettingsScreen extends StatelessWidget {
         leading: Padding(
           padding: const EdgeInsets.only(left: 20),
           child: Center(
-            child: GlassSurface(
-              borderRadius: BorderRadius.circular(12),
-              opacity: 0.08,
-              padding: EdgeInsets.zero,
+            child: Container(
+              width: 44,
+              height: 44,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white.withValues(alpha: 0.05),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              ),
               child: IconButton(
-                icon: const Icon(Icons.chevron_left_rounded, color: Colors.white, size: 24),
-                onPressed: () => context.pop(),
-                constraints: const BoxConstraints(minWidth: 40, minHeight: 40),
                 padding: EdgeInsets.zero,
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: Colors.white,
+                  size: 16,
+                ),
+                onPressed: () => context.pop(),
               ),
             ),
           ),
@@ -47,77 +54,86 @@ class SettingsScreen extends StatelessWidget {
       ),
       body: ListView(
         physics: const BouncingScrollPhysics(),
+        cacheExtent: 1000,
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
           vertical: 24.h,
         ),
         children: [
-          _SettingsSection(
-            title: 'ACCOUNT',
-            items: [
-              _SettingsItem(
-                icon: Icons.person_rounded,
-                iconColor: const Color(0xFF7C4DFF),
-                title: 'Profile Information',
-                subtitle: 'View and edit your profile details',
-                onTap: () {},
-              ),
-              const _SettingsDivider(),
-              _SettingsItem(
-                icon: Icons.shield_rounded,
-                iconColor: const Color(0xFF00E5FF),
-                title: 'Security & Password',
-                subtitle: 'Manage your password and security',
-                onTap: () {},
-              ),
-            ],
+          RepaintBoundary(
+            child: _SettingsSection(
+              title: 'ACCOUNT',
+              items: [
+                _SettingsItem(
+                  icon: Icons.person_rounded,
+                  iconColor: const Color(0xFF7C4DFF),
+                  title: 'Profile Information',
+                  subtitle: 'View and edit your profile details',
+                  onTap: () {},
+                ),
+                const _SettingsDivider(),
+                _SettingsItem(
+                  icon: Icons.shield_rounded,
+                  iconColor: const Color(0xFF00E5FF),
+                  title: 'Security & Password',
+                  subtitle: 'Manage your password and security',
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 20.h),
-          _SettingsSection(
-            title: 'PREFERENCES',
-            items: [
-              _SettingsItem(
-                icon: Icons.notifications_rounded,
-                iconColor: SoteriaColors.gold,
-                title: 'Notifications',
-                subtitle: 'Manage your notification preferences',
-                onTap: () => context.push(SoteriaRoutes.notificationSettings),
-              ),
-              const _SettingsDivider(),
-              _SettingsItem(
-                icon: Icons.palette_rounded,
-                iconColor: const Color(0xFFE91E63),
-                title: 'Theme & Appearance',
-                subtitle: 'Dark Mode',
-                isThemeItem: true,
-                onTap: () {},
-              ),
-            ],
+          SoteriaSpacing.gapMD,
+          RepaintBoundary(
+            child: _SettingsSection(
+              title: 'PREFERENCES',
+              items: [
+                _SettingsItem(
+                  icon: Icons.notifications_rounded,
+                  iconColor: SoteriaColors.gold,
+                  title: 'Notifications',
+                  subtitle: 'Manage your notification preferences',
+                  onTap: () => context.push(SoteriaRoutes.notificationSettings),
+                ),
+                const _SettingsDivider(),
+                _SettingsItem(
+                  icon: Icons.palette_rounded,
+                  iconColor: const Color(0xFFE91E63),
+                  title: 'Theme & Appearance',
+                  subtitle: 'Dark Mode',
+                  isThemeItem: true,
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 20.h),
-          _SettingsSection(
-            title: 'SUPPORT',
-            items: [
-              _SettingsItem(
-                icon: Icons.help_rounded,
-                iconColor: SoteriaColors.secondary,
-                title: 'Help Center',
-                subtitle: 'Get help and support',
-                onTap: () {},
-              ),
-              const _SettingsDivider(),
-              _SettingsItem(
-                icon: Icons.info_rounded,
-                iconColor: Colors.white60,
-                title: 'About Soteria',
-                subtitle: 'App info, terms and more',
-                onTap: () {},
-              ),
-            ],
+          SoteriaSpacing.gapMD,
+          RepaintBoundary(
+            child: _SettingsSection(
+              title: 'SUPPORT',
+              items: [
+                _SettingsItem(
+                  icon: Icons.help_rounded,
+                  iconColor: SoteriaColors.secondary,
+                  title: 'Help Center',
+                  subtitle: 'Get help and support',
+                  onTap: () {},
+                ),
+                const _SettingsDivider(),
+                _SettingsItem(
+                  icon: Icons.info_rounded,
+                  iconColor: Colors.white60,
+                  title: 'About Soteria',
+                  subtitle: 'App info, terms and more',
+                  onTap: () {},
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 32.h),
-          _LogoutSection(onTap: () => _showLogoutDialog(context)),
-          SizedBox(height: 12.h),
+          SoteriaSpacing.gapXL,
+          RepaintBoundary(
+            child: _LogoutSection(onTap: () => _showLogoutDialog(context)),
+          ),
+          SoteriaSpacing.gapSM,
           Center(
             child: Text(
               'You will be logged out of your account.',

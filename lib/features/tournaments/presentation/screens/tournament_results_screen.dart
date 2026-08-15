@@ -152,6 +152,7 @@ class TournamentResultsScreen extends ConsumerWidget {
     // Reusing CompetitiveStatisticsCard but needs GameResult
     final mockResult = GameResult(
       sessionId: 'tournament',
+      playerId: ranking.uid,
       mode: GameMode.tournament,
       finalScore: ranking.score,
       totalXP: ranking.prize?.xp ?? 0,

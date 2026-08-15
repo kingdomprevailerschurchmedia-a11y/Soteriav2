@@ -4,10 +4,10 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
-import 'package:soteria/features/player/domain/models/competitive_goal.dart';
+import 'package:soteria/features/player/domain/models/goal.dart';
 
 class GoalSummaryCard extends StatelessWidget {
-  final List<CompetitiveGoal> activeGoals;
+  final List<GoalProgress> activeGoals;
   final VoidCallback onTap;
 
   const GoalSummaryCard({

@@ -12,6 +12,7 @@ class ChallengeLobbyState {
   final bool isLoading;
   final String? error;
   final List<Category> categories;
+  final bool useInterests;
 
   const ChallengeLobbyState({
     this.category,
@@ -20,6 +21,7 @@ class ChallengeLobbyState {
     this.isLoading = false,
     this.error,
     this.categories = const [],
+    this.useInterests = false,
   });
 
   ChallengeLobbyState copyWith({
@@ -29,6 +31,7 @@ class ChallengeLobbyState {
     bool? isLoading,
     String? error,
     List<Category>? categories,
+    bool? useInterests,
   }) {
     return ChallengeLobbyState(
       category: category ?? this.category,
@@ -37,6 +40,7 @@ class ChallengeLobbyState {
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       categories: categories ?? this.categories,
+      useInterests: useInterests ?? this.useInterests,
     );
   }
 }
@@ -66,7 +70,14 @@ class ChallengeLobbyNotifier extends Notifier<ChallengeLobbyState> {
   }
 
   void updateCategory(Category category) {
-    state = state.copyWith(category: category);
+    state = state.copyWith(category: category, useInterests: false);
+  }
+
+  void setUseInterests(bool value) {
+    state = state.copyWith(useInterests: value);
+    if (value) {
+      state = state.copyWith(category: null);
+    }
   }
 
   void updateDifficulty(Difficulty difficulty) {
@@ -78,14 +89,15 @@ class ChallengeLobbyNotifier extends Notifier<ChallengeLobbyState> {
   }
 
   Future<void> sendChallenge() async {
-    if (state.category == null) return;
+    if (!state.useInterests && state.category == null) return;
 
     final configuration = {
-      'categoryId': state.category!.id,
-      'categoryName': state.category!.name,
+      'categoryId': state.category?.id,
+      'categoryName': state.category?.name,
       'difficulty': state.difficulty.name,
       'questionCount': state.questionCount,
       'timeLimit': 30, // Default 30s per question
+      'useInterests': state.useInterests,
     };
 
     await ref.read(challengeControllerProvider.notifier).sendChallenge(

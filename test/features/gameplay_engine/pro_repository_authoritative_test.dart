@@ -6,14 +6,23 @@ import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dar
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
 import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
+import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
+import 'package:soteria/features/player/domain/models/xp_transaction.dart';
+import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FakeDatabaseService extends Fake implements IDatabaseService {
   @override
-  ICollectionReference collection(String path) => FakeCollectionReference();
+  CollectionReference<Map<String, dynamic>> collection(String path) => FakeCollectionReference();
 
   @override
   FirebaseFirestore get instance => FakeFirebaseFirestore();
+  
+  @override
+  DocumentReference<Map<String, dynamic>> doc(String path) => FakeDocumentReference();
+  
+  @override
+  Future<void> enablePersistence() async {}
 }
 
 class FakeFirebaseFirestore extends Fake implements FirebaseFirestore {
@@ -21,6 +30,9 @@ class FakeFirebaseFirestore extends Fake implements FirebaseFirestore {
   Future<T> runTransaction<T>(TransactionHandler<T> transactionHandler, {Duration timeout = const Duration(seconds: 30), int maxAttempts = 5}) async {
     return await transactionHandler(FakeTransaction());
   }
+  
+  @override
+  CollectionReference<Map<String, dynamic>> collection(String path) => FakeCollectionReference();
 }
 
 class FakeTransaction extends Fake implements Transaction {
@@ -30,43 +42,74 @@ class FakeTransaction extends Fake implements Transaction {
   }
 
   @override
-  void set<T>(DocumentReference<T> documentReference, T data, [SetOptions? options]) {}
+  Transaction set<T>(DocumentReference<T> documentReference, T data, [SetOptions? options]) {
+    return this;
+  }
   
   @override
-  void update(DocumentReference<dynamic> documentReference, Map<String, dynamic> data) {}
+  Transaction update(DocumentReference<dynamic> documentReference, Map<Object, Object?> data) {
+    return this;
+  }
+  
+  @override
+  Transaction delete(DocumentReference<dynamic> documentReference) {
+    return this;
+  }
 }
 
 class FakeDocumentSnapshot<T> extends Fake implements DocumentSnapshot<T> {
   @override
   bool get exists => true;
   @override
-  Map<String, dynamic>? data() => {'uid': 'user-123'};
+  T? data() => {'uid': 'user-123'} as T?;
 }
 
-class FakeCollectionReference extends Fake implements ICollectionReference {
+class FakeCollectionReference extends Fake implements CollectionReference<Map<String, dynamic>> {
   @override
-  IDocumentReference doc([String? path]) => FakeDocumentReference();
+  DocumentReference<Map<String, dynamic>> doc([String? path]) => FakeDocumentReference();
+  
+  @override
+  AggregateQuery count() => FakeAggregateQuery();
 }
 
-class FakeDocumentReference extends Fake implements IDocumentReference {
+class FakeAggregateQuery extends Fake implements AggregateQuery {
   @override
-  Future<IDocumentSnapshot> get([GetOptions? options]) async => FakeIDocumentSnapshot();
+  Future<AggregateQuerySnapshot> get({AggregateSource source = AggregateSource.server}) async => FakeAggregateQuerySnapshot();
 }
 
-class FakeIDocumentSnapshot extends Fake implements IDocumentSnapshot {
+class FakeAggregateQuerySnapshot extends Fake implements AggregateQuerySnapshot {
   @override
-  bool get exists => true;
+  int? get count => 10;
+}
+
+class FakeDocumentReference extends Fake implements DocumentReference<Map<String, dynamic>> {
   @override
-  Map<String, dynamic>? data() => {'uid': 'user-123'};
+  Future<DocumentSnapshot<Map<String, dynamic>>> get([GetOptions? options]) async => FakeDocumentSnapshot<Map<String, dynamic>>();
+  
+  @override
+  String get id => 'fake-id';
+}
+
+class FakePlayerProgressionRepository extends Fake implements PlayerProgressionRepository {
+  @override
+  Future<void> applyXpTransaction(XpTransaction transaction) async {}
+
+  @override
+  Future<PlayerProgression?> getProgression(String userId) async => null;
+
+  @override
+  Future<void> updateProgression(PlayerProgression progression) async {}
 }
 
 void main() {
   late FakeDatabaseService fakeDatabase;
+  late FakePlayerProgressionRepository fakeProgressionRepo;
   late FirestoreProModeRepository repository;
 
   setUp(() {
     fakeDatabase = FakeDatabaseService();
-    repository = FirestoreProModeRepository(fakeDatabase);
+    fakeProgressionRepo = FakePlayerProgressionRepository();
+    repository = FirestoreProModeRepository(fakeDatabase, fakeProgressionRepo);
   });
 
   group('FirestoreProModeRepository Authoritative Tests', () {
@@ -87,7 +130,8 @@ void main() {
       );
 
       final gameState = GameState(
-        sessionId: 'session-123',
+        playerId: 'test-player',
+      sessionId: 'session-123',
         questions: [question],
         answerHistory: [
           AnswerResult(
@@ -113,8 +157,8 @@ void main() {
       expect(result.finalScore, isNot(equals(999999)));
       
       // Verify XP (rewards.totalXP includes base + bonus)
-      // Hard/Correct Pro XP = 33. Bonus = 900 * 0.05 = 45. Total = 78.
-      expect(result.totalXP, equals(78));
+      // Hard/Correct Pro XP = 45. Bonus = 900 * 0.05 = 45. Total = 90.
+      expect(result.totalXP, equals(90));
       expect(result.totalXP, isNot(equals(888888)));
     });
   });

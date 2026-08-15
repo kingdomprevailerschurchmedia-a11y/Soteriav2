@@ -1,7 +1,18 @@
 import '../models/leaderboard_entry.dart';
 import '../models/rank_movement_event.dart';
+import '../models/player_profile.dart';
+import '../models/player_progression.dart';
 
 abstract class LeaderboardRepository {
+  /// Synchronizes a player's entry in the leaderboard.
+  /// Can be used within an existing [transaction].
+  Future<void> syncLeaderboardEntry({
+    required PlayerProfile profile,
+    required PlayerProgression progression,
+    String? seasonId,
+    dynamic transaction,
+  });
+
   /// Fetches a paginated list of entries for a specific season.
   /// If [seasonId] is null, fetches the global/all-time leaderboard.
   Future<List<LeaderboardEntry>> getLeaderboardPage({

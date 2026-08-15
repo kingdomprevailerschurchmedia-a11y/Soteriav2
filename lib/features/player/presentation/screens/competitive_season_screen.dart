@@ -53,7 +53,7 @@ class CompetitiveSeasonScreen extends ConsumerWidget {
     final rankAsync = ref.watch(rankProgressProvider);
     final milestonesAsync = ref.watch(milestoneProgressProvider);
     final rewardsAsync = ref.watch(seasonRewardDefinitionsProvider(season.seasonId));
-    final leaderboardAsync = ref.watch(leaderboardControllerProvider);
+    final leaderboardAsync = ref.watch(leaderboardControllerProvider(season.seasonId));
     final activityAsync = userId != null ? ref.watch(activityFeedProvider(userId)) : null;
 
     return SafeGradientScaffold(
@@ -68,7 +68,7 @@ class CompetitiveSeasonScreen extends ConsumerWidget {
           ref.invalidate(currentSeasonProvider);
           ref.invalidate(rankProgressProvider);
           ref.invalidate(milestoneProgressProvider);
-          ref.invalidate(leaderboardControllerProvider);
+          ref.invalidate(leaderboardControllerProvider(season.seasonId));
         },
         color: SoteriaColors.primary,
         child: CustomScrollView(

@@ -103,6 +103,7 @@ class MockDataFactory {
   static GameResult createMockResult({bool isPerfect = false}) {
     return GameResult(
       sessionId: 'session_mock',
+      playerId: 'mock-player-id',
       mode: GameMode.practice,
       finalScore: isPerfect ? 1000 : 850,
       totalXP: isPerfect ? 1500 : 1250,
@@ -123,6 +124,7 @@ class MockDataFactory {
   static GameResult createFailedResult() {
     return GameResult(
       sessionId: 'session_failed',
+      playerId: 'mock-player-id',
       mode: GameMode.practice,
       finalScore: 120,
       totalXP: 50,
@@ -193,6 +195,7 @@ class MockDataFactory {
 
   static GameState createWinningProState() => GameState(
     sessionId: 'win_mock',
+    playerId: 'mock-player-id',
     score: 2500,
     streak: 12,
     questions: createMockQuestions(30),
@@ -203,6 +206,7 @@ class MockDataFactory {
 
   static GameState createLosingProState() => GameState(
     sessionId: 'lose_mock',
+    playerId: 'mock-player-id',
     score: 200,
     streak: 0,
     lives: 1,
@@ -391,48 +395,6 @@ class MockDataFactory {
       completionTime: const Duration(minutes: 4, seconds: 30),
       completionTimestamp: DateTime.now().subtract(const Duration(minutes: 15)),
       prize: prize,
-    );
-  }
-}
-
-extension GameResultExtension on GameResult {
-  GameResult copyWith({
-    String? sessionId,
-    GameMode? mode,
-    int? finalScore,
-    int? totalXP,
-    int? totalQuestions,
-    int? correctAnswers,
-    int? wrongAnswers,
-    int? skippedQuestions,
-    Duration? totalDuration,
-    double? accuracy,
-    int? maxStreak,
-    RewardSummary? rewards,
-    Duration? avgResponseTime,
-    Duration? fastestAnswerTime,
-    Duration? slowestAnswerTime,
-    DateTime? timestamp,
-    bool? isSynced,
-  }) {
-    return GameResult(
-      sessionId: sessionId ?? this.sessionId,
-      mode: mode ?? this.mode,
-      finalScore: finalScore ?? this.finalScore,
-      totalXP: totalXP ?? this.totalXP,
-      totalQuestions: totalQuestions ?? this.totalQuestions,
-      correctAnswers: correctAnswers ?? this.correctAnswers,
-      wrongAnswers: wrongAnswers ?? this.wrongAnswers,
-      skippedQuestions: skippedQuestions ?? this.skippedQuestions,
-      totalDuration: totalDuration ?? this.totalDuration,
-      accuracy: accuracy ?? this.accuracy,
-      maxStreak: maxStreak ?? this.maxStreak,
-      rewards: rewards ?? this.rewards,
-      avgResponseTime: avgResponseTime ?? this.avgResponseTime,
-      fastestAnswerTime: fastestAnswerTime ?? this.fastestAnswerTime,
-      slowestAnswerTime: slowestAnswerTime ?? this.slowestAnswerTime,
-      timestamp: timestamp ?? this.timestamp,
-      isSynced: isSynced ?? this.isSynced,
     );
   }
 }

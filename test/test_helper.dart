@@ -28,6 +28,10 @@ class MockIdentityRepo extends IdentityRepository {
   Future<void> clearSession() async {}
   @override
   Future<void> updateUserProfile(String uid, UserProfile profile) async {}
+
+  @override
+  Future<void> updateUserGameProfile(String uid, UserGameProfile profile) async {}
+
   @override
   Future<String> uploadProfilePicture(String uid, String filePath) async => '';
 }

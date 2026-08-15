@@ -82,6 +82,7 @@ class FirebaseIdentityRepository implements IdentityRepository {
       faculty: data['faculty'],
       department: data['department'],
       country: data['country'] ?? 'Nigeria',
+      interests: List<String>.from(data['interests'] ?? []),
     );
   }
 
@@ -97,7 +98,16 @@ class FirebaseIdentityRepository implements IdentityRepository {
       coins: data['coins'] ?? 0,
       tokens: data['tokens'] ?? 0,
       lives: data['lives'] ?? 5,
+      achievements: List<String>.from(data['achievements'] ?? []),
+      badges: List<String>.from(data['badges'] ?? []),
       rank: data['rank'] ?? 'Novice',
+      globalRank: data['globalRank'] ?? 0,
+      campusRank: data['campusRank'] ?? 0,
+      dailyStreak: data['dailyStreak'] ?? 0,
+      longestStreak: data['longestStreak'] ?? 0,
+      lastEngagementDate: data['lastEngagementDate'],
+      questionsAnswered: data['questionsAnswered'] ?? 0,
+      accuracy: (data['accuracy'] ?? 0.0).toDouble(),
     );
   }
 
@@ -115,6 +125,14 @@ class FirebaseIdentityRepository implements IdentityRepository {
   Future<void> updateUserProfile(String uid, UserProfile profile) async {
     await _database
         .collection('user_profiles')
+        .doc(uid)
+        .set(profile.toMap(), SetOptions(merge: true));
+  }
+
+  @override
+  Future<void> updateUserGameProfile(String uid, UserGameProfile profile) async {
+    await _database
+        .collection('user_game_profiles')
         .doc(uid)
         .set(profile.toMap(), SetOptions(merge: true));
   }

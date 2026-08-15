@@ -44,23 +44,37 @@ void main(List<String> args) async {
     int valid = 0;
     int invalid = 0;
     int duplicatesInBatch = 0;
+    int nearDuplicatesInBatch = 0;
     int existingInFirestore = 0;
     List<QuestionDto> toCreate = [];
 
     final Set<String> batchIds = {};
+    final Set<String> normalizedTexts = {};
 
     print('Starting Validation...');
+
+    String normalize(String text) {
+      return text.trim().toLowerCase().replaceAll(RegExp(r'[^\w\s]'), '');
+    }
 
     for (var i = 0; i < data.length; i++) {
       try {
         final dto = QuestionDto.fromJson(data[i] as Map<String, dynamic>);
         
-        // Internal duplicate check
+        // Internal ID duplicate check
         if (batchIds.contains(dto.id)) {
           duplicatesInBatch++;
           continue;
         }
         batchIds.add(dto.id);
+
+        // Near-duplicate text detection
+        final norm = normalize(dto.text);
+        if (normalizedTexts.contains(norm)) {
+          nearDuplicatesInBatch++;
+          print('  [WARNING] Row $i (${dto.id}): Possible near-duplicate detected in batch.');
+        }
+        normalizedTexts.add(norm);
 
         // Domain validation
         final entity = QuestionMapper.fromDto(dto);
@@ -98,7 +112,8 @@ void main(List<String> args) async {
     print('Total Records:      ${data.length}');
     print('Valid:              $valid');
     print('Invalid:            $invalid');
-    print('Duplicates (Batch): $duplicatesInBatch');
+    print('Duplicates (ID):    $duplicatesInBatch');
+    print('Near-Duplicates:    $nearDuplicatesInBatch');
     print('Existing (DB):      $existingInFirestore');
     print('New to Create:      ${toCreate.length}');
     print('------------------------------------------------------------');

@@ -7,6 +7,8 @@ enum XpSource {
   quizCompletion,
   achievement,
   dailyChallenge,
+  milestone,
+  goal,
   tournament,
   versus,
   bonus,

@@ -9,12 +9,18 @@ import '../../domain/repositories/tournament_repository.dart';
 import '../../logic/tournament_settlement_engine.dart';
 import '../models/tournament_dto.dart';
 import '../models/tournament_participant_dto.dart';
+import '../../../player/domain/repositories/player_progression_repository.dart';
+import '../../../player/domain/models/xp_transaction.dart';
 
 class FirestoreTournamentRepository implements TournamentRepository {
-  FirestoreTournamentRepository({required IDatabaseService database})
-    : _database = database;
+  FirestoreTournamentRepository({
+    required IDatabaseService database,
+    required PlayerProgressionRepository progressionRepository,
+  }) : _database = database,
+       _progressionRepository = progressionRepository;
 
   final IDatabaseService _database;
+  final PlayerProgressionRepository _progressionRepository;
 
   @override
   Future<List<Tournament>> getTournaments() async {
@@ -299,9 +305,21 @@ class FirestoreTournamentRepository implements TournamentRepository {
         final playerRef = _database.collection('players').doc(r.uid);
         batch.update(playerRef, {
           'coins': FieldValue.increment(r.prize!.coins),
-          'xp': FieldValue.increment(r.prize!.xp),
-          // Achievements and badges would be added to lists
         });
+
+        // Authoritative XP update
+        if (r.prize!.xp > 0) {
+          final xpTx = XpTransaction(
+            transactionId: '${tournamentId}_${r.uid}_xp',
+            userId: r.uid,
+            amount: r.prize!.xp,
+            source: XpSource.tournament,
+            referenceId: tournamentId,
+            createdAt: DateTime.now(),
+          );
+          // Apply separately as it starts its own transaction
+          await _progressionRepository.applyXpTransaction(xpTx);
+        }
 
         // Record reward in history
         final rewardRef = playerRef.collection('rewards').doc();

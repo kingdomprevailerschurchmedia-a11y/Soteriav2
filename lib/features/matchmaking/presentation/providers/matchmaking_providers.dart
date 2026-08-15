@@ -22,6 +22,7 @@ class VersusLobbyState {
   final List<Category> categories;
   final bool isLoading;
   final String? error;
+  final bool useInterests;
 
   const VersusLobbyState({
     this.category,
@@ -30,6 +31,7 @@ class VersusLobbyState {
     this.categories = const [],
     this.isLoading = false,
     this.error,
+    this.useInterests = false,
   });
 
   VersusLobbyState copyWith({
@@ -39,6 +41,7 @@ class VersusLobbyState {
     List<Category>? categories,
     bool? isLoading,
     String? error,
+    bool? useInterests,
   }) {
     return VersusLobbyState(
       category: category ?? this.category,
@@ -47,6 +50,7 @@ class VersusLobbyState {
       categories: categories ?? this.categories,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
+      useInterests: useInterests ?? this.useInterests,
     );
   }
 }
@@ -72,9 +76,15 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
     }
   }
 
-  void updateCategory(Category category) => state = state.copyWith(category: category);
+  void updateCategory(Category category) => state = state.copyWith(category: category, useInterests: false);
   void updateDifficulty(Difficulty diff) => state = state.copyWith(difficulty: diff);
   void updateQuestionCount(int count) => state = state.copyWith(questionCount: count);
+  void setUseInterests(bool value) {
+    state = state.copyWith(useInterests: value);
+    if (value) {
+      state = state.copyWith(category: null);
+    }
+  }
 }
 
 final versusLobbyProvider = NotifierProvider<VersusLobbyNotifier, VersusLobbyState>(

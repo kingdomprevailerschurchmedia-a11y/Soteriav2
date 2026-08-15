@@ -62,7 +62,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
     WidgetRef ref,
     CompetitiveProfile profile,
   ) {
-    final goalsAsync = ref.watch(playerGoalsProvider);
+    final goalsAsync = ref.watch(goalProgressProvider);
 
     return RefreshIndicator(
       onRefresh: () async {
@@ -71,34 +71,39 @@ class CompetitiveProfileScreen extends ConsumerWidget {
       color: SoteriaColors.primary,
       backgroundColor: SoteriaColors.background,
       child: ListView(
+        cacheExtent: 1000,
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
         ),
         children: [
-          SizedBox(height: SoteriaSpacing.md),
+          SoteriaSpacing.gapMD,
           ref.watch(competitiveIdentityProvider).when(
                 data: (identity) => identity != null
-                    ? GestureDetector(
-                        onTap: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const CompetitiveShowcaseScreen(),
+                    ? RepaintBoundary(
+                        child: GestureDetector(
+                          onTap: () => Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => const CompetitiveShowcaseScreen(),
+                            ),
                           ),
+                          child: IdentityShowcaseHeader(identity: identity),
                         ),
-                        child: IdentityShowcaseHeader(identity: identity),
                       )
                     : const SizedBox.shrink(),
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (_, __) => const SizedBox.shrink(),
               ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SoteriaSpacing.gapLG,
           ref.watch(rankProgressProvider).when(
-                data: (rankProgress) => SoteriaSlideUp(
-                  duration: SoteriaAnimations.normal,
-                  child: CompetitiveRankCard(
-                    rankProgress: rankProgress,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const CompetitiveRankOverviewScreen(),
+                data: (rankProgress) => RepaintBoundary(
+                  child: SoteriaSlideUp(
+                    duration: SoteriaAnimations.normal,
+                    child: CompetitiveRankCard(
+                      rankProgress: rankProgress,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const CompetitiveRankOverviewScreen(),
+                        ),
                       ),
                     ),
                   ),
@@ -106,16 +111,18 @@ class CompetitiveProfileScreen extends ConsumerWidget {
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (_, _) => const SizedBox.shrink(),
               ),
-          SizedBox(height: SoteriaSpacing.lg),
-          const NextGoalSection(),
+          SoteriaSpacing.gapLG,
+          const RepaintBoundary(child: NextGoalSection()),
           goalsAsync.when(
-            data: (goals) => SoteriaSlideUp(
-              delay: const Duration(milliseconds: 50),
-              child: GoalSummaryCard(
-                activeGoals: goals,
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (_) => const CompetitiveGoalsScreen(),
+            data: (goals) => RepaintBoundary(
+              child: SoteriaSlideUp(
+                delay: const Duration(milliseconds: 50),
+                child: GoalSummaryCard(
+                  activeGoals: goals,
+                  onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const CompetitiveGoalsScreen(),
+                    ),
                   ),
                 ),
               ),
@@ -123,81 +130,95 @@ class CompetitiveProfileScreen extends ConsumerWidget {
             loading: () => const SizedBox.shrink(),
             error: (_, __) => const SizedBox.shrink(),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SoteriaSpacing.gapLG,
           ref
               .watch(currentWinStreakProvider)
               .when(
                 data: (streak) => streak != null
-                    ? SoteriaSlideUp(
-                        delay: const Duration(milliseconds: 75),
-                        child: CompetitiveStreakCard(streak: streak),
+                    ? RepaintBoundary(
+                        child: SoteriaSlideUp(
+                          delay: const Duration(milliseconds: 75),
+                          child: CompetitiveStreakCard(streak: streak),
+                        ),
                       )
                     : const SizedBox.shrink(),
                 loading: () => const SizedBox.shrink(),
                 error: (_, _) => const SizedBox.shrink(),
               ),
-          SizedBox(height: SoteriaSpacing.lg),
-          SoteriaSlideUp(
-            delay: const Duration(milliseconds: 100),
-            child: CareerSummaryCard(
-              history: profile.history,
-              identity: profile.identity,
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const CompetitiveCareerScreen(),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(
+            child: SoteriaSlideUp(
+              delay: const Duration(milliseconds: 100),
+              child: CareerSummaryCard(
+                history: profile.history,
+                identity: profile.identity,
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const CompetitiveCareerScreen(),
+                  ),
                 ),
               ),
             ),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SoteriaSpacing.gapLG,
           _buildSectionHeader(context, 'PERFORMANCE'),
-          SoteriaFadeIn(
-            delay: const Duration(milliseconds: 200),
-            child: _buildStatsGrid(context, profile),
-          ),
-          SizedBox(height: SoteriaSpacing.lg),
-          SoteriaSlideUp(
-            delay: const Duration(milliseconds: 300),
-            child: RewardSummarySection(
-              recentRewards: profile.recentRewards,
-              totalRewards: profile.totalRewards,
+          RepaintBoundary(
+            child: SoteriaFadeIn(
+              delay: const Duration(milliseconds: 200),
+              child: _buildStatsGrid(context, profile),
             ),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
-          SoteriaSlideUp(
-            delay: const Duration(milliseconds: 350),
-            child: AchievementSummarySection(
-              completed: profile.completedMilestones,
-              total: profile.totalMilestones,
-              onViewAll: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MilestonesScreen()),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(
+            child: SoteriaSlideUp(
+              delay: const Duration(milliseconds: 300),
+              child: RewardSummarySection(
+                recentRewards: profile.recentRewards,
+                totalRewards: profile.totalRewards,
               ),
             ),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
-          SoteriaSlideUp(
-            delay: const Duration(milliseconds: 375),
-            child: MatchHistorySummarySection(
-              onViewAll: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const CompetitiveMatchHistoryScreen(),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(
+            child: SoteriaSlideUp(
+              delay: const Duration(milliseconds: 350),
+              child: AchievementSummarySection(
+                earned: const [], // TODO: Link to achievements subcollection in next story
+                total: profile.totalMilestones,
+                onViewAll: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const MilestonesScreen()),
                 ),
               ),
             ),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(
+            child: SoteriaSlideUp(
+              delay: const Duration(milliseconds: 375),
+              child: MatchHistorySummarySection(
+                onViewAll: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => const CompetitiveMatchHistoryScreen(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SoteriaSpacing.gapLG,
           if (profile.history.results.isNotEmpty) ...[
             _buildSectionHeader(context, 'CAREER HISTORY'),
             ...profile.history.results.asMap().entries.map((entry) {
               final index = entry.key;
               final result = entry.value;
-              return SoteriaSlideUp(
-                delay: Duration(milliseconds: 400 + (50 * index)),
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-                  child: SeasonResultCard(
-                    result: result,
-                    onTap: () => _showResultDetails(context, result),
+              return RepaintBoundary(
+                child: SoteriaSlideUp(
+                  delay: Duration(milliseconds: 400 + (50 * index)),
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                    child: SeasonResultCard(
+                      result: result,
+                      onTap: () => _showResultDetails(context, result),
+                    ),
                   ),
                 ),
               );
@@ -207,6 +228,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
         ],
       ),
     );
+
   }
 
   Widget _buildStatsGrid(BuildContext context, CompetitiveProfile profile) {

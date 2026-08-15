@@ -3,7 +3,13 @@ import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import '../../domain/repositories/tournament_repository.dart';
 import 'firestore_tournament_repository.dart';
 
+import 'package:soteria/features/player/presentation/providers/progression_providers.dart';
+
 final tournamentRepositoryProvider = Provider<TournamentRepository>((ref) {
   final database = ref.watch(firestoreDatabaseServiceProvider);
-  return FirestoreTournamentRepository(database: database);
+  final progressionRepo = ref.watch(playerProgressionRepositoryProvider);
+  return FirestoreTournamentRepository(
+    database: database,
+    progressionRepository: progressionRepo,
+  );
 });

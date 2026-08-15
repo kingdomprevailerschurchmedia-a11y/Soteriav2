@@ -5,6 +5,7 @@ import '../../../design_system/colors/soteria_colors.dart';
 import '../../domain/avatar.dart';
 import '../../providers/avatar_providers.dart';
 import '../../../identity/providers/identity_providers.dart';
+import '../../../../features/player/providers/player_providers.dart';
 import 'avatar_frame.dart';
 
 class SoteriaAvatar extends ConsumerWidget {
@@ -36,11 +37,22 @@ class SoteriaAvatar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider);
-    final hasImageUrl = (imageUrl != null && imageUrl!.isNotEmpty) ||
-        (profile?.avatarUrl != null && profile!.avatarUrl!.isNotEmpty);
-    final hasInitials = initials != null && initials!.isNotEmpty;
+    final player = ref.watch(currentPlayerProvider);
 
-    final effectiveImageUrl = imageUrl ?? profile?.avatarUrl;
+    // Prioritize the Identity Profile (updated by dialogs) over the Game Profile (updated by sync)
+    final profileImageUrl = profile?.avatarUrl;
+    final playerImageUrl = player?.photoUrl;
+    
+    final String? effectiveImageUrl = (imageUrl?.isNotEmpty ?? false) 
+        ? imageUrl 
+        : (profileImageUrl != null && profileImageUrl.isNotEmpty)
+            ? profileImageUrl
+            : (profileImageUrl == null && playerImageUrl != null && playerImageUrl.isNotEmpty)
+                ? playerImageUrl
+                : null;
+
+    final hasImageUrl = effectiveImageUrl != null && effectiveImageUrl.isNotEmpty;
+    final hasInitials = initials != null && initials!.isNotEmpty;
 
     final effectiveAvatar =
         avatar ??

@@ -113,7 +113,10 @@ class _PersonalizedSelectionList extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final request = requestOverride ?? const QuestionSelectionRequest(questionCount: 5);
+    final request = requestOverride ?? const QuestionSelectionRequest(
+      questionCount: 5,
+      usePersonalization: true,
+    );
     
     return ProviderScope(
       overrides: [

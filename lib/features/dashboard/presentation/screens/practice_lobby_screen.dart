@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
@@ -13,10 +12,11 @@ import 'package:soteria/features/dashboard/presentation/providers/practice_lobby
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/category_selector.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/config_selectors.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/session_summary_card.dart';
+import 'package:soteria/features/dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
+import 'package:soteria/features/player/presentation/providers/progression_providers.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/features/gameplay_engine/models/practice_session_config.dart';
-import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 
 class PracticeLobbyScreen extends ConsumerWidget {
@@ -44,44 +44,45 @@ class PracticeLobbyScreen extends ConsumerWidget {
                   child: CustomScrollView(
                     slivers: [
                       SliverPadding(
-                        padding: EdgeInsets.all(SoteriaSpacing.lg),
+                        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
                         sliver: SliverList(
                           delegate: SliverChildListDelegate([
-                            SoteriaFadeIn(
-                              duration: SoteriaAnimations.medium,
-                              child: Text(
-                                'READY TO TRAIN?',
-                                style: context.displayMedium.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -1,
-                                ),
-                              ),
+                            LobbyHeroHeader(
+                              part1: 'READY',
+                              part2: 'TO',
+                              part3: 'TRAIN?',
+                              subtitle: "Let's build your knowledge and climb the ranks 🚀",
                             ),
-                            SizedBox(height: SoteriaSpacing.xl),
-                            _buildInterestsToggle(ref, state.config),
-                            SizedBox(height: SoteriaSpacing.xl),
+                            SizedBox(height: SoteriaSpacing.md),
+                            LobbyInterestsCard(
+                              value: state.config.useInterests,
+                              onChanged: (val) => ref.read(practiceLobbyProvider.notifier).setUseInterests(val),
+                            ),
+                            SizedBox(height: SoteriaSpacing.md),
                             if (!state.config.useInterests) ...[
                               const CategorySelector(),
-                              SizedBox(height: SoteriaSpacing.xxl),
+                              SizedBox(height: SoteriaSpacing.lg),
                             ],
                             const DifficultySelector(),
-                            SizedBox(height: SoteriaSpacing.xl),
+                            SizedBox(height: SoteriaSpacing.md),
                             const QuestionCountSelector(),
-                            SizedBox(height: SoteriaSpacing.xxl),
+                            SizedBox(height: SoteriaSpacing.lg),
                             if (state.estimatedRewards != null)
                               SessionSummaryCard(
                                 rewards: state.estimatedRewards!,
                               ),
-                            SizedBox(height: SoteriaSpacing.xxl * 2),
+                            SizedBox(height: SoteriaSpacing.lg),
                           ]),
                         ),
                       ),
                     ],
                   ),
                 ),
-                _StartAction(
+                LobbyStartAction(
                   enabled: state.validationError == null,
                   error: state.validationError,
+                  label: 'START PRACTICE',
+                  helperText: 'Earn XP • Improve • Climb the leaderboard',
                   onStart: () async {
                     final session = await ref
                         .read(practiceLobbyProvider.notifier)
@@ -98,37 +99,6 @@ class PracticeLobbyScreen extends ConsumerWidget {
       ),
     );
   }
-  Widget _buildInterestsToggle(WidgetRef ref, PracticeSessionConfig config) {
-    return SoteriaCard(
-      onTap: () => ref.read(practiceLobbyProvider.notifier).setUseInterests(!config.useInterests),
-      child: Row(
-        children: [
-          const Icon(Icons.auto_awesome_rounded, color: SoteriaColors.gold),
-          SizedBox(width: SoteriaSpacing.md),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Use My Interests',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  'Personalized mix based on your profile',
-                  style: TextStyle(color: Colors.white.withValues(alpha: 0.5), fontSize: 12),
-                ),
-              ],
-            ),
-          ),
-          Switch(
-            value: config.useInterests,
-            onChanged: (val) => ref.read(practiceLobbyProvider.notifier).setUseInterests(val),
-            activeColor: SoteriaColors.gold,
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class _LobbyHeader extends StatelessWidget {
@@ -138,22 +108,26 @@ class _LobbyHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg, vertical: SoteriaSpacing.md),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: Colors.white,
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
             ),
-            onPressed: () => context.pop(),
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.history_rounded,
-              color: Colors.white70,
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
+              onPressed: () => context.pop(),
             ),
-            onPressed: () => context.push(SoteriaRoutes.practiceHistory),
           ),
           const Spacer(),
           if (player != null)
@@ -164,73 +138,50 @@ class _LobbyHeader extends StatelessWidget {
                   children: [
                     Text(
                       player.displayName,
-                      style: context.bodyMedium.copyWith(
+                      style: context.titleSmall.copyWith(
                         fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
                     ),
-                    Text(
-                      'Lvl ${player.level}',
-                      style: context.labelSmall.copyWith(
-                        color: SoteriaColors.gold,
-                      ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final level = ref.watch(currentCompetitiveLevelProvider);
+                        return Text(
+                          'Lvl $level',
+                          style: context.labelSmall.copyWith(
+                            color: SoteriaColors.gold,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
                 SizedBox(width: SoteriaSpacing.md),
-                SoteriaAvatar(
-                  imageUrl: player.photoUrl,
-                  size: 40,
-                  isOnline: true,
+                Stack(
+                  children: [
+                    SoteriaAvatar(
+                      imageUrl: player.photoUrl,
+                      size: 44,
+                      isOnline: true,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: SoteriaColors.success,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: SoteriaColors.background, width: 2),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
-        ],
-      ),
-    );
-  }
-}
-
-class _StartAction extends StatelessWidget {
-  const _StartAction({
-    required this.enabled,
-    this.error,
-    required this.onStart,
-  });
-
-  final bool enabled;
-  final String? error;
-  final VoidCallback onStart;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg + 80.h,
-      ),
-      decoration: BoxDecoration(
-        color: SoteriaColors.surface.withValues(alpha: 0.8),
-        border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (error != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Text(
-                error!,
-                style: context.labelSmall.copyWith(color: SoteriaColors.error),
-              ),
-            ),
-          SoteriaButton.primary(
-            label: 'START PRACTICE',
-            onPressed: enabled ? onStart : null,
-          ),
         ],
       ),
     );

@@ -15,9 +15,6 @@ import 'package:soteria/features/gameplay_engine/lifelines/providers/lifeline_co
 import 'package:soteria/features/question_presentation/widgets/question_explanation_view.dart';
 import 'package:soteria/features/question_presentation/widgets/question_card.dart';
 import 'package:soteria/features/gameplay_engine/widgets/gameplay_progress_bar.dart';
-
-import 'package:soteria/core/design_system/components/soteria_button.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
 import 'package:soteria/features/gameplay_engine/providers/game_engine_provider.dart';
 
@@ -132,25 +129,19 @@ class QuestionPresenter extends ConsumerWidget {
                       isRevealed: isRevealed,
                       onAnswerSelected: isRevealed
                           ? (id) {}
-                          : (id) => ref
-                                .read(answerSelectionProvider.notifier)
-                                .select(id),
+                          : (id) {
+                              ref.read(answerSelectionProvider.notifier).select(id);
+                              ref.read(isResultRevealedProvider.notifier).state =
+                                  true;
+                              if (gameConfig != null) {
+                                ref
+                                    .read(gameEngineProvider(gameConfig!).notifier)
+                                    .submitAnswer([id]);
+                              }
+                            },
                       hiddenOptionIds: lifelineResults.hiddenOptionIds,
                     ),
                     const SizedBox(height: 32),
-                    if (!isRevealed && selectedId != null)
-                      SoteriaButton.primary(
-                        label: 'CONFIRM ANSWER',
-                        onPressed: () {
-                          ref.read(isResultRevealedProvider.notifier).state =
-                              true;
-                          if (gameConfig != null) {
-                            ref
-                                .read(gameEngineProvider(gameConfig!).notifier)
-                                .submitAnswer([selectedId]);
-                          }
-                        },
-                      ),
                     SizedBox(height: 120.h), // Space for explanation view
                   ],
                 ),

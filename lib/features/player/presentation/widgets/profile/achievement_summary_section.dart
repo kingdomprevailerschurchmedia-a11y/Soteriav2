@@ -7,16 +7,21 @@ import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
 import '../../providers/milestone_providers.dart';
+import '../../providers/achievement_providers.dart';
 import '../../../domain/models/milestone.dart';
+import '../../../domain/models/achievement.dart';
+
+import 'package:go_router/go_router.dart';
+import '../../../../../core/navigation/soteria_routes.dart';
 
 class AchievementSummarySection extends ConsumerWidget {
-  final List<PlayerMilestone> completed;
+  final List<PlayerAchievement> earned;
   final int total;
   final VoidCallback? onViewAll;
 
   const AchievementSummarySection({
     super.key,
-    required this.completed,
+    required this.earned,
     required this.total,
     this.onViewAll,
   });
@@ -39,9 +44,9 @@ class AchievementSummarySection extends ConsumerWidget {
               ),
             ),
             GestureDetector(
-              onTap: onViewAll,
+              onTap: () => context.push(SoteriaRoutes.achievements),
               child: Text(
-                '$total TOTAL',
+                '${earned.length} / $total EARNED',
                 style: context.labelSmall.copyWith(
                   color: SoteriaColors.primary,
                   fontWeight: FontWeight.bold,
@@ -52,17 +57,17 @@ class AchievementSummarySection extends ConsumerWidget {
         ),
         SizedBox(height: SoteriaSpacing.md),
         
-        // Horizontal list of completed badges
-        if (completed.isNotEmpty) ...[
+        // Horizontal list of earned achievements
+        if (earned.isNotEmpty) ...[
           SizedBox(
             height: 64.h,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: completed.length,
+              itemCount: earned.length,
               separatorBuilder: (_, __) => SizedBox(width: SoteriaSpacing.md),
               itemBuilder: (context, index) {
-                final milestone = completed[index];
-                return _AchievementBadge(milestone: milestone);
+                final achievement = earned[index];
+                return _AchievementBadge(achievement: achievement);
               },
             ),
           ),
@@ -78,7 +83,7 @@ class AchievementSummarySection extends ConsumerWidget {
           error: (_, __) => const SizedBox.shrink(),
         ),
 
-        if (completed.isEmpty && nextMilestoneAsync.value == null)
+        if (earned.isEmpty && nextMilestoneAsync.value == null)
           SoteriaCard(
             padding: EdgeInsets.all(SoteriaSpacing.lg),
             child: Center(
@@ -162,9 +167,9 @@ class _NextMilestoneCard extends StatelessWidget {
 }
 
 class _AchievementBadge extends StatelessWidget {
-  final PlayerMilestone milestone;
+  final PlayerAchievement achievement;
 
-  const _AchievementBadge({required this.milestone});
+  const _AchievementBadge({required this.achievement});
 
   @override
   Widget build(BuildContext context) {

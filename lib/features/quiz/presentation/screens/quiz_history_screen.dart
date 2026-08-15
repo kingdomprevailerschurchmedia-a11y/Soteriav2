@@ -50,17 +50,18 @@ class QuizHistoryScreen extends ConsumerWidget {
         color: SoteriaColors.primary,
         backgroundColor: SoteriaColors.background,
         child: CustomScrollView(
+          cacheExtent: 1000,
           slivers: [
-            SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.md)),
+            const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
             SliverToBoxAdapter(child: HistoryFilterBar()),
-            SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xl)),
+            const SliverToBoxAdapter(child: SoteriaSpacing.gapXL),
 
             summaryAsync.when(
               data: (summary) => SliverPadding(
                 padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
                 sliver: SliverToBoxAdapter(
                   child: summary.totalQuizzes > 0
-                      ? PerformanceSummarySection(summary: summary)
+                      ? RepaintBoundary(child: PerformanceSummarySection(summary: summary))
                       : const SizedBox.shrink(),
                 ),
               ),
@@ -74,7 +75,7 @@ class QuizHistoryScreen extends ConsumerWidget {
                 padding: EdgeInsets.all(SoteriaSpacing.lg),
                 sliver: SliverToBoxAdapter(
                   child: (performances as List<CategoryPerformance>).isNotEmpty
-                      ? CategoryPerformanceList(performances: performances)
+                      ? RepaintBoundary(child: CategoryPerformanceList(performances: performances))
                       : const SizedBox.shrink(),
                 ),
               ),
@@ -105,11 +106,13 @@ class QuizHistoryScreen extends ConsumerWidget {
                   }
                   return SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => QuizHistoryCard(
-                        result: results[index],
-                        onTap: () => context.push(
-                          '${SoteriaRoutes.quizHistory}/detail',
-                          extra: results[index],
+                      (context, index) => RepaintBoundary(
+                        child: QuizHistoryCard(
+                          result: results[index],
+                          onTap: () => context.push(
+                            '${SoteriaRoutes.quizHistory}/detail',
+                            extra: results[index],
+                          ),
                         ),
                       ),
                       childCount: results.length,
@@ -122,7 +125,7 @@ class QuizHistoryScreen extends ConsumerWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+            const SliverToBoxAdapter(child: SoteriaSpacing.gapSM),
           ],
         ),
       ),

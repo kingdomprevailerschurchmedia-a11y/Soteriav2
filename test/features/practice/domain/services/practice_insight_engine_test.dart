@@ -88,6 +88,7 @@ void main() {
 
       final history = [
         GameResult(
+          playerId: 'test_user',
           sessionId: 'prev',
           mode: GameMode.practice,
           finalScore: 100,

@@ -37,6 +37,7 @@ class PracticeHistoryScreen extends ConsumerWidget {
     }
 
     return CustomScrollView(
+      cacheExtent: 1000,
       physics: const BouncingScrollPhysics(),
       slivers: [
         _buildAppBar(context),
@@ -44,18 +45,22 @@ class PracticeHistoryScreen extends ConsumerWidget {
           padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
           sliver: SliverList(
             delegate: SliverChildListDelegate([
-              SoteriaFadeIn(child: PracticeSummaryHeader(history: history)),
-              SizedBox(height: SoteriaSpacing.lg),
-              SoteriaSlideUp(
-                delay: const Duration(milliseconds: 100),
-                child: PracticeTrendChart(trends: history.trends),
+              RepaintBoundary(child: SoteriaFadeIn(child: PracticeSummaryHeader(history: history))),
+              SoteriaSpacing.gapLG,
+              RepaintBoundary(
+                child: SoteriaSlideUp(
+                  delay: const Duration(milliseconds: 100),
+                  child: PracticeTrendChart(trends: history.trends),
+                ),
               ),
-              SizedBox(height: SoteriaSpacing.lg),
-              SoteriaSlideUp(
-                delay: const Duration(milliseconds: 200),
-                child: CategoryPerformanceList(history: history),
+              SoteriaSpacing.gapLG,
+              RepaintBoundary(
+                child: SoteriaSlideUp(
+                  delay: const Duration(milliseconds: 200),
+                  child: CategoryPerformanceList(history: history),
+                ),
               ),
-              SizedBox(height: SoteriaSpacing.xl),
+              SoteriaSpacing.gapXL,
               Text(
                 'RECENT SESSIONS',
                 style: context.labelSmall.copyWith(
@@ -64,7 +69,7 @@ class PracticeHistoryScreen extends ConsumerWidget {
                   letterSpacing: 1.5,
                 ),
               ),
-              SizedBox(height: SoteriaSpacing.md),
+              SoteriaSpacing.gapMD,
             ]),
           ),
         ),
@@ -74,16 +79,18 @@ class PracticeHistoryScreen extends ConsumerWidget {
             delegate: SliverChildBuilderDelegate(
               (context, index) {
                 final session = history.recentSessions[index];
-                return SoteriaSlideUp(
-                  delay: Duration(milliseconds: 300 + (index * 50)),
-                  child: _buildSessionCard(context, session),
+                return RepaintBoundary(
+                  child: SoteriaSlideUp(
+                    delay: Duration(milliseconds: 300 + (index * 50)),
+                    child: _buildSessionCard(context, session),
+                  ),
                 );
               },
               childCount: history.recentSessions.length,
             ),
           ),
         ),
-        SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.xxl)),
+        const SliverToBoxAdapter(child: SoteriaSpacing.gapXL),
       ],
     );
   }

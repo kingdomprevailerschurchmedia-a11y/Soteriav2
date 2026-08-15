@@ -32,6 +32,7 @@ class ProSessionConfig {
   final int entryFee;
   final bool timerEnabled;
   final int minLevelRequirement;
+  final bool useInterests;
 
   const ProSessionConfig({
     this.category,
@@ -40,6 +41,7 @@ class ProSessionConfig {
     this.entryFee = 100,
     this.timerEnabled = true,
     this.minLevelRequirement = 1,
+    this.useInterests = false,
   });
 
   ProSessionConfig copyWith({
@@ -49,6 +51,7 @@ class ProSessionConfig {
     int? entryFee,
     bool? timerEnabled,
     int? minLevelRequirement,
+    bool? useInterests,
   }) {
     return ProSessionConfig(
       category: category ?? this.category,
@@ -57,6 +60,7 @@ class ProSessionConfig {
       entryFee: entryFee ?? this.entryFee,
       timerEnabled: timerEnabled ?? this.timerEnabled,
       minLevelRequirement: minLevelRequirement ?? this.minLevelRequirement,
+      useInterests: useInterests ?? this.useInterests,
     );
   }
 }

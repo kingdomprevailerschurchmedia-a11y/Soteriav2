@@ -5,6 +5,7 @@ import '../answer/models/answer_result.dart';
 /// Final summary of a gameplay session performance.
 class GameResult {
   final String sessionId;
+  final String playerId;
   final GameMode mode;
   final int finalScore;
   final int totalXP;
@@ -25,6 +26,7 @@ class GameResult {
 
   const GameResult({
     required this.sessionId,
+    required this.playerId,
     required this.mode,
     required this.finalScore,
     required this.totalXP,
@@ -46,6 +48,7 @@ class GameResult {
 
   Map<String, dynamic> toJson() => {
     'sessionId': sessionId,
+    'playerId': playerId,
     'mode': mode.name,
     'finalScore': finalScore,
     'totalXP': totalXP,
@@ -67,6 +70,7 @@ class GameResult {
 
   factory GameResult.fromJson(Map<String, dynamic> json) => GameResult(
     sessionId: json['sessionId'],
+    playerId: json['playerId'] ?? '',
     mode: GameMode.values.byName(json['mode'] ?? 'practice'),
     finalScore: json['finalScore'],
     totalXP: json['totalXP'],
@@ -90,4 +94,48 @@ class GameResult {
         : DateTime.now(),
     isSynced: json['isSynced'] ?? true,
   );
+
+  GameResult copyWith({
+    String? sessionId,
+    String? playerId,
+    GameMode? mode,
+    int? finalScore,
+    int? totalXP,
+    int? totalQuestions,
+    int? correctAnswers,
+    int? wrongAnswers,
+    int? skippedQuestions,
+    Duration? totalDuration,
+    double? accuracy,
+    int? maxStreak,
+    RewardSummary? rewards,
+    Duration? avgResponseTime,
+    Duration? fastestAnswerTime,
+    Duration? slowestAnswerTime,
+    List<AnswerResult>? answers,
+    DateTime? timestamp,
+    bool? isSynced,
+  }) {
+    return GameResult(
+      sessionId: sessionId ?? this.sessionId,
+      playerId: playerId ?? this.playerId,
+      mode: mode ?? this.mode,
+      finalScore: finalScore ?? this.finalScore,
+      totalXP: totalXP ?? this.totalXP,
+      totalQuestions: totalQuestions ?? this.totalQuestions,
+      correctAnswers: correctAnswers ?? this.correctAnswers,
+      wrongAnswers: wrongAnswers ?? this.wrongAnswers,
+      skippedQuestions: skippedQuestions ?? this.skippedQuestions,
+      totalDuration: totalDuration ?? this.totalDuration,
+      accuracy: accuracy ?? this.accuracy,
+      maxStreak: maxStreak ?? this.maxStreak,
+      rewards: rewards ?? this.rewards,
+      avgResponseTime: avgResponseTime ?? this.avgResponseTime,
+      fastestAnswerTime: fastestAnswerTime ?? this.fastestAnswerTime,
+      slowestAnswerTime: slowestAnswerTime ?? this.slowestAnswerTime,
+      answers: answers ?? this.answers,
+      timestamp: timestamp ?? this.timestamp,
+      isSynced: isSynced ?? this.isSynced,
+    );
+  }
 }

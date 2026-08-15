@@ -13,6 +13,7 @@ import '../../../gameplay_engine/domain/repositories/practice_repository.dart';
 import '../../../gameplay_engine/data/repositories/firestore_practice_repository.dart';
 
 import '../../../question_content/domain/entities/difficulty.dart';
+import '../../../player/presentation/providers/progression_providers.dart';
 
 // --- Repositories ---
 final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
@@ -157,8 +158,13 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
 
   void _updateSummary() {
     final player = ref.read(currentPlayerProvider);
+    final level = ref.read(currentCompetitiveLevelProvider);
     final estimator = ref.read(rewardEstimatorProvider);
-    final validationError = _validator.validate(state.config, player);
+    final validationError = _validator.validate(
+      config: state.config,
+      player: player,
+      level: level,
+    );
     final estimatedRewards = estimator.estimate(state.config);
 
     state = state.copyWith(
@@ -169,9 +175,14 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
 
   Future<PracticeSession?> startSession() async {
     final player = ref.read(currentPlayerProvider);
+    final level = ref.read(currentCompetitiveLevelProvider);
     if (player == null) return null;
 
-    final validationError = _validator.validate(state.config, player);
+    final validationError = _validator.validate(
+      config: state.config,
+      player: player,
+      level: level,
+    );
     if (validationError != null) {
       state = state.copyWith(validationError: validationError);
       return null;

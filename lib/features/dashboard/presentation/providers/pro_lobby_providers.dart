@@ -15,10 +15,13 @@ import '../../../../features/gameplay_engine/models/competitive_session.dart';
 import '../../../../features/gameplay_engine/domain/repositories/pro_mode_repository.dart';
 import '../../../../features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart';
 
+import '../../../player/presentation/providers/progression_providers.dart';
+
 // --- Repositories ---
 final proModeRepositoryProvider = Provider<ProModeRepository>((ref) {
   return FirestoreProModeRepository(
     ref.watch(firestoreDatabaseServiceProvider),
+    ref.watch(playerProgressionRepositoryProvider),
   );
 });
 
@@ -62,6 +65,8 @@ class ProLobbyState {
 class ProLobbyNotifier extends Notifier<ProLobbyState> {
   @override
   ProLobbyState build() {
+    // Trigger initial validation which includes availability check
+    Future.microtask(() => _updateValidation());
     return _getInitialState();
   }
 
@@ -79,7 +84,8 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     ProModeAccessResult access = const ProModeAccessResult.available();
 
     if (player != null) {
-      if (player.level < updatedConfig.minLevelRequirement) {
+      final level = ref.read(currentCompetitiveLevelProvider);
+      if (level < updatedConfig.minLevelRequirement) {
         access = ProModeAccessResult(
           state: ProModeAccessState.locked,
           message: 'MINIMUM LEVEL ${updatedConfig.minLevelRequirement} REQUIRED',
@@ -102,7 +108,19 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   void updateCategory(Category? category) {
-    state = state.copyWith(config: state.config.copyWith(category: category));
+    state = state.copyWith(
+      config: state.config.copyWith(category: category, useInterests: false),
+    );
+    _updateValidation();
+  }
+
+  void setUseInterests(bool value) {
+    state = state.copyWith(
+      config: state.config.copyWith(useInterests: value),
+    );
+    if (value) {
+      state = state.copyWith(config: state.config.copyWith(category: null));
+    }
     _updateValidation();
   }
 
@@ -140,7 +158,8 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
     ProModeAccessResult access = const ProModeAccessResult.available();
 
-    if (player.level < state.config.minLevelRequirement) {
+    final level = ref.read(currentCompetitiveLevelProvider);
+    if (level < state.config.minLevelRequirement) {
       access = ProModeAccessResult(
         state: ProModeAccessState.locked,
         message: 'MINIMUM LEVEL ${state.config.minLevelRequirement} REQUIRED',
@@ -157,8 +176,26 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   Future<void> _checkAvailability() async {
+    List<String>? categoryIds;
+    
+    if (state.config.useInterests) {
+      final player = ref.read(currentPlayerProvider);
+      categoryIds = player?.favoriteCategories ?? [];
+      if (categoryIds.isEmpty) {
+        state = state.copyWith(
+          access: const ProModeAccessResult(
+            state: ProModeAccessState.insufficientContent,
+            message: 'NO INTERESTS DEFINED IN PROFILE',
+          ),
+        );
+        return;
+      }
+    } else if (state.config.category != null) {
+      categoryIds = [state.config.category!.id];
+    }
+
     final count = await ref.read(proModeRepositoryProvider).getAvailableQuestionCount(
-      categoryId: state.config.category?.id,
+      categoryIds: categoryIds,
       difficulty: state.config.difficulty.toBaseDifficulty(),
     );
 
@@ -166,7 +203,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       state = state.copyWith(
         access: ProModeAccessResult(
           state: ProModeAccessState.insufficientContent,
-          message: 'Not enough questions available for this configuration.',
+          message: 'ONLY $count QUESTIONS AVAILABLE (${state.config.questionCount} REQUIRED)',
           metadata: {'available': count, 'required': state.config.questionCount},
         ),
       );
@@ -180,9 +217,17 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     state = state.copyWith(isLoading: true);
     try {
       // 1. Select Questions first (Fail-fast content check)
+      List<String> categories = [];
+      if (state.config.useInterests) {
+        final profile = ref.read(currentPlayerProvider);
+        categories = profile?.favoriteCategories ?? [];
+      } else if (state.config.category != null) {
+        categories = [state.config.category!.id];
+      }
+
       final selectionResult = await ref.read(questionSelectionServiceProvider).selectQuestions(
         QuestionSelectionRequest(
-          categoryIds: state.config.category != null ? [state.config.category!.id] : [],
+          categoryIds: categories,
           difficulty: state.config.difficulty.toBaseDifficulty(),
           questionCount: state.config.questionCount,
           mode: GameMode.pro,

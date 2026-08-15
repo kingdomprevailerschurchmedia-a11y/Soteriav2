@@ -1,6 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import '../../../question_content/domain/entities/question.dart';
-import '../../../gameplay_engine/answer/models/answer_result.dart';
 import '../../../question_content/domain/entities/difficulty.dart';
 
 part 'practice_result.freezed.dart';
@@ -8,6 +6,7 @@ part 'practice_result.g.dart';
 
 @freezed
 abstract class PracticeResult with _$PracticeResult {
+  @JsonSerializable(explicitToJson: true)
   const factory PracticeResult({
     required String sessionId,
     required String userId,
@@ -36,6 +35,7 @@ abstract class PracticeResult with _$PracticeResult {
 
 @freezed
 abstract class CategoryPerformance with _$CategoryPerformance {
+  @JsonSerializable(explicitToJson: true)
   const factory CategoryPerformance({
     required String categoryId,
     required int total,
@@ -48,6 +48,7 @@ abstract class CategoryPerformance with _$CategoryPerformance {
 
 @freezed
 abstract class QuestionReviewItem with _$QuestionReviewItem {
+  @JsonSerializable(explicitToJson: true)
   const factory QuestionReviewItem({
     required String questionId,
     required String questionText,
@@ -59,6 +60,7 @@ abstract class QuestionReviewItem with _$QuestionReviewItem {
     required String categoryId,
     required Difficulty difficulty,
     required Duration responseTime,
+    String? questionVersion,
   }) = _QuestionReviewItem;
 
   factory QuestionReviewItem.fromJson(Map<String, dynamic> json) => _$QuestionReviewItemFromJson(json);
@@ -66,6 +68,7 @@ abstract class QuestionReviewItem with _$QuestionReviewItem {
 
 @freezed
 abstract class LearningInsight with _$LearningInsight {
+  @JsonSerializable(explicitToJson: true)
   const factory LearningInsight({
     required String title,
     required String description,
@@ -85,6 +88,7 @@ enum LearningInsightType {
 
 @freezed
 abstract class PracticeRecommendation with _$PracticeRecommendation {
+  @JsonSerializable(explicitToJson: true)
   const factory PracticeRecommendation({
     required String title,
     required String description,

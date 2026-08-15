@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:uuid/uuid.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../domain/models/competitive_goal.dart';
+import '../../domain/models/goal.dart';
 import '../providers/goal_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../domain/config/progression_config.dart';
@@ -44,8 +43,8 @@ class GoalSelectionScreen extends ConsumerWidget {
             onSelect: () => _createWinGoal(context, ref, 50),
           ),
           _GoalOptionCard(
-            title: '90% Accuracy',
-            description: 'Maintain surgical precision in your next 10 matches.',
+            title: 'Career Accuracy',
+            description: 'Achieve a new career accuracy milestone.',
             icon: Icons.track_changes_rounded,
             onSelect: () => _createAccuracyGoal(context, ref, 0.9),
           ),
@@ -71,19 +70,13 @@ class GoalSelectionScreen extends ConsumerWidget {
     _handleCreation(
       context,
       ref,
-      CompetitiveGoal(
-        id: const Uuid().v4(),
+      PlayerGoal(
+        goalId: 'rank_${tierName.toLowerCase()}',
         userId: ref.read(authRepositoryProvider).currentUserId!,
-        type: GoalType.career,
-        category: GoalCategory.rank,
-        title: 'Reach $tierName',
-        description: 'Earn enough RP to reach the $tierName tier.',
-        target: 1,
-        currentProgress: 0,
         status: GoalStatus.active,
-        startAt: DateTime.now(),
-        endAt: DateTime.now().add(const Duration(days: 365)),
-        metadata: {'targetTier': tierName},
+        currentProgress: 0,
+        startedAt: DateTime.now(),
+        expiresAt: DateTime.now().add(const Duration(days: 365)),
       ),
     );
   }
@@ -92,18 +85,13 @@ class GoalSelectionScreen extends ConsumerWidget {
     _handleCreation(
       context,
       ref,
-      CompetitiveGoal(
-        id: const Uuid().v4(),
+      PlayerGoal(
+        goalId: 'career_wins_$targetWins',
         userId: ref.read(authRepositoryProvider).currentUserId!,
-        type: GoalType.career,
-        category: GoalCategory.win,
-        title: 'Win $targetWins Matches',
-        description: 'Win $targetWins competitive matches across any mode.',
-        target: targetWins.toDouble(),
-        currentProgress: 0,
         status: GoalStatus.active,
-        startAt: DateTime.now(),
-        endAt: DateTime.now().add(const Duration(days: 90)),
+        currentProgress: 0,
+        startedAt: DateTime.now(),
+        expiresAt: DateTime.now().add(const Duration(days: 90)),
       ),
     );
   }
@@ -112,18 +100,13 @@ class GoalSelectionScreen extends ConsumerWidget {
     _handleCreation(
       context,
       ref,
-      CompetitiveGoal(
-        id: const Uuid().v4(),
+      PlayerGoal(
+        goalId: 'accuracy_milestone',
         userId: ref.read(authRepositoryProvider).currentUserId!,
-        type: GoalType.career,
-        category: GoalCategory.personalBest,
-        title: '${(accuracy * 100).toInt()}% Accuracy',
-        description: 'Achieve a career accuracy of ${(accuracy * 100).toInt()}%.',
-        target: accuracy,
-        currentProgress: 0,
         status: GoalStatus.active,
-        startAt: DateTime.now(),
-        endAt: DateTime.now().add(const Duration(days: 30)),
+        currentProgress: 0,
+        startedAt: DateTime.now(),
+        expiresAt: DateTime.now().add(const Duration(days: 30)),
       ),
     );
   }
@@ -131,7 +114,7 @@ class GoalSelectionScreen extends ConsumerWidget {
   Future<void> _handleCreation(
     BuildContext context,
     WidgetRef ref,
-    CompetitiveGoal goal,
+    PlayerGoal goal,
   ) async {
     try {
       await ref.read(goalRepositoryProvider).createGoal(goal);
@@ -171,7 +154,7 @@ class _GoalOptionCard extends StatelessWidget {
       color: SoteriaColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(SoteriaSpacing.md),
-        border: Border.all(color: SoteriaColors.border),
+        side: const BorderSide(color: SoteriaColors.border),
       ),
       child: ListTile(
         onTap: onSelect,

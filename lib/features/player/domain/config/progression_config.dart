@@ -1,12 +1,13 @@
+import 'dart:math';
 import '../models/rank_tier.dart';
 
 class ProgressionConfig {
   static const int maxLevel = 100;
 
-  // Level Curve Constants (matching Gameplay Engine defaults for consistency)
-  static const int baseLevelXP = 1000;
-  static const double levelExponent = 1.2;
-  static const int linearFactor = 200;
+  // Authoritative Level Curve Constants
+  static const int baseLevelXP = 100;
+  static const double levelExponent = 1.5;
+  static const int linearFactor = 50;
 
   static final List<RankTier> rankTiers = [
     const RankTier(
@@ -93,10 +94,18 @@ class ProgressionConfig {
 
   static int xpRequiredForLevel(int level) {
     if (level <= 1) return 0;
-    // Simplified progression curve for the Story
-    // In a real scenario, this would match LevelConfig exactly or be served by API
-    return (baseLevelXP * (level - 1) * levelExponent +
-            linearFactor * (level - 1))
-        .toInt();
+    if (level > maxLevel) return xpRequiredForLevel(maxLevel);
+
+    final n = level - 1;
+    final exponentialPart = baseLevelXP * pow(n, levelExponent);
+    final linearPart = linearFactor * n;
+
+    return (exponentialPart + linearPart).toInt();
+  }
+
+  /// Calculates the relative XP capacity of a specific level (XP needed to cross it).
+  static int xpCapacityForLevel(int level) {
+    if (level < 1) return baseLevelXP;
+    return xpRequiredForLevel(level + 1) - xpRequiredForLevel(level);
   }
 }

@@ -43,20 +43,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(dashboardProvider);
-    final progressionAsync = ref.watch(competitiveProgressionProvider);
-    final player = state.player;
+    // Only rebuild if critical dashboard state changes
+    final isLoading = ref.watch(dashboardProvider.select((s) => s.isLoading));
+    final error = ref.watch(dashboardProvider.select((s) => s.error));
+    final hasPlayer = ref.watch(dashboardProvider.select((s) => s.player != null));
+    final announcementsCount = ref.watch(dashboardProvider.select((s) => s.announcements.length));
 
     if (kDebugMode) {
       LoggerService.d(
-        'Building Dashboard: isLoading=${state.isLoading}, hasPlayer=${player != null}',
+        'Building Dashboard: isLoading=$isLoading, hasPlayer=$hasPlayer',
         feature: 'Dashboard',
       );
     }
 
     return SoteriaPage(
-      isLoading: state.isLoading && player == null,
-      error: state.error,
+      isLoading: isLoading && !hasPlayer,
+      error: error,
       onRetry: () => ref.read(dashboardProvider.notifier).refresh(),
       useSafeArea: false,
       child: Scaffold(
@@ -65,6 +67,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
           color: SoteriaColors.primary,
           child: CustomScrollView(
+            cacheExtent: 1000, // Pre-render some area to reduce jank during scroll
             physics: const AlwaysScrollableScrollPhysics(
               parent: BouncingScrollPhysics(),
             ),
@@ -75,127 +78,159 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               // Header
               SliverToBoxAdapter(
-                child: progressionAsync.when(
-                  data: (progression) => DashboardHeader(
-                    greeting: state.greeting,
-                    playerName: player?.displayName ?? 'Scholar',
-                    level: progression.currentLevel,
-                    streak: player?.currentStreak ?? 0,
-                    coins: player?.coins ?? 0,
-                    profileCompletion: 1.0,
-                    avatarUrl: player?.photoUrl,
-                    isOnline: true,
-                  ),
-                  loading: () => DashboardHeader(
-                    greeting: state.greeting,
-                    playerName: player?.displayName ?? 'Scholar',
-                    level: 1,
-                    streak: 0,
-                    coins: 0,
-                    profileCompletion: 1.0,
-                    isOnline: true,
-                  ),
-                  error: (err, st) => DashboardHeader(
-                    greeting: 'Error loading level',
-                    playerName: player?.displayName ?? 'Scholar',
-                    level: 1,
-                    streak: 0,
-                    coins: 0,
-                    profileCompletion: 1.0,
-                    isOnline: true,
+                child: RepaintBoundary(
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final progressionAsync = ref.watch(competitiveProgressionProvider);
+                      final player = ref.watch(dashboardProvider.select((s) => s.player));
+                      final greeting = ref.watch(dashboardProvider.select((s) => s.greeting));
+                      
+                      return progressionAsync.when(
+                        data: (progression) => DashboardHeader(
+                          greeting: greeting,
+                          playerName: player?.displayName ?? 'Scholar',
+                          level: progression.currentLevel,
+                          streak: player?.currentStreak ?? 0,
+                          coins: player?.coins ?? 0,
+                          profileCompletion: 1.0,
+                          avatarUrl: player?.photoUrl,
+                          isOnline: true,
+                        ),
+                        loading: () => DashboardHeader(
+                          greeting: greeting,
+                          playerName: player?.displayName ?? 'Scholar',
+                          level: 1,
+                          streak: 0,
+                          coins: 0,
+                          profileCompletion: 1.0,
+                          isOnline: true,
+                        ),
+                        error: (err, st) => DashboardHeader(
+                          greeting: 'Error loading level',
+                          playerName: player?.displayName ?? 'Scholar',
+                          level: 1,
+                          streak: 0,
+                          coins: 0,
+                          profileCompletion: 1.0,
+                          isOnline: true,
+                        ),
+                      );
+                    }
                   ),
                 ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Unified Profile & Rank Hero Card
               SliverToBoxAdapter(
-                child: progressionAsync.when(
-                  data: (progression) => ref.watch(rankProgressProvider).when(
-                        data: (rankProgress) => HeroCard(
-                          level: progression.currentLevel,
-                          xpInCurrentLevel: progression.currentXp,
-                          xpThreshold: progression.xpRequiredForNextLevel -
-                              progression.xpRequiredForCurrentLevel,
-                          streak: player?.currentStreak ?? 0,
-                          rankProgress: rankProgress,
-                          xpProgress: progression.xpProgress,
-                          xpRemaining: progression.xpRequiredForNextLevel -
-                              (progression.xpRequiredForCurrentLevel +
-                                  progression.currentXp),
-                          isDoubleXp: state.announcements.any(
-                            (a) => a.toLowerCase().contains('double xp'),
-                          ),
-                          onTap: () => Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  const CompetitiveRankOverviewScreen(),
+                child: RepaintBoundary(
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final progressionAsync = ref.watch(competitiveProgressionProvider);
+                      final rankProgressAsync = ref.watch(rankProgressProvider);
+                      final player = ref.watch(dashboardProvider.select((s) => s.player));
+                      final hasDoubleXp = ref.watch(dashboardProvider.select((s) => 
+                        s.announcements.any((a) => a.toLowerCase().contains('double xp'))
+                      ));
+
+                      return progressionAsync.when(
+                        data: (progression) => rankProgressAsync.when(
+                          data: (rankProgress) => HeroCard(
+                            level: progression.currentLevel,
+                            xpInCurrentLevel: progression.currentXp,
+                            xpThreshold: progression.xpRequiredForNextLevel -
+                                progression.xpRequiredForCurrentLevel,
+                            streak: player?.currentStreak ?? 0,
+                            rankProgress: rankProgress,
+                            xpProgress: progression.xpProgress,
+                            xpRemaining: progression.xpRequiredForNextLevel -
+                                (progression.xpRequiredForCurrentLevel +
+                                    progression.currentXp),
+                            isDoubleXp: hasDoubleXp,
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    const CompetitiveRankOverviewScreen(),
+                              ),
                             ),
                           ),
+                          loading: () => const HeroCardLoading(),
+                          error: (err, st) => const HeroCardLoading(),
                         ),
                         loading: () => const HeroCardLoading(),
                         error: (err, st) => const HeroCardLoading(),
-                      ),
-                  loading: () => const HeroCardLoading(),
-                  error: (err, st) => const HeroCardLoading(),
+                      );
+                    }
+                  ),
                 ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Season Status
-              const SliverToBoxAdapter(child: SeasonHeader()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: SeasonHeader())),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Milestone Section
               SliverToBoxAdapter(
-                child: ref.watch(nextCompetitiveMilestoneProvider).when(
-                      data: (next) => next != null
-                          ? MilestoneSection(progress: next)
-                          : const SizedBox.shrink(),
-                      loading: () => const SizedBox.shrink(),
-                      error: (err, st) => const SizedBox.shrink(),
-                    ),
+                child: RepaintBoundary(
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      return ref.watch(nextCompetitiveMilestoneProvider).when(
+                        data: (next) => next != null
+                            ? MilestoneSection(progress: next)
+                            : const SizedBox.shrink(),
+                        loading: () => const SizedBox.shrink(),
+                        error: (err, st) => const SizedBox.shrink(),
+                      );
+                    }
+                  ),
+                ),
               ),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Quick Actions
-              const SliverToBoxAdapter(child: QuickActionsGrid()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: QuickActionsGrid())),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Daily Goals
-              const SliverToBoxAdapter(child: DailyGoalsSection()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: DailyGoalsSection())),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Recent Achievements
-              const SliverToBoxAdapter(child: RecentAchievementsSection()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: RecentAchievementsSection())),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Top Scholars
-              const SliverToBoxAdapter(child: TopScholarsSection()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: TopScholarsSection())),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Recent Opponents
-              const SliverToBoxAdapter(child: RecentOpponentsSection()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: RecentOpponentsSection())),
 
-              SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
               // Performance
-              const SliverToBoxAdapter(child: PerformanceSection()),
+              const SliverToBoxAdapter(child: RepaintBoundary(child: PerformanceSection())),
 
               // Announcements
-              if (state.announcements.isNotEmpty) ...[
-                SliverToBoxAdapter(child: SizedBox(height: SoteriaSpacing.lg)),
+              if (announcementsCount > 0) ...[
+                const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
                 SliverToBoxAdapter(
-                  child: AnnouncementSection(
-                    announcements: state.announcements,
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final announcements = ref.watch(dashboardProvider.select((s) => s.announcements));
+                      return AnnouncementSection(
+                        announcements: announcements,
+                      );
+                    }
                   ),
                 ),
               ],

@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mocktail/mocktail.dart' as mt;
 import 'package:soteria/features/gameplay_engine/pages/pro_mode_results_screen.dart';
 import 'package:soteria/features/gameplay_engine/providers/pro_mode_results_provider.dart';
 import 'package:soteria/features/gameplay_engine/models/pro_mode_result.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
-class MockRef extends Mock implements Ref {}
+class MockProModeResultsNotifier extends mt.Mock implements ProModeResultsNotifier {}
 
 void main() {
   testWidgets('ProModeResultsScreen displays correct metrics', (WidgetTester tester) async {
     final result = ProModeResult(
+      playerId: 'test-player',
       sessionId: 'test-session',
       mode: GameMode.pro,
       finalScore: 1000,
@@ -27,10 +28,14 @@ void main() {
       rating: 'A',
     );
 
+    final mockNotifier = MockProModeResultsNotifier();
+    mt.when(() => mockNotifier.state).thenReturn(ProModeResultsState(result: AsyncValue.data(result)));
+    mt.when(() => mockNotifier.stream).thenAnswer((_) => Stream.value(ProModeResultsState(result: AsyncValue.data(result))));
+
     await tester.pumpWidget(
       ProviderScope(
         overrides: [
-          proModeResultsProvider.overrideWith((ref) => _FakeResultsNotifier(result)),
+          proModeResultsProvider.overrideWith((ref) => mockNotifier),
         ],
         child: ScreenUtilInit(
           designSize: const Size(390, 844),
@@ -42,7 +47,7 @@ void main() {
     );
 
     await tester.runAsync(() async {
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 1));
     });
     await tester.pumpAndSettle();
 
@@ -50,21 +55,5 @@ void main() {
     expect(find.text('1000'), findsOneWidget); // Score
     expect(find.text('90%'), findsOneWidget); // Accuracy
     expect(find.text('A'), findsOneWidget); // Rating
-    
-    await tester.pump(const Duration(seconds: 5));
   });
-}
-
-class _FakeResultsNotifier extends ProModeResultsNotifier {
-  final ProModeResult mockResult;
-
-  _FakeResultsNotifier(this.mockResult) : super(MockRef()) {
-    state = ProModeResultsState(result: AsyncValue.data(mockResult));
-  }
-
-  @override
-  Future<void> loadResult(String sessionId) async {}
-  
-  @override
-  Future<void> completeSession(dynamic s) async {}
 }

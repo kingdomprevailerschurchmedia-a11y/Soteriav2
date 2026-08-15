@@ -25,7 +25,8 @@ void main() {
       );
 
       final state = GameState(
-        sessionId: 'test',
+        playerId: 'test-player',
+      sessionId: 'test',
         score: 1000,
         questions: List.generate(
           10,

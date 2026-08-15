@@ -13,19 +13,25 @@ class QuestionSelectionService {
     try {
       final List<Question> pool = [];
       
-      // If no categories specified, use a default fallback (e.g. general knowledge)
-      final categoryIds = request.categoryIds.isNotEmpty 
-          ? request.categoryIds 
-          : ['general-knowledge'];
-
-      // Fetch questions for each category to build the pool
-      for (final categoryId in categoryIds) {
+      // If no categories specified, search across all categories
+      if (request.categoryIds.isEmpty) {
         final questions = await _repository.getQuestions(
-          categoryId: categoryId,
           difficulty: request.difficulty,
-          limit: request.questionCount * 2, // Fetch extra for variety and exclusions
+          limit: request.questionCount * 2,
         );
         pool.addAll(questions);
+      } else {
+        // Fetch questions for each specified category in parallel to build the pool
+        final results = await Future.wait(
+          request.categoryIds.map((categoryId) => _repository.getQuestions(
+            categoryId: categoryId,
+            difficulty: request.difficulty,
+            limit: request.questionCount * 2,
+          ))
+        );
+        for (final questions in results) {
+          pool.addAll(questions);
+        }
       }
 
       // Filter out excluded questions
@@ -49,7 +55,7 @@ class QuestionSelectionService {
       }
 
       // Determine strategy
-      final strategy = categoryIds.length > 1 
+      final strategy = request.categoryIds.length > 1 
           ? BalancedCategoryStrategy() 
           : RandomSelectionStrategy();
 

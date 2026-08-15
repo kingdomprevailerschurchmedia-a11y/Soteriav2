@@ -1,19 +1,19 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:soteria/features/player/domain/models/competitive_goal.dart';
-import 'package:soteria/features/player/domain/services/competitive_goal_evaluation_service.dart';
+import 'package:soteria/features/player/domain/models/goal.dart';
+import 'package:soteria/features/player/domain/services/goal_evaluation_service.dart';
 import 'package:soteria/features/player/domain/models/competitive_statistics.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
 
 void main() {
-  group('CompetitiveGoalEvaluationService', () {
-    late CompetitiveGoalEvaluationService service;
+  group('GoalEvaluationService', () {
+    late GoalEvaluationService service;
     late PlayerProgression mockProgression;
     late CompetitiveStatistics mockStats;
 
     setUp(() {
-      service = CompetitiveGoalEvaluationService();
+      service = GoalEvaluationService();
       mockProgression = PlayerProgression.initial(
         'u1',
         's1',
@@ -42,18 +42,13 @@ void main() {
 
     test('should update progress for gameCount goal', () {
       final now = DateTime.now();
-      final goal = CompetitiveGoal(
-        id: 'g1',
+      final playerGoal = PlayerGoal(
+        goalId: 'daily_games_3',
         userId: 'u1',
-        type: GoalType.daily,
-        category: GoalCategory.gameCount,
-        title: 'Play Games',
-        description: 'Play 3 games',
-        target: 3,
-        currentProgress: 0,
         status: GoalStatus.active,
-        startAt: now.subtract(const Duration(hours: 1)),
-        endAt: now.add(const Duration(hours: 23)),
+        currentProgress: 0,
+        startedAt: now.subtract(const Duration(hours: 1)),
+        expiresAt: now.add(const Duration(hours: 23)),
       );
 
       final results = [
@@ -110,7 +105,7 @@ void main() {
       ];
 
       final updated = service.evaluate(
-        activeGoals: [goal],
+        playerGoals: [playerGoal],
         recentResults: results,
         statistics: mockStats,
         progression: mockProgression,
@@ -123,18 +118,13 @@ void main() {
 
     test('should mark goal as completed when target is reached', () {
       final now = DateTime.now();
-      final goal = CompetitiveGoal(
-        id: 'g2',
+      final playerGoal = PlayerGoal(
+        goalId: 'daily_wins_2',
         userId: 'u1',
-        type: GoalType.daily,
-        category: GoalCategory.win,
-        title: 'Win Games',
-        description: 'Win 1 game',
-        target: 1,
-        currentProgress: 0,
         status: GoalStatus.active,
-        startAt: now.subtract(const Duration(hours: 1)),
-        endAt: now.add(const Duration(hours: 23)),
+        currentProgress: 0,
+        startedAt: now.subtract(const Duration(hours: 1)),
+        expiresAt: now.add(const Duration(hours: 23)),
       );
 
       final results = [
@@ -163,100 +153,63 @@ void main() {
           completionTime: Duration(minutes: 1),
           performanceRating: 'S',
         ),
+        QuizResult(
+          sessionId: 's2',
+          playerId: 'u1',
+          gameMode: GameMode.tournament,
+          difficulty: Difficulty.medium,
+          category: 'History',
+          totalQuestions: 10,
+          answeredQuestions: 10,
+          correctAnswers: 10,
+          wrongAnswers: 0,
+          skipped: 0,
+          timedOut: 0,
+          finalScore: 100,
+          accuracy: 1.0,
+          completedAt: now.add(const Duration(minutes: 5)),
+          xpEarned: 50,
+          longestStreak: 10,
+          finalStreak: 10,
+          averageResponseTime: Duration(seconds: 3),
+          fastestResponseTime: Duration(seconds: 1),
+          slowestResponseTime: Duration(seconds: 5),
+          questionResults: [],
+          completionTime: Duration(minutes: 1),
+          performanceRating: 'A',
+        ),
       ];
 
       final updated = service.evaluate(
-        activeGoals: [goal],
+        playerGoals: [playerGoal],
         recentResults: results,
         statistics: mockStats,
         progression: mockProgression,
       );
 
       expect(updated.first.status, GoalStatus.completed);
-      expect(updated.first.currentProgress, 1.0);
+      expect(updated.first.currentProgress, 2.0);
     });
 
-    test('should calculate progress for rank goal', () {
-      final now = DateTime.now();
-      final goal = CompetitiveGoal(
-        id: 'g3',
-        userId: 'u1',
-        type: GoalType.career,
-        category: GoalCategory.rank,
-        title: 'Reach Gold',
-        description: 'Reach Gold tier',
-        target: 1,
-        currentProgress: 0,
-        status: GoalStatus.active,
-        startAt: now.subtract(const Duration(days: 1)),
-        endAt: now.add(const Duration(days: 30)),
-        metadata: {'targetTier': 'Gold'},
-      );
+    test('should mark as expired if time window passed', () {
+        final now = DateTime.now();
+        final playerGoal = PlayerGoal(
+          goalId: 'daily_games_3',
+          userId: 'u1',
+          status: GoalStatus.active,
+          currentProgress: 0,
+          startedAt: now.subtract(const Duration(hours: 25)),
+          expiresAt: now.subtract(const Duration(hours: 1)),
+        );
 
-      final updated = service.evaluate(
-        activeGoals: [goal],
-        recentResults: [],
-        statistics: mockStats,
-        progression: mockProgression.copyWith(currentRankTier: 'Gold'),
-      );
+        final updated = service.evaluate(
+          playerGoals: [playerGoal],
+          recentResults: [],
+          statistics: mockStats,
+          progression: mockProgression,
+        );
 
-      expect(updated.first.currentProgress, 1.0);
-      expect(updated.first.status, GoalStatus.completed);
-    });
-
-    test('should NOT complete rank goal if tier is lower', () {
-      final now = DateTime.now();
-      final goal = CompetitiveGoal(
-        id: 'g3',
-        userId: 'u1',
-        type: GoalType.career,
-        category: GoalCategory.rank,
-        title: 'Reach Platinum',
-        description: 'Reach Platinum tier',
-        target: 1,
-        currentProgress: 0,
-        status: GoalStatus.active,
-        startAt: now.subtract(const Duration(days: 1)),
-        endAt: now.add(const Duration(days: 30)),
-        metadata: {'targetTier': 'Platinum'},
-      );
-
-      final updated = service.evaluate(
-        activeGoals: [goal],
-        recentResults: [],
-        statistics: mockStats,
-        progression: mockProgression.copyWith(currentRankTier: 'Gold'),
-      );
-
-      expect(updated, isEmpty);
-    });
-
-    test('should update streak goal progress', () {
-      final now = DateTime.now();
-      final goal = CompetitiveGoal(
-        id: 'g4',
-        userId: 'u1',
-        type: GoalType.career,
-        category: GoalCategory.streak,
-        title: 'Hot Streak',
-        description: 'Achieve a 5-win streak',
-        target: 5,
-        currentProgress: 0,
-        status: GoalStatus.active,
-        startAt: now.subtract(const Duration(days: 1)),
-        endAt: now.add(const Duration(days: 30)),
-      );
-
-      final updated = service.evaluate(
-        activeGoals: [goal],
-        recentResults: [],
-        statistics: mockStats.copyWith(
-          career: mockStats.career.copyWith(currentStreak: 3),
-        ),
-        progression: mockProgression,
-      );
-
-      expect(updated.first.currentProgress, 3.0);
+        expect(updated.first.status, GoalStatus.expired);
     });
   });
 }

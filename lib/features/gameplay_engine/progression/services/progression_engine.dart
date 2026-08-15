@@ -3,6 +3,7 @@ import 'package:soteria/features/gameplay_engine/progression/models/progress_sna
 import 'package:soteria/features/gameplay_engine/progression/models/progression_event.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_policy.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_result.dart';
+import 'package:soteria/features/gameplay_engine/progression/services/achievement_engine.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/level_engine.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/reward_calculator.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/score_engine.dart';
@@ -21,6 +22,7 @@ class ProgressionEngine {
     required ProgressSnapshot current,
     required AnswerResult answer,
     required ProgressionPolicy policy,
+    Map<String, dynamic> careerContext = const {},
   }) {
     final List<ProgressionEvent> events = [];
 
@@ -59,14 +61,29 @@ class ProgressionEngine {
       events.add(StreakMilestoneEvent(newCurrentStreak));
     }
 
-    // 4. Update Level
+    // 4. Update Level & Mastery
     final newTotalXP = current.totalXP + xpDelta;
     final newLevel = _levelEngine.calculateLevel(newTotalXP);
 
+    final newSessionCorrectAnswers = answer.isCorrect 
+        ? current.sessionCorrectAnswers + 1 
+        : current.sessionCorrectAnswers;
+    
+    final Map<String, int> newCategoryMastery = Map.from(current.sessionCategoryMastery);
+    if (answer.isCorrect) {
+      final category = answer.metadata['categoryId'] as String? ?? 'unknown';
+      newCategoryMastery[category] = (newCategoryMastery[category] ?? 0) + 1;
+    }
+
     if (newLevel > current.level) {
       events.add(
-        LevelUpEvent(newLevel, 0),
-      ); // XP Overflow logic can be added here
+        LevelUpEvent(
+          previousLevel: current.level,
+          newLevel: newLevel,
+          levelsGained: newLevel - current.level,
+          xpOverflow: _levelEngine.xpIntoCurrentLevel(newTotalXP),
+        ),
+      );
     }
 
     // 5. Assemble Intermediate State
@@ -78,6 +95,9 @@ class ProgressionEngine {
       maxStreak: newMaxStreak,
       sessionScore: current.sessionScore + scoreDelta,
       sessionStreak: newCurrentStreak,
+      sessionCorrectAnswers: newSessionCorrectAnswers,
+      sessionCategoryMastery: newCategoryMastery,
+      lives: answer.isCorrect ? current.lives : current.lives - 1,
       timestamp: DateTime.now(),
     );
 
@@ -92,6 +112,15 @@ class ProgressionEngine {
     // 6. Calculate Reward Hooks & Achievement Events
     final rewardEvents = RewardCalculator.calculateRewards(result);
     events.addAll(rewardEvents);
+
+    // 7. Check for Achievements
+    final newAchievements = AchievementEngine.checkAchievements(
+      result: result,
+      careerContext: careerContext,
+    );
+    for (final achId in newAchievements) {
+      events.add(AchievementUnlockedEvent(achId));
+    }
 
     // Final result with all events
     return ProgressionResult(
@@ -109,6 +138,10 @@ class ProgressionEngine {
     required int totalQuestions,
     required int correctAnswers,
     required ProgressionPolicy policy,
+    required String currentEngagementDate,
+    required bool Function(String, String) isConsecutive,
+    required bool Function(String, String) isSameDay,
+    Map<String, dynamic> careerContext = const {},
   }) {
     final List<ProgressionEvent> events = [];
 
@@ -122,45 +155,56 @@ class ProgressionEngine {
     final newLevel = _levelEngine.calculateLevel(newTotalXP);
 
     if (newLevel > current.level) {
-      events.add(LevelUpEvent(newLevel, 0));
+      events.add(
+        LevelUpEvent(
+          previousLevel: current.level,
+          newLevel: newLevel,
+          levelsGained: newLevel - current.level,
+          xpOverflow: _levelEngine.xpIntoCurrentLevel(newTotalXP),
+        ),
+      );
     }
 
     // Daily Streak Logic
-    final now = DateTime.now();
-    int newDailyStreak = current.dailyStreak;
-    DateTime? newLastUpdate = current.lastDailyStreakUpdate;
+    final newDailyStreak = StreakEngine.calculateDailyStreak(
+      currentDailyStreak: current.dailyStreak,
+      lastEngagementDate: current.lastEngagementDate,
+      currentEngagementDate: currentEngagementDate,
+      isConsecutive: isConsecutive,
+      isSameDay: isSameDay,
+    );
 
-    if (newLastUpdate == null) {
-      newDailyStreak = 1;
-      newLastUpdate = now;
+    if (newDailyStreak > current.dailyStreak &&
+        StreakEngine.isMilestone(newDailyStreak)) {
       events.add(StreakMilestoneEvent(newDailyStreak));
-    } else {
-      final difference = now.difference(newLastUpdate).inDays;
-      if (difference == 1) {
-        newDailyStreak++;
-        newLastUpdate = now;
-        events.add(StreakMilestoneEvent(newDailyStreak));
-      } else if (difference > 1) {
-        newDailyStreak = 1;
-        newLastUpdate = now;
-      }
-      // If difference is 0, same day, no change to streak count
     }
 
     final updatedSnapshot = current.copyWith(
       totalXP: newTotalXP,
       level: newLevel,
       dailyStreak: newDailyStreak,
-      lastDailyStreakUpdate: newLastUpdate,
-      timestamp: now,
+      lastEngagementDate: currentEngagementDate,
+      timestamp: DateTime.now(),
     );
 
-    return ProgressionResult(
+    final result = ProgressionResult(
       before: current,
       after: updatedSnapshot,
       scoreDelta: 0,
       xpDelta: xpBonus,
       events: events,
     );
+
+    // Check for Achievements at Round End
+    final newAchievements = AchievementEngine.checkAchievements(
+      result: result,
+      careerContext: careerContext,
+      isRoundEnd: true,
+    );
+    for (final achId in newAchievements) {
+      events.add(AchievementUnlockedEvent(achId));
+    }
+
+    return result;
   }
 }

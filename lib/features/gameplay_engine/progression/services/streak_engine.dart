@@ -29,6 +29,30 @@ class StreakEngine {
     return streak % 10 == 0; // 20, 30, ...
   }
 
+  /// Calculates the new daily streak count.
+  static int calculateDailyStreak({
+    required int currentDailyStreak,
+    required String? lastEngagementDate,
+    required String currentEngagementDate,
+    required bool Function(String, String) isConsecutive,
+    required bool Function(String, String) isSameDay,
+  }) {
+    if (lastEngagementDate == null) {
+      return 1;
+    }
+
+    if (isSameDay(lastEngagementDate, currentEngagementDate)) {
+      return currentDailyStreak;
+    }
+
+    if (isConsecutive(lastEngagementDate, currentEngagementDate)) {
+      return currentDailyStreak + 1;
+    }
+
+    // Missed day(s)
+    return 1;
+  }
+
   /// Determines if a streak recovery is possible (Future hook).
   static bool canRecoverStreak({
     required int brokenStreak,

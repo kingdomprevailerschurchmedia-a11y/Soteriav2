@@ -30,7 +30,10 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
       overrides: [
         sessionProvider.overrideWith(() => SessionMock()),
         profileProvider.overrideWith(() => ProfileMock()),
-        leaderboardControllerProvider.overrideWith(
+        leaderboardControllerProvider(null).overrideWith(
+          (ref) => LeaderboardControllerMock(mockEntries),
+        ),
+        leaderboardControllerProvider('s1').overrideWith(
           (ref) => LeaderboardControllerMock(mockEntries),
         ),
         playerLeaderboardEntryProvider.overrideWith(
@@ -132,6 +135,14 @@ class LeaderboardControllerMock extends LeaderboardController {
 }
 
 class _MockLeaderboardRepository implements LeaderboardRepository {
+  @override
+  Future<void> syncLeaderboardEntry({
+    required PlayerProfile profile,
+    required PlayerProgression progression,
+    String? seasonId,
+    dynamic transaction,
+  }) async {}
+
   @override
   Future<List<LeaderboardEntry>> getLeaderboardPage({
     String? seasonId,

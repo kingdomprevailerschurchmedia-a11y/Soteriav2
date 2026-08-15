@@ -17,6 +17,7 @@ class SoteriaCard extends StatelessWidget {
   final bool isElevated;
   final double? blur;
   final double? opacity;
+  final bool useBlur;
 
   const SoteriaCard({
     super.key,
@@ -31,6 +32,7 @@ class SoteriaCard extends StatelessWidget {
     this.isElevated = false,
     this.blur,
     this.opacity,
+    this.useBlur = true,
   });
 
   @override
@@ -42,7 +44,8 @@ class SoteriaCard extends StatelessWidget {
       padding:
           padding ?? EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
       opacity: opacity ?? (isElevated ? 0.15 : 0.05),
-      blur: blur ?? SoteriaBlur.high,
+      blur: blur ?? 12.0,
+      useBlur: useBlur,
       border: Border.all(
         color: borderColor ?? Colors.white.withValues(alpha: 0.12),
         width: 1,

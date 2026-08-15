@@ -50,7 +50,8 @@ void main() {
 
     test('should calculate accuracy and counts correctly', () {
       final state = GameState(
-        sessionId: 'test',
+        playerId: 'test-player',
+      sessionId: 'test',
         questions: mockQuestions,
         lifecycle: GameLifecycle.completed,
         answerHistory: [
@@ -101,7 +102,8 @@ void main() {
       ));
 
       final state = GameState(
-        sessionId: 'test',
+        playerId: 'test-player',
+      sessionId: 'test',
         questions: manyScienceQuestions,
         answerHistory: manyScienceQuestions.map((q) => AnswerResult(
           submissionId: 's_${q.id}',

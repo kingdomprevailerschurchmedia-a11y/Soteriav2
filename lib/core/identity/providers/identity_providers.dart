@@ -1,7 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_profile.dart';
@@ -62,15 +59,21 @@ class ProfileNotifier extends Notifier<UserProfile?> {
   }
 
   Future<void> _loadProfile(String uid) async {
-    final profile = await ref
-        .read(identityRepositoryProvider)
-        .getUserProfile(uid);
-    state = profile;
+    try {
+      final profile = await ref
+          .read(identityRepositoryProvider)
+          .getUserProfile(uid);
+      state = profile;
+    } catch (e, st) {
+      LoggerService.e('Failed to load profile', error: e, stackTrace: st, feature: 'Identity');
+      // Keep state as null or handle error state
+    }
   }
 
   Future<void> updateAvatar(String avatarId) async {
     final session = ref.read(sessionProvider);
     if (!session.isAuthenticated || session.uid == null || state == null) {
+      LoggerService.w('Cannot update avatar: Session or Profile is null', feature: 'Identity');
       return;
     }
 
@@ -78,19 +81,35 @@ class ProfileNotifier extends Notifier<UserProfile?> {
       selectedAvatarId: avatarId,
       avatarUrl: '', // Clear custom photo if selecting preset avatar
     );
-    await ref
-        .read(identityRepositoryProvider)
-        .updateUserProfile(session.uid!, updatedProfile);
+
+    LoggerService.i('Updating avatar to: $avatarId', feature: 'Identity');
+
+    // Optimistic update
+    final previousState = state;
     state = updatedProfile;
+
+    try {
+      await ref
+          .read(identityRepositoryProvider)
+          .updateUserProfile(session.uid!, updatedProfile);
+      LoggerService.i('Avatar successfully saved to Firestore', feature: 'Identity');
+    } catch (e) {
+      LoggerService.e('Failed to update avatar in Firestore', error: e, feature: 'Identity');
+      state = previousState; // Revert on failure
+      rethrow;
+    }
   }
 
   Future<void> updateProfilePicture(XFile image) async {
     final session = ref.read(sessionProvider);
     if (!session.isAuthenticated || session.uid == null || state == null) {
+      LoggerService.w('Cannot upload profile picture: Session or Profile is null', feature: 'Identity');
       return;
     }
 
+    LoggerService.i('Uploading new profile picture...', feature: 'Identity');
     ref.read(profileUploadProvider.notifier).state = true;
+    
     try {
       final downloadUrl = await ref
           .read(identityRepositoryProvider)
@@ -104,9 +123,11 @@ class ProfileNotifier extends Notifier<UserProfile?> {
       await ref
           .read(identityRepositoryProvider)
           .updateUserProfile(session.uid!, updatedProfile);
+      
       state = updatedProfile;
+      LoggerService.i('Profile picture successfully updated', feature: 'Identity');
     } catch (e) {
-      LoggerService.e('Failed to upload profile picture', error: e);
+      LoggerService.e('Failed to upload/save profile picture', error: e, feature: 'Identity');
       rethrow;
     } finally {
       ref.read(profileUploadProvider.notifier).state = false;
@@ -114,7 +135,17 @@ class ProfileNotifier extends Notifier<UserProfile?> {
   }
 }
 
-final profileUploadProvider = StateProvider<bool>((ref) => false);
+class ProfileUploadNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+  
+  @override
+  set state(bool value) => super.state = value;
+}
+
+final profileUploadProvider = NotifierProvider<ProfileUploadNotifier, bool>(
+  ProfileUploadNotifier.new,
+);
 
 final profileProvider = NotifierProvider<ProfileNotifier, UserProfile?>(
   ProfileNotifier.new,

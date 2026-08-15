@@ -8,6 +8,7 @@ class PlayerProfileDto {
     return PlayerProfile(
       uid: doc.id,
       displayName: data['displayName'] as String? ?? 'Scholar',
+      username: data['username'] as String? ?? 'scholar',
       email: data['email'] as String? ?? '',
       photoUrl: data['photoUrl'] as String? ?? '',
       selectedAvatarId: data['selectedAvatarId'] as String? ?? 'socrates',
@@ -51,6 +52,7 @@ class PlayerProfileDto {
   static Map<String, dynamic> toFirestore(PlayerProfile profile) {
     return {
       'displayName': profile.displayName,
+      'username': profile.username,
       'email': profile.email,
       'photoUrl': profile.photoUrl,
       'selectedAvatarId': profile.selectedAvatarId,

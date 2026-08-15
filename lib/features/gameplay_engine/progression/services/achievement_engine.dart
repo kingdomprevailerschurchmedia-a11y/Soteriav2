@@ -1,54 +1,82 @@
+import '../../../player/domain/models/achievement.dart';
+import '../../../player/domain/services/achievement_registry.dart';
 import '../models/progress_snapshot.dart';
 import '../models/progression_result.dart';
 
 class AchievementEngine {
-  /// Analyzes a progression result and returns a list of unlocked achievement IDs.
-  static List<String> checkAchievements(ProgressionResult result) {
-    final List<String> unlocked = [];
-
-    // Score Milestones
-    if (_hasReached(result, (s) => s.score, 1000)) unlocked.add('score_1k');
-    if (_hasReached(result, (s) => s.score, 5000)) unlocked.add('score_5k');
-    if (_hasReached(result, (s) => s.score, 10000)) unlocked.add('score_10k');
-
-    // Streak Milestones
-    if (_hasReached(result, (s) => s.currentStreak, 10))
-      unlocked.add('streak_10');
-    if (_hasReached(result, (s) => s.currentStreak, 50))
-      unlocked.add('streak_50');
-    if (_hasReached(result, (s) => s.currentStreak, 100))
-      unlocked.add('streak_100');
-
-    // Level Milestones
-    if (_hasReached(result, (s) => s.level, 10)) unlocked.add('level_10');
-    if (_hasReached(result, (s) => s.level, 25)) unlocked.add('level_25');
-    if (_hasReached(result, (s) => s.level, 50)) unlocked.add('level_50');
-
-    return unlocked;
-  }
-
-  /// Specialized check for tournament-specific achievements.
-  static List<String> checkTournamentAchievements({
-    required int rank,
-    required int participants,
-    required bool isPerfect,
+  /// Analyzes a progression result and career context to return a list of newly unlocked achievement IDs.
+  static List<String> checkAchievements({
+    required ProgressionResult result,
+    required Map<String, dynamic> careerContext,
+    bool isRoundEnd = false,
   }) {
     final List<String> unlocked = [];
 
-    if (rank == 1) unlocked.add('tournament_winner');
-    if (rank <= 3) unlocked.add('tournament_podium');
-    if (rank <= 10) unlocked.add('tournament_top_10');
-    if (isPerfect) unlocked.add('tournament_perfect');
+    for (final definition in AchievementRegistry.definitions) {
+      if (!definition.isActive) continue;
+
+      if (_isNewlyUnlocked(definition, result, careerContext, isRoundEnd)) {
+        unlocked.add(definition.id);
+      }
+    }
 
     return unlocked;
   }
 
-  static bool _hasReached(
+  static bool _isNewlyUnlocked(
+    AchievementDefinition definition,
     ProgressionResult result,
-    num Function(ProgressSnapshot) getValue,
-    num threshold,
+    Map<String, dynamic> careerContext,
+    bool isRoundEnd,
   ) {
-    return getValue(result.after) >= threshold &&
-        getValue(result.before) < threshold;
+    final beforeValue = _getValue(definition, result.before, careerContext, isRoundEnd, isBefore: true);
+    final afterValue = _getValue(definition, result.after, careerContext, isRoundEnd, isBefore: false);
+
+    return afterValue >= definition.threshold && beforeValue < definition.threshold;
+  }
+
+  static double _getValue(
+    AchievementDefinition definition,
+    ProgressSnapshot snapshot,
+    Map<String, dynamic> careerContext,
+    bool isRoundEnd, {
+    required bool isBefore,
+  }) {
+    switch (definition.requirementType) {
+      case AchievementRequirementType.score:
+        if (definition.metadata['singleMatch'] == true) {
+          return snapshot.sessionScore.toDouble();
+        }
+        // Score in snapshot is already "total" (baseline + session)
+        return snapshot.score.toDouble();
+      case AchievementRequirementType.xp:
+        return snapshot.totalXP.toDouble();
+      case AchievementRequirementType.level:
+        return snapshot.level.toDouble();
+      case AchievementRequirementType.streak:
+        return snapshot.currentStreak.toDouble();
+      case AchievementRequirementType.gamesPlayed:
+        final baseline = careerContext['gamesPlayed'] as int? ?? 0;
+        // careerContext for gamesPlayed usually reflects the state BEFORE this round.
+        return (isRoundEnd && !isBefore) ? (baseline + 1).toDouble() : baseline.toDouble();
+      case AchievementRequirementType.gamesWon:
+        final baseline = careerContext['gamesWon'] as int? ?? 0;
+        // This is hard to know mid-round. Typically wins are checked at round end.
+        return (isRoundEnd && !isBefore && snapshot.lives > 0) ? (baseline + 1).toDouble() : baseline.toDouble();
+      case AchievementRequirementType.correctAnswers:
+        final baseline = careerContext['correctAnswers'] as int? ?? 0;
+        return (baseline + snapshot.sessionCorrectAnswers).toDouble();
+      case AchievementRequirementType.accuracy:
+        // Accuracy is best calculated at round end from career context
+        return (careerContext['accuracy'] as double? ?? 0.0) * 100;
+      case AchievementRequirementType.categoryMastery:
+        final category = definition.metadata['category'] as String?;
+        if (category == null) return 0.0;
+        final careerMastery = (careerContext['categoryMastery'] as Map<String, dynamic>? ?? {})[category] as int? ?? 0;
+        final sessionMastery = snapshot.sessionCategoryMastery[category] ?? 0;
+        return (careerMastery + sessionMastery).toDouble();
+      default:
+        return 0.0;
+    }
   }
 }

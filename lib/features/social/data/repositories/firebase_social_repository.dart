@@ -64,57 +64,103 @@ class FirebaseSocialRepository implements SocialRepository {
 
   @override
   Future<void> sendFriendRequest(String senderId, String receiverId) async {
-    final requestId = '${senderId}_$receiverId';
-    await _firestore.collection('friend_requests').doc(requestId).set({
-      'senderId': senderId,
-      'receiverId': receiverId,
-      'status': 'pending',
-      'createdAt': FieldValue.serverTimestamp(),
+    if (senderId == receiverId) {
+      throw Exception('You cannot send a friend request to yourself');
+    }
+
+    await _firestore.runTransaction((transaction) async {
+      // Check if already friends
+      final friendshipId = senderId.compareTo(receiverId) < 0
+          ? '${senderId}_$receiverId'
+          : '${receiverId}_$senderId';
+      final friendshipDoc = await transaction.get(_firestore.collection('friendships').doc(friendshipId));
+      if (friendshipDoc.exists) {
+        throw Exception('You are already friends with this player');
+      }
+
+      // Check for existing pending request (either direction)
+      final outgoingId = '${senderId}_$receiverId';
+      final incomingId = '${receiverId}_$senderId';
+      
+      final outgoingDoc = await transaction.get(_firestore.collection('friend_requests').doc(outgoingId));
+      final incomingDoc = await transaction.get(_firestore.collection('friend_requests').doc(incomingId));
+
+      if (outgoingDoc.exists && outgoingDoc.data()?['status'] == 'pending') {
+        throw Exception('A friend request is already pending');
+      }
+      if (incomingDoc.exists && incomingDoc.data()?['status'] == 'pending') {
+        throw Exception('This player has already sent you a friend request');
+      }
+
+      // Safe to send
+      transaction.set(_firestore.collection('friend_requests').doc(outgoingId), {
+        'senderId': senderId,
+        'receiverId': receiverId,
+        'status': 'pending',
+        'createdAt': FieldValue.serverTimestamp(),
+      });
     });
   }
 
   @override
   Future<void> acceptFriendRequest(String requestId) async {
-    final batch = _firestore.batch();
-    final requestDoc = await _firestore.collection('friend_requests').doc(requestId).get();
-    if (!requestDoc.exists) return;
+    await _firestore.runTransaction((transaction) async {
+      final requestDoc = await transaction.get(_firestore.collection('friend_requests').doc(requestId));
+      if (!requestDoc.exists) {
+        throw Exception('Friend request not found');
+      }
 
-    final data = requestDoc.data()!;
-    final senderId = data['senderId'];
-    final receiverId = data['receiverId'];
+      final data = requestDoc.data()!;
+      if (data['status'] != 'pending') {
+        throw Exception('Friend request is no longer pending');
+      }
 
-    // Update request
-    batch.update(requestDoc.reference, {
-      'status': 'accepted',
-      'updatedAt': FieldValue.serverTimestamp(),
+      final senderId = data['senderId'];
+      final receiverId = data['receiverId'];
+
+      // Update request
+      transaction.update(requestDoc.reference, {
+        'status': 'accepted',
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      // Create friendship
+      final friendshipId = senderId.compareTo(receiverId) < 0
+          ? '${senderId}_$receiverId'
+          : '${receiverId}_$senderId';
+
+      transaction.set(_firestore.collection('friendships').doc(friendshipId), {
+        'userIds': [senderId, receiverId],
+        'createdAt': FieldValue.serverTimestamp(),
+      });
     });
-
-    // Create friendship
-    final friendshipId = senderId.compareTo(receiverId) < 0 
-        ? '${senderId}_$receiverId' 
-        : '${receiverId}_$senderId';
-        
-    batch.set(_firestore.collection('friendships').doc(friendshipId), {
-      'userIds': [senderId, receiverId],
-      'createdAt': FieldValue.serverTimestamp(),
-    });
-
-    await batch.commit();
   }
 
   @override
   Future<void> declineFriendRequest(String requestId) async {
-    await _firestore.collection('friend_requests').doc(requestId).update({
-      'status': 'declined',
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _firestore.runTransaction((transaction) async {
+      final requestDoc = await transaction.get(_firestore.collection('friend_requests').doc(requestId));
+      if (!requestDoc.exists) return;
+      if (requestDoc.data()?['status'] != 'pending') return;
+
+      transaction.update(requestDoc.reference, {
+        'status': 'declined',
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
     });
   }
 
   @override
   Future<void> cancelFriendRequest(String requestId) async {
-     await _firestore.collection('friend_requests').doc(requestId).update({
-      'status': 'cancelled',
-      'updatedAt': FieldValue.serverTimestamp(),
+    await _firestore.runTransaction((transaction) async {
+      final requestDoc = await transaction.get(_firestore.collection('friend_requests').doc(requestId));
+      if (!requestDoc.exists) return;
+      if (requestDoc.data()?['status'] != 'pending') return;
+
+      transaction.update(requestDoc.reference, {
+        'status': 'cancelled',
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
     });
   }
 

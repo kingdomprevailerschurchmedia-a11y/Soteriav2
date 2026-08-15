@@ -32,7 +32,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(publicProfileProvider(userId));
     final relationshipAsync = ref.watch(relationshipStatusProvider(userId));
-    final currentUserId = ref.watch(authRepositoryProvider).currentUserId;
+    final currentUserId = ref.watch(authRepositoryProvider.select((repo) => repo.currentUserId));
 
     return SafeGradientScaffold(
       appBar: AppBar(
@@ -56,94 +56,97 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
 
   Widget _buildContent(BuildContext context, WidgetRef ref, PublicCompetitiveProfile profile, String? currentUserId, RelationshipStatus relationship) {
     return ListView(
+      cacheExtent: 1000,
       padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.containerPadding(context),
       ),
       children: [
-        SizedBox(height: SoteriaSpacing.md),
+        SoteriaSpacing.gapMD,
         _buildHeader(context, ref, profile, currentUserId, relationship),
-        SizedBox(height: SoteriaSpacing.lg),
-        _buildStatsGrid(context, profile),
-        SizedBox(height: SoteriaSpacing.lg),
-        _buildCareerHighlights(context, profile),
+        SoteriaSpacing.gapLG,
+        RepaintBoundary(child: _buildStatsGrid(context, profile)),
+        SoteriaSpacing.gapLG,
+        RepaintBoundary(child: _buildCareerHighlights(context, profile)),
         SizedBox(height: SoteriaSpacing.xxxl),
       ],
     );
   }
 
   Widget _buildHeader(BuildContext context, WidgetRef ref, PublicCompetitiveProfile profile, String? currentUserId, RelationshipStatus relationship) {
-    return SoteriaSlideUp(
-      child: Container(
-        padding: EdgeInsets.all(SoteriaSpacing.lg),
-        decoration: BoxDecoration(
-          color: SoteriaColors.surface.withValues(alpha: 0.5),
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
-        ),
-        child: Column(
-          children: [
-            Stack(
-              children: [
-                SoteriaAvatar(
-                  avatar: AvatarCatalog().getById(profile.avatarId),
-                  size: 80,
-                  imageUrl: profile.photoUrl,
-                ),
-                Positioned(
-                  right: 4,
-                  bottom: 4,
-                  child: PlayerPresenceIndicator(userId: userId, size: 20),
-                ),
+    return RepaintBoundary(
+      child: SoteriaSlideUp(
+        child: Container(
+          padding: EdgeInsets.all(SoteriaSpacing.lg),
+          decoration: BoxDecoration(
+            color: SoteriaColors.surface.withValues(alpha: 0.5),
+            borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+          ),
+          child: Column(
+            children: [
+              Stack(
+                children: [
+                  SoteriaAvatar(
+                    avatar: AvatarCatalog().getById(profile.avatarId),
+                    size: 80,
+                    imageUrl: profile.photoUrl,
+                  ),
+                  Positioned(
+                    right: 4,
+                    bottom: 4,
+                    child: PlayerPresenceIndicator(userId: userId, size: 20),
+                  ),
+                ],
+              ),
+              SoteriaSpacing.gapMD,
+              Text(
+                profile.displayName,
+                style: context.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+              ),
+              if (profile.equippedTitle != null) ...[
+                SoteriaSpacing.gapXS,
+                CompetitiveTitleWidget(title: profile.equippedTitle!),
               ],
-            ),
-            SizedBox(height: SoteriaSpacing.md),
-            Text(
-              profile.displayName,
-              style: context.headlineSmall.copyWith(fontWeight: FontWeight.bold),
-            ),
-            if (profile.equippedTitle != null) ...[
-              SizedBox(height: SoteriaSpacing.xs),
-              CompetitiveTitleWidget(title: profile.equippedTitle!),
-            ],
-            SizedBox(height: SoteriaSpacing.xs),
-            PresenceLabel(userId: userId),
-            SizedBox(height: SoteriaSpacing.lg),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CompetitiveRankBadge(
-                  rankName: profile.currentRank,
-                  tierId: profile.rankTier.toLowerCase(),
-                  size: RankBadgeSize.large,
-                ),
-                SizedBox(width: SoteriaSpacing.lg),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${profile.rankPoints} RP',
-                      style: context.titleMedium.copyWith(
-                        color: SoteriaColors.gold,
-                        fontWeight: FontWeight.w900,
+              SoteriaSpacing.gapXS,
+              PresenceLabel(userId: userId),
+              SoteriaSpacing.gapLG,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CompetitiveRankBadge(
+                    rankName: profile.currentRank,
+                    tierId: profile.rankTier.toLowerCase(),
+                    size: RankBadgeSize.large,
+                  ),
+                  SoteriaSpacing.gapLG,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${profile.rankPoints} RP',
+                        style: context.titleMedium.copyWith(
+                          color: SoteriaColors.gold,
+                          fontWeight: FontWeight.w900,
+                        ),
                       ),
-                    ),
-                    Text(
-                      'DIVISION ${profile.division}',
-                      style: context.labelSmall.copyWith(color: SoteriaColors.muted),
-                    ),
-                  ],
-                ),
+                      Text(
+                        'DIVISION ${profile.division}',
+                        style: context.labelSmall.copyWith(color: SoteriaColors.muted),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (profile.featuredBadges.isNotEmpty) ...[
+                SoteriaSpacing.gapLG,
+                _buildFeaturedBadges(profile.featuredBadges),
               ],
-            ),
-            if (profile.featuredBadges.isNotEmpty) ...[
-              SizedBox(height: SoteriaSpacing.lg),
-              _buildFeaturedBadges(profile.featuredBadges),
+              if (currentUserId != userId) ...[
+                SoteriaSpacing.gapXL,
+                _buildActions(context, ref, relationship, profile),
+              ],
             ],
-            if (currentUserId != userId) ...[
-              SizedBox(height: SoteriaSpacing.xl),
-              _buildActions(context, ref, relationship, profile),
-            ],
-          ],
+          ),
         ),
       ),
     );
@@ -153,7 +156,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
     return Column(
       children: [
         CompetitiveQuickActions(userId: userId, profile: profile),
-        SizedBox(height: SoteriaSpacing.md),
+        SoteriaSpacing.gapMD,
         _buildRelationshipButton(context, ref, relationship),
       ],
     );

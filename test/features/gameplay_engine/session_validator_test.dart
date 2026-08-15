@@ -33,13 +33,13 @@ void main() {
 
   test('should fail if no category selected and not using interests', () {
     final config = PracticeSessionConfig(category: null, useInterests: false);
-    final error = validator.validate(config, mockPlayer);
+    final error = validator.validate(config: config, player: mockPlayer, level: mockPlayer.level);
     expect(error, 'Please select at least one category');
   });
 
   test('should fail if player level too low for category', () {
     final config = PracticeSessionConfig(category: mockCategory, useInterests: false);
-    final error = validator.validate(config, mockPlayer);
+    final error = validator.validate(config: config, player: mockPlayer, level: mockPlayer.level);
     expect(error, contains('Level 5 required'));
   });
 
@@ -52,7 +52,7 @@ void main() {
       difficulty: Difficulty.expert,
       useInterests: false,
     );
-    final error = validator.validate(config, player);
+    final error = validator.validate(config: config, player: player, level: player.level);
     expect(error, contains('Level 10 required for Expert'));
   });
 
@@ -63,7 +63,7 @@ void main() {
       difficulty: Difficulty.medium,
       useInterests: false,
     );
-    final error = validator.validate(config, player);
+    final error = validator.validate(config: config, player: player, level: player.level);
     expect(error, isNull);
   });
 }

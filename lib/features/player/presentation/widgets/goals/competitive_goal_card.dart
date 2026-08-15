@@ -4,21 +4,23 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
-import 'package:soteria/features/player/domain/models/competitive_goal.dart';
+import 'package:soteria/features/player/domain/models/goal.dart';
 
 class CompetitiveGoalCard extends StatelessWidget {
-  final CompetitiveGoal goal;
+  final GoalProgress progress;
   final VoidCallback? onTap;
 
-  const CompetitiveGoalCard({super.key, required this.goal, this.onTap});
+  const CompetitiveGoalCard({super.key, required this.progress, this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    final isCompleted = goal.isCompleted;
-    final progress = goal.progressPercentage;
+    final definition = progress.definition;
+    final playerState = progress.playerState;
+    final isCompleted = progress.isCompleted;
+    final progressValue = progress.progressPercentage;
 
     return Semantics(
-      label: 'Goal: ${goal.title}. Progress: ${(progress * 100).toInt()}%.',
+      label: 'Goal: ${definition.title}. Progress: ${(progressValue * 100).toInt()}%.',
       child: SoteriaCard(
         onTap: onTap,
         padding: EdgeInsets.all(SoteriaSpacing.lg),
@@ -31,7 +33,8 @@ class CompetitiveGoalCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildTypeBadge(context),
-                if (!isCompleted) _buildExpiryBadge(context),
+                if (!isCompleted && !progress.isExpired) _buildExpiryBadge(context),
+                if (progress.isExpired) _buildExpiredBadge(context),
                 if (isCompleted)
                   Icon(
                     Icons.check_circle_rounded,
@@ -42,7 +45,7 @@ class CompetitiveGoalCard extends StatelessWidget {
             ),
             SizedBox(height: SoteriaSpacing.md),
             Text(
-              goal.title,
+              definition.title,
               style: context.titleSmall.copyWith(
                 fontWeight: FontWeight.bold,
                 color: isCompleted ? Colors.white38 : Colors.white,
@@ -50,7 +53,7 @@ class CompetitiveGoalCard extends StatelessWidget {
             ),
             SizedBox(height: SoteriaSpacing.xs),
             Text(
-              goal.description,
+              definition.description,
               style: context.bodySmall.copyWith(
                 color: isCompleted ? Colors.white24 : Colors.white70,
               ),
@@ -62,7 +65,7 @@ class CompetitiveGoalCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '${goal.currentProgress.toInt()} / ${goal.target.toInt()}',
+                  '${playerState?.currentProgress.toInt() ?? 0} / ${definition.target.toInt()}',
                   style: context.labelSmall.copyWith(
                     color: isCompleted
                         ? SoteriaColors.success
@@ -70,7 +73,7 @@ class CompetitiveGoalCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                if (goal.rewardId != null) _buildRewardBadge(context),
+                if (definition.rewardAmount != null) _buildRewardBadge(context),
               ],
             ),
           ],
@@ -89,7 +92,7 @@ class CompetitiveGoalCard extends StatelessWidget {
         border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Text(
-        goal.type.name.toUpperCase(),
+        progress.definition.type.name.toUpperCase(),
         style: context.labelSmall.copyWith(
           color: color,
           fontSize: 8.sp,
@@ -101,7 +104,8 @@ class CompetitiveGoalCard extends StatelessWidget {
   }
 
   Widget _buildExpiryBadge(BuildContext context) {
-    final remaining = goal.endAt.difference(DateTime.now());
+    if (progress.playerState == null) return const SizedBox.shrink();
+    final remaining = progress.playerState!.expiresAt.difference(DateTime.now());
     String label;
     if (remaining.inHours > 24) {
       label = '${remaining.inDays}d left';
@@ -117,15 +121,22 @@ class CompetitiveGoalCard extends StatelessWidget {
     );
   }
 
+  Widget _buildExpiredBadge(BuildContext context) {
+    return Text(
+      'EXPIRED',
+      style: context.labelSmall.copyWith(color: SoteriaColors.error, fontWeight: FontWeight.bold),
+    );
+  }
+
   Widget _buildProgressBar(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(2.r),
       child: LinearProgressIndicator(
-        value: goal.progressPercentage,
+        value: progress.progressPercentage,
         minHeight: 4.h,
         backgroundColor: Colors.white.withValues(alpha: 0.05),
         valueColor: AlwaysStoppedAnimation(
-          goal.isCompleted ? SoteriaColors.success : SoteriaColors.primary,
+          progress.isCompleted ? SoteriaColors.success : SoteriaColors.primary,
         ),
       ),
     );
@@ -149,7 +160,7 @@ class CompetitiveGoalCard extends StatelessWidget {
   }
 
   Color _getTypeColor() {
-    switch (goal.type) {
+    switch (progress.definition.type) {
       case GoalType.daily:
         return Colors.blueAccent;
       case GoalType.weekly:

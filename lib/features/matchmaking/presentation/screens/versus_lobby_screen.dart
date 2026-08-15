@@ -10,6 +10,7 @@ import '../../../../core/design_system/animations/soteria_animation_widgets.dart
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/providers/player_providers.dart';
 import '../providers/matchmaking_providers.dart';
+import '../../../dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
 import '../widgets/versus_config_selectors.dart';
 import '../widgets/matchmaking_rank_card.dart';
 import '../../../player/presentation/widgets/presence/recent_opponents_section.dart';
@@ -44,16 +45,13 @@ class VersusLobbyScreen extends ConsumerWidget {
                         padding: EdgeInsets.all(SoteriaSpacing.lg),
                         sliver: SliverList(
                           delegate: SliverChildListDelegate([
-                            SoteriaFadeIn(
-                              child: Text(
-                                'FIND YOUR RIVAL',
-                                style: context.displayMedium.copyWith(
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: -1,
-                                ),
-                              ),
+                            LobbyHeroHeader(
+                              part1: 'FIND',
+                              part2: 'YOUR',
+                              part3: 'RIVAL',
+                              subtitle: "Challenge opponents and climb the competitive ladder ⚔️",
                             ),
-                            SizedBox(height: SoteriaSpacing.xl),
+                            SizedBox(height: SoteriaSpacing.md),
                             ref.watch(rankProgressProvider).when(
                               data: (rank) => MatchmakingRankCard(
                                 rankName: rank.currentRank,
@@ -63,30 +61,51 @@ class VersusLobbyScreen extends ConsumerWidget {
                               loading: () => const SizedBox.shrink(),
                               error: (_, __) => const SizedBox.shrink(),
                             ),
-                            SizedBox(height: SoteriaSpacing.xl),
-                            const VersusCategorySelector(),
-                            SizedBox(height: SoteriaSpacing.xxl),
+                            SizedBox(height: SoteriaSpacing.lg),
+                            LobbyInterestsCard(
+                              value: state.useInterests,
+                              onChanged: (val) => ref
+                                  .read(versusLobbyProvider.notifier)
+                                  .setUseInterests(val),
+                            ),
+                            SizedBox(height: SoteriaSpacing.md),
+                            if (!state.useInterests) ...[
+                              const VersusCategorySelector(),
+                              SizedBox(height: SoteriaSpacing.lg),
+                            ],
                             const VersusDifficultySelector(),
-                            SizedBox(height: SoteriaSpacing.xl),
+                            SizedBox(height: SoteriaSpacing.md),
                             const VersusQuestionCountSelector(),
-                            SizedBox(height: SoteriaSpacing.xxl),
+                            SizedBox(height: SoteriaSpacing.lg),
                             const RecentOpponentsSection(),
-                            SizedBox(height: SoteriaSpacing.xxl),
+                            SizedBox(height: SoteriaSpacing.lg),
                           ]),
                         ),
                       ),
                     ],
                   ),
                 ),
-                _SearchAction(
-                  enabled: state.category != null,
-                  onSearch: () async {
+                LobbyStartAction(
+                  enabled: state.useInterests || state.category != null,
+                  label: 'FIND OPPONENT',
+                  helperText: 'Competitive Integrity • Professional Matchmaking',
+                  onStart: () async {
+                    List<String> categoryIds = [];
+                    if (state.useInterests) {
+                      final profile = ref.read(currentPlayerProvider);
+                      categoryIds = profile?.favoriteCategories ?? [];
+                    } else if (state.category != null) {
+                      categoryIds = [state.category!.id];
+                    }
+
                     await ref.read(matchmakingControllerProvider.notifier).enterQueue(
                       configuration: {
-                        'categoryId': state.category?.id,
-                        'categoryName': state.category?.name,
+                        'categoryIds': categoryIds,
+                        'categoryId': categoryIds.isNotEmpty ? categoryIds.first : null,
+                        'categoryName': state.useInterests ? 'Interests' : state.category?.name,
                         'difficulty': state.difficulty.name,
                         'questionCount': state.questionCount,
+                        'useInterests': state.useInterests,
                       },
                     );
                     if (context.mounted) {
@@ -113,9 +132,23 @@ class _LobbyHeader extends StatelessWidget {
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       child: Row(
         children: [
-          IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-            onPressed: () => context.pop(),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+                size: 16,
+              ),
+              onPressed: () => context.pop(),
+            ),
           ),
           const Spacer(),
           if (player != null)
@@ -125,32 +158,6 @@ class _LobbyHeader extends StatelessWidget {
               isOnline: true,
             ),
         ],
-      ),
-    );
-  }
-}
-
-class _SearchAction extends StatelessWidget {
-  const _SearchAction({required this.enabled, required this.onSearch});
-  final bool enabled;
-  final VoidCallback onSearch;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg + 80.h,
-      ),
-      decoration: BoxDecoration(
-        color: SoteriaColors.surface.withValues(alpha: 0.8),
-        border: Border(top: BorderSide(color: Colors.white.withValues(alpha: 0.05))),
-      ),
-      child: SoteriaButton.primary(
-        label: 'FIND OPPONENT',
-        onPressed: enabled ? onSearch : null,
       ),
     );
   }

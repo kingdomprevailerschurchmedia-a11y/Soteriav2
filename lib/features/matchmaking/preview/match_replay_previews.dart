@@ -5,9 +5,11 @@ import '../domain/models/competitive_match_replay.dart';
 import '../presentation/providers/match_result_providers.dart';
 import '../presentation/screens/competitive_match_replay_screen.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 class MatchReplayPreviews {
   static Widget standard() => ProviderScope(
@@ -23,6 +25,9 @@ class MatchReplayPreviews {
             opponentScore: 760,
             playerPerformance: GameResult(
               sessionId: 's1',
+              playerId: 'me',
+              mode: GameMode.versus,
+              timestamp: DateTime.now(),
               finalScore: 820,
               totalXP: 100,
               totalQuestions: 2,
@@ -36,30 +41,33 @@ class MatchReplayPreviews {
                   submissionId: 'opt_1',
                   questionId: 'q1',
                   decision: AnswerDecision.correct,
-                  correctOptionIds: ['opt_1'],
+                  correctOptionIds: const ['opt_1'],
                   xpEarned: 50,
                   timestamp: DateTime.now(),
-                  metadata: {'responseTime': 3200},
+                  metadata: const {'responseTime': 3200},
                 ),
                 AnswerResult(
                   submissionId: 'opt_3',
                   questionId: 'q2',
                   decision: AnswerDecision.wrong,
-                  correctOptionIds: ['opt_4'],
+                  correctOptionIds: const ['opt_4'],
                   xpEarned: 0,
                   timestamp: DateTime.now(),
-                  metadata: {'responseTime': 4500},
+                  metadata: const {'responseTime': 4500},
                 ),
               ],
             ),
-            opponentPerformance: const GameResult(
+            opponentPerformance: GameResult(
               sessionId: 's2',
+              playerId: 'rival',
+              mode: GameMode.versus,
+              timestamp: DateTime.now(),
               finalScore: 760,
               totalXP: 80,
               totalQuestions: 2,
               correctAnswers: 1,
               wrongAnswers: 1,
-              totalDuration: Duration(minutes: 1),
+              totalDuration: const Duration(minutes: 1),
               accuracy: 0.5,
               maxStreak: 1,
             ),
@@ -69,16 +77,17 @@ class MatchReplayPreviews {
           ),
           questions: [
             Question(
+              id: 'q1',
               version: '1',
               text: 'What is the primary purpose of a firewall?',
-              difficulty: QuestionDifficulty.medium,
-              category: 'Security',
+              difficulty: Difficulty.medium,
+              categoryId: 'Security',
               type: QuestionType.multipleChoice,
-              options: [
-                const Answer(id: 'opt_1', text: 'Filter traffic'),
-                const Answer(id: 'opt_2', text: 'Increase speed'),
+              options: const [
+                Answer(id: 'opt_1', text: 'Filter traffic'),
+                Answer(id: 'opt_2', text: 'Increase speed'),
               ],
-              correctAnswers: ['opt_1'],
+              correctOptionIds: const ['opt_1'],
               createdAt: DateTime.now(),
               updatedAt: DateTime.now(),
               source: 'internal',
@@ -86,16 +95,17 @@ class MatchReplayPreviews {
               contentHash: 'h1',
             ),
             Question(
+              id: 'q2',
               version: '1',
               text: 'Which protocol is used for secure shell access?',
-              difficulty: QuestionDifficulty.easy,
-              category: 'Networking',
+              difficulty: Difficulty.easy,
+              categoryId: 'Networking',
               type: QuestionType.multipleChoice,
-              options: [
-                const Answer(id: 'opt_3', text: 'HTTP'),
-                const Answer(id: 'opt_4', text: 'SSH'),
+              options: const [
+                Answer(id: 'opt_3', text: 'HTTP'),
+                Answer(id: 'opt_4', text: 'SSH'),
               ],
-              correctAnswers: ['opt_4'],
+              correctOptionIds: const ['opt_4'],
               createdAt: DateTime.now(),
               updatedAt: DateTime.now(),
               source: 'internal',

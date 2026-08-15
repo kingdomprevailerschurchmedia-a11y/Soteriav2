@@ -1,17 +1,26 @@
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../personalization/utils/personalization_bridge.dart';
 import '../domain/models/player_profile.dart';
+import '../domain/models/player_progression.dart';
 import '../domain/use_cases/load_player_profile_use_case.dart';
 import '../domain/use_cases/create_player_profile_use_case.dart';
 import '../domain/use_cases/update_player_profile_use_case.dart';
+import '../domain/repositories/player_progression_repository.dart';
+import '../domain/services/progression_service.dart';
 import '../../../core/logging/logger_service.dart';
+import '../../../core/identity/repositories/identity_repository.dart';
 
 class PlayerBootstrapService {
   final LoadPlayerProfileUseCase _loadProfile;
   final CreatePlayerProfileUseCase _createProfile;
   final UpdatePlayerProfileUseCase _updateProfile;
+  final PlayerProgressionRepository _progressionRepository;
+  final ProgressionService _progressionService;
+  final FirebaseFirestore _firestore;
+  final IdentityRepository? _identityRepository;
 
   static const _kPersonalizationKey = 'user_personalization';
 
@@ -19,7 +28,11 @@ class PlayerBootstrapService {
     this._loadProfile,
     this._createProfile,
     this._updateProfile,
-  );
+    this._progressionRepository,
+    this._progressionService,
+    this._firestore, {
+    IdentityRepository? identityRepository,
+  }) : _identityRepository = identityRepository;
 
   Future<PlayerProfile> bootstrap(auth.User user) async {
     LoggerService.i(
@@ -37,10 +50,18 @@ class PlayerBootstrapService {
           feature: 'Player',
         );
 
-        // Sync interests if remote profile is missing them but local has them
+        // Sync interests if remote profile is missing them
         List<String> mergedInterests = existingProfile.favoriteCategories;
-        if (mergedInterests.isEmpty && localInterests.isNotEmpty) {
-          mergedInterests = localInterests;
+        if (mergedInterests.isEmpty) {
+          if (localInterests.isNotEmpty) {
+            mergedInterests = localInterests;
+          } else if (_identityRepository != null) {
+            // Fallback: Check user_profiles collection for interests saved during registration
+            final userIdentityProfile = await _identityRepository!.getUserProfile(user.uid);
+            if (userIdentityProfile != null && userIdentityProfile.interests.isNotEmpty) {
+               mergedInterests = userIdentityProfile.interests.map((label) => PersonalizationBridge.labelToCategoryId(label)).toList();
+            }
+          }
         }
 
         final updatedProfile = existingProfile.copyWith(
@@ -49,24 +70,41 @@ class PlayerBootstrapService {
           favoriteCategories: mergedInterests,
         );
         await _updateProfile.execute(updatedProfile);
+
+        // Lazy Progression Migration
+        await _migrateProgressionIfMissing(user.uid, existingProfile);
+
         return updatedProfile;
       } else {
         LoggerService.i(
           'No profile found, creating initial profile',
           feature: 'Player',
         );
+        
+        List<String> initialInterests = localInterests;
+        if (initialInterests.isEmpty && _identityRepository != null) {
+           final userIdentityProfile = await _identityRepository!.getUserProfile(user.uid);
+            if (userIdentityProfile != null && userIdentityProfile.interests.isNotEmpty) {
+               initialInterests = userIdentityProfile.interests.map((label) => PersonalizationBridge.labelToCategoryId(label)).toList();
+            }
+        }
+
         final now = DateTime.now();
         final newProfile = PlayerProfile(
           uid: user.uid,
           displayName: user.displayName ?? 'Scholar',
           email: user.email ?? '',
           photoUrl: user.photoURL ?? '',
-          favoriteCategories: localInterests,
+          favoriteCategories: initialInterests,
           createdAt: now,
           lastLogin: now,
           updatedAt: now,
         );
         await _createProfile.execute(newProfile);
+
+        // Initialize new progression record
+        await _initializeNewProgression(user.uid);
+
         return newProfile;
       }
     } catch (e, st) {
@@ -78,6 +116,66 @@ class PlayerBootstrapService {
       );
       rethrow;
     }
+  }
+
+  Future<void> _migrateProgressionIfMissing(
+    String userId,
+    PlayerProfile profile,
+  ) async {
+    final existingProg = await _progressionRepository.getProgression(userId);
+    if (existingProg != null) return; // Already migrated
+
+    LoggerService.i(
+      'Migrating legacy progression for user: $userId',
+      feature: 'Player',
+    );
+
+    // 1. Resolve legacy XP
+    int legacyXp = profile.xp;
+    int playersXp = 0;
+
+    try {
+      final playersDoc = await _firestore.collection('players').doc(userId).get();
+      if (playersDoc.exists) {
+        playersXp = playersDoc.data()?['xp'] ?? 0;
+      }
+    } catch (e) {
+      LoggerService.w('Could not read from players collection: $e', feature: 'Player');
+    }
+
+    // 2. Conflict Check
+    if (legacyXp > 0 && playersXp > 0) {
+      final diff = (legacyXp - playersXp).abs();
+      if (diff > (legacyXp * 0.2) && diff > 500) {
+        LoggerService.e(
+          'CRITICAL: Progression conflict detected for $userId. users.xp=$legacyXp, players.xp=$playersXp. Migration halted.',
+          feature: 'Player',
+        );
+        return; // Safety Stop
+      }
+    }
+
+    final finalXp = legacyXp > playersXp ? legacyXp : playersXp;
+
+    // 3. Create initial record
+    // We use addXp to calculate level correctly from XP 0 using the new formula
+    final initial = PlayerProgression.initial(userId, 'current_season');
+    final migrated = _progressionService.addXp(initial, finalXp).copyWith(
+      dailyStreak: profile.currentStreak,
+      longestStreak: profile.highestStreak,
+    );
+
+    await _progressionRepository.updateProgression(migrated);
+    
+    LoggerService.i(
+      'Successfully migrated progression: Level ${migrated.currentLevel}, XP ${migrated.lifetimeXp}',
+      feature: 'Player',
+    );
+  }
+
+  Future<void> _initializeNewProgression(String userId) async {
+    final initial = PlayerProgression.initial(userId, 'current_season');
+    await _progressionRepository.updateProgression(initial);
   }
 
   Future<List<String>> _getInterestsFromLocal() async {

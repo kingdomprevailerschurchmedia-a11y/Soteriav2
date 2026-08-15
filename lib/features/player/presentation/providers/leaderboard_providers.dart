@@ -6,6 +6,7 @@ import '../../domain/repositories/leaderboard_repository.dart';
 import '../../data/repositories/firebase_leaderboard_repository.dart';
 import '../../domain/models/rank_movement_event.dart';
 import '../../domain/services/leaderboard_insights_service.dart';
+import '../../domain/config/leaderboard_config.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 
 // --- Repositories ---
@@ -154,6 +155,8 @@ class LeaderboardController
     extends StateNotifier<AsyncValue<List<LeaderboardEntry>>> {
   final LeaderboardRepository _repository;
   final String? _seasonId;
+  bool _hasReachedMax = false;
+  LeaderboardEntry? _lastEntry;
 
   LeaderboardController(this._repository, this._seasonId)
     : super(const AsyncValue.loading()) {
@@ -161,9 +164,23 @@ class LeaderboardController
   }
 
   Future<void> refresh() async {
+    _hasReachedMax = false;
+    _lastEntry = null;
     state = const AsyncValue.loading();
     try {
-      final entries = await _repository.getLeaderboardPage(seasonId: _seasonId);
+      final entries = await _repository.getLeaderboardPage(
+        seasonId: _seasonId,
+        limit: LeaderboardConfig.defaultPageSize,
+      );
+      
+      if (entries.length < LeaderboardConfig.defaultPageSize) {
+        _hasReachedMax = true;
+      }
+      
+      if (entries.isNotEmpty) {
+        _lastEntry = entries.last;
+      }
+      
       state = AsyncValue.data(entries);
     } catch (e, st) {
       state = AsyncValue.error(e, st);
@@ -171,20 +188,39 @@ class LeaderboardController
   }
 
   Future<void> loadMore() async {
-    if (state.value == null || state.isLoading) return;
+    if (state.value == null || state.isLoading || _hasReachedMax) return;
 
-    // In a real Firebase impl, we'd use the last DocumentSnapshot as cursor.
-    // For now, we'll keep it simple as the UI focus is on the architecture foundation.
+    try {
+      final entries = await _repository.getLeaderboardPage(
+        seasonId: _seasonId,
+        limit: LeaderboardConfig.defaultPageSize,
+        lastCursor: _lastEntry,
+      );
+
+      if (entries.length < LeaderboardConfig.defaultPageSize) {
+        _hasReachedMax = true;
+      }
+
+      if (entries.isNotEmpty) {
+        _lastEntry = entries.last;
+        state = AsyncValue.data([...state.value!, ...entries]);
+      }
+    } catch (e, st) {
+      // Don't set state to error to avoid losing current list, 
+      // but maybe notify UI somehow or just log.
+      print('Error loading more leaderboard entries: $e');
+    }
   }
 }
 
 final leaderboardControllerProvider =
-    StateNotifierProvider<
+    StateNotifierProvider.family<
       LeaderboardController,
-      AsyncValue<List<LeaderboardEntry>>
-    >((ref) {
+      AsyncValue<List<LeaderboardEntry>>,
+      String?
+    >((ref, seasonId) {
       return LeaderboardController(
         ref.watch(leaderboardRepositoryProvider),
-        ref.watch(currentSeasonIdProvider),
+        seasonId,
       );
     });

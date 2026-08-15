@@ -22,7 +22,10 @@ class CompetitiveRankingEngine {
     );
 
     final previousRankInfo = _parseRank(currentProgression.currentRank);
-    final newRankInfo = _resolveRankFromPoints(newPoints);
+    final newRankInfo = _resolveRankFromPoints(
+      newPoints,
+      previousRankInfo: previousRankInfo,
+    );
 
     final changeType = _determineChangeType(
       previousPoints,
@@ -90,30 +93,34 @@ class CompetitiveRankingEngine {
     // Standard Rank Progress
     final tierRange = info.tier.maxPoints - info.tier.minPoints + 1;
     final pointsPerDivision = tierRange / RankingConfig.divisionsPerTier;
-    
-    // Division I is highest (least points to next tier)
-    // Gold III: [0, 332] relative to tier start
-    // Gold II: [333, 665]
-    // Gold I: [666, 999]
-    final relativePoints = points - info.tier.minPoints;
-    final divisionIndex = (relativePoints / pointsPerDivision).floor(); // 0, 1, 2
-    
-    final divMinRP = info.tier.minPoints + (divisionIndex * pointsPerDivision).floor();
-    final divMaxRP = info.tier.minPoints + ((divisionIndex + 1) * pointsPerDivision).floor() - 1;
-    
+
+    // Gold III (3) -> Gold II (2) -> Gold I (1)
+    final div = info.division;
+
+    final divMinRP =
+        info.tier.minPoints +
+        ((RankingConfig.divisionsPerTier - div) * pointsPerDivision).floor();
+    final divMaxRP =
+        info.tier.minPoints +
+        ((RankingConfig.divisionsPerTier - div + 1) * pointsPerDivision)
+            .floor() -
+        1;
+
     final divProgress = (points - divMinRP) / (divMaxRP - divMinRP + 1);
 
     String? nextRankName;
     int? rpToNext;
 
-    if (info.division > 1) {
+    if (div > 1) {
       // Move up to next division in same tier (e.g. III -> II)
-      final nextDiv = info.division - 1;
+      final nextDiv = div - 1;
       nextRankName = '${info.tier.name} ${_dataToRoman(nextDiv)}';
       rpToNext = (divMaxRP + 1) - points;
     } else {
       // Move up to next tier
-      final nextTierIndex = ProgressionConfig.rankTiers.indexOf(info.tier) + 1;
+      final nextTierIndex =
+          ProgressionConfig.rankTiers.indexWhere((t) => t.id == info.tier.id) +
+          1;
       if (nextTierIndex < ProgressionConfig.rankTiers.length) {
         final nextTier = ProgressionConfig.rankTiers[nextTierIndex];
         nextRankName = nextTier.id == 'elite' ? 'Elite' : '${nextTier.name} III';
@@ -130,7 +137,7 @@ class CompetitiveRankingEngine {
       nextRank: nextRankName,
       rpToNextRank: rpToNext,
       tier: info.tier,
-      division: info.division,
+      division: div,
     );
   }
 
@@ -143,7 +150,9 @@ class CompetitiveRankingEngine {
     if (infoA.tier.displayOrder < infoB.tier.displayOrder) return false;
 
     // Same tier, check division (I > II > III)
-    if (infoA.division == 0 || infoB.division == 0) return false;
+    if (infoA.division == 0 || infoB.division == 0) {
+      return infoA.tier.displayOrder > infoB.tier.displayOrder;
+    }
     return infoA.division < infoB.division;
   }
 
@@ -160,28 +169,34 @@ class CompetitiveRankingEngine {
     }
   }
 
-  RankInfo _resolveRankFromPoints(int points) {
-    // 1. Find the Tier
-    final tier = ProgressionConfig.rankTiers.firstWhere(
+  RankInfo _resolveRankFromPoints(int points, {RankInfo? previousRankInfo}) {
+    // 1. Find the Tier based on base boundaries
+    var tier = ProgressionConfig.rankTiers.firstWhere(
       (t) => points >= t.minPoints && points <= t.maxPoints,
       orElse: () => ProgressionConfig.rankTiers.first,
     );
+
+    // 2. Handle Rank Protection (Demotion Threshold)
+    if (RankingConfig.enableRankProtection && previousRankInfo != null) {
+      // If points dropped below current tier's min but are above demotion threshold, stay in previous tier
+      if (points < previousRankInfo.tier.minPoints &&
+          points >= previousRankInfo.tier.demotionThreshold) {
+        tier = previousRankInfo.tier;
+      }
+    }
 
     if (tier.id == 'unranked' || tier.id == 'elite') {
       return RankInfo(tier: tier, division: 0);
     }
 
-    // 2. Calculate Division
-    // Range: 1000 - 1999 (Gold). 1000 RP.
-    // 3 divisions. 1000 / 3 = 333 points per division.
+    // 3. Calculate Division
     final tierRange = tier.maxPoints - tier.minPoints + 1;
-    final pointsInTier = points - tier.minPoints;
+    final pointsInTier = (points - tier.minPoints).clamp(0, tierRange - 1);
     final pointsPerDivision = tierRange / RankingConfig.divisionsPerTier;
 
-    // Gold III (3), Gold II (2), Gold I (1) - Higher points is lower number division
-    int division =
-        RankingConfig.divisionsPerTier -
-        pointsInLevel(pointsInTier, pointsPerDivision);
+    // Gold III (3), Gold II (2), Gold I (1)
+    int divisionIndex = (pointsInTier / pointsPerDivision).floor();
+    int division = RankingConfig.divisionsPerTier - divisionIndex;
     division = division.clamp(1, RankingConfig.divisionsPerTier);
 
     return RankInfo(tier: tier, division: division);

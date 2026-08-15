@@ -26,7 +26,7 @@ class SplashBranding extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final logoSize = size.width * 0.62; // Increased size (3x, previously 0.208)
+    final logoSize = size.width * 0.55; // Slightly smaller logo to give text more breathing room
 
     return Center(
       child: Column(
@@ -54,33 +54,32 @@ class SplashBranding extends StatelessWidget {
             ),
           ),
 
+          SizedBox(height: 24.h), // Consistent gap between logo and text
+
           // ============================================================
           // WORDMARK + TAGLINE (GROUPED)
           // ============================================================
-          Transform.translate(
-            offset: Offset(0, -8.h), // Pull text closer to logo
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // ============================================================
-                // SOTERIA WORDMARK
-                // ============================================================
-                FadeTransition(
-                  opacity: wordmarkOpacity,
-                  child: _Wordmark(availableWidth: size.width),
-                ),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ============================================================
+              // SOTERIA WORDMARK
+              // ============================================================
+              FadeTransition(
+                opacity: wordmarkOpacity,
+                child: _Wordmark(availableWidth: size.width),
+              ),
 
-                SizedBox(height: 1.h),
+              SizedBox(height: 1.h),
 
-                // ============================================================
-                // TAGLINE
-                // ============================================================
-                FadeTransition(
-                  opacity: taglineOpacity,
-                  child: _Tagline(availableWidth: size.width),
-                ),
-              ],
-            ),
+              // ============================================================
+              // TAGLINE
+              // ============================================================
+              FadeTransition(
+                opacity: taglineOpacity,
+                child: _Tagline(availableWidth: size.width),
+              ),
+            ],
           ),
         ],
       ),
@@ -100,11 +99,10 @@ class _Wordmark extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     /*
-     * The supplied artwork uses a clean, thin, widely-spaced
-     * wordmark rather than a heavy/bold gaming-style title.
+     * The wordmark is bold and authoritative as seen in the production branding.
      */
 
-    final fontSize = availableWidth * 0.064;
+    final fontSize = availableWidth * 0.085; // Increased from 0.064
 
     return FittedBox(
       fit: BoxFit.scaleDown,
@@ -115,8 +113,8 @@ class _Wordmark extends StatelessWidget {
         style: SoteriaTypography.displayMedium.copyWith(
           color: SoteriaColors.textPrimary,
           fontSize: fontSize,
-          fontWeight: FontWeight.w400,
-          letterSpacing: availableWidth * 0.0105,
+          fontWeight: FontWeight.w700, // Bolder to match the "permanent" look
+          letterSpacing: availableWidth * 0.015, // Increased spacing
           height: 1.0,
         ),
       ),
@@ -135,7 +133,7 @@ class _Tagline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = availableWidth * 0.0205;
+    final fontSize = availableWidth * 0.024; // Increased from 0.0205
 
     return FittedBox(
       fit: BoxFit.scaleDown,
@@ -143,11 +141,11 @@ class _Tagline extends StatelessWidget {
         'COMPETE. LEARN. RISE.',
         maxLines: 1,
         textAlign: TextAlign.center,
-        style: SoteriaTypography.label.copyWith(
+        style: SoteriaTypography.labelSmall.copyWith(
           color: SoteriaColors.gold,
           fontSize: fontSize,
-          fontWeight: FontWeight.w600,
-          letterSpacing: availableWidth * 0.0058,
+          fontWeight: FontWeight.w900, // Much bolder for visibility
+          letterSpacing: availableWidth * 0.008,
           height: 1.0,
         ),
       ),

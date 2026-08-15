@@ -8,6 +8,8 @@ import 'history_providers.dart';
 import 'reward_providers.dart';
 import 'milestone_providers.dart';
 import 'personal_record_providers.dart';
+import 'streak_providers.dart';
+import 'achievement_providers.dart';
 import '../../providers/player_providers.dart';
 import 'service_providers.dart';
 
@@ -22,6 +24,9 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   final milestonesAsync = ref.watch(playerMilestonesProvider);
   final milestoneDefinitionsAsync = ref.watch(milestoneDefinitionsProvider);
   final personalRecordsAsync = ref.watch(currentUserPersonalRecordsProvider);
+  final streakAsync = ref.watch(currentWinStreakProvider);
+  final achievementsAsync = ref.watch(playerAchievementsStreamProvider);
+  final achievementDefinitionsAsync = ref.watch(achievementDefinitionsProvider);
   final statsService = ref.watch(statisticsServiceProvider);
 
   // Evaluation is triggered by separate orchestrator or screen to avoid cycles
@@ -32,7 +37,9 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
       progressionAsync.isLoading ||
       historyAsync.isLoading ||
       milestonesAsync.isLoading ||
-      personalRecordsAsync.isLoading;
+      personalRecordsAsync.isLoading ||
+      streakAsync.isLoading ||
+      achievementsAsync.isLoading;
 
   if (isLoading) {
     return const AsyncValue.loading();
@@ -66,6 +73,9 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
   final milestones = milestonesAsync.value ?? [];
   final definitionsCount = milestoneDefinitionsAsync.value?.length ?? 0;
   final personalRecords = personalRecordsAsync.value ?? [];
+  final streak = streakAsync.value;
+  final earnedAchievements = achievementsAsync.value ?? [];
+  final totalAchievementsCount = achievementDefinitionsAsync.length;
 
   final careerSummary = statsService.calculateCareerSummary(
     userId: player.uid,
@@ -90,8 +100,11 @@ competitiveProfileProvider = Provider<AsyncValue<CompetitiveProfile>>((ref) {
           )
           .toList(),
       totalMilestones: definitionsCount,
+      earnedAchievements: earnedAchievements,
+      totalAchievements: totalAchievementsCount,
       personalRecords: personalRecords,
       careerSummary: careerSummary,
+      streak: streak,
     ),
   );
 });

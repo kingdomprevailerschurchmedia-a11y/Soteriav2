@@ -15,11 +15,14 @@ final questionSelectionServiceProvider = Provider<QuestionSelectionService>((ref
 final personalizedQuestionSelectionProvider = FutureProvider.family<QuestionSelectionResult, QuestionSelectionRequest>((ref, request) async {
   final service = ref.watch(questionSelectionServiceProvider);
   
-  // If request has no categories, try to use user's favorite categories
-  if (request.categoryIds.isEmpty) {
-    final profile = ref.watch(currentPlayerStreamProvider).value;
+  // Only apply personalization if explicitly requested via the flag
+  if (request.usePersonalization) {
+    final profile = await ref.watch(currentPlayerStreamProvider.future);
     if (profile != null && profile.favoriteCategories.isNotEmpty) {
-      final updatedRequest = request.copyWith(categoryIds: profile.favoriteCategories);
+      final updatedRequest = request.copyWith(
+        categoryIds: profile.favoriteCategories,
+        usePersonalization: false, // Prevent infinite recursion
+      );
       return service.selectQuestions(updatedRequest);
     }
   }

@@ -54,14 +54,9 @@ class TournamentGameplayNotifier
       if (user == null) throw Exception('User not authenticated');
 
       // 2. Initialize the Game Engine with Tournament Config
-      final config = GameConfiguration(
-        mode: GameMode.tournament,
+      final config = GameConfiguration.tournament(
         questionCount: questions.length,
-        initialLives: 3,
-        allowLifelines: false,
-        questionTimer: const Duration(seconds: 15),
-        metadata: {'tournamentId': tournamentId},
-      );
+      ).copyWith(metadata: {'tournamentId': tournamentId});
 
       // 3. Record session start in repository
       await ref
@@ -91,6 +86,7 @@ class TournamentGameplayNotifier
       });
 
       // 5. Start the engine
+      ref.read(tournamentConfigProvider(tournamentId).notifier).state = config;
       await ref
           .read(gameEngineProvider(config).notifier)
           .startSession(questions);
@@ -116,3 +112,8 @@ final tournamentGameplayProvider =
     >((ref, id) {
       return TournamentGameplayNotifier(tournamentId: id, ref: ref);
     });
+
+final tournamentConfigProvider = StateProvider.family<GameConfiguration, String>((ref, id) {
+  // Default fallback until session starts
+  return GameConfiguration.tournament();
+});

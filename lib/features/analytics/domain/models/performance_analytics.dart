@@ -12,6 +12,7 @@ part 'performance_analytics.g.dart';
 @freezed
 abstract class PersonalPerformanceAnalytics
     with _$PersonalPerformanceAnalytics {
+  @JsonSerializable(explicitToJson: true)
   const factory PersonalPerformanceAnalytics({
     required String playerId,
     required TimePeriod period,

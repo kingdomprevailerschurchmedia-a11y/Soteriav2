@@ -2,12 +2,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_progress_bar.dart';
-import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../domain/models/player_progression.dart';
+import '../../domain/config/progression_config.dart';
+import '../../domain/config/progression_config.dart';
 
 class PlayerProgressionCard extends StatelessWidget {
   final PlayerProgression progression;
@@ -33,7 +33,7 @@ class PlayerProgressionCard extends StatelessWidget {
             _ProgressBarSection(
               icon: Icons.auto_awesome_rounded,
               label: 'XP PROGRESS',
-              value: '${progression.currentXp} / ${progression.xpRequiredForNextLevel} XP',
+              value: '${progression.currentXp} / ${ProgressionConfig.xpCapacityForLevel(progression.currentLevel)} XP',
               progress: progression.xpProgress,
               color: const Color(0xFF7C4DFF),
               rightWidget: const _HexagonIcon(

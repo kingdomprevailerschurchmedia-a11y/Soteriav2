@@ -4,10 +4,68 @@ import '../../domain/models/rank_movement_event.dart';
 import '../../domain/repositories/leaderboard_repository.dart';
 import '../../domain/config/leaderboard_config.dart';
 
+import '../../domain/models/player_profile.dart';
+import '../../domain/models/player_progression.dart';
+
 class FirebaseLeaderboardRepository implements LeaderboardRepository {
   final FirebaseFirestore _firestore;
 
   FirebaseLeaderboardRepository(this._firestore);
+
+  @override
+  Future<void> syncLeaderboardEntry({
+    required PlayerProfile profile,
+    required PlayerProgression progression,
+    String? seasonId,
+    dynamic transaction,
+  }) async {
+    final entry = LeaderboardEntry(
+      userId: profile.uid,
+      displayName: profile.displayName,
+      avatarUrl: profile.photoUrl,
+      avatarId: profile.selectedAvatarId,
+      rankPoints: progression.rankPoints,
+      rankTier: progression.currentRankTier,
+      division: _parseDivision(progression.currentRank),
+      position: 0, // Calculated client-side
+      titleId: profile.equippedTitleId,
+      lastUpdated: DateTime.now(),
+    );
+
+    final data = entry.toJson();
+    if (seasonId != null) {
+      data['seasonId'] = seasonId;
+    }
+
+    final collection = seasonId == null
+        ? LeaderboardConfig.globalLeaderboardCollection
+        : LeaderboardConfig.seasonLeaderboardCollection;
+    final docId = seasonId == null ? profile.uid : '${seasonId}_${profile.uid}';
+
+    final docRef = _firestore.collection(collection).doc(docId);
+
+    if (transaction != null && transaction is Transaction) {
+      transaction.set(docRef, data, SetOptions(merge: true));
+    } else {
+      await docRef.set(data, SetOptions(merge: true));
+    }
+  }
+
+  int _parseDivision(String rankString) {
+    if (rankString == 'Unranked' || rankString == 'Elite') return 0;
+    final parts = rankString.split(' ');
+    if (parts.length < 2) return 0;
+    switch (parts[1]) {
+      case 'I':
+        return 1;
+      case 'II':
+        return 2;
+      case 'III':
+        return 3;
+      default:
+        return 0;
+    }
+  }
 
   Query<Map<String, dynamic>> _getBaseQuery(String? seasonId) {
     if (seasonId == null) {
@@ -33,7 +91,11 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
         .limit(limit);
 
     if (lastCursor != null) {
-      query = query.startAfterDocument(lastCursor as DocumentSnapshot);
+      if (lastCursor is LeaderboardEntry) {
+        query = query.startAfter([lastCursor.rankPoints, lastCursor.userId]);
+      } else if (lastCursor is DocumentSnapshot) {
+        query = query.startAfterDocument(lastCursor);
+      }
     }
 
     final snapshot = await query.get();

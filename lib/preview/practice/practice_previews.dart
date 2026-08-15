@@ -12,8 +12,6 @@ import 'package:soteria/features/question_content/domain/entities/difficulty.dar
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/practice/presentation/providers/practice_history_providers.dart';
-import 'package:soteria/features/gameplay_engine/models/game_result.dart';
-import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 
 class PracticePreviews {
   static Widget setup() => const PracticeLobbyScreen();
@@ -21,6 +19,7 @@ class PracticePreviews {
   static Widget resultsPerfect() {
     final questions = _createMockQuestions(5);
     final state = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'preview_perfect',
       questions: questions,
       lifecycle: GameLifecycle.completed,
@@ -43,6 +42,7 @@ class PracticePreviews {
   static Widget resultsStrong() {
     final questions = _createMockQuestions(10);
     final state = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'preview_strong',
       questions: questions,
       lifecycle: GameLifecycle.completed,
@@ -65,6 +65,7 @@ class PracticePreviews {
   static Widget resultsAverage() {
     final questions = _createMockQuestions(10);
     final state = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'preview_average',
       questions: questions,
       lifecycle: GameLifecycle.completed,
@@ -87,6 +88,7 @@ class PracticePreviews {
   static Widget resultsPoor() {
     final questions = _createMockQuestions(5);
     final state = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'preview_poor',
       questions: questions,
       lifecycle: GameLifecycle.completed,
@@ -111,6 +113,7 @@ class PracticePreviews {
   static Widget improvementInsight() {
     final questions = _createMockQuestions(5);
     final currentState = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'current',
       questions: questions,
       answerHistory: questions.map((q) => AnswerResult(
@@ -158,6 +161,7 @@ class PracticePreviews {
     final questions = _createMockQuestions(10);
     // Force many failures in science
     final state = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'weak_sci',
       questions: questions,
       lifecycle: GameLifecycle.completed,
@@ -183,6 +187,7 @@ class PracticePreviews {
     final questions = _createMockQuestions(10);
     // Force many failures in medium difficulty
     final state = GameState(
+      playerId: 'mock-player-id',
       sessionId: 'weak_medium',
       questions: questions,
       lifecycle: GameLifecycle.completed,
@@ -288,11 +293,11 @@ class PracticePreviews {
       difficulty: i % 2 == 0 ? Difficulty.easy : Difficulty.medium,
       categoryId: i < 5 ? 'science' : 'technology',
       type: QuestionType.multipleChoice,
-      options: [
-        const Answer(id: 'o1', text: 'Correct Option'),
-        const Answer(id: 'o2', text: 'Wrong Option'),
+      options: const [
+        Answer(id: 'o1', text: 'Correct Option'),
+        Answer(id: 'o2', text: 'Wrong Option'),
       ],
-      correctOptionIds: ['o1'],
+      correctOptionIds: const ['o1'],
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),
       source: 'Mock',

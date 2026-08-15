@@ -42,7 +42,7 @@ class _CompetitiveActivityScreenState
   }
 
   void _onScroll() {
-    final userId = ref.read(authRepositoryProvider).currentUserId;
+    final userId = ref.read(authRepositoryProvider.select((repo) => repo.currentUserId));
     if (userId == null) return;
 
     if (_scrollController.position.pixels >=
@@ -53,7 +53,7 @@ class _CompetitiveActivityScreenState
 
   @override
   Widget build(BuildContext context) {
-    final userId = ref.watch(authRepositoryProvider).currentUserId;
+    final userId = ref.watch(authRepositoryProvider.select((repo) => repo.currentUserId));
     if (userId == null) return _buildError(context);
 
     final activityAsync = ref.watch(activityFeedProvider(userId));
@@ -118,6 +118,7 @@ class _CompetitiveActivityScreenState
       color: SoteriaColors.primary,
       backgroundColor: SoteriaColors.background,
       child: ListView.builder(
+        cacheExtent: 1000,
         controller: _scrollController,
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.lg,
@@ -134,10 +135,12 @@ class _CompetitiveActivityScreenState
             return _buildGroupHeader(context, item.title!);
           }
 
-          return CompetitiveActivityCard(
-            event: item.event!,
-            isLast: index == timelineItems.length - 1 || timelineItems[index + 1].isHeader,
-            onTap: () => _showEventDetails(context, item.event!),
+          return RepaintBoundary(
+            child: CompetitiveActivityCard(
+              event: item.event!,
+              isLast: index == timelineItems.length - 1 || timelineItems[index + 1].isHeader,
+              onTap: () => _showEventDetails(context, item.event!),
+            ),
           );
         },
       ),

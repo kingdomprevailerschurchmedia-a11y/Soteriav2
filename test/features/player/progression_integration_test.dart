@@ -60,7 +60,7 @@ void main() {
 
       // Verify that addXp calculates the level correctly
       final updated = progressionService.addXp(initialProgression, 2000);
-      expect(updated.currentLevel, 2);
+      expect(updated.currentLevel, 7);
       expect(updated.lifetimeXp, 2000);
     });
   });

@@ -5,6 +5,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
 import '../../player/providers/player_providers.dart';
+import '../../player/presentation/providers/progression_providers.dart';
 import '../services/auth_coordinator.dart';
 import '../../notifications/widgets/competitive_notification_overlay.dart';
 
@@ -56,13 +57,19 @@ class AuthenticatedShellScreen extends ConsumerWidget {
               ),
             ),
             SizedBox(height: SoteriaSpacing.md),
-            Text(
-              'LEVEL ${player?.level ?? 1} | ${player?.coins ?? 0} COINS',
-              style: context.bodyMedium.copyWith(
-                color: SoteriaColors.gold,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 2,
-              ),
+            Consumer(
+              builder: (context, ref, child) {
+                final level = ref.watch(currentCompetitiveLevelProvider);
+                final player = ref.watch(currentPlayerProvider);
+                return Text(
+                  'LEVEL $level | ${player?.coins ?? 0} COINS',
+                  style: context.bodyMedium.copyWith(
+                    color: SoteriaColors.gold,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 2,
+                  ),
+                );
+              },
             ),
             SizedBox(height: SoteriaSpacing.xxl),
             Padding(

@@ -11,10 +11,15 @@ import '../../../quiz/domain/services/quiz_scoring_engine.dart';
 import '../../../quiz/domain/models/scoring_configuration.dart';
 import '../../../quiz/domain/models/player_answer.dart';
 
+import '../../../player/domain/repositories/player_progression_repository.dart';
+import '../../../player/domain/models/xp_transaction.dart';
+import '../../../../core/logging/logger_service.dart';
+
 class FirestoreProModeRepository implements ProModeRepository {
   final IDatabaseService _database;
+  final PlayerProgressionRepository _progressionRepository;
 
-  FirestoreProModeRepository(this._database);
+  FirestoreProModeRepository(this._database, this._progressionRepository);
 
   @override
   Future<bool> validateEntry(String uid, int fee) async {
@@ -81,19 +86,31 @@ class FirestoreProModeRepository implements ProModeRepository {
 
   @override
   Future<int> getAvailableQuestionCount({
-    String? categoryId,
+    List<String>? categoryIds,
     required Difficulty difficulty,
   }) async {
     Query query = _database.collection('questions')
         .where('status', isEqualTo: 'published')
         .where('difficulty', isEqualTo: difficulty.name);
 
-    if (categoryId != null) {
-      query = query.where('categoryId', isEqualTo: categoryId);
+    if (categoryIds != null && categoryIds.isNotEmpty) {
+      if (categoryIds.length == 1) {
+        query = query.where('categoryId', isEqualTo: categoryIds.first);
+      } else {
+        // Firestore 'in' operator supports up to 10-30 items depending on SDK version
+        query = query.where('categoryId', whereIn: categoryIds);
+      }
     }
 
     final snapshot = await query.count().get();
-    return snapshot.count ?? 0;
+    final count = snapshot.count ?? 0;
+    
+    LoggerService.d(
+      'Pro Mode Content Check: categories=$categoryIds, difficulty=${difficulty.name}, available=$count',
+      feature: 'GameplayEngine',
+    );
+    
+    return count;
   }
 
   @override
@@ -178,6 +195,7 @@ class FirestoreProModeRepository implements ProModeRepository {
 
     final result = ProModeResult(
       sessionId: sessionId,
+      playerId: finalState.playerId,
       mode: GameMode.pro,
       finalScore: authoritativeScore,
       totalXP: rewards.totalXP,
@@ -216,9 +234,26 @@ class FirestoreProModeRepository implements ProModeRepository {
       if (uid != null) {
         final playerRef = _database.collection('players').doc(uid);
         transaction.update(playerRef, {
-          'xp': FieldValue.increment(result.totalXP),
           'coins': FieldValue.increment(result.rewards.totalCoins),
         });
+
+        // 3. Authoritative Progression Update
+        if (result.totalXP > 0) {
+          final xpTx = XpTransaction(
+            transactionId: '${sessionId}_xp',
+            userId: uid,
+            amount: result.totalXP,
+            source: XpSource.quizCompletion,
+            referenceId: sessionId,
+            createdAt: DateTime.now(),
+          );
+          
+          // We call this AFTER the transaction as Firestore transactions 
+          // don't support calling other methods that start their own transactions 
+          // easily without passing the transaction object.
+          // But applyXpTransaction is idempotent, so it's safe to retry or call separately.
+          _progressionRepository.applyXpTransaction(xpTx);
+        }
       }
     });
 

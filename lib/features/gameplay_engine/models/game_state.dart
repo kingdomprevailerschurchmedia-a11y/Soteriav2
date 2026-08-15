@@ -5,6 +5,7 @@ import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dar
 /// Immutable state of the Gameplay Engine.
 class GameState {
   final String sessionId;
+  final String playerId;
   final GameLifecycle lifecycle;
   final int currentQuestionIndex;
   final List<Question> questions;
@@ -21,6 +22,7 @@ class GameState {
 
   const GameState({
     required this.sessionId,
+    required this.playerId,
     this.lifecycle = GameLifecycle.initializing,
     this.currentQuestionIndex = 0,
     this.questions = const [],
@@ -46,6 +48,7 @@ class GameState {
 
   GameState copyWith({
     String? sessionId,
+    String? playerId,
     GameLifecycle? lifecycle,
     int? currentQuestionIndex,
     List<Question>? questions,
@@ -62,6 +65,7 @@ class GameState {
   }) {
     return GameState(
       sessionId: sessionId ?? this.sessionId,
+      playerId: playerId ?? this.playerId,
       lifecycle: lifecycle ?? this.lifecycle,
       currentQuestionIndex: currentQuestionIndex ?? this.currentQuestionIndex,
       questions: questions ?? this.questions,
@@ -80,6 +84,7 @@ class GameState {
 
   Map<String, dynamic> toJson() => {
     'sessionId': sessionId,
+    'playerId': playerId,
     'lifecycle': lifecycle.name,
     'currentQuestionIndex': currentQuestionIndex,
     'questions': questions.map((e) => e.toJson()).toList(),
@@ -97,6 +102,7 @@ class GameState {
 
   factory GameState.fromJson(Map<String, dynamic> json) => GameState(
     sessionId: json['sessionId'],
+    playerId: json['playerId'] ?? 'unknown',
     lifecycle: GameLifecycle.values.byName(json['lifecycle']),
     currentQuestionIndex: json['currentQuestionIndex'],
     questions: (json['questions'] as List)

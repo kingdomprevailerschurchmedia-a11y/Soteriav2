@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
+import 'package:soteria/features/player/domain/config/progression_config.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/animations/soteria_animations.dart';
@@ -12,12 +13,11 @@ class XPProgressWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final progress = ref.watch(levelProgressProvider);
     final level = ref.watch(levelProvider);
-    final levelEngine = ref.watch(levelEngineProvider);
 
-    final xpRequired = levelEngine.config.xpRequiredBetweenLevels(level);
+    final xpRequired = ProgressionConfig.xpCapacityForLevel(level);
+    
     final snapshot = ref.watch(progressionProvider);
-    final xpInCurrent =
-        snapshot.totalXP - levelEngine.config.xpRequiredForLevel(level);
+    final xpInCurrent = snapshot.totalXP - ProgressionConfig.xpRequiredForLevel(level);
 
     return Column(
       mainAxisSize: MainAxisSize.min,

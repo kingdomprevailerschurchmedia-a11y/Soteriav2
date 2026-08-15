@@ -1,9 +1,16 @@
 sealed class ProgressionEvent {}
 
 class LevelUpEvent extends ProgressionEvent {
+  final int previousLevel;
   final int newLevel;
+  final int levelsGained;
   final int xpOverflow;
-  LevelUpEvent(this.newLevel, this.xpOverflow);
+  LevelUpEvent({
+    required this.previousLevel,
+    required this.newLevel,
+    required this.levelsGained,
+    required this.xpOverflow,
+  });
 }
 
 class AchievementUnlockedEvent extends ProgressionEvent {

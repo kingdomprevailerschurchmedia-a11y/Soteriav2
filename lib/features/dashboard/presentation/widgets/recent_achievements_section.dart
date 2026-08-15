@@ -1,15 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../player/presentation/providers/achievement_providers.dart';
+import '../../../player/domain/models/achievement.dart';
+import '../../../player/domain/services/achievement_registry.dart';
 
-class RecentAchievementsSection extends StatelessWidget {
+class RecentAchievementsSection extends ConsumerWidget {
   const RecentAchievementsSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final recentAchievements = ref.watch(recentAchievementsProvider);
+    final definitions = ref.watch(achievementDefinitionsProvider);
+    final earnedMap = ref.watch(playerAchievementMapProvider);
+
+    // Show top 3 achievements (unlocked first, then locked by order)
+    final displayList = _getDisplayList(definitions, earnedMap);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,57 +76,115 @@ class RecentAchievementsSection extends StatelessWidget {
         SizedBox(height: SoteriaSpacing.md),
         SizedBox(
           height: 165.w,
-          child: ListView(
+          child: ListView.builder(
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
             physics: const BouncingScrollPhysics(),
-            children: [
-              _AchievementCard(
-                title: 'First Win',
-                description: 'Win your first match',
-                date: 'May 20, 2024',
-                color: SoteriaColors.gold,
-                isUnlocked: true,
-                icon: Image.asset(
-                  'assets/icons/first_position_badge_transparent.png',
-                  width: 28.w,
-                  height: 28.w,
-                  fit: BoxFit.contain,
-                ),
-              ),
-              _AchievementCard(
-                title: 'Logic Master',
-                description: 'Answer 10 logic questions correctly',
-                date: 'May 20, 2024',
-                color: const Color(0xFF7C4DFF),
-                isUnlocked: true,
-                icon: Icon(
-                  Icons.psychology_rounded,
-                  color: Colors.white,
-                  size: 24.w,
-                ),
-              ),
-              _AchievementCard(
-                title: 'Century',
-                description: 'Score 100 points in a single match',
-                date: '',
-                color: SoteriaColors.muted,
-                isUnlocked: false,
-                currentProgress: 72,
-                totalProgress: 100,
-                icon: Image.asset(
-                  'assets/icons/coin_icon.png',
-                  width: 24.w,
-                  height: 24.w,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ],
+            itemCount: displayList.length,
+            itemBuilder: (context, index) {
+              final item = displayList[index];
+              return _AchievementCard(
+                title: item.def.title,
+                description: item.def.description,
+                date: item.unlockedAt != null ? _formatDate(item.unlockedAt!) : '',
+                color: _getCategoryColor(item.def.category),
+                isUnlocked: item.isUnlocked,
+                icon: _getIcon(item.def.icon),
+                currentProgress: item.currentValue.toInt(),
+                totalProgress: item.def.threshold.toInt(),
+              );
+            },
           ),
         ),
       ],
     );
   }
+
+  List<_AchievementDisplayItem> _getDisplayList(
+    List<AchievementDefinition> definitions,
+    Map<String, PlayerAchievement> earnedMap,
+  ) {
+    final list = <_AchievementDisplayItem>[];
+    
+    // First, add all earned achievements, sorted by date
+    final earned = earnedMap.values.toList()
+      ..sort((a, b) => (b.unlockedAt ?? DateTime(0)).compareTo(a.unlockedAt ?? DateTime(0)));
+    
+    for (final ach in earned) {
+      final def = AchievementRegistry.getById(ach.achievementId);
+      if (def != null) {
+        list.add(_AchievementDisplayItem(
+          def: def,
+          isUnlocked: true,
+          unlockedAt: ach.unlockedAt,
+          currentValue: ach.currentValue,
+        ));
+      }
+    }
+
+    // Then, add locked achievements by display order
+    final locked = definitions.where((d) => !earnedMap.containsKey(d.id)).toList()
+      ..sort((a, b) => a.displayOrder.compareTo(b.displayOrder));
+    
+    for (final def in locked) {
+      list.add(_AchievementDisplayItem(
+        def: def,
+        isUnlocked: false,
+        currentValue: 0, // In a real app, we might track progress even if locked
+      ));
+    }
+
+    return list.take(10).toList();
+  }
+
+  String _formatDate(DateTime date) {
+    return '${_getMonth(date.month)} ${date.day}, ${date.year}';
+  }
+
+  String _getMonth(int month) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return months[month - 1];
+  }
+
+  Color _getCategoryColor(AchievementCategory category) {
+    switch (category) {
+      case AchievementCategory.victory:
+        return SoteriaColors.gold;
+      case AchievementCategory.streak:
+        return SoteriaColors.warning;
+      case AchievementCategory.special:
+        return const Color(0xFF7C4DFF);
+      default:
+        return SoteriaColors.primary;
+    }
+  }
+
+  Widget _getIcon(String iconName) {
+    switch (iconName) {
+      case 'stars_rounded':
+        return const Icon(Icons.stars_rounded, color: Colors.white, size: 24);
+      case 'psychology_rounded':
+        return const Icon(Icons.psychology_rounded, color: Colors.white, size: 24);
+      case 'emoji_events_rounded':
+        return const Icon(Icons.emoji_events_rounded, color: Colors.white, size: 24);
+      default:
+        return const Icon(Icons.emoji_events_rounded, color: Colors.white, size: 24);
+    }
+  }
+}
+
+class _AchievementDisplayItem {
+  final AchievementDefinition def;
+  final bool isUnlocked;
+  final DateTime? unlockedAt;
+  final double currentValue;
+
+  _AchievementDisplayItem({
+    required this.def,
+    required this.isUnlocked,
+    this.unlockedAt,
+    required this.currentValue,
+  });
 }
 
 class _AchievementCard extends StatelessWidget {

@@ -12,11 +12,11 @@ class AnswerValidator {
     required bool allowMultipleSubmissions,
   }) {
     if (lifecycle != GameLifecycle.playing) {
-      return 'Submission rejected: Session is not in active playing state.';
+      return 'Submission rejected: Session is in $lifecycle state, not playing.';
     }
 
-    if (timerStatus == TimerStatus.expired) {
-      return 'Submission rejected: Timer has already expired.';
+    if (timerStatus == TimerStatus.expired || timerStatus == TimerStatus.idle) {
+      return 'Submission rejected: Timer is $timerStatus.';
     }
 
     if (alreadySubmitted && !allowMultipleSubmissions) {

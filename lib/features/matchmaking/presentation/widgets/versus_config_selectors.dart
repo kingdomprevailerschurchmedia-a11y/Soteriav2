@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
 import '../providers/matchmaking_providers.dart';
+import '../../../dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
 
 class VersusCategorySelector extends ConsumerWidget {
   const VersusCategorySelector({super.key});
@@ -17,17 +19,13 @@ class VersusCategorySelector extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'SELECT CATEGORY',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
+        const LobbySectionHeader(
+          label: 'CATEGORY',
+          icon: Icons.grid_view_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
         SizedBox(
-          height: 120,
+          height: 90.h,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: state.categories.length,
@@ -36,25 +34,25 @@ class VersusCategorySelector extends ConsumerWidget {
               final isSelected = state.category?.id == category.id;
 
               return Padding(
-                padding: EdgeInsets.only(right: SoteriaSpacing.md),
+                padding: EdgeInsets.only(right: 10.w),
                 child: GestureDetector(
                   onTap: () => ref
                       .read(versusLobbyProvider.notifier)
                       .updateCategory(category),
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 250),
-                    width: 140,
+                    width: 100.w,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
+                      borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
                         color: isSelected
                             ? SoteriaColors.primary
                             : Colors.white.withValues(alpha: 0.1),
-                        width: 2,
+                        width: 1.5,
                       ),
                     ),
                     child: ClipRRect(
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(15.r),
                       child: GlassSurface(
                         opacity: isSelected ? 0.15 : 0.05,
                         child: Column(
@@ -63,13 +61,14 @@ class VersusCategorySelector extends ConsumerWidget {
                             Icon(
                               _getIcon(category.icon),
                               color: isSelected ? SoteriaColors.primary : Colors.white70,
-                              size: 32,
+                              size: 24.sp,
                             ),
-                            SizedBox(height: SoteriaSpacing.sm),
+                            SizedBox(height: 4.h),
                             Text(
                               category.name,
-                              style: context.bodyMedium.copyWith(
+                              style: context.bodySmall.copyWith(
                                 fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                fontSize: 9.sp,
                               ),
                             ),
                           ],
@@ -107,34 +106,55 @@ class VersusDifficultySelector extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'DIFFICULTY',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
+        const LobbySectionHeader(
+          label: 'DIFFICULTY',
+          icon: Icons.track_changes_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: Difficulty.values.map((diff) {
-            final isSelected = selected == diff;
-            return ChoiceChip(
-              label: Text(diff.name.toUpperCase()),
-              selected: isSelected,
-              onSelected: (_) => ref
-                  .read(versusLobbyProvider.notifier)
-                  .updateDifficulty(diff),
-              selectedColor: SoteriaColors.primary.withValues(alpha: 0.2),
-              backgroundColor: Colors.white.withValues(alpha: 0.05),
-              labelStyle: TextStyle(
-                color: isSelected ? SoteriaColors.primary : Colors.white60,
-                fontSize: 10,
-              ),
-              showCheckmark: false,
-            );
-          }).toList(),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 4,
+          mainAxisSpacing: 8.w,
+          crossAxisSpacing: 8.w,
+          childAspectRatio: 1.1,
+          children: [
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.easy,
+              label: 'EASY',
+              icon: Icons.eco_rounded,
+              color: const Color(0xFF4CAF50),
+              onTap: () => ref.read(versusLobbyProvider.notifier).updateDifficulty(Difficulty.easy),
+            ),
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.medium,
+              label: 'MEDIUM',
+              icon: Icons.bar_chart_rounded,
+              color: const Color(0xFF7C4DFF),
+              onTap: () => ref.read(versusLobbyProvider.notifier).updateDifficulty(Difficulty.medium),
+            ),
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.hard,
+              label: 'HARD',
+              icon: Icons.whatshot_rounded,
+              color: const Color(0xFFFFAB40),
+              onTap: () => ref.read(versusLobbyProvider.notifier).updateDifficulty(Difficulty.hard),
+            ),
+            LobbyDifficultyCard(
+              isSelected: selected == Difficulty.expert,
+              label: 'EXPERT',
+              icon: Icons.workspace_premium_rounded,
+              color: const Color(0xFFFF5252),
+              onTap: () => ref.read(versusLobbyProvider.notifier).updateDifficulty(Difficulty.expert),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        LobbyAdaptiveToggle(
+          isSelected: selected == Difficulty.adaptive,
+          onTap: () => ref.read(versusLobbyProvider.notifier).updateDifficulty(
+            selected == Difficulty.adaptive ? Difficulty.medium : Difficulty.adaptive,
+          ),
         ),
       ],
     );
@@ -152,38 +172,19 @@ class VersusQuestionCountSelector extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'QUESTION COUNT',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
+        const LobbySectionHeader(
+          label: 'QUESTION COUNT',
+          icon: Icons.list_alt_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: counts.map((count) {
             final isSelected = selected == count;
-            return GestureDetector(
-              onTap: () => ref
-                  .read(versusLobbyProvider.notifier)
-                  .updateQuestionCount(count),
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                decoration: BoxDecoration(
-                  color: isSelected ? SoteriaColors.primary : Colors.white.withValues(alpha: 0.05),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Text(
-                  count.toString(),
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.white60,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+            return LobbyCountCircle(
+              count: count,
+              isSelected: isSelected,
+              onTap: () => ref.read(versusLobbyProvider.notifier).updateQuestionCount(count),
             );
           }).toList(),
         ),

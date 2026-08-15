@@ -11,45 +11,71 @@ class SessionSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GlassSurface(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
-      borderRadius: BorderRadius.circular(24),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'SESSION SUMMARY',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
-              letterSpacing: 1.5,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: SoteriaSpacing.lg),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _SummaryItem(
-                label: 'Potential XP',
-                value: '+${rewards.xp}',
-                icon: Icons.bolt_rounded,
-                color: SoteriaColors.primary,
-              ),
-              _SummaryItem(
-                label: 'Potential Coins',
-                value: '+${rewards.coins}',
-                icon: Icons.monetization_on_rounded,
-                color: SoteriaColors.gold,
-              ),
-              _SummaryItem(
-                label: 'Est. Time',
-                value: '${rewards.estimatedDuration.inMinutes}m',
-                icon: Icons.timer_rounded,
-                color: Colors.white70,
-              ),
-            ],
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        boxShadow: [
+          BoxShadow(
+            color: SoteriaColors.gold.withValues(alpha: 0.1),
+            blurRadius: 20,
+            spreadRadius: -8,
           ),
         ],
+      ),
+      child: GlassSurface(
+        padding: EdgeInsets.symmetric(
+          horizontal: SoteriaSpacing.lg,
+          vertical: SoteriaSpacing.md,
+        ),
+        borderRadius: BorderRadius.circular(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Text(
+                  'SESSION SUMMARY',
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.gold,
+                    letterSpacing: 1.5,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 9,
+                  ),
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.auto_graph_rounded,
+                  color: SoteriaColors.gold.withValues(alpha: 0.5),
+                  size: 12,
+                ),
+              ],
+            ),
+            SizedBox(height: SoteriaSpacing.md),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _SummaryItem(
+                  label: 'XP',
+                  value: '+${rewards.xp}',
+                  icon: Icons.bolt_rounded,
+                  color: SoteriaColors.xpColor,
+                ),
+                _SummaryItem(
+                  label: 'Coins',
+                  value: '+${rewards.coins}',
+                  icon: Icons.monetization_on_rounded,
+                  color: SoteriaColors.gold,
+                ),
+                _SummaryItem(
+                  label: 'Time',
+                  value: '${rewards.estimatedDuration.inMinutes}m',
+                  icon: Icons.timer_rounded,
+                  color: Colors.white70,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -72,17 +98,21 @@ class _SummaryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Icon(icon, color: color, size: 24),
-        SizedBox(height: SoteriaSpacing.xs),
+        Icon(icon, color: color, size: 18),
+        SizedBox(height: 4),
         Text(
           value,
-          style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+          style: context.bodyMedium.copyWith(
+            fontWeight: FontWeight.w900,
+            fontSize: 14,
+          ),
         ),
         Text(
           label.toUpperCase(),
           style: context.labelSmall.copyWith(
             color: SoteriaColors.muted,
-            fontSize: 8,
+            fontSize: 7,
+            fontWeight: FontWeight.bold,
           ),
         ),
       ],

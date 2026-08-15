@@ -56,6 +56,7 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
         .toList();
 
     return CustomScrollView(
+      cacheExtent: 1000,
       slivers: [
         SliverAppBar(
           expandedHeight: 200.h,
@@ -81,7 +82,7 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
           _SectionHeader(title: 'UPCOMING'),
           _TournamentList(tournaments: upcoming),
         ],
-        SliverToBoxAdapter(child: SizedBox(height: 10.h)),
+        const SliverToBoxAdapter(child: SoteriaSpacing.gapSM),
       ],
     );
   }
@@ -134,12 +135,14 @@ class _TournamentList extends StatelessWidget {
                 mainAxisSpacing: SoteriaSpacing.md,
               ),
               delegate: SliverChildBuilderDelegate(
-                (context, index) => TournamentCard(
-                  tournament: tournaments[index],
-                  onTap: () => context.push(
-                    SoteriaRoutes.tournamentDetails.replaceAll(
-                      ':id',
-                      tournaments[index].id,
+                (context, index) => RepaintBoundary(
+                  child: TournamentCard(
+                    tournament: tournaments[index],
+                    onTap: () => context.push(
+                      SoteriaRoutes.tournamentDetails.replaceAll(
+                        ':id',
+                        tournaments[index].id,
+                      ),
                     ),
                   ),
                 ),
@@ -148,14 +151,16 @@ class _TournamentList extends StatelessWidget {
             )
           : SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) => Padding(
-                  padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-                  child: TournamentCard(
-                    tournament: tournaments[index],
-                    onTap: () => context.push(
-                      SoteriaRoutes.tournamentDetails.replaceAll(
-                        ':id',
-                        tournaments[index].id,
+                (context, index) => RepaintBoundary(
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                    child: TournamentCard(
+                      tournament: tournaments[index],
+                      onTap: () => context.push(
+                        SoteriaRoutes.tournamentDetails.replaceAll(
+                          ':id',
+                          tournaments[index].id,
+                        ),
                       ),
                     ),
                   ),

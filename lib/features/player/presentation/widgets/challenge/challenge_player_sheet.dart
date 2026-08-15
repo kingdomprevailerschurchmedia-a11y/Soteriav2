@@ -10,6 +10,7 @@ import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/features/player/domain/models/public_competitive_profile.dart';
 import 'package:soteria/features/player/presentation/providers/challenge_lobby_providers.dart';
 import 'package:soteria/features/player/presentation/providers/challenge_providers.dart';
+import 'package:soteria/features/dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
 import 'challenge_config_selectors.dart';
 
 class ChallengePlayerSheet extends ConsumerWidget {
@@ -51,8 +52,17 @@ class ChallengePlayerSheet extends ConsumerWidget {
           SizedBox(height: SoteriaSpacing.lg),
           _buildOpponentHeader(context),
           SizedBox(height: SoteriaSpacing.xl),
-          ChallengeCategorySelector(userId: profile.userId),
-          SizedBox(height: SoteriaSpacing.lg),
+          LobbyInterestsCard(
+            value: state.useInterests,
+            onChanged: (val) => ref
+                .read(challengeLobbyProvider(profile.userId).notifier)
+                .setUseInterests(val),
+          ),
+          SizedBox(height: SoteriaSpacing.md),
+          if (!state.useInterests) ...[
+            ChallengeCategorySelector(userId: profile.userId),
+            SizedBox(height: SoteriaSpacing.lg),
+          ],
           ChallengeDifficultySelector(userId: profile.userId),
           SizedBox(height: SoteriaSpacing.xl),
           _buildQuestionCountSelector(context, ref),
@@ -68,7 +78,7 @@ class ChallengePlayerSheet extends ConsumerWidget {
           SoteriaButton.primary(
             label: 'SEND CHALLENGE',
             isLoading: controllerAsync.isLoading,
-            onPressed: state.category != null
+            onPressed: state.useInterests || state.category != null
                 ? () async {
                     await ref
                         .read(challengeLobbyProvider(profile.userId).notifier)

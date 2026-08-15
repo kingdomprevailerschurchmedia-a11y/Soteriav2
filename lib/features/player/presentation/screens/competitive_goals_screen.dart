@@ -5,7 +5,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../domain/models/competitive_goal.dart';
+import '../../domain/models/goal.dart';
 import '../providers/goal_providers.dart';
 import '../widgets/goals/competitive_goal_card.dart';
 import '../widgets/goals/next_goal_card.dart';
@@ -25,6 +25,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
 
     final nextGoalAsync = ref.watch(nextGoalProvider);
     final dailyGoals = ref.watch(dailyGoalsProvider);
+    final weeklyGoals = ref.watch(weeklyGoalsProvider);
     final seasonalGoals = ref.watch(seasonalGoalsProvider);
     final careerGoals = ref.watch(careerGoalsProvider);
 
@@ -47,13 +48,13 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
         slivers: [
           // Next Goal Hero
           nextGoalAsync.when(
-            data: (goal) => goal != null
+            data: (progress) => progress != null
                 ? SliverPadding(
                     padding: EdgeInsets.all(SoteriaSpacing.lg),
                     sliver: SliverToBoxAdapter(
                       child: NextGoalCard(
-                        goal: goal,
-                        onTap: () => _navigateToDetails(context, goal),
+                        progress: progress,
+                        onTap: () => _navigateToDetails(context, progress),
                       ),
                     ),
                   )
@@ -94,6 +95,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
           ),
 
           _buildSection(context, 'DAILY OBJECTIVES', dailyGoals),
+          _buildSection(context, 'WEEKLY GOALS', weeklyGoals),
           _buildSection(context, 'SEASONAL GOALS', seasonalGoals),
           _buildSection(context, 'CAREER MILESTONES', careerGoals),
 
@@ -106,7 +108,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
   Widget _buildSection(
     BuildContext context,
     String title,
-    AsyncValue<List<CompetitiveGoal>> goalsAsync,
+    AsyncValue<List<GoalProgress>> goalsAsync,
   ) {
     return goalsAsync.when(
       data: (goals) {
@@ -139,7 +141,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
                   (context, index) => Padding(
                     padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
                     child: CompetitiveGoalCard(
-                      goal: goals[index],
+                      progress: goals[index],
                       onTap: () => _navigateToDetails(context, goals[index]),
                     ),
                   ),
@@ -155,10 +157,10 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
     );
   }
 
-  void _navigateToDetails(BuildContext context, CompetitiveGoal goal) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => GoalDetailsScreen(goal: goal)),
-    );
+  void _navigateToDetails(BuildContext context, GoalProgress progress) {
+    // Navigator.of(context).push(
+    //   MaterialPageRoute(builder: (_) => GoalDetailsScreen(goal: progress.playerState!)),
+    // );
   }
 }
 

@@ -8,12 +8,15 @@ import '../services/personal_record_service.dart';
 import '../models/competitive_match.dart';
 import '../repositories/leaderboard_repository.dart';
 
+import '../services/achievement_service.dart';
+
 class ProcessCompetitiveResultUseCase {
   final PlayerProgressionRepository _progressionRepository;
   final CompetitiveResultRepository _resultRepository;
   final CompetitiveStreakService _streakService;
   final PersonalRecordService _recordService;
   final LeaderboardRepository _leaderboardRepository;
+  final AchievementService _achievementService;
 
   ProcessCompetitiveResultUseCase(
     this._progressionRepository,
@@ -21,6 +24,7 @@ class ProcessCompetitiveResultUseCase {
     this._streakService,
     this._recordService,
     this._leaderboardRepository,
+    this._achievementService,
   );
 
   Future<RankChange> execute({
@@ -82,6 +86,9 @@ class ProcessCompetitiveResultUseCase {
         seasonId: result.seasonId,
       );
     }
+
+    // 7. Authoritative Achievement Evaluation
+    await _achievementService.evaluateAchievements(result.userId);
 
     return rankChange;
   }

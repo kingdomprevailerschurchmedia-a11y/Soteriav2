@@ -33,14 +33,16 @@ void main() {
   group('Pro Mode Results Integration Tests', () {
     test('completeSession calls repository and updates state with authoritative result', () async {
       final gameState = GameState(
-        sessionId: 'session-123',
+        playerId: 'test-player',
+      sessionId: 'session-123',
         lifecycle: GameLifecycle.completed,
         questions: [],
         answerHistory: [],
       );
 
       final expectedResult = ProModeResult(
-        sessionId: 'session-123',
+        playerId: 'test-player',
+      sessionId: 'session-123',
         mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 100,
@@ -67,7 +69,8 @@ void main() {
 
     test('loadResult fetches result from repository', () async {
       final expectedResult = ProModeResult(
-        sessionId: 'session-123',
+        playerId: 'test-player',
+      sessionId: 'session-123',
         mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 100,

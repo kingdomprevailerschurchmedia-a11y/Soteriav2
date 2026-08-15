@@ -18,11 +18,11 @@ class ProAnswerPolicy implements AnswerPolicy {
 
 class PracticeAnswerPolicy implements AnswerPolicy {
   @override
-  bool get allowMultipleSubmissions => true;
+  bool get allowMultipleSubmissions => false;
   @override
-  bool get allowRetriesOnWrong => true;
+  bool get allowRetriesOnWrong => false;
   @override
-  bool get lockAfterFirstSubmission => false;
+  bool get lockAfterFirstSubmission => true;
 }
 
 class AnswerPolicyResolver {

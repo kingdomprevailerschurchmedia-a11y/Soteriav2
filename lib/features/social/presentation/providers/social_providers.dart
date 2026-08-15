@@ -80,6 +80,17 @@ class SocialController extends StateNotifier<AsyncValue<void>> {
     }
   }
 
+  Future<void> cancelRequest(String requestId, String otherUserId) async {
+    state = const AsyncValue.loading();
+    try {
+      await ref.read(socialRepositoryProvider).cancelFriendRequest(requestId);
+      ref.invalidate(relationshipStatusProvider(otherUserId));
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
   Future<void> removeFriend(String otherUserId) async {
     state = const AsyncValue.loading();
     try {

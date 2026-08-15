@@ -59,44 +59,47 @@ class CompetitiveHistoryScreen extends ConsumerWidget {
     }
 
     return ListView(
+      cacheExtent: 500,
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
         if (currentSeason != null && progression != null) ...[
           _buildSectionHeader('Current Season'),
           SoteriaFadeIn(
             duration: SoteriaAnimations.normal,
-            child: _buildCurrentSeasonCard(context, currentSeason, progression),
+            child: RepaintBoundary(child: _buildCurrentSeasonCard(context, currentSeason, progression)),
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: SoteriaSpacing.xlStatic),
         ],
         if (history.results.isNotEmpty) ...[
           SoteriaSlideUp(
             duration: SoteriaAnimations.normal,
-            child: _buildCareerSummary(context, history),
+            child: RepaintBoundary(child: _buildCareerSummary(context, history)),
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: SoteriaSpacing.xlStatic),
           if (history.latestResult != null) ...[
             _buildSectionHeader('Latest Completed'),
             SoteriaScaleIn(
               duration: SoteriaAnimations.normal,
-              child: _buildLatestResultCard(context, history.latestResult!),
+              child: RepaintBoundary(child: _buildLatestResultCard(context, history.latestResult!)),
             ),
-            SizedBox(height: SoteriaSpacing.xl),
+            SizedBox(height: SoteriaSpacing.xlStatic),
           ],
           _buildSectionHeader('Season History'),
           ...history.results.asMap().entries.map((entry) {
             final index = entry.key;
             final result = entry.value;
-            return SoteriaSlideUp(
-              delay: Duration(milliseconds: 50 * index),
-              child: SeasonResultCard(
-                result: result,
-                onTap: () => _showResultDetails(context, result),
+            return RepaintBoundary(
+              child: SoteriaSlideUp(
+                delay: Duration(milliseconds: 50 * index),
+                child: SeasonResultCard(
+                  result: result,
+                  onTap: () => _showResultDetails(context, result),
+                ),
               ),
             );
           }),
         ],
-        SizedBox(height: SoteriaSpacing.xxl),
+        const SizedBox(height: SoteriaSpacing.xxlStatic),
       ],
     );
   }

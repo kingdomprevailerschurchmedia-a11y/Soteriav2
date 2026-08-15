@@ -5,7 +5,7 @@ import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
-import '../../../domain/models/competitive_goal.dart';
+import '../../../domain/models/goal.dart';
 import '../../providers/goal_providers.dart';
 import '../../screens/goal_details_screen.dart';
 
@@ -17,18 +17,18 @@ class NextGoalSection extends ConsumerWidget {
     final nextGoalAsync = ref.watch(nextGoalProvider);
 
     return nextGoalAsync.when(
-      data: (goal) {
-        if (goal == null) return const SizedBox.shrink();
+      data: (progress) {
+        if (progress == null) return const SizedBox.shrink();
 
         return Padding(
           padding: EdgeInsets.only(bottom: SoteriaSpacing.lg),
           child: SoteriaCard(
             onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => GoalDetailsScreen(goal: goal)),
+              MaterialPageRoute(builder: (_) => GoalDetailsScreen(progress: progress)),
             ),
             child: Row(
               children: [
-                _buildIcon(goal.category),
+                _buildIcon(progress.definition.category),
                 SizedBox(width: SoteriaSpacing.md),
                 Expanded(
                   child: Column(
@@ -42,12 +42,12 @@ class NextGoalSection extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        goal.title,
+                        progress.definition.title,
                         style: context.titleMedium.copyWith(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: SoteriaSpacing.xs),
                       LinearProgressIndicator(
-                        value: goal.progressPercentage,
+                        value: progress.progressPercentage,
                         backgroundColor: SoteriaColors.border,
                         color: SoteriaColors.primary,
                         minHeight: 4.h,
@@ -58,7 +58,7 @@ class NextGoalSection extends ConsumerWidget {
                 ),
                 SizedBox(width: SoteriaSpacing.md),
                 Text(
-                  '${(goal.progressPercentage * 100).toInt()}%',
+                  '${(progress.progressPercentage * 100).toInt()}%',
                   style: context.labelSmall.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],

@@ -62,6 +62,7 @@ class PracticeResultService {
         categoryId: question.categoryId,
         difficulty: question.difficulty,
         responseTime: answer.responseTime,
+        questionVersion: question.version,
       ));
     }
 

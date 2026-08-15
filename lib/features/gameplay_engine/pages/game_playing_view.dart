@@ -58,7 +58,7 @@ class GamePlayingView extends ConsumerWidget {
             totalQuestions: totalQuestions,
             sessionId: sessionId,
             gameConfig: config,
-            timerChild: config.questionTimer != null
+            timerChild: config.showTimer
                 ? AdaptiveTimerDisplay(state: ref.watch(timerEngineProvider))
                 : null,
           ),

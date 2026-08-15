@@ -44,9 +44,6 @@ void main() {
         ),
       );
 
-      // Log the runtime Firebase project ID safely
-      LoggerService.i('Runtime Firebase Project ID: ${FirebaseInitializer.getProjectId()}');
-
       // 2. Defer all non-critical background services to post-startup
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _initializeDeferredServices();

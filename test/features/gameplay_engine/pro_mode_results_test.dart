@@ -21,7 +21,8 @@ void main() {
     test('toJson and fromJson maintain data integrity', () {
       final now = DateTime.now();
       final result = ProModeResult(
-        sessionId: 'test-session',
+        playerId: 'test-player',
+      sessionId: 'test-session',
         mode: GameMode.pro,
         finalScore: 1200,
         totalXP: 200,
@@ -50,7 +51,8 @@ void main() {
     test('fromGameResult correctly assigns fields and calculates rating', () {
       final now = DateTime.now();
       final baseResult = GameResult(
-        sessionId: 'base-id',
+        playerId: 'test-player',
+      sessionId: 'base-id',
         mode: GameMode.pro,
         finalScore: 1000,
         totalXP: 150,

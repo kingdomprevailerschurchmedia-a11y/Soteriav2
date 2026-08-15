@@ -104,6 +104,7 @@ class ProGameplayPreviews {
 
   static GameState _createMidState(CompetitiveSession session) {
     return GameState(
+      playerId: 'mock-player-id',
       sessionId: session.sessionId,
       lifecycle: GameLifecycle.playing,
       questions: session.questions,
@@ -117,6 +118,7 @@ class ProGameplayPreviews {
 
   static GameState _createFinalState(CompetitiveSession session) {
     return GameState(
+      playerId: 'mock-player-id',
       sessionId: session.sessionId,
       lifecycle: GameLifecycle.playing,
       questions: session.questions,

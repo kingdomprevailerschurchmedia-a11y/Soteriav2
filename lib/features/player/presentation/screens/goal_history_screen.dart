@@ -6,7 +6,8 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../domain/models/competitive_goal.dart';
+import '../../domain/models/goal.dart';
+import '../../domain/config/goal_registry.dart';
 import '../providers/goal_providers.dart';
 
 class GoalHistoryScreen extends ConsumerWidget {
@@ -31,7 +32,7 @@ class GoalHistoryScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildList(BuildContext context, List<CompetitiveGoal> goals) {
+  Widget _buildList(BuildContext context, List<PlayerGoal> goals) {
     if (goals.isEmpty) {
       return Center(
         child: Column(
@@ -57,12 +58,13 @@ class GoalHistoryScreen extends ConsumerWidget {
 }
 
 class _HistoryGoalCard extends StatelessWidget {
-  final CompetitiveGoal goal;
+  final PlayerGoal goal;
 
   const _HistoryGoalCard({required this.goal});
 
   @override
   Widget build(BuildContext context) {
+    final definition = GoalRegistry.getById(goal.goalId);
     final isCompleted = goal.status == GoalStatus.completed || goal.status == GoalStatus.claimed;
     final color = isCompleted ? SoteriaColors.success : SoteriaColors.error;
 
@@ -71,16 +73,16 @@ class _HistoryGoalCard extends StatelessWidget {
       color: SoteriaColors.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(SoteriaSpacing.md),
-        border: Border.all(color: SoteriaColors.border),
+        side: const BorderSide(color: SoteriaColors.border),
       ),
       child: ListTile(
         leading: Icon(
           isCompleted ? Icons.check_circle_rounded : Icons.cancel_rounded,
           color: color,
         ),
-        title: Text(goal.title, style: context.titleMedium),
+        title: Text(definition?.title ?? 'Unknown Goal', style: context.titleMedium),
         subtitle: Text(
-          DateFormat('MMM d, yyyy').format(goal.endAt),
+          DateFormat('MMM d, yyyy').format(goal.expiresAt),
           style: context.bodySmall.copyWith(color: SoteriaColors.textSecondary),
         ),
         trailing: Text(

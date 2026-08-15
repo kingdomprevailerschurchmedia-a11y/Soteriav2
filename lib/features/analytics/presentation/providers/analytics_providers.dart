@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/analytics/domain/models/analytics_enums.dart';
 import 'package:soteria/features/analytics/domain/models/performance_analytics.dart';
 import 'package:soteria/features/analytics/domain/repositories/performance_analytics_repository.dart';
 import 'package:soteria/features/analytics/data/repositories/performance_analytics_repository_impl.dart';
+import 'package:soteria/features/analytics/domain/repositories/question_analytics_repository.dart';
+import 'package:soteria/features/analytics/data/repositories/firestore_question_analytics_repository.dart';
+import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart'
     as quiz_enums;
@@ -14,6 +16,12 @@ final performanceAnalyticsRepositoryProvider =
     Provider<PerformanceAnalyticsRepository>((ref) {
       final historyRepo = ref.watch(quizHistoryRepositoryProvider);
       return PerformanceAnalyticsRepositoryImpl(historyRepo);
+    });
+
+final questionAnalyticsRepositoryProvider =
+    Provider<QuestionAnalyticsRepository>((ref) {
+      final database = ref.watch(firestoreDatabaseServiceProvider);
+      return FirestoreQuestionAnalyticsRepository(database);
     });
 
 final selectedTimePeriodProvider = StateProvider<TimePeriod>(

@@ -1,4 +1,5 @@
 import '../../domain/entities/question.dart';
+import '../../domain/entities/difficulty.dart';
 
 /// Service responsible for validating question integrity and quality rules.
 class QuestionValidator {
@@ -53,5 +54,37 @@ class QuestionValidator {
     }
 
     return errors;
+  }
+
+  /// Audits a question for quality signals (non-breaking).
+  static List<String> audit(Question question) {
+    final warnings = <String>[];
+
+    if (question.xpValue > 1000) {
+      warnings.add('Quality: XP value is unusually high (> 1000).');
+    }
+
+    if (question.coinValue > 100) {
+      warnings.add('Quality: Coin value is unusually high (> 100).');
+    }
+
+    if (question.estimatedTime.inSeconds < 5 || question.estimatedTime.inSeconds > 120) {
+      warnings.add('Quality: Estimated time is outside typical range (5-120s).');
+    }
+
+    if (question.difficulty == Difficulty.hard && (question.explanation == null || question.explanation!.trim().isEmpty)) {
+      warnings.add('Quality: Hard difficulty question is missing an explanation.');
+    }
+
+    final versionRegex = RegExp(r'^\d+\.\d+\.\d+$');
+    if (!versionRegex.hasMatch(question.version)) {
+      warnings.add('Quality: Version does not follow semantic versioning.');
+    }
+
+    if (question.source.trim().isEmpty) {
+      warnings.add('Quality: Question source is missing.');
+    }
+
+    return warnings;
   }
 }

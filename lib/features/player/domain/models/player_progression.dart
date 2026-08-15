@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../config/progression_config.dart';
 
 part 'player_progression.freezed.dart';
 part 'player_progression.g.dart';
@@ -21,6 +22,11 @@ abstract class PlayerProgression with _$PlayerProgression {
     required int seasonXp,
     required int seasonRankPoints,
     required DateTime lastUpdated,
+    @Default(0) int dailyStreak,
+    @Default(0) int longestStreak,
+    String? lastEngagementDate, // YYYY-MM-DD
+    String? lastXpTransactionId,
+    String? lastRankTransactionId,
     @Default(1) int schemaVersion,
   }) = _PlayerProgression;
 
@@ -34,7 +40,7 @@ abstract class PlayerProgression with _$PlayerProgression {
         currentXp: 0,
         lifetimeXp: 0,
         xpRequiredForCurrentLevel: 0,
-        xpRequiredForNextLevel: 1000, // Default start
+        xpRequiredForNextLevel: ProgressionConfig.xpRequiredForLevel(2),
         xpProgress: 0.0,
         currentRank: 'Unranked',
         currentRankTier: 'None',

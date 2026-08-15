@@ -547,6 +547,8 @@ class QuizController extends Notifier<QuizState> {
           correctOptionText: correctOption.text,
           responseTime: answer.responseTime,
           scoreEarned: answer.isCorrect ? 100 : 0,
+          categoryId: session.category,
+          mode: session.gameMode,
           difficulty: question.difficulty,
           explanation: question.explanation,
           questionVersion: question.version,
@@ -607,6 +609,13 @@ class QuizController extends Notifier<QuizState> {
     // Save history entry and update session status atomically (conceptually)
     try {
       await ref.read(quizHistoryRepositoryProvider).addResult(quizResult);
+
+      // Trigger global question analytics updates (Secure individual events)
+      final analyticsRepo = ref.read(questionAnalyticsRepositoryProvider);
+      final userId = session.playerId;
+      for (final qr in questionResults) {
+        analyticsRepo.recordEvent(session.sessionId, userId, qr).catchError((_) {});
+      }
 
       final updatedSession = session.copyWith(
         sessionStatus: SessionStatus.completed,

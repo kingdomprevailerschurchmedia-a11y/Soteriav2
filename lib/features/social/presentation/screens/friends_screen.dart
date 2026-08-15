@@ -9,6 +9,7 @@ import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import 'package:go_router/go_router.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../player/presentation/providers/public_profile_providers.dart';
 import '../../../player/presentation/screens/public_competitive_profile_screen.dart';
@@ -27,6 +28,7 @@ class FriendsScreen extends ConsumerWidget {
     final friendsAsync = ref.watch(friendsProvider);
     final incomingRequests = ref.watch(incomingRequestsProvider).value ?? [];
     final topRivalriesAsync = ref.watch(topRivalriesProvider);
+    final currentUserId = ref.watch(authRepositoryProvider.select((repo) => repo.currentUserId));
 
     return SafeGradientScaffold(
       appBar: AppBar(
@@ -46,6 +48,7 @@ class FriendsScreen extends ConsumerWidget {
         ],
       ),
       body: CustomScrollView(
+        cacheExtent: 1000,
         slivers: [
           if (incomingRequests.isNotEmpty)
             SliverToBoxAdapter(child: _buildRequestsBanner(context, incomingRequests.length)),
@@ -63,8 +66,8 @@ class FriendsScreen extends ConsumerWidget {
                         'TOP RIVAL',
                         style: context.labelSmall.copyWith(color: SoteriaColors.muted, letterSpacing: 2),
                       ),
-                      SizedBox(height: SoteriaSpacing.sm),
-                      RivalryCard(rivalry: rivalries.first),
+                      SoteriaSpacing.gapSM,
+                      RepaintBoundary(child: RivalryCard(rivalry: rivalries.first)),
                     ],
                   ),
                 );
@@ -94,9 +97,9 @@ class FriendsScreen extends ConsumerWidget {
                     (context, index) {
                       final friendship = friends[index];
                       final otherUserId = friendship.userIds.firstWhere(
-                        (id) => id != ref.read(authRepositoryProvider).currentUserId,
+                        (id) => id != currentUserId,
                       );
-                      return _FriendListTile(userId: otherUserId);
+                      return RepaintBoundary(child: _FriendListTile(userId: otherUserId));
                     },
                     childCount: friends.length,
                   ),
@@ -133,9 +136,9 @@ class FriendsScreen extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.people_outline_rounded, size: 64.w, color: SoteriaColors.muted.withValues(alpha: 0.3)),
-          SizedBox(height: SoteriaSpacing.md),
+          SoteriaSpacing.gapMD,
           Text('You haven\'t added any rivals yet.', style: context.bodyMedium.copyWith(color: SoteriaColors.muted)),
-          SizedBox(height: SoteriaSpacing.lg),
+          SoteriaSpacing.gapLG,
           SoteriaButton.secondary(
             label: 'FIND COMPETITORS',
             onPressed: () => _showSearch(context),
@@ -146,8 +149,7 @@ class FriendsScreen extends ConsumerWidget {
   }
 
   void _showSearch(BuildContext context) {
-    // Navigate to player search screen (already exists in features/player)
-    context.push('/player/search'); 
+    context.push(SoteriaRoutes.playerSearch);
   }
 }
 
@@ -167,7 +169,7 @@ class _FriendListTile extends ConsumerWidget {
           color: SoteriaColors.surface.withValues(alpha: 0.3),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
           child: ListTile(
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => PublicCompetitiveProfileScreen(userId: userId))),
+            onTap: () => context.push('${SoteriaRoutes.profile}/external/$userId'),
             leading: SoteriaAvatar(
               avatar: AvatarCatalog().getById(profile.avatarId),
               size: 48,
@@ -181,13 +183,25 @@ class _FriendListTile extends ConsumerWidget {
                 Text('${profile.rankPoints} RP', style: context.labelSmall.copyWith(color: SoteriaColors.gold)),
               ],
             ),
-            trailing: SoteriaButton.outline(
-              label: 'CHALLENGE',
-              size: SoteriaButtonSize.sm,
-              isFullWidth: false,
-              onPressed: () {
-                // Open challenge sheet
+            trailing: PopupMenuButton<String>(
+              icon: const Icon(Icons.more_vert_rounded, color: SoteriaColors.muted),
+              onSelected: (value) {
+                if (value == 'remove') {
+                  ref.read(socialControllerProvider.notifier).removeFriend(userId);
+                } else if (value == 'profile') {
+                   context.push('${SoteriaRoutes.profile}/external/$userId');
+                }
               },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: 'profile',
+                  child: Text('View Profile'),
+                ),
+                PopupMenuItem(
+                  value: 'remove',
+                  child: Text('Remove Friend', style: TextStyle(color: SoteriaColors.error)),
+                ),
+              ],
             ),
           ),
         );

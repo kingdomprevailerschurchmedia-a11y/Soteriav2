@@ -9,6 +9,7 @@ class ProModeResult extends GameResult {
 
   const ProModeResult({
     required String sessionId,
+    required String playerId,
     required GameMode mode,
     required int finalScore,
     required int totalXP,
@@ -29,6 +30,7 @@ class ProModeResult extends GameResult {
     required this.rating,
   }) : super(
          sessionId: sessionId,
+         playerId: playerId,
          mode: mode,
          finalScore: finalScore,
          totalXP: totalXP,
@@ -51,6 +53,7 @@ class ProModeResult extends GameResult {
   factory ProModeResult.fromGameResult(GameResult result) {
     return ProModeResult(
       sessionId: result.sessionId,
+      playerId: result.playerId,
       mode: result.mode,
       finalScore: result.finalScore,
       totalXP: result.totalXP,
@@ -91,6 +94,7 @@ class ProModeResult extends GameResult {
     final base = GameResult.fromJson(json);
     return ProModeResult(
       sessionId: base.sessionId,
+      playerId: base.playerId,
       mode: base.mode,
       finalScore: base.finalScore,
       totalXP: base.totalXP,

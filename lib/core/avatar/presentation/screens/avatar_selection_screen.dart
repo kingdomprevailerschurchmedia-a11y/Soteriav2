@@ -15,6 +15,8 @@ class AvatarSelectionScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final avatars = ref.watch(avatarCatalogProvider).all;
     final selectedAvatarId = ref.watch(selectedAvatarIdProvider);
+    final profile = ref.watch(profileProvider);
+    final isProfileLoading = profile == null;
 
     return SafeGradientScaffold(
       appBar: AppBar(
@@ -50,7 +52,7 @@ class AvatarSelectionScreen extends ConsumerWidget {
             final isLocked = !avatar.isUnlocked;
 
             return GestureDetector(
-              onTap: isLocked
+              onTap: (isLocked || isProfileLoading)
                   ? null
                   : () {
                       ref

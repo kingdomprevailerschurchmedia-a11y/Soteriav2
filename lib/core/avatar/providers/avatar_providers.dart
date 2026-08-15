@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../identity/providers/identity_providers.dart';
+import '../../../features/player/providers/player_providers.dart';
 import '../data/avatar_catalog.dart';
 import '../domain/avatar.dart';
 
@@ -9,7 +10,12 @@ final avatarCatalogProvider = Provider<AvatarCatalog>((ref) {
 
 final selectedAvatarIdProvider = Provider<String>((ref) {
   final profile = ref.watch(profileProvider);
-  return profile?.selectedAvatarId ?? 'socrates';
+  if (profile?.selectedAvatarId != null && profile!.selectedAvatarId.isNotEmpty) {
+    return profile.selectedAvatarId;
+  }
+  
+  final player = ref.watch(currentPlayerProvider);
+  return player?.selectedAvatarId ?? 'socrates';
 });
 
 final selectedAvatarProvider = Provider<Avatar>((ref) {

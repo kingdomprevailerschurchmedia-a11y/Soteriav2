@@ -15,11 +15,13 @@ import 'competitive_rank_badge.dart';
 class LeaderboardRow extends ConsumerWidget {
   final LeaderboardEntry entry;
   final bool isCurrentUser;
+  final int? calculatedPosition;
 
   const LeaderboardRow({
     super.key,
     required this.entry,
     this.isCurrentUser = false,
+    this.calculatedPosition,
   });
 
   @override
@@ -30,6 +32,8 @@ class LeaderboardRow extends ConsumerWidget {
             ?.where((t) => t.id == entry.titleId)
             .firstOrNull
         : null;
+
+    final position = calculatedPosition ?? entry.position;
 
     return InkWell(
       onTap: () => Navigator.of(context).push(
@@ -56,13 +60,13 @@ class LeaderboardRow extends ConsumerWidget {
           children: [
             SizedBox(
               width: 32.w,
-              child: _LeaderboardPositionBadge(rank: entry.position),
+              child: _LeaderboardPositionBadge(rank: position),
             ),
             SizedBox(width: 8.w),
             SoteriaAvatar(
               avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
               size: 40,
-              rank: entry.position,
+              rank: position,
             ),
             SizedBox(width: SoteriaSpacing.md),
             Expanded(

@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../player/presentation/providers/goal_providers.dart';
+import '../../../player/presentation/screens/competitive_goals_screen.dart';
 
-class DailyGoalsSection extends StatelessWidget {
+class DailyGoalsSection extends ConsumerWidget {
   const DailyGoalsSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final dailyGoalsAsync = ref.watch(dailyGoalsProvider);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       child: Column(
@@ -39,7 +44,9 @@ class DailyGoalsSection extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (_) => const CompetitiveGoalsScreen()),
+                ),
                 child: Row(
                   children: [
                     Text(
@@ -61,61 +68,97 @@ class DailyGoalsSection extends StatelessWidget {
               ),
             ],
           ),
-        SizedBox(height: SoteriaSpacing.md),
-        SoteriaCard(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-            borderRadius: 24,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Complete 3 goals to earn bonus XP!',
-                        style: context.titleMedium.copyWith(
-                          color: SoteriaColors.muted,
-                          fontWeight: FontWeight.w600,
-                          height: 1.4,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(width: 12.w),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _GoalProgressIcon(
-                      icon: Icons.menu_book_rounded,
-                      current: 0,
-                      total: 1,
-                      color: const Color(0xFF9155FD),
-                    ),
-                    _VerticalDivider(),
-                    _GoalProgressIcon(
-                      icon: Icons.flash_on_rounded,
-                      current: 0,
-                      total: 1,
-                      color: const Color(0xFF2196F3),
-                    ),
-                    _VerticalDivider(),
-                    _GoalProgressIcon(
-                      icon: Icons.emoji_events_rounded,
-                      current: 0,
-                      total: 1,
-                      color: const Color(0xFFFF9F43),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+          SizedBox(height: SoteriaSpacing.md),
+          dailyGoalsAsync.when(
+            data: (goals) => _buildGoalsRow(context, goals),
+            loading: () => const _LoadingGoalsCard(),
+            error: (_, __) => const SizedBox.shrink(),
           ),
         ],
       ),
     );
+  }
+
+  Widget _buildGoalsRow(BuildContext context, List<dynamic> goals) {
+    // If no goals, show a placeholder
+    if (goals.isEmpty) {
+      return SoteriaCard(
+        padding: EdgeInsets.all(SoteriaSpacing.md),
+        child: Center(
+          child: Text(
+            'Check back later for new goals!',
+            style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+          ),
+        ),
+      );
+    }
+
+    // Limit to 3 for the dashboard summary
+    final displayGoals = goals.take(3).toList();
+    final completedCount = goals.where((g) => g.isCompleted).length;
+
+    return SoteriaCard(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+      borderRadius: 24,
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  completedCount == goals.length
+                      ? 'All daily goals completed!'
+                      : 'Complete daily goals to earn bonus XP!',
+                  style: context.titleMedium.copyWith(
+                    color: SoteriaColors.muted,
+                    fontWeight: FontWeight.w600,
+                    height: 1.4,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 12.w),
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: displayGoals.asMap().entries.map((entry) {
+              final index = entry.key;
+              final goal = entry.value;
+              return Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _GoalProgressIcon(
+                    icon: _getIconForCategory(goal.definition.category),
+                    current: goal.playerState?.currentProgress.toInt() ?? 0,
+                    total: goal.definition.target.toInt(),
+                    color: _getColorForIndex(index),
+                    isCompleted: goal.isCompleted,
+                  ),
+                  if (index < displayGoals.length - 1) _VerticalDivider(),
+                ],
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  IconData _getIconForCategory(dynamic category) {
+    // Mapping GoalCategory to icons
+    return Icons.flash_on_rounded; // Default
+  }
+
+  Color _getColorForIndex(int index) {
+    const colors = [
+      Color(0xFF9155FD),
+      Color(0xFF2196F3),
+      Color(0xFFFF9F43),
+    ];
+    return colors[index % colors.length];
   }
 }
 
@@ -125,12 +168,14 @@ class _GoalProgressIcon extends StatelessWidget {
     required this.current,
     required this.total,
     required this.color,
+    this.isCompleted = false,
   });
 
   final IconData icon;
   final int current;
   final int total;
   final Color color;
+  final bool isCompleted;
 
   @override
   Widget build(BuildContext context) {
@@ -142,24 +187,17 @@ class _GoalProgressIcon extends StatelessWidget {
           height: 42.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: color.withValues(alpha: 0.1),
+            color: isCompleted ? SoteriaColors.success.withValues(alpha: 0.1) : color.withValues(alpha: 0.1),
             border: Border.all(
-              color: color.withValues(alpha: 0.5),
+              color: isCompleted ? SoteriaColors.success : color.withValues(alpha: 0.5),
               width: 1.2,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: color.withValues(alpha: 0.2),
-                blurRadius: 10,
-                spreadRadius: 1,
-              ),
-            ],
           ),
           child: Center(
             child: Icon(
-              icon,
+              isCompleted ? Icons.check_rounded : icon,
               size: 20.sp,
-              color: color,
+              color: isCompleted ? SoteriaColors.success : color,
             ),
           ),
         ),
@@ -186,6 +224,20 @@ class _VerticalDivider extends StatelessWidget {
         height: 32.h,
         width: 1,
         color: Colors.white.withValues(alpha: 0.05),
+      ),
+    );
+  }
+}
+
+class _LoadingGoalsCard extends StatelessWidget {
+  const _LoadingGoalsCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return SoteriaCard(
+      child: SizedBox(
+        height: 60.h,
+        child: const Center(child: CircularProgressIndicator()),
       ),
     );
   }

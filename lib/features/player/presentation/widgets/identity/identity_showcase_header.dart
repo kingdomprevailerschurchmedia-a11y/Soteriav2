@@ -22,7 +22,7 @@ class IdentityShowcaseHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return SoteriaCard(
       hasGlow: true,
-      glowColor: SoteriaColors.primary,
+      glowColor: SoteriaColors.primary.withValues(alpha: 0.3),
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       child: Column(
         children: [
@@ -61,17 +61,24 @@ class IdentityShowcaseHeader extends StatelessWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 4.h),
-                    CompetitiveTitleWidget(title: identity.equippedTitle),
-                    SizedBox(height: 12.h),
-                    FeaturedBadgesRow(
-                      badges: identity.featuredBadges,
-                      maxBadges: 3,
+                    Text(
+                      '@${identity.profile.username}',
+                      style: context.bodyMedium.copyWith(
+                        color: SoteriaColors.muted,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
+                    SizedBox(height: 8.h),
+                    CompetitiveTitleWidget(title: identity.equippedTitle),
                   ],
                 ),
               ),
             ],
+          ),
+          SizedBox(height: 16.h),
+          FeaturedBadgesRow(
+            badges: identity.featuredBadges,
+            maxBadges: 3,
           ),
           SizedBox(height: SoteriaSpacing.lg),
           Container(

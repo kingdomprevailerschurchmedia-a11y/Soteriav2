@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../domain/models/competitive_goal.dart';
+import '../domain/models/goal.dart';
 import '../presentation/providers/goal_providers.dart';
 import '../presentation/screens/competitive_goals_screen.dart';
 
 class GoalPreviewWrapper extends StatelessWidget {
-  final List<CompetitiveGoal> goals;
+  final List<PlayerGoal> goals;
   final bool isLoading;
 
   const GoalPreviewWrapper({
@@ -28,65 +28,52 @@ class GoalPreviewWrapper extends StatelessWidget {
 }
 
 class GoalPreviews {
-  static List<CompetitiveGoal> mockGoals() {
+  static List<PlayerGoal> mockGoals() {
     final now = DateTime.now();
     final tomorrow = now.add(const Duration(days: 1));
     final nextWeek = now.add(const Duration(days: 7));
 
     return [
-      CompetitiveGoal(
-        id: '1',
+      PlayerGoal(
+        goalId: 'daily_games_3',
         userId: 'u1',
-        type: GoalType.daily,
-        category: GoalCategory.gameCount,
-        title: 'Daily Participation',
-        description: 'Play 3 competitive games today.',
-        target: 3,
-        currentProgress: 2,
         status: GoalStatus.active,
-        startAt: now,
-        endAt: tomorrow,
-      ),
-      CompetitiveGoal(
-        id: '2',
-        userId: 'u1',
-        type: GoalType.daily,
-        category: GoalCategory.win,
-        title: 'Winner',
-        description: 'Win 2 games today.',
-        target: 2,
         currentProgress: 2,
+        startedAt: now,
+        expiresAt: tomorrow,
+      ),
+      PlayerGoal(
+        goalId: 'daily_wins_2',
+        userId: 'u1',
         status: GoalStatus.completed,
-        startAt: now,
-        endAt: tomorrow,
+        currentProgress: 2,
+        startedAt: now,
+        expiresAt: tomorrow,
+        completedAt: now,
       ),
-      CompetitiveGoal(
-        id: '3',
+      PlayerGoal(
+        goalId: 'weekly_games_20',
         userId: 'u1',
-        type: GoalType.weekly,
-        category: GoalCategory.win,
-        title: 'Weekly Dominance',
-        description: 'Win 10 games this week.',
-        target: 10,
+        status: GoalStatus.active,
+        currentProgress: 15,
+        startedAt: now,
+        expiresAt: nextWeek,
+      ),
+      PlayerGoal(
+        goalId: 'weekly_wins_10',
+        userId: 'u1',
+        status: GoalStatus.active,
         currentProgress: 4,
-        status: GoalStatus.active,
-        startAt: now,
-        endAt: nextWeek,
-        rewardId: 'rew_123',
+        startedAt: now,
+        expiresAt: nextWeek,
       ),
-      CompetitiveGoal(
-        id: '4',
+      PlayerGoal(
+        goalId: 'daily_games_3_expired',
         userId: 'u1',
-        type: GoalType.career,
-        category: GoalCategory.rank,
-        title: 'Reach Gold I',
-        description: 'Climb to the top of Gold tier.',
-        target: 1,
-        currentProgress: 0,
-        status: GoalStatus.active,
-        startAt: now,
-        endAt: now.add(const Duration(days: 30)),
-        metadata: {'targetTier': 'Gold I'},
+        status: GoalStatus.expired,
+        currentProgress: 1,
+        startedAt: now.subtract(const Duration(days: 2)),
+        expiresAt: now.subtract(const Duration(days: 1)),
       ),
     ];
   }

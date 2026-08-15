@@ -11,11 +11,19 @@ import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dar
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/gameplay_engine/models/answer_review.dart';
 
+import 'package:soteria/features/player/presentation/providers/progression_providers.dart';
+
 final postGameRepositoryProvider = Provider<PostGameRepository>((ref) {
   final firestore = ref.watch(firebaseFirestoreProvider);
   final auth = ref.watch(firebaseAuthProvider);
   final prefs = ref.watch(sharedPreferencesProvider);
-  return FirestorePostGameRepository(firestore, auth, prefs);
+  final progressionRepo = ref.watch(playerProgressionRepositoryProvider);
+  return FirestorePostGameRepository(
+    firestore,
+    auth,
+    prefs,
+    progressionRepo,
+  );
 });
 
 class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
@@ -60,6 +68,7 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
 
     final result = GameResult(
       sessionId: gameState.sessionId,
+      playerId: ref.read(sessionProvider).uid ?? '',
       finalScore: gameState.score,
       totalXP: gameState.xp + rewards.totalXP,
       totalQuestions: gameState.questions.length,

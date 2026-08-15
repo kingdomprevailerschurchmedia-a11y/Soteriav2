@@ -19,6 +19,8 @@ abstract class QuestionResult with _$QuestionResult {
     required String correctOptionText,
     required Duration responseTime,
     required int scoreEarned,
+    String? categoryId,
+    GameMode? mode,
     Difficulty? difficulty,
     String? explanation,
     String? questionVersion,

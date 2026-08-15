@@ -5,6 +5,9 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/design_system/components/soteria_progress_bar.dart';
 
+import 'package:soteria/features/gameplay_engine/progression/services/level_engine.dart';
+import 'package:soteria/features/player/domain/config/progression_config.dart';
+
 class LevelProgressionCard extends StatefulWidget {
   final int initialXP;
   final int xpEarned;
@@ -29,15 +32,17 @@ class _LevelProgressionCardState extends State<LevelProgressionCard>
   late int _displayXP;
   late int _displayLevel;
   late double _displayProgress;
+  late int _xpRequiredForNext;
 
-  final int _xpPerLevel = 1000;
+  final _engine = LevelEngine();
 
   @override
   void initState() {
     super.initState();
     _displayXP = widget.initialXP;
     _displayLevel = widget.initialLevel;
-    _displayProgress = (widget.initialXP % _xpPerLevel) / _xpPerLevel;
+    _displayProgress = _engine.calculateLevelProgress(widget.initialXP);
+    _xpRequiredForNext = ProgressionConfig.xpCapacityForLevel(_displayLevel);
 
     _controller = AnimationController(
       vsync: this,
@@ -55,8 +60,9 @@ class _LevelProgressionCardState extends State<LevelProgressionCard>
             setState(() {
               final currentXP = _xpAnimation.value.toInt();
               _displayXP = currentXP;
-              _displayLevel = currentXP ~/ _xpPerLevel;
-              _displayProgress = (currentXP % _xpPerLevel) / _xpPerLevel;
+              _displayLevel = _engine.calculateLevel(currentXP);
+              _displayProgress = _engine.calculateLevelProgress(currentXP);
+              _xpRequiredForNext = ProgressionConfig.xpCapacityForLevel(_displayLevel);
             });
           });
 
@@ -73,40 +79,45 @@ class _LevelProgressionCardState extends State<LevelProgressionCard>
 
   @override
   Widget build(BuildContext context) {
-    return SoteriaCard(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'LEVEL $_displayLevel',
-                style: context.titleMedium.copyWith(
-                  color: SoteriaColors.gold,
-                  fontWeight: FontWeight.w900,
+    final xpInLevel = _engine.xpIntoCurrentLevel(_displayXP);
+
+    return Semantics(
+      label: 'Level Progression. Currently level $_displayLevel. ${widget.xpEarned} XP earned.',
+      child: SoteriaCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'LEVEL $_displayLevel',
+                  style: context.titleMedium.copyWith(
+                    color: SoteriaColors.gold,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                Text(
+                  '$xpInLevel / $_xpRequiredForNext XP',
+                  style: context.labelSmall.copyWith(color: SoteriaColors.muted),
+                ),
+              ],
+            ),
+            SizedBox(height: SoteriaSpacing.md),
+            SoteriaProgressBar(progress: _displayProgress, hasGlow: true),
+            SizedBox(height: SoteriaSpacing.sm),
+            Center(
+              child: Text(
+                '+${widget.xpEarned} XP GAINED',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.primary,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
                 ),
               ),
-              Text(
-                '${_displayXP % _xpPerLevel} / $_xpPerLevel XP',
-                style: context.labelSmall.copyWith(color: SoteriaColors.muted),
-              ),
-            ],
-          ),
-          SizedBox(height: SoteriaSpacing.md),
-          SoteriaProgressBar(progress: _displayProgress, hasGlow: true),
-          SizedBox(height: SoteriaSpacing.sm),
-          Center(
-            child: Text(
-              '+${widget.xpEarned} XP GAINED',
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.primary,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

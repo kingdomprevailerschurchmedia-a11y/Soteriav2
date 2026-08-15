@@ -7,7 +7,8 @@ import '../../../features/player/domain/models/competitive_season.dart';
 class MockProfileData {
   static PlayerProfile get mockPlayer => PlayerProfile(
     uid: 'mock_user',
-    displayName: 'SoteriaPlayer',
+    displayName: 'Scholar',
+    username: 'scholar',
     email: 'player@soteria.app',
     createdAt: DateTime.now(),
     lastLogin: DateTime.now(),
@@ -57,6 +58,8 @@ class MockProfileData {
     totalRewards: 12,
     completedMilestones: [],
     totalMilestones: 25,
+    earnedAchievements: [],
+    totalAchievements: 50,
     personalRecords: [],
   );
 }

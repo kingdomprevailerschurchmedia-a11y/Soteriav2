@@ -72,6 +72,7 @@ class NotificationCenterScreen extends ConsumerWidget {
             final categories = grouped.keys.toList();
 
             return ListView.builder(
+              cacheExtent: 1000,
               padding: EdgeInsets.fromLTRB(
                 SoteriaSpacing.lg,
                 kToolbarHeight + SoteriaSpacing.xl,
@@ -97,7 +98,7 @@ class NotificationCenterScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    ...items.map((n) => _NotificationWrapper(notification: n)),
+                    ...items.map((n) => RepaintBoundary(child: _NotificationWrapper(notification: n))),
                   ],
                 );
               },

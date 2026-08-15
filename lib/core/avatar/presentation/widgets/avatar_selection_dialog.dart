@@ -40,7 +40,9 @@ class AvatarSelectionDialog extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final catalog = ref.watch(avatarCatalogProvider);
     final selectedAvatarId = ref.watch(selectedAvatarIdProvider);
+    final profile = ref.watch(profileProvider);
     final isUploading = ref.watch(profileUploadProvider);
+    final isProfileLoading = profile == null;
 
     return Stack(
       children: [
@@ -81,7 +83,7 @@ class AvatarSelectionDialog extends ConsumerWidget {
                     child: _ActionTile(
                       icon: Icons.photo_library_rounded,
                       label: 'Gallery',
-                      onTap: isUploading
+                      onTap: (isUploading || isProfileLoading)
                           ? () {}
                           : () => _pickImage(ref, ImageSource.gallery),
                     ),
@@ -91,7 +93,7 @@ class AvatarSelectionDialog extends ConsumerWidget {
                     child: _ActionTile(
                       icon: Icons.camera_alt_rounded,
                       label: 'Camera',
-                      onTap: isUploading
+                      onTap: (isUploading || isProfileLoading)
                           ? () {}
                           : () => _pickImage(ref, ImageSource.camera),
                     ),
@@ -122,7 +124,7 @@ class AvatarSelectionDialog extends ConsumerWidget {
                     final isSelected = avatar.id == selectedAvatarId;
 
                     return GestureDetector(
-                      onTap: isUploading
+                      onTap: (isUploading || isProfileLoading)
                           ? null
                           : () {
                               ref

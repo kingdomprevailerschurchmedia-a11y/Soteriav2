@@ -4,15 +4,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import '../../domain/repositories/post_game_repository.dart';
 import '../../models/game_result.dart';
+import '../../../player/domain/repositories/player_progression_repository.dart';
+import '../../../player/domain/models/xp_transaction.dart';
+
+import '../../../player/data/repositories/firebase_player_progression_repository.dart';
 
 class FirestorePostGameRepository implements PostGameRepository {
   final FirebaseFirestore _firestore;
   final FirebaseAuth _auth;
   final SharedPreferences _prefs;
+  final PlayerProgressionRepository _progressionRepository;
 
   static const String _syncQueueKey = 'post_game_sync_queue';
 
-  FirestorePostGameRepository(this._firestore, this._auth, this._prefs);
+  FirestorePostGameRepository(
+    this._firestore,
+    this._auth,
+    this._prefs,
+    this._progressionRepository,
+  );
 
   String? get _uid => _auth.currentUser?.uid;
 
@@ -23,19 +33,17 @@ class FirestorePostGameRepository implements PostGameRepository {
       return;
     }
 
-    // Atomic update using a transaction
+    // Authoritative atomic update for all rewards (coins, stats, and XP)
     await _firestore.runTransaction((transaction) async {
       final userRef = _firestore.collection('users').doc(_uid);
       final userDoc = await transaction.get(userRef);
 
       if (!userDoc.exists) return;
 
-      final currentXP = userDoc.data()?['xp'] ?? 0;
+      // 1. Update Identity stats and non-progression rewards (coins)
       final currentCoins = userDoc.data()?['coins'] ?? 0;
-      final currentLevel = userDoc.data()?['level'] ?? 1;
 
       transaction.update(userRef, {
-        'xp': currentXP + result.rewards.totalXP,
         'coins': currentCoins + result.rewards.totalCoins,
         'totalQuestionsAnswered': FieldValue.increment(
           result.correctAnswers + result.wrongAnswers,
@@ -45,10 +53,30 @@ class FirestorePostGameRepository implements PostGameRepository {
       });
 
       // Also save the session result as a record
-      final sessionRef = userRef
-          .collection('game_results')
-          .doc(result.sessionId);
+      final sessionRef = userRef.collection('game_results').doc(
+        result.sessionId,
+      );
       transaction.set(sessionRef, result.toJson());
+
+      // 2. Authoritative Progression Update (XP)
+      if (result.rewards.totalXP > 0) {
+        final xpTx = XpTransaction(
+          transactionId: '${result.sessionId}_xp',
+          userId: _uid!,
+          amount: result.rewards.totalXP,
+          source: XpSource.quizCompletion,
+          referenceId: result.sessionId,
+          createdAt: DateTime.now(),
+        );
+
+        if (_progressionRepository is FirebasePlayerProgressionRepository) {
+          await (_progressionRepository as FirebasePlayerProgressionRepository)
+              .processXpTransaction(transaction, xpTx);
+        } else {
+          // Fallback if not using Firestore implementation (unlikely in prod)
+          await _progressionRepository.applyXpTransaction(xpTx);
+        }
+      }
     });
   }
 

@@ -1,36 +1,53 @@
-import 'package:soteria/features/player/domain/models/competitive_goal.dart';
-import 'package:soteria/features/player/domain/models/competitive_statistics.dart';
-import 'package:soteria/features/player/domain/models/player_progression.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_result.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
+import '../models/goal.dart';
+import '../models/competitive_statistics.dart';
+import '../models/player_progression.dart';
+import '../config/goal_registry.dart';
+import '../../../quiz/domain/models/quiz_result.dart';
+import '../../../quiz/domain/models/quiz_enums.dart';
 
-class CompetitiveGoalEvaluationService {
-  /// Evaluates a list of goals against authoritative data.
-  List<CompetitiveGoal> evaluate({
-    required List<CompetitiveGoal> activeGoals,
+class GoalEvaluationService {
+  /// Evaluates a list of player goals against authoritative data.
+  List<PlayerGoal> evaluate({
+    required List<PlayerGoal> playerGoals,
     required List<QuizResult> recentResults,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
+    List<GoalDefinition>? definitions,
   }) {
-    final updatedGoals = <CompetitiveGoal>[];
+    final updatedGoals = <PlayerGoal>[];
+    final now = DateTime.now();
 
-    for (final goal in activeGoals) {
-      if (goal.isCompleted || goal.isExpired) continue;
+    for (final playerGoal in playerGoals) {
+      if (playerGoal.isCompleted || playerGoal.isExpired) continue;
+
+      // Check for expiration
+      if (now.isAfter(playerGoal.expiresAt)) {
+        updatedGoals.add(playerGoal.copyWith(status: GoalStatus.expired));
+        continue;
+      }
+
+      final definitionId = _resolveDefinitionId(playerGoal.goalId);
+      final definition = definitions?.firstWhere((d) => d.id == definitionId, orElse: () => GoalRegistry.getById(definitionId)!) ?? GoalRegistry.getById(definitionId);
+      
+      if (definition == null) continue;
 
       final double progress = _calculateProgress(
-        goal: goal,
+        definition: definition,
+        playerGoal: playerGoal,
         recentResults: recentResults,
         statistics: statistics,
         progression: progression,
       );
 
-      if (progress != goal.currentProgress) {
-        final isNewlyCompleted = progress >= goal.target;
+      final clampedProgress = progress.clamp(0.0, definition.target);
+
+      if (clampedProgress != playerGoal.currentProgress) {
+        final isNewlyCompleted = clampedProgress >= definition.target;
         updatedGoals.add(
-          goal.copyWith(
-            currentProgress: progress,
+          playerGoal.copyWith(
+            currentProgress: clampedProgress,
             status: isNewlyCompleted ? GoalStatus.completed : GoalStatus.active,
-            completedAt: isNewlyCompleted ? DateTime.now() : null,
+            completedAt: isNewlyCompleted ? DateTime.now() : playerGoal.completedAt,
           ),
         );
       }
@@ -40,7 +57,8 @@ class CompetitiveGoalEvaluationService {
   }
 
   double _calculateProgress({
-    required CompetitiveGoal goal,
+    required GoalDefinition definition,
+    required PlayerGoal playerGoal,
     required List<QuizResult> recentResults,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
@@ -49,14 +67,13 @@ class CompetitiveGoalEvaluationService {
     final resultsInRange = recentResults
         .where(
           (r) =>
-              r.completedAt.isAfter(goal.startAt) &&
-              r.completedAt.isBefore(goal.endAt),
+              r.completedAt.isAfter(playerGoal.startedAt) &&
+              r.completedAt.isBefore(playerGoal.expiresAt),
         )
         .toList();
 
-    switch (goal.category) {
+    switch (definition.category) {
       case GoalCategory.gameCount:
-        // Only count competitive games
         return resultsInRange
             .where(
               (r) =>
@@ -83,7 +100,7 @@ class CompetitiveGoalEvaluationService {
             .toDouble();
 
       case GoalCategory.rank:
-        final targetTier = goal.metadata['targetTier'] ?? '';
+        final targetTier = definition.metadata['targetTier'] ?? '';
         return _evaluateRankTier(
           progression.currentRankTier,
           targetTier,
@@ -115,5 +132,13 @@ class CompetitiveGoalEvaluationService {
 
     if (targetIndex == -1) return 0;
     return currentIndex >= targetIndex ? 1 : 0;
+  }
+
+  String _resolveDefinitionId(String goalId) {
+    final parts = goalId.split('_');
+    if (parts.length > 3 && (parts[0] == 'daily' || parts[0] == 'weekly')) {
+       return parts.take(3).join('_');
+    }
+    return goalId;
   }
 }

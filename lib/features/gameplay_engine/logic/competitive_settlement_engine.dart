@@ -1,6 +1,8 @@
 import '../models/game_result.dart';
 import '../models/competitive_session.dart';
 import '../progression/models/reward_summary.dart';
+import '../progression/models/progression_policy.dart';
+import '../progression/services/xp_manager.dart';
 
 class CompetitiveSettlementEngine {
   /// Validates a competitive result against the original session config.
@@ -14,7 +16,7 @@ class CompetitiveSettlementEngine {
     return true;
   }
 
-  /// Calculates final rewards for a competitive session.
+  /// Calculates final rewards for a competitive session using authoritative policies.
   static RewardSummary calculateRewards({
     required CompetitiveSession session,
     required GameResult result,
@@ -22,18 +24,20 @@ class CompetitiveSettlementEngine {
     final entryFee = session.config.entryFee;
     final accuracy = result.accuracy;
 
-    // Base XP from correct answers
-    final baseXP = result.correctAnswers * 50;
-
-    // Multiplier based on difficulty
-    final difficultyMultiplier = _getDifficultyMultiplier(
-      session.config.difficulty.name,
+    final policy = ProgressionPolicyResolver.resolve(
+      result.mode,
+      difficulty: session.config.difficulty.name,
     );
 
-    // Perfect Session Bonus
-    final perfectBonus = accuracy >= 1.0 ? 500 : 0;
+    // Calculate XP using authoritative XPManager
+    final xpFromAnswers = result.correctAnswers * (policy.xpPerCorrect * policy.xpMultiplier).toInt();
+    final roundBonus = XPManager.calculateRoundBonus(
+      totalQuestions: result.totalQuestions,
+      correctAnswers: result.correctAnswers,
+      policy: policy,
+    );
 
-    // Streak Bonus (placeholder logic)
+    // Streak Bonus (placeholder logic maintained but unified if needed)
     final streakBonus = result.maxStreak * 10;
 
     // Coins Returned (Return entry fee if accuracy > 70%, for example)
@@ -45,26 +49,11 @@ class CompetitiveSettlementEngine {
     }
 
     return RewardSummary(
-      baseXP: (baseXP * difficultyMultiplier).toInt(),
-      bonusXP: (perfectBonus * difficultyMultiplier).toInt(),
+      baseXP: xpFromAnswers,
+      bonusXP: roundBonus,
       baseCoins: coinsWon,
-      perfectScoreBonus: perfectBonus,
+      perfectScoreBonus: accuracy >= 1.0 ? policy.perfectRoundBonusXP : 0,
       streakBonus: streakBonus,
     );
-  }
-
-  static double _getDifficultyMultiplier(String difficulty) {
-    switch (difficulty.toLowerCase()) {
-      case 'intermediate':
-        return 1.5;
-      case 'advanced':
-        return 2.0;
-      case 'expert':
-        return 3.0;
-      case 'adaptive':
-        return 2.0;
-      default:
-        return 1.0;
-    }
   }
 }

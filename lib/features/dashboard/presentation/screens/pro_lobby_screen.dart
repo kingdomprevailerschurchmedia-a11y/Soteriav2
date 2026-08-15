@@ -13,8 +13,8 @@ import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../../../features/gameplay_engine/models/pro_session_config.dart';
 import '../providers/pro_lobby_providers.dart';
-import '../widgets/lobby/pro/pro_reward_card.dart';
-import '../widgets/lobby/pro/pro_risk_card.dart';
+import '../widgets/lobby/lobby_config_widgets.dart';
+import '../widgets/lobby/pro/pro_session_summary_card.dart';
 import '../widgets/lobby/pro/pro_entry_fee_widget.dart';
 import '../widgets/lobby/pro/pro_confirmation_dialog.dart';
 import '../widgets/lobby/pro/competitive_badge.dart';
@@ -22,6 +22,7 @@ import '../../../../features/tournaments/domain/models/tournament.dart';
 import '../../../../features/gameplay_engine/models/pro_mode_access.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
+import '../widgets/lobby/lobby_config_widgets.dart';
 
 class ProLobbyScreen extends ConsumerWidget {
   final Tournament? tournament;
@@ -51,7 +52,7 @@ class ProLobbyScreen extends ConsumerWidget {
                       child: CustomScrollView(
                         slivers: [
                           SliverPadding(
-                            padding: EdgeInsets.all(SoteriaSpacing.lg),
+                            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
                             sliver: SliverList(
                               delegate: SliverChildListDelegate([
                                 SoteriaFadeIn(
@@ -59,47 +60,45 @@ class ProLobbyScreen extends ConsumerWidget {
                                   child: Semantics(
                                     header: true,
                                     label: 'Pro Mode Lobby',
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        const CompetitiveBadge(),
-                                        SizedBox(height: SoteriaSpacing.sm),
-                                        Text(
-                                          'PRO CHALLENGE',
-                                          style: context.displayMedium.copyWith(
-                                            fontWeight: FontWeight.w900,
-                                            letterSpacing: -1,
-                                          ),
-                                        ),
-                                      ],
+                                    child: const LobbyHeroHeader(
+                                      part1: 'PRO',
+                                      part2: 'MODE',
+                                      part3: 'CHALLENGE',
+                                      subtitle: "High stakes. Professional integrity. Rank points at risk.",
                                     ),
                                   ),
                                 ),
-                                SizedBox(height: SoteriaSpacing.xl),
+                                SizedBox(height: SoteriaSpacing.md),
                                 if (state.access.state == ProModeAccessState.locked)
                                   _LockedStateCard(message: state.access.message)
                                 else ...[
                                   const ProEntryFeeWidget(),
-                                  SizedBox(height: SoteriaSpacing.xxl),
+                                  SizedBox(height: SoteriaSpacing.md),
+                                  LobbyInterestsCard(
+                                    value: state.config.useInterests,
+                                    onChanged: (val) => ref
+                                        .read(proLobbyProvider.notifier)
+                                        .setUseInterests(val),
+                                  ),
+                                  SizedBox(height: SoteriaSpacing.md),
                                   const DifficultySelectorSection(),
-                                  SizedBox(height: SoteriaSpacing.xl),
+                                  SizedBox(height: SoteriaSpacing.md),
                                   const QuestionCountSelectorSection(),
-                                  SizedBox(height: SoteriaSpacing.xxl),
-                                  const ProRewardCard(),
                                   SizedBox(height: SoteriaSpacing.lg),
-                                  const ProRiskCard(),
+                                  const ProSessionSummaryCard(),
                                 ],
-                                SizedBox(height: SoteriaSpacing.xxl * 2),
+                                SizedBox(height: SoteriaSpacing.lg),
                               ]),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    _StartAction(
+                    LobbyStartAction(
                       enabled: state.access.isAllowed,
                       error: _getErrorMessage(state.access),
+                      label: 'INITIALIZE SESSION',
+                      helperText: 'Authoritative Validation • Secure Settlement',
                       onStart: () {
                         showDialog(
                           context: context,
@@ -138,7 +137,7 @@ class ProLobbyScreen extends ConsumerWidget {
       case ProModeAccessState.insufficientTokens:
         return 'INSUFFICIENT COINS';
       case ProModeAccessState.insufficientContent:
-        return 'NOT ENOUGH QUESTIONS AVAILABLE';
+        return access.message?.toUpperCase() ?? 'NOT ENOUGH QUESTIONS AVAILABLE';
       case ProModeAccessState.locked:
         return access.message?.toUpperCase();
       default:
@@ -225,151 +224,92 @@ class _ProHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
-      child: Column(
+      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg, vertical: SoteriaSpacing.md),
+      child: Row(
         children: [
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white,
-                ),
-                onPressed: () => context.pop(),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: IconButton(
+              padding: EdgeInsets.zero,
+              icon: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: Colors.white,
+                size: 16,
               ),
-              const Spacer(),
-              if (player != null)
-                Row(
+              onPressed: () => context.pop(),
+            ),
+          ),
+          const Spacer(),
+          if (player != null)
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                    Text(
+                      player.displayName,
+                      style: context.titleSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Row(
                       children: [
-                        Text(
-                          player.displayName,
-                          style: context.bodyMedium.copyWith(
-                            fontWeight: FontWeight.bold,
+                        ShaderMask(
+                          shaderCallback: (bounds) => const LinearGradient(
+                            colors: [SoteriaColors.gold, Color(0xFFFFD700)],
+                          ).createShader(bounds),
+                          child: const Icon(
+                            Icons.monetization_on_rounded,
+                            color: Colors.white,
+                            size: 12,
                           ),
                         ),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.monetization_on_rounded,
-                              color: SoteriaColors.gold,
-                              size: 12,
-                            ),
-                            const SizedBox(width: 4),
-                            Text(
-                              '${player.coins}',
-                              style: context.labelSmall.copyWith(
-                                color: SoteriaColors.gold,
-                              ),
-                            ),
-                          ],
+                        const SizedBox(width: 4),
+                        Text(
+                          '${player.coins}',
+                          style: context.labelSmall.copyWith(
+                            color: SoteriaColors.gold,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.5,
+                            fontSize: 10,
+                          ),
                         ),
                       ],
                     ),
-                    SizedBox(width: SoteriaSpacing.md),
+                  ],
+                ),
+                SizedBox(width: SoteriaSpacing.md),
+                Stack(
+                  children: [
                     SoteriaAvatar(
                       imageUrl: player.photoUrl,
-                      size: 40,
+                      size: 44,
                       isOnline: true,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: BoxDecoration(
+                          color: SoteriaColors.success,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: SoteriaColors.background, width: 2),
+                        ),
+                      ),
                     ),
                   ],
                 ),
-            ],
-          ),
-          if (player != null) ...[
-            SizedBox(height: SoteriaSpacing.lg),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _HeaderStat(label: 'RANK', value: player.role.toUpperCase()),
-                _HeaderStat(
-                  label: 'WIN RATE',
-                  value: '${(player.accuracy * 100).toInt()}%',
-                ),
-                _HeaderStat(label: 'STREAK', value: '${player.currentStreak}'),
               ],
             ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _HeaderStat extends StatelessWidget {
-  final String label;
-  final String value;
-  const _HeaderStat({required this.label, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: context.titleMedium.copyWith(
-            fontWeight: FontWeight.w900,
-            color: SoteriaColors.textPrimary,
-          ),
-        ),
-        Text(
-          label,
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.muted,
-            fontSize: 9,
-            letterSpacing: 1.2,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _StartAction extends StatelessWidget {
-  const _StartAction({
-    required this.enabled,
-    this.error,
-    required this.onStart,
-  });
-  final bool enabled;
-  final String? error;
-  final VoidCallback onStart;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg,
-        SoteriaSpacing.lg + 80.h,
-      ),
-      decoration: BoxDecoration(
-        color: SoteriaColors.surface.withValues(alpha: 0.8),
-        border: Border(
-          top: BorderSide(color: Colors.white.withValues(alpha: 0.05)),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          if (error != null)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: Text(
-                error!,
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.error,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          SoteriaButton.primary(
-            label: 'INITIALIZE SESSION',
-            onPressed: enabled ? onStart : null,
-          ),
         ],
       ),
     );
@@ -385,63 +325,54 @@ class DifficultySelectorSection extends ConsumerWidget {
       proLobbyProvider.select((s) => s.config.difficulty),
     );
 
-    return Semantics(
-      label: 'Difficulty selection',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'DIFFICULTY',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.muted,
-              letterSpacing: 2,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const LobbySectionHeader(
+          label: 'DIFFICULTY',
+          icon: Icons.psychology_rounded,
+        ),
+        SizedBox(height: SoteriaSpacing.md),
+        GridView.count(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          crossAxisCount: 3,
+          mainAxisSpacing: 8.w,
+          crossAxisSpacing: 8.w,
+          childAspectRatio: 1.1,
+          children: [
+            LobbyDifficultyCard(
+              isSelected: current == ProDifficulty.intermediate,
+              label: 'INTERMEDIATE',
+              icon: Icons.bar_chart_rounded,
+              color: const Color(0xFF7C4DFF),
+              onTap: () => ref.read(proLobbyProvider.notifier).updateDifficulty(ProDifficulty.intermediate),
             ),
+            LobbyDifficultyCard(
+              isSelected: current == ProDifficulty.advanced,
+              label: 'ADVANCED',
+              icon: Icons.whatshot_rounded,
+              color: const Color(0xFFFFAB40),
+              onTap: () => ref.read(proLobbyProvider.notifier).updateDifficulty(ProDifficulty.advanced),
+            ),
+            LobbyDifficultyCard(
+              isSelected: current == ProDifficulty.expert,
+              label: 'EXPERT',
+              icon: Icons.workspace_premium_rounded,
+              color: const Color(0xFFFF5252),
+              onTap: () => ref.read(proLobbyProvider.notifier).updateDifficulty(ProDifficulty.expert),
+            ),
+          ],
+        ),
+        SizedBox(height: 12.h),
+        LobbyAdaptiveToggle(
+          isSelected: current == ProDifficulty.adaptive,
+          label: 'ADAPTIVE INTELLIGENCE',
+          onTap: () => ref.read(proLobbyProvider.notifier).updateDifficulty(
+            current == ProDifficulty.adaptive ? ProDifficulty.intermediate : ProDifficulty.adaptive,
           ),
-          SizedBox(height: SoteriaSpacing.md),
-          Row(
-            children: ProDifficulty.values.map((d) {
-              final isSelected = d == current;
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xs),
-                  child: GestureDetector(
-                    onTap: () =>
-                        ref.read(proLobbyProvider.notifier).updateDifficulty(d),
-                    child: AnimatedContainer(
-                      duration: SoteriaAnimations.fast,
-                      padding: EdgeInsets.symmetric(
-                        vertical: SoteriaSpacing.md,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? SoteriaColors.primary
-                            : SoteriaColors.surface,
-                        borderRadius: BorderRadius.circular(SoteriaRadius.md),
-                        border: Border.all(
-                          color: isSelected
-                              ? SoteriaColors.primary
-                              : Colors.white.withValues(alpha: 0.1),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          d.label,
-                          style: context.labelSmall.copyWith(
-                            color: isSelected
-                                ? Colors.black
-                                : SoteriaColors.textPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
@@ -456,64 +387,26 @@ class QuestionCountSelectorSection extends ConsumerWidget {
     );
     final counts = [10, 20, 30, 50];
 
-    return Semantics(
-      label: 'Question count selection',
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'QUESTIONS',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.muted,
-              letterSpacing: 2,
-            ),
-          ),
-          SizedBox(height: SoteriaSpacing.md),
-          Row(
-            children: counts.map((c) {
-              final isSelected = c == current;
-              return Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xs),
-                  child: GestureDetector(
-                    onTap: () => ref
-                        .read(proLobbyProvider.notifier)
-                        .updateQuestionCount(c),
-                    child: AnimatedContainer(
-                      duration: SoteriaAnimations.fast,
-                      padding: EdgeInsets.symmetric(
-                        vertical: SoteriaSpacing.md,
-                      ),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? SoteriaColors.primary
-                            : SoteriaColors.surface,
-                        borderRadius: BorderRadius.circular(SoteriaRadius.md),
-                        border: Border.all(
-                          color: isSelected
-                              ? SoteriaColors.primary
-                              : Colors.white.withValues(alpha: 0.1),
-                        ),
-                      ),
-                      child: Center(
-                        child: Text(
-                          c.toString(),
-                          style: context.labelSmall.copyWith(
-                            color: isSelected
-                                ? Colors.black
-                                : SoteriaColors.textPrimary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const LobbySectionHeader(
+          label: 'QUESTIONS',
+          icon: Icons.layers_rounded,
+        ),
+        SizedBox(height: SoteriaSpacing.md),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: counts.map((count) {
+            final isSelected = current == count;
+            return LobbyCountCircle(
+              count: count,
+              isSelected: isSelected,
+              onTap: () => ref.read(proLobbyProvider.notifier).updateQuestionCount(count),
+            );
+          }).toList(),
+        ),
+      ],
     );
   }
 }

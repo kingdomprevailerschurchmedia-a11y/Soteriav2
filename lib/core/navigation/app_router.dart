@@ -104,8 +104,10 @@ import 'package:soteria/features/player/screens/config_debug_screen.dart';
 import 'package:soteria/features/player/screens/security_status_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/competitive_history_screen.dart';
+import 'package:soteria/features/player/presentation/screens/achievement_list_screen.dart';
 import 'package:soteria/features/player/presentation/screens/create_challenge_screen.dart';
 import 'package:soteria/features/player/presentation/screens/public_competitive_profile_screen.dart';
+import 'package:soteria/features/player/presentation/screens/player_search_screen.dart';
 import 'package:soteria/features/social/presentation/screens/friends_screen.dart';
 import 'package:soteria/features/social/presentation/screens/friend_requests_screen.dart';
 import 'package:soteria/features/player/presentation/screens/challenge_center_screen.dart';
@@ -145,7 +147,7 @@ final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: SoteriaRoutes.splash,
     navigatorKey: rootNavigatorKey,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false,
     refreshListenable: listenable,
     observers: [
       if (!Platform.environment.containsKey('FLUTTER_TEST') &&
@@ -701,6 +703,22 @@ final routerProvider = Provider<GoRouter>((ref) {
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.slideUp(
                           child: const CompetitiveHistoryScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                  GoRoute(
+                    path: 'achievements',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.slideUp(
+                          child: const AchievementListScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
+                  GoRoute(
+                    path: 'search',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.slideUp(
+                          child: const PlayerSearchScreen(),
                           key: state.pageKey,
                         ),
                   ),

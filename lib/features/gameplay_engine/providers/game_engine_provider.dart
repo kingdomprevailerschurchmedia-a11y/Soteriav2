@@ -16,7 +16,7 @@ import 'package:soteria/features/gameplay_engine/timer/models/timer_state.dart';
 import 'package:soteria/features/gameplay_engine/timer/models/timer_status.dart';
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/providers/lifeline_controller.dart';
-
+import 'package:soteria/features/gameplay_engine/progression/models/progress_snapshot.dart';
 import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_policy.dart';
 import 'package:soteria/features/gameplay_engine/integrity/providers/integrity_providers.dart';
@@ -24,7 +24,9 @@ import 'package:soteria/features/gameplay_engine/integrity/models/integrity_sign
 import 'package:soteria/features/question_presentation/providers/presentation_providers.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
 import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
-import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
+import 'package:soteria/features/player/presentation/providers/progression_providers.dart' as player_prog;
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 
 /// Central engine managing the lifecycle and state of a gameplay session.
 class GameEngine extends StateNotifier<GameState> {
@@ -54,7 +56,10 @@ class GameEngine extends StateNotifier<GameState> {
        _integrity = integrity,
        _repository = repository,
        super(
-         GameState(sessionId: DateTime.now().millisecondsSinceEpoch.toString()),
+         GameState(
+           sessionId: DateTime.now().millisecondsSinceEpoch.toString(),
+           playerId: ref?.read(currentPlayerProvider)?.uid ?? 'unknown',
+         ),
        ) {
     _subscribeToTimer();
   }
@@ -108,8 +113,13 @@ class GameEngine extends StateNotifier<GameState> {
     // Initialize Integrity Monitoring
     _integrity?.startSession(state.sessionId, config.mode);
 
-    // Reset progression session
-    _progression?.resetSession();
+    // Hydrate progression baseline from authoritative record
+    final authoritativeProg = ref?.read(player_prog.competitiveProgressionProvider).value;
+    if (authoritativeProg != null) {
+      _progression?.hydrate(ProgressSnapshot.fromProgression(authoritativeProg));
+    } else {
+      _progression?.resetSession();
+    }
 
     // Simulate preparation time for loading animations
     await Future.delayed(const Duration(milliseconds: 800));
@@ -120,9 +130,7 @@ class GameEngine extends StateNotifier<GameState> {
       lives: config.initialLives,
     );
 
-    if (config.questionTimer != null) {
-      _timerEngine?.start(config.questionTimer!);
-    }
+    _startQuestionTimer();
 
     analytics?.trackEvent('Game Started', {'mode': config.mode.name});
     _saveCheckpoint();
@@ -131,10 +139,17 @@ class GameEngine extends StateNotifier<GameState> {
   /// Hydrates the engine with a previously saved state (for session resume).
   void hydrate(GameState hydratedState) {
     state = hydratedState;
-    if (state.lifecycle == GameLifecycle.playing &&
-        config.questionTimer != null) {
-      _timerEngine?.start(config.questionTimer!);
+    if (state.lifecycle == GameLifecycle.playing) {
+      _startQuestionTimer();
     }
+  }
+
+  void _startQuestionTimer() {
+    final effectiveDuration = config.questionTimer ??
+        state.currentQuestion?.estimatedTime ??
+        const Duration(seconds: 30);
+
+    _timerEngine?.start(effectiveDuration);
   }
 
   void _saveCheckpoint() {
@@ -154,6 +169,9 @@ class GameEngine extends StateNotifier<GameState> {
         state.lastAnswerTime ?? state.startTime!,
       ),
     );
+
+    // Stop timer immediately on submission to lock response time and prevent late submissions
+    _timerEngine?.pause(reason: 'answered');
 
     final policy = AnswerPolicyResolver.resolve(config.mode);
     final timerStatus = _timerEngine?.debugState.status ?? TimerStatus.running;
@@ -182,13 +200,22 @@ class GameEngine extends StateNotifier<GameState> {
   }
 
   void _handleAnswerResult(AnswerResult result) {
-    final progressionPolicy = ProgressionPolicyResolver.resolve(config.mode);
+    final progressionPolicy = ProgressionPolicyResolver.resolve(
+      config.mode,
+      difficultyMultiplier: config.difficultyMultiplier,
+    );
+    final careerContext =
+        ref?.read(currentPlayerProvider)?.toCareerContext() ?? const {};
 
     // Record in history for Answer Review
     state = state.copyWith(answerHistory: [...state.answerHistory, result]);
 
     // Delegate to the Progression Engine
-    _progression?.handleAnswer(result, progressionPolicy);
+    _progression?.handleAnswer(
+      result,
+      progressionPolicy,
+      careerContext: careerContext,
+    );
 
     if (result.isCorrect) {
       state = state.copyWith(
@@ -217,11 +244,10 @@ class GameEngine extends StateNotifier<GameState> {
       }
     }
 
-    // Auto-advance after delay (Story 3.1 logic)
-    // For Practice mode, we might want to wait for manual "Continue"
-    if (config.mode != GameMode.practice) {
+    // Auto-advance after delay if configured (Story 3.1 logic)
+    if (config.autoAdvance) {
       Future.delayed(const Duration(milliseconds: 1500), () {
-        if (mounted && state.lifecycle == GameLifecycle.answered) {
+        if (mounted && (state.lifecycle == GameLifecycle.answered || state.lifecycle == GameLifecycle.timeout)) {
           moveToNextQuestion();
         }
       });
@@ -241,9 +267,7 @@ class GameEngine extends StateNotifier<GameState> {
         lifecycle: GameLifecycle.playing,
       );
 
-      if (config.questionTimer != null) {
-        _timerEngine?.start(config.questionTimer!);
-      }
+      _startQuestionTimer();
       _saveCheckpoint();
     }
   }
@@ -269,23 +293,37 @@ class GameEngine extends StateNotifier<GameState> {
 
   void _endSession(GameLifecycle finalLifecycle) {
     state = state.copyWith(lifecycle: finalLifecycle);
+    _timerEngine?.reset();
     _integrity?.endSession();
 
     if (finalLifecycle == GameLifecycle.completed) {
-      final progressionPolicy = ProgressionPolicyResolver.resolve(config.mode);
+      final progressionPolicy = ProgressionPolicyResolver.resolve(
+        config.mode,
+        difficultyMultiplier: config.difficultyMultiplier,
+      );
+      final careerContext =
+          ref?.read(currentPlayerProvider)?.toCareerContext() ?? const {};
+
       final correctCount =
           state.score ~/
           100; // This is a bit loose now, but keeping for compatibility
+      
+      final timezone = ref?.read(profileProvider)?.timezone ?? 'Africa/Lagos';
+
       _progression?.handleRoundEnd(
+        userId: state.playerId,
         sessionId: state.sessionId,
         totalQuestions: state.questions.length,
         correctAnswers: correctCount,
         policy: progressionPolicy,
+        timezone: timezone,
+        careerContext: careerContext,
       );
     }
 
     final result = GameResult(
       sessionId: state.sessionId,
+      playerId: state.playerId,
       mode: config.mode,
       finalScore: state.score,
       totalXP: _progression?.state.totalXP ?? state.xp,
@@ -318,7 +356,7 @@ abstract class AnalyticsHook {
 
 /// Provider for a specific game configuration.
 final gameEngineProvider =
-    StateNotifierProvider.family<GameEngine, GameState, GameConfiguration>((
+    StateNotifierProvider.autoDispose.family<GameEngine, GameState, GameConfiguration>((
       ref,
       config,
     ) {

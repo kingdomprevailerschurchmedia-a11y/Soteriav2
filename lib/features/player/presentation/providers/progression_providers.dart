@@ -12,6 +12,10 @@ import '../../../../core/identity/providers/identity_providers.dart';
 import '../../providers/player_providers.dart';
 import '../../domain/repositories/competitive_result_repository.dart';
 import '../../data/repositories/firebase_competitive_result_repository.dart';
+import '../../domain/repositories/engagement_repository.dart';
+import '../../data/repositories/firebase_engagement_repository.dart';
+import '../../domain/models/daily_engagement.dart';
+import 'leaderboard_providers.dart';
 
 // --- Services ---
 final progressionServiceProvider = Provider<ProgressionService>((ref) {
@@ -29,6 +33,8 @@ final playerProgressionRepositoryProvider =
         FirebaseFirestore.instance,
         ref.watch(progressionServiceProvider),
         ref.watch(rankingEngineProvider),
+        ref.watch(leaderboardRepositoryProvider),
+        ref.watch(playerRepositoryProvider),
       );
     });
 
@@ -36,6 +42,10 @@ final competitiveResultRepositoryProvider =
     Provider<CompetitiveResultRepository>((ref) {
       return FirebaseCompetitiveResultRepository(FirebaseFirestore.instance);
     });
+
+final engagementRepositoryProvider = Provider<EngagementRepository>((ref) {
+  return FirebaseEngagementRepository(FirebaseFirestore.instance);
+});
 
 // --- Progression State ---
 final competitiveProgressionProvider = StreamProvider<PlayerProgression>((ref) {
@@ -72,6 +82,43 @@ final competitiveXpProgressProvider = Provider<double>((ref) {
       );
 });
 
+final currentStreakProvider = Provider<int>((ref) {
+  return ref.watch(competitiveProgressionProvider).when(
+    data: (p) => p.dailyStreak,
+    loading: () => 0,
+    error: (_, __) => 0,
+  );
+});
+
+final longestStreakProvider = Provider<int>((ref) {
+  return ref.watch(competitiveProgressionProvider).when(
+    data: (p) => p.longestStreak,
+    loading: () => 0,
+    error: (_, __) => 0,
+  );
+});
+
+final isEngagedTodayProvider = FutureProvider<bool>((ref) async {
+  final session = ref.watch(sessionProvider);
+  if (session.uid == null) return false;
+  
+  final profile = ref.watch(profileProvider);
+  final timezone = profile?.timezone ?? 'Africa/Lagos';
+  
+  final engagement = await ref.watch(engagementRepositoryProvider).getTodayEngagement(session.uid!, timezone);
+  return engagement != null;
+});
+
+final weeklyEngagementProvider = StreamProvider<List<DailyEngagement>>((ref) {
+  final session = ref.watch(sessionProvider);
+  if (session.uid == null) return Stream.value([]);
+  
+  final now = DateTime.now();
+  final start = now.subtract(const Duration(days: 7));
+  
+  return ref.watch(engagementRepositoryProvider).watchEngagements(session.uid!, start: start, end: now);
+});
+
 final playerStatisticsProvider = Provider<PlayerStatistics>((ref) {
   final player = ref.watch(currentPlayerProvider);
   if (player == null) return const PlayerStatistics();
@@ -90,3 +137,20 @@ final applyXpTransactionProvider =
       final repository = ref.watch(playerProgressionRepositoryProvider);
       return (transaction) => repository.applyXpTransaction(transaction);
     });
+
+final recordEngagementProvider = Provider<Future<int> Function(String, String)>((ref) {
+  final repository = ref.watch(engagementRepositoryProvider);
+  final session = ref.watch(sessionProvider);
+  final profile = ref.watch(profileProvider);
+  
+  return (type, id) async {
+    if (session.uid == null) return 0;
+    final timezone = profile?.timezone ?? 'Africa/Lagos';
+    return repository.recordEngagement(
+      userId: session.uid!,
+      activityType: type,
+      activityId: id,
+      timezone: timezone,
+    );
+  };
+});

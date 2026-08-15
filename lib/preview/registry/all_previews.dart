@@ -18,6 +18,7 @@ import '../../../features/quiz/preview/recovery_previews.dart';
 import '../../../features/quiz/preview/results_previews.dart';
 import '../../../features/quiz/preview/certification_previews.dart';
 import '../../../features/analytics/preview/analytics_previews.dart';
+import '../../../features/analytics/preview/question_analytics_previews.dart';
 import '../../../features/player/preview/progression_previews.dart';
 import '../../../features/player/preview/leaderboard_previews.dart';
 import '../../../features/player/preview/season_previews.dart';
@@ -25,6 +26,7 @@ import '../../../features/player/preview/competitive_history_previews.dart';
 import '../../../features/player/preview/competitive_profile_previews.dart';
 import '../../../features/player/preview/statistics_previews.dart';
 import '../../../features/player/preview/milestone_previews.dart';
+import '../../../features/player/preview/achievement_previews.dart';
 import '../../../features/player/preview/leaderboard_insights_previews.dart';
 import '../../../features/player/preview/personal_record_previews.dart';
 import '../../../features/notifications/preview/notification_previews.dart';
@@ -856,6 +858,16 @@ void registerAllPreviews() {
 
   r.registerPreview(
     PreviewItem(
+      id: 'achievement-gallery',
+      title: 'Achievement List',
+      description: 'Career recognition center',
+      category: PreviewCategory.profile,
+      builder: (context) => const AchievementPreviews(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
       id: 'personal-records',
       title: 'Personal Records',
       description: 'Career bests & Season records',
@@ -1382,6 +1394,16 @@ void registerAllPreviews() {
       description: 'Personal intelligence hub',
       category: PreviewCategory.analytics,
       builder: (context) => const AnalyticsPreviews(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'question-analytics',
+      title: 'Question Analytics',
+      description: 'Production performance metrics',
+      category: PreviewCategory.analytics,
+      builder: (context) => const QuestionAnalyticsPreviews(),
     ),
   );
 

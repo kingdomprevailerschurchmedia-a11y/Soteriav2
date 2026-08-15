@@ -103,13 +103,12 @@ void main() {
     });
 
     test(
-      'should demote from Silver to Bronze below 450 RP (Demotion Threshold)',
+      'should NOT demote from Silver to Bronze if points are above demotion threshold (Rank Protection)',
       () {
         // Silver: 500 - 999. Demotion at 450.
-        // Wait, RankingEngine uses tier minPoints for now, not thresholds.
-        // Let's check ProgressionConfig.
-        // Silver min: 500.
-        final prev = mockProgression(points: 510, rank: 'Silver III');
+        // Current: 505 (Silver III). Loss: -15 -> 490.
+        // 490 < 500 (Min Silver) but 490 >= 450 (Demotion Threshold).
+        final prev = mockProgression(points: 505, rank: 'Silver III');
         final result = mockResult(CompetitiveOutcome.loss);
 
         final change = engine.calculateRankChange(
@@ -117,7 +116,27 @@ void main() {
           result: result,
         );
 
-        expect(change.newRankPoints, 495);
+        expect(change.newRankPoints, 490);
+        expect(change.newRank, 'Silver III');
+        expect(change.type, RankChangeType.decrease);
+      },
+    );
+
+    test(
+      'should demote from Silver to Bronze if points drop below demotion threshold',
+      () {
+        // Silver: 500 - 999. Demotion at 450.
+        // Current: 460 (Silver III due to protection). Loss: -15 -> 445.
+        // 445 < 450.
+        final prev = mockProgression(points: 460, rank: 'Silver III');
+        final result = mockResult(CompetitiveOutcome.loss);
+
+        final change = engine.calculateRankChange(
+          currentProgression: prev,
+          result: result,
+        );
+
+        expect(change.newRankPoints, 445);
         expect(change.newRank, startsWith('Bronze'));
         expect(change.type, RankChangeType.demotion);
       },
@@ -163,6 +182,46 @@ void main() {
             .newRank,
         'Silver I',
       );
+    });
+  });
+
+  group('CompetitiveRankingEngine - Rank Progress', () {
+    test('should calculate correct progress for Unranked', () {
+      final progress = engine.calculateRankProgress(50);
+      expect(progress.isUnranked, true);
+      expect(progress.progressPercentage, closeTo(50 / 99, 0.01));
+      expect(progress.nextRank, 'Bronze III');
+    });
+
+    test('should calculate correct progress for Elite', () {
+      final progress = engine.calculateRankProgress(8000);
+      expect(progress.isMaxRank, true);
+      expect(progress.progressPercentage, 1.0);
+    });
+
+    test('should calculate correct division progress within Gold', () {
+      // Gold: 1000 - 1999 (Range 1000). 3 Divisions. ~333 per div.
+      // Gold III: 1000 - 1332
+      // Gold II: 1333 - 665 (Wait, range is 1000. 1000/3 = 333.33)
+      // Div 3: [1000, 1332]
+      // Div 2: [1333, 1665]
+      // Div 1: [1666, 1999]
+
+      final p1 = engine.calculateRankProgress(1100);
+      expect(p1.currentRank, 'Gold III');
+      expect(p1.division, 3);
+      expect(p1.progressPercentage, closeTo(100 / 333, 0.01));
+      expect(p1.nextRank, 'Gold II');
+
+      final p2 = engine.calculateRankProgress(1500);
+      expect(p2.currentRank, 'Gold II');
+      expect(p2.division, 2);
+      expect(p2.nextRank, 'Gold I');
+
+      final p3 = engine.calculateRankProgress(1800);
+      expect(p3.currentRank, 'Gold I');
+      expect(p3.division, 1);
+      expect(p3.nextRank, 'Platinum III');
     });
   });
 }

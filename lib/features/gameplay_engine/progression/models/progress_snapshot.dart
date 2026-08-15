@@ -1,3 +1,5 @@
+import 'package:soteria/features/player/domain/models/player_progression.dart';
+
 /// Immutable state of a player's progression at a specific point in time.
 class ProgressSnapshot {
   final int score;
@@ -7,8 +9,11 @@ class ProgressSnapshot {
   final int maxStreak;
   final int sessionScore;
   final int sessionStreak;
+  final int sessionCorrectAnswers;
+  final Map<String, int> sessionCategoryMastery;
+  final int lives;
   final int dailyStreak;
-  final DateTime? lastDailyStreakUpdate;
+  final String? lastEngagementDate; // YYYY-MM-DD
   final String? lastProcessedSessionId;
   final DateTime timestamp;
 
@@ -20,8 +25,11 @@ class ProgressSnapshot {
     required this.maxStreak,
     required this.sessionScore,
     required this.sessionStreak,
+    required this.sessionCorrectAnswers,
+    this.sessionCategoryMastery = const {},
+    required this.lives,
     required this.dailyStreak,
-    this.lastDailyStreakUpdate,
+    this.lastEngagementDate,
     this.lastProcessedSessionId,
     required this.timestamp,
   });
@@ -34,9 +42,31 @@ class ProgressSnapshot {
     maxStreak: 0,
     sessionScore: 0,
     sessionStreak: 0,
+    sessionCorrectAnswers: 0,
+    sessionCategoryMastery: const {},
+    lives: 3,
     dailyStreak: 0,
     timestamp: DateTime.now(),
   );
+
+  /// Creates a snapshot from a [PlayerProgression] record to use as a session baseline.
+  factory ProgressSnapshot.fromProgression(PlayerProgression progression) {
+    return ProgressSnapshot(
+      score: 0, // In-game score always starts at 0
+      totalXP: progression.lifetimeXp,
+      level: progression.currentLevel,
+      currentStreak: 0, // In-session question streak
+      maxStreak: 0,
+      sessionScore: 0,
+      sessionStreak: 0,
+      sessionCorrectAnswers: 0,
+      sessionCategoryMastery: const {},
+      lives: 3, // Default lives
+      dailyStreak: progression.dailyStreak,
+      lastEngagementDate: progression.lastEngagementDate,
+      timestamp: DateTime.now(),
+    );
+  }
 
   ProgressSnapshot copyWith({
     int? score,
@@ -46,8 +76,11 @@ class ProgressSnapshot {
     int? maxStreak,
     int? sessionScore,
     int? sessionStreak,
+    int? sessionCorrectAnswers,
+    Map<String, int>? sessionCategoryMastery,
+    int? lives,
     int? dailyStreak,
-    DateTime? lastDailyStreakUpdate,
+    String? lastEngagementDate,
     String? lastProcessedSessionId,
     DateTime? timestamp,
   }) {
@@ -59,9 +92,14 @@ class ProgressSnapshot {
       maxStreak: maxStreak ?? this.maxStreak,
       sessionScore: sessionScore ?? this.sessionScore,
       sessionStreak: sessionStreak ?? this.sessionStreak,
+      sessionCorrectAnswers:
+          sessionCorrectAnswers ?? this.sessionCorrectAnswers,
+      sessionCategoryMastery:
+          sessionCategoryMastery ?? this.sessionCategoryMastery,
+      lives: lives ?? this.lives,
       dailyStreak: dailyStreak ?? this.dailyStreak,
-      lastDailyStreakUpdate:
-          lastDailyStreakUpdate ?? this.lastDailyStreakUpdate,
+      lastEngagementDate:
+          lastEngagementDate ?? this.lastEngagementDate,
       lastProcessedSessionId:
           lastProcessedSessionId ?? this.lastProcessedSessionId,
       timestamp: timestamp ?? this.timestamp,
@@ -76,8 +114,11 @@ class ProgressSnapshot {
     'maxStreak': maxStreak,
     'sessionScore': sessionScore,
     'sessionStreak': sessionStreak,
+    'sessionCorrectAnswers': sessionCorrectAnswers,
+    'sessionCategoryMastery': sessionCategoryMastery,
+    'lives': lives,
     'dailyStreak': dailyStreak,
-    'lastDailyStreakUpdate': lastDailyStreakUpdate?.toIso8601String(),
+    'lastEngagementDate': lastEngagementDate,
     'lastProcessedSessionId': lastProcessedSessionId,
     'timestamp': timestamp.toIso8601String(),
   };

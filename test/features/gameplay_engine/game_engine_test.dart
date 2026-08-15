@@ -9,6 +9,7 @@ import 'package:soteria/features/gameplay_engine/answer/services/answer_processo
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/progression_engine.dart';
+import 'package:soteria/features/player/domain/services/engagement_service.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/level_engine.dart';
 
 void main() {
@@ -63,6 +64,7 @@ void main() {
       timer = TimerEngine();
       progression = ProgressionNotifier(
         engine: ProgressionEngine(levelEngine: LevelEngine()),
+        engagementService: EngagementService(),
       );
     });
 

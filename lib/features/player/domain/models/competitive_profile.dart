@@ -7,6 +7,8 @@ import 'reward_grant.dart';
 import 'milestone.dart';
 import 'competitive_personal_record.dart';
 import 'competitive_career_summary.dart';
+import 'competitive_streak.dart';
+import 'achievement.dart';
 
 @immutable
 class CompetitiveProfile {
@@ -19,8 +21,11 @@ class CompetitiveProfile {
   final int totalRewards;
   final List<PlayerMilestone> completedMilestones;
   final int totalMilestones;
+  final List<PlayerAchievement> earnedAchievements;
+  final int totalAchievements;
   final List<CompetitivePersonalRecord> personalRecords;
   final CompetitiveCareerSummary? careerSummary;
+  final CompetitiveStreak? streak;
 
   const CompetitiveProfile({
     required this.identity,
@@ -32,8 +37,11 @@ class CompetitiveProfile {
     required this.totalRewards,
     required this.completedMilestones,
     required this.totalMilestones,
+    required this.earnedAchievements,
+    required this.totalAchievements,
     required this.personalRecords,
     this.careerSummary,
+    this.streak,
   });
 
   CompetitiveProfile copyWith({
@@ -46,8 +54,11 @@ class CompetitiveProfile {
     int? totalRewards,
     List<PlayerMilestone>? completedMilestones,
     int? totalMilestones,
+    List<PlayerAchievement>? earnedAchievements,
+    int? totalAchievements,
     List<CompetitivePersonalRecord>? personalRecords,
     CompetitiveCareerSummary? careerSummary,
+    CompetitiveStreak? streak,
   }) {
     return CompetitiveProfile(
       identity: identity ?? this.identity,
@@ -59,8 +70,11 @@ class CompetitiveProfile {
       totalRewards: totalRewards ?? this.totalRewards,
       completedMilestones: completedMilestones ?? this.completedMilestones,
       totalMilestones: totalMilestones ?? this.totalMilestones,
+      earnedAchievements: earnedAchievements ?? this.earnedAchievements,
+      totalAchievements: totalAchievements ?? this.totalAchievements,
       personalRecords: personalRecords ?? this.personalRecords,
       careerSummary: careerSummary ?? this.careerSummary,
+      streak: streak ?? this.streak,
     );
   }
 }

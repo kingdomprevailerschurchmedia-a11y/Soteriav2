@@ -8,6 +8,7 @@ abstract class PlayerProfile with _$PlayerProfile {
   const factory PlayerProfile({
     required String uid,
     required String displayName,
+    @Default('') String username,
     required String email,
     @Default('') String photoUrl,
     @Default('socrates') String selectedAvatarId,
@@ -52,4 +53,26 @@ abstract class PlayerProfile with _$PlayerProfile {
 
   factory PlayerProfile.fromJson(Map<String, dynamic> json) =>
       _$PlayerProfileFromJson(json);
+  const PlayerProfile._();
+
+  Map<String, dynamic> toCareerContext() => {
+    'uid': uid,
+    'displayName': displayName,
+    'username': username,
+    'level': level,
+    'xp': xp,
+    'coins': coins,
+    'currentStreak': currentStreak,
+    'highestStreak': highestStreak,
+    'totalQuestionsAnswered': totalQuestionsAnswered,
+    'correctAnswers': correctAnswers,
+    'accuracy': accuracy,
+    'gamesPlayed': gamesPlayed,
+    'gamesWon': gamesWon,
+    'practiceSessions': practiceSessions,
+    'proSessions': proSessions,
+    'versusMatches': versusMatches,
+    'tournamentMatches': tournamentMatches,
+    'achievements': achievements,
+  };
 }

@@ -3,20 +3,24 @@ import '../models/competitive_statistics.dart';
 import '../models/player_progression.dart';
 import '../models/season_result.dart';
 import '../config/progression_config.dart';
+import '../config/milestone_registry.dart';
 
 class MilestoneEvaluationService {
-  /// Evaluates all milestones for a user based on their current state.
+  /// Evaluates all milestones for a user based on their current authoritative state.
   List<PlayerMilestone> evaluate({
     required String userId,
-    required List<MilestoneDefinition> definitions,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
     required CompetitiveHistory history,
     required List<PlayerMilestone> currentStates,
+    List<MilestoneDefinition>? definitions,
   }) {
     final updatedMilestones = <PlayerMilestone>[];
+    final activeDefinitions = definitions ?? MilestoneRegistry.definitions;
 
-    for (final definition in definitions) {
+    for (final definition in activeDefinitions) {
+      if (!definition.isActive) continue;
+
       final currentState = currentStates.firstWhere(
         (m) => m.milestoneId == definition.id,
         orElse: () => PlayerMilestone(
@@ -40,16 +44,18 @@ class MilestoneEvaluationService {
         history: history,
       );
 
-      final isNewlyCompleted = progress >= definition.threshold;
+      // Ensure progress never exceeds threshold in evaluation
+      final clampedProgress = progress.clamp(0.0, definition.threshold);
+      final isNewlyCompleted = clampedProgress >= definition.threshold;
 
-      if (isNewlyCompleted || progress != currentState.currentProgress) {
+      if (isNewlyCompleted || clampedProgress != currentState.currentProgress) {
         updatedMilestones.add(
           currentState.copyWith(
-            currentProgress: progress,
+            currentProgress: clampedProgress,
             status: isNewlyCompleted
                 ? MilestoneStatus.completed
                 : MilestoneStatus.inProgress,
-            unlockedAt: isNewlyCompleted ? DateTime.now() : null,
+            unlockedAt: isNewlyCompleted ? DateTime.now() : currentState.unlockedAt,
           ),
         );
       }

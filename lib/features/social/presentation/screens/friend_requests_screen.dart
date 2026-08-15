@@ -123,9 +123,7 @@ class _RequestTile extends ConsumerWidget {
                   ],
                 )
               : TextButton(
-                  onPressed: () {
-                    // Cancel request logic
-                  },
+                  onPressed: () => ref.read(socialControllerProvider.notifier).cancelRequest(requestId, userId),
                   child: Text('CANCEL', style: context.labelSmall.copyWith(color: SoteriaColors.error)),
                 ),
         );

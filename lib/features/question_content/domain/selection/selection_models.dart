@@ -16,6 +16,7 @@ abstract class QuestionSelectionRequest with _$QuestionSelectionRequest {
     @Default({}) Set<String> excludedQuestionIds,
     GameMode? mode,
     String? language,
+    @Default(false) bool usePersonalization,
   }) = _QuestionSelectionRequest;
 }
 

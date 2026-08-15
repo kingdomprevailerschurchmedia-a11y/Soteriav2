@@ -76,11 +76,11 @@ void main() {
 
       final result = service.evaluate(
         userId: userId,
-        definitions: definitions,
         statistics: mockStats,
         progression: mockProgression,
         history: mockHistory,
         currentStates: [],
+        definitions: definitions,
       );
 
       expect(result.length, 1);
@@ -103,11 +103,11 @@ void main() {
 
       final result = service.evaluate(
         userId: userId,
-        definitions: definitions,
         statistics: mockStats,
         progression: mockProgression,
         history: mockHistory,
         currentStates: [],
+        definitions: definitions,
       );
 
       expect(result.length, 1);
@@ -138,11 +138,11 @@ void main() {
 
       final result = service.evaluate(
         userId: userId,
-        definitions: definitions,
         statistics: mockStats,
         progression: mockProgression,
         history: mockHistory,
         currentStates: currentStates,
+        definitions: definitions,
       );
 
       expect(result, isEmpty);
@@ -162,11 +162,11 @@ void main() {
 
       final result = service.evaluate(
         userId: userId,
-        definitions: definitions,
         statistics: mockStats,
         progression: mockProgression,
         history: mockHistory,
         currentStates: [],
+        definitions: definitions,
       );
 
       expect(result.length, 1);

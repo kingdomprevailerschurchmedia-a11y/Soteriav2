@@ -6,13 +6,12 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../domain/models/competitive_goal.dart';
-import '../widgets/goals/competitive_goal_card.dart';
+import '../../domain/models/goal.dart';
 
 class GoalDetailsScreen extends ConsumerWidget {
-  final CompetitiveGoal goal;
+  final GoalProgress progress;
 
-  const GoalDetailsScreen({super.key, required this.goal});
+  const GoalDetailsScreen({super.key, required this.progress});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,8 +33,8 @@ class GoalDetailsScreen extends ConsumerWidget {
             SizedBox(height: SoteriaSpacing.xxl),
             _buildMetaSection(context),
             SizedBox(height: SoteriaSpacing.xxxl),
-            if (goal.status == GoalStatus.active)
-              _buildActions(context, ref),
+            if (progress.playerState?.status == GoalStatus.active)
+              _buildActions(context),
           ],
         ),
       ),
@@ -43,23 +42,24 @@ class GoalDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildHeroSection(BuildContext context) {
+    final definition = progress.definition;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(
-          _getIconForCategory(goal.category),
+          _getIconForCategory(definition.category),
           size: 64.w,
           color: SoteriaColors.primary,
         ),
         SizedBox(height: SoteriaSpacing.md),
         Text(
-          goal.title.toUpperCase(),
+          definition.title.toUpperCase(),
           style: context.headlineMedium.copyWith(fontWeight: FontWeight.w900),
           textAlign: TextAlign.center,
         ),
         SizedBox(height: SoteriaSpacing.sm),
         Text(
-          goal.description,
+          definition.description,
           style: context.bodyMedium.copyWith(color: SoteriaColors.textSecondary),
           textAlign: TextAlign.center,
         ),
@@ -68,6 +68,9 @@ class GoalDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildProgressSection(BuildContext context) {
+    final playerState = progress.playerState;
+    final definition = progress.definition;
+    
     return Container(
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       decoration: BoxDecoration(
@@ -82,14 +85,14 @@ class GoalDetailsScreen extends ConsumerWidget {
             children: [
               Text('PROGRESS', style: context.labelSmall),
               Text(
-                '${(goal.progressPercentage * 100).toInt()}%',
+                '${(progress.progressPercentage * 100).toInt()}%',
                 style: context.titleMedium.copyWith(color: SoteriaColors.primary),
               ),
             ],
           ),
           SizedBox(height: SoteriaSpacing.md),
           LinearProgressIndicator(
-            value: goal.progressPercentage,
+            value: progress.progressPercentage,
             backgroundColor: SoteriaColors.border,
             color: SoteriaColors.primary,
             minHeight: 12.h,
@@ -101,15 +104,15 @@ class GoalDetailsScreen extends ConsumerWidget {
             children: [
               _ProgressStat(
                 label: 'CURRENT',
-                value: _formatValue(goal.category, goal.currentProgress),
+                value: _formatValue(definition.category, playerState?.currentProgress ?? 0),
               ),
               _ProgressStat(
                 label: 'TARGET',
-                value: _formatValue(goal.category, goal.target),
+                value: _formatValue(definition.category, definition.target),
               ),
               _ProgressStat(
                 label: 'REMAINING',
-                value: _formatValue(goal.category, goal.remaining),
+                value: _formatValue(definition.category, progress.remaining),
                 highlight: true,
               ),
             ],
@@ -120,28 +123,27 @@ class GoalDetailsScreen extends ConsumerWidget {
   }
 
   Widget _buildMetaSection(BuildContext context) {
+    final playerState = progress.playerState;
+    final definition = progress.definition;
+    
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _MetaItem(
           label: 'TYPE',
-          value: goal.type.name.toUpperCase(),
+          value: definition.type.name.toUpperCase(),
         ),
-        _MetaItem(
-          label: 'DEADLINE',
-          value: DateFormat('MMM d, yyyy HH:mm').format(goal.endAt),
-          isWarning: goal.remaining < (goal.target * 0.2),
-        ),
-        if (goal.seasonId != null)
+        if (playerState != null)
           _MetaItem(
-            label: 'SEASON',
-            value: goal.seasonId!,
+            label: 'DEADLINE',
+            value: DateFormat('MMM d, yyyy HH:mm').format(playerState.expiresAt),
+            isWarning: progress.remaining < (definition.target * 0.2),
           ),
       ],
     );
   }
 
-  Widget _buildActions(BuildContext context, WidgetRef ref) {
+  Widget _buildActions(BuildContext context) {
     return Center(
       child: TextButton.icon(
         onPressed: () {
@@ -166,9 +168,6 @@ class GoalDetailsScreen extends ConsumerWidget {
   }
 
   String _formatValue(GoalCategory category, double value) {
-    if (category == GoalCategory.personalBest && value < 1.0) {
-      return '${(value * 100).toInt()}%';
-    }
     return value.toInt().toString();
   }
 }

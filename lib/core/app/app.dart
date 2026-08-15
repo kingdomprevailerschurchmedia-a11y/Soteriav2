@@ -12,6 +12,8 @@ import 'package:soteria/features/player/presentation/providers/presence_coordina
 import 'package:soteria/features/notifications/providers/notification_providers.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_celebration_listener.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
+import 'package:soteria/features/splash/presentation/widgets/splash_static_view.dart';
 import '../firebase/providers/bootstrapper_provider.dart';
 
 class SoteriaApp extends ConsumerWidget {
@@ -28,7 +30,19 @@ class SoteriaApp extends ConsumerWidget {
       builder: (context, child) {
         return firebaseInit.when(
           data: (_) => _buildApp(context, ref),
-          loading: () => const SizedBox.shrink(),
+          loading: () {
+            // Remove native splash as soon as our themed static view is ready
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              FlutterNativeSplash.remove();
+            });
+            // We return a minimal MaterialApp to provide Directionality and other
+            // required ancestors for the Scaffold in SplashStaticView.
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: SoteriaTheme.darkTheme,
+              home: const SplashStaticView(),
+            );
+          },
           error: (error, stack) => _buildErrorApp(context, ref, error),
         );
       },
@@ -39,13 +53,22 @@ class SoteriaApp extends ConsumerWidget {
     // Ensure auth/session/presence management is active
     ref.watch(authCoordinatorProvider);
     ref.watch(presenceCoordinatorProvider);
+    ref.watch(playerAvatarSyncProvider);
 
-    // Initialize background services
+    // Initialize background services with a staggered delay to ensure splash animation is smooth
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(notificationCoordinatorProvider).initialize();
-      ref.read(configurationCoordinatorProvider).initialize();
-      ref.read(competitiveEventObserverProvider);
-      // Native splash removal is handled by SplashScreen for a smoother transition
+      // 1. Critical but can wait a bit
+      Future.delayed(const Duration(milliseconds: 800), () {
+        if (!ref.exists(notificationCoordinatorProvider)) return;
+        ref.read(notificationCoordinatorProvider).initialize();
+      });
+
+      // 2. Non-critical background observers
+      Future.delayed(const Duration(milliseconds: 2000), () {
+        if (!ref.exists(configurationCoordinatorProvider)) return;
+        ref.read(configurationCoordinatorProvider).initialize();
+        ref.read(competitiveEventObserverProvider);
+      });
     });
 
     final router = ref.watch(routerProvider);

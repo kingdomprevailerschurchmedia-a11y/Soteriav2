@@ -7,17 +7,23 @@ import '../../domain/models/rank_transaction.dart';
 import '../../domain/repositories/player_progression_repository.dart';
 import '../../domain/services/progression_service.dart';
 import '../../domain/services/competitive_ranking_engine.dart';
+import '../../domain/repositories/leaderboard_repository.dart';
+import '../../domain/repositories/player_repository.dart';
 
 class FirebasePlayerProgressionRepository
     implements PlayerProgressionRepository {
   final FirebaseFirestore _firestore;
   final ProgressionService _progressionService;
   final CompetitiveRankingEngine _rankingEngine;
+  final LeaderboardRepository _leaderboardRepository;
+  final PlayerRepository _playerRepository;
 
   FirebasePlayerProgressionRepository(
     this._firestore,
     this._progressionService,
     this._rankingEngine,
+    this._leaderboardRepository,
+    this._playerRepository,
   );
 
   CollectionReference<Map<String, dynamic>> get _progressionCollection =>
@@ -47,7 +53,7 @@ class FirebasePlayerProgressionRepository
   Future<PlayerProgression?> getProgression(String userId) async {
     final doc = await _progressionCollection.doc(userId).get();
     if (!doc.exists) {
-      return PlayerProgression.initial(userId, 'current_season');
+      return null;
     }
     return PlayerProgression.fromJson(doc.data()!);
   }
@@ -61,37 +67,51 @@ class FirebasePlayerProgressionRepository
 
   @override
   Future<void> applyXpTransaction(XpTransaction transaction) async {
-    // Implement Idempotency check
-    final existing = await _xpTransactionCollection
-        .where('transactionId', isEqualTo: transaction.transactionId)
-        .get();
+    final txDoc = _xpTransactionCollection.doc(transaction.transactionId);
 
-    if (existing.docs.isNotEmpty) {
+    await _firestore.runTransaction((tx) async {
+      await processXpTransaction(tx, transaction);
+    });
+  }
+
+  /// Internal helper to process an XP transaction within an existing Firestore transaction.
+  /// Used by other repositories to ensure atomicity across features.
+  Future<void> processXpTransaction(
+    Transaction tx,
+    XpTransaction transaction,
+  ) async {
+    final txDoc = _xpTransactionCollection.doc(transaction.transactionId);
+
+    // 1. Idempotency check inside the atomic transaction
+    final txSnapshot = await tx.get(txDoc);
+    if (txSnapshot.exists) {
       return; // Already applied
     }
 
-    await _firestore.runTransaction((tx) async {
-      final progressionDoc = _progressionCollection.doc(transaction.userId);
-      final snapshot = await tx.get(progressionDoc);
+    final progressionDoc = _progressionCollection.doc(transaction.userId);
+    final snapshot = await tx.get(progressionDoc);
 
-      PlayerProgression current;
-      if (!snapshot.exists) {
-        current = PlayerProgression.initial(
-          transaction.userId,
-          'current_season',
-        );
-      } else {
-        current = PlayerProgression.fromJson(snapshot.data()!);
-      }
-
-      final updated = _progressionService.addXp(current, transaction.amount);
-
-      tx.set(progressionDoc, updated.toJson());
-      tx.set(
-        _xpTransactionCollection.doc(transaction.transactionId),
-        transaction.toJson(),
+    PlayerProgression current;
+    if (!snapshot.exists) {
+      current = PlayerProgression.initial(
+        transaction.userId,
+        'current_season',
       );
-    });
+    } else {
+      current = PlayerProgression.fromJson(snapshot.data()!);
+    }
+
+    // 2. Extra safety: Check if this specific transaction ID was the last one processed
+    if (current.lastXpTransactionId == transaction.transactionId) {
+      return;
+    }
+
+    final updated = _progressionService
+        .addXp(current, transaction.amount)
+        .copyWith(lastXpTransactionId: transaction.transactionId);
+
+    tx.set(progressionDoc, updated.toJson());
+    tx.set(txDoc, transaction.toJson());
   }
 
   @override
@@ -129,14 +149,39 @@ class FirebasePlayerProgressionRepository
       );
 
       // 3. Update Progression
+      final progress = _rankingEngine.calculateRankProgress(rankChange.newRankPoints);
+
       final updated = current.copyWith(
         currentRank: rankChange.newRank,
+        currentRankTier: progress.tier.id,
         rankPoints: rankChange.newRankPoints,
-        // rankProgress and tierId will be updated by providers or derived
+        rankProgress: progress.progressPercentage,
+        seasonRankPoints: current.seasonId == result.seasonId
+            ? rankChange.newRankPoints
+            : current.seasonRankPoints,
+        lastRankTransactionId: '${result.resultId}_tx',
         lastUpdated: DateTime.now(),
       );
 
-      // 4. Create Transaction Record
+      // 4. Update Leaderboard (Sync in transaction)
+      final profile = await _playerRepository.getPlayerProfile(result.userId);
+      if (profile != null) {
+        await _leaderboardRepository.syncLeaderboardEntry(
+          profile: profile,
+          progression: updated,
+          seasonId: result.seasonId,
+          transaction: tx,
+        );
+        // Also sync global
+        await _leaderboardRepository.syncLeaderboardEntry(
+          profile: profile,
+          progression: updated,
+          seasonId: null,
+          transaction: tx,
+        );
+      }
+
+      // 5. Create Transaction Record
       final rankTx = RankTransaction(
         transactionId: '${result.resultId}_tx',
         userId: result.userId,

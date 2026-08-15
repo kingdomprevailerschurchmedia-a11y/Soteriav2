@@ -47,7 +47,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(sessionProvider);
-    final leaderboardState = ref.watch(leaderboardControllerProvider);
+    final currentSeasonId = ref.watch(currentSeasonIdProvider);
     final friendsLeaderboardAsync = ref.watch(friendsLeaderboardProvider);
     final playerEntryAsync = ref.watch(playerLeaderboardEntryProvider);
     final totalPlayersAsync = ref.watch(leaderboardTotalPlayersProvider);
@@ -92,8 +92,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         controller: _tabController,
         children: [
           _buildFriendsLeaderboard(context, friendsLeaderboardAsync, session.uid),
-          _buildStandardLeaderboard(context, leaderboardState, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid),
-          _buildStandardLeaderboard(context, leaderboardState, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid), // Global
+          _buildStandardLeaderboard(context, currentSeasonId, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid),
+          _buildStandardLeaderboard(context, null, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid), // Global
         ],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -111,7 +111,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
   Widget _buildStandardLeaderboard(
     BuildContext context,
-    AsyncValue<List<LeaderboardEntry>> leaderboardState,
+    String? seasonId,
     AsyncValue<LeaderboardEntry?> playerEntryAsync,
     AsyncValue<int> totalPlayersAsync,
     AsyncValue<LeaderboardNeighborhoodData> neighborhoodAsync,
@@ -119,6 +119,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     AsyncValue<List<RankMovementEvent>> movementHistoryAsync,
     String? currentUserId,
   ) {
+    final leaderboardState = ref.watch(leaderboardControllerProvider(seasonId));
+
     return leaderboardState.when(
       data: (entries) {
         if (entries.isEmpty) {
@@ -126,112 +128,129 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         }
         return RefreshIndicator(
           onRefresh: () async {
-            await ref.read(leaderboardControllerProvider.notifier).refresh();
+            await ref.read(leaderboardControllerProvider(seasonId).notifier).refresh();
             ref.invalidate(playerLeaderboardEntryProvider);
             ref.invalidate(leaderboardTotalPlayersProvider);
           },
           color: SoteriaColors.primary,
-          child: ListView.builder(
-            padding: EdgeInsets.only(
-              left: SoteriaSpacing.md,
-              right: SoteriaSpacing.md,
-              bottom: 100.h,
-            ),
-            itemCount: entries.length + 6,
-            itemBuilder: (context, index) {
-              if (index == 0) {
-                return const Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 16),
-                  child: SeasonHeader(),
-                );
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification scrollInfo) {
+              if (scrollInfo.metrics.pixels >=
+                  scrollInfo.metrics.maxScrollExtent - 200) {
+                ref.read(leaderboardControllerProvider(seasonId).notifier).loadMore();
               }
-              
-              if (index == 1) {
-                return playerEntryAsync.when(
-                  data: (entry) {
-                    if (entry == null) return const SizedBox.shrink();
-                    final movement = movementHistoryAsync.value?.firstOrNull;
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: PlayerLeaderboardPositionCard(
-                        entry: entry,
-                        totalPlayers: totalPlayersAsync.value ?? 0,
-                        delta: movement?.positionDelta ?? 0,
-                      ),
-                    );
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
-                );
-              }
-
-              if (index == 2) {
-                return insightsAsync.when(
-                  data: (insights) {
-                    if (insights.isEmpty) return const SizedBox.shrink();
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: Column(
-                        children: insights.map<Widget>((LeaderboardInsight i) => Padding(
-                          padding: const EdgeInsets.only(bottom: 8),
-                          child: LeaderboardInsightCard(insight: i),
-                        )).toList(),
-                      ),
-                    );
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
-                );
-              }
-
-              if (index == 3) {
-                return neighborhoodAsync.when(
-                  data: (neighborhood) {
-                    if (neighborhood.currentPlayer == null) return const SizedBox.shrink();
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16),
-                      child: LeaderboardNeighborhood(
-                        playerAbove: neighborhood.playerAbove,
-                        currentPlayer: neighborhood.currentPlayer!,
-                        playerBelow: neighborhood.playerBelow,
-                      ),
-                    );
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
-                );
-              }
-
-              if (index == 4) {
-                return playerEntryAsync.when(
-                  data: (entry) {
-                    if (entry == null) return const SizedBox.shrink();
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 24),
-                      child: RankProgressCard(entry: entry),
-                    );
-                  },
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
-                );
-              }
-
-              if (index == 5) {
-                return Column(
-                  children: [
-                    _buildSectionDivider('TOP PERFORMERS'),
-                    const SizedBox(height: 16),
-                    LeaderboardPodium(topEntries: entries.take(3).toList()),
-                  ],
-                );
-              }
-
-              final entry = entries[index - 6];
-              return LeaderboardRow(
-                entry: entry,
-                isCurrentUser: entry.userId == currentUserId,
-              );
+              return true;
             },
+            child: ListView.builder(
+              cacheExtent: 500,
+              padding: EdgeInsets.only(
+                left: SoteriaSpacing.md,
+                right: SoteriaSpacing.md,
+                bottom: 100.h,
+              ),
+              itemCount: entries.length + 6,
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return const Padding(
+                    padding: EdgeInsets.only(top: 8, bottom: 16),
+                    child: RepaintBoundary(child: SeasonHeader()),
+                  );
+                }
+                
+                if (index == 1) {
+                  return playerEntryAsync.when(
+                    data: (entry) {
+                      if (entry == null) return const SizedBox.shrink();
+                      final movement = movementHistoryAsync.value?.firstOrNull;
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: RepaintBoundary(
+                          child: PlayerLeaderboardPositionCard(
+                            entry: entry,
+                            totalPlayers: totalPlayersAsync.value ?? 0,
+                            delta: movement?.positionDelta ?? 0,
+                          ),
+                        ),
+                      );
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  );
+                }
+
+                if (index == 2) {
+                  return insightsAsync.when(
+                    data: (insights) {
+                      if (insights.isEmpty) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: Column(
+                          children: insights.map<Widget>((LeaderboardInsight i) => Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: RepaintBoundary(child: LeaderboardInsightCard(insight: i)),
+                          )).toList(),
+                        ),
+                      );
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  );
+                }
+
+                if (index == 3) {
+                  return neighborhoodAsync.when(
+                    data: (neighborhood) {
+                      if (neighborhood.currentPlayer == null) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: RepaintBoundary(
+                          child: LeaderboardNeighborhood(
+                            playerAbove: neighborhood.playerAbove,
+                            currentPlayer: neighborhood.currentPlayer!,
+                            playerBelow: neighborhood.playerBelow,
+                          ),
+                        ),
+                      );
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  );
+                }
+
+                if (index == 4) {
+                  return playerEntryAsync.when(
+                    data: (entry) {
+                      if (entry == null) return const SizedBox.shrink();
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 24),
+                        child: RepaintBoundary(child: RankProgressCard(entry: entry)),
+                      );
+                    },
+                    loading: () => const SizedBox.shrink(),
+                    error: (_, __) => const SizedBox.shrink(),
+                  );
+                }
+
+                if (index == 5) {
+                  return Column(
+                    children: [
+                      _buildSectionDivider('TOP PERFORMERS'),
+                      const SizedBox(height: 16),
+                      RepaintBoundary(child: LeaderboardPodium(topEntries: entries.take(3).toList())),
+                    ],
+                  );
+                }
+
+                final entry = entries[index - 6];
+                return RepaintBoundary(
+                  child: LeaderboardRow(
+                    entry: entry,
+                    isCurrentUser: entry.userId == currentUserId,
+                    calculatedPosition: index - 5,
+                  ),
+                );
+              },
+            ),
           ),
         );
       },

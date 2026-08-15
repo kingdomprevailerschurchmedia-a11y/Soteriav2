@@ -33,6 +33,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
         ),
         child: SafeArea(
           child: CustomScrollView(
+            cacheExtent: 1000,
             slivers: [
               _buildAppBar(context, ref),
               SliverPadding(
@@ -131,27 +132,17 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       ),
       sliver: SliverList(
         delegate: SliverChildListDelegate([
-          _buildOverviewSection(context, analytics),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-          ),
-          _buildTrendSection(context, analytics),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-          ),
-          _buildInsightsSection(context, analytics),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-          ),
-          _buildCategorySection(context, analytics),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-          ),
-          _buildDifficultySection(context, analytics),
-          SizedBox(
-            height: SoteriaSpacing.adaptive(context, SoteriaSpacing.lgStatic),
-          ),
-          _buildConsistencySection(context, analytics),
+          RepaintBoundary(child: _buildOverviewSection(context, analytics)),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(child: _buildTrendSection(context, analytics)),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(child: _buildInsightsSection(context, analytics)),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(child: _buildCategorySection(context, analytics)),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(child: _buildDifficultySection(context, analytics)),
+          SoteriaSpacing.gapLG,
+          RepaintBoundary(child: _buildConsistencySection(context, analytics)),
         ]),
       ),
     );
@@ -177,14 +168,16 @@ class PersonalPerformanceScreen extends ConsumerWidget {
         Row(
           children: [
             Expanded(
-              child: SoteriaProgressChart(
-                value: analytics.averageAccuracy,
-                label: '${(analytics.averageAccuracy * 100).toInt()}%',
-                subLabel: 'Avg Accuracy',
-                color: SoteriaColors.primary,
+              child: RepaintBoundary(
+                child: SoteriaProgressChart(
+                  value: analytics.averageAccuracy,
+                  label: '${(analytics.averageAccuracy * 100).toInt()}%',
+                  subLabel: 'Avg Accuracy',
+                  color: SoteriaColors.primary,
+                ),
               ),
             ),
-            SizedBox(width: SoteriaSpacing.md),
+            SoteriaSpacing.gapMD,
             Expanded(
               child: Column(
                 children: [
@@ -194,7 +187,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                     icon: Icons.quiz,
                     color: SoteriaColors.secondary,
                   ),
-                  SizedBox(height: SoteriaSpacing.md),
+                  SoteriaSpacing.gapMD,
                   MetricCard(
                     title: 'Total XP',
                     value: '${analytics.totalXp}',
@@ -206,7 +199,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
             ),
           ],
         ),
-        SizedBox(height: SoteriaSpacing.md),
+        SoteriaSpacing.gapMD,
         Row(
           children: [
             Expanded(
@@ -217,7 +210,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                 color: SoteriaColors.gold,
               ),
             ),
-            SizedBox(width: SoteriaSpacing.md),
+            SoteriaSpacing.gapMD,
             Expanded(
               child: MetricCard(
                 title: 'Best Streak',

@@ -12,6 +12,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 1500,
         totalXP: 250,
@@ -40,6 +41,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 1250,
         totalXP: 210,
@@ -68,6 +70,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 850,
         totalXP: 120,
@@ -91,6 +94,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 300,
         totalXP: 40,
@@ -155,6 +159,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 400,
         totalXP: 50,
@@ -176,6 +181,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 0,
         totalXP: 0,
@@ -197,6 +203,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 900,
         totalXP: 150,
@@ -218,6 +225,7 @@ class ProModeResultsPreviews {
     return _withResult(
       ProModeResult(
         sessionId: 'fake-id',
+        playerId: 'fake-player-id',
         mode: GameMode.pro,
         finalScore: 2000,
         totalXP: 500,

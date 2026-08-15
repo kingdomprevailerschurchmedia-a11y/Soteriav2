@@ -4,6 +4,8 @@ import 'package:mockito/annotations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/features/player/data/repositories/firebase_leaderboard_repository.dart';
 import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
+import 'package:soteria/features/player/domain/models/player_profile.dart';
+import 'package:soteria/features/player/domain/models/player_progression.dart';
 
 @GenerateNiceMocks([
   MockSpec<FirebaseFirestore>(),
@@ -11,6 +13,7 @@ import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
   MockSpec<QuerySnapshot<Map<String, dynamic>>>(),
   MockSpec<Query<Map<String, dynamic>>>(),
   MockSpec<DocumentSnapshot<Map<String, dynamic>>>(),
+  MockSpec<DocumentReference<Map<String, dynamic>>>(),
 ])
 import 'leaderboard_repository_test.mocks.dart';
 
