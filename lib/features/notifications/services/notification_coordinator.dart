@@ -122,7 +122,7 @@ class NotificationCoordinator {
         _navigation.go(SoteriaRoutes.competitiveHistory);
         break;
       case 'rewards':
-        _navigation.go(SoteriaRoutes.wallet);
+        _navigation.go(SoteriaRoutes.rewards);
         break;
       case 'season':
         _navigation.go(SoteriaRoutes.season);

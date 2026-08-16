@@ -64,10 +64,32 @@ class PlayerBootstrapService {
           }
         }
 
+        final now = DateTime.now();
+        int newStreak = existingProfile.currentStreak;
+        int coins = existingProfile.coins;
+
+        // Calculate Streak
+        if (_isYesterday(existingProfile.lastLogin, now)) {
+          newStreak++;
+          // Reward every 7 days
+          if (newStreak % 7 == 0) {
+            coins += 100;
+            LoggerService.i('7-day streak reached! Granting 100 bonus coins.', feature: 'Player');
+          }
+        } else if (!_isSameDay(existingProfile.lastLogin, now)) {
+          // Missed a day or more, reset to 1
+          newStreak = 1;
+        }
+
         final updatedProfile = existingProfile.copyWith(
-          lastLogin: DateTime.now(),
-          updatedAt: DateTime.now(),
+          lastLogin: now,
+          updatedAt: now,
           favoriteCategories: mergedInterests,
+          currentStreak: newStreak,
+          highestStreak: newStreak > existingProfile.highestStreak 
+              ? newStreak 
+              : existingProfile.highestStreak,
+          coins: coins,
         );
         await _updateProfile.execute(updatedProfile);
 
@@ -191,5 +213,14 @@ class PlayerBootstrapService {
     } catch (e) {
       return [];
     }
+  }
+
+  bool _isSameDay(DateTime d1, DateTime d2) {
+    return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
+  }
+
+  bool _isYesterday(DateTime last, DateTime now) {
+    final yesterday = now.subtract(const Duration(days: 1));
+    return _isSameDay(last, yesterday);
   }
 }

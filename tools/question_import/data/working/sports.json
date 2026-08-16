@@ -1,0 +1,702 @@
+[
+  {
+    "question": "How many players does a soccer team have on the field at the start of a match?",
+    "options": [
+      "9",
+      "10",
+      "11",
+      "12"
+    ],
+    "correctAnswer": "11",
+    "explanation": "Each soccer team normally has 11 players on the field at the start of a match, including the goalkeeper.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "FIFA Laws of the Game"
+  },
+  {
+    "question": "How many points is a free throw worth in basketball?",
+    "options": [
+      "1",
+      "2",
+      "3",
+      "4"
+    ],
+    "correctAnswer": "1",
+    "explanation": "A successful free throw awards one point in basketball.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "FIBA Official Basketball Rules"
+  },
+  {
+    "question": "How many rings are on the Olympic symbol?",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "correctAnswer": "5",
+    "explanation": "The Olympic symbol consists of five interlocking rings representing the unity of the Olympic movement.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "International Olympic Committee"
+  },
+  {
+    "question": "Which sport is played at Wimbledon?",
+    "options": [
+      "Cricket",
+      "Tennis",
+      "Rugby",
+      "Golf"
+    ],
+    "correctAnswer": "Tennis",
+    "explanation": "Wimbledon is one of the four Grand Slam tennis tournaments.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "Wimbledon"
+  },
+  {
+    "question": "How many players are on the court for one volleyball team?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correctAnswer": "6",
+    "explanation": "Indoor volleyball teams have six players on the court at a time.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "FIVB Official Volleyball Rules"
+  },
+  {
+    "question": "Which country is traditionally associated with the origin of modern cricket?",
+    "options": [
+      "Australia",
+      "India",
+      "England",
+      "South Africa"
+    ],
+    "correctAnswer": "England",
+    "explanation": "Modern cricket developed in England and later spread internationally.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "Marylebone Cricket Club"
+  },
+  {
+    "question": "How many bases are there on a baseball field?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correctAnswer": "4",
+    "explanation": "A baseball diamond has four bases: first, second, third, and home plate.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "Major League Baseball"
+  },
+  {
+    "question": "What color card means a player is sent off in soccer?",
+    "options": [
+      "Blue",
+      "Green",
+      "Yellow",
+      "Red"
+    ],
+    "correctAnswer": "Red",
+    "explanation": "A red card means the player is sent off and cannot continue participating in the match.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "FIFA Laws of the Game"
+  },
+  {
+    "question": "How many Grand Slam tournaments are there in tennis each year?",
+    "options": [
+      "2",
+      "3",
+      "4",
+      "5"
+    ],
+    "correctAnswer": "4",
+    "explanation": "The four Grand Slam tournaments are the Australian Open, French Open, Wimbledon, and US Open.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "International Tennis Federation"
+  },
+  {
+    "question": "Which sport uses a shuttlecock?",
+    "options": [
+      "Squash",
+      "Badminton",
+      "Table tennis",
+      "Hockey"
+    ],
+    "correctAnswer": "Badminton",
+    "explanation": "Badminton is played with a racket and a feathered or synthetic shuttlecock.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "Badminton World Federation"
+  },
+  {
+    "question": "How long is a standard Olympic swimming pool?",
+    "options": [
+      "25 meters",
+      "40 meters",
+      "50 meters",
+      "100 meters"
+    ],
+    "correctAnswer": "50 meters",
+    "explanation": "An Olympic-standard long-course swimming pool is 50 meters long.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "World Aquatics"
+  },
+  {
+    "question": "Which sport is associated with the term 'home run'?",
+    "options": [
+      "Baseball",
+      "Cricket",
+      "Rugby",
+      "Hockey"
+    ],
+    "correctAnswer": "Baseball",
+    "explanation": "A home run occurs when a batter hits the ball in a way that allows them to score by completing the bases.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "Major League Baseball"
+  },
+  {
+    "question": "What is the highest score possible with a single dart in standard darts?",
+    "options": [
+      "50",
+      "60",
+      "80",
+      "100"
+    ],
+    "correctAnswer": "60",
+    "explanation": "The triple 20 is worth 60 points, the highest possible score with one dart.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "Professional Darts Corporation"
+  },
+  {
+    "question": "Which sport uses a puck?",
+    "options": [
+      "Field hockey",
+      "Ice hockey",
+      "Lacrosse",
+      "Curling"
+    ],
+    "correctAnswer": "Ice hockey",
+    "explanation": "Ice hockey is played using a rubber puck that players attempt to shoot into the opposing goal.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "International Ice Hockey Federation"
+  },
+  {
+    "question": "How many points is a touchdown worth in American football before any extra point or conversion?",
+    "options": [
+      "3",
+      "5",
+      "6",
+      "7"
+    ],
+    "correctAnswer": "6",
+    "explanation": "A touchdown awards six points, followed by an opportunity for an additional scoring play.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "NFL Rulebook"
+  },
+  {
+    "question": "Which sport is known as 'the beautiful game'?",
+    "options": [
+      "Basketball",
+      "Soccer",
+      "Tennis",
+      "Rugby"
+    ],
+    "correctAnswer": "Soccer",
+    "explanation": "Soccer is widely known by the nickname 'the beautiful game,' particularly because of its global popularity and style of play.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "FIFA"
+  },
+  {
+    "question": "What is the term for zero points in tennis?",
+    "options": [
+      "Nil",
+      "Love",
+      "Duck",
+      "Blank"
+    ],
+    "correctAnswer": "Love",
+    "explanation": "In tennis scoring, zero points is traditionally called 'love.'",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "International Tennis Federation"
+  },
+  {
+    "question": "Which country hosted the first modern Olympic Games in 1896?",
+    "options": [
+      "France",
+      "Greece",
+      "Italy",
+      "United Kingdom"
+    ],
+    "correctAnswer": "Greece",
+    "explanation": "The first modern Olympic Games were held in Athens, Greece, in 1896.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "International Olympic Committee"
+  },
+  {
+    "question": "What piece of equipment is used to hit a ball in golf?",
+    "options": [
+      "Bat",
+      "Club",
+      "Racket",
+      "Stick"
+    ],
+    "correctAnswer": "Club",
+    "explanation": "Golfers use clubs to strike the ball toward the hole.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "The R&A"
+  },
+  {
+    "question": "Which sport awards a 'try' as a major method of scoring?",
+    "options": [
+      "Rugby",
+      "Cricket",
+      "Basketball",
+      "Baseball"
+    ],
+    "correctAnswer": "Rugby",
+    "explanation": "A try is a primary scoring method in rugby and is awarded when the ball is grounded in the opponents' in-goal area.",
+    "categoryId": "sports",
+    "difficulty": "easy",
+    "source": "World Rugby"
+  },
+  {
+    "question": "What is the maximum number of players a basketball team can have on the court at one time?",
+    "options": [
+      "4",
+      "5",
+      "6",
+      "7"
+    ],
+    "correctAnswer": "5",
+    "explanation": "Five players from each team are on the court during normal basketball play.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "FIBA Official Basketball Rules"
+  },
+  {
+    "question": "How many minutes are played in a standard soccer match, excluding added time?",
+    "options": [
+      "80",
+      "90",
+      "100",
+      "120"
+    ],
+    "correctAnswer": "90",
+    "explanation": "A standard soccer match consists of two 45-minute halves, totaling 90 minutes before added time.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "FIFA Laws of the Game"
+  },
+  {
+    "question": "In tennis, what score comes after deuce when a player wins the next point?",
+    "options": [
+      "Match point",
+      "Advantage",
+      "Set point",
+      "Break point"
+    ],
+    "correctAnswer": "Advantage",
+    "explanation": "After deuce, winning the next point gives a player advantage.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "International Tennis Federation"
+  },
+  {
+    "question": "How many players from one team are normally on the field in rugby union?",
+    "options": [
+      "11",
+      "13",
+      "15",
+      "17"
+    ],
+    "correctAnswer": "15",
+    "explanation": "A rugby union team fields 15 players during normal play.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "World Rugby"
+  },
+  {
+    "question": "What is an eagle in golf?",
+    "options": [
+      "One stroke over par",
+      "Two strokes under par",
+      "Two strokes over par",
+      "A hole-in-one only"
+    ],
+    "correctAnswer": "Two strokes under par",
+    "explanation": "An eagle means completing a hole in two strokes fewer than its par.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "The R&A"
+  },
+  {
+    "question": "Which event is the final race of a traditional decathlon?",
+    "options": [
+      "400 meters",
+      "800 meters",
+      "1500 meters",
+      "5000 meters"
+    ],
+    "correctAnswer": "1500 meters",
+    "explanation": "The men's decathlon concludes with the 1500-meter race on the second day of competition.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "World Athletics"
+  },
+  {
+    "question": "How many events are included in the men's decathlon?",
+    "options": [
+      "8",
+      "9",
+      "10",
+      "12"
+    ],
+    "correctAnswer": "10",
+    "explanation": "The decathlon consists of ten track and field events conducted over two days.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "World Athletics"
+  },
+  {
+    "question": "What is a hat-trick in many team sports?",
+    "options": [
+      "Three successful achievements by one player in a game",
+      "Three consecutive team defeats",
+      "A game lasting three hours",
+      "Three substitutions at once"
+    ],
+    "correctAnswer": "Three successful achievements by one player in a game",
+    "explanation": "The term commonly refers to three notable scoring achievements by one player, especially three goals in soccer or hockey.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which Grand Slam tennis tournament is played on clay courts?",
+    "options": [
+      "Australian Open",
+      "Wimbledon",
+      "US Open",
+      "French Open"
+    ],
+    "correctAnswer": "French Open",
+    "explanation": "The French Open, held at Roland-Garros, is played on outdoor clay courts.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "International Tennis Federation"
+  },
+  {
+    "question": "Which Grand Slam tennis tournament is traditionally played on grass?",
+    "options": [
+      "Australian Open",
+      "French Open",
+      "Wimbledon",
+      "US Open"
+    ],
+    "correctAnswer": "Wimbledon",
+    "explanation": "Wimbledon is the only Grand Slam tournament played on grass courts.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "Wimbledon"
+  },
+  {
+    "question": "How many innings are normally played in a regulation Major League Baseball game?",
+    "options": [
+      "6",
+      "7",
+      "9",
+      "12"
+    ],
+    "correctAnswer": "9",
+    "explanation": "A regulation Major League Baseball game is normally nine innings, unless extra innings are required.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "Major League Baseball"
+  },
+  {
+    "question": "What is a 'clean sheet' in soccer?",
+    "options": [
+      "A match in which a team concedes no goals",
+      "A match with no yellow cards",
+      "A game played without substitutions",
+      "A match with no corner kicks"
+    ],
+    "correctAnswer": "A match in which a team concedes no goals",
+    "explanation": "A clean sheet means a team finishes a match without conceding a goal.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "FIFA Laws of the Game"
+  },
+  {
+    "question": "In basketball, what is a triple-double?",
+    "options": [
+      "Scoring three three-pointers",
+      "Recording double figures in three statistical categories",
+      "Winning three games in a row",
+      "Making three consecutive steals"
+    ],
+    "correctAnswer": "Recording double figures in three statistical categories",
+    "explanation": "A triple-double occurs when a player records at least 10 in three different statistical categories in a game.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "NBA Official Statistics"
+  },
+  {
+    "question": "What is the term for winning all four Grand Slam singles tournaments in a calendar year?",
+    "options": [
+      "Golden Slam",
+      "Calendar Grand Slam",
+      "Super Slam",
+      "Grand Sweep"
+    ],
+    "correctAnswer": "Calendar Grand Slam",
+    "explanation": "A player achieves a Calendar Grand Slam by winning all four Grand Slam singles tournaments in the same calendar year.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "International Tennis Federation"
+  },
+  {
+    "question": "Which swimming stroke is generally regarded as the fastest competitive stroke?",
+    "options": [
+      "Backstroke",
+      "Breaststroke",
+      "Butterfly",
+      "Freestyle"
+    ],
+    "correctAnswer": "Freestyle",
+    "explanation": "In competitive swimming, front crawl is normally used in freestyle events and is generally the fastest stroke.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "World Aquatics"
+  },
+  {
+    "question": "What is the standard height of a basketball hoop?",
+    "options": [
+      "8 feet",
+      "9 feet",
+      "10 feet",
+      "11 feet"
+    ],
+    "correctAnswer": "10 feet",
+    "explanation": "The rim of a standard basketball basket is positioned 10 feet above the playing surface.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "FIBA Official Basketball Rules"
+  },
+  {
+    "question": "What is a false start in athletics?",
+    "options": [
+      "Starting a race before the permitted signal",
+      "Finishing a race too slowly",
+      "Changing lanes after the finish",
+      "Running beyond the finish line"
+    ],
+    "correctAnswer": "Starting a race before the permitted signal",
+    "explanation": "A false start occurs when an athlete initiates a start in violation of the starting rules before the appropriate signal.",
+    "categoryId": "sports",
+    "difficulty": "medium",
+    "source": "World Athletics"
+  },
+  {
+    "question": "Which country has won the most men's FIFA World Cup titles?",
+    "options": [
+      "Germany",
+      "Argentina",
+      "Brazil",
+      "Italy"
+    ],
+    "correctAnswer": "Brazil",
+    "explanation": "Brazil has won the men's FIFA World Cup five times, more than any other country.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "FIFA"
+  },
+  {
+    "question": "What is the maximum score possible in a single frame of ten-pin bowling?",
+    "options": [
+      "20",
+      "30",
+      "40",
+      "50"
+    ],
+    "correctAnswer": "30",
+    "explanation": "A strike is worth 10 points plus the next two rolls, making 30 the maximum score for a frame.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Bowling"
+  },
+  {
+    "question": "Which athlete holds the men's 100-meter world record of 9.58 seconds?",
+    "options": [
+      "Usain Bolt",
+      "Tyson Gay",
+      "Yohan Blake",
+      "Asafa Powell"
+    ],
+    "correctAnswer": "Usain Bolt",
+    "explanation": "Usain Bolt set the men's 100-meter world record of 9.58 seconds in Berlin in 2009.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Athletics"
+  },
+  {
+    "question": "In cricket, what is a 'duck'?",
+    "options": [
+      "A batsman being dismissed without scoring",
+      "Six runs from one ball",
+      "A bowler taking three wickets",
+      "A team scoring exactly 100 runs"
+    ],
+    "correctAnswer": "A batsman being dismissed without scoring",
+    "explanation": "In cricket, a duck refers to a batter being dismissed before scoring any runs.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "Marylebone Cricket Club"
+  },
+  {
+    "question": "What is the maximum break in snooker under standard scoring?",
+    "options": [
+      "147",
+      "155",
+      "167",
+      "180"
+    ],
+    "correctAnswer": "147",
+    "explanation": "A standard maximum break consists of 15 reds with 15 blacks followed by all six colors, totaling 147 points.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Professional Billiards and Snooker Association"
+  },
+  {
+    "question": "Which country has won the most men's Rugby World Cup titles?",
+    "options": [
+      "New Zealand",
+      "South Africa",
+      "Australia",
+      "England"
+    ],
+    "correctAnswer": "South Africa",
+    "explanation": "South Africa has won the men's Rugby World Cup four times, the most in the competition's history.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Rugby"
+  },
+  {
+    "question": "What is the Olympic combined event for women that consists of seven athletics disciplines?",
+    "options": [
+      "Heptathlon",
+      "Decathlon",
+      "Pentathlon",
+      "Triathlon"
+    ],
+    "correctAnswer": "Heptathlon",
+    "explanation": "The women's outdoor Olympic combined event is the heptathlon, consisting of seven track and field disciplines.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Athletics"
+  },
+  {
+    "question": "In Formula 1, what does a driver receive for finishing first in a Grand Prix?",
+    "options": [
+      "The most championship points available for that race",
+      "No points unless they set the fastest lap",
+      "Exactly 5 points",
+      "A guaranteed world championship"
+    ],
+    "correctAnswer": "The most championship points available for that race",
+    "explanation": "The race winner receives the highest standard championship points allocation for the Grand Prix.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "FIA Formula One Sporting Regulations"
+  },
+  {
+    "question": "Which tennis player is known for completing the first men's singles Calendar Grand Slam in the Open Era?",
+    "options": [
+      "Rod Laver",
+      "Björn Borg",
+      "Pete Sampras",
+      "Roger Federer"
+    ],
+    "correctAnswer": "Rod Laver",
+    "explanation": "Rod Laver won all four men's singles Grand Slam tournaments in 1969, achieving the Calendar Grand Slam in the Open Era.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "International Tennis Federation"
+  },
+  {
+    "question": "In baseball, what is a perfect game?",
+    "options": [
+      "A game in which no opposing batter reaches base",
+      "A game in which every batter hits a home run",
+      "A game won by exactly one run",
+      "A game lasting nine innings without errors"
+    ],
+    "correctAnswer": "A game in which no opposing batter reaches base",
+    "explanation": "A perfect game occurs when one pitcher or pitching team retires every opposing batter without allowing anyone to reach base.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "Major League Baseball"
+  },
+  {
+    "question": "Which athletics event combines running, jumping, and throwing into ten events?",
+    "options": [
+      "Heptathlon",
+      "Decathlon",
+      "Pentathlon",
+      "Triathlon"
+    ],
+    "correctAnswer": "Decathlon",
+    "explanation": "The decathlon consists of ten athletics events combining sprinting, distance running, jumping, and throwing disciplines.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Athletics"
+  },
+  {
+    "question": "In rugby union, how many points is a try worth under the standard laws?",
+    "options": [
+      "3",
+      "4",
+      "5",
+      "6"
+    ],
+    "correctAnswer": "5",
+    "explanation": "A try in rugby union is worth five points under the Laws of the Game.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Rugby"
+  },
+  {
+    "question": "What is the term for three strikes in a row in bowling?",
+    "options": [
+      "Turkey",
+      "Eagle",
+      "Hat-trick",
+      "Triple"
+    ],
+    "correctAnswer": "Turkey",
+    "explanation": "In ten-pin bowling, three consecutive strikes are traditionally called a turkey.",
+    "categoryId": "sports",
+    "difficulty": "hard",
+    "source": "World Bowling"
+  }
+]

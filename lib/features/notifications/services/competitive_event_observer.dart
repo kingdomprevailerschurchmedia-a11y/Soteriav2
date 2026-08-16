@@ -21,6 +21,9 @@ import '../providers/notification_providers.dart';
 import '../../player/domain/models/competitive_badge.dart';
 import '../../player/domain/models/competitive_title.dart';
 import '../../player/providers/player_providers.dart';
+import '../../social/domain/models/friendship.dart';
+import '../../social/presentation/providers/social_providers.dart';
+import '../../auth/providers/auth_providers.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../player/domain/repositories/activity_repository.dart';
@@ -45,6 +48,44 @@ class CompetitiveEventObserver {
     _observePersonalRecords();
     _observeProfileChanges();
     _observeLiveEvents();
+    _observeFriendships();
+  }
+
+  void _observeFriendships() {
+    _ref.listen<AsyncValue<List<Friendship>>>(friendsProvider, (previous, next) {
+      final oldList = previous?.value ?? [];
+      final newList = next.value ?? [];
+
+      if (newList.length > oldList.length) {
+        final newFriendships = newList.where(
+          (n) => !oldList.any((o) => o.id == n.id),
+        );
+        final currentUserId = _ref.read(authRepositoryProvider).currentUserId;
+        if (currentUserId == null) return;
+
+        for (final friendship in newFriendships) {
+          final otherUserId = friendship.userIds.firstWhere(
+            (id) => id != currentUserId,
+            orElse: () => '',
+          );
+          if (otherUserId.isEmpty) continue;
+
+          _emitEvent(
+            CompetitiveEvent(
+              eventId: const Uuid().v4(),
+              userId: currentUserId,
+              type: CompetitiveEventType.friendshipEstablished,
+              title: 'New Connection!',
+              body: 'You are now friends with another player.',
+              metadata: {'friendId': otherUserId},
+              createdAt: DateTime.now(),
+              priority: 1,
+              deduplicationKey: 'friendship_${friendship.id}',
+            ),
+          );
+        }
+      }
+    });
   }
 
   void _observeLiveEvents() {
@@ -392,6 +433,7 @@ class CompetitiveEventObserver {
         metadata: event.metadata,
         deepLink: _mapAction(event.type),
         importance: _mapImportance(event.priority),
+        visibility: _mapVisibility(event.type),
       );
       _activityRepository.recordActivityEvent(activityEvent);
     }
@@ -407,6 +449,24 @@ class CompetitiveEventObserver {
     if (priority >= 2) return ActivityImportance.high;
     if (priority >= 1) return ActivityImportance.normal;
     return ActivityImportance.low;
+  }
+
+  ActivityVisibility _mapVisibility(CompetitiveEventType type) {
+    switch (type) {
+      case CompetitiveEventType.rankPromoted:
+      case CompetitiveEventType.rankReached:
+      case CompetitiveEventType.achievementUnlocked:
+      case CompetitiveEventType.milestoneCompleted:
+      case CompetitiveEventType.streakReached:
+      case CompetitiveEventType.personalBest:
+        return ActivityVisibility.friends;
+      case CompetitiveEventType.friendshipEstablished:
+        return ActivityVisibility.friends;
+      case CompetitiveEventType.matchCompleted:
+        return ActivityVisibility.friends;
+      default:
+        return ActivityVisibility.friends;
+    }
   }
 
   NotificationType _mapType(CompetitiveEventType type) {
@@ -475,6 +535,8 @@ class CompetitiveEventObserver {
         return NotificationType.rematchRequest;
       case CompetitiveEventType.systemAnnouncement:
         return NotificationType.systemAnnouncement;
+      case CompetitiveEventType.friendshipEstablished:
+        return NotificationType.socialConnection;
     }
   }
 
@@ -513,6 +575,8 @@ class CompetitiveEventObserver {
         return 'events';
       case CompetitiveEventType.rematchRequest:
         return 'versus';
+      case CompetitiveEventType.friendshipEstablished:
+        return 'social';
       default:
         return null;
     }

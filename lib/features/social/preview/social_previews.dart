@@ -11,11 +11,12 @@ import 'package:soteria/features/social/presentation/providers/social_leaderboar
 import 'package:soteria/features/social/presentation/providers/rivalry_providers.dart';
 import 'social_fixtures.dart';
 import 'rivalry_fixtures.dart';
-import '../domain/models/social_activity_event.dart';
 import '../presentation/widgets/social_activity_feed.dart';
 import '../presentation/widgets/rivalry_card.dart';
 import '../presentation/screens/head_to_head_screen.dart';
 import 'package:soteria/features/social/domain/models/relationship_status.dart';
+import 'package:soteria/features/player/domain/models/competitive_activity_event.dart';
+import 'package:soteria/features/player/domain/models/competitive_event.dart';
 import 'package:soteria/features/player/domain/models/competitive_statistics.dart';
 
 import 'package:soteria/features/player/presentation/screens/player_search_screen.dart';
@@ -124,23 +125,24 @@ class SocialPreviews extends StatelessWidget {
             onTap: () => _show(context, Padding(
               padding: const EdgeInsets.all(16),
               child: SocialActivityFeed(activities: [
-                SocialActivityEvent(
+                CompetitiveActivityEvent(
                   id: '1',
-                  userId: 'current_user',
-                  otherUserId: 'rival_1',
-                  otherDisplayName: 'Alex',
-                  type: SocialActivityType.friendRankUp,
-                  message: 'Alex reached Gold I',
+                  userId: 'rival_1',
+                  type: CompetitiveEventType.rankPromoted,
+                  title: 'Tier Promotion!',
+                  description: 'Alex reached Gold I',
                   createdAt: DateTime.now().subtract(const Duration(hours: 2)),
+                  importance: ActivityImportance.high,
+                  metadata: {'rank': 'Gold I'},
                 ),
-                SocialActivityEvent(
+                CompetitiveActivityEvent(
                   id: '2',
                   userId: 'current_user',
-                  otherUserId: 'rival_2',
-                  otherDisplayName: 'Jordan',
-                  type: SocialActivityType.overtake,
-                  message: 'You moved ahead of Jordan',
+                  type: CompetitiveEventType.personalBest,
+                  title: 'New Career Best!',
+                  description: 'You moved ahead of Jordan',
                   createdAt: DateTime.now().subtract(const Duration(hours: 4)),
+                  importance: ActivityImportance.normal,
                 ),
               ]),
             )),

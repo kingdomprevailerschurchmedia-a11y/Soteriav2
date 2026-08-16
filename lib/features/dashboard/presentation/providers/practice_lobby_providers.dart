@@ -1,3 +1,4 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/firebase/providers/firebase_providers.dart';
@@ -15,6 +16,8 @@ import '../../../gameplay_engine/data/repositories/firestore_practice_repository
 import '../../../question_content/domain/entities/difficulty.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
 
+part 'practice_lobby_providers.freezed.dart';
+
 // --- Repositories ---
 final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
   return FirestorePracticeRepository(
@@ -23,40 +26,16 @@ final practiceRepositoryProvider = Provider<PracticeRepository>((ref) {
 });
 
 // --- State Models ---
-class PracticeLobbyState {
-  final bool isLoading;
-  final String? error;
-  final List<Category> categories;
-  final PracticeSessionConfig config;
-  final EstimatedRewards? estimatedRewards;
-  final String? validationError;
-
-  const PracticeLobbyState({
-    this.isLoading = false,
-    this.error,
-    this.categories = const [],
-    this.config = const PracticeSessionConfig(),
-    this.estimatedRewards,
-    this.validationError,
-  });
-
-  PracticeLobbyState copyWith({
-    bool? isLoading,
+@freezed
+abstract class PracticeLobbyState with _$PracticeLobbyState {
+  const factory PracticeLobbyState({
+    @Default(false) bool isLoading,
     String? error,
-    List<Category>? categories,
-    PracticeSessionConfig? config,
+    @Default([]) List<Category> categories,
+    @Default(PracticeSessionConfig()) PracticeSessionConfig config,
     EstimatedRewards? estimatedRewards,
     String? validationError,
-  }) {
-    return PracticeLobbyState(
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      categories: categories ?? this.categories,
-      config: config ?? this.config,
-      estimatedRewards: estimatedRewards ?? this.estimatedRewards,
-      validationError: validationError ?? this.validationError,
-    );
-  }
+  }) = _PracticeLobbyState;
 }
 
 // --- Notifiers ---

@@ -69,7 +69,7 @@ class SettingsScreen extends StatelessWidget {
                   iconColor: const Color(0xFF7C4DFF),
                   title: 'Profile Information',
                   subtitle: 'View and edit your profile details',
-                  onTap: () {},
+                  onTap: () => context.push(SoteriaRoutes.profileInformation),
                 ),
                 const _SettingsDivider(),
                 _SettingsItem(

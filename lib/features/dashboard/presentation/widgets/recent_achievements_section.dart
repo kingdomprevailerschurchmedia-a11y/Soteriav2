@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
@@ -8,6 +9,7 @@ import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../player/presentation/providers/achievement_providers.dart';
 import '../../../player/domain/models/achievement.dart';
 import '../../../player/domain/services/achievement_registry.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 
 class RecentAchievementsSection extends ConsumerWidget {
   const RecentAchievementsSection({super.key});
@@ -50,7 +52,7 @@ class RecentAchievementsSection extends ConsumerWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () => context.push(SoteriaRoutes.achievements),
                 child: Row(
                   children: [
                     Text(
@@ -160,16 +162,36 @@ class RecentAchievementsSection extends ConsumerWidget {
   }
 
   Widget _getIcon(String iconName) {
+    IconData iconData;
     switch (iconName) {
       case 'stars_rounded':
-        return const Icon(Icons.stars_rounded, color: Colors.white, size: 24);
+        iconData = Icons.stars_rounded;
       case 'psychology_rounded':
-        return const Icon(Icons.psychology_rounded, color: Colors.white, size: 24);
+        iconData = Icons.psychology_rounded;
       case 'emoji_events_rounded':
-        return const Icon(Icons.emoji_events_rounded, color: Colors.white, size: 24);
+        iconData = Icons.emoji_events_rounded;
+      case 'military_tech_rounded':
+        iconData = Icons.military_tech_rounded;
+      case 'workspace_premium_rounded':
+        iconData = Icons.workspace_premium_rounded;
+      case 'local_fire_department_rounded':
+        iconData = Icons.local_fire_department_rounded;
+      case 'bolt_rounded':
+        iconData = Icons.bolt_rounded;
+      case 'trending_up_rounded':
+        iconData = Icons.trending_up_rounded;
+      case 'shield_rounded':
+        iconData = Icons.shield_rounded;
+      case 'play_arrow_rounded':
+        iconData = Icons.play_arrow_rounded;
+      case 'sports_esports_rounded':
+        iconData = Icons.sports_esports_rounded;
+      case 'auto_awesome_rounded':
+        iconData = Icons.auto_awesome_rounded;
       default:
-        return const Icon(Icons.emoji_events_rounded, color: Colors.white, size: 24);
+        iconData = Icons.emoji_events_rounded;
     }
+    return Icon(iconData, color: Colors.white, size: 24.sp);
   }
 }
 

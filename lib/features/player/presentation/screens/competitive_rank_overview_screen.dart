@@ -14,7 +14,11 @@ import '../widgets/competitive_rank_badge.dart';
 import '../widgets/rank_progress_bar.dart';
 import '../widgets/rank_history_section.dart';
 import '../widgets/milestone_card.dart';
-import '../providers/milestone_providers.dart';
+import '../providers/reward_providers.dart';
+import 'package:soteria/features/player/presentation/providers/milestone_providers.dart';
+import 'package:soteria/features/player/presentation/providers/season_providers.dart';
+import '../../domain/models/competitive_season.dart';
+import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import 'milestones_screen.dart';
 
 class CompetitiveRankOverviewScreen extends ConsumerWidget {
@@ -24,19 +28,26 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final rankProgressAsync = ref.watch(rankProgressProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
+    return SafeGradientScaffold(
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         title: const Text('COMPETITIVE RANK'),
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
       ),
-      body: SoteriaPage(
-        child: rankProgressAsync.when(
-          data: (progress) => _buildContent(context, ref, progress),
-          loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, st) => Center(child: Text('Error: $e')),
+      body: rankProgressAsync.when(
+        data: (progress) => _buildContent(context, ref, progress),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline_rounded, color: SoteriaColors.error, size: 48),
+              SizedBox(height: SoteriaSpacing.md),
+              Text('Failed to load rank data: $e'),
+            ],
+          ),
         ),
       ),
     );
@@ -119,6 +130,7 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
 
   Widget _buildStatsGrid(BuildContext context, WidgetRef ref) {
     final positionAsync = ref.watch(playerRankPositionProvider);
+    final currentSeasonAsync = ref.watch(currentSeasonProvider);
 
     return GridView.count(
       crossAxisCount: 2,
@@ -126,12 +138,12 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
       physics: const NeverScrollableScrollPhysics(),
       mainAxisSpacing: SoteriaSpacing.md,
       crossAxisSpacing: SoteriaSpacing.md,
-      childAspectRatio: 1.5,
+      childAspectRatio: 1.4,
       children: [
         _StatCard(
           label: 'GLOBAL POSITION',
           value: positionAsync.when(
-            data: (pos) => '#$pos',
+            data: (pos) => pos > 0 ? '#$pos' : 'Unranked',
             loading: () => '...',
             error: (_, _) => 'N/A',
           ),
@@ -139,7 +151,11 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
         ),
         _StatCard(
           label: 'CURRENT SEASON',
-          value: 'SEASON 5', // Hardcoded for now, should be from currentSeasonProvider
+          value: currentSeasonAsync.when(
+            data: (season) => season?.displayName ?? season?.name ?? 'Active Season',
+            loading: () => '...',
+            error: (_, _) => 'N/A',
+          ),
           icon: Icons.event_note_rounded,
         ),
       ],
@@ -162,10 +178,27 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
         SizedBox(height: SoteriaSpacing.md),
         recordsAsync.when(
           data: (records) {
-            final bestRank = records.firstWhere(
-              (r) => r.type == CompetitiveRecordType.bestRankReached,
-              orElse: () => records.first, // Placeholder
-            );
+            if (records.isEmpty) {
+              return _StatCard(
+                label: 'HIGHEST RANK ACHIEVED',
+                value: 'Unranked',
+                icon: Icons.emoji_events_rounded,
+                color: SoteriaColors.gold.withValues(alpha: 0.5),
+              );
+            }
+            
+            // Safer search for the best rank record
+            final bestRank = records.where((r) => r.type == CompetitiveRecordType.bestRankReached).firstOrNull ?? records.firstOrNull;
+            
+            if (bestRank == null) {
+              return _StatCard(
+                label: 'HIGHEST RANK ACHIEVED',
+                value: 'Unranked',
+                icon: Icons.emoji_events_rounded,
+                color: SoteriaColors.gold.withValues(alpha: 0.5),
+              );
+            }
+
             return _StatCard(
               label: 'HIGHEST RANK ACHIEVED',
               value: bestRank.displayValue,
@@ -173,7 +206,12 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
               color: SoteriaColors.gold,
             );
           },
-          loading: () => const LinearProgressIndicator(),
+          loading: () => const Center(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: LinearProgressIndicator(),
+            ),
+          ),
           error: (_, __) => const SizedBox.shrink(),
         ),
       ],
@@ -246,7 +284,10 @@ class _StatCard extends StatelessWidget {
     final Color effectiveColor = color ?? SoteriaColors.textPrimary;
 
     return Container(
-      padding: EdgeInsets.all(SoteriaSpacing.md),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.md,
+        vertical: SoteriaSpacing.sm,
+      ),
       decoration: BoxDecoration(
         color: SoteriaColors.surface,
         borderRadius: BorderRadius.circular(SoteriaSpacing.md),
@@ -255,21 +296,28 @@ class _StatCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Icon(icon, color: effectiveColor, size: 20.w),
-          SizedBox(height: SoteriaSpacing.sm),
+          SizedBox(height: SoteriaSpacing.xs),
           Text(
             label,
             style: context.labelSmall.copyWith(
               color: SoteriaColors.textSecondary,
               fontSize: 10.sp,
             ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
-          Text(
-            value,
-            style: context.titleLarge.copyWith(
-              color: effectiveColor,
-              fontWeight: FontWeight.bold,
+          Flexible(
+            child: Text(
+              value,
+              style: context.titleLarge.copyWith(
+                color: effectiveColor,
+                fontWeight: FontWeight.bold,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

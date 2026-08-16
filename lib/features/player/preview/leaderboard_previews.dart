@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/leaderboard_entry.dart';
 import '../domain/models/competitive_season.dart';
 import '../domain/models/rank_movement_event.dart';
+import '../domain/models/player_profile.dart';
+import '../domain/models/player_progression.dart';
 import '../domain/repositories/leaderboard_repository.dart';
 import '../presentation/providers/leaderboard_providers.dart';
 import '../presentation/providers/season_providers.dart';
 import '../presentation/screens/leaderboard_screen.dart';
+import 'package:soteria/features/social/presentation/providers/social_leaderboard_providers.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../../../core/identity/models/user_session.dart';
 import '../../../../core/services/time_service.dart';
@@ -88,6 +91,8 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
           ),
         ),
         timeServiceProvider.overrideWithValue(_MockTimeService(now)),
+        leaderboardRepositoryProvider.overrideWithValue(_MockLeaderboardRepository()),
+        friendsLeaderboardProvider.overrideWith((ref) => Future.value(mockEntries)),
       ],
       child: const LeaderboardScreen(),
     );

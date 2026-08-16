@@ -1,0 +1,604 @@
+[
+  {
+    "question": "What is the largest ocean on Earth?",
+    "options": [
+      "Atlantic Ocean",
+      "Indian Ocean",
+      "Pacific Ocean",
+      "Arctic Ocean"
+    ],
+    "correctAnswer": "Pacific Ocean",
+    "explanation": "The Pacific Ocean is the largest and deepest ocean on Earth, covering more area than any other ocean.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "National Geographic"
+  },
+  {
+    "question": "What is the capital city of France?",
+    "options": [
+      "Madrid",
+      "Paris",
+      "Rome",
+      "Berlin"
+    ],
+    "correctAnswer": "Paris",
+    "explanation": "Paris is the capital and largest city of France.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "How many continents are traditionally recognized on Earth?",
+    "options": [
+      "Five",
+      "Six",
+      "Seven",
+      "Eight"
+    ],
+    "correctAnswer": "Seven",
+    "explanation": "The traditional geographic model recognizes seven continents: Africa, Antarctica, Asia, Europe, North America, South America, and Australia.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which planet is known as the Red Planet?",
+    "options": [
+      "Venus",
+      "Mars",
+      "Jupiter",
+      "Mercury"
+    ],
+    "correctAnswer": "Mars",
+    "explanation": "Mars is called the Red Planet because iron minerals in its soil give its surface a reddish appearance.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "NASA"
+  },
+  {
+    "question": "What is the currency of Japan?",
+    "options": [
+      "Won",
+      "Yuan",
+      "Yen",
+      "Ringgit"
+    ],
+    "correctAnswer": "Yen",
+    "explanation": "The yen is the official currency of Japan.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Bank of Japan"
+  },
+  {
+    "question": "Which animal is the largest land animal?",
+    "options": [
+      "Giraffe",
+      "African elephant",
+      "Hippopotamus",
+      "White rhinoceros"
+    ],
+    "correctAnswer": "African elephant",
+    "explanation": "The African elephant is the largest living land animal.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "National Geographic"
+  },
+  {
+    "question": "What is the fastest land animal?",
+    "options": [
+      "Lion",
+      "Cheetah",
+      "Leopard",
+      "Pronghorn"
+    ],
+    "correctAnswer": "Cheetah",
+    "explanation": "The cheetah is the fastest land animal and can reach speeds of roughly 60 to 70 miles per hour over short distances.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Smithsonian's National Zoo"
+  },
+  {
+    "question": "Which language has the largest number of native speakers worldwide?",
+    "options": [
+      "English",
+      "Spanish",
+      "Mandarin Chinese",
+      "Arabic"
+    ],
+    "correctAnswer": "Mandarin Chinese",
+    "explanation": "Mandarin Chinese has more native speakers than any other language.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Ethnologue"
+  },
+  {
+    "question": "Which organ pumps blood throughout the human body?",
+    "options": [
+      "Liver",
+      "Lungs",
+      "Heart",
+      "Kidneys"
+    ],
+    "correctAnswer": "Heart",
+    "explanation": "The heart is a muscular organ that pumps blood through the circulatory system.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "National Institutes of Health"
+  },
+  {
+    "question": "Which country is famous for the ancient pyramids of Giza?",
+    "options": [
+      "Egypt",
+      "Mexico",
+      "Sudan",
+      "Greece"
+    ],
+    "correctAnswer": "Egypt",
+    "explanation": "The pyramids of Giza are located near Cairo, Egypt, and were built during ancient Egypt's Old Kingdom.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the chemical symbol for gold?",
+    "options": [
+      "Ag",
+      "Au",
+      "Gd",
+      "Go"
+    ],
+    "correctAnswer": "Au",
+    "explanation": "Au is the chemical symbol for gold, derived from the Latin word 'aurum'.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Royal Society of Chemistry"
+  },
+  {
+    "question": "Which instrument is used to measure temperature?",
+    "options": [
+      "Barometer",
+      "Thermometer",
+      "Hygrometer",
+      "Anemometer"
+    ],
+    "correctAnswer": "Thermometer",
+    "explanation": "A thermometer is an instrument used to measure temperature.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which country has the largest population in Africa?",
+    "options": [
+      "Egypt",
+      "South Africa",
+      "Nigeria",
+      "Ethiopia"
+    ],
+    "correctAnswer": "Nigeria",
+    "explanation": "Nigeria is Africa's most populous country.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "World Bank"
+  },
+  {
+    "question": "How many days are there in a leap year?",
+    "options": [
+      "364",
+      "365",
+      "366",
+      "367"
+    ],
+    "correctAnswer": "366",
+    "explanation": "A leap year contains 366 days because February has 29 days instead of 28.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which gas do humans primarily breathe in to support respiration?",
+    "options": [
+      "Carbon dioxide",
+      "Oxygen",
+      "Nitrogen",
+      "Hydrogen"
+    ],
+    "correctAnswer": "Oxygen",
+    "explanation": "Humans require oxygen for cellular respiration, although atmospheric air also contains a much larger proportion of nitrogen.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "National Institutes of Health"
+  },
+  {
+    "question": "Who wrote the play Romeo and Juliet?",
+    "options": [
+      "Charles Dickens",
+      "William Shakespeare",
+      "George Orwell",
+      "Jane Austen"
+    ],
+    "correctAnswer": "William Shakespeare",
+    "explanation": "William Shakespeare wrote Romeo and Juliet, one of the most famous plays in English literature.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which is the smallest prime number?",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "correctAnswer": "2",
+    "explanation": "Two is the smallest prime number and the only even prime number.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which country is known as the Land of the Rising Sun?",
+    "options": [
+      "China",
+      "Japan",
+      "South Korea",
+      "Thailand"
+    ],
+    "correctAnswer": "Japan",
+    "explanation": "Japan is traditionally known as the Land of the Rising Sun, reflecting its position east of the Asian mainland.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the hardest natural substance on Earth?",
+    "options": [
+      "Quartz",
+      "Iron",
+      "Diamond",
+      "Granite"
+    ],
+    "correctAnswer": "Diamond",
+    "explanation": "Diamond is the hardest naturally occurring mineral on the Mohs hardness scale.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which planet is the largest in the Solar System?",
+    "options": [
+      "Saturn",
+      "Earth",
+      "Jupiter",
+      "Neptune"
+    ],
+    "correctAnswer": "Jupiter",
+    "explanation": "Jupiter is the largest planet in the Solar System by both mass and volume.",
+    "categoryId": "general_knowledge",
+    "difficulty": "easy",
+    "source": "NASA"
+  },
+  {
+    "question": "Which African country was formerly known as Abyssinia?",
+    "options": [
+      "Ethiopia",
+      "Eritrea",
+      "Somalia",
+      "Sudan"
+    ],
+    "correctAnswer": "Ethiopia",
+    "explanation": "Abyssinia was the historical name commonly used for the Ethiopian Empire and surrounding highlands.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which sea separates Europe from Africa?",
+    "options": [
+      "Caribbean Sea",
+      "Mediterranean Sea",
+      "Red Sea",
+      "Arabian Sea"
+    ],
+    "correctAnswer": "Mediterranean Sea",
+    "explanation": "The Mediterranean Sea lies between southern Europe and northern Africa.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which element has the atomic number 1?",
+    "options": [
+      "Helium",
+      "Hydrogen",
+      "Oxygen",
+      "Carbon"
+    ],
+    "correctAnswer": "Hydrogen",
+    "explanation": "Hydrogen has one proton in its nucleus, giving it the atomic number 1.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "International Union of Pure and Applied Chemistry"
+  },
+  {
+    "question": "Which country is home to the ancient city of Petra?",
+    "options": [
+      "Jordan",
+      "Lebanon",
+      "Egypt",
+      "Syria"
+    ],
+    "correctAnswer": "Jordan",
+    "explanation": "Petra is an ancient archaeological city in southern Jordan and was the capital of the Nabataean Kingdom.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "UNESCO World Heritage Centre"
+  },
+  {
+    "question": "What is the largest internal organ in the human body?",
+    "options": [
+      "Brain",
+      "Liver",
+      "Lungs",
+      "Kidney"
+    ],
+    "correctAnswer": "Liver",
+    "explanation": "The liver is the largest internal organ in the human body and performs many essential metabolic functions.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "National Institutes of Health"
+  },
+  {
+    "question": "Which scientist formulated the laws of motion and universal gravitation?",
+    "options": [
+      "Albert Einstein",
+      "Isaac Newton",
+      "Galileo Galilei",
+      "Johannes Kepler"
+    ],
+    "correctAnswer": "Isaac Newton",
+    "explanation": "Isaac Newton formulated the three laws of motion and the law of universal gravitation.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which country gifted the Statue of Liberty to the United States?",
+    "options": [
+      "United Kingdom",
+      "France",
+      "Spain",
+      "Italy"
+    ],
+    "correctAnswer": "France",
+    "explanation": "France presented the Statue of Liberty to the United States as a gift commemorating the friendship between the two nations.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "National Park Service"
+  },
+  {
+    "question": "Which is the longest river in South America?",
+    "options": [
+      "Amazon River",
+      "Orinoco River",
+      "Paraná River",
+      "São Francisco River"
+    ],
+    "correctAnswer": "Amazon River",
+    "explanation": "The Amazon River is the largest river in South America by volume and is generally recognized as the continent's longest river.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which scientist is associated with the theory of relativity?",
+    "options": [
+      "Isaac Newton",
+      "Albert Einstein",
+      "Niels Bohr",
+      "Erwin Schrödinger"
+    ],
+    "correctAnswer": "Albert Einstein",
+    "explanation": "Albert Einstein developed the special and general theories of relativity.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Nobel Prize"
+  },
+  {
+    "question": "Which civilization developed the first known system of writing called cuneiform?",
+    "options": [
+      "Sumerians",
+      "Romans",
+      "Greeks",
+      "Maya"
+    ],
+    "correctAnswer": "Sumerians",
+    "explanation": "The Sumerians of ancient Mesopotamia developed cuneiform, one of the earliest known writing systems.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which country contains the world's largest rainforest, the Amazon rainforest?",
+    "options": [
+      "Brazil",
+      "Peru",
+      "Colombia",
+      "Venezuela"
+    ],
+    "correctAnswer": "Brazil",
+    "explanation": "The largest portion of the Amazon rainforest lies within Brazil, although the rainforest extends across several South American countries.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "National Geographic"
+  },
+  {
+    "question": "Which blood type is commonly known as the universal red-cell donor type?",
+    "options": [
+      "AB positive",
+      "A positive",
+      "O negative",
+      "B negative"
+    ],
+    "correctAnswer": "O negative",
+    "explanation": "O-negative red blood cells lack A, B, and RhD antigens and are commonly used for emergency transfusions when the recipient's blood type is unknown.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "American Red Cross"
+  },
+  {
+    "question": "Which metal is liquid at ordinary room temperature?",
+    "options": [
+      "Mercury",
+      "Aluminium",
+      "Copper",
+      "Zinc"
+    ],
+    "correctAnswer": "Mercury",
+    "explanation": "Mercury is a metal that remains liquid at ordinary room temperature.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Royal Society of Chemistry"
+  },
+  {
+    "question": "Which desert is the largest hot desert in the world?",
+    "options": [
+      "Gobi Desert",
+      "Kalahari Desert",
+      "Sahara Desert",
+      "Atacama Desert"
+    ],
+    "correctAnswer": "Sahara Desert",
+    "explanation": "The Sahara is the world's largest hot desert, covering much of North Africa.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which country has the city of Istanbul, a city that lies on two continents?",
+    "options": [
+      "Greece",
+      "Turkey",
+      "Bulgaria",
+      "Georgia"
+    ],
+    "correctAnswer": "Turkey",
+    "explanation": "Istanbul is located in Turkey and spans both Europe and Asia across the Bosporus Strait.",
+    "categoryId": "general_knowledge",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which ancient wonder was located in Alexandria?",
+    "options": [
+      "Hanging Gardens of Babylon",
+      "Lighthouse of Alexandria",
+      "Colossus of Rhodes",
+      "Temple of Artemis"
+    ],
+    "correctAnswer": "Lighthouse of Alexandria",
+    "explanation": "The Lighthouse of Alexandria, also known as the Pharos, was one of the Seven Wonders of the Ancient World.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which element is the most abundant in Earth's atmosphere by volume?",
+    "options": [
+      "Oxygen",
+      "Nitrogen",
+      "Carbon dioxide",
+      "Argon"
+    ],
+    "correctAnswer": "Nitrogen",
+    "explanation": "Nitrogen makes up approximately 78% of Earth's atmosphere by volume.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "NASA"
+  },
+  {
+    "question": "Which philosopher wrote The Republic?",
+    "options": [
+      "Aristotle",
+      "Plato",
+      "Socrates",
+      "Epicurus"
+    ],
+    "correctAnswer": "Plato",
+    "explanation": "Plato wrote The Republic, a philosophical dialogue that examines justice, politics, education, and the ideal state.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which African lake is traditionally regarded as the source of the White Nile?",
+    "options": [
+      "Lake Chad",
+      "Lake Victoria",
+      "Lake Tanganyika",
+      "Lake Malawi"
+    ],
+    "correctAnswer": "Lake Victoria",
+    "explanation": "Lake Victoria is traditionally identified as the main source of the White Nile, although the Nile's ultimate headwaters are farther south.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which physicist is credited with discovering the neutron?",
+    "options": [
+      "Ernest Rutherford",
+      "James Chadwick",
+      "J. J. Thomson",
+      "Niels Bohr"
+    ],
+    "correctAnswer": "James Chadwick",
+    "explanation": "James Chadwick discovered the neutron in 1932, a discovery that earned him the Nobel Prize in Physics in 1935.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "Nobel Prize"
+  },
+  {
+    "question": "Which civilization constructed the road network that connected much of the Andes?",
+    "options": [
+      "Inca",
+      "Aztec",
+      "Maya",
+      "Olmec"
+    ],
+    "correctAnswer": "Inca",
+    "explanation": "The Inca built an extensive road system across the Andes that connected major parts of their empire.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "UNESCO World Heritage Centre"
+  },
+  {
+    "question": "Which mathematical constant is approximately equal to 2.71828?",
+    "options": [
+      "Pi",
+      "Euler's number",
+      "The golden ratio",
+      "The square root of 2"
+    ],
+    "correctAnswer": "Euler's number",
+    "explanation": "Euler's number, represented by e, is approximately 2.71828 and is the base of natural logarithms.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which treaty formally ended the Thirty Years' War in 1648?",
+    "options": [
+      "Treaty of Versailles",
+      "Peace of Westphalia",
+      "Treaty of Tordesillas",
+      "Treaty of Utrecht"
+    ],
+    "correctAnswer": "Peace of Westphalia",
+    "explanation": "The Peace of Westphalia refers to the treaties of 1648 that ended the Thirty Years' War and reshaped the political order of Europe.",
+    "categoryId": "general_knowledge",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  }
+]

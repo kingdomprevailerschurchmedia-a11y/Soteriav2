@@ -44,6 +44,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default('user') String role, // user, moderator, admin
     @Default('active') String accountStatus, // active, suspended, deleted
 
+    DateTime? lastDailyRewardClaim,
     required DateTime createdAt,
     required DateTime lastLogin,
     required DateTime updatedAt,
@@ -74,5 +75,6 @@ abstract class PlayerProfile with _$PlayerProfile {
     'versusMatches': versusMatches,
     'tournamentMatches': tournamentMatches,
     'achievements': achievements,
+    'lastDailyRewardClaim': lastDailyRewardClaim,
   };
 }

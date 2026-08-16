@@ -83,7 +83,7 @@ class SeasonComparisonCard extends StatelessWidget {
             CompetitiveRankBadge(
               rankName: result.finalTier,
               tierId: result.finalTier,
-              size: 24.w,
+              size: RankBadgeSize.small,
             ),
             SizedBox(width: SoteriaSpacing.xs),
             Expanded(

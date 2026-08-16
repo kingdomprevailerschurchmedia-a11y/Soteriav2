@@ -162,7 +162,10 @@ class AchievementRegistry {
   ];
 
   static AchievementDefinition? getById(String id) {
-    return definitions.firstWhere((d) => d.id == id);
+    for (final def in definitions) {
+      if (def.id == id) return def;
+    }
+    return null;
   }
 
   static List<AchievementDefinition> getByCategory(AchievementCategory category) {

@@ -1,0 +1,758 @@
+[
+  {
+    "question": "What is the principle that a person is considered innocent until proven guilty?",
+    "options": [
+      "Presumption of innocence",
+      "Judicial review",
+      "Strict liability",
+      "Double jeopardy"
+    ],
+    "correctAnswer": "Presumption of innocence",
+    "explanation": "The presumption of innocence means an accused person is treated as innocent unless guilt is established according to law.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "United Nations Universal Declaration of Human Rights, Article 11"
+  },
+  {
+    "question": "What is a contract?",
+    "options": [
+      "A legally enforceable agreement between parties",
+      "A personal opinion between two people",
+      "A court judgment only",
+      "A government election"
+    ],
+    "correctAnswer": "A legally enforceable agreement between parties",
+    "explanation": "A contract is an agreement that creates legally enforceable rights and obligations between parties.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a plaintiff?",
+    "options": [
+      "A person who brings a civil action before a court",
+      "A person accused of a crime",
+      "The judge in a case",
+      "A witness for the prosecution"
+    ],
+    "correctAnswer": "A person who brings a civil action before a court",
+    "explanation": "A plaintiff is the party who initiates a civil lawsuit against another party.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a defendant?",
+    "options": [
+      "A party against whom a legal action is brought",
+      "The lawyer who represents the court",
+      "The person who writes legislation",
+      "The judge presiding over a trial"
+    ],
+    "correctAnswer": "A party against whom a legal action is brought",
+    "explanation": "A defendant is a person or entity required to answer a legal claim or accusation brought against them.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is evidence?",
+    "options": [
+      "Information presented to establish or disprove a fact in a legal proceeding",
+      "A private legal opinion",
+      "A court building",
+      "A lawyer's personal belief"
+    ],
+    "correctAnswer": "Information presented to establish or disprove a fact in a legal proceeding",
+    "explanation": "Evidence consists of information or material that may be used to prove or disprove facts relevant to a legal dispute.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a witness?",
+    "options": [
+      "A person who gives evidence about matters relevant to a legal proceeding",
+      "A person who automatically decides the verdict",
+      "A person who writes laws",
+      "A person who serves as the judge"
+    ],
+    "correctAnswer": "A person who gives evidence about matters relevant to a legal proceeding",
+    "explanation": "A witness provides testimony or other evidence concerning facts relevant to a legal proceeding.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a judge primarily responsible for doing?",
+    "options": [
+      "Applying and interpreting the law in judicial proceedings",
+      "Representing one side of every case",
+      "Writing every statute",
+      "Investigating every crime personally"
+    ],
+    "correctAnswer": "Applying and interpreting the law in judicial proceedings",
+    "explanation": "Judges preside over proceedings and apply relevant law when resolving legal issues and disputes.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is legislation?",
+    "options": [
+      "Law formally enacted by a legislative body",
+      "A private conversation between lawyers",
+      "A judicial witness statement",
+      "A police investigation report"
+    ],
+    "correctAnswer": "Law formally enacted by a legislative body",
+    "explanation": "Legislation refers to laws enacted by a competent legislative authority.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a constitution?",
+    "options": [
+      "The fundamental framework of a state's government and legal system",
+      "A contract between private companies",
+      "A criminal indictment",
+      "A court transcript"
+    ],
+    "correctAnswer": "The fundamental framework of a state's government and legal system",
+    "explanation": "A constitution establishes fundamental principles, institutions, powers, and rights within a state.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a crime?",
+    "options": [
+      "An act or omission prohibited and punishable by law",
+      "Any disagreement between friends",
+      "A breach of etiquette",
+      "A disagreement over a private preference"
+    ],
+    "correctAnswer": "An act or omission prohibited and punishable by law",
+    "explanation": "A crime is conduct defined by law as an offense and subject to a criminal penalty.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a civil case generally concerned with?",
+    "options": [
+      "Disputes involving rights, obligations, or remedies between parties",
+      "Only offenses against the state",
+      "Only constitutional amendments",
+      "Only criminal sentencing"
+    ],
+    "correctAnswer": "Disputes involving rights, obligations, or remedies between parties",
+    "explanation": "Civil litigation generally involves disputes between individuals, organizations, or other legal entities concerning legal rights and obligations.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a criminal case primarily concerned with?",
+    "options": [
+      "An alleged violation of criminal law",
+      "A disagreement over a business logo",
+      "A private property sale",
+      "A routine employment interview"
+    ],
+    "correctAnswer": "An alleged violation of criminal law",
+    "explanation": "Criminal proceedings address allegations that a person committed an offense defined by criminal law.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a lawyer?",
+    "options": [
+      "A person professionally qualified and authorized to practice law",
+      "A person who automatically decides court cases",
+      "A member of the jury in every case",
+      "A government legislator by definition"
+    ],
+    "correctAnswer": "A person professionally qualified and authorized to practice law",
+    "explanation": "A lawyer is a legal professional who is qualified and authorized under applicable rules to practice law.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a jury?",
+    "options": [
+      "A group of people selected to determine facts or reach a verdict in certain legal proceedings",
+      "A group of judges who write statutes",
+      "A government ministry",
+      "A group of police officers"
+    ],
+    "correctAnswer": "A group of people selected to determine facts or reach a verdict in certain legal proceedings",
+    "explanation": "A jury is a body of people selected according to law to determine facts and, in applicable cases, reach a verdict.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What does the term 'appeal' generally mean in law?",
+    "options": [
+      "A request for a higher court to review a lower court's decision",
+      "A request to arrest a witness",
+      "A contract between two judges",
+      "A method of writing legislation"
+    ],
+    "correctAnswer": "A request for a higher court to review a lower court's decision",
+    "explanation": "An appeal is a legal process through which a party asks a higher court to review a decision of a lower court.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a fine?",
+    "options": [
+      "A monetary penalty imposed for violating the law",
+      "A type of court evidence",
+      "A legal contract",
+      "A judicial appointment"
+    ],
+    "correctAnswer": "A monetary penalty imposed for violating the law",
+    "explanation": "A fine is a monetary penalty imposed by lawful authority for an offense or violation.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a statute?",
+    "options": [
+      "A written law enacted by a legislative body",
+      "A private legal opinion",
+      "A court witness",
+      "A police report"
+    ],
+    "correctAnswer": "A written law enacted by a legislative body",
+    "explanation": "A statute is a formal written law enacted by a legislature.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a legal right?",
+    "options": [
+      "A right recognized and protected by law",
+      "A personal preference with no legal effect",
+      "A political slogan",
+      "A private promise without legal consequences"
+    ],
+    "correctAnswer": "A right recognized and protected by law",
+    "explanation": "A legal right is an entitlement or interest recognized and enforceable under applicable law.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a court?",
+    "options": [
+      "A judicial institution authorized to hear and decide legal disputes",
+      "A legislative committee",
+      "A police station",
+      "A private business association"
+    ],
+    "correctAnswer": "A judicial institution authorized to hear and decide legal disputes",
+    "explanation": "A court is a judicial body with authority to hear cases and issue legally recognized decisions.",
+    "categoryId": "law",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is legal liability?",
+    "options": [
+      "Legal responsibility for an act, omission, debt, or harm",
+      "The right to ignore a court order",
+      "A privilege available only to judges",
+      "A type of criminal evidence"
+    ],
+    "correctAnswer": "Legal responsibility for an act, omission, debt, or harm",
+    "explanation": "Liability refers to legal responsibility that may result in an obligation to pay damages, perform an act, or face another legal consequence.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is negligence?",
+    "options": [
+      "Failure to exercise the level of care that the law requires in the circumstances",
+      "Intentional obedience to a court order",
+      "A lawful transfer of property",
+      "A formal legislative procedure"
+    ],
+    "correctAnswer": "Failure to exercise the level of care that the law requires in the circumstances",
+    "explanation": "Negligence generally involves a failure to exercise reasonable care, resulting in legally recognized harm or loss.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is a tort?",
+    "options": [
+      "A civil wrong for which the law may provide a remedy",
+      "A type of criminal court",
+      "A legislative election",
+      "A written constitution"
+    ],
+    "correctAnswer": "A civil wrong for which the law may provide a remedy",
+    "explanation": "A tort is a civil wrong, other than a breach of contract in the usual classification, for which legal remedies may be available.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "Which of the following is generally an essential element of a valid contract?",
+    "options": [
+      "Offer and acceptance",
+      "A criminal conviction",
+      "A jury verdict",
+      "A police report"
+    ],
+    "correctAnswer": "Offer and acceptance",
+    "explanation": "Contract formation generally requires elements such as offer and acceptance, consideration where applicable, capacity, and lawful purpose, depending on the legal system.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is consideration in contract law?",
+    "options": [
+      "Something of legal value exchanged as part of a contract",
+      "A judge's private opinion",
+      "A criminal punishment",
+      "A witness's testimony"
+    ],
+    "correctAnswer": "Something of legal value exchanged as part of a contract",
+    "explanation": "In common-law contract doctrine, consideration is something of legal value exchanged between contracting parties as part of the bargain.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is a breach of contract?",
+    "options": [
+      "Failure to perform a contractual obligation without lawful justification",
+      "A successful appeal",
+      "The creation of a constitution",
+      "A judicial appointment"
+    ],
+    "correctAnswer": "Failure to perform a contractual obligation without lawful justification",
+    "explanation": "A breach occurs when a party fails to perform a contractual obligation as required by the agreement and applicable law.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is damages in civil law?",
+    "options": [
+      "Money awarded or recoverable to compensate for legally recognized loss or harm",
+      "A criminal charge",
+      "A type of evidence",
+      "A judicial oath"
+    ],
+    "correctAnswer": "Money awarded or recoverable to compensate for legally recognized loss or harm",
+    "explanation": "Damages are monetary compensation that may be awarded to a person who has suffered legally recognized injury or loss.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is an injunction?",
+    "options": [
+      "A court order requiring a person to do or refrain from doing a particular act",
+      "A criminal investigation",
+      "A legislative election",
+      "A type of legal contract"
+    ],
+    "correctAnswer": "A court order requiring a person to do or refrain from doing a particular act",
+    "explanation": "An injunction is a judicial order directing a party to perform or refrain from performing specified conduct.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is habeas corpus primarily concerned with?",
+    "options": [
+      "Challenging the legality of a person's detention",
+      "Determining ownership of a trademark",
+      "Enforcing a commercial contract",
+      "Registering a company"
+    ],
+    "correctAnswer": "Challenging the legality of a person's detention",
+    "explanation": "Habeas corpus is a legal procedure used to challenge unlawful detention and require authorities to justify the detention before a court.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is judicial review?",
+    "options": [
+      "The power of a court to examine the legality or constitutionality of governmental action",
+      "A process for electing judges",
+      "A method of negotiating contracts",
+      "A police investigation"
+    ],
+    "correctAnswer": "The power of a court to examine the legality or constitutionality of governmental action",
+    "explanation": "Judicial review allows courts, where authorized by the applicable legal system, to assess governmental actions or laws against higher legal standards.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is precedent?",
+    "options": [
+      "A prior judicial decision that may guide later cases",
+      "A written criminal charge",
+      "A police investigation method",
+      "A private contract"
+    ],
+    "correctAnswer": "A prior judicial decision that may guide later cases",
+    "explanation": "Judicial precedent refers to earlier court decisions that may be used as authority when deciding later cases.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is jurisdiction?",
+    "options": [
+      "A court's legal authority to hear and decide a matter",
+      "A person's right to write a statute",
+      "A lawyer's private opinion",
+      "A police officer's personal authority"
+    ],
+    "correctAnswer": "A court's legal authority to hear and decide a matter",
+    "explanation": "Jurisdiction refers to the legal authority of a court or other institution to hear and determine particular matters.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is arbitration?",
+    "options": [
+      "A process in which a dispute is submitted to a neutral decision-maker outside ordinary court litigation",
+      "A criminal sentencing procedure",
+      "A constitutional amendment",
+      "A police interrogation"
+    ],
+    "correctAnswer": "A process in which a dispute is submitted to a neutral decision-maker outside ordinary court litigation",
+    "explanation": "Arbitration is an alternative dispute-resolution process in which an arbitrator or panel resolves a dispute according to the parties' agreement and applicable rules.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "United Nations Commission on International Trade Law (UNCITRAL)"
+  },
+  {
+    "question": "What is mediation?",
+    "options": [
+      "A process in which a neutral third party helps disputing parties reach an agreement",
+      "A criminal conviction",
+      "A court's final judgment",
+      "A legislative vote"
+    ],
+    "correctAnswer": "A process in which a neutral third party helps disputing parties reach an agreement",
+    "explanation": "Mediation uses a neutral mediator to facilitate communication and negotiation between parties seeking a voluntary resolution.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "United Nations Commission on International Trade Law (UNCITRAL)"
+  },
+  {
+    "question": "What is double jeopardy?",
+    "options": [
+      "The principle that a person generally should not be tried twice for the same offense after a qualifying final judgment",
+      "The right to appeal every decision twice",
+      "The requirement that two judges hear every case",
+      "The use of two lawyers in a criminal trial"
+    ],
+    "correctAnswer": "The principle that a person generally should not be tried twice for the same offense after a qualifying final judgment",
+    "explanation": "Double jeopardy protects against repeated prosecution for the same offense in circumstances where the applicable law recognizes the protection.",
+    "categoryId": "law",
+    "difficulty": "medium",
+    "source": "United Nations Human Rights Committee, General Comment No. 32"
+  },
+  {
+    "question": "What is mens rea?",
+    "options": [
+      "The mental element or state of mind associated with certain criminal offenses",
+      "The physical evidence in a case",
+      "The location where a crime occurred",
+      "The punishment imposed by a court"
+    ],
+    "correctAnswer": "The mental element or state of mind associated with certain criminal offenses",
+    "explanation": "Mens rea is a Latin legal term referring broadly to the mental element required for certain criminal offenses.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is actus reus?",
+    "options": [
+      "The physical act or conduct constituting an element of a criminal offense",
+      "The defendant's legal representation",
+      "The judge's written opinion",
+      "The sentence imposed after conviction"
+    ],
+    "correctAnswer": "The physical act or conduct constituting an element of a criminal offense",
+    "explanation": "Actus reus refers broadly to the physical act, omission, or conduct that forms an element of a criminal offense.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is strict liability in criminal law?",
+    "options": [
+      "Liability for an offense that can apply without proof of a particular guilty mental state for a specified element",
+      "Liability that always requires proof of intent",
+      "Liability that applies only to judges",
+      "Liability that can never result in punishment"
+    ],
+    "correctAnswer": "Liability for an offense that can apply without proof of a particular guilty mental state for a specified element",
+    "explanation": "In a strict-liability offense, the prosecution may not need to prove a particular mental state regarding one or more elements, depending on the statute and jurisdiction.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is the standard of proof generally required for a criminal conviction in many common-law systems?",
+    "options": [
+      "Beyond a reasonable doubt",
+      "Balance of probabilities",
+      "Reasonable suspicion",
+      "Possible cause"
+    ],
+    "correctAnswer": "Beyond a reasonable doubt",
+    "explanation": "In many common-law criminal justice systems, the prosecution must establish the defendant's guilt beyond a reasonable doubt.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "United States Courts"
+  },
+  {
+    "question": "What is the standard of proof commonly used in civil cases in many common-law jurisdictions?",
+    "options": [
+      "Balance of probabilities",
+      "Beyond a reasonable doubt",
+      "Absolute certainty",
+      "Probable suspicion"
+    ],
+    "correctAnswer": "Balance of probabilities",
+    "explanation": "In many common-law jurisdictions, civil claims are generally determined according to the balance of probabilities, meaning the claim is more likely than not to be true.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "UK Ministry of Justice"
+  },
+  {
+    "question": "What is the doctrine of separation of powers?",
+    "options": [
+      "The division of governmental authority among separate branches or institutions",
+      "The division of a court into two buildings",
+      "The separation of lawyers from judges",
+      "The division of a contract into two copies"
+    ],
+    "correctAnswer": "The division of governmental authority among separate branches or institutions",
+    "explanation": "Separation of powers distributes governmental functions among branches or institutions to prevent excessive concentration of power.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the rule of law?",
+    "options": [
+      "The principle that everyone, including government, is subject to and accountable under the law",
+      "The principle that judges may ignore legislation",
+      "A rule applying only to lawyers",
+      "A requirement that every law must be criminal"
+    ],
+    "correctAnswer": "The principle that everyone, including government, is subject to and accountable under the law",
+    "explanation": "The rule of law emphasizes that laws govern the exercise of public power and apply through established legal processes.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "United Nations"
+  },
+  {
+    "question": "What is stare decisis?",
+    "options": [
+      "The principle of following established judicial decisions in appropriate circumstances",
+      "The right to remain silent",
+      "The process of negotiating a contract",
+      "The principle of parliamentary sovereignty"
+    ],
+    "correctAnswer": "The principle of following established judicial decisions in appropriate circumstances",
+    "explanation": "Stare decisis is the doctrine under which courts generally follow applicable precedents to promote consistency and predictability.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is mens rea most closely associated with?",
+    "options": [
+      "Criminal culpability and mental state",
+      "Property registration",
+      "Contract signatures",
+      "Court architecture"
+    ],
+    "correctAnswer": "Criminal culpability and mental state",
+    "explanation": "Mens rea concerns the mental state or culpability associated with criminal conduct and is relevant to many criminal offenses.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is an amicus curiae?",
+    "options": [
+      "A person or organization that is not a party to a case but assists the court by providing relevant information or arguments",
+      "A person convicted of a crime",
+      "The judge's personal assistant",
+      "A government prosecutor in every case"
+    ],
+    "correctAnswer": "A person or organization that is not a party to a case but assists the court by providing relevant information or arguments",
+    "explanation": "An amicus curiae, meaning 'friend of the court,' may provide information or legal arguments relevant to a case with the court's permission or under applicable rules.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is judicial immunity generally intended to protect?",
+    "options": [
+      "Judges from personal liability for judicial acts performed within their lawful jurisdiction",
+      "All citizens from taxation",
+      "Witnesses from giving evidence",
+      "Legislators from elections"
+    ],
+    "correctAnswer": "Judges from personal liability for judicial acts performed within their lawful jurisdiction",
+    "explanation": "Judicial immunity generally protects judges from personal civil liability for judicial acts performed within their jurisdiction, subject to legal limits and exceptions.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is vicarious liability?",
+    "options": [
+      "Legal responsibility imposed on one person for the acts of another in circumstances recognized by law",
+      "Liability that applies only to judges",
+      "A criminal sentence imposed automatically",
+      "A contractual term with no legal effect"
+    ],
+    "correctAnswer": "Legal responsibility imposed on one person for the acts of another in circumstances recognized by law",
+    "explanation": "Vicarious liability can make one party legally responsible for another's conduct where a recognized legal relationship, such as certain employment relationships, exists.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is sovereign immunity?",
+    "options": [
+      "A legal doctrine limiting when a state or government may be sued without its consent",
+      "A citizen's right to ignore criminal law",
+      "A judge's power to create any law",
+      "A company's right to avoid taxation"
+    ],
+    "correctAnswer": "A legal doctrine limiting when a state or government may be sued without its consent",
+    "explanation": "Sovereign immunity is a legal doctrine that can restrict lawsuits against a sovereign state or government unless consent or a statutory exception exists.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is legal standing?",
+    "options": [
+      "The legal right to bring a particular claim before a court",
+      "The physical location of a courthouse",
+      "The rank of a judge",
+      "The length of a trial"
+    ],
+    "correctAnswer": "The legal right to bring a particular claim before a court",
+    "explanation": "Standing concerns whether a person or organization has sufficient legal interest in a dispute to invoke the court's jurisdiction.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Cornell Legal Information Institute"
+  },
+  {
+    "question": "What is an ex post facto law?",
+    "options": [
+      "A law that retroactively changes the legal consequences of conduct that occurred before the law was enacted",
+      "A law dealing exclusively with future elections",
+      "A court order issued during a trial",
+      "A contract between two governments"
+    ],
+    "correctAnswer": "A law that retroactively changes the legal consequences of conduct that occurred before the law was enacted",
+    "explanation": "An ex post facto law operates retrospectively, particularly by making previously lawful conduct punishable or increasing criminal consequences after the conduct occurred.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is due process?",
+    "options": [
+      "The requirement that legal procedures be fair and follow established law",
+      "The automatic conviction of an accused person",
+      "The right of a judge to ignore evidence",
+      "The requirement that every dispute go to arbitration"
+    ],
+    "correctAnswer": "The requirement that legal procedures be fair and follow established law",
+    "explanation": "Due process generally requires fair procedures and lawful treatment when government action affects a person's rights or interests.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "United Nations Universal Declaration of Human Rights"
+  },
+  {
+    "question": "What is the principle of proportionality in law generally concerned with?",
+    "options": [
+      "Ensuring that a legal measure or penalty is appropriately related to the legitimate objective or wrongdoing",
+      "Ensuring that every sentence has exactly the same length",
+      "Ensuring that every court has the same number of judges",
+      "Ensuring that all contracts have identical terms"
+    ],
+    "correctAnswer": "Ensuring that a legal measure or penalty is appropriately related to the legitimate objective or wrongdoing",
+    "explanation": "Proportionality generally requires that legal restrictions or penalties bear an appropriate relationship to the legitimate objective pursued or the seriousness of the conduct.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "European Court of Human Rights"
+  },
+  {
+    "question": "What is the doctrine of necessity in law generally concerned with?",
+    "options": [
+      "Justifying certain conduct in exceptional circumstances to prevent a greater harm",
+      "Allowing every contract to be cancelled",
+      "Automatically dismissing criminal charges",
+      "Preventing courts from hearing emergencies"
+    ],
+    "correctAnswer": "Justifying certain conduct in exceptional circumstances to prevent a greater harm",
+    "explanation": "The defense or doctrine of necessity may, depending on the jurisdiction and circumstances, justify conduct that would otherwise be unlawful when undertaken to avoid a greater imminent harm.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  },
+  {
+    "question": "What is the principle of legality in criminal law?",
+    "options": [
+      "A person should not be punished for conduct that was not criminalized by law when it occurred",
+      "Every criminal case must end in imprisonment",
+      "Judges may create crimes after the conduct occurs",
+      "Police may punish offenses without legal authority"
+    ],
+    "correctAnswer": "A person should not be punished for conduct that was not criminalized by law when it occurred",
+    "explanation": "The principle of legality requires criminal offenses and penalties to have a basis in law and generally rejects retroactive criminalization.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "United Nations Human Rights Committee"
+  },
+  {
+    "question": "What is mens rea distinguished from actus reus by?",
+    "options": [
+      "Mens rea concerns the mental element, while actus reus concerns the prohibited conduct or physical element",
+      "Mens rea concerns civil contracts, while actus reus concerns elections",
+      "Mens rea is a type of evidence, while actus reus is a judge",
+      "Mens rea concerns sentencing, while actus reus concerns appeals"
+    ],
+    "correctAnswer": "Mens rea concerns the mental element, while actus reus concerns the prohibited conduct or physical element",
+    "explanation": "The terms distinguish two commonly analyzed aspects of criminal responsibility: the required mental state and the prohibited act or omission.",
+    "categoryId": "law",
+    "difficulty": "hard",
+    "source": "Black's Law Dictionary"
+  }
+]

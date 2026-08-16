@@ -1,0 +1,692 @@
+[
+  {
+    "question": "Which country won the 2026 FIFA World Cup?",
+    "options": [
+      "Argentina",
+      "Spain",
+      "France",
+      "Brazil"
+    ],
+    "correctAnswer": "Spain",
+    "explanation": "Spain defeated Argentina 1-0 after extra time in the 2026 FIFA World Cup final to win its second World Cup title.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "FIFA",
+    "sourceDate": "2026-07-19"
+  },
+  {
+    "question": "Which player scored the winning goal for Spain in the 2026 FIFA World Cup final?",
+    "options": [
+      "Lamine Yamal",
+      "Rodri",
+      "Ferran Torres",
+      "Nico Williams"
+    ],
+    "correctAnswer": "Ferran Torres",
+    "explanation": "Ferran Torres scored in the 106th minute of extra time to give Spain a 1-0 victory over Argentina.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "FIFA",
+    "sourceDate": "2026-07-19"
+  },
+  {
+    "question": "Which three countries hosted the 2026 FIFA World Cup?",
+    "options": [
+      "United States, Canada and Mexico",
+      "Brazil, Argentina and Chile",
+      "Spain, Portugal and Morocco",
+      "England, France and Germany"
+    ],
+    "correctAnswer": "United States, Canada and Mexico",
+    "explanation": "The 2026 FIFA World Cup was jointly hosted by the United States, Canada and Mexico.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "FIFA",
+    "sourceDate": "2026-07-19"
+  },
+  {
+    "question": "How many national teams competed in the 2026 FIFA World Cup?",
+    "options": [
+      "32",
+      "40",
+      "48",
+      "56"
+    ],
+    "correctAnswer": "48",
+    "explanation": "The 2026 FIFA World Cup expanded the tournament from 32 teams to 48 teams.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Reuters",
+    "sourceDate": "2026-07-17"
+  },
+  {
+    "question": "Which country finished as runner-up at the 2026 FIFA World Cup?",
+    "options": [
+      "Portugal",
+      "Argentina",
+      "Germany",
+      "England"
+    ],
+    "correctAnswer": "Argentina",
+    "explanation": "Defending champions Argentina lost 1-0 to Spain in the 2026 World Cup final.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "FIFA",
+    "sourceDate": "2026-07-19"
+  },
+  {
+    "question": "Which country topped the final medal table at the 2026 Winter Olympics?",
+    "options": [
+      "United States",
+      "Italy",
+      "Norway",
+      "Germany"
+    ],
+    "correctAnswer": "Norway",
+    "explanation": "Norway finished first in the final medal table at the Milano Cortina 2026 Winter Olympics with 18 gold medals and 41 medals overall.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Yonhap News Agency",
+    "sourceDate": "2026-02-23"
+  },
+  {
+    "question": "Which country hosted the 2026 Winter Olympics?",
+    "options": [
+      "Switzerland",
+      "Italy",
+      "Austria",
+      "France"
+    ],
+    "correctAnswer": "Italy",
+    "explanation": "The 2026 Winter Olympics were held in Italy, with Milano and Cortina d'Ampezzo serving as the principal host locations.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Milano Cortina 2026",
+    "sourceDate": "2026-02-22"
+  },
+  {
+    "question": "Which Nigerian election is scheduled for January 16, 2027?",
+    "options": [
+      "Presidential and House of Assembly election",
+      "Only state governorship elections",
+      "Local government elections",
+      "Senate-only election"
+    ],
+    "correctAnswer": "Presidential and House of Assembly election",
+    "explanation": "Nigeria's Independent National Electoral Commission lists January 16, 2027 as the date for the Presidential and House of Assembly election.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Independent National Electoral Commission (INEC)",
+    "sourceDate": "2026-08-16"
+  },
+  {
+    "question": "Which Nigerian state held its governorship election on August 15, 2026?",
+    "options": [
+      "Osun",
+      "Ekiti",
+      "Edo",
+      "Ondo"
+    ],
+    "correctAnswer": "Osun",
+    "explanation": "INEC's election calendar lists August 15, 2026 as the date for the Osun State governorship election.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Independent National Electoral Commission (INEC)",
+    "sourceDate": "2026-08-16"
+  },
+  {
+    "question": "Which Nigerian state held its governorship election on June 20, 2026?",
+    "options": [
+      "Osun",
+      "Ekiti",
+      "Kogi",
+      "Anambra"
+    ],
+    "correctAnswer": "Ekiti",
+    "explanation": "INEC's official election calendar lists June 20, 2026 as the date of the Ekiti State governorship election.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Independent National Electoral Commission (INEC)",
+    "sourceDate": "2026-08-16"
+  },
+  {
+    "question": "Which country secured automatic qualification for the 2027 Cricket World Cup after defeating Ireland in August 2026?",
+    "options": [
+      "Afghanistan",
+      "West Indies",
+      "South Africa",
+      "Bangladesh"
+    ],
+    "correctAnswer": "Afghanistan",
+    "explanation": "Afghanistan secured automatic qualification after defeating Ireland and ensuring a top-eight position in the ODI rankings.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Reuters",
+    "sourceDate": "2026-08-11"
+  },
+  {
+    "question": "Which club won the 2026 UEFA Super Cup?",
+    "options": [
+      "Aston Villa",
+      "Paris Saint-Germain",
+      "Real Madrid",
+      "Manchester City"
+    ],
+    "correctAnswer": "Paris Saint-Germain",
+    "explanation": "Paris Saint-Germain defeated Aston Villa 2-1 to retain the UEFA Super Cup.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "Which country is scheduled to host the 2026 FIFA Under-20 Women's World Cup?",
+    "options": [
+      "Poland",
+      "France",
+      "Germany",
+      "Brazil"
+    ],
+    "correctAnswer": "Poland",
+    "explanation": "Poland is scheduled to host the FIFA Under-20 Women's World Cup from September 5 to 27, 2026.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Reuters",
+    "sourceDate": "2026-08-11"
+  },
+  {
+    "question": "Which country signed a recent interfaith peace accord involving more than 50 Muslim and Christian leaders in August 2026?",
+    "options": [
+      "Ghana",
+      "Nigeria",
+      "Kenya",
+      "Egypt"
+    ],
+    "correctAnswer": "Nigeria",
+    "explanation": "More than 50 Muslim and Christian leaders in Nigeria signed a peace accord in Abuja aimed at promoting religious harmony.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Reuters",
+    "sourceDate": "2026-08-13"
+  },
+  {
+    "question": "Which organization is responsible for organizing elections in Nigeria?",
+    "options": [
+      "EFCC",
+      "INEC",
+      "CBN",
+      "NCC"
+    ],
+    "correctAnswer": "INEC",
+    "explanation": "The Independent National Electoral Commission, or INEC, is Nigeria's electoral management body responsible for organizing national and state elections.",
+    "categoryId": "current_affairs",
+    "difficulty": "easy",
+    "source": "Independent National Electoral Commission (INEC)",
+    "sourceDate": "2026-08-16"
+  },
+  {
+    "question": "What was the main reason Nigeria's electric vehicle ambitions face significant challenges, according to a recent Reuters report?",
+    "options": [
+      "Lack of vehicle manufacturers",
+      "Weak electricity infrastructure",
+      "A ban on electric vehicles",
+      "Lack of roads"
+    ],
+    "correctAnswer": "Weak electricity infrastructure",
+    "explanation": "Nigeria is promoting electric vehicle adoption, but unreliable electricity supply and limited charging infrastructure remain major obstacles.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "What target has Nigeria set for electric vehicles as a share of its vehicle fleet by 2050?",
+    "options": [
+      "20%",
+      "40%",
+      "60%",
+      "80%"
+    ],
+    "correctAnswer": "60%",
+    "explanation": "Nigeria's government-backed electric mobility plans aim for electric vehicles to account for 60% of the country's vehicle fleet by 2050.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "Approximately how much electricity generation capacity did Reuters report Nigeria was delivering for a population of more than 200 million people?",
+    "options": [
+      "4,000 megawatts",
+      "10,000 megawatts",
+      "20,000 megawatts",
+      "40,000 megawatts"
+    ],
+    "correctAnswer": "4,000 megawatts",
+    "explanation": "Reuters reported that Nigeria was delivering around 4,000 megawatts of electricity for a population of more than 200 million people.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "Which Nigerian economic reform was identified as a major factor behind increased fuel prices and cost-of-living pressures?",
+    "options": [
+      "Removal of the fuel subsidy",
+      "Introduction of free fuel",
+      "Reduction of import duties on all goods",
+      "A ban on domestic refining"
+    ],
+    "correctAnswer": "Removal of the fuel subsidy",
+    "explanation": "The removal of Nigeria's fuel subsidy was one of the major reforms that contributed to higher petrol prices and increased living costs.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-10"
+  },
+  {
+    "question": "What monetary policy rate did Reuters report for Nigeria in August 2026?",
+    "options": [
+      "16.5%",
+      "21.5%",
+      "26.5%",
+      "31.5%"
+    ],
+    "correctAnswer": "26.5%",
+    "explanation": "Reuters reported that Nigeria's central bank interest rate stood at 26.5% amid continued inflation and cost-of-living pressures.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-10"
+  },
+  {
+    "question": "Which body reported in 2026 that global audiences are increasingly using platforms as news sources?",
+    "options": [
+      "Reuters Institute for the Study of Journalism",
+      "World Bank",
+      "International Monetary Fund",
+      "UNESCO"
+    ],
+    "correctAnswer": "Reuters Institute for the Study of Journalism",
+    "explanation": "The Reuters Institute's 2026 Digital News Report examined changes in how audiences consume news around the world.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters Institute for the Study of Journalism",
+    "sourceDate": "2026-06-16"
+  },
+  {
+    "question": "According to the 2026 Digital News Report, what has become more popular globally than both television and news websites and apps as a source of news?",
+    "options": [
+      "Newspapers",
+      "Platforms",
+      "Radio",
+      "Printed magazines"
+    ],
+    "correctAnswer": "Platforms",
+    "explanation": "The Reuters Institute reported that platforms had become more popular globally than both television and news websites or apps as sources of news.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters Institute for the Study of Journalism",
+    "sourceDate": "2026-06-16"
+  },
+  {
+    "question": "Which major global sporting event was described by Reuters as the largest FIFA World Cup in history?",
+    "options": [
+      "2022 FIFA World Cup",
+      "2026 FIFA World Cup",
+      "2030 FIFA World Cup",
+      "2018 FIFA World Cup"
+    ],
+    "correctAnswer": "2026 FIFA World Cup",
+    "explanation": "The 2026 FIFA World Cup featured 48 teams and was hosted across three countries, making it the largest World Cup in history.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-07-17"
+  },
+  {
+    "question": "Which football organization faced criticism after a proposed $4.2 billion sale of World Cup commercial rights was abandoned?",
+    "options": [
+      "UEFA",
+      "FIFA",
+      "CONMEBOL",
+      "CAF"
+    ],
+    "correctAnswer": "FIFA",
+    "explanation": "FIFA faced criticism from several football bodies after its controversial proposal to sell World Cup commercial rights to private investors was abandoned.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-01"
+  },
+  {
+    "question": "Who is the president of FIFA involved in the 2026 leadership controversy?",
+    "options": [
+      "Gianni Infantino",
+      "Aleksander Čeferin",
+      "Javier Tebas",
+      "Hamad bin Khalifa Al-Thani"
+    ],
+    "correctAnswer": "Gianni Infantino",
+    "explanation": "FIFA President Gianni Infantino faced criticism from several football confederations over the abandoned commercial-rights proposal.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-01"
+  },
+  {
+    "question": "Which two football confederations publicly declared they had lost confidence in Gianni Infantino in August 2026?",
+    "options": [
+      "UEFA and CONCACAF",
+      "CAF and AFC",
+      "CONMEBOL and CAF",
+      "AFC and UEFA"
+    ],
+    "correctAnswer": "UEFA and CONCACAF",
+    "explanation": "UEFA and CONCACAF publicly expressed a loss of confidence in FIFA President Gianni Infantino following the commercial-rights controversy.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-01"
+  },
+  {
+    "question": "Which country was reported to be preparing to host the FIFA Under-20 Women's World Cup despite tensions within global football governance?",
+    "options": [
+      "Poland",
+      "Canada",
+      "Mexico",
+      "Argentina"
+    ],
+    "correctAnswer": "Poland",
+    "explanation": "Poland's football federation said preparations for the September 2026 FIFA Under-20 Women's World Cup remained on schedule despite governance disputes.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-11"
+  },
+  {
+    "question": "Which international shipping route remained closed amid the 2026 conflict involving Iran?",
+    "options": [
+      "Strait of Malacca",
+      "Strait of Hormuz",
+      "Panama Canal",
+      "Suez Canal"
+    ],
+    "correctAnswer": "Strait of Hormuz",
+    "explanation": "Iran said the Strait of Hormuz would remain closed unless the United States accepted its conditions for ending the conflict.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "Approximately what share of global oil and LNG flows did the Strait of Hormuz carry before the 2026 blockade?",
+    "options": [
+      "One-tenth",
+      "One-fifth",
+      "One-third",
+      "One-half"
+    ],
+    "correctAnswer": "One-fifth",
+    "explanation": "Reuters reported that the Strait of Hormuz carried approximately one-fifth of global oil and LNG flows before Iran's blockade.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-10"
+  },
+  {
+    "question": "Which organization reported warnings of another potential wave of global food inflation in August 2026?",
+    "options": [
+      "FAO",
+      "NATO",
+      "WHO",
+      "WTO"
+    ],
+    "correctAnswer": "FAO",
+    "explanation": "The United Nations Food and Agriculture Organization warned that the world was approaching another possible wave of food inflation.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-14"
+  },
+  {
+    "question": "Which climate phenomenon was identified as one factor contributing to concerns about food inflation in 2026?",
+    "options": [
+      "La Niña",
+      "El Niño",
+      "Polar vortex",
+      "Indian Ocean Dipole"
+    ],
+    "correctAnswer": "El Niño",
+    "explanation": "Reuters reported that a strong El Niño, combined with higher energy costs and other disruptions, was increasing concerns about food inflation.",
+    "categoryId": "current_affairs",
+    "difficulty": "medium",
+    "source": "Reuters",
+    "sourceDate": "2026-08-14"
+  },
+  {
+    "question": "Which country's central bank was facing pressure to raise interest rates because of inflation and a weakening currency in August 2026?",
+    "options": [
+      "Japan",
+      "Canada",
+      "Brazil",
+      "South Africa"
+    ],
+    "correctAnswer": "Japan",
+    "explanation": "Japan faced pressure for another Bank of Japan rate increase amid inflation, higher import costs and a weakening yen.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-14"
+  },
+  {
+    "question": "What interest rate level was markets expecting the Bank of Japan to potentially reach after another 25-basis-point increase?",
+    "options": [
+      "0.75%",
+      "1.00%",
+      "1.25%",
+      "1.50%"
+    ],
+    "correctAnswer": "1.25%",
+    "explanation": "Reuters reported that markets were increasingly expecting the Bank of Japan to raise its policy rate by 25 basis points to 1.25% after its June increase to 1%.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-14"
+  },
+  {
+    "question": "What happened to U.S. Producer Price Index data for July 2026?",
+    "options": [
+      "It rose 2%",
+      "It remained unchanged",
+      "It doubled",
+      "It fell 5%"
+    ],
+    "correctAnswer": "It remained unchanged",
+    "explanation": "Reuters reported that the U.S. Producer Price Index remained unchanged in July after a revised decline in June.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-13"
+  },
+  {
+    "question": "What effect did the July 2026 U.S. Producer Price Index data have on expectations for a September Federal Reserve rate hike?",
+    "options": [
+      "It increased expectations sharply",
+      "It reduced expectations",
+      "It guaranteed a rate hike",
+      "It had no effect at all"
+    ],
+    "correctAnswer": "It reduced expectations",
+    "explanation": "The unchanged PPI reading, combined with other inflation data, caused traders to reduce expectations of a September Federal Reserve rate hike.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-13"
+  },
+  {
+    "question": "What was the reported annual growth forecast for Japan's GDP for the three months through June 2026?",
+    "options": [
+      "0.5%",
+      "1.0%",
+      "2.0%",
+      "4.0%"
+    ],
+    "correctAnswer": "2.0%",
+    "explanation": "Reuters reported that economists expected Japan's GDP to have expanded at an annualized rate of approximately 2% in the three months through June.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-14"
+  },
+  {
+    "question": "By how much did Japan's July wholesale inflation rise year-on-year according to Reuters?",
+    "options": [
+      "3.2%",
+      "5.1%",
+      "7.2%",
+      "9.5%"
+    ],
+    "correctAnswer": "7.2%",
+    "explanation": "Japan's July wholesale inflation rose 7.2% year-on-year, reinforcing expectations of possible monetary tightening.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-13"
+  },
+  {
+    "question": "Which country was reported by Reuters to have achieved its second FIFA World Cup title in July 2026?",
+    "options": [
+      "Spain",
+      "Argentina",
+      "France",
+      "Germany"
+    ],
+    "correctAnswer": "Spain",
+    "explanation": "Spain won the 2026 FIFA World Cup, adding a second title to its previous championship in 2010.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-07-19"
+  },
+  {
+    "question": "Which Spanish player scored the decisive goal in the 2026 FIFA World Cup final in the 106th minute?",
+    "options": [
+      "Rodri",
+      "Ferran Torres",
+      "Lamine Yamal",
+      "Dani Olmo"
+    ],
+    "correctAnswer": "Ferran Torres",
+    "explanation": "Ferran Torres scored the only goal of the final in the 106th minute of extra time.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "FIFA",
+    "sourceDate": "2026-07-19"
+  },
+  {
+    "question": "Which country won the most gold medals at the 2026 Winter Olympics?",
+    "options": [
+      "Norway",
+      "United States",
+      "Italy",
+      "Netherlands"
+    ],
+    "correctAnswer": "Norway",
+    "explanation": "Norway won 18 gold medals at the Milano Cortina 2026 Winter Olympics, the most of any nation.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Yonhap News Agency",
+    "sourceDate": "2026-02-23"
+  },
+  {
+    "question": "How many total medals did Italy win at the 2026 Winter Olympics?",
+    "options": [
+      "20",
+      "26",
+      "30",
+      "33"
+    ],
+    "correctAnswer": "30",
+    "explanation": "Italy won 30 medals at its home Winter Olympics: 10 gold, 6 silver and 14 bronze.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Milano Cortina 2026 / CONI",
+    "sourceDate": "2026-02-22"
+  },
+  {
+    "question": "Which country was ranked second in the final medal table at the 2026 Winter Olympics?",
+    "options": [
+      "Italy",
+      "United States",
+      "Netherlands",
+      "Germany"
+    ],
+    "correctAnswer": "United States",
+    "explanation": "The United States finished second with 12 gold, 12 silver and 9 bronze medals.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Yonhap News Agency",
+    "sourceDate": "2026-02-23"
+  },
+  {
+    "question": "Which club did Paris Saint-Germain defeat to win the 2026 UEFA Super Cup?",
+    "options": [
+      "Aston Villa",
+      "Real Madrid",
+      "Chelsea",
+      "Bayern Munich"
+    ],
+    "correctAnswer": "Aston Villa",
+    "explanation": "Paris Saint-Germain defeated 2026 Europa League winners Aston Villa 2-1 in the UEFA Super Cup.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "Which player scored the decisive goal for Paris Saint-Germain in the 2026 UEFA Super Cup?",
+    "options": [
+      "Khvicha Kvaratskhelia",
+      "Desire Doue",
+      "Ousmane Dembele",
+      "Bradley Barcola"
+    ],
+    "correctAnswer": "Desire Doue",
+    "explanation": "Desire Doue scored PSG's decisive second goal in the 61st minute after a VAR review confirmed the goal.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-08-12"
+  },
+  {
+    "question": "Which country was reported to be planning 29 international sports events over two years to strengthen its bid for the 2036 Olympics?",
+    "options": [
+      "India",
+      "Japan",
+      "Indonesia",
+      "Australia"
+    ],
+    "correctAnswer": "India",
+    "explanation": "India announced plans to host 29 international sports events over two years as part of its effort to strengthen its bid to host the 2036 Olympic Games.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Reuters",
+    "sourceDate": "2026-07-09"
+  },
+  {
+    "question": "Which African country is scheduled to hold its presidential and House of Assembly election on January 16, 2027?",
+    "options": [
+      "Ghana",
+      "Nigeria",
+      "Kenya",
+      "South Africa"
+    ],
+    "correctAnswer": "Nigeria",
+    "explanation": "Nigeria's INEC election calendar schedules the Presidential and House of Assembly election for January 16, 2027.",
+    "categoryId": "current_affairs",
+    "difficulty": "hard",
+    "source": "Independent National Electoral Commission (INEC)",
+    "sourceDate": "2026-08-16"
+  }
+]

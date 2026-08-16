@@ -11,6 +11,7 @@ abstract class PublicCompetitiveProfile with _$PublicCompetitiveProfile {
   const factory PublicCompetitiveProfile({
     required String userId,
     required String displayName,
+    @Default('') String username,
     required String avatarId,
     String? photoUrl,
     

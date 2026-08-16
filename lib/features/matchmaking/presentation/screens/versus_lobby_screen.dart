@@ -15,6 +15,7 @@ import '../widgets/versus_config_selectors.dart';
 import '../widgets/matchmaking_rank_card.dart';
 import '../../../player/presentation/widgets/presence/recent_opponents_section.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
+import '../../../../core/network/providers/connectivity_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
 
 class VersusLobbyScreen extends ConsumerWidget {
@@ -24,6 +25,7 @@ class VersusLobbyScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(versusLobbyProvider);
     final player = ref.watch(currentPlayerProvider);
+    final isOnline = ref.watch(isOnlineProvider);
 
     return SoteriaPage(
       isLoading: state.isLoading,
@@ -37,7 +39,7 @@ class VersusLobbyScreen extends ConsumerWidget {
           child: SafeArea(
             child: Column(
               children: [
-                _LobbyHeader(player: player),
+                _LobbyHeader(player: player, isOnline: isOnline),
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
@@ -86,7 +88,8 @@ class VersusLobbyScreen extends ConsumerWidget {
                   ),
                 ),
                 LobbyStartAction(
-                  enabled: state.useInterests || state.category != null,
+                  enabled: state.validationError == null,
+                  error: state.validationError,
                   label: 'FIND OPPONENT',
                   helperText: 'Competitive Integrity • Professional Matchmaking',
                   onStart: () async {
@@ -123,8 +126,9 @@ class VersusLobbyScreen extends ConsumerWidget {
 }
 
 class _LobbyHeader extends StatelessWidget {
-  const _LobbyHeader({this.player});
+  const _LobbyHeader({this.player, required this.isOnline});
   final dynamic player;
+  final bool isOnline;
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +159,8 @@ class _LobbyHeader extends StatelessWidget {
             SoteriaAvatar(
               imageUrl: player.photoUrl,
               size: 40,
-              isOnline: true,
+              isOnline: isOnline,
+              showStatus: true,
             ),
         ],
       ),

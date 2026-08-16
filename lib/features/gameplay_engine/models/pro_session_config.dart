@@ -3,6 +3,7 @@ import '../../question_content/domain/entities/category.dart';
 import '../../question_content/domain/entities/difficulty.dart';
 
 enum ProDifficulty {
+  foundation,
   intermediate,
   advanced,
   expert,
@@ -12,6 +13,8 @@ enum ProDifficulty {
 
   Difficulty toBaseDifficulty() {
     switch (this) {
+      case ProDifficulty.foundation:
+        return Difficulty.easy;
       case ProDifficulty.intermediate:
         return Difficulty.medium;
       case ProDifficulty.advanced:

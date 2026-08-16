@@ -39,8 +39,10 @@ class AchievementSummarySection extends ConsumerWidget {
             Text(
               'ACHIEVEMENTS',
               style: context.labelSmall.copyWith(
-                color: SoteriaColors.muted,
-                letterSpacing: 1.5,
+                color: SoteriaColors.gold,
+                letterSpacing: 2.0,
+                fontWeight: FontWeight.w800,
+                fontSize: 13.sp,
               ),
             ),
             GestureDetector(

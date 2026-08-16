@@ -23,7 +23,7 @@ class FirestoreProModeRepository implements ProModeRepository {
 
   @override
   Future<bool> validateEntry(String uid, int fee) async {
-    final snapshot = await _database.collection('players').doc(uid).get();
+    final snapshot = await _database.collection('users').doc(uid).get();
     if (!snapshot.exists) return false;
 
     final data = snapshot.data();
@@ -36,7 +36,7 @@ class FirestoreProModeRepository implements ProModeRepository {
   @override
   Future<void> reserveEntryFee(String uid, String sessionId, int fee) async {
     await _database.instance.runTransaction((transaction) async {
-      final playerRef = _database.collection('players').doc(uid);
+      final playerRef = _database.collection('users').doc(uid);
       final playerDoc = await transaction.get(playerRef);
 
       if (!playerDoc.exists) {
@@ -232,7 +232,7 @@ class FirestoreProModeRepository implements ProModeRepository {
       
       final uid = sessionDoc.data()?['uid'];
       if (uid != null) {
-        final playerRef = _database.collection('players').doc(uid);
+        final playerRef = _database.collection('users').doc(uid);
         transaction.update(playerRef, {
           'coins': FieldValue.increment(result.rewards.totalCoins),
         });

@@ -83,6 +83,7 @@ class FirebaseIdentityRepository implements IdentityRepository {
       department: data['department'],
       country: data['country'] ?? 'Nigeria',
       interests: List<String>.from(data['interests'] ?? []),
+      bio: data['bio'] as String? ?? '',
     );
   }
 

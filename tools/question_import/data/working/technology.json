@@ -1,0 +1,688 @@
+[
+  {
+    "question": "What does CPU stand for?",
+    "options": [
+      "Central Processing Unit",
+      "Computer Personal Unit",
+      "Central Program Utility",
+      "Core Processing Utility"
+    ],
+    "correctAnswer": "Central Processing Unit",
+    "explanation": "CPU stands for Central Processing Unit, the primary processor responsible for executing instructions in a computer.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "What does RAM stand for?",
+    "options": [
+      "Read Access Memory",
+      "Random Access Memory",
+      "Rapid Application Memory",
+      "Remote Access Module"
+    ],
+    "correctAnswer": "Random Access Memory",
+    "explanation": "RAM is temporary computer memory used to store data and instructions that the processor is actively using.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "Which device is primarily used to move the pointer on a computer screen?",
+    "options": [
+      "Printer",
+      "Mouse",
+      "Speaker",
+      "Scanner"
+    ],
+    "correctAnswer": "Mouse",
+    "explanation": "A computer mouse is a pointing device used to control the position of a pointer on a graphical interface.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Microsoft Support"
+  },
+  {
+    "question": "What does USB stand for?",
+    "options": [
+      "Universal Serial Bus",
+      "United System Board",
+      "Universal Storage Block",
+      "User Serial Base"
+    ],
+    "correctAnswer": "Universal Serial Bus",
+    "explanation": "USB stands for Universal Serial Bus, a standard used for connecting and communicating with peripheral devices.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "USB Implementers Forum"
+  },
+  {
+    "question": "Which of the following is an operating system?",
+    "options": [
+      "Google Chrome",
+      "Microsoft Word",
+      "Windows",
+      "Adobe Photoshop"
+    ],
+    "correctAnswer": "Windows",
+    "explanation": "Windows is an operating system developed by Microsoft that manages computer hardware and software resources.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Microsoft"
+  },
+  {
+    "question": "What is the main purpose of a web browser?",
+    "options": [
+      "To edit videos",
+      "To access and display websites",
+      "To manufacture computer chips",
+      "To increase battery capacity"
+    ],
+    "correctAnswer": "To access and display websites",
+    "explanation": "A web browser retrieves, interprets, and displays content from websites and other web resources.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Mozilla Developer Network"
+  },
+  {
+    "question": "Which company developed the Android operating system?",
+    "options": [
+      "Apple",
+      "Google",
+      "Microsoft",
+      "IBM"
+    ],
+    "correctAnswer": "Google",
+    "explanation": "Android is an open-source mobile operating system led by Google and developed through the Android Open Source Project.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Android Developers"
+  },
+  {
+    "question": "What does Wi-Fi primarily allow devices to do?",
+    "options": [
+      "Connect wirelessly to a network",
+      "Increase screen resolution",
+      "Charge batteries without electricity",
+      "Convert files into paper documents"
+    ],
+    "correctAnswer": "Connect wirelessly to a network",
+    "explanation": "Wi-Fi is a family of wireless networking technologies that allows compatible devices to communicate over a local network.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Wi-Fi Alliance"
+  },
+  {
+    "question": "Which storage device uses spinning magnetic disks to store data?",
+    "options": [
+      "SSD",
+      "HDD",
+      "RAM",
+      "CPU"
+    ],
+    "correctAnswer": "HDD",
+    "explanation": "A hard disk drive uses rotating magnetic platters and a read/write head to store and retrieve data.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "What does URL stand for?",
+    "options": [
+      "Universal Resource Link",
+      "Uniform Resource Locator",
+      "User Reference Location",
+      "Unified Routing Link"
+    ],
+    "correctAnswer": "Uniform Resource Locator",
+    "explanation": "URL stands for Uniform Resource Locator and identifies the location of a resource on a network, commonly the web.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "Which technology is commonly used to make contactless payments with smartphones?",
+    "options": [
+      "NFC",
+      "VGA",
+      "HDMI",
+      "SATA"
+    ],
+    "correctAnswer": "NFC",
+    "explanation": "Near Field Communication, or NFC, enables short-range wireless communication and is widely used for contactless payments.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "NFC Forum"
+  },
+  {
+    "question": "Which file extension is commonly associated with a PDF document?",
+    "options": [
+      ".docx",
+      ".jpg",
+      ".pdf",
+      ".exe"
+    ],
+    "correctAnswer": ".pdf",
+    "explanation": "The .pdf extension identifies files in Adobe's Portable Document Format.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Adobe"
+  },
+  {
+    "question": "What is a smartphone?",
+    "options": [
+      "A mobile device with computing and communication capabilities",
+      "A device used only for making calls",
+      "A type of desktop printer",
+      "A wireless computer monitor"
+    ],
+    "correctAnswer": "A mobile device with computing and communication capabilities",
+    "explanation": "A smartphone combines mobile communication with computing functions such as internet access, applications, cameras, and multimedia.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What does GPS stand for?",
+    "options": [
+      "Global Positioning System",
+      "General Processing Service",
+      "Global Programming Standard",
+      "Geographic Personal System"
+    ],
+    "correctAnswer": "Global Positioning System",
+    "explanation": "GPS is a satellite-based navigation system that provides positioning and timing information.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "GPS.gov"
+  },
+  {
+    "question": "Which component is primarily responsible for rendering graphics in a computer?",
+    "options": [
+      "GPU",
+      "RAM",
+      "Power supply",
+      "Keyboard"
+    ],
+    "correctAnswer": "GPU",
+    "explanation": "A Graphics Processing Unit, or GPU, performs specialized computations for rendering images, video, and other graphics.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "NVIDIA"
+  },
+  {
+    "question": "What is cloud computing?",
+    "options": [
+      "Computing services delivered over a network",
+      "A method of cooling computers with clouds",
+      "A type of physical computer storage",
+      "A programming language"
+    ],
+    "correctAnswer": "Computing services delivered over a network",
+    "explanation": "Cloud computing provides on-demand access to computing resources such as storage, processing, databases, and software over a network.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "Which company developed the iPhone?",
+    "options": [
+      "Samsung",
+      "Apple",
+      "Google",
+      "Huawei"
+    ],
+    "correctAnswer": "Apple",
+    "explanation": "Apple developed and introduced the iPhone in 2007.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Apple"
+  },
+  {
+    "question": "What is Bluetooth primarily used for?",
+    "options": [
+      "Short-range wireless communication",
+      "Long-distance satellite communication",
+      "Increasing internet speed automatically",
+      "Storing operating systems"
+    ],
+    "correctAnswer": "Short-range wireless communication",
+    "explanation": "Bluetooth is a wireless technology designed for short-range communication between compatible devices.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Bluetooth SIG"
+  },
+  {
+    "question": "What does AI stand for?",
+    "options": [
+      "Automated Internet",
+      "Artificial Intelligence",
+      "Advanced Integration",
+      "Application Interface"
+    ],
+    "correctAnswer": "Artificial Intelligence",
+    "explanation": "Artificial Intelligence refers to computer systems designed to perform tasks that normally require aspects of human intelligence.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "Which device converts digital documents or images into digital files?",
+    "options": [
+      "Scanner",
+      "Router",
+      "Monitor",
+      "Projector"
+    ],
+    "correctAnswer": "Scanner",
+    "explanation": "A scanner captures physical documents or images and converts them into digital data.",
+    "categoryId": "technology",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is an IP address primarily used for?",
+    "options": [
+      "Identifying a device or network interface on a network",
+      "Increasing processor speed",
+      "Encrypting every file automatically",
+      "Measuring battery temperature"
+    ],
+    "correctAnswer": "Identifying a device or network interface on a network",
+    "explanation": "An IP address identifies a network interface or endpoint so that network traffic can be delivered to the appropriate destination.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Internet Engineering Task Force"
+  },
+  {
+    "question": "What is the main purpose of a router?",
+    "options": [
+      "To route network traffic between networks",
+      "To store photographs permanently",
+      "To display computer graphics",
+      "To convert AC power to DC power"
+    ],
+    "correctAnswer": "To route network traffic between networks",
+    "explanation": "A router forwards data packets between different networks based on their destination addresses.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Cisco"
+  },
+  {
+    "question": "What does HTTPS provide in addition to HTTP?",
+    "options": [
+      "Encrypted communication",
+      "Unlimited storage",
+      "Faster processors",
+      "Higher screen resolution"
+    ],
+    "correctAnswer": "Encrypted communication",
+    "explanation": "HTTPS uses TLS to help protect data exchanged between a client and a web server from interception or tampering.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Internet Engineering Task Force"
+  },
+  {
+    "question": "Which technology is used to store data in most modern solid-state drives?",
+    "options": [
+      "Magnetic tape",
+      "NAND flash memory",
+      "Optical film",
+      "Vacuum tubes"
+    ],
+    "correctAnswer": "NAND flash memory",
+    "explanation": "Modern SSDs generally use NAND flash memory to store data electronically without moving mechanical parts.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "What is two-factor authentication designed to improve?",
+    "options": [
+      "Account security",
+      "Screen brightness",
+      "Internet bandwidth",
+      "Battery capacity"
+    ],
+    "correctAnswer": "Account security",
+    "explanation": "Two-factor authentication requires two different forms of verification, making unauthorized account access more difficult.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is a database primarily designed to do?",
+    "options": [
+      "Store and organize data",
+      "Generate electricity",
+      "Render physical objects",
+      "Increase monitor refresh rates"
+    ],
+    "correctAnswer": "Store and organize data",
+    "explanation": "Databases provide structured systems for storing, managing, retrieving, and updating data.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Oracle"
+  },
+  {
+    "question": "Which protocol is commonly used to transfer web pages between browsers and servers?",
+    "options": [
+      "HTTP",
+      "FTP",
+      "SMTP",
+      "SSH"
+    ],
+    "correctAnswer": "HTTP",
+    "explanation": "HTTP is the foundational application-layer protocol used for communication between web clients and servers.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Internet Engineering Task Force"
+  },
+  {
+    "question": "What is an algorithm?",
+    "options": [
+      "A step-by-step procedure for solving a problem",
+      "A physical computer component",
+      "A type of network cable",
+      "A database server"
+    ],
+    "correctAnswer": "A step-by-step procedure for solving a problem",
+    "explanation": "An algorithm is a defined sequence of steps or rules used to solve a problem or perform a computation.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is virtualization in computing?",
+    "options": [
+      "Creating simulated computing environments from physical resources",
+      "Increasing the physical size of a processor",
+      "Replacing all software with hardware",
+      "Removing operating systems from computers"
+    ],
+    "correctAnswer": "Creating simulated computing environments from physical resources",
+    "explanation": "Virtualization allows physical computing resources to be divided or abstracted into virtual machines or other virtual environments.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Red Hat"
+  },
+  {
+    "question": "What is an API?",
+    "options": [
+      "A set of rules that allows software systems to communicate",
+      "A type of computer battery",
+      "A graphics card standard",
+      "A physical network connector"
+    ],
+    "correctAnswer": "A set of rules that allows software systems to communicate",
+    "explanation": "An Application Programming Interface defines how software components can interact and exchange data or functionality.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "Which technology is commonly associated with decentralized digital ledgers?",
+    "options": [
+      "Blockchain",
+      "Bluetooth",
+      "Ethernet",
+      "NFC"
+    ],
+    "correctAnswer": "Blockchain",
+    "explanation": "Blockchain is a distributed ledger technology that records transactions in linked blocks maintained across a network.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is machine learning?",
+    "options": [
+      "A method where computers learn patterns from data",
+      "A process for physically repairing computers",
+      "A type of computer cable",
+      "A method for increasing screen size"
+    ],
+    "correctAnswer": "A method where computers learn patterns from data",
+    "explanation": "Machine learning enables computer systems to identify patterns in data and use those patterns to make predictions or decisions.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "Which protocol is commonly used to send email between mail servers?",
+    "options": [
+      "SMTP",
+      "HTTP",
+      "FTP",
+      "DNS"
+    ],
+    "correctAnswer": "SMTP",
+    "explanation": "Simple Mail Transfer Protocol, or SMTP, is commonly used to transmit email between mail systems.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Internet Engineering Task Force"
+  },
+  {
+    "question": "What is DNS primarily responsible for?",
+    "options": [
+      "Translating domain names into IP addresses",
+      "Encrypting hard drives",
+      "Compressing video files",
+      "Managing battery charging"
+    ],
+    "correctAnswer": "Translating domain names into IP addresses",
+    "explanation": "The Domain Name System translates human-readable domain names into network addresses used by computers.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Internet Engineering Task Force"
+  },
+  {
+    "question": "What is an open-source software project?",
+    "options": [
+      "Software whose source code is made available under an open-source license",
+      "Software that can only run without an internet connection",
+      "Software that is always free of charge",
+      "Software developed exclusively by governments"
+    ],
+    "correctAnswer": "Software whose source code is made available under an open-source license",
+    "explanation": "Open-source software makes its source code available under licensing terms that allow specified forms of use, modification, and redistribution.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "Open Source Initiative"
+  },
+  {
+    "question": "What does IoT stand for?",
+    "options": [
+      "Internet of Things",
+      "Integration of Technology",
+      "Internet of Terminals",
+      "Intelligent Online Transfer"
+    ],
+    "correctAnswer": "Internet of Things",
+    "explanation": "The Internet of Things refers to networks of physical objects equipped with sensors, software, and connectivity that enable them to exchange data.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is encryption primarily used for?",
+    "options": [
+      "Protecting information by transforming it into an unreadable form",
+      "Increasing processor clock speed",
+      "Reducing the physical size of files",
+      "Improving monitor brightness"
+    ],
+    "correctAnswer": "Protecting information by transforming it into an unreadable form",
+    "explanation": "Encryption transforms plaintext into ciphertext so that information can be protected from unauthorized access.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is the purpose of a firewall?",
+    "options": [
+      "To control network traffic based on security rules",
+      "To increase hard-drive capacity",
+      "To cool a computer processor",
+      "To improve camera resolution"
+    ],
+    "correctAnswer": "To control network traffic based on security rules",
+    "explanation": "A firewall monitors and controls network traffic according to defined security policies.",
+    "categoryId": "technology",
+    "difficulty": "medium",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What does SaaS stand for in cloud computing?",
+    "options": [
+      "Software as a Service",
+      "Storage as a System",
+      "Security as a Server",
+      "Software and Storage"
+    ],
+    "correctAnswer": "Software as a Service",
+    "explanation": "SaaS is a cloud computing model in which software applications are delivered to users as a service, commonly over the internet.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "Which cryptographic technique uses a public key and a private key?",
+    "options": [
+      "Symmetric encryption",
+      "Asymmetric cryptography",
+      "Hashing only",
+      "Data compression"
+    ],
+    "correctAnswer": "Asymmetric cryptography",
+    "explanation": "Asymmetric cryptography uses a mathematically related public-private key pair for operations such as encryption, decryption, and digital signatures.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is a hash function primarily designed to produce?",
+    "options": [
+      "A fixed-length representation of input data",
+      "A physical copy of a hard drive",
+      "A wireless network connection",
+      "A video stream"
+    ],
+    "correctAnswer": "A fixed-length representation of input data",
+    "explanation": "A cryptographic hash function maps input data of arbitrary length to a fixed-length output called a hash or digest.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is containerization in modern software development?",
+    "options": [
+      "Packaging an application and its dependencies into an isolated environment",
+      "Physically placing servers inside shipping containers",
+      "Compressing all files into a ZIP archive",
+      "Replacing databases with spreadsheets"
+    ],
+    "correctAnswer": "Packaging an application and its dependencies into an isolated environment",
+    "explanation": "Containerization packages applications with their dependencies into isolated, portable execution environments.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "Docker Documentation"
+  },
+  {
+    "question": "What is the primary purpose of a CDN?",
+    "options": [
+      "Deliver content efficiently from geographically distributed servers",
+      "Create new programming languages",
+      "Replace all databases",
+      "Physically repair network cables"
+    ],
+    "correctAnswer": "Deliver content efficiently from geographically distributed servers",
+    "explanation": "A Content Delivery Network distributes cached content across multiple locations to reduce latency and improve content delivery performance.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "Cloudflare"
+  },
+  {
+    "question": "In artificial intelligence, what is a neural network inspired by?",
+    "options": [
+      "The structure and function of biological neural systems",
+      "The design of hard drives",
+      "The structure of computer cables",
+      "The operation of electrical power grids"
+    ],
+    "correctAnswer": "The structure and function of biological neural systems",
+    "explanation": "Artificial neural networks are computational models loosely inspired by interconnected neurons and information processing in biological nervous systems.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "What is overfitting in machine learning?",
+    "options": [
+      "When a model learns training data too closely and performs poorly on unseen data",
+      "When a computer runs out of physical storage",
+      "When a model has too few parameters to learn anything",
+      "When an internet connection becomes overloaded"
+    ],
+    "correctAnswer": "When a model learns training data too closely and performs poorly on unseen data",
+    "explanation": "Overfitting occurs when a model captures noise or overly specific patterns in training data, reducing its ability to generalize to new data.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is a zero-day vulnerability?",
+    "options": [
+      "A newly discovered security vulnerability with no established fix or mitigation available",
+      "A vulnerability that automatically disappears after one day",
+      "A computer with zero storage space",
+      "A network that has been offline for one day"
+    ],
+    "correctAnswer": "A newly discovered security vulnerability with no established fix or mitigation available",
+    "explanation": "A zero-day vulnerability is a previously unknown or unaddressed security flaw for which defenders have had little or no time to develop a remedy.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "Cybersecurity and Infrastructure Security Agency"
+  },
+  {
+    "question": "What is the primary role of a hypervisor?",
+    "options": [
+      "To create and manage virtual machines",
+      "To encrypt every website",
+      "To convert analog signals into sound",
+      "To manage only physical keyboards"
+    ],
+    "correctAnswer": "To create and manage virtual machines",
+    "explanation": "A hypervisor is software or firmware that creates and manages virtual machines by allocating underlying computing resources.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "IBM Technology"
+  },
+  {
+    "question": "What is edge computing?",
+    "options": [
+      "Processing data closer to where it is generated",
+      "Moving every computation to a distant data center",
+      "Using only desktop computers for processing",
+      "Removing networking capabilities from devices"
+    ],
+    "correctAnswer": "Processing data closer to where it is generated",
+    "explanation": "Edge computing moves computation and data processing closer to devices and data sources, potentially reducing latency and bandwidth requirements.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "National Institute of Standards and Technology"
+  },
+  {
+    "question": "What is the primary purpose of a version control system such as Git?",
+    "options": [
+      "Track changes to files and coordinate development work",
+      "Increase the physical storage capacity of a computer",
+      "Replace an operating system",
+      "Provide electricity to servers"
+    ],
+    "correctAnswer": "Track changes to files and coordinate development work",
+    "explanation": "Version control systems record changes to files over time and help developers collaborate, compare versions, and restore previous states.",
+    "categoryId": "technology",
+    "difficulty": "hard",
+    "source": "Git Documentation"
+  }
+]

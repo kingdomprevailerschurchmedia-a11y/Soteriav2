@@ -1,0 +1,744 @@
+[
+  {
+    "question": "Which of the following is a noun?",
+    "options": [
+      "Beautiful",
+      "Run",
+      "Teacher",
+      "Quickly"
+    ],
+    "correctAnswer": "Teacher",
+    "explanation": "A noun is a word that names a person, place, thing, or idea. Teacher names a person or occupation.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Grammar"
+  },
+  {
+    "question": "Which word is a synonym for 'happy'?",
+    "options": [
+      "Angry",
+      "Joyful",
+      "Tired",
+      "Nervous"
+    ],
+    "correctAnswer": "Joyful",
+    "explanation": "Joyful means feeling or expressing great happiness, making it a synonym of happy.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which word is the opposite of 'ancient'?",
+    "options": [
+      "Old",
+      "Historic",
+      "Modern",
+      "Traditional"
+    ],
+    "correctAnswer": "Modern",
+    "explanation": "Modern refers to something belonging to the present or recent times, making it an antonym of ancient.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which of these is a verb?",
+    "options": [
+      "Happiness",
+      "Beautiful",
+      "Swim",
+      "Quickly"
+    ],
+    "correctAnswer": "Swim",
+    "explanation": "A verb expresses an action, occurrence, or state. Swim describes an action.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which punctuation mark is normally used at the end of a direct question?",
+    "options": [
+      "Comma",
+      "Full stop",
+      "Question mark",
+      "Colon"
+    ],
+    "correctAnswer": "Question mark",
+    "explanation": "A question mark is used at the end of a direct interrogative sentence.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which word correctly completes the sentence: 'She ___ to school every day.'?",
+    "options": [
+      "go",
+      "goes",
+      "going",
+      "gone"
+    ],
+    "correctAnswer": "goes",
+    "explanation": "With the third-person singular subject 'she' in the simple present tense, the verb 'go' becomes 'goes'.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "Which of these is an adjective?",
+    "options": [
+      "Carefully",
+      "Beauty",
+      "Beautiful",
+      "Beautify"
+    ],
+    "correctAnswer": "Beautiful",
+    "explanation": "An adjective modifies or describes a noun. Beautiful describes a person, place, thing, or idea.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Grammar"
+  },
+  {
+    "question": "What is the plural form of 'child'?",
+    "options": [
+      "Childs",
+      "Childes",
+      "Children",
+      "Childrens"
+    ],
+    "correctAnswer": "Children",
+    "explanation": "Children is the irregular plural form of child.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which word is spelled correctly?",
+    "options": [
+      "Necessary",
+      "Necesary",
+      "Neccessary",
+      "Necassary"
+    ],
+    "correctAnswer": "Necessary",
+    "explanation": "Necessary is the standard spelling of the word meaning required or essential.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which pronoun can replace 'James and I' as the subject of a sentence?",
+    "options": [
+      "Us",
+      "Them",
+      "We",
+      "They"
+    ],
+    "correctAnswer": "We",
+    "explanation": "We is the first-person plural subject pronoun used when referring to the speaker and at least one other person.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "What is the comparative form of 'good'?",
+    "options": [
+      "Gooder",
+      "Best",
+      "Better",
+      "More good"
+    ],
+    "correctAnswer": "Better",
+    "explanation": "Good has an irregular comparative form: better. Its superlative form is best.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which word is an adverb in the sentence 'She ran quickly'?",
+    "options": [
+      "She",
+      "Ran",
+      "Quickly",
+      "None"
+    ],
+    "correctAnswer": "Quickly",
+    "explanation": "Quickly is an adverb because it modifies the verb 'ran' by describing how the action was performed.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Grammar"
+  },
+  {
+    "question": "Which sentence is grammatically correct?",
+    "options": [
+      "He don't like coffee.",
+      "He doesn't likes coffee.",
+      "He doesn't like coffee.",
+      "He not like coffee."
+    ],
+    "correctAnswer": "He doesn't like coffee.",
+    "explanation": "In the simple present negative with a third-person singular subject, 'doesn't' is followed by the base form of the verb.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "What is the past tense of 'write'?",
+    "options": [
+      "Writed",
+      "Written",
+      "Wrote",
+      "Writing"
+    ],
+    "correctAnswer": "Wrote",
+    "explanation": "Wrote is the simple past tense of the irregular verb write.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which word is a preposition?",
+    "options": [
+      "Under",
+      "Quickly",
+      "Beautiful",
+      "Sing"
+    ],
+    "correctAnswer": "Under",
+    "explanation": "Under is a preposition that can indicate the position or relationship of one thing relative to another.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which language is primarily spoken in Brazil?",
+    "options": [
+      "Spanish",
+      "Portuguese",
+      "French",
+      "Italian"
+    ],
+    "correctAnswer": "Portuguese",
+    "explanation": "Portuguese is the official language of Brazil and is spoken by the vast majority of its population.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which language uses the Cyrillic alphabet as one of its writing systems?",
+    "options": [
+      "Russian",
+      "Japanese",
+      "Arabic",
+      "Swahili"
+    ],
+    "correctAnswer": "Russian",
+    "explanation": "Russian is written using the Cyrillic alphabet.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a synonym?",
+    "options": [
+      "A word with a similar meaning to another word",
+      "A word with the opposite meaning",
+      "A word with no meaning",
+      "A word that is always misspelled"
+    ],
+    "correctAnswer": "A word with a similar meaning to another word",
+    "explanation": "Synonyms are words or expressions that have the same or similar meanings in particular contexts.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "What is an antonym?",
+    "options": [
+      "A word with an opposite meaning",
+      "A word with the same spelling",
+      "A word borrowed from another language",
+      "A word that describes an action"
+    ],
+    "correctAnswer": "A word with an opposite meaning",
+    "explanation": "An antonym is a word that expresses a meaning opposite to that of another word.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which sentence uses the correct article?",
+    "options": [
+      "She is a honest person.",
+      "She is an honest person.",
+      "She is honest an person.",
+      "She is the honest a person."
+    ],
+    "correctAnswer": "She is an honest person.",
+    "explanation": "The article 'an' is used before 'honest' because the word begins with a vowel sound.",
+    "categoryId": "languages",
+    "difficulty": "easy",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "What is the main purpose of a conjunction?",
+    "options": [
+      "To connect words, phrases, or clauses",
+      "To describe a noun",
+      "To replace a noun",
+      "To indicate physical location"
+    ],
+    "correctAnswer": "To connect words, phrases, or clauses",
+    "explanation": "Conjunctions connect words, phrases, or clauses and show relationships between them.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "Which sentence is in the passive voice?",
+    "options": [
+      "The chef cooked the meal.",
+      "The meal was cooked by the chef.",
+      "The chef is cooking the meal.",
+      "The chef will cook the meal."
+    ],
+    "correctAnswer": "The meal was cooked by the chef.",
+    "explanation": "In the passive voice, the subject receives the action rather than performing it. Here, the meal receives the action of being cooked.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "Which sentence is an example of a conditional statement?",
+    "options": [
+      "I went to the market yesterday.",
+      "If it rains, we will stay home.",
+      "She is reading a book.",
+      "They have finished dinner."
+    ],
+    "correctAnswer": "If it rains, we will stay home.",
+    "explanation": "A conditional sentence describes a condition and its possible result.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "Which word is closest in meaning to 'meticulous'?",
+    "options": [
+      "Careless",
+      "Thorough",
+      "Rapid",
+      "Uncertain"
+    ],
+    "correctAnswer": "Thorough",
+    "explanation": "Meticulous means extremely careful and precise about details, making thorough the closest option.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "What is an idiom?",
+    "options": [
+      "A fixed expression whose meaning may differ from the literal meaning of its words",
+      "A word that always has one syllable",
+      "A formal scientific equation",
+      "A type of punctuation mark"
+    ],
+    "correctAnswer": "A fixed expression whose meaning may differ from the literal meaning of its words",
+    "explanation": "An idiom is a conventional expression whose overall meaning cannot always be understood directly from its individual words.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which sentence correctly uses the apostrophe?",
+    "options": [
+      "The students books are on the table.",
+      "The student's books are on the table.",
+      "The students book's are on the table.",
+      "The student book's are on the table."
+    ],
+    "correctAnswer": "The student's books are on the table.",
+    "explanation": "The apostrophe in student's indicates possession by one student.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Grammar"
+  },
+  {
+    "question": "What is a homophone?",
+    "options": [
+      "A word that sounds the same as another word but may differ in spelling and meaning",
+      "A word with exactly the opposite meaning",
+      "A word with multiple prefixes",
+      "A word that contains no vowels"
+    ],
+    "correctAnswer": "A word that sounds the same as another word but may differ in spelling and meaning",
+    "explanation": "Homophones have the same or very similar pronunciation but different meanings and often different spellings, such as 'two' and 'too'.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which pair consists of homophones?",
+    "options": [
+      "Accept and except",
+      "Flour and flower",
+      "Happy and joyful",
+      "Big and large"
+    ],
+    "correctAnswer": "Flour and flower",
+    "explanation": "Flour and flower have the same pronunciation in standard English but different meanings and spellings.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which sentence uses a semicolon correctly?",
+    "options": [
+      "I was tired; I went to bed early.",
+      "I was; tired I went to bed early.",
+      "I; was tired I went to bed early.",
+      "I was tired I; went to bed early."
+    ],
+    "correctAnswer": "I was tired; I went to bed early.",
+    "explanation": "A semicolon can connect closely related independent clauses that could otherwise stand as separate sentences.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "What is a prefix?",
+    "options": [
+      "A group of letters added to the beginning of a word",
+      "A group of letters added only to the middle of a word",
+      "A punctuation mark at the end of a sentence",
+      "A word that replaces a noun"
+    ],
+    "correctAnswer": "A group of letters added to the beginning of a word",
+    "explanation": "A prefix is an affix placed before a word or word stem to modify its meaning.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "What is a suffix?",
+    "options": [
+      "A group of letters added to the end of a word",
+      "A punctuation mark used in questions",
+      "A word that always begins a sentence",
+      "A replacement for a verb"
+    ],
+    "correctAnswer": "A group of letters added to the end of a word",
+    "explanation": "A suffix is an affix attached to the end of a word or word stem and may alter its meaning or grammatical function.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which word contains a prefix meaning 'again'?",
+    "options": [
+      "Rewrite",
+      "Unkind",
+      "Impossible",
+      "Preview"
+    ],
+    "correctAnswer": "Rewrite",
+    "explanation": "The prefix 're-' commonly conveys the meaning of doing something again, as in rewrite.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "What is a metaphor?",
+    "options": [
+      "A comparison that states one thing is another to create a figurative meaning",
+      "A direct question",
+      "A word with the opposite meaning",
+      "A grammatical error"
+    ],
+    "correctAnswer": "A comparison that states one thing is another to create a figurative meaning",
+    "explanation": "A metaphor describes one thing in terms of another without using a direct comparison such as 'like' or 'as'.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "What is a simile?",
+    "options": [
+      "A comparison using words such as 'like' or 'as'",
+      "A sentence without a verb",
+      "A word with multiple spellings",
+      "A type of punctuation"
+    ],
+    "correctAnswer": "A comparison using words such as 'like' or 'as'",
+    "explanation": "A simile explicitly compares two things, commonly using 'like' or 'as'.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge Dictionary"
+  },
+  {
+    "question": "Which sentence contains a simile?",
+    "options": [
+      "The moon was a silver coin.",
+      "She runs like the wind.",
+      "The classroom was silent.",
+      "He opened the door."
+    ],
+    "correctAnswer": "She runs like the wind.",
+    "explanation": "The sentence compares her running to the wind using the word 'like', making it a simile.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "What does the prefix 'anti-' generally mean?",
+    "options": [
+      "Against or opposed to",
+      "Before",
+      "After",
+      "Together"
+    ],
+    "correctAnswer": "Against or opposed to",
+    "explanation": "The prefix anti- generally expresses opposition, as in antisocial or antibiotic.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Oxford English Dictionary"
+  },
+  {
+    "question": "Which sentence demonstrates correct subject-verb agreement?",
+    "options": [
+      "The group of students are ready.",
+      "The group of students is ready.",
+      "The group of students be ready.",
+      "The group of students were ready."
+    ],
+    "correctAnswer": "The group of students is ready.",
+    "explanation": "The subject is 'group', which is singular in this construction, so the singular verb 'is' is appropriate in standard English.",
+    "categoryId": "languages",
+    "difficulty": "medium",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "What is the subjunctive mood commonly used to express?",
+    "options": [
+      "Hypothetical, wished-for, or contrary-to-fact situations",
+      "Only completed past actions",
+      "Only commands involving physical movement",
+      "Only questions about location"
+    ],
+    "correctAnswer": "Hypothetical, wished-for, or contrary-to-fact situations",
+    "explanation": "The subjunctive mood is used in certain constructions involving wishes, recommendations, demands, or hypothetical and contrary-to-fact situations.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "Which sentence correctly uses the past perfect tense?",
+    "options": [
+      "She had left before I arrived.",
+      "She has left before I arrived.",
+      "She leaves before I arrived.",
+      "She leaving before I arrived."
+    ],
+    "correctAnswer": "She had left before I arrived.",
+    "explanation": "The past perfect, formed with 'had' plus the past participle, describes an action completed before another past event.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Cambridge English Grammar"
+  },
+  {
+    "question": "What is syntactic ambiguity?",
+    "options": [
+      "A sentence structure that allows more than one possible interpretation",
+      "A word with only one pronunciation",
+      "A spelling mistake involving punctuation",
+      "A language with no grammar"
+    ],
+    "correctAnswer": "A sentence structure that allows more than one possible interpretation",
+    "explanation": "Syntactic ambiguity occurs when the grammatical structure of a sentence permits multiple interpretations.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is semantics primarily concerned with?",
+    "options": [
+      "Meaning in language",
+      "Physical speech organs only",
+      "Sentence punctuation only",
+      "Alphabetical order"
+    ],
+    "correctAnswer": "Meaning in language",
+    "explanation": "Semantics is the branch of linguistics concerned with meaning in words, phrases, sentences, and larger expressions.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is syntax primarily concerned with?",
+    "options": [
+      "The arrangement and relationships of words in sentences",
+      "The physical production of speech sounds",
+      "The history of writing systems only",
+      "The meanings of individual colors"
+    ],
+    "correctAnswer": "The arrangement and relationships of words in sentences",
+    "explanation": "Syntax studies how words and phrases are structured and combined to form grammatical sentences.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is phonetics?",
+    "options": [
+      "The study of speech sounds and their physical properties",
+      "The study of sentence meaning",
+      "The study of punctuation",
+      "The study of literary genres"
+    ],
+    "correctAnswer": "The study of speech sounds and their physical properties",
+    "explanation": "Phonetics studies the production, transmission, and perception of speech sounds.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is phonology?",
+    "options": [
+      "The study of how sounds function and pattern within a particular language",
+      "The study of handwriting styles",
+      "The study of sentence punctuation",
+      "The study of historical events"
+    ],
+    "correctAnswer": "The study of how sounds function and pattern within a particular language",
+    "explanation": "Phonology examines the organization and patterning of sounds within languages.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is morphology in linguistics?",
+    "options": [
+      "The study of the structure and formation of words",
+      "The study of physical geography",
+      "The study of punctuation marks",
+      "The study of speech volume"
+    ],
+    "correctAnswer": "The study of the structure and formation of words",
+    "explanation": "Linguistic morphology examines how words are formed from smaller meaningful units such as roots and affixes.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is a morpheme?",
+    "options": [
+      "The smallest unit of language that carries meaning or grammatical function",
+      "The longest sentence in a language",
+      "A type of punctuation mark",
+      "A complete paragraph"
+    ],
+    "correctAnswer": "The smallest unit of language that carries meaning or grammatical function",
+    "explanation": "A morpheme is the smallest linguistic unit that has a meaning or grammatical function, such as 'un-' or '-ed'.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is code-switching in linguistics?",
+    "options": [
+      "Alternating between two or more languages or language varieties in communication",
+      "Changing a word's spelling within a sentence",
+      "Replacing all nouns with pronouns",
+      "Translating every sentence literally"
+    ],
+    "correctAnswer": "Alternating between two or more languages or language varieties in communication",
+    "explanation": "Code-switching occurs when speakers alternate between languages or language varieties within a conversation or communicative context.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is a lingua franca?",
+    "options": [
+      "A language or variety used for communication between people with different native languages",
+      "A language spoken exclusively by children",
+      "A language with no written form",
+      "A language used only in scientific laboratories"
+    ],
+    "correctAnswer": "A language or variety used for communication between people with different native languages",
+    "explanation": "A lingua franca serves as a common means of communication among speakers whose first languages differ.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which language family includes English, German, and Dutch?",
+    "options": [
+      "Germanic",
+      "Romance",
+      "Sino-Tibetan",
+      "Dravidian"
+    ],
+    "correctAnswer": "Germanic",
+    "explanation": "English, German, and Dutch are members of the Germanic branch of the Indo-European language family.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which language family includes Spanish, French, Italian, and Portuguese?",
+    "options": [
+      "Romance",
+      "Germanic",
+      "Slavic",
+      "Uralic"
+    ],
+    "correctAnswer": "Romance",
+    "explanation": "Spanish, French, Italian, Portuguese, and several other languages developed from varieties of Latin and belong to the Romance branch of Indo-European.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is diglossia?",
+    "options": [
+      "A situation in which two varieties of a language have distinct social or functional roles",
+      "A language with exactly two letters",
+      "The inability to speak two languages",
+      "The translation of a text into two alphabets"
+    ],
+    "correctAnswer": "A situation in which two varieties of a language have distinct social or functional roles",
+    "explanation": "Diglossia describes a sociolinguistic situation in which distinct varieties are used for different functions or contexts within a community.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is pragmatics primarily concerned with?",
+    "options": [
+      "How context affects the interpretation of language",
+      "How letters are arranged alphabetically",
+      "How punctuation is printed",
+      "How words are divided into syllables only"
+    ],
+    "correctAnswer": "How context affects the interpretation of language",
+    "explanation": "Pragmatics examines how speakers, listeners, context, and communicative situations influence the interpretation of utterances.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Oxford Dictionary of Linguistics"
+  },
+  {
+    "question": "What is a pidgin?",
+    "options": [
+      "A simplified contact language that develops for communication between groups without a shared language",
+      "A fully standardized national language by definition",
+      "A language used exclusively in formal ceremonies",
+      "A writing system consisting only of symbols"
+    ],
+    "correctAnswer": "A simplified contact language that develops for communication between groups without a shared language",
+    "explanation": "A pidgin can develop when groups without a common language need to communicate, typically in contexts such as trade or work.",
+    "categoryId": "languages",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  }
+]

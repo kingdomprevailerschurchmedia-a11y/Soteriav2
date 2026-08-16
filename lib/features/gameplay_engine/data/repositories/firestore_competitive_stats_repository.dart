@@ -15,7 +15,7 @@ class FirestoreCompetitiveStatsRepository
     GameResult result,
     int coinsDelta,
   ) async {
-    final playerDoc = _database.collection('players').doc(uid);
+    final playerDoc = _database.collection('users').doc(uid);
 
     await playerDoc.update({
       'totalQuestionsAnswered': FieldValue.increment(result.totalQuestions),

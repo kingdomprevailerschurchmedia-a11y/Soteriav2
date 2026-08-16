@@ -6,9 +6,9 @@ import '../../../design_system/colors/soteria_colors.dart';
 import '../../../design_system/spacing/soteria_spacing.dart';
 import '../../../design_system/typography/soteria_typography.dart';
 import '../../../widgets/glass_surface.dart';
-import '../../data/avatar_catalog.dart';
 import '../../providers/avatar_providers.dart';
 import '../../../identity/providers/identity_providers.dart';
+import '../../../../features/player/providers/player_providers.dart';
 
 class AvatarSelectionDialog extends ConsumerWidget {
   const AvatarSelectionDialog({super.key});
@@ -41,8 +41,9 @@ class AvatarSelectionDialog extends ConsumerWidget {
     final catalog = ref.watch(avatarCatalogProvider);
     final selectedAvatarId = ref.watch(selectedAvatarIdProvider);
     final profile = ref.watch(profileProvider);
+    final player = ref.watch(currentPlayerProvider);
     final isUploading = ref.watch(profileUploadProvider);
-    final isProfileLoading = profile == null;
+    final isProfileLoading = profile == null && player == null;
 
     return Stack(
       children: [

@@ -27,6 +27,7 @@ import '../../../features/player/preview/competitive_profile_previews.dart';
 import '../../../features/player/preview/statistics_previews.dart';
 import '../../../features/player/preview/milestone_previews.dart';
 import '../../../features/player/preview/achievement_previews.dart';
+import '../../../features/rewards/preview/rewards_economy_preview.dart';
 import '../../../features/player/preview/leaderboard_insights_previews.dart';
 import '../../../features/player/preview/personal_record_previews.dart';
 import '../../../features/notifications/preview/notification_previews.dart';
@@ -1139,6 +1140,36 @@ void registerAllPreviews() {
   );
 
   // --- Rewards ---
+  r.registerPreview(
+    PreviewItem(
+      id: 'rewards-economy',
+      title: 'Rewards & Economy',
+      description: 'Production wallet and rewards hub',
+      category: PreviewCategory.profile,
+      builder: (context) => RewardsEconomyPreview.normal(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rewards-empty-wallet',
+      title: 'Rewards - Empty Wallet',
+      description: 'Zero balance state',
+      category: PreviewCategory.profile,
+      builder: (context) => RewardsEconomyPreview.emptyWallet(),
+    ),
+  );
+
+  r.registerPreview(
+    PreviewItem(
+      id: 'rewards-no-rewards',
+      title: 'Rewards - No Rewards',
+      description: 'Empty rewards list state',
+      category: PreviewCategory.profile,
+      builder: (context) => RewardsEconomyPreview.noRewards(),
+    ),
+  );
+
   r.registerPreview(
     PreviewItem(
       id: 'reward-gallery',

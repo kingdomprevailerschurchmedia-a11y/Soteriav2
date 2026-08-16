@@ -78,7 +78,7 @@ class _PlayerSearchScreenState extends ConsumerState<PlayerSearchScreen> {
       body: searchResultsAsync.when(
         data: (results) {
           if (_searchController.text.isEmpty) {
-            return _buildEmptyState('Find your rivals by name.');
+            return _buildEmptyState('Find your rivals by name or username.');
           }
           if (results.isEmpty) {
             return _buildEmptyState('No competitors found.');

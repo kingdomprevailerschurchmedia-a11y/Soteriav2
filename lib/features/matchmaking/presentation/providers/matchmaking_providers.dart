@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
@@ -12,53 +13,30 @@ import '../../../question_content/domain/entities/category.dart';
 import '../../../question_content/domain/repositories/category_repository.dart';
 import '../../../question_content/presentation/providers/category_providers.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
+import '../../../player/providers/player_providers.dart';
+
+part 'matchmaking_providers.freezed.dart';
 
 // --- Lobby ---
 
-class VersusLobbyState {
-  final Category? category;
-  final Difficulty difficulty;
-  final int questionCount;
-  final List<Category> categories;
-  final bool isLoading;
-  final String? error;
-  final bool useInterests;
-
-  const VersusLobbyState({
-    this.category,
-    this.difficulty = Difficulty.medium,
-    this.questionCount = 10,
-    this.categories = const [],
-    this.isLoading = false,
-    this.error,
-    this.useInterests = false,
-  });
-
-  VersusLobbyState copyWith({
+@freezed
+abstract class VersusLobbyState with _$VersusLobbyState {
+  const factory VersusLobbyState({
     Category? category,
-    Difficulty? difficulty,
-    int? questionCount,
-    List<Category>? categories,
-    bool? isLoading,
+    @Default(Difficulty.medium) Difficulty difficulty,
+    @Default(10) int questionCount,
+    @Default([]) List<Category> categories,
+    @Default(false) bool isLoading,
     String? error,
-    bool? useInterests,
-  }) {
-    return VersusLobbyState(
-      category: category ?? this.category,
-      difficulty: difficulty ?? this.difficulty,
-      questionCount: questionCount ?? this.questionCount,
-      categories: categories ?? this.categories,
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      useInterests: useInterests ?? this.useInterests,
-    );
-  }
+    @Default(false) bool useInterests,
+    String? validationError,
+  }) = _VersusLobbyState;
 }
 
 class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
   @override
   VersusLobbyState build() {
-    _init();
+    Future.microtask(() => _init());
     return const VersusLobbyState();
   }
 
@@ -71,19 +49,50 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
         categories: categories,
         category: categories.isNotEmpty ? categories.first : null,
       );
+      _validate();
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
     }
   }
 
-  void updateCategory(Category category) => state = state.copyWith(category: category, useInterests: false);
-  void updateDifficulty(Difficulty diff) => state = state.copyWith(difficulty: diff);
-  void updateQuestionCount(int count) => state = state.copyWith(questionCount: count);
+  void updateCategory(Category category) {
+    state = state.copyWith(category: category, useInterests: false);
+    _validate();
+  }
+
+  void updateDifficulty(Difficulty diff) {
+    state = state.copyWith(difficulty: diff);
+    _validate();
+  }
+
+  void updateQuestionCount(int count) {
+    state = state.copyWith(questionCount: count);
+    _validate();
+  }
+
   void setUseInterests(bool value) {
     state = state.copyWith(useInterests: value);
     if (value) {
       state = state.copyWith(category: null);
     }
+    _validate();
+  }
+
+  void _validate() {
+    final player = ref.read(currentPlayerProvider);
+    final level = ref.read(currentCompetitiveLevelProvider);
+
+    String? validationError;
+
+    if (player == null) {
+      validationError = 'Player profile not found';
+    } else if (!state.useInterests && state.category == null) {
+      validationError = 'Please select a category';
+    } else if (state.difficulty == Difficulty.expert && level < 10) {
+      validationError = 'Level 10 required for Expert difficulty';
+    }
+
+    state = state.copyWith(validationError: validationError);
   }
 }
 

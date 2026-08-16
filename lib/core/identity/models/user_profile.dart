@@ -17,6 +17,7 @@ class UserProfile {
   final String timezone;
   final String language;
   final List<String> interests;
+  final String bio;
 
   const UserProfile({
     required this.firstName,
@@ -34,6 +35,7 @@ class UserProfile {
     this.timezone = 'Africa/Lagos',
     this.language = 'en',
     this.interests = const [],
+    this.bio = '',
   });
 
   String get fullName => '$firstName $lastName';
@@ -54,6 +56,7 @@ class UserProfile {
     String? timezone,
     String? language,
     List<String>? interests,
+    String? bio,
   }) {
     return UserProfile(
       firstName: firstName ?? this.firstName,
@@ -71,6 +74,7 @@ class UserProfile {
       timezone: timezone ?? this.timezone,
       language: language ?? this.language,
       interests: interests ?? this.interests,
+      bio: bio ?? this.bio,
     );
   }
 
@@ -91,6 +95,7 @@ class UserProfile {
       'timezone': timezone,
       'language': language,
       'interests': interests,
+      'bio': bio,
     };
   }
 }

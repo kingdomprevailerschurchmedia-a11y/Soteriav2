@@ -5,14 +5,18 @@ void main() {
   group('PersonalizationBridge', () {
     test('labelToCategoryId maps correctly', () {
       expect(PersonalizationBridge.labelToCategoryId('Science'), 'science');
-      expect(PersonalizationBridge.labelToCategoryId('Current Affairs'), 'current-affairs');
+      expect(PersonalizationBridge.labelToCategoryId('Current Affairs'), 'current_affairs');
       expect(PersonalizationBridge.labelToCategoryId('Unknown'), 'unknown');
     });
 
     test('categoryIdToLabel maps correctly', () {
       expect(PersonalizationBridge.categoryIdToLabel('science'), 'Science');
-      expect(PersonalizationBridge.categoryIdToLabel('current-affairs'), 'Current Affairs');
+      expect(PersonalizationBridge.categoryIdToLabel('current_affairs'), 'Current Affairs');
       expect(PersonalizationBridge.categoryIdToLabel('unknown'), 'Unknown');
+    });
+
+    test('legacy categoryIdToLabel maps correctly', () {
+      expect(PersonalizationBridge.categoryIdToLabel('current-affairs'), 'Current Affairs');
     });
   });
 }

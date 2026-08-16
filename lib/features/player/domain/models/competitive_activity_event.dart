@@ -6,6 +6,12 @@ part 'competitive_activity_event.g.dart';
 
 enum ActivityImportance { low, normal, high, milestone }
 
+enum ActivityVisibility {
+  public,
+  friends,
+  private,
+}
+
 @freezed
 abstract class CompetitiveActivityEvent with _$CompetitiveActivityEvent {
   const factory CompetitiveActivityEvent({
@@ -20,6 +26,7 @@ abstract class CompetitiveActivityEvent with _$CompetitiveActivityEvent {
     String? deepLink,
     @Default(ActivityImportance.normal) ActivityImportance importance,
     String? icon,
+    @Default(ActivityVisibility.public) ActivityVisibility visibility,
   }) = _CompetitiveActivityEvent;
 
   factory CompetitiveActivityEvent.fromJson(Map<String, dynamic> json) =>

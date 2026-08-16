@@ -54,6 +54,13 @@ class PlayerSearchResultCard extends ConsumerWidget {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
+                    if (profile.username.isNotEmpty)
+                      Text(
+                        '@${profile.username}',
+                        style: context.bodySmall.copyWith(
+                          color: SoteriaColors.muted,
+                        ),
+                      ),
                     if (profile.equippedTitle != null) ...[
                       SizedBox(height: SoteriaSpacing.xs),
                       CompetitiveTitleWidget(title: profile.equippedTitle!),

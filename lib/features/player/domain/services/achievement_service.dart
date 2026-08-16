@@ -59,15 +59,13 @@ class AchievementService {
       case AchievementRequirementType.gamesWon:
         return profile.gamesWon.toDouble();
       case AchievementRequirementType.streak:
-        return profile.highestStreak.toDouble();
+        return progression.longestStreak.toDouble();
       case AchievementRequirementType.accuracy:
         return profile.accuracy * 100;
       case AchievementRequirementType.correctAnswers:
         return profile.correctAnswers.toDouble();
       case AchievementRequirementType.score:
-        // For career total score, we might need a specific field in profile if not already there.
-        // Assuming 'xp' or a 'totalScore' exists. Profile has 'xp'.
-        return profile.xp.toDouble();
+        return progression.lifetimeXp.toDouble();
       case AchievementRequirementType.tournamentWin:
         // We'd need specific win tracking for tournaments if different from gamesWon.
         return profile.tournamentMatches.toDouble(); // Placeholder if no win count yet

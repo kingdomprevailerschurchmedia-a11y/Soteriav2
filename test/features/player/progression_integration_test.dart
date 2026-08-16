@@ -9,12 +9,17 @@ import 'package:soteria/features/player/domain/services/progression_service.dart
 
 import 'package:soteria/features/player/domain/services/competitive_ranking_engine.dart';
 
+import 'package:soteria/features/player/domain/repositories/leaderboard_repository.dart';
+import 'package:soteria/features/player/domain/repositories/player_repository.dart';
+
 @GenerateNiceMocks([
   MockSpec<FirebaseFirestore>(),
   MockSpec<CollectionReference<Map<String, dynamic>>>(),
   MockSpec<DocumentReference<Map<String, dynamic>>>(),
   MockSpec<DocumentSnapshot<Map<String, dynamic>>>(),
   MockSpec<QuerySnapshot<Map<String, dynamic>>>(),
+  MockSpec<LeaderboardRepository>(),
+  MockSpec<PlayerRepository>(),
 ])
 import 'progression_integration_test.mocks.dart';
 
@@ -22,6 +27,8 @@ void main() {
   late MockFirebaseFirestore mockFirestore;
   late MockCollectionReference mockCollection;
   late MockDocumentReference mockDoc;
+  late MockLeaderboardRepository mockLeaderboardRepository;
+  late MockPlayerRepository mockPlayerRepository;
   late ProgressionService progressionService;
   late FirebasePlayerProgressionRepository repository;
 
@@ -29,11 +36,15 @@ void main() {
     mockFirestore = MockFirebaseFirestore();
     mockCollection = MockCollectionReference();
     mockDoc = MockDocumentReference();
+    mockLeaderboardRepository = MockLeaderboardRepository();
+    mockPlayerRepository = MockPlayerRepository();
     progressionService = ProgressionService();
     repository = FirebasePlayerProgressionRepository(
       mockFirestore,
       progressionService,
       CompetitiveRankingEngine(),
+      mockLeaderboardRepository,
+      mockPlayerRepository,
     );
 
     when(

@@ -1,0 +1,800 @@
+[
+  {
+    "question": "Which primary colors are traditionally used in painting?",
+    "options": [
+      "Red, blue, and yellow",
+      "Red, green, and blue",
+      "Orange, green, and violet",
+      "Black, white, and gray"
+    ],
+    "correctAnswer": "Red, blue, and yellow",
+    "explanation": "In the traditional RYB color model used in art education, red, blue, and yellow are treated as the primary colors.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Who painted the Mona Lisa?",
+    "options": [
+      "Michelangelo",
+      "Leonardo da Vinci",
+      "Raphael",
+      "Donatello"
+    ],
+    "correctAnswer": "Leonardo da Vinci",
+    "explanation": "Leonardo da Vinci painted the Mona Lisa, one of the most famous works of the Italian Renaissance.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "The Louvre Museum"
+  },
+  {
+    "question": "Which art form involves creating images by applying pigment to a surface?",
+    "options": [
+      "Painting",
+      "Sculpture",
+      "Architecture",
+      "Choreography"
+    ],
+    "correctAnswer": "Painting",
+    "explanation": "Painting is a visual art form in which pigments are applied to surfaces to create images, designs, or expressions.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a sculpture?",
+    "options": [
+      "A three-dimensional work of art",
+      "A type of musical composition",
+      "A written dramatic performance",
+      "A photographic technique"
+    ],
+    "correctAnswer": "A three-dimensional work of art",
+    "explanation": "Sculpture is a visual art form involving three-dimensional objects created by carving, modeling, casting, assembling, or other techniques.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which instrument is commonly associated with classical orchestras and has black and white keys?",
+    "options": [
+      "Violin",
+      "Flute",
+      "Piano",
+      "Trumpet"
+    ],
+    "correctAnswer": "Piano",
+    "explanation": "The piano is a keyboard instrument widely used in classical music and many other musical genres.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which art form uses the human body as a medium for movement and expression?",
+    "options": [
+      "Dance",
+      "Painting",
+      "Sculpture",
+      "Printmaking"
+    ],
+    "correctAnswer": "Dance",
+    "explanation": "Dance uses bodily movement as a form of artistic expression, often incorporating rhythm, space, and choreography.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which art form involves creating images using a camera?",
+    "options": [
+      "Photography",
+      "Sculpture",
+      "Calligraphy",
+      "Ceramics"
+    ],
+    "correctAnswer": "Photography",
+    "explanation": "Photography is the art and practice of creating images by recording light with a camera or similar imaging device.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a portrait?",
+    "options": [
+      "An artwork depicting a person or people",
+      "A painting of only buildings",
+      "A sculpture of an animal only",
+      "A design made exclusively with geometric shapes"
+    ],
+    "correctAnswer": "An artwork depicting a person or people",
+    "explanation": "A portrait is an artistic representation of a person or group, traditionally intended to depict their appearance or identity.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which art movement is strongly associated with Claude Monet?",
+    "options": [
+      "Cubism",
+      "Impressionism",
+      "Surrealism",
+      "Pop Art"
+    ],
+    "correctAnswer": "Impressionism",
+    "explanation": "Claude Monet was a leading Impressionist painter known for works emphasizing light, color, and fleeting visual impressions.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Musée d'Orsay"
+  },
+  {
+    "question": "Which material is commonly used in traditional pottery?",
+    "options": [
+      "Clay",
+      "Steel",
+      "Glass fiber",
+      "Rubber"
+    ],
+    "correctAnswer": "Clay",
+    "explanation": "Traditional pottery is commonly made by shaping clay and then hardening it through firing.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Victoria and Albert Museum"
+  },
+  {
+    "question": "What is a canvas?",
+    "options": [
+      "A surface commonly used for painting",
+      "A type of musical instrument",
+      "A sculpture tool",
+      "A photography lens"
+    ],
+    "correctAnswer": "A surface commonly used for painting",
+    "explanation": "Canvas is a durable fabric commonly stretched over a frame and used as a surface for painting.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which art form involves arranging and performing sounds in an organized way?",
+    "options": [
+      "Music",
+      "Sculpture",
+      "Architecture",
+      "Photography"
+    ],
+    "correctAnswer": "Music",
+    "explanation": "Music is an art form that organizes sound and silence through elements such as rhythm, melody, harmony, and timbre.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which famous artist painted The Starry Night?",
+    "options": [
+      "Vincent van Gogh",
+      "Pablo Picasso",
+      "Edvard Munch",
+      "Paul Cézanne"
+    ],
+    "correctAnswer": "Vincent van Gogh",
+    "explanation": "Vincent van Gogh painted The Starry Night in 1889 while staying at the Saint-Paul-de-Mausole asylum in France.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is a mural?",
+    "options": [
+      "A work of art painted or applied directly to a wall or ceiling",
+      "A small sculpture made from metal",
+      "A handwritten musical score",
+      "A type of camera"
+    ],
+    "correctAnswer": "A work of art painted or applied directly to a wall or ceiling",
+    "explanation": "A mural is a large-scale artwork created directly on a wall, ceiling, or other permanent architectural surface.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which instrument normally has six strings and is widely used in popular music?",
+    "options": [
+      "Guitar",
+      "Trumpet",
+      "Clarinet",
+      "Trombone"
+    ],
+    "correctAnswer": "Guitar",
+    "explanation": "The standard guitar commonly has six strings and is used in numerous musical traditions and genres.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is theater?",
+    "options": [
+      "An art form involving live performance before an audience",
+      "A method of painting landscapes",
+      "A form of sculpture",
+      "A type of photography"
+    ],
+    "correctAnswer": "An art form involving live performance before an audience",
+    "explanation": "Theater is a performing art in which actors or performers present a story or artistic work before an audience.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which art movement is associated with Pablo Picasso and Georges Braque?",
+    "options": [
+      "Cubism",
+      "Impressionism",
+      "Baroque",
+      "Romanticism"
+    ],
+    "correctAnswer": "Cubism",
+    "explanation": "Pablo Picasso and Georges Braque were central figures in the development of Cubism in the early twentieth century.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is a still life?",
+    "options": [
+      "An artwork depicting arranged inanimate objects",
+      "A portrait of a dancer",
+      "A painting of a historical battle only",
+      "A sculpture of a living person"
+    ],
+    "correctAnswer": "An artwork depicting arranged inanimate objects",
+    "explanation": "Still-life art typically depicts arranged inanimate objects such as food, flowers, vessels, or household items.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which art form involves designing and constructing buildings?",
+    "options": [
+      "Architecture",
+      "Choreography",
+      "Sculpture",
+      "Photography"
+    ],
+    "correctAnswer": "Architecture",
+    "explanation": "Architecture involves the design and construction of buildings and other physical structures.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a sketch?",
+    "options": [
+      "A preliminary or quickly made drawing",
+      "A finished stone sculpture",
+      "A musical performance",
+      "A type of dance"
+    ],
+    "correctAnswer": "A preliminary or quickly made drawing",
+    "explanation": "A sketch is usually a quick or preliminary drawing used to capture an idea, observation, or composition.",
+    "categoryId": "arts",
+    "difficulty": "easy",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "What is perspective in visual art?",
+    "options": [
+      "A technique for representing depth and three-dimensional space",
+      "A method of mixing musical notes",
+      "A sculpture-making material",
+      "A form of theatrical dialogue"
+    ],
+    "correctAnswer": "A technique for representing depth and three-dimensional space",
+    "explanation": "Perspective techniques create the visual impression of depth and distance on a two-dimensional surface.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "What is chiaroscuro?",
+    "options": [
+      "The use of strong contrasts between light and dark",
+      "A method of sculpting marble",
+      "A type of musical rhythm",
+      "A technique for weaving fabric"
+    ],
+    "correctAnswer": "The use of strong contrasts between light and dark",
+    "explanation": "Chiaroscuro is an artistic technique that uses pronounced contrasts between light and shadow to create volume and drama.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which Renaissance artist created the ceiling frescoes of the Sistine Chapel?",
+    "options": [
+      "Michelangelo",
+      "Leonardo da Vinci",
+      "Raphael",
+      "Titian"
+    ],
+    "correctAnswer": "Michelangelo",
+    "explanation": "Michelangelo painted the famous ceiling frescoes of the Sistine Chapel in Vatican City between 1508 and 1512.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Vatican Museums"
+  },
+  {
+    "question": "What is a fresco?",
+    "options": [
+      "A painting made on freshly applied wet plaster",
+      "A sculpture carved from wood",
+      "A painting made exclusively on canvas",
+      "A digital illustration"
+    ],
+    "correctAnswer": "A painting made on freshly applied wet plaster",
+    "explanation": "In the traditional fresco technique, pigments are applied to wet plaster so the color becomes integrated with the surface as it dries.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which art movement emphasized dreams, the unconscious, and unexpected imagery?",
+    "options": [
+      "Surrealism",
+      "Neoclassicism",
+      "Realism",
+      "Minimalism"
+    ],
+    "correctAnswer": "Surrealism",
+    "explanation": "Surrealism explored dreams, the unconscious, and irrational or unexpected combinations of imagery.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is printmaking?",
+    "options": [
+      "The creation of images by transferring an image from a prepared surface",
+      "The painting of ceilings",
+      "The carving of statues only",
+      "The performance of music"
+    ],
+    "correctAnswer": "The creation of images by transferring an image from a prepared surface",
+    "explanation": "Printmaking encompasses techniques in which an image is created on a matrix and transferred to another surface, often paper.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which material is traditionally associated with many classical Greek and Renaissance sculptures?",
+    "options": [
+      "Marble",
+      "Plastic",
+      "Carbon fiber",
+      "Nylon"
+    ],
+    "correctAnswer": "Marble",
+    "explanation": "Marble was widely used by classical Greek and Renaissance sculptors because of its durability and ability to be finely carved.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "What is a monochromatic artwork?",
+    "options": [
+      "An artwork primarily using one color or color family",
+      "An artwork containing no lines",
+      "An artwork made only from sculpture",
+      "An artwork using every possible color equally"
+    ],
+    "correctAnswer": "An artwork primarily using one color or color family",
+    "explanation": "Monochromatic art uses one dominant hue and may employ different values, tones, or shades of that hue.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "What is complementary color in art?",
+    "options": [
+      "A color opposite another color on a color wheel",
+      "A lighter version of the same color",
+      "A color with no pigment",
+      "A color created only with black and white"
+    ],
+    "correctAnswer": "A color opposite another color on a color wheel",
+    "explanation": "Complementary colors are positioned opposite each other on a traditional color wheel and create strong visual contrast.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which artist is strongly associated with the painting Guernica?",
+    "options": [
+      "Pablo Picasso",
+      "Salvador Dalí",
+      "Henri Matisse",
+      "Wassily Kandinsky"
+    ],
+    "correctAnswer": "Pablo Picasso",
+    "explanation": "Pablo Picasso created Guernica in 1937 in response to the bombing of the Basque town during the Spanish Civil War.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Museo Nacional Centro de Arte Reina Sofía"
+  },
+  {
+    "question": "What is an art installation?",
+    "options": [
+      "An artwork arranged in a space so that the environment is part of the experience",
+      "A traditional portrait painted on canvas",
+      "A musical scale",
+      "A method of carving marble"
+    ],
+    "correctAnswer": "An artwork arranged in a space so that the environment is part of the experience",
+    "explanation": "Installation art often transforms or incorporates a physical space, inviting viewers to experience the work in relation to its environment.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which technique involves creating an image by arranging small pieces of colored material?",
+    "options": [
+      "Mosaic",
+      "Fresco",
+      "Etching",
+      "Lithography"
+    ],
+    "correctAnswer": "Mosaic",
+    "explanation": "Mosaic is an art technique in which small pieces of materials such as stone, glass, or ceramic are arranged to create an image or pattern.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Victoria and Albert Museum"
+  },
+  {
+    "question": "Which art movement is characterized by an interest in everyday commercial imagery and popular culture?",
+    "options": [
+      "Pop Art",
+      "Baroque",
+      "Romanticism",
+      "Gothic"
+    ],
+    "correctAnswer": "Pop Art",
+    "explanation": "Pop Art drew heavily from advertising, consumer products, celebrities, comics, and other elements of popular culture.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is an etching?",
+    "options": [
+      "A printmaking technique using acid to create lines in a metal plate",
+      "A method of painting with wet plaster",
+      "A type of dance movement",
+      "A method of shaping clay"
+    ],
+    "correctAnswer": "A printmaking technique using acid to create lines in a metal plate",
+    "explanation": "In traditional etching, acid is used to bite lines into a metal plate that can then be inked and printed.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "What is abstract art?",
+    "options": [
+      "Art that does not necessarily represent objects realistically",
+      "Art that must depict historical events",
+      "Art made only from photographs",
+      "Art created exclusively for religious buildings"
+    ],
+    "correctAnswer": "Art that does not necessarily represent objects realistically",
+    "explanation": "Abstract art reduces, transforms, or abandons direct representation in favor of elements such as color, shape, line, and form.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which artist is famous for Campbell's Soup Cans?",
+    "options": [
+      "Andy Warhol",
+      "Jackson Pollock",
+      "Roy Lichtenstein",
+      "Keith Haring"
+    ],
+    "correctAnswer": "Andy Warhol",
+    "explanation": "Andy Warhol's Campbell's Soup Cans series became a major example of American Pop Art.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is a triptych?",
+    "options": [
+      "An artwork made up of three panels",
+      "A sculpture with three heads",
+      "A painting using three colors only",
+      "A three-person musical performance"
+    ],
+    "correctAnswer": "An artwork made up of three panels",
+    "explanation": "A triptych is an artwork consisting of three panels that are usually connected or displayed together.",
+    "categoryId": "arts",
+    "difficulty": "medium",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which artistic period is associated with artists such as Caravaggio and dramatic use of light and shadow?",
+    "options": [
+      "Baroque",
+      "Impressionism",
+      "Cubism",
+      "Minimalism"
+    ],
+    "correctAnswer": "Baroque",
+    "explanation": "The Baroque period is associated with dramatic compositions, emotional intensity, movement, and strong contrasts of light and shadow.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is sfumato, a technique associated with Leonardo da Vinci?",
+    "options": [
+      "A subtle blending of tones without sharp outlines",
+      "A method of carving stone",
+      "A process of applying gold leaf",
+      "A form of geometric abstraction"
+    ],
+    "correctAnswer": "A subtle blending of tones without sharp outlines",
+    "explanation": "Sfumato creates soft transitions between colors and tones, reducing sharp outlines and producing atmospheric effects.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "The Louvre Museum"
+  },
+  {
+    "question": "Which artist painted The Persistence of Memory?",
+    "options": [
+      "Salvador Dalí",
+      "Joan Miró",
+      "René Magritte",
+      "Max Ernst"
+    ],
+    "correctAnswer": "Salvador Dalí",
+    "explanation": "Salvador Dalí painted The Persistence of Memory in 1931, a celebrated work of Surrealism featuring melting clocks.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is lithography?",
+    "options": [
+      "A printmaking process traditionally based on the repulsion of oil and water",
+      "A technique for carving marble",
+      "A method of painting with egg yolk",
+      "A form of photographic exposure"
+    ],
+    "correctAnswer": "A printmaking process traditionally based on the repulsion of oil and water",
+    "explanation": "Traditional lithography uses a flat stone or plate and relies on the chemical incompatibility of oil and water to create printable images.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which art movement is associated with Kazimir Malevich's geometric compositions and the concept of non-objective art?",
+    "options": [
+      "Suprematism",
+      "Impressionism",
+      "Fauvism",
+      "Rococo"
+    ],
+    "correctAnswer": "Suprematism",
+    "explanation": "Kazimir Malevich founded Suprematism, an abstract movement emphasizing basic geometric forms and pure artistic feeling.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "What is chiaroscuro primarily used to achieve in a painting?",
+    "options": [
+      "A sense of volume and dramatic lighting",
+      "A completely flat surface",
+      "A photographic effect without paint",
+      "A musical rhythm"
+    ],
+    "correctAnswer": "A sense of volume and dramatic lighting",
+    "explanation": "Strong contrasts between light and dark can model forms, create depth, and intensify dramatic effects.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which artist is closely associated with the abstract expressionist technique known as 'action painting'?",
+    "options": [
+      "Jackson Pollock",
+      "Claude Monet",
+      "Leonardo da Vinci",
+      "Gustav Klimt"
+    ],
+    "correctAnswer": "Jackson Pollock",
+    "explanation": "Jackson Pollock became famous for his drip and pour techniques, which are strongly associated with Abstract Expressionist action painting.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "What is the Golden Ratio in visual composition?",
+    "options": [
+      "A mathematical proportion approximately equal to 1.618",
+      "A rule requiring all artwork to use gold pigment",
+      "A ratio of exactly 1:1",
+      "A method for mixing three primary colors"
+    ],
+    "correctAnswer": "A mathematical proportion approximately equal to 1.618",
+    "explanation": "The Golden Ratio is a mathematical proportion approximately equal to 1.618 and has been discussed in relation to composition and design.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which movement was founded in the early 20th century by Filippo Tommaso Marinetti and celebrated speed, technology, and modernity?",
+    "options": [
+      "Futurism",
+      "Dada",
+      "Neoclassicism",
+      "Symbolism"
+    ],
+    "correctAnswer": "Futurism",
+    "explanation": "Italian Futurism emerged around 1909 through Marinetti's manifesto and celebrated modern technology, speed, energy, and dynamism.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which artist is known for the painting The Scream?",
+    "options": [
+      "Edvard Munch",
+      "Gustav Klimt",
+      "Egon Schiele",
+      "Paul Gauguin"
+    ],
+    "correctAnswer": "Edvard Munch",
+    "explanation": "Edvard Munch created several versions of The Scream, one of the most recognizable works associated with modern art and Expressionism.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "National Museum of Norway"
+  },
+  {
+    "question": "What is the term for a sculpture made by assembling existing objects or materials?",
+    "options": [
+      "Assemblage",
+      "Fresco",
+      "Sfumato",
+      "Tempera"
+    ],
+    "correctAnswer": "Assemblage",
+    "explanation": "Assemblage is a sculptural or three-dimensional art practice that combines found or existing objects and materials into a new work.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which technique involves applying pigment mixed with egg yolk as a binder?",
+    "options": [
+      "Tempera",
+      "Fresco",
+      "Encaustic",
+      "Lithography"
+    ],
+    "correctAnswer": "Tempera",
+    "explanation": "Traditional egg tempera uses pigment mixed with an aqueous binder, commonly egg yolk.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which architectural order is characterized by ornate capitals decorated with acanthus leaves?",
+    "options": [
+      "Doric",
+      "Ionic",
+      "Corinthian",
+      "Tuscan"
+    ],
+    "correctAnswer": "Corinthian",
+    "explanation": "The Corinthian order is distinguished by elaborate capitals traditionally decorated with stylized acanthus leaves.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is Dadaism primarily associated with?",
+    "options": [
+      "An anti-art movement challenging conventional artistic and cultural values",
+      "A revival of ancient Greek sculpture",
+      "A movement focused exclusively on realistic landscapes",
+      "A style of medieval church architecture"
+    ],
+    "correctAnswer": "An anti-art movement challenging conventional artistic and cultural values",
+    "explanation": "Dada emerged during World War I and challenged established ideas about art, reason, culture, and artistic institutions.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Museum of Modern Art"
+  },
+  {
+    "question": "Which Renaissance artist created the sculpture David now associated with Florence's Galleria dell'Accademia?",
+    "options": [
+      "Michelangelo",
+      "Donatello",
+      "Bernini",
+      "Verrocchio"
+    ],
+    "correctAnswer": "Michelangelo",
+    "explanation": "Michelangelo created his monumental marble David between 1501 and 1504; the sculpture is displayed at the Galleria dell'Accademia in Florence.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Galleria dell'Accademia di Firenze"
+  },
+  {
+    "question": "Which art movement emphasized emotional intensity and distorted forms rather than objective representation?",
+    "options": [
+      "Expressionism",
+      "Neoclassicism",
+      "Realism",
+      "Classicism"
+    ],
+    "correctAnswer": "Expressionism",
+    "explanation": "Expressionism prioritized subjective emotion and often used distortion, intense color, or exaggerated forms to convey inner experience.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "What is encaustic painting?",
+    "options": [
+      "Painting with pigments mixed into heated wax",
+      "Painting directly onto wet plaster",
+      "Painting exclusively with watercolors",
+      "Painting with pigments mixed only with oil"
+    ],
+    "correctAnswer": "Painting with pigments mixed into heated wax",
+    "explanation": "Encaustic painting uses pigments suspended in wax, traditionally beeswax, which is heated and applied to a surface.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "The Metropolitan Museum of Art"
+  },
+  {
+    "question": "Which artist is particularly associated with large-scale color field paintings?",
+    "options": [
+      "Mark Rothko",
+      "Albrecht Dürer",
+      "Diego Velázquez",
+      "Jan van Eyck"
+    ],
+    "correctAnswer": "Mark Rothko",
+    "explanation": "Mark Rothko is strongly associated with Color Field painting and large compositions featuring broad fields of luminous color.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "National Gallery of Art"
+  },
+  {
+    "question": "What is the term for the visual weight or distribution of elements within an artwork?",
+    "options": [
+      "Composition",
+      "Pigmentation",
+      "Texture",
+      "Perspective"
+    ],
+    "correctAnswer": "Composition",
+    "explanation": "Composition refers to the arrangement and organization of visual elements within an artwork.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Tate Art Terms"
+  },
+  {
+    "question": "Which artistic technique uses repeated small dots of pure color that visually blend when viewed from a distance?",
+    "options": [
+      "Pointillism",
+      "Sfumato",
+      "Chiaroscuro",
+      "Frottage"
+    ],
+    "correctAnswer": "Pointillism",
+    "explanation": "Pointillism builds images from small distinct dots or touches of color that can appear to blend optically at viewing distance.",
+    "categoryId": "arts",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  }
+]

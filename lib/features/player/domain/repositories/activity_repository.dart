@@ -7,6 +7,7 @@ abstract class ActivityRepository {
     List<String> userIds, {
     int limit = 20,
     CompetitiveActivityEvent? lastEvent,
+    List<ActivityVisibility>? visibilities,
   });
 
   /// Persists a new activity event.
@@ -16,5 +17,6 @@ abstract class ActivityRepository {
   Stream<List<CompetitiveActivityEvent>> watchSocialActivity(
     List<String> userIds, {
     int limit = 20,
+    List<ActivityVisibility>? visibilities,
   });
 }

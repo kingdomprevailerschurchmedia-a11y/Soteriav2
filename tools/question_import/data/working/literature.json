@@ -1,0 +1,758 @@
+[
+  {
+    "question": "Who wrote the novel \"Pride and Prejudice\"?",
+    "options": [
+      "Charlotte Brontë",
+      "Jane Austen",
+      "George Eliot",
+      "Emily Brontë"
+    ],
+    "correctAnswer": "Jane Austen",
+    "explanation": "Jane Austen wrote \"Pride and Prejudice,\" first published in 1813.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Romeo and Juliet\"?",
+    "options": [
+      "William Shakespeare",
+      "Christopher Marlowe",
+      "John Milton",
+      "Geoffrey Chaucer"
+    ],
+    "correctAnswer": "William Shakespeare",
+    "explanation": "\"Romeo and Juliet\" is one of William Shakespeare's most famous tragedies.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Things Fall Apart\"?",
+    "options": [
+      "Wole Soyinka",
+      "Chinua Achebe",
+      "Ngũgĩ wa Thiong'o",
+      "Ben Okri"
+    ],
+    "correctAnswer": "Chinua Achebe",
+    "explanation": "Chinua Achebe wrote \"Things Fall Apart,\" a landmark African novel published in 1958.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Great Gatsby\"?",
+    "options": [
+      "Ernest Hemingway",
+      "F. Scott Fitzgerald",
+      "John Steinbeck",
+      "Mark Twain"
+    ],
+    "correctAnswer": "F. Scott Fitzgerald",
+    "explanation": "F. Scott Fitzgerald wrote \"The Great Gatsby,\" which was published in 1925.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote the \"Harry Potter\" series?",
+    "options": [
+      "J.R.R. Tolkien",
+      "J.K. Rowling",
+      "C.S. Lewis",
+      "Philip Pullman"
+    ],
+    "correctAnswer": "J.K. Rowling",
+    "explanation": "J.K. Rowling is the author of the seven-book Harry Potter series.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Oliver Twist\"?",
+    "options": [
+      "Charles Dickens",
+      "Thomas Hardy",
+      "Oscar Wilde",
+      "George Orwell"
+    ],
+    "correctAnswer": "Charles Dickens",
+    "explanation": "Charles Dickens wrote \"Oliver Twist,\" which was originally published serially beginning in 1837.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Old Man and the Sea\"?",
+    "options": [
+      "Ernest Hemingway",
+      "F. Scott Fitzgerald",
+      "William Faulkner",
+      "John Steinbeck"
+    ],
+    "correctAnswer": "Ernest Hemingway",
+    "explanation": "Ernest Hemingway wrote \"The Old Man and the Sea,\" published in 1952.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Hobbit\"?",
+    "options": [
+      "C.S. Lewis",
+      "J.R.R. Tolkien",
+      "George R.R. Martin",
+      "J.K. Rowling"
+    ],
+    "correctAnswer": "J.R.R. Tolkien",
+    "explanation": "J.R.R. Tolkien wrote \"The Hobbit,\" first published in 1937.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Animal Farm\"?",
+    "options": [
+      "George Orwell",
+      "Aldous Huxley",
+      "H.G. Wells",
+      "Arthur Koestler"
+    ],
+    "correctAnswer": "George Orwell",
+    "explanation": "George Orwell wrote \"Animal Farm,\" a political allegorical novella published in 1945.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Jane Eyre\"?",
+    "options": [
+      "Emily Brontë",
+      "Anne Brontë",
+      "Charlotte Brontë",
+      "George Eliot"
+    ],
+    "correctAnswer": "Charlotte Brontë",
+    "explanation": "Charlotte Brontë wrote \"Jane Eyre,\" which was published in 1847.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What type of literary work is a sonnet?",
+    "options": [
+      "A short story",
+      "A 14-line poem",
+      "A dramatic play",
+      "A novel"
+    ],
+    "correctAnswer": "A 14-line poem",
+    "explanation": "A sonnet is traditionally a poem consisting of 14 lines, often following a specific rhyme scheme.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Poetry Foundation"
+  },
+  {
+    "question": "What is a protagonist?",
+    "options": [
+      "The main character in a story",
+      "The narrator's enemy",
+      "The author of a story",
+      "The setting of a story"
+    ],
+    "correctAnswer": "The main character in a story",
+    "explanation": "The protagonist is the central character whose experiences or goals typically drive the narrative.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a metaphor?",
+    "options": [
+      "A direct comparison without using 'like' or 'as'",
+      "A repeated sound at the beginning of words",
+      "An intentional exaggeration",
+      "A question requiring no answer"
+    ],
+    "correctAnswer": "A direct comparison without using 'like' or 'as'",
+    "explanation": "A metaphor describes one thing in terms of another to create a comparison or suggest a shared quality.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a biography?",
+    "options": [
+      "A fictional story about an invented character",
+      "An account of a person's life written by another person",
+      "A poem about nature",
+      "A collection of fictional stories"
+    ],
+    "correctAnswer": "An account of a person's life written by another person",
+    "explanation": "A biography is a factual account of someone's life written by another person.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Adventures of Tom Sawyer\"?",
+    "options": [
+      "Mark Twain",
+      "Jack London",
+      "Herman Melville",
+      "Ernest Hemingway"
+    ],
+    "correctAnswer": "Mark Twain",
+    "explanation": "Mark Twain wrote \"The Adventures of Tom Sawyer,\" published in 1876.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Lion, the Witch and the Wardrobe\"?",
+    "options": [
+      "J.R.R. Tolkien",
+      "C.S. Lewis",
+      "J.K. Rowling",
+      "Philip Pullman"
+    ],
+    "correctAnswer": "C.S. Lewis",
+    "explanation": "C.S. Lewis wrote \"The Lion, the Witch and the Wardrobe,\" the first published book in The Chronicles of Narnia.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Wuthering Heights\"?",
+    "options": [
+      "Charlotte Brontë",
+      "Emily Brontë",
+      "Anne Brontë",
+      "Jane Austen"
+    ],
+    "correctAnswer": "Emily Brontë",
+    "explanation": "Emily Brontë wrote \"Wuthering Heights,\" her only published novel.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the setting of a literary work?",
+    "options": [
+      "The central conflict",
+      "The time and place in which the story occurs",
+      "The author's biography",
+      "The ending of the story"
+    ],
+    "correctAnswer": "The time and place in which the story occurs",
+    "explanation": "Setting refers to the time, place, and broader circumstances in which a literary work takes place.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a novel?",
+    "options": [
+      "A long fictional prose narrative",
+      "A short poem",
+      "A stage direction",
+      "A historical document only"
+    ],
+    "correctAnswer": "A long fictional prose narrative",
+    "explanation": "A novel is an extended fictional narrative written primarily in prose.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Macbeth\"?",
+    "options": [
+      "William Shakespeare",
+      "John Donne",
+      "Christopher Marlowe",
+      "Ben Jonson"
+    ],
+    "correctAnswer": "William Shakespeare",
+    "explanation": "\"Macbeth\" is one of Shakespeare's major tragedies.",
+    "categoryId": "literature",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is a narrator?",
+    "options": [
+      "The voice or character that tells a story",
+      "The main conflict in a story",
+      "The publisher of a book",
+      "The location of a story"
+    ],
+    "correctAnswer": "The voice or character that tells a story",
+    "explanation": "A narrator is the voice or character through which a narrative is presented to the reader.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is dramatic irony?",
+    "options": [
+      "When the audience knows something a character does not know",
+      "When a story has no conflict",
+      "When a character tells a joke",
+      "When the ending is completely predictable"
+    ],
+    "correctAnswer": "When the audience knows something a character does not know",
+    "explanation": "Dramatic irony occurs when readers or viewers possess information that one or more characters lack.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"1984\"?",
+    "options": [
+      "George Orwell",
+      "Aldous Huxley",
+      "Ray Bradbury",
+      "Arthur C. Clarke"
+    ],
+    "correctAnswer": "George Orwell",
+    "explanation": "George Orwell wrote the dystopian novel \"1984,\" published in 1949.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Brave New World\"?",
+    "options": [
+      "George Orwell",
+      "Aldous Huxley",
+      "H.G. Wells",
+      "George Bernard Shaw"
+    ],
+    "correctAnswer": "Aldous Huxley",
+    "explanation": "Aldous Huxley wrote \"Brave New World,\" a dystopian novel published in 1932.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"One Hundred Years of Solitude\"?",
+    "options": [
+      "Gabriel García Márquez",
+      "Pablo Neruda",
+      "Jorge Luis Borges",
+      "Mario Vargas Llosa"
+    ],
+    "correctAnswer": "Gabriel García Márquez",
+    "explanation": "Colombian author Gabriel García Márquez wrote \"One Hundred Years of Solitude,\" published in 1967.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Divine Comedy\"?",
+    "options": [
+      "Dante Alighieri",
+      "Virgil",
+      "Petrarch",
+      "Giovanni Boccaccio"
+    ],
+    "correctAnswer": "Dante Alighieri",
+    "explanation": "Dante Alighieri wrote \"The Divine Comedy,\" an epic poem describing a journey through Hell, Purgatory, and Paradise.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which Shakespeare play features the character Hamlet?",
+    "options": [
+      "Macbeth",
+      "Hamlet",
+      "Othello",
+      "King Lear"
+    ],
+    "correctAnswer": "Hamlet",
+    "explanation": "\"Hamlet\" is Shakespeare's tragedy centered on Prince Hamlet of Denmark.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is alliteration?",
+    "options": [
+      "Repetition of initial consonant sounds",
+      "A comparison using 'like' or 'as'",
+      "A deliberate contradiction",
+      "A long narrative poem"
+    ],
+    "correctAnswer": "Repetition of initial consonant sounds",
+    "explanation": "Alliteration is the repetition of the same or similar consonant sounds at the beginnings of nearby words.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Poetry Foundation"
+  },
+  {
+    "question": "What is personification?",
+    "options": [
+      "Giving human qualities to nonhuman things",
+      "Repeating a phrase at the end of a poem",
+      "Using only literal language",
+      "Writing from a first-person perspective"
+    ],
+    "correctAnswer": "Giving human qualities to nonhuman things",
+    "explanation": "Personification attributes human characteristics, emotions, or actions to nonhuman entities.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Odyssey\"?",
+    "options": [
+      "Homer",
+      "Sophocles",
+      "Aristotle",
+      "Virgil"
+    ],
+    "correctAnswer": "Homer",
+    "explanation": "\"The Odyssey\" is traditionally attributed to the ancient Greek poet Homer.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Iliad\"?",
+    "options": [
+      "Homer",
+      "Plato",
+      "Virgil",
+      "Euripides"
+    ],
+    "correctAnswer": "Homer",
+    "explanation": "\"The Iliad\" is traditionally attributed to Homer and tells of events surrounding the Trojan War.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which Nigerian author wrote \"The Man Died\"?",
+    "options": [
+      "Chinua Achebe",
+      "Wole Soyinka",
+      "Ben Okri",
+      "Buchi Emecheta"
+    ],
+    "correctAnswer": "Wole Soyinka",
+    "explanation": "Wole Soyinka wrote \"The Man Died,\" a collection of prison notes based on his experiences during the Nigerian Civil War.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Nobel Prize"
+  },
+  {
+    "question": "Who wrote \"Half of a Yellow Sun\"?",
+    "options": [
+      "Chimamanda Ngozi Adichie",
+      "Buchi Emecheta",
+      "Helen Oyeyemi",
+      "Flora Nwapa"
+    ],
+    "correctAnswer": "Chimamanda Ngozi Adichie",
+    "explanation": "Chimamanda Ngozi Adichie wrote \"Half of a Yellow Sun,\" a novel set during the Nigerian-Biafran War.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What literary movement is associated with authors such as T.S. Eliot and James Joyce?",
+    "options": [
+      "Modernism",
+      "Romanticism",
+      "Realism",
+      "Classicism"
+    ],
+    "correctAnswer": "Modernism",
+    "explanation": "T.S. Eliot and James Joyce are major figures associated with literary modernism.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Poetry Foundation"
+  },
+  {
+    "question": "What is an allegory?",
+    "options": [
+      "A story in which characters and events represent deeper ideas",
+      "A poem with exactly fourteen lines",
+      "A story told only through dialogue",
+      "A factual account of a historical event"
+    ],
+    "correctAnswer": "A story in which characters and events represent deeper ideas",
+    "explanation": "An allegory uses characters, events, or settings to communicate symbolic meanings, often involving moral, political, or philosophical ideas.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"A Tale of Two Cities\"?",
+    "options": [
+      "Charles Dickens",
+      "Victor Hugo",
+      "Leo Tolstoy",
+      "Thomas Hardy"
+    ],
+    "correctAnswer": "Charles Dickens",
+    "explanation": "Charles Dickens wrote \"A Tale of Two Cities,\" set partly in London and Paris during the French Revolution.",
+    "categoryId": "literature",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which novel begins with the famous line about someone being 'dead to begin with'?",
+    "options": [
+      "Great Expectations",
+      "A Christmas Carol",
+      "David Copperfield",
+      "Oliver Twist"
+    ],
+    "correctAnswer": "A Christmas Carol",
+    "explanation": "Charles Dickens's \"A Christmas Carol\" famously begins by establishing that Jacob Marley is dead before introducing Ebenezer Scrooge.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Charles Dickens Museum"
+  },
+  {
+    "question": "What is an unreliable narrator?",
+    "options": [
+      "A narrator whose account cannot be fully trusted",
+      "A narrator who never appears in a story",
+      "A narrator who tells only historical facts",
+      "A narrator who writes poetry"
+    ],
+    "correctAnswer": "A narrator whose account cannot be fully trusted",
+    "explanation": "An unreliable narrator presents information in a way that causes readers to question the accuracy or completeness of the account.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Waiting for Godot\"?",
+    "options": [
+      "Samuel Beckett",
+      "Harold Pinter",
+      "Eugène Ionesco",
+      "Jean-Paul Sartre"
+    ],
+    "correctAnswer": "Samuel Beckett",
+    "explanation": "Irish playwright Samuel Beckett wrote \"Waiting for Godot,\" a major work of the Theatre of the Absurd.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which literary movement is strongly associated with William Wordsworth and Samuel Taylor Coleridge?",
+    "options": [
+      "Romanticism",
+      "Modernism",
+      "Naturalism",
+      "Postmodernism"
+    ],
+    "correctAnswer": "Romanticism",
+    "explanation": "Wordsworth and Coleridge were central figures in English Romantic poetry, particularly through their collection \"Lyrical Ballads.\"",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Poetry Foundation"
+  },
+  {
+    "question": "What is iambic pentameter?",
+    "options": [
+      "A poetic meter consisting typically of five iambic feet per line",
+      "A stanza containing exactly five poems",
+      "A rhyme scheme with five rhyming words",
+      "A poem containing five characters"
+    ],
+    "correctAnswer": "A poetic meter consisting typically of five iambic feet per line",
+    "explanation": "Iambic pentameter consists of five metrical feet, with each foot typically containing an unstressed syllable followed by a stressed syllable.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Poetry Foundation"
+  },
+  {
+    "question": "Who wrote \"Paradise Lost\"?",
+    "options": [
+      "John Milton",
+      "John Donne",
+      "Edmund Spenser",
+      "William Blake"
+    ],
+    "correctAnswer": "John Milton",
+    "explanation": "John Milton wrote \"Paradise Lost,\" an epic poem first published in 1667.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"The Waste Land\"?",
+    "options": [
+      "T.S. Eliot",
+      "W.B. Yeats",
+      "Ezra Pound",
+      "W.H. Auden"
+    ],
+    "correctAnswer": "T.S. Eliot",
+    "explanation": "T.S. Eliot wrote \"The Waste Land,\" one of the most influential poems of literary modernism.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Poetry Foundation"
+  },
+  {
+    "question": "Which novel by Leo Tolstoy centers on the characters Anna Karenina and Count Vronsky?",
+    "options": [
+      "War and Peace",
+      "Anna Karenina",
+      "The Death of Ivan Ilyich",
+      "Resurrection"
+    ],
+    "correctAnswer": "Anna Karenina",
+    "explanation": "Tolstoy's \"Anna Karenina\" follows the tragic relationship between Anna and Count Vronsky alongside other interconnected characters.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which author created the fictional detective Sherlock Holmes?",
+    "options": [
+      "Arthur Conan Doyle",
+      "Agatha Christie",
+      "G.K. Chesterton",
+      "Wilkie Collins"
+    ],
+    "correctAnswer": "Arthur Conan Doyle",
+    "explanation": "Sir Arthur Conan Doyle created Sherlock Holmes, who first appeared in \"A Study in Scarlet\" in 1887.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who wrote \"Beloved\"?",
+    "options": [
+      "Toni Morrison",
+      "Maya Angelou",
+      "Alice Walker",
+      "Zora Neale Hurston"
+    ],
+    "correctAnswer": "Toni Morrison",
+    "explanation": "Toni Morrison wrote \"Beloved,\" a novel dealing with the legacy of slavery and memory in the United States.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Nobel Prize"
+  },
+  {
+    "question": "Who wrote \"The Trial\"?",
+    "options": [
+      "Franz Kafka",
+      "Albert Camus",
+      "Fyodor Dostoevsky",
+      "Hermann Hesse"
+    ],
+    "correctAnswer": "Franz Kafka",
+    "explanation": "Franz Kafka wrote \"The Trial,\" a novel about Josef K., who becomes caught in an inexplicable legal process.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is stream of consciousness in literature?",
+    "options": [
+      "A technique that presents the continuous flow of a character's thoughts and perceptions",
+      "A method of describing only physical settings",
+      "A form of poetry with regular rhyme",
+      "A narrative written entirely in dialogue"
+    ],
+    "correctAnswer": "A technique that presents the continuous flow of a character's thoughts and perceptions",
+    "explanation": "Stream-of-consciousness writing attempts to represent the ongoing flow of thoughts, perceptions, memories, and associations within a character's mind.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which Nigerian author won the Nobel Prize in Literature in 1986?",
+    "options": [
+      "Chinua Achebe",
+      "Wole Soyinka",
+      "Ben Okri",
+      "Chimamanda Ngozi Adichie"
+    ],
+    "correctAnswer": "Wole Soyinka",
+    "explanation": "Wole Soyinka became the first African writer to receive the Nobel Prize in Literature in 1986.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Nobel Prize"
+  },
+  {
+    "question": "Who wrote \"The Canterbury Tales\"?",
+    "options": [
+      "Geoffrey Chaucer",
+      "William Langland",
+      "Thomas More",
+      "John Gower"
+    ],
+    "correctAnswer": "Geoffrey Chaucer",
+    "explanation": "Geoffrey Chaucer wrote \"The Canterbury Tales,\" a collection of stories told by pilgrims traveling to Canterbury.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which literary term describes a reference to another work, person, historical event, or cultural idea?",
+    "options": [
+      "Allusion",
+      "Onomatopoeia",
+      "Hyperbole",
+      "Euphemism"
+    ],
+    "correctAnswer": "Allusion",
+    "explanation": "An allusion is an indirect reference to a person, event, text, place, or cultural idea that the reader is expected to recognize.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which novel by Gabriel García Márquez is a major example of magical realism?",
+    "options": [
+      "One Hundred Years of Solitude",
+      "The House of the Spirits",
+      "Love in the Time of Cholera",
+      "The Autumn of the Patriarch"
+    ],
+    "correctAnswer": "One Hundred Years of Solitude",
+    "explanation": "\"One Hundred Years of Solitude\" blends realistic settings and historical events with supernatural and fantastical elements.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is an epic?",
+    "options": [
+      "A long narrative poem or work centered on heroic deeds and significant events",
+      "A short humorous poem",
+      "A dramatic speech delivered by a villain",
+      "A fictional diary"
+    ],
+    "correctAnswer": "A long narrative poem or work centered on heroic deeds and significant events",
+    "explanation": "An epic is an extended narrative traditionally focused on heroic figures and events of broad cultural or historical significance.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which Shakespeare tragedy features the characters Othello, Desdemona, and Iago?",
+    "options": [
+      "Othello",
+      "Hamlet",
+      "King Lear",
+      "Macbeth"
+    ],
+    "correctAnswer": "Othello",
+    "explanation": "Shakespeare's tragedy \"Othello\" centers on the Moorish general Othello, his wife Desdemona, and the manipulative Iago.",
+    "categoryId": "literature",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  }
+]

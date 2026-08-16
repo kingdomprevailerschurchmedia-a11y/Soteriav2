@@ -20,13 +20,17 @@ class FirebaseActivityRepository implements ActivityRepository {
     List<String> userIds, {
     int limit = 20,
     CompetitiveActivityEvent? lastEvent,
+    List<ActivityVisibility>? visibilities,
   }) async {
     if (userIds.isEmpty) return [];
 
     var query = _firestore.collectionGroup('competitive_activity')
-        .where('userId', whereIn: userIds.take(30).toList())
-        .orderBy('createdAt', descending: true)
-        .limit(limit);
+        .where('userId', whereIn: userIds.take(30).toList());
+
+    // We rely on security rules to filter unauthorized visibility states
+    // since Firestore only allows one 'whereIn' filter per query.
+
+    query = query.orderBy('createdAt', descending: true).limit(limit);
 
     if (lastEvent != null) {
       query = query.startAfter([lastEvent.createdAt]);
@@ -56,12 +60,10 @@ class FirebaseActivityRepository implements ActivityRepository {
   Stream<List<CompetitiveActivityEvent>> watchSocialActivity(
     List<String> userIds, {
     int limit = 20,
+    List<ActivityVisibility>? visibilities,
   }) {
     if (userIds.isEmpty) return Stream.value([]);
 
-    // Using collectionGroup to find activities across all users
-    // Then filtering by userId in the list. 
-    // In a high-scale app, we might want a flat root collection 'activities' with visibility rules.
     return _firestore.collectionGroup('competitive_activity')
         .where('userId', whereIn: userIds.take(30).toList())
         .orderBy('createdAt', descending: true)

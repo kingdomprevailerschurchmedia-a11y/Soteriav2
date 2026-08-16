@@ -1,0 +1,702 @@
+[
+  {
+    "question": "What is psychology primarily the scientific study of?",
+    "options": [
+      "Behavior and mental processes",
+      "The structure of the human body",
+      "The history of civilizations",
+      "The chemical composition of matter"
+    ],
+    "correctAnswer": "Behavior and mental processes",
+    "explanation": "Psychology is the scientific discipline concerned with behavior and mental processes.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "Which part of the brain is primarily associated with regulating basic functions such as breathing and heart rate?",
+    "options": [
+      "Brainstem",
+      "Hippocampus",
+      "Frontal lobe",
+      "Occipital lobe"
+    ],
+    "correctAnswer": "Brainstem",
+    "explanation": "The brainstem controls or contributes to several vital automatic functions, including breathing and heart rate.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "National Institute of Neurological Disorders and Stroke"
+  },
+  {
+    "question": "What is memory?",
+    "options": [
+      "The ability to encode, store, and retrieve information",
+      "The process of producing hormones",
+      "The ability to control muscle movement only",
+      "The process of digesting food"
+    ],
+    "correctAnswer": "The ability to encode, store, and retrieve information",
+    "explanation": "Memory involves processes through which information is encoded, stored, and later retrieved.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is perception?",
+    "options": [
+      "The process of organizing and interpreting sensory information",
+      "The process of producing blood cells",
+      "The storage of genetic information",
+      "The involuntary movement of muscles"
+    ],
+    "correctAnswer": "The process of organizing and interpreting sensory information",
+    "explanation": "Perception involves how the brain organizes and interprets information received through the senses.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "Which sense allows humans to detect sound?",
+    "options": [
+      "Hearing",
+      "Vision",
+      "Taste",
+      "Touch"
+    ],
+    "correctAnswer": "Hearing",
+    "explanation": "Hearing is the sensory process through which humans detect and interpret sound waves.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "National Institute on Deafness and Other Communication Disorders"
+  },
+  {
+    "question": "What is learning in psychology?",
+    "options": [
+      "A relatively lasting change in knowledge or behavior resulting from experience",
+      "A temporary change caused only by fatigue",
+      "The automatic regulation of heartbeat",
+      "The physical growth of bones"
+    ],
+    "correctAnswer": "A relatively lasting change in knowledge or behavior resulting from experience",
+    "explanation": "Psychological learning generally involves a relatively lasting change resulting from experience or practice.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is emotion?",
+    "options": [
+      "A complex response involving feelings, physiological changes, and behavior",
+      "A type of bone structure",
+      "A purely mathematical process",
+      "A form of digestion"
+    ],
+    "correctAnswer": "A complex response involving feelings, physiological changes, and behavior",
+    "explanation": "Emotions involve subjective experiences as well as physiological and behavioral responses.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "Which emotion is commonly associated with a perceived threat?",
+    "options": [
+      "Fear",
+      "Pride",
+      "Amusement",
+      "Contentment"
+    ],
+    "correctAnswer": "Fear",
+    "explanation": "Fear is an emotional response commonly associated with perceived danger or threat.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is motivation?",
+    "options": [
+      "The processes that initiate, guide, and sustain goal-directed behavior",
+      "The ability to hear sounds",
+      "The process of blood circulation",
+      "The physical growth of muscles"
+    ],
+    "correctAnswer": "The processes that initiate, guide, and sustain goal-directed behavior",
+    "explanation": "Motivation refers to processes that energize and direct behavior toward goals or desired outcomes.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is personality?",
+    "options": [
+      "A relatively enduring pattern of thoughts, feelings, and behaviors",
+      "A person's temporary blood pressure",
+      "A person's physical height",
+      "The number of friends someone has"
+    ],
+    "correctAnswer": "A relatively enduring pattern of thoughts, feelings, and behaviors",
+    "explanation": "Personality refers to characteristic patterns of thinking, feeling, and behaving that distinguish individuals.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "Which psychological process involves focusing mental resources on selected information?",
+    "options": [
+      "Attention",
+      "Digestion",
+      "Respiration",
+      "Circulation"
+    ],
+    "correctAnswer": "Attention",
+    "explanation": "Attention involves selectively concentrating mental resources on particular information or stimuli.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is a stimulus?",
+    "options": [
+      "Something that can produce a response in an organism",
+      "A type of personality disorder",
+      "A form of long-term memory",
+      "A biological organ"
+    ],
+    "correctAnswer": "Something that can produce a response in an organism",
+    "explanation": "In psychology, a stimulus is an event or object capable of eliciting a response.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is behavior?",
+    "options": [
+      "An observable action or response of an individual",
+      "Only a person's private thoughts",
+      "Only biological inheritance",
+      "The chemical structure of a neuron"
+    ],
+    "correctAnswer": "An observable action or response of an individual",
+    "explanation": "Behavior generally refers to observable actions or responses produced by an individual or organism.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is stress?",
+    "options": [
+      "A physical or psychological response to challenging or demanding circumstances",
+      "A permanent personality trait",
+      "A type of memory",
+      "A form of intelligence"
+    ],
+    "correctAnswer": "A physical or psychological response to challenging or demanding circumstances",
+    "explanation": "Stress can involve psychological and physiological responses when demands are perceived as challenging or threatening.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is empathy?",
+    "options": [
+      "The ability to understand or share another person's emotional experience",
+      "The ability to memorize numbers rapidly",
+      "The fear of social interaction",
+      "The inability to recognize emotions"
+    ],
+    "correctAnswer": "The ability to understand or share another person's emotional experience",
+    "explanation": "Empathy involves understanding another person's perspective or emotional experience and can include an affective response to it.",
+    "categoryId": "psychology",
+    "difficulty": "easy",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is classical conditioning?",
+    "options": [
+      "Learning through association between stimuli",
+      "Learning exclusively through reading",
+      "Learning caused only by biological growth",
+      "Learning through mathematical calculation"
+    ],
+    "correctAnswer": "Learning through association between stimuli",
+    "explanation": "Classical conditioning occurs when an initially neutral stimulus becomes associated with a stimulus that naturally produces a response.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who is most closely associated with classical conditioning experiments involving dogs?",
+    "options": [
+      "Ivan Pavlov",
+      "Abraham Maslow",
+      "Jean Piaget",
+      "Carl Rogers"
+    ],
+    "correctAnswer": "Ivan Pavlov",
+    "explanation": "Russian physiologist Ivan Pavlov conducted influential experiments demonstrating classical conditioning in dogs.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is operant conditioning?",
+    "options": [
+      "Learning in which consequences influence the likelihood of behavior",
+      "Learning exclusively through dreams",
+      "Learning through genetic inheritance",
+      "Learning that occurs without experience"
+    ],
+    "correctAnswer": "Learning in which consequences influence the likelihood of behavior",
+    "explanation": "Operant conditioning explains how behaviors can become more or less likely depending on their consequences.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Who is strongly associated with operant conditioning?",
+    "options": [
+      "B. F. Skinner",
+      "Sigmund Freud",
+      "Carl Jung",
+      "William James"
+    ],
+    "correctAnswer": "B. F. Skinner",
+    "explanation": "B. F. Skinner was a major psychologist in the development and study of operant conditioning.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is positive reinforcement?",
+    "options": [
+      "Adding a desirable consequence to increase a behavior",
+      "Removing a desirable consequence to decrease a behavior",
+      "Adding an unpleasant consequence to increase a behavior",
+      "Ignoring every behavior"
+    ],
+    "correctAnswer": "Adding a desirable consequence to increase a behavior",
+    "explanation": "Positive reinforcement increases behavior by presenting a consequence that is desirable to the individual.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is negative reinforcement?",
+    "options": [
+      "Removing an unpleasant stimulus to increase a behavior",
+      "Adding an unpleasant stimulus to increase a behavior",
+      "Removing a pleasant stimulus to increase a behavior",
+      "Punishing every behavior"
+    ],
+    "correctAnswer": "Removing an unpleasant stimulus to increase a behavior",
+    "explanation": "Negative reinforcement increases a behavior by removing or preventing an aversive stimulus after the behavior occurs.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is punishment in operant conditioning?",
+    "options": [
+      "A consequence intended to reduce the likelihood of a behavior",
+      "A reward designed to increase behavior",
+      "A process of forming memories",
+      "A method of measuring intelligence"
+    ],
+    "correctAnswer": "A consequence intended to reduce the likelihood of a behavior",
+    "explanation": "In operant conditioning, punishment refers to consequences that decrease the likelihood of a behavior.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is observational learning?",
+    "options": [
+      "Learning by watching and modeling the behavior of others",
+      "Learning without observing any behavior",
+      "Learning only through punishment",
+      "Learning exclusively during sleep"
+    ],
+    "correctAnswer": "Learning by watching and modeling the behavior of others",
+    "explanation": "Observational learning occurs when people acquire behaviors or information by observing others and their consequences.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "Who is strongly associated with social learning theory?",
+    "options": [
+      "Albert Bandura",
+      "Ivan Pavlov",
+      "Sigmund Freud",
+      "Edward Thorndike"
+    ],
+    "correctAnswer": "Albert Bandura",
+    "explanation": "Albert Bandura developed social learning theory, emphasizing learning through observation, imitation, and social interaction.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is short-term memory?",
+    "options": [
+      "A system that temporarily holds information for immediate use",
+      "A permanent record of every experience",
+      "A form of unconscious motivation",
+      "A type of sensory organ"
+    ],
+    "correctAnswer": "A system that temporarily holds information for immediate use",
+    "explanation": "Short-term memory temporarily maintains a limited amount of information for immediate processing or use.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is long-term memory?",
+    "options": [
+      "The relatively enduring storage of information",
+      "A temporary sensory response",
+      "A form of muscle movement",
+      "A type of emotional reflex"
+    ],
+    "correctAnswer": "The relatively enduring storage of information",
+    "explanation": "Long-term memory refers to the relatively enduring storage of information over extended periods.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is confirmation bias?",
+    "options": [
+      "The tendency to favor information that supports existing beliefs",
+      "The ability to remember every detail accurately",
+      "The tendency to avoid all decisions",
+      "The inability to form opinions"
+    ],
+    "correctAnswer": "The tendency to favor information that supports existing beliefs",
+    "explanation": "Confirmation bias involves preferentially seeking, interpreting, or remembering information that is consistent with existing beliefs.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is cognitive dissonance?",
+    "options": [
+      "Psychological discomfort resulting from inconsistent beliefs, attitudes, or behaviors",
+      "A complete absence of emotion",
+      "The inability to learn new information",
+      "A type of sensory perception"
+    ],
+    "correctAnswer": "Psychological discomfort resulting from inconsistent beliefs, attitudes, or behaviors",
+    "explanation": "Cognitive dissonance refers to psychological discomfort that can occur when a person holds conflicting cognitions or behaves inconsistently with their beliefs.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is an intrinsic motivation?",
+    "options": [
+      "Motivation arising from enjoyment or interest in the activity itself",
+      "Motivation caused only by money",
+      "Motivation caused exclusively by punishment",
+      "Motivation resulting from physical exhaustion"
+    ],
+    "correctAnswer": "Motivation arising from enjoyment or interest in the activity itself",
+    "explanation": "Intrinsic motivation occurs when an activity is pursued because it is inherently interesting, enjoyable, or satisfying.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is extrinsic motivation?",
+    "options": [
+      "Motivation driven by external rewards or consequences",
+      "Motivation that comes only from curiosity",
+      "Motivation caused by sleep",
+      "Motivation that does not involve goals"
+    ],
+    "correctAnswer": "Motivation driven by external rewards or consequences",
+    "explanation": "Extrinsic motivation involves engaging in behavior because of external rewards, recognition, requirements, or consequences.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is the placebo effect?",
+    "options": [
+      "A beneficial or perceived beneficial response associated with receiving an inactive treatment",
+      "A permanent cure produced by every medication",
+      "A form of genetic inheritance",
+      "A type of memory loss"
+    ],
+    "correctAnswer": "A beneficial or perceived beneficial response associated with receiving an inactive treatment",
+    "explanation": "The placebo effect refers to changes in symptoms or outcomes associated with expectations or other effects of receiving an inactive treatment.",
+    "categoryId": "psychology",
+    "difficulty": "medium",
+    "source": "National Center for Complementary and Integrative Health"
+  },
+  {
+    "question": "What is the fundamental attribution error?",
+    "options": [
+      "The tendency to overemphasize personal factors when explaining others' behavior",
+      "The tendency to forget one's own name",
+      "The inability to recognize faces",
+      "The tendency to avoid social interaction"
+    ],
+    "correctAnswer": "The tendency to overemphasize personal factors when explaining others' behavior",
+    "explanation": "The fundamental attribution error describes a tendency to emphasize dispositional factors and underestimate situational factors when explaining other people's behavior.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is the self-serving bias?",
+    "options": [
+      "The tendency to attribute successes to oneself and failures to external factors",
+      "The tendency to remember failures more accurately than successes",
+      "The tendency to avoid all personal responsibility",
+      "The tendency to agree with everyone"
+    ],
+    "correctAnswer": "The tendency to attribute successes to oneself and failures to external factors",
+    "explanation": "Self-serving bias involves interpreting outcomes in ways that protect or enhance one's self-image, such as attributing success internally and failure externally.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is the availability heuristic?",
+    "options": [
+      "Judging the likelihood of an event partly by how easily examples come to mind",
+      "Making decisions only after calculating exact probabilities",
+      "Ignoring all memories when making decisions",
+      "Learning exclusively through reinforcement"
+    ],
+    "correctAnswer": "Judging the likelihood of an event partly by how easily examples come to mind",
+    "explanation": "The availability heuristic is a mental shortcut in which people estimate likelihood or frequency partly based on how readily relevant examples can be recalled.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the representativeness heuristic?",
+    "options": [
+      "Judging something by how closely it appears to match a mental prototype",
+      "Estimating probability only through statistical calculation",
+      "Remembering every previous experience",
+      "Choosing the most expensive option"
+    ],
+    "correctAnswer": "Judging something by how closely it appears to match a mental prototype",
+    "explanation": "The representativeness heuristic involves making judgments based on perceived similarity to a prototype or category.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the anchoring effect?",
+    "options": [
+      "The tendency for an initial piece of information to influence subsequent judgments",
+      "The tendency to forget recent information",
+      "The inability to make numerical judgments",
+      "The tendency to reject the first information encountered"
+    ],
+    "correctAnswer": "The tendency for an initial piece of information to influence subsequent judgments",
+    "explanation": "Anchoring occurs when an initial value or piece of information influences later judgments, even when the anchor may not be objectively relevant.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is working memory?",
+    "options": [
+      "A limited-capacity system for temporarily holding and manipulating information",
+      "A permanent storage system with unlimited capacity",
+      "A type of emotional response",
+      "A mechanism responsible only for reflexes"
+    ],
+    "correctAnswer": "A limited-capacity system for temporarily holding and manipulating information",
+    "explanation": "Working memory allows information to be temporarily maintained and actively manipulated during cognitive tasks.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "Which brain structure is strongly associated with forming new declarative memories?",
+    "options": [
+      "Hippocampus",
+      "Medulla",
+      "Cerebellum",
+      "Hypothalamus"
+    ],
+    "correctAnswer": "Hippocampus",
+    "explanation": "The hippocampus plays a crucial role in the formation and consolidation of new declarative memories.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "National Institute of Neurological Disorders and Stroke"
+  },
+  {
+    "question": "Which brain region is strongly associated with planning, decision-making, and cognitive control?",
+    "options": [
+      "Prefrontal cortex",
+      "Occipital cortex",
+      "Medulla",
+      "Primary auditory cortex"
+    ],
+    "correctAnswer": "Prefrontal cortex",
+    "explanation": "The prefrontal cortex is involved in executive functions including planning, decision-making, working memory, and cognitive control.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "National Institute of Mental Health"
+  },
+  {
+    "question": "What is neuroplasticity?",
+    "options": [
+      "The brain's ability to change its structure or function in response to experience or other factors",
+      "The inability of neurons to change",
+      "The production of red blood cells in the brain",
+      "The process of permanently stopping brain activity"
+    ],
+    "correctAnswer": "The brain's ability to change its structure or function in response to experience or other factors",
+    "explanation": "Neuroplasticity refers to the nervous system's capacity to change its structure and function in response to experience, learning, injury, or other influences.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "National Institute of Neurological Disorders and Stroke"
+  },
+  {
+    "question": "What is classical extinction in conditioning?",
+    "options": [
+      "The weakening of a conditioned response when the conditioned stimulus is repeatedly presented without the unconditioned stimulus",
+      "The permanent strengthening of every conditioned response",
+      "The creation of a new biological reflex",
+      "The removal of all memories"
+    ],
+    "correctAnswer": "The weakening of a conditioned response when the conditioned stimulus is repeatedly presented without the unconditioned stimulus",
+    "explanation": "In classical conditioning, extinction occurs when a conditioned stimulus is repeatedly presented without the stimulus that previously produced the unconditioned response, causing the conditioned response to weaken.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is generalization in classical conditioning?",
+    "options": [
+      "Responding to stimuli that resemble the conditioned stimulus",
+      "Responding only to one exact stimulus",
+      "Forgetting the conditioned response immediately",
+      "Learning without any stimulus"
+    ],
+    "correctAnswer": "Responding to stimuli that resemble the conditioned stimulus",
+    "explanation": "Stimulus generalization occurs when a conditioned response extends to stimuli that resemble the original conditioned stimulus.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is discrimination in classical conditioning?",
+    "options": [
+      "Learning to respond differently to stimuli that are similar but distinct",
+      "Responding identically to every stimulus",
+      "Forgetting all conditioned responses",
+      "Learning without sensory information"
+    ],
+    "correctAnswer": "Learning to respond differently to stimuli that are similar but distinct",
+    "explanation": "Stimulus discrimination involves learning to distinguish the conditioned stimulus from other similar stimuli.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is the bystander effect?",
+    "options": [
+      "The tendency for individuals to be less likely to help when other people are present",
+      "The tendency to help more when nobody is watching",
+      "A person's inability to recognize emergencies",
+      "A form of memory loss"
+    ],
+    "correctAnswer": "The tendency for individuals to be less likely to help when other people are present",
+    "explanation": "The bystander effect describes a reduced likelihood of helping behavior in some emergencies when other potential helpers are present.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is groupthink?",
+    "options": [
+      "A group decision-making process in which the desire for consensus can discourage critical evaluation",
+      "A method for measuring intelligence",
+      "A form of individual memory",
+      "A technique for increasing physical strength"
+    ],
+    "correctAnswer": "A group decision-making process in which the desire for consensus can discourage critical evaluation",
+    "explanation": "Groupthink occurs when the pursuit of group agreement can suppress dissent, critical evaluation, or consideration of alternatives.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is cognitive behavioral therapy (CBT)?",
+    "options": [
+      "A psychological treatment that focuses on connections among thoughts, feelings, and behaviors",
+      "A surgical procedure for treating brain injuries",
+      "A method of measuring IQ only",
+      "A form of physical exercise"
+    ],
+    "correctAnswer": "A psychological treatment that focuses on connections among thoughts, feelings, and behaviors",
+    "explanation": "CBT is a form of psychological treatment that addresses patterns of thinking and behavior that contribute to emotional or psychological difficulties.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "National Institute of Mental Health"
+  },
+  {
+    "question": "What is classical conditioning's unconditioned stimulus?",
+    "options": [
+      "A stimulus that naturally produces a response without prior conditioning",
+      "A stimulus that produces a response only after extensive training",
+      "A stimulus that never produces a response",
+      "A stimulus that is always neutral"
+    ],
+    "correctAnswer": "A stimulus that naturally produces a response without prior conditioning",
+    "explanation": "An unconditioned stimulus naturally elicits an unconditioned response without requiring prior learning.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is a conditioned stimulus?",
+    "options": [
+      "A previously neutral stimulus that comes to elicit a learned response after association",
+      "A stimulus that always produces an innate response",
+      "A stimulus that cannot be perceived",
+      "A stimulus that only affects muscles"
+    ],
+    "correctAnswer": "A previously neutral stimulus that comes to elicit a learned response after association",
+    "explanation": "A conditioned stimulus begins as neutral but acquires the ability to elicit a response after being associated with an unconditioned stimulus.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  },
+  {
+    "question": "What is the placebo control used for in many clinical trials?",
+    "options": [
+      "To help distinguish treatment effects from effects associated with receiving an inactive treatment",
+      "To guarantee that every participant improves",
+      "To eliminate the need for randomization",
+      "To increase the dose of the active treatment"
+    ],
+    "correctAnswer": "To help distinguish treatment effects from effects associated with receiving an inactive treatment",
+    "explanation": "A placebo control can help researchers determine whether observed outcomes are attributable to the active treatment rather than expectations or other nonspecific effects.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "National Institutes of Health"
+  },
+  {
+    "question": "What is the difference between correlation and causation?",
+    "options": [
+      "Correlation indicates an association, whereas causation means one factor contributes to producing a change in another",
+      "Correlation always proves causation",
+      "Causation means two variables are unrelated",
+      "Correlation can only occur in laboratory experiments"
+    ],
+    "correctAnswer": "Correlation indicates an association, whereas causation means one factor contributes to producing a change in another",
+    "explanation": "Correlation describes a relationship between variables, but by itself it does not establish that changes in one variable cause changes in another.",
+    "categoryId": "psychology",
+    "difficulty": "hard",
+    "source": "American Psychological Association"
+  }
+]

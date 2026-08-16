@@ -19,6 +19,24 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
         state = state.copyWith(countdown: seconds);
       }
     });
+
+    // Auto-initialize for email verification if user is already logged in
+    if (_type == VerificationType.emailVerification) {
+      _initEmailVerification();
+    }
+  }
+
+  void _initEmailVerification() {
+    final user = _ref.read(authDataSourceProvider).currentUser;
+    if (user != null && user.email != null) {
+      state = state.copyWith(
+        target: user.email!,
+        step: VerificationStep.sent,
+      );
+      // Automatically trigger the verification request to be sure
+      // and to start the countdown.
+      Future.microtask(() => submitRequest());
+    }
   }
 
   void updateTarget(String target) {

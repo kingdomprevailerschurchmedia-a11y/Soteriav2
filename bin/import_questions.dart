@@ -4,20 +4,42 @@ import 'package:firedart/firedart.dart';
 import 'package:soteria/features/question_content/data/models/question_dto.dart';
 import 'package:soteria/features/question_content/data/mappers/question_mapper.dart';
 import 'package:soteria/features/question_content/data/validators/question_validator.dart';
-import 'package:soteria/features/question_content/domain/entities/question.dart';
+import 'package:soteria/core/network/firebase_admin_interop.dart';
 
 // Standalone script for physical Firestore import.
-// Usage: dart run bin/import_questions.dart [path_to_json] [--execute]
+// Usage: dart run bin/import_questions.dart [path_to_json] [--execute] [--auth <email>:<password>]
 
 void main(List<String> args) async {
   if (args.isEmpty) {
-    print('Usage: dart run bin/import_questions.dart <path_to_json> [--execute]');
+    print('Usage: dart run bin/import_questions.dart <path_to_json> [--execute] [--auth <email>:<password>]');
     return;
   }
 
   final path = args[0];
   final execute = args.contains('--execute');
+  
+  String? authEmail;
+  String? authPassword;
+  
+  final authIdx = args.indexOf('--auth');
+  if (authIdx != -1 && args.length > authIdx + 1) {
+    final credentials = args[authIdx + 1].split(':');
+    if (credentials.length == 2) {
+      authEmail = credentials[0];
+      authPassword = credentials[1];
+    }
+  }
+
   const projectId = 'soteriav2-b4042';
+  const apiKey = 'AIzaSyAo1el2cRS6VtggUY9FgXexDIe1f0ElAwo'; // From firebase_options.dart
+
+  // Initialize Admin Interop (Service Account) if available via environment variable
+  FirebaseAdminInterop? admin;
+  try {
+    admin = await FirebaseAdminInterop.initialize();
+  } catch (e) {
+    print('WARNING: Failed to initialize Admin SDK: $e');
+  }
 
   print('============================================================');
   print('SOTERIA — PRODUCTION QUESTION IMPORT');
@@ -26,11 +48,35 @@ void main(List<String> args) async {
   print('Collection:  questions');
   print('Target File: $path');
   print('Mode:        ${execute ? "EXECUTE (PHYSICAL WRITE)" : "DRY RUN"}');
+  
+  if (admin != null) {
+    print('Auth Source: Service Account (ADC)');
+    print('Admin Email: ${admin.serviceAccountEmail}');
+  } else if (authEmail != null) {
+    print('Auth Source: Client Firebase Auth');
+    print('User Email:  $authEmail');
+  } else {
+    print('Auth Source: Unauthenticated (Read-only if rules allow)');
+  }
   print('============================================================');
 
   try {
-    // 1. Initialize Firestore
+    // 1. Initialize Firebase Auth and Sign In if provided (Fallback for non-admin)
+    if (authEmail != null && authPassword != null) {
+      FirebaseAuth.initialize(apiKey, VolatileStore());
+      await FirebaseAuth.instance.signIn(authEmail, authPassword);
+      print('Successfully authenticated as user.');
+    }
+
+    // 2. Initialize Firestore (Firedart fallback)
     Firestore.initialize(projectId);
+
+    // 3. Pre-flight connectivity check for Admin SDK if executing
+    if (execute && admin != null) {
+      print('Verifying Admin Connectivity...');
+      await admin.verifyConnectivity();
+      print('Admin connectivity verified.');
+    }
 
     final file = File(path);
     if (!file.existsSync()) {
@@ -87,16 +133,29 @@ void main(List<String> args) async {
         }
 
         // Firestore existence check
+        bool exists = false;
         try {
-          final doc = await Firestore.instance.collection('questions').document(dto.id).get();
-          if (doc != null) {
-            existingInFirestore++;
-            // We do not overwrite existing questions
-            continue;
+          if (admin != null) {
+            // Admin SDK bypasses rules
+            final docPath = 'projects/$projectId/databases/(default)/documents/questions/${dto.id}';
+            await admin.api.projects.databases.documents.get(docPath);
+            exists = true;
+          } else {
+            // Firedart fallback (subject to rules)
+            final doc = await Firestore.instance.collection('questions').document(dto.id).get();
+            exists = doc != null;
           }
         } catch (e) {
-          // If permission denied here, we'll likely fail on write too.
-          // In some setups, read might be restricted while write is allowed for admins.
+          // If 404/NotFound, document doesn't exist.
+          // Firedart returns null on not found. 
+          // googleapis throws DetailedApiRequestError with 404.
+          exists = false;
+        }
+
+        if (exists) {
+          existingInFirestore++;
+          // We do not overwrite existing questions
+          continue;
         }
 
         valid++;
@@ -137,7 +196,14 @@ void main(List<String> args) async {
           dataMap.remove('id');
           
           // 3. Physical write
-          await Firestore.instance.collection('questions').document(q.id).set(dataMap);
+          if (admin != null) {
+            // Use Admin SDK (Bypasses rules)
+            await admin.writeQuestion(q.id, dataMap);
+          } else {
+            // Use Firedart (Subject to rules)
+            await Firestore.instance.collection('questions').document(q.id).set(dataMap);
+          }
+          
           successCount++;
           print('  [CREATED] ${q.id}');
         } catch (e) {

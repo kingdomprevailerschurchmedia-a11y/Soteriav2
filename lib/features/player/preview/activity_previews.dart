@@ -42,6 +42,16 @@ class ActivityPreviews {
         importance: ActivityImportance.high,
       ),
       CompetitiveActivityEvent(
+        id: 'friend_1',
+        userId: 'u1',
+        type: CompetitiveEventType.friendshipEstablished,
+        title: 'New Connection!',
+        description: 'You are now friends with Jordan.',
+        createdAt: now.subtract(const Duration(minutes: 10)),
+        metadata: {'friendId': 'friend_jordan'},
+        importance: ActivityImportance.normal,
+      ),
+      CompetitiveActivityEvent(
         id: 'challenge_1',
         userId: 'friend_jordan',
         type: CompetitiveEventType.challengeCompleted,

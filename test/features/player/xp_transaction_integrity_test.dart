@@ -7,11 +7,16 @@ import 'package:soteria/features/player/data/repositories/firebase_player_progre
 import 'package:soteria/features/player/domain/services/progression_service.dart';
 import 'package:soteria/features/player/domain/services/competitive_ranking_engine.dart';
 
+import 'package:soteria/features/player/domain/repositories/leaderboard_repository.dart';
+import 'package:soteria/features/player/domain/repositories/player_repository.dart';
+
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 class MockCollectionReference extends Mock implements CollectionReference<Map<String, dynamic>> {}
 class MockDocumentReference extends Mock implements DocumentReference<Map<String, dynamic>> {}
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot<Map<String, dynamic>> {}
 class MockTransaction extends Mock implements Transaction {}
+class MockLeaderboardRepository extends Mock implements LeaderboardRepository {}
+class MockPlayerRepository extends Mock implements PlayerRepository {}
 
 class FakeDocumentReference extends Fake implements DocumentReference<Map<String, dynamic>> {}
 
@@ -24,6 +29,8 @@ void main() {
   late MockDocumentSnapshot mockProgressionSnapshot;
   late MockDocumentSnapshot mockXpTxSnapshot;
   late MockTransaction mockTransaction;
+  late MockLeaderboardRepository mockLeaderboardRepository;
+  late MockPlayerRepository mockPlayerRepository;
   late ProgressionService progressionService;
   late FirebasePlayerProgressionRepository repository;
 
@@ -40,12 +47,16 @@ void main() {
     mockProgressionSnapshot = MockDocumentSnapshot();
     mockXpTxSnapshot = MockDocumentSnapshot();
     mockTransaction = MockTransaction();
+    mockLeaderboardRepository = MockLeaderboardRepository();
+    mockPlayerRepository = MockPlayerRepository();
     
     progressionService = ProgressionService();
     repository = FirebasePlayerProgressionRepository(
       mockFirestore,
       progressionService,
       CompetitiveRankingEngine(),
+      mockLeaderboardRepository,
+      mockPlayerRepository,
     );
 
     when(() => mockFirestore.collection('player_progression')).thenReturn(mockProgressionCollection);

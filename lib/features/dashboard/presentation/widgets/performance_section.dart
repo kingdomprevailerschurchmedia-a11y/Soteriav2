@@ -5,6 +5,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 
 class PerformanceSection extends StatelessWidget {
   const PerformanceSection({super.key});
@@ -40,7 +41,7 @@ class PerformanceSection extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () => context.push('/app/versus/insights'),
+                onTap: () => context.push(SoteriaRoutes.performanceAnalytics),
                 child: Row(
                   children: [
                     Text(

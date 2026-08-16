@@ -57,6 +57,7 @@ class DashboardHeader extends ConsumerWidget {
                       tag: 'player_avatar',
                       child: SoteriaAvatar(
                         isOnline: isOnline,
+                        showStatus: true,
                         size: 52,
                         showGlow: true,
                       ),
@@ -104,10 +105,13 @@ class DashboardHeader extends ConsumerWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      _CompactStat(
-                        assetPath: 'assets/icons/coin_icon.png',
-                        value: coins.toString(),
-                        label: 'Coins',
+                      GestureDetector(
+                        onTap: () => nav.navigateTo('/app/wallet'),
+                        child: _CompactStat(
+                          assetPath: 'assets/icons/coin_icon.png',
+                          value: coins.toString(),
+                          label: 'Coins',
+                        ),
                       ),
                       SizedBox(width: SoteriaSpacing.sm),
                       _ChallengesAction(),

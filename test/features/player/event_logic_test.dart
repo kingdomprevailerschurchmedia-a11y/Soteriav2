@@ -4,7 +4,7 @@ import 'package:soteria/features/player/domain/models/live_event.dart';
 void main() {
   group('LiveEvent Status Logic', () {
     final start = DateTime(2026, 8, 14, 10);
-    final end = DateTime(2026, 8, 14, 14);
+    final end = DateTime(2026, 8, 14, 20); // 10 hour duration
 
     final event = LiveEvent(
       eventId: 'e1',

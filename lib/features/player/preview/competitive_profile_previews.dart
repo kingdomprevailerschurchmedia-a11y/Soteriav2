@@ -9,6 +9,7 @@ import '../domain/models/reward_grant.dart';
 import '../domain/models/milestone.dart';
 import '../domain/models/achievement.dart';
 import '../domain/models/competitive_streak.dart';
+import '../domain/models/season_reward_definition.dart';
 import '../presentation/providers/competitive_profile_provider.dart';
 import '../presentation/screens/player_profile_screen.dart';
 import 'competitive_history_previews.dart';
@@ -159,6 +160,8 @@ class CompetitiveProfilePreviews {
           userId: 'u1',
           achievementId: 'a1',
           status: AchievementStatus.unlocked,
+          currentValue: 10,
+          targetValue: 10,
           unlockedAt: DateTime.now().subtract(const Duration(days: 5)),
         ),
       ],

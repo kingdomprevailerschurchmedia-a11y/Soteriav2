@@ -61,13 +61,13 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
         horizontal: SoteriaSpacing.containerPadding(context),
       ),
       children: [
-        SoteriaSpacing.gapMD,
+        SizedBox(height: 8.h),
         _buildHeader(context, ref, profile, currentUserId, relationship),
         SoteriaSpacing.gapLG,
         RepaintBoundary(child: _buildStatsGrid(context, profile)),
         SoteriaSpacing.gapLG,
         RepaintBoundary(child: _buildCareerHighlights(context, profile)),
-        SizedBox(height: SoteriaSpacing.xxxl),
+        SizedBox(height: 40.h + MediaQuery.paddingOf(context).bottom),
       ],
     );
   }
@@ -142,7 +142,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
                 _buildFeaturedBadges(profile.featuredBadges),
               ],
               if (currentUserId != userId) ...[
-                SoteriaSpacing.gapXL,
+                SoteriaSpacing.gapLG,
                 _buildActions(context, ref, relationship, profile),
               ],
             ],
@@ -286,9 +286,9 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 2,
-      childAspectRatio: 2.6,
-      mainAxisSpacing: SoteriaSpacing.md,
-      crossAxisSpacing: SoteriaSpacing.md,
+      childAspectRatio: 2.1,
+      mainAxisSpacing: 12.h,
+      crossAxisSpacing: 12.w,
       children: [
         StatisticCard(
           label: 'Matches',
@@ -325,8 +325,10 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
         Text(
           'CAREER HIGHLIGHTS',
           style: context.labelSmall.copyWith(
-            color: SoteriaColors.muted,
-            letterSpacing: 1.5,
+            color: SoteriaColors.gold,
+            letterSpacing: 2.0,
+            fontWeight: FontWeight.w800,
+            fontSize: 13.sp,
           ),
         ),
         SizedBox(height: SoteriaSpacing.md),

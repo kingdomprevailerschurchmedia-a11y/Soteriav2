@@ -16,6 +16,7 @@ class SoteriaAvatar extends ConsumerWidget {
   final AvatarFrameStyle? frameStyle;
   final int? rank;
   final bool isOnline;
+  final bool showStatus;
   final bool showGlow;
   final bool isSelected;
   final bool hasBorder;
@@ -29,6 +30,7 @@ class SoteriaAvatar extends ConsumerWidget {
     this.frameStyle,
     this.rank,
     this.isOnline = false,
+    this.showStatus = false,
     this.showGlow = false,
     this.isSelected = false,
     this.hasBorder = true,
@@ -39,24 +41,31 @@ class SoteriaAvatar extends ConsumerWidget {
     final profile = ref.watch(profileProvider);
     final player = ref.watch(currentPlayerProvider);
 
-    // Prioritize the Identity Profile (updated by dialogs) over the Game Profile (updated by sync)
-    final profileImageUrl = profile?.avatarUrl;
-    final playerImageUrl = player?.photoUrl;
-    
-    final String? effectiveImageUrl = (imageUrl?.isNotEmpty ?? false) 
-        ? imageUrl 
-        : (profileImageUrl != null && profileImageUrl.isNotEmpty)
-            ? profileImageUrl
-            : (profileImageUrl == null && playerImageUrl != null && playerImageUrl.isNotEmpty)
-                ? playerImageUrl
-                : null;
+    final bool hasProvidedImageUrl = imageUrl?.isNotEmpty ?? false;
+    final bool hasProvidedAvatar = avatar != null;
+    final bool hasProvidedInitials = initials?.isNotEmpty ?? false;
 
-    final hasImageUrl = effectiveImageUrl != null && effectiveImageUrl.isNotEmpty;
-    final hasInitials = initials != null && initials!.isNotEmpty;
+    // We only fallback to the current user's profile/player image if NO other source is provided.
+    // This prevents the current user's Google image from overriding other users' preset avatars in lists.
+    String? effectiveImageUrl;
+    if (hasProvidedImageUrl) {
+      effectiveImageUrl = imageUrl;
+    } else if (!hasProvidedAvatar && !hasProvidedInitials) {
+      final profileImageUrl = profile?.avatarUrl;
+      final playerImageUrl = player?.photoUrl;
+
+      effectiveImageUrl = (profileImageUrl != null && profileImageUrl.isNotEmpty)
+          ? profileImageUrl
+          : (profileImageUrl == null && playerImageUrl != null && playerImageUrl.isNotEmpty)
+              ? playerImageUrl
+              : null;
+    }
+
+    final hasEffectiveImageUrl = effectiveImageUrl != null && effectiveImageUrl.isNotEmpty;
 
     final effectiveAvatar =
         avatar ??
-        (hasImageUrl || hasInitials
+        (hasEffectiveImageUrl || hasProvidedInitials
             ? null
             : ref.watch(selectedAvatarProvider));
 
@@ -98,7 +107,7 @@ class SoteriaAvatar extends ConsumerWidget {
             ),
           ),
         ),
-        if (isOnline)
+        if (showStatus || isOnline)
           Positioned(
             right: 2.w,
             bottom: 2.w,
@@ -106,18 +115,19 @@ class SoteriaAvatar extends ConsumerWidget {
               width: (size * 0.24).w,
               height: (size * 0.24).w,
               decoration: BoxDecoration(
-                color: SoteriaColors.success, // Full green from design system
+                color: isOnline ? SoteriaColors.success : SoteriaColors.muted,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: const Color(0xFF0B012A), // Dark separator border
                   width: 1.5.w,
                 ),
                 boxShadow: [
-                  BoxShadow(
-                    color: SoteriaColors.success.withValues(alpha: 0.4),
-                    blurRadius: 6.w,
-                    spreadRadius: 1.w,
-                  ),
+                  if (isOnline)
+                    BoxShadow(
+                      color: SoteriaColors.success.withValues(alpha: 0.4),
+                      blurRadius: 6.w,
+                      spreadRadius: 1.w,
+                    ),
                 ],
               ),
             ),

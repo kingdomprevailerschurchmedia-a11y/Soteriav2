@@ -18,7 +18,7 @@ The social layer is built as a separate feature that integrates deeply with the 
 - **Friendship**: A bi-directional connection between two users.
 - **FriendRequest**: A pending invitation to connect.
 - **Follow**: A one-way interest relationship.
-- **SocialActivityEvent**: Competitive events from friends surfaced in the feed.
+- **CompetitiveActivityEvent**: Authoritative events surfaced in the social and competitive feeds.
 
 ## Firestore Schema
 

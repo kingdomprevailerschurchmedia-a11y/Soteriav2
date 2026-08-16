@@ -18,6 +18,7 @@ import 'package:soteria/features/player/presentation/providers/progression_provi
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/features/gameplay_engine/models/practice_session_config.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
+import 'package:soteria/core/network/providers/connectivity_providers.dart';
 
 class PracticeLobbyScreen extends ConsumerWidget {
   const PracticeLobbyScreen({super.key});
@@ -26,6 +27,7 @@ class PracticeLobbyScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(practiceLobbyProvider);
     final player = ref.watch(currentPlayerProvider);
+    final isOnline = ref.watch(isOnlineProvider);
 
     return SoteriaPage(
       isLoading: state.isLoading,
@@ -39,7 +41,7 @@ class PracticeLobbyScreen extends ConsumerWidget {
           child: SafeArea(
             child: Column(
               children: [
-                _LobbyHeader(player: player),
+                _LobbyHeader(player: player, isOnline: isOnline),
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
@@ -102,8 +104,9 @@ class PracticeLobbyScreen extends ConsumerWidget {
 }
 
 class _LobbyHeader extends StatelessWidget {
-  const _LobbyHeader({this.player});
+  const _LobbyHeader({this.player, required this.isOnline});
   final dynamic player;
+  final bool isOnline;
 
   @override
   Widget build(BuildContext context) {
@@ -158,27 +161,11 @@ class _LobbyHeader extends StatelessWidget {
                   ],
                 ),
                 SizedBox(width: SoteriaSpacing.md),
-                Stack(
-                  children: [
-                    SoteriaAvatar(
-                      imageUrl: player.photoUrl,
-                      size: 44,
-                      isOnline: true,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: SoteriaColors.success,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: SoteriaColors.background, width: 2),
-                        ),
-                      ),
-                    ),
-                  ],
+                SoteriaAvatar(
+                  imageUrl: player.photoUrl,
+                  size: 44,
+                  isOnline: isOnline,
+                  showStatus: true,
                 ),
               ],
             ),

@@ -23,11 +23,11 @@ class StatisticCard extends StatelessWidget {
     return Semantics(
       label: '$label: $value',
       child: SoteriaCard(
-        padding: EdgeInsets.all(SoteriaSpacing.sm),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         child: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(SoteriaSpacing.xs),
+              padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: (color ?? SoteriaColors.primary).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
@@ -35,10 +35,10 @@ class StatisticCard extends StatelessWidget {
               child: Icon(
                 icon,
                 color: color ?? SoteriaColors.primary,
-                size: 18,
+                size: 16,
               ),
             ),
-            SizedBox(width: SoteriaSpacing.md),
+            const SizedBox(width: 10),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,13 +47,16 @@ class StatisticCard extends StatelessWidget {
                   Text(
                     value,
                     style: context.titleMedium.copyWith(
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
                     ),
                   ),
                   Text(
                     label,
-                    style: context.bodySmall.copyWith(
+                    style: context.labelSmall.copyWith(
                       color: SoteriaColors.muted,
+                      fontSize: 8,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

@@ -26,8 +26,10 @@ class EngagementSummarySection extends StatelessWidget {
         Text(
           'ENGAGEMENT',
           style: context.labelSmall.copyWith(
-            color: SoteriaColors.muted,
-            letterSpacing: 1.5,
+            color: SoteriaColors.gold,
+            letterSpacing: 2.0,
+            fontWeight: FontWeight.w800,
+            fontSize: 13.sp,
           ),
         ),
         SizedBox(height: SoteriaSpacing.md),

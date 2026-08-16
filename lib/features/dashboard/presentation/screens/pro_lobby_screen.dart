@@ -14,6 +14,7 @@ import '../../../player/providers/player_providers.dart';
 import '../../../../features/gameplay_engine/models/pro_session_config.dart';
 import '../providers/pro_lobby_providers.dart';
 import '../widgets/lobby/lobby_config_widgets.dart';
+import '../widgets/lobby/pro/pro_category_selector.dart';
 import '../widgets/lobby/pro/pro_session_summary_card.dart';
 import '../widgets/lobby/pro/pro_entry_fee_widget.dart';
 import '../widgets/lobby/pro/pro_confirmation_dialog.dart';
@@ -22,6 +23,7 @@ import '../../../../features/tournaments/domain/models/tournament.dart';
 import '../../../../features/gameplay_engine/models/pro_mode_access.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
+import 'package:soteria/core/network/providers/connectivity_providers.dart';
 import '../widgets/lobby/lobby_config_widgets.dart';
 
 class ProLobbyScreen extends ConsumerWidget {
@@ -32,6 +34,7 @@ class ProLobbyScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(proLobbyProvider);
     final player = ref.watch(currentPlayerProvider);
+    final isOnline = ref.watch(isOnlineProvider);
 
     return SoteriaPage(
       isLoading: state.isLoading,
@@ -47,7 +50,7 @@ class ProLobbyScreen extends ConsumerWidget {
               children: [
                 Column(
                   children: [
-                    _ProHeader(player: player),
+                    _ProHeader(player: player, isOnline: isOnline),
                     Expanded(
                       child: CustomScrollView(
                         slivers: [
@@ -81,6 +84,10 @@ class ProLobbyScreen extends ConsumerWidget {
                                         .setUseInterests(val),
                                   ),
                                   SizedBox(height: SoteriaSpacing.md),
+                                  if (!state.config.useInterests) ...[
+                                    const ProCategorySelector(),
+                                    SizedBox(height: SoteriaSpacing.md),
+                                  ],
                                   const DifficultySelectorSection(),
                                   SizedBox(height: SoteriaSpacing.md),
                                   const QuestionCountSelectorSection(),
@@ -218,8 +225,9 @@ class _OfflineOverlay extends StatelessWidget {
 }
 
 class _ProHeader extends StatelessWidget {
-  const _ProHeader({this.player});
+  const _ProHeader({this.player, required this.isOnline});
   final dynamic player;
+  final bool isOnline;
 
   @override
   Widget build(BuildContext context) {
@@ -286,27 +294,11 @@ class _ProHeader extends StatelessWidget {
                   ],
                 ),
                 SizedBox(width: SoteriaSpacing.md),
-                Stack(
-                  children: [
-                    SoteriaAvatar(
-                      imageUrl: player.photoUrl,
-                      size: 44,
-                      isOnline: true,
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        width: 10,
-                        height: 10,
-                        decoration: BoxDecoration(
-                          color: SoteriaColors.success,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: SoteriaColors.background, width: 2),
-                        ),
-                      ),
-                    ),
-                  ],
+                SoteriaAvatar(
+                  imageUrl: player.photoUrl,
+                  size: 44,
+                  isOnline: isOnline,
+                  showStatus: true,
                 ),
               ],
             ),
@@ -330,17 +322,24 @@ class DifficultySelectorSection extends ConsumerWidget {
       children: [
         const LobbySectionHeader(
           label: 'DIFFICULTY',
-          icon: Icons.psychology_rounded,
+          icon: Icons.track_changes_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
         GridView.count(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
-          crossAxisCount: 3,
+          crossAxisCount: 4,
           mainAxisSpacing: 8.w,
           crossAxisSpacing: 8.w,
           childAspectRatio: 1.1,
           children: [
+            LobbyDifficultyCard(
+              isSelected: current == ProDifficulty.foundation,
+              label: 'FOUNDATION',
+              icon: Icons.eco_rounded,
+              color: const Color(0xFF4CAF50),
+              onTap: () => ref.read(proLobbyProvider.notifier).updateDifficulty(ProDifficulty.foundation),
+            ),
             LobbyDifficultyCard(
               isSelected: current == ProDifficulty.intermediate,
               label: 'INTERMEDIATE',
@@ -391,8 +390,8 @@ class QuestionCountSelectorSection extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const LobbySectionHeader(
-          label: 'QUESTIONS',
-          icon: Icons.layers_rounded,
+          label: 'QUESTION COUNT',
+          icon: Icons.list_alt_rounded,
         ),
         SizedBox(height: SoteriaSpacing.md),
         Row(

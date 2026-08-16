@@ -16,6 +16,7 @@ void main() {
         'metadata': {'rank': 'Diamond I'},
         'deepLink': 'profile',
         'importance': 'high',
+        'visibility': 'friends',
       };
 
       final event = CompetitiveActivityEvent.fromJson(json);
@@ -23,6 +24,7 @@ void main() {
       expect(event.id, 'evt_123');
       expect(event.type, CompetitiveEventType.rankPromoted);
       expect(event.importance, ActivityImportance.high);
+      expect(event.visibility, ActivityVisibility.friends);
       expect(event.createdAt.isUtc, isTrue);
     });
 

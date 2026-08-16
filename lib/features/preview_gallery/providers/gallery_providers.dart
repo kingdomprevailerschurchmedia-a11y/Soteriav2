@@ -329,6 +329,14 @@ final galleryItemsProvider = Provider<List<GalleryItem>>((ref) {
       icon: Icons.people_rounded,
       tags: ['friend', 'social', 'request'],
     ),
+    const GalleryItem(
+      title: 'Profile Info',
+      description: 'Account identity and personal details',
+      category: GalleryCategory.screens,
+      route: '/preview-gallery/profile-info',
+      icon: Icons.person_outline_rounded,
+      tags: ['profile', 'identity', 'account', 'edit'],
+    ),
   ];
 });
 

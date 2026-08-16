@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/models/player_profile.dart';
+import '../../../personalization/utils/personalization_bridge.dart';
 
 class PlayerProfileDto {
   static PlayerProfile fromFirestore(DocumentSnapshot doc) {
@@ -26,7 +27,9 @@ class PlayerProfileDto {
       proSessions: data['proSessions'] as int? ?? 0,
       versusMatches: data['versusMatches'] as int? ?? 0,
       tournamentMatches: data['tournamentMatches'] as int? ?? 0,
-      favoriteCategories: List<String>.from(data['favoriteCategories'] ?? []),
+      favoriteCategories: (data['favoriteCategories'] as List<dynamic>? ?? [])
+          .map((cat) => PersonalizationBridge.normalizeCategoryId(cat as String))
+          .toList(),
       preferredLanguage: data['preferredLanguage'] as String? ?? 'en',
       avatarFrame: data['avatarFrame'] as String? ?? 'default',
       badges: List<String>.from(data['badges'] ?? []),
@@ -35,6 +38,7 @@ class PlayerProfileDto {
       featuredBadgeIds: List<String>.from(data['featuredBadgeIds'] ?? []),
       role: data['role'] as String? ?? 'user',
       accountStatus: data['accountStatus'] as String? ?? 'active',
+      lastDailyRewardClaim: data['lastDailyRewardClaim'] != null ? _parseDate(data['lastDailyRewardClaim']) : null,
       createdAt: _parseDate(data['createdAt']),
       lastLogin: _parseDate(data['lastLogin']),
       updatedAt: _parseDate(data['updatedAt']),
@@ -79,6 +83,7 @@ class PlayerProfileDto {
       'featuredBadgeIds': profile.featuredBadgeIds,
       'role': profile.role,
       'accountStatus': profile.accountStatus,
+      'lastDailyRewardClaim': profile.lastDailyRewardClaim != null ? Timestamp.fromDate(profile.lastDailyRewardClaim!) : null,
       'createdAt': Timestamp.fromDate(profile.createdAt),
       'lastLogin': Timestamp.fromDate(profile.lastLogin),
       'updatedAt': Timestamp.fromDate(profile.updatedAt),

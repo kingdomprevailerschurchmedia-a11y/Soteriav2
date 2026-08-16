@@ -302,7 +302,7 @@ class FirestoreTournamentRepository implements TournamentRepository {
 
     for (var r in rankings) {
       if (r.prize != null && !r.prize!.isEmpty) {
-        final playerRef = _database.collection('players').doc(r.uid);
+        final playerRef = _database.collection('users').doc(r.uid);
         batch.update(playerRef, {
           'coins': FieldValue.increment(r.prize!.coins),
         });

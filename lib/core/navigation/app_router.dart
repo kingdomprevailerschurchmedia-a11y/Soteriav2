@@ -30,6 +30,7 @@ import 'package:soteria/features/preview_gallery/pages/startup_preview_page.dart
 import 'package:soteria/features/preview_gallery/pages/navigation_foundation_page.dart';
 import 'package:soteria/features/preview_gallery/pages/onboarding_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/personalization_preview_page.dart';
+import 'package:soteria/features/preview_gallery/pages/profile_information_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/avatar_platform_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/auth_landing_preview_page.dart';
 import 'package:soteria/features/preview_gallery/pages/registration_preview_page.dart';
@@ -76,6 +77,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:soteria/features/dashboard/presentation/screens/practice_lobby_screen.dart';
 import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart';
+import 'package:soteria/features/rewards/presentation/screens/rewards_screen.dart';
 import 'package:soteria/shared/screens/coming_soon_screen.dart';
 import 'package:soteria/features/settings/screens/settings_screen.dart';
 import 'package:soteria/features/settings/screens/notification_settings_screen.dart';
@@ -89,7 +91,9 @@ import 'package:soteria/features/gameplay_engine/pages/pro_mode_results_screen.d
 import 'package:soteria/features/gameplay_engine/pages/pro_mode_question_review_screen.dart';
 
 import 'package:soteria/features/player/presentation/screens/player_profile_screen.dart';
+import 'package:soteria/features/player/presentation/screens/profile_information_screen.dart';
 import 'package:soteria/features/player/presentation/screens/personal_records_screen.dart';
+import 'package:soteria/features/analytics/presentation/screens/personal_performance_screen.dart';
 import 'package:soteria/features/player/presentation/screens/leaderboard_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_discovery_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_details_screen.dart';
@@ -623,6 +627,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                         ),
                     routes: [
                       GoRoute(
+                        path: 'profile',
+                        pageBuilder: (context, state) =>
+                            SoteriaPageTransitions.slideUp(
+                              child: const ProfileInformationScreen(),
+                              key: state.pageKey,
+                            ),
+                      ),
+                      GoRoute(
                         path: 'notifications',
                         pageBuilder: (context, state) =>
                             SoteriaPageTransitions.slideUp(
@@ -667,12 +679,9 @@ final routerProvider = Provider<GoRouter>((ref) {
             navigatorKey: rewardsNavigatorKey,
             routes: [
               GoRoute(
-                path: SoteriaRoutes.wallet,
+                path: SoteriaRoutes.rewards,
                 pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-                  child: const ComingSoonScreen(
-                    featureName: 'Soteria Rewards',
-                    category: 'Finance',
-                  ),
+                  child: const RewardsScreen(),
                   key: state.pageKey,
                 ),
               ),
@@ -688,6 +697,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                   key: state.pageKey,
                 ),
                 routes: [
+                  GoRoute(
+                    path: 'performance',
+                    pageBuilder: (context, state) =>
+                        SoteriaPageTransitions.fade(
+                          child: const PersonalPerformanceScreen(),
+                          key: state.pageKey,
+                        ),
+                  ),
                   GoRoute(
                     path: 'external/:id',
                     pageBuilder: (context, state) {
@@ -1064,6 +1081,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (context, state) => const GalleryShell(
               title: 'Social & Connections',
               child: SocialPreviews(),
+            ),
+          ),
+          GoRoute(
+            path: 'profile-info',
+            builder: (context, state) => const GalleryShell(
+              title: 'Profile Information',
+              child: ProfileInformationPreviewPage(),
             ),
           ),
         ],

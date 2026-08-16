@@ -1,0 +1,576 @@
+[
+  {
+    "question": "What is 12 × 8?",
+    "options": [
+      "86",
+      "96",
+      "108",
+      "112"
+    ],
+    "correctAnswer": "96",
+    "explanation": "12 multiplied by 8 equals 96.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is 45 + 37?",
+    "options": [
+      "72",
+      "82",
+      "92",
+      "78"
+    ],
+    "correctAnswer": "82",
+    "explanation": "Adding 45 and 37 gives 82.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is 100 − 64?",
+    "options": [
+      "26",
+      "36",
+      "46",
+      "34"
+    ],
+    "correctAnswer": "36",
+    "explanation": "Subtracting 64 from 100 gives 36.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is 144 ÷ 12?",
+    "options": [
+      "10",
+      "11",
+      "12",
+      "14"
+    ],
+    "correctAnswer": "12",
+    "explanation": "144 divided by 12 equals 12.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is 25% of 200?",
+    "options": [
+      "25",
+      "40",
+      "50",
+      "75"
+    ],
+    "correctAnswer": "50",
+    "explanation": "25% is one-quarter, and one-quarter of 200 is 50.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "Which of the following is an even number?",
+    "options": [
+      "17",
+      "23",
+      "36",
+      "41"
+    ],
+    "correctAnswer": "36",
+    "explanation": "An even number is divisible by 2 without a remainder, and 36 is divisible by 2.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the value of 7²?",
+    "options": [
+      "14",
+      "21",
+      "49",
+      "56"
+    ],
+    "correctAnswer": "49",
+    "explanation": "7² means 7 multiplied by itself: 7 × 7 = 49.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "How many sides does a hexagon have?",
+    "options": [
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "correctAnswer": "6",
+    "explanation": "A hexagon is a polygon with six sides.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard geometry reference"
+  },
+  {
+    "question": "What is the perimeter of a square with a side length of 5 cm?",
+    "options": [
+      "10 cm",
+      "15 cm",
+      "20 cm",
+      "25 cm"
+    ],
+    "correctAnswer": "20 cm",
+    "explanation": "The perimeter of a square is 4 × side length, so 4 × 5 = 20 cm.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard geometry reference"
+  },
+  {
+    "question": "What is 3/4 expressed as a decimal?",
+    "options": [
+      "0.25",
+      "0.5",
+      "0.75",
+      "0.8"
+    ],
+    "correctAnswer": "0.75",
+    "explanation": "Dividing 3 by 4 gives 0.75.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the smallest prime number?",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "3"
+    ],
+    "correctAnswer": "2",
+    "explanation": "2 is the smallest prime number and the only even prime number.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is 9 × 9?",
+    "options": [
+      "72",
+      "81",
+      "90",
+      "99"
+    ],
+    "correctAnswer": "81",
+    "explanation": "9 multiplied by 9 equals 81.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the average of 10, 20, and 30?",
+    "options": [
+      "15",
+      "20",
+      "25",
+      "30"
+    ],
+    "correctAnswer": "20",
+    "explanation": "The average is (10 + 20 + 30) ÷ 3 = 20.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "How many degrees are in a right angle?",
+    "options": [
+      "45°",
+      "90°",
+      "180°",
+      "360°"
+    ],
+    "correctAnswer": "90°",
+    "explanation": "A right angle measures exactly 90 degrees.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard geometry reference"
+  },
+  {
+    "question": "What is 0.5 expressed as a fraction in simplest form?",
+    "options": [
+      "1/4",
+      "1/2",
+      "2/3",
+      "3/5"
+    ],
+    "correctAnswer": "1/2",
+    "explanation": "0.5 is equivalent to 5/10, which simplifies to 1/2.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the area of a rectangle that is 8 cm long and 3 cm wide?",
+    "options": [
+      "11 cm²",
+      "22 cm²",
+      "24 cm²",
+      "32 cm²"
+    ],
+    "correctAnswer": "24 cm²",
+    "explanation": "The area of a rectangle is length × width, so 8 × 3 = 24 cm².",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard geometry reference"
+  },
+  {
+    "question": "What is 15% of 300?",
+    "options": [
+      "30",
+      "45",
+      "50",
+      "60"
+    ],
+    "correctAnswer": "45",
+    "explanation": "15% of 300 is 0.15 × 300 = 45.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "If x + 7 = 15, what is x?",
+    "options": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "correctAnswer": "8",
+    "explanation": "Subtracting 7 from both sides gives x = 15 − 7 = 8.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard algebra reference"
+  },
+  {
+    "question": "What is the next number in the sequence 2, 4, 8, 16, ...?",
+    "options": [
+      "20",
+      "24",
+      "30",
+      "32"
+    ],
+    "correctAnswer": "32",
+    "explanation": "Each number is multiplied by 2, so 16 × 2 = 32.",
+    "categoryId": "mathematics",
+    "difficulty": "easy",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the greatest common factor of 18 and 24?",
+    "options": [
+      "3",
+      "6",
+      "8",
+      "12"
+    ],
+    "correctAnswer": "6",
+    "explanation": "The common factors of 18 and 24 include 1, 2, 3, and 6, with 6 being the greatest.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the least common multiple of 6 and 8?",
+    "options": [
+      "12",
+      "18",
+      "24",
+      "48"
+    ],
+    "correctAnswer": "24",
+    "explanation": "24 is the smallest positive number divisible by both 6 and 8.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "Solve: 3x + 5 = 20.",
+    "options": [
+      "x = 3",
+      "x = 5",
+      "x = 7",
+      "x = 10"
+    ],
+    "correctAnswer": "x = 5",
+    "explanation": "Subtract 5 to get 3x = 15, then divide by 3 to obtain x = 5.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard algebra reference"
+  },
+  {
+    "question": "What is the square root of 196?",
+    "options": [
+      "12",
+      "13",
+      "14",
+      "16"
+    ],
+    "correctAnswer": "14",
+    "explanation": "14 × 14 = 196, so the principal square root of 196 is 14.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "A shirt originally costs $80 and is discounted by 25%. What is the sale price?",
+    "options": [
+      "$55",
+      "$60",
+      "$65",
+      "$70"
+    ],
+    "correctAnswer": "$60",
+    "explanation": "25% of $80 is $20, so the sale price is $80 − $20 = $60.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the sum of the interior angles of a triangle?",
+    "options": [
+      "90°",
+      "180°",
+      "270°",
+      "360°"
+    ],
+    "correctAnswer": "180°",
+    "explanation": "The interior angles of every Euclidean triangle add up to 180 degrees.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard geometry reference"
+  },
+  {
+    "question": "If a car travels 240 km in 4 hours, what is its average speed?",
+    "options": [
+      "40 km/h",
+      "50 km/h",
+      "60 km/h",
+      "80 km/h"
+    ],
+    "correctAnswer": "60 km/h",
+    "explanation": "Average speed equals distance divided by time: 240 ÷ 4 = 60 km/h.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is 2³ + 3²?",
+    "options": [
+      "13",
+      "15",
+      "17",
+      "19"
+    ],
+    "correctAnswer": "17",
+    "explanation": "2³ = 8 and 3² = 9, so 8 + 9 = 17.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the median of 4, 7, 9, 12, and 15?",
+    "options": [
+      "7",
+      "9",
+      "10",
+      "12"
+    ],
+    "correctAnswer": "9",
+    "explanation": "The numbers are already ordered, and 9 is the middle value.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard statistics reference"
+  },
+  {
+    "question": "A triangle has a base of 10 cm and a height of 6 cm. What is its area?",
+    "options": [
+      "16 cm²",
+      "30 cm²",
+      "60 cm²",
+      "120 cm²"
+    ],
+    "correctAnswer": "30 cm²",
+    "explanation": "The area of a triangle is 1/2 × base × height, so 1/2 × 10 × 6 = 30 cm².",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard geometry reference"
+  },
+  {
+    "question": "If 5 notebooks cost $20, how much does one notebook cost?",
+    "options": [
+      "$2",
+      "$3",
+      "$4",
+      "$5"
+    ],
+    "correctAnswer": "$4",
+    "explanation": "The unit price is $20 ÷ 5 = $4 per notebook.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the value of 5!?",
+    "options": [
+      "25",
+      "60",
+      "100",
+      "120"
+    ],
+    "correctAnswer": "120",
+    "explanation": "5! = 5 × 4 × 3 × 2 × 1 = 120.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the probability of rolling a 6 on a fair six-sided die?",
+    "options": [
+      "1/2",
+      "1/3",
+      "1/6",
+      "1/12"
+    ],
+    "correctAnswer": "1/6",
+    "explanation": "A fair six-sided die has six equally likely outcomes, and only one outcome is a 6.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard probability reference"
+  },
+  {
+    "question": "If the ratio of boys to girls in a class is 2:3 and there are 15 girls, how many boys are there?",
+    "options": [
+      "8",
+      "10",
+      "12",
+      "15"
+    ],
+    "correctAnswer": "10",
+    "explanation": "The ratio 2:3 means boys are two-thirds of the number of girls. Two-thirds of 15 is 10.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "What is the slope of the line y = 3x + 2?",
+    "options": [
+      "2",
+      "3",
+      "-2",
+      "-3"
+    ],
+    "correctAnswer": "3",
+    "explanation": "In the slope-intercept form y = mx + b, m represents the slope. Here m = 3.",
+    "categoryId": "mathematics",
+    "difficulty": "medium",
+    "source": "Standard algebra reference"
+  },
+  {
+    "question": "What is the value of log₁₀(1000)?",
+    "options": [
+      "2",
+      "3",
+      "10",
+      "100"
+    ],
+    "correctAnswer": "3",
+    "explanation": "10³ = 1000, so log₁₀(1000) = 3.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "If f(x) = x² − 4x + 3, what is f(2)?",
+    "options": [
+      "-3",
+      "-1",
+      "1",
+      "3"
+    ],
+    "correctAnswer": "-1",
+    "explanation": "Substituting x = 2 gives 2² − 4(2) + 3 = 4 − 8 + 3 = -1.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard algebra reference"
+  },
+  {
+    "question": "What is the derivative of x² with respect to x?",
+    "options": [
+      "x",
+      "2x",
+      "x²",
+      "2"
+    ],
+    "correctAnswer": "2x",
+    "explanation": "Using the power rule, the derivative of x² is 2x.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard calculus reference"
+  },
+  {
+    "question": "What is the determinant of the matrix [[2, 3], [1, 4]]?",
+    "options": [
+      "5",
+      "6",
+      "8",
+      "11"
+    ],
+    "correctAnswer": "5",
+    "explanation": "For a 2×2 matrix, the determinant is ad − bc. Therefore, (2 × 4) − (3 × 1) = 5.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard linear algebra reference"
+  },
+  {
+    "question": "What is the sum of the first 10 positive integers?",
+    "options": [
+      "45",
+      "50",
+      "55",
+      "60"
+    ],
+    "correctAnswer": "55",
+    "explanation": "The sum is 10 × 11 ÷ 2 = 55.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard mathematics reference"
+  },
+  {
+    "question": "If x² − 5x + 6 = 0, what are the solutions?",
+    "options": [
+      "x = 1 and x = 6",
+      "x = 2 and x = 3",
+      "x = -2 and x = -3",
+      "x = 3 and x = 4"
+    ],
+    "correctAnswer": "x = 2 and x = 3",
+    "explanation": "The quadratic factors as (x − 2)(x − 3) = 0, giving x = 2 and x = 3.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard algebra reference"
+  },
+  {
+    "question": "What is the integral of 2x with respect to x?",
+    "options": [
+      "x² + C",
+      "2x² + C",
+      "x + C",
+      "2 + C"
+    ],
+    "correctAnswer": "x² + C",
+    "explanation": "The antiderivative of 2x is x², with C representing the constant of integration.",
+    "categoryId": "mathematics",
+    "difficulty": "hard",
+    "source": "Standard calculus reference"
+  }
+]

@@ -259,6 +259,22 @@ class CompetitiveActivityCard extends ConsumerWidget {
       );
     }
 
+    if (event.type == CompetitiveEventType.friendshipEstablished) {
+      return Row(
+        children: [
+          Icon(Icons.people_alt_rounded, color: SoteriaColors.primary, size: 16.sp),
+          SizedBox(width: 4.w),
+          Text(
+            'NEW CONNECTION',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.primary,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ],
+      );
+    }
+
     return const SizedBox.shrink();
   }
 
@@ -324,6 +340,8 @@ class CompetitiveActivityCard extends ConsumerWidget {
         return Icons.check_circle_outline_rounded;
       case CompetitiveEventType.streakReached:
         return Icons.local_fire_department_rounded;
+      case CompetitiveEventType.friendshipEstablished:
+        return Icons.person_add_rounded;
       default:
         return Icons.stars_rounded;
     }

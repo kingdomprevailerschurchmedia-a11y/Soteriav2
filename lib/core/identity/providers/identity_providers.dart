@@ -70,28 +70,49 @@ class ProfileNotifier extends Notifier<UserProfile?> {
     }
   }
 
+  void refresh() {
+    final session = ref.read(sessionProvider);
+    if (session.isAuthenticated && session.uid != null) {
+      _loadProfile(session.uid!);
+    }
+  }
+
   Future<void> updateAvatar(String avatarId) async {
     final session = ref.read(sessionProvider);
-    if (!session.isAuthenticated || session.uid == null || state == null) {
-      LoggerService.w('Cannot update avatar: Session or Profile is null', feature: 'Identity');
+    if (!session.isAuthenticated || session.uid == null) {
+      LoggerService.w('Cannot update avatar: Session is null', feature: 'Identity');
       return;
     }
 
-    final updatedProfile = state!.copyWith(
-      selectedAvatarId: avatarId,
-      avatarUrl: '', // Clear custom photo if selecting preset avatar
-    );
+    UserProfile profile;
+    if (state == null) {
+      final user = ref.read(firebaseAuthServiceProvider).currentUser;
+      final names = (user?.displayName ?? 'Scholar').split(' ');
+      profile = UserProfile(
+        firstName: names.first,
+        lastName: names.length > 1 ? names.last : '',
+        displayName: user?.displayName ?? 'Scholar',
+        username: user?.displayName?.toLowerCase().replaceAll(' ', '') ?? 'scholar',
+        email: user?.email ?? '',
+        selectedAvatarId: avatarId,
+      );
+    } else {
+      profile = state!.copyWith(
+        selectedAvatarId: avatarId,
+        avatarUrl: '', // Clear custom photo if selecting preset avatar
+      );
+    }
 
     LoggerService.i('Updating avatar to: $avatarId', feature: 'Identity');
 
     // Optimistic update
     final previousState = state;
-    state = updatedProfile;
+    state = profile;
 
     try {
       await ref
           .read(identityRepositoryProvider)
-          .updateUserProfile(session.uid!, updatedProfile);
+          .updateUserProfile(session.uid!, profile);
       LoggerService.i('Avatar successfully saved to Firestore', feature: 'Identity');
     } catch (e) {
       LoggerService.e('Failed to update avatar in Firestore', error: e, feature: 'Identity');
@@ -102,8 +123,8 @@ class ProfileNotifier extends Notifier<UserProfile?> {
 
   Future<void> updateProfilePicture(XFile image) async {
     final session = ref.read(sessionProvider);
-    if (!session.isAuthenticated || session.uid == null || state == null) {
-      LoggerService.w('Cannot upload profile picture: Session or Profile is null', feature: 'Identity');
+    if (!session.isAuthenticated || session.uid == null) {
+      LoggerService.w('Cannot upload profile picture: Session is null', feature: 'Identity');
       return;
     }
 
@@ -115,10 +136,25 @@ class ProfileNotifier extends Notifier<UserProfile?> {
           .read(identityRepositoryProvider)
           .uploadProfilePicture(session.uid!, image.path);
 
-      final updatedProfile = state!.copyWith(
-        avatarUrl: downloadUrl,
-        selectedAvatarId: '', // Clear avatar ID if using custom photo
-      );
+      UserProfile updatedProfile;
+      if (state == null) {
+        final user = ref.read(firebaseAuthServiceProvider).currentUser;
+        final names = (user?.displayName ?? 'Scholar').split(' ');
+        updatedProfile = UserProfile(
+          firstName: names.first,
+          lastName: names.length > 1 ? names.last : '',
+          displayName: user?.displayName ?? 'Scholar',
+          username: user?.displayName?.toLowerCase().replaceAll(' ', '') ?? 'scholar',
+          email: user?.email ?? '',
+          avatarUrl: downloadUrl,
+          selectedAvatarId: '', 
+        );
+      } else {
+        updatedProfile = state!.copyWith(
+          avatarUrl: downloadUrl,
+          selectedAvatarId: '', // Clear avatar ID if using custom photo
+        );
+      }
 
       await ref
           .read(identityRepositoryProvider)

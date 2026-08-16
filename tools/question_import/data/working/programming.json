@@ -1,0 +1,744 @@
+[
+  {
+    "question": "What does CPU stand for in computing?",
+    "options": [
+      "Central Processing Unit",
+      "Computer Processing Utility",
+      "Central Program Unit",
+      "Computer Primary Unit"
+    ],
+    "correctAnswer": "Central Processing Unit",
+    "explanation": "CPU stands for Central Processing Unit, the primary processor responsible for executing instructions in a computer.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "IBM Computer Science Fundamentals"
+  },
+  {
+    "question": "Which data type is commonly used to store whole numbers in programming?",
+    "options": [
+      "Integer",
+      "String",
+      "Boolean",
+      "Character"
+    ],
+    "correctAnswer": "Integer",
+    "explanation": "An integer data type is used to represent whole numbers without a fractional component.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What is a variable in programming?",
+    "options": [
+      "A named storage location for a value",
+      "A type of computer processor",
+      "A programming language",
+      "A network connection"
+    ],
+    "correctAnswer": "A named storage location for a value",
+    "explanation": "A variable provides a named way for a program to store and work with data.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "Which symbol is commonly used for single-line comments in Python?",
+    "options": [
+      "//",
+      "#",
+      "/*",
+      "--"
+    ],
+    "correctAnswer": "#",
+    "explanation": "In Python, text beginning with # is treated as a comment and is not executed as code.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "Which of these is a programming language?",
+    "options": [
+      "Python",
+      "HTML",
+      "CSS",
+      "JSON"
+    ],
+    "correctAnswer": "Python",
+    "explanation": "Python is a general-purpose programming language. HTML, CSS, and JSON serve different roles in web development and data representation.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What does a Boolean value normally represent?",
+    "options": [
+      "True or false",
+      "Only whole numbers",
+      "Text characters",
+      "Decimal numbers"
+    ],
+    "correctAnswer": "True or false",
+    "explanation": "Boolean values represent logical states, commonly expressed as true and false.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What is a loop used for in programming?",
+    "options": [
+      "Repeating a block of instructions",
+      "Deleting an operating system",
+      "Connecting a computer to Wi-Fi",
+      "Changing a programming language"
+    ],
+    "correctAnswer": "Repeating a block of instructions",
+    "explanation": "Loops allow a program to execute a set of instructions repeatedly according to a condition or sequence.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "Which programming construct is commonly used to make a decision based on a condition?",
+    "options": [
+      "if statement",
+      "import statement",
+      "print statement",
+      "return statement"
+    ],
+    "correctAnswer": "if statement",
+    "explanation": "An if statement evaluates a condition and executes code when that condition is satisfied.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What is a function in programming?",
+    "options": [
+      "A reusable block of code designed to perform a task",
+      "A physical component of a computer",
+      "A type of database",
+      "A network protocol"
+    ],
+    "correctAnswer": "A reusable block of code designed to perform a task",
+    "explanation": "Functions group instructions into reusable units that can perform specific tasks and may accept inputs and return outputs.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "Which data structure stores items in an ordered sequence and commonly allows duplicate values?",
+    "options": [
+      "List",
+      "Set",
+      "Boolean",
+      "Dictionary key"
+    ],
+    "correctAnswer": "List",
+    "explanation": "Lists are ordered collections that can contain multiple values, including duplicates.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What does HTML stand for?",
+    "options": [
+      "HyperText Markup Language",
+      "High-Level Text Management Language",
+      "Hyperlink and Text Modeling Language",
+      "Home Tool Markup Language"
+    ],
+    "correctAnswer": "HyperText Markup Language",
+    "explanation": "HTML stands for HyperText Markup Language and is used to structure content on the web.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What does an IDE commonly provide programmers?",
+    "options": [
+      "Tools for writing, debugging, and managing code",
+      "Only internet access",
+      "Only file storage",
+      "Only antivirus protection"
+    ],
+    "correctAnswer": "Tools for writing, debugging, and managing code",
+    "explanation": "An integrated development environment typically combines tools such as a code editor, debugger, build tools, and project management features.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Microsoft Developer Documentation"
+  },
+  {
+    "question": "What is debugging?",
+    "options": [
+      "Finding and fixing errors in a program",
+      "Creating computer hardware",
+      "Compressing a video file",
+      "Installing an operating system"
+    ],
+    "correctAnswer": "Finding and fixing errors in a program",
+    "explanation": "Debugging is the process of identifying, analyzing, and correcting problems in software.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Microsoft Developer Documentation"
+  },
+  {
+    "question": "What is an array commonly used for?",
+    "options": [
+      "Storing a collection of values",
+      "Encrypting an entire computer",
+      "Creating a physical processor",
+      "Connecting to a printer"
+    ],
+    "correctAnswer": "Storing a collection of values",
+    "explanation": "Arrays provide a structure for storing multiple values, commonly accessed using indexes.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "Which operator is commonly used to test equality in many programming languages?",
+    "options": [
+      "==",
+      "=",
+      "!=",
+      "+="
+    ],
+    "correctAnswer": "==",
+    "explanation": "In many languages, == is used as an equality comparison operator, while = commonly represents assignment.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What is source code?",
+    "options": [
+      "Human-readable instructions written by programmers",
+      "A computer's physical memory",
+      "A network cable",
+      "A finished hardware component"
+    ],
+    "correctAnswer": "Human-readable instructions written by programmers",
+    "explanation": "Source code consists of programming instructions written in a programming language before being compiled or interpreted for execution.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "IBM Developer Documentation"
+  },
+  {
+    "question": "What does API stand for?",
+    "options": [
+      "Application Programming Interface",
+      "Advanced Program Installation",
+      "Application Process Integration",
+      "Automated Programming Instruction"
+    ],
+    "correctAnswer": "Application Programming Interface",
+    "explanation": "An API defines ways for software components to communicate and interact with one another.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What is an algorithm?",
+    "options": [
+      "A step-by-step procedure for solving a problem",
+      "A programming editor",
+      "A type of computer monitor",
+      "A physical storage device"
+    ],
+    "correctAnswer": "A step-by-step procedure for solving a problem",
+    "explanation": "An algorithm is a defined sequence of computational steps used to solve a problem or accomplish a task.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which keyword is commonly used in Python to define a function?",
+    "options": [
+      "func",
+      "define",
+      "def",
+      "function"
+    ],
+    "correctAnswer": "def",
+    "explanation": "Python uses the def keyword to begin a function definition.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What is a string in programming?",
+    "options": [
+      "A sequence of text characters",
+      "A whole number",
+      "A true or false value",
+      "A computer cable"
+    ],
+    "correctAnswer": "A sequence of text characters",
+    "explanation": "A string represents textual data as a sequence of characters.",
+    "categoryId": "programming",
+    "difficulty": "easy",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What is recursion?",
+    "options": [
+      "A function calling itself directly or indirectly",
+      "A method of deleting variables",
+      "A way to encrypt passwords",
+      "A process of compiling hardware"
+    ],
+    "correctAnswer": "A function calling itself directly or indirectly",
+    "explanation": "Recursion occurs when a function invokes itself, directly or through another function, typically with a base condition that stops further calls.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What is the main purpose of a compiler?",
+    "options": [
+      "Translate source code into another form that can be executed or further processed",
+      "Store files permanently",
+      "Connect computers to the internet",
+      "Manage user passwords"
+    ],
+    "correctAnswer": "Translate source code into another form that can be executed or further processed",
+    "explanation": "A compiler translates source code into another representation, such as machine code or intermediate code, according to the language implementation.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which data structure follows the Last In, First Out principle?",
+    "options": [
+      "Queue",
+      "Stack",
+      "Graph",
+      "Hash table"
+    ],
+    "correctAnswer": "Stack",
+    "explanation": "A stack follows LIFO, meaning the most recently added element is the first one removed.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "Which data structure follows the First In, First Out principle?",
+    "options": [
+      "Stack",
+      "Queue",
+      "Tree",
+      "Heap"
+    ],
+    "correctAnswer": "Queue",
+    "explanation": "A queue follows FIFO, meaning the first element added is the first element removed.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is the purpose of a return statement in a function?",
+    "options": [
+      "To send a value back to the caller and end the function's execution",
+      "To create a new programming language",
+      "To repeat a loop indefinitely",
+      "To declare a database"
+    ],
+    "correctAnswer": "To send a value back to the caller and end the function's execution",
+    "explanation": "A return statement exits the current function and can provide a result to the code that called it.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What is object-oriented programming primarily based on?",
+    "options": [
+      "Objects containing data and behavior",
+      "Only mathematical equations",
+      "Only database tables",
+      "Hardware circuits"
+    ],
+    "correctAnswer": "Objects containing data and behavior",
+    "explanation": "Object-oriented programming organizes software around objects that combine data with operations or behavior associated with that data.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What is inheritance in object-oriented programming?",
+    "options": [
+      "A mechanism allowing a class to derive properties or behavior from another class",
+      "A process of deleting a class",
+      "A method of encrypting an object",
+      "A way to convert source code into binary"
+    ],
+    "correctAnswer": "A mechanism allowing a class to derive properties or behavior from another class",
+    "explanation": "Inheritance allows a class to reuse or extend attributes and methods defined by another class.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What is encapsulation in object-oriented programming?",
+    "options": [
+      "Bundling data and related behavior while controlling access to internal details",
+      "Running several programs simultaneously",
+      "Converting code to machine language",
+      "Storing files on a server"
+    ],
+    "correctAnswer": "Bundling data and related behavior while controlling access to internal details",
+    "explanation": "Encapsulation combines related data and operations and can restrict direct access to internal implementation details.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What is polymorphism in object-oriented programming?",
+    "options": [
+      "The ability of different objects or classes to respond to the same interface in different ways",
+      "The process of storing multiple copies of a file",
+      "The conversion of text into binary",
+      "The creation of a database table"
+    ],
+    "correctAnswer": "The ability of different objects or classes to respond to the same interface in different ways",
+    "explanation": "Polymorphism allows code to work with different types through a common interface while each type provides its own behavior.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What does SQL primarily allow developers to do?",
+    "options": [
+      "Query and manage relational databases",
+      "Design computer processors",
+      "Create operating systems automatically",
+      "Edit digital photographs"
+    ],
+    "correctAnswer": "Query and manage relational databases",
+    "explanation": "SQL is a language used to query, manipulate, define, and manage data in relational database systems.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "PostgreSQL Documentation"
+  },
+  {
+    "question": "What is version control used for?",
+    "options": [
+      "Tracking changes to files and collaborating on code",
+      "Increasing processor speed",
+      "Compressing RAM",
+      "Replacing an operating system"
+    ],
+    "correctAnswer": "Tracking changes to files and collaborating on code",
+    "explanation": "Version control systems record changes to files over time and help developers collaborate, review changes, and restore earlier versions.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Git Documentation"
+  },
+  {
+    "question": "Which Git command is commonly used to create a local copy of an existing repository?",
+    "options": [
+      "git clone",
+      "git copy",
+      "git fork",
+      "git download"
+    ],
+    "correctAnswer": "git clone",
+    "explanation": "The git clone command creates a local working copy of a repository.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Git Documentation"
+  },
+  {
+    "question": "What is a null value generally used to represent?",
+    "options": [
+      "The absence of a value",
+      "The largest possible integer",
+      "A successful program execution",
+      "A true Boolean value"
+    ],
+    "correctAnswer": "The absence of a value",
+    "explanation": "Null-like values are commonly used to indicate that a variable has no meaningful or assigned value.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What is an exception in programming?",
+    "options": [
+      "An event indicating an error or unusual condition during execution",
+      "A type of variable that always stores text",
+      "A database table",
+      "A hardware upgrade"
+    ],
+    "correctAnswer": "An event indicating an error or unusual condition during execution",
+    "explanation": "An exception represents an error or unusual runtime condition that a program can potentially detect and handle.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "What is unit testing?",
+    "options": [
+      "Testing individual components of a program in isolation",
+      "Testing only the physical computer",
+      "Testing internet bandwidth",
+      "Testing a complete company network"
+    ],
+    "correctAnswer": "Testing individual components of a program in isolation",
+    "explanation": "Unit tests focus on small, isolated units of software such as functions, methods, or classes.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "Microsoft Learn"
+  },
+  {
+    "question": "What is Big O notation commonly used to describe?",
+    "options": [
+      "The growth of an algorithm's resource requirements",
+      "The color of a program's interface",
+      "The size of a computer monitor",
+      "The number of developers on a project"
+    ],
+    "correctAnswer": "The growth of an algorithm's resource requirements",
+    "explanation": "Big O notation describes how an algorithm's time or space requirements grow as the input size increases.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is a hash table primarily designed to provide?",
+    "options": [
+      "Efficient lookup using key-value associations",
+      "Sequential video playback",
+      "Graphics rendering",
+      "Operating system booting"
+    ],
+    "correctAnswer": "Efficient lookup using key-value associations",
+    "explanation": "Hash tables use hash functions to associate keys with values and can provide efficient average-case lookup.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is an API endpoint?",
+    "options": [
+      "A specific location through which a software service exposes functionality or data",
+      "A computer's physical power button",
+      "A database backup file",
+      "A programming language keyword"
+    ],
+    "correctAnswer": "A specific location through which a software service exposes functionality or data",
+    "explanation": "An API endpoint is a defined interface location, often represented by a URL, through which clients can access a service operation or resource.",
+    "categoryId": "programming",
+    "difficulty": "medium",
+    "source": "MDN Web Docs"
+  },
+  {
+    "question": "What is a binary search algorithm designed to do?",
+    "options": [
+      "Efficiently find an item in a sorted collection",
+      "Sort an unsorted collection without comparisons",
+      "Encrypt a password",
+      "Compress an image"
+    ],
+    "correctAnswer": "Efficiently find an item in a sorted collection",
+    "explanation": "Binary search repeatedly divides a sorted search range in half, reducing the search space at each step.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is the average-case time complexity of lookup in a well-designed hash table?",
+    "options": [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n²)"
+    ],
+    "correctAnswer": "O(1)",
+    "explanation": "With a good hash function and controlled load factor, hash-table lookup has expected constant-time complexity, although worst-case lookup can be O(n).",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is the time complexity of binary search on a sorted array?",
+    "options": [
+      "O(1)",
+      "O(log n)",
+      "O(n)",
+      "O(n log n)"
+    ],
+    "correctAnswer": "O(log n)",
+    "explanation": "Binary search halves the remaining search space after each comparison, producing logarithmic time complexity.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "Which sorting algorithm has an average-case time complexity of O(n log n) and is based on partitioning around a pivot?",
+    "options": [
+      "Bubble sort",
+      "Selection sort",
+      "Quicksort",
+      "Linear search"
+    ],
+    "correctAnswer": "Quicksort",
+    "explanation": "Quicksort partitions a collection around a pivot and has an average-case time complexity of O(n log n), although its worst case can be O(n²).",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is a race condition in concurrent programming?",
+    "options": [
+      "A situation where program behavior depends on the timing of concurrent operations",
+      "A loop that always executes once",
+      "A syntax error in a function",
+      "A slow network connection"
+    ],
+    "correctAnswer": "A situation where program behavior depends on the timing of concurrent operations",
+    "explanation": "A race condition can occur when multiple concurrent operations access shared state and the outcome depends on their execution order.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What is a deadlock in concurrent programming?",
+    "options": [
+      "A situation where processes or threads wait indefinitely for resources held by one another",
+      "A program that finishes successfully",
+      "A function that returns zero",
+      "A database with no records"
+    ],
+    "correctAnswer": "A situation where processes or threads wait indefinitely for resources held by one another",
+    "explanation": "A deadlock can occur when concurrent processes or threads each wait for resources or conditions that prevent the others from proceeding.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Microsoft Learn"
+  },
+  {
+    "question": "What is memoization?",
+    "options": [
+      "Caching results of expensive function calls for reuse",
+      "Encrypting source code",
+      "Deleting unused variables",
+      "Converting code to machine language"
+    ],
+    "correctAnswer": "Caching results of expensive function calls for reuse",
+    "explanation": "Memoization stores previously computed results so repeated calls with the same inputs can avoid redundant computation.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Python Documentation"
+  },
+  {
+    "question": "Which traversal visits a tree's root before its subtrees?",
+    "options": [
+      "Preorder traversal",
+      "Inorder traversal",
+      "Postorder traversal",
+      "Reverse traversal"
+    ],
+    "correctAnswer": "Preorder traversal",
+    "explanation": "In preorder traversal, the root is visited first, followed by the left and right subtrees in a binary tree.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "Which traversal visits the root of a binary tree after both subtrees?",
+    "options": [
+      "Preorder",
+      "Inorder",
+      "Postorder",
+      "Level-order only"
+    ],
+    "correctAnswer": "Postorder",
+    "explanation": "Postorder traversal visits the left subtree, then the right subtree, and finally the root.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What property must a binary search tree maintain for efficient ordered searching?",
+    "options": [
+      "Values in the left subtree are ordered below the node and values in the right subtree above it",
+      "Every node must have exactly two children",
+      "All nodes must contain identical values",
+      "The tree must always contain exactly 100 nodes"
+    ],
+    "correctAnswer": "Values in the left subtree are ordered below the node and values in the right subtree above it",
+    "explanation": "A binary search tree maintains an ordering relationship between each node and values in its subtrees, enabling ordered searching.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "MIT OpenCourseWare"
+  },
+  {
+    "question": "What is garbage collection?",
+    "options": [
+      "Automatic identification and reclamation of memory that is no longer reachable",
+      "Deleting source-code comments",
+      "Removing old files from a repository",
+      "Cleaning computer hardware"
+    ],
+    "correctAnswer": "Automatic identification and reclamation of memory that is no longer reachable",
+    "explanation": "Garbage collectors automatically identify objects that are no longer reachable by a program and reclaim their associated memory.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What is a memory leak in a program?",
+    "options": [
+      "Memory that remains allocated when it is no longer needed",
+      "A damaged RAM module",
+      "A failed hard drive",
+      "A syntax error involving memory"
+    ],
+    "correctAnswer": "Memory that remains allocated when it is no longer needed",
+    "explanation": "A memory leak occurs when a program retains memory that it no longer needs, potentially causing memory usage to grow unnecessarily.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Microsoft Learn"
+  },
+  {
+    "question": "What does ACID describe in database systems?",
+    "options": [
+      "Properties that help ensure reliable database transactions",
+      "A programming language",
+      "A network encryption algorithm",
+      "A graphics rendering method"
+    ],
+    "correctAnswer": "Properties that help ensure reliable database transactions",
+    "explanation": "ACID stands for Atomicity, Consistency, Isolation, and Durability, four properties used to describe reliable transaction behavior.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "PostgreSQL Documentation"
+  },
+  {
+    "question": "What is an abstraction in software engineering?",
+    "options": [
+      "Hiding unnecessary implementation details behind a simpler interface",
+      "Copying every line of source code",
+      "Removing all functions from a program",
+      "Converting software into hardware"
+    ],
+    "correctAnswer": "Hiding unnecessary implementation details behind a simpler interface",
+    "explanation": "Abstraction allows programmers to focus on essential behavior while hiding lower-level implementation details.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Oracle Java Documentation"
+  },
+  {
+    "question": "What is the main purpose of a mutex in concurrent programming?",
+    "options": [
+      "To control exclusive access to shared resources",
+      "To sort an array",
+      "To compile source code",
+      "To store database records"
+    ],
+    "correctAnswer": "To control exclusive access to shared resources",
+    "explanation": "A mutex, or mutual exclusion lock, allows only one thread or process at a time to access a protected critical section.",
+    "categoryId": "programming",
+    "difficulty": "hard",
+    "source": "Microsoft Learn"
+  }
+]

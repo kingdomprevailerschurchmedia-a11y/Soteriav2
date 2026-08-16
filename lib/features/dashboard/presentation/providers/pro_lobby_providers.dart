@@ -1,3 +1,4 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/firebase/config/providers/configuration_providers.dart';
@@ -14,8 +15,12 @@ import '../../../../features/gameplay_engine/models/pro_mode_access.dart';
 import '../../../../features/gameplay_engine/models/competitive_session.dart';
 import '../../../../features/gameplay_engine/domain/repositories/pro_mode_repository.dart';
 import '../../../../features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart';
+import '../../../question_content/domain/repositories/category_repository.dart';
+import '../../../question_content/presentation/providers/category_providers.dart';
 
 import '../../../player/presentation/providers/progression_providers.dart';
+
+part 'pro_lobby_providers.freezed.dart';
 
 // --- Repositories ---
 final proModeRepositoryProvider = Provider<ProModeRepository>((ref) {
@@ -26,36 +31,18 @@ final proModeRepositoryProvider = Provider<ProModeRepository>((ref) {
 });
 
 // --- State Models ---
-class ProLobbyState {
-  final bool isLoading;
-  final String? error;
-  final ProSessionConfig config;
-  final bool isOffline;
-  final ProModeAccessResult access;
-
-  const ProLobbyState({
-    this.isLoading = false,
-    this.error,
-    this.config = const ProSessionConfig(),
-    this.isOffline = false,
-    this.access = const ProModeAccessResult.loading(),
-  });
-
-  ProLobbyState copyWith({
-    bool? isLoading,
+@freezed
+abstract class ProLobbyState with _$ProLobbyState {
+  const factory ProLobbyState({
+    @Default(false) bool isLoading,
     String? error,
-    ProSessionConfig? config,
-    bool? isOffline,
-    ProModeAccessResult? access,
-  }) {
-    return ProLobbyState(
-      isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
-      config: config ?? this.config,
-      isOffline: isOffline ?? this.isOffline,
-      access: access ?? this.access,
-    );
-  }
+    @Default(ProSessionConfig()) ProSessionConfig config,
+    @Default(false) bool isOffline,
+    @Default(ProModeAccessResult.loading()) ProModeAccessResult access,
+    @Default([]) List<Category> categories,
+  }) = _ProLobbyState;
+
+  const ProLobbyState._();
 
   bool get hasInsufficientCoins => access.state == ProModeAccessState.insufficientTokens;
   String? get validationError => access.message;
@@ -63,10 +50,14 @@ class ProLobbyState {
 
 // --- Notifiers ---
 class ProLobbyNotifier extends Notifier<ProLobbyState> {
+  bool _mounted = true;
+
   @override
   ProLobbyState build() {
-    // Trigger initial validation which includes availability check
-    Future.microtask(() => _updateValidation());
+    _mounted = true;
+    ref.onDispose(() => _mounted = false);
+    // Trigger initial validation and category fetch
+    Future.microtask(() => _init());
     return _getInitialState();
   }
 
@@ -100,6 +91,28 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       access: access,
       isOffline: false,
     );
+  }
+
+  Future<void> _init() async {
+    await _fetchCategories();
+    _updateValidation();
+  }
+
+  Future<void> _fetchCategories() async {
+    state = state.copyWith(isLoading: true);
+    try {
+      final categories = await ref.read(categoryRepositoryProvider).getCategories();
+      if (_mounted) {
+        state = state.copyWith(
+          isLoading: false,
+          categories: categories,
+        );
+      }
+    } catch (e) {
+      if (_mounted) {
+        state = state.copyWith(isLoading: false, error: e.toString());
+      }
+    }
   }
 
   Future<void> checkConnection() async {

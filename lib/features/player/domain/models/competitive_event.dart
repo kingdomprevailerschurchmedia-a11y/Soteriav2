@@ -33,6 +33,7 @@ enum CompetitiveEventType {
   liveEventEnding,
   systemAnnouncement,
   rematchRequest,
+  friendshipEstablished,
 }
 
 @immutable

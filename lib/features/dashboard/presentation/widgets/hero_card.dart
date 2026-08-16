@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
@@ -9,8 +10,9 @@ import '../../../../core/widgets/animations/animated_numeric_counter.dart';
 import '../../../player/domain/models/rank_progress.dart';
 import '../../../player/presentation/widgets/competitive_rank_badge.dart';
 import '../../../player/presentation/widgets/rank_progress_bar.dart';
+import '../../../player/providers/player_providers.dart';
 
-class HeroCard extends StatelessWidget {
+class HeroCard extends ConsumerWidget {
   const HeroCard({
     super.key,
     required this.level,
@@ -35,7 +37,7 @@ class HeroCard extends StatelessWidget {
   final VoidCallback? onTap;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.containerPadding(context),
@@ -63,13 +65,17 @@ class HeroCard extends StatelessWidget {
               children: [
                 // Top Row: Identity and Streak
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (rankProgress != null) ...[
-                      CompetitiveRankBadge(
-                        tierId: rankProgress!.tier.id,
-                        rankName: rankProgress!.currentRank,
-                        size: RankBadgeSize.small,
-                        hasGlow: rankProgress!.tier.displayOrder >= 3,
+                      Padding(
+                        padding: EdgeInsets.only(top: 4.h),
+                        child: CompetitiveRankBadge(
+                          tierId: rankProgress!.tier.id,
+                          rankName: rankProgress!.currentRank,
+                          size: RankBadgeSize.small,
+                          hasGlow: rankProgress!.tier.displayOrder >= 3,
+                        ),
                       ),
                       SizedBox(width: 12.w),
                     ],
@@ -348,8 +354,11 @@ class _StreakSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final progress = (streak % 7);
+    final displayProgress = progress == 0 && streak > 0 ? 7 : progress;
+
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(12.r),
@@ -364,22 +373,22 @@ class _StreakSummary extends StatelessWidget {
         children: [
           Image.asset(
             'assets/icons/streak_icon.png',
-            width: 16.sp,
-            height: 16.sp,
+            width: 24.sp,
+            height: 24.sp,
             fit: BoxFit.contain,
           ),
-          SizedBox(width: 6.w),
-          AnimatedNumericCounter(
-            value: streak,
+          SizedBox(width: 8.w),
+          Text(
+            '$displayProgress/7',
             style: context.titleLarge.copyWith(
               fontWeight: FontWeight.w900,
               color: Colors.white,
-              fontSize: 14.sp,
+              fontSize: 18.sp,
             ),
           ),
-          SizedBox(width: 4.w),
+          SizedBox(width: 6.w),
           Text(
-            'STREAK',
+            'DAYS STREAK',
             style: context.labelSmall.copyWith(
               color: Colors.white.withValues(alpha: 0.5),
               fontSize: 8.sp,

@@ -19,6 +19,7 @@ class SoteriaTextField extends StatefulWidget {
   final bool enabled;
   final bool readOnly;
   final Iterable<String>? autofillHints;
+  final String? initialValue;
 
   const SoteriaTextField({
     super.key,
@@ -34,6 +35,7 @@ class SoteriaTextField extends StatefulWidget {
     this.enabled = true,
     this.readOnly = false,
     this.autofillHints,
+    this.initialValue,
   });
 
   @override
@@ -103,6 +105,7 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
           child: TextFormField(
             focusNode: _focusNode,
             controller: widget.controller,
+            initialValue: widget.initialValue,
             obscureText: _isObscured,
             validator: widget.validator,
             keyboardType: widget.keyboardType,

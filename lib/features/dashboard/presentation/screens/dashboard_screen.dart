@@ -10,6 +10,7 @@ import '../../../player/presentation/providers/progression_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
 import '../../../player/presentation/providers/milestone_providers.dart';
 import '../../../player/presentation/screens/competitive_rank_overview_screen.dart';
+import '../../../../core/network/providers/connectivity_providers.dart';
 import '../providers/dashboard_providers.dart';
 import '../widgets/dashboard_header.dart';
 import '../widgets/hero_card.dart';
@@ -17,6 +18,7 @@ import '../widgets/quick_actions_grid.dart';
 import '../../../player/presentation/widgets/season_header.dart';
 import '../widgets/daily_goals_section.dart';
 import '../widgets/milestone_section.dart';
+import '../widgets/daily_bonus_card.dart';
 import '../widgets/announcement_section.dart';
 import '../widgets/recent_achievements_section.dart';
 import '../widgets/top_scholars_section.dart';
@@ -84,6 +86,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       final progressionAsync = ref.watch(competitiveProgressionProvider);
                       final player = ref.watch(dashboardProvider.select((s) => s.player));
                       final greeting = ref.watch(dashboardProvider.select((s) => s.greeting));
+                      final isOnline = ref.watch(isOnlineProvider);
                       
                       return progressionAsync.when(
                         data: (progression) => DashboardHeader(
@@ -94,25 +97,25 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           coins: player?.coins ?? 0,
                           profileCompletion: 1.0,
                           avatarUrl: player?.photoUrl,
-                          isOnline: true,
+                          isOnline: isOnline,
                         ),
                         loading: () => DashboardHeader(
                           greeting: greeting,
                           playerName: player?.displayName ?? 'Scholar',
-                          level: 1,
-                          streak: 0,
-                          coins: 0,
+                          level: 1, // Fallback, could be improved with a secondary level provider
+                          streak: player?.currentStreak ?? 0,
+                          coins: player?.coins ?? 0,
                           profileCompletion: 1.0,
-                          isOnline: true,
+                          isOnline: isOnline,
                         ),
                         error: (err, st) => DashboardHeader(
                           greeting: 'Error loading level',
                           playerName: player?.displayName ?? 'Scholar',
                           level: 1,
-                          streak: 0,
-                          coins: 0,
+                          streak: player?.currentStreak ?? 0,
+                          coins: player?.coins ?? 0,
                           profileCompletion: 1.0,
-                          isOnline: true,
+                          isOnline: isOnline,
                         ),
                       );
                     }
@@ -170,6 +173,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
               // Season Status
               const SliverToBoxAdapter(child: RepaintBoundary(child: SeasonHeader())),
+
+              const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
+
+              // Daily Bonus
+              const SliverToBoxAdapter(
+                child: RepaintBoundary(child: DailyBonusCard()),
+              ),
 
               const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 

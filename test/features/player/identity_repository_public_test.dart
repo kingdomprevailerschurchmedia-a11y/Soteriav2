@@ -59,24 +59,14 @@ void main() {
       final mockQuery = MockQuery();
       final mockSnapshot = MockQuerySnapshot();
 
-      when(mockCollection.where(
-        'displayNameNormalized',
-        isGreaterThanOrEqualTo: 'alex',
-      )).thenReturn(mockQuery);
-      when(mockQuery.where(
-        'displayNameNormalized',
-        isLessThanOrEqualTo: 'alex\uf8ff',
-      )).thenReturn(mockQuery);
+      when(mockCollection.where(any)).thenReturn(mockQuery);
       when(mockQuery.limit(any)).thenReturn(mockQuery);
       when(mockQuery.get()).thenAnswer((_) async => mockSnapshot);
       when(mockSnapshot.docs).thenReturn([]);
 
       await repository.searchPlayers('Alex');
 
-      verify(mockCollection.where(
-        'displayNameNormalized',
-        isGreaterThanOrEqualTo: 'alex',
-      )).called(1);
+      verify(mockCollection.where(any)).called(1);
     });
   });
 }

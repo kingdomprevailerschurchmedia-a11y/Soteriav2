@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 
@@ -25,6 +26,7 @@ class _SoteriaAnimation extends StatefulWidget {
 
 class _SoteriaAnimationState extends State<_SoteriaAnimation> {
   bool _start = false;
+  Timer? _timer;
 
   @override
   void initState() {
@@ -32,10 +34,16 @@ class _SoteriaAnimationState extends State<_SoteriaAnimation> {
     if (widget.delay == Duration.zero) {
       _start = true;
     } else {
-      Future.delayed(widget.delay, () {
+      _timer = Timer(widget.delay, () {
         if (mounted) setState(() => _start = true);
       });
     }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override

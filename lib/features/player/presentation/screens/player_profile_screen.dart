@@ -49,7 +49,7 @@ class PlayerProfileScreen extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: MediaQuery.paddingOf(context).top + 20.h),
+            SizedBox(height: MediaQuery.paddingOf(context).top + 8.h),
             RepaintBoundary(child: _buildTopHeader(context)),
             SoteriaSpacing.gapLG,
             RepaintBoundary(
@@ -63,28 +63,28 @@ class PlayerProfileScreen extends ConsumerWidget {
             RepaintBoundary(
               child: RankProgressSection(progression: profile.progression),
             ),
-            SoteriaSpacing.gapXL,
+            SoteriaSpacing.gapLG,
             RepaintBoundary(
               child: EngagementSummarySection(
                 progression: profile.progression,
                 winStreak: profile.streak,
               ),
             ),
-            SoteriaSpacing.gapXL,
+            SoteriaSpacing.gapLG,
             RepaintBoundary(
               child: AchievementSummarySection(
                 earned: profile.earnedAchievements,
                 total: profile.totalAchievements,
               ),
             ),
-            SoteriaSpacing.gapXL,
+            SoteriaSpacing.gapLG,
             if (profile.careerSummary != null)
               RepaintBoundary(
                 child: CareerStatisticsSection(summary: profile.careerSummary!),
               ),
-            SoteriaSpacing.gapXL,
+            SoteriaSpacing.gapLG,
             RepaintBoundary(child: _buildAccountSection(context)),
-            SizedBox(height: 48.h + MediaQuery.paddingOf(context).bottom),
+            SizedBox(height: 40.h + MediaQuery.paddingOf(context).bottom),
           ],
         ),
       ),
@@ -161,10 +161,10 @@ class PlayerProfileScreen extends ConsumerWidget {
           child: Text(
             'ACCOUNT',
             style: context.labelSmall.copyWith(
-              color: SoteriaColors.muted,
-              letterSpacing: 1.5,
-              fontWeight: FontWeight.w900,
-              fontSize: 11.sp,
+              color: SoteriaColors.gold,
+              letterSpacing: 2.0,
+              fontWeight: FontWeight.w800,
+              fontSize: 13.sp,
             ),
           ),
         ),
@@ -175,11 +175,11 @@ class PlayerProfileScreen extends ConsumerWidget {
           child: Column(
             children: [
               _AccountTile(
-                icon: Icons.person_rounded,
-                iconColor: const Color(0xFF7C4DFF),
-                title: 'Personal Information',
-                subtitle: 'View and update your details',
-                onTap: () {},
+                icon: Icons.account_balance_wallet_rounded,
+                iconColor: SoteriaColors.xpColor,
+                title: 'Wallet & Billing',
+                subtitle: 'Manage your coins and transactions',
+                onTap: () => context.push(SoteriaRoutes.rewards),
               ),
               _AccountDivider(),
               _AccountTile(

@@ -1,0 +1,744 @@
+[
+  {
+    "question": "What is the SI unit of force?",
+    "options": [
+      "Joule",
+      "Newton",
+      "Watt",
+      "Pascal"
+    ],
+    "correctAnswer": "Newton",
+    "explanation": "The newton (N) is the SI derived unit of force, equal to one kilogram metre per second squared.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "International Bureau of Weights and Measures (BIPM)"
+  },
+  {
+    "question": "What is the primary purpose of a beam in a structure?",
+    "options": [
+      "To carry loads primarily through bending",
+      "To generate electrical power",
+      "To store fuel",
+      "To measure temperature"
+    ],
+    "correctAnswer": "To carry loads primarily through bending",
+    "explanation": "Structural beams are designed to support loads and primarily resist bending and shear forces.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Engineering Mechanics textbook"
+  },
+  {
+    "question": "Which material is commonly used for electrical wiring because of its high conductivity?",
+    "options": [
+      "Copper",
+      "Concrete",
+      "Glass",
+      "Rubber"
+    ],
+    "correctAnswer": "Copper",
+    "explanation": "Copper has high electrical conductivity and good mechanical properties, making it widely used for electrical wiring.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "IEEE Engineering Fundamentals"
+  },
+  {
+    "question": "What does CAD stand for?",
+    "options": [
+      "Computer-Aided Design",
+      "Computer Automated Development",
+      "Central Architecture Design",
+      "Calculated Assembly Drawing"
+    ],
+    "correctAnswer": "Computer-Aided Design",
+    "explanation": "CAD refers to the use of computer software to create, modify, analyze, and optimize designs.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Autodesk Engineering Resources"
+  },
+  {
+    "question": "Which device converts mechanical energy into electrical energy?",
+    "options": [
+      "Generator",
+      "Transformer",
+      "Motor",
+      "Resistor"
+    ],
+    "correctAnswer": "Generator",
+    "explanation": "A generator converts mechanical energy into electrical energy through electromagnetic induction.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which device converts electrical energy into mechanical energy?",
+    "options": [
+      "Generator",
+      "Motor",
+      "Transformer",
+      "Capacitor"
+    ],
+    "correctAnswer": "Motor",
+    "explanation": "An electric motor converts electrical energy into mechanical motion.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "What is the SI unit of pressure?",
+    "options": [
+      "Pascal",
+      "Newton",
+      "Joule",
+      "Volt"
+    ],
+    "correctAnswer": "Pascal",
+    "explanation": "The pascal (Pa) is the SI unit of pressure and is equal to one newton per square metre.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "International Bureau of Weights and Measures (BIPM)"
+  },
+  {
+    "question": "What is the main purpose of a bridge?",
+    "options": [
+      "To provide a passage over an obstacle",
+      "To generate electricity",
+      "To store construction materials",
+      "To measure water pressure"
+    ],
+    "correctAnswer": "To provide a passage over an obstacle",
+    "explanation": "Bridges are structures designed to carry people, vehicles, railways, or other loads across obstacles such as rivers, roads, or valleys.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which engineering discipline focuses primarily on the design of machines and mechanical systems?",
+    "options": [
+      "Mechanical engineering",
+      "Civil engineering",
+      "Chemical engineering",
+      "Geological engineering"
+    ],
+    "correctAnswer": "Mechanical engineering",
+    "explanation": "Mechanical engineering deals with machines, mechanisms, energy systems, manufacturing, and mechanical devices.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "American Society of Mechanical Engineers (ASME)"
+  },
+  {
+    "question": "Which engineering discipline focuses on buildings, roads, bridges, and other infrastructure?",
+    "options": [
+      "Civil engineering",
+      "Electrical engineering",
+      "Software engineering",
+      "Biomedical engineering"
+    ],
+    "correctAnswer": "Civil engineering",
+    "explanation": "Civil engineering covers the planning, design, construction, and maintenance of infrastructure and the built environment.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "American Society of Civil Engineers (ASCE)"
+  },
+  {
+    "question": "Which engineering discipline primarily deals with electricity, electronics, and electrical systems?",
+    "options": [
+      "Electrical engineering",
+      "Civil engineering",
+      "Mining engineering",
+      "Environmental engineering"
+    ],
+    "correctAnswer": "Electrical engineering",
+    "explanation": "Electrical engineering focuses on electrical systems, electronics, power, communications, control systems, and related technologies.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "IEEE"
+  },
+  {
+    "question": "What is concrete primarily made from?",
+    "options": [
+      "Cement, aggregates, and water",
+      "Steel and copper",
+      "Wood and glass",
+      "Aluminum and rubber"
+    ],
+    "correctAnswer": "Cement, aggregates, and water",
+    "explanation": "Concrete is generally produced by mixing cement with water and aggregates such as sand and gravel or crushed stone.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "American Concrete Institute"
+  },
+  {
+    "question": "What is the main function of a transformer in an electrical system?",
+    "options": [
+      "To change AC voltage levels",
+      "To convert AC directly into mechanical motion",
+      "To store electrical charge permanently",
+      "To measure temperature"
+    ],
+    "correctAnswer": "To change AC voltage levels",
+    "explanation": "Transformers use electromagnetic induction to step alternating-current voltage up or down.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "IEEE"
+  },
+  {
+    "question": "What does HVAC stand for?",
+    "options": [
+      "Heating, Ventilation, and Air Conditioning",
+      "High Voltage Automatic Control",
+      "Hydraulic Ventilation and Cooling",
+      "Heat Valve and Circulation"
+    ],
+    "correctAnswer": "Heating, Ventilation, and Air Conditioning",
+    "explanation": "HVAC refers to systems used to control heating, ventilation, and air conditioning in buildings and other spaces.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "ASHRAE"
+  },
+  {
+    "question": "What is a turbine primarily designed to do?",
+    "options": [
+      "Convert fluid energy into mechanical energy",
+      "Store electrical charge",
+      "Measure structural stress",
+      "Produce concrete"
+    ],
+    "correctAnswer": "Convert fluid energy into mechanical energy",
+    "explanation": "Turbines extract energy from moving fluids such as steam, water, or gas and convert it into rotational mechanical energy.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Encyclopaedia Britannica"
+  },
+  {
+    "question": "Which metal is commonly used in aircraft structures because of its low density and useful strength?",
+    "options": [
+      "Aluminum",
+      "Lead",
+      "Mercury",
+      "Tin"
+    ],
+    "correctAnswer": "Aluminum",
+    "explanation": "Aluminum alloys are widely used in aircraft because they combine relatively low density with useful strength and corrosion resistance.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "Federal Aviation Administration"
+  },
+  {
+    "question": "What is a circuit breaker designed to do?",
+    "options": [
+      "Interrupt an electrical circuit when unsafe current conditions occur",
+      "Increase fuel pressure",
+      "Store mechanical energy",
+      "Increase water flow"
+    ],
+    "correctAnswer": "Interrupt an electrical circuit when unsafe current conditions occur",
+    "explanation": "Circuit breakers automatically interrupt current when conditions such as overloads or short circuits exceed specified limits.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "National Electrical Manufacturers Association (NEMA)"
+  },
+  {
+    "question": "What is the main purpose of insulation around an electrical conductor?",
+    "options": [
+      "To reduce unwanted electrical contact and current leakage",
+      "To increase the conductor's weight",
+      "To generate electricity",
+      "To increase water pressure"
+    ],
+    "correctAnswer": "To reduce unwanted electrical contact and current leakage",
+    "explanation": "Electrical insulation separates conductors from each other and from surrounding materials to help prevent unintended current flow.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "IEEE"
+  },
+  {
+    "question": "Which engineering field applies engineering principles to living systems and medical technology?",
+    "options": [
+      "Biomedical engineering",
+      "Mining engineering",
+      "Structural engineering",
+      "Petroleum engineering"
+    ],
+    "correctAnswer": "Biomedical engineering",
+    "explanation": "Biomedical engineering applies engineering methods to biology and medicine, including medical devices, biomaterials, and diagnostic technologies.",
+    "categoryId": "engineering",
+    "difficulty": "easy",
+    "source": "National Institute of Biomedical Imaging and Bioengineering"
+  },
+  {
+    "question": "What is tensile stress?",
+    "options": [
+      "Stress caused by forces pulling a material apart",
+      "Stress caused only by heating",
+      "Stress caused by twisting only",
+      "Stress caused by electrical current"
+    ],
+    "correctAnswer": "Stress caused by forces pulling a material apart",
+    "explanation": "Tensile stress occurs when forces act to stretch or pull a material apart.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Engineering Mechanics textbook"
+  },
+  {
+    "question": "What is Young's modulus a measure of?",
+    "options": [
+      "A material's stiffness in tension or compression",
+      "A material's electrical conductivity",
+      "A material's melting temperature",
+      "A material's density only"
+    ],
+    "correctAnswer": "A material's stiffness in tension or compression",
+    "explanation": "Young's modulus is the ratio of normal stress to corresponding strain within the elastic range of a material.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Materials Science and Engineering textbook"
+  },
+  {
+    "question": "What is the purpose of reinforcement steel in reinforced concrete?",
+    "options": [
+      "To improve the concrete's resistance to tensile forces",
+      "To reduce the concrete's density to zero",
+      "To prevent all forms of corrosion",
+      "To replace cement completely"
+    ],
+    "correctAnswer": "To improve the concrete's resistance to tensile forces",
+    "explanation": "Concrete is strong in compression but relatively weak in tension, so reinforcing steel helps carry tensile forces.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "American Concrete Institute"
+  },
+  {
+    "question": "What is Bernoulli's principle commonly used to analyze?",
+    "options": [
+      "The relationship between pressure, velocity, and elevation in fluid flow",
+      "The strength of electrical insulation",
+      "The hardness of metals",
+      "The thermal expansion of solids only"
+    ],
+    "correctAnswer": "The relationship between pressure, velocity, and elevation in fluid flow",
+    "explanation": "Bernoulli's equation relates pressure, kinetic energy per unit volume, and potential energy per unit volume along a streamline under specified assumptions.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Fluid Mechanics textbook"
+  },
+  {
+    "question": "What does Reynolds number help engineers determine?",
+    "options": [
+      "Whether fluid flow is likely to be laminar or turbulent",
+      "The electrical resistance of copper",
+      "The melting point of steel",
+      "The weight of a bridge"
+    ],
+    "correctAnswer": "Whether fluid flow is likely to be laminar or turbulent",
+    "explanation": "Reynolds number is a dimensionless quantity used to characterize flow regimes and the relative importance of inertial and viscous effects.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Fluid Mechanics textbook"
+  },
+  {
+    "question": "What is the purpose of a heat exchanger?",
+    "options": [
+      "To transfer heat between fluids at different temperatures",
+      "To convert electricity directly into sound",
+      "To increase structural strength",
+      "To store mechanical energy"
+    ],
+    "correctAnswer": "To transfer heat between fluids at different temperatures",
+    "explanation": "Heat exchangers transfer thermal energy between two or more fluids, usually while keeping them physically separated.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "American Society of Mechanical Engineers (ASME)"
+  },
+  {
+    "question": "What is torque?",
+    "options": [
+      "The rotational effect of a force",
+      "The temperature of a machine",
+      "The pressure inside a pipe",
+      "The electrical charge stored in a capacitor"
+    ],
+    "correctAnswer": "The rotational effect of a force",
+    "explanation": "Torque measures the tendency of a force to rotate an object about an axis or pivot.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Engineering Mechanics textbook"
+  },
+  {
+    "question": "What is fatigue failure in engineering materials?",
+    "options": [
+      "Failure caused by repeated or cyclic loading",
+      "Failure caused only by a single impact",
+      "Failure caused exclusively by electrical current",
+      "Failure caused by insufficient color contrast"
+    ],
+    "correctAnswer": "Failure caused by repeated or cyclic loading",
+    "explanation": "Fatigue occurs when repeated or fluctuating stresses cause cracks to initiate and grow, potentially leading to failure.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "ASM International"
+  },
+  {
+    "question": "What is corrosion?",
+    "options": [
+      "The deterioration of a material through chemical or electrochemical reactions with its environment",
+      "The strengthening of steel through heating",
+      "The cooling of a fluid",
+      "The increase of electrical conductivity"
+    ],
+    "correctAnswer": "The deterioration of a material through chemical or electrochemical reactions with its environment",
+    "explanation": "Corrosion is the deterioration of materials, especially metals, through chemical or electrochemical interaction with their environment.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "NACE International"
+  },
+  {
+    "question": "What is a control system designed to do?",
+    "options": [
+      "Regulate or control the behavior of a system",
+      "Only store mechanical parts",
+      "Only increase electrical resistance",
+      "Replace all sensors"
+    ],
+    "correctAnswer": "Regulate or control the behavior of a system",
+    "explanation": "Control systems use inputs, measurements, and control actions to influence a system's behavior toward desired conditions.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "IEEE Control Systems Society"
+  },
+  {
+    "question": "What is a sensor?",
+    "options": [
+      "A device that detects or measures a physical quantity",
+      "A device that always produces mechanical motion",
+      "A type of structural beam",
+      "A material used only for insulation"
+    ],
+    "correctAnswer": "A device that detects or measures a physical quantity",
+    "explanation": "Sensors detect physical quantities such as temperature, pressure, position, acceleration, or light and produce a corresponding signal.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "National Institute of Standards and Technology (NIST)"
+  },
+  {
+    "question": "What is the purpose of a PID controller?",
+    "options": [
+      "To regulate a system using proportional, integral, and derivative actions",
+      "To convert AC voltage into mechanical energy",
+      "To measure the mass of a structure",
+      "To manufacture semiconductor wafers"
+    ],
+    "correctAnswer": "To regulate a system using proportional, integral, and derivative actions",
+    "explanation": "A PID controller combines proportional, integral, and derivative terms to reduce error between a desired setpoint and measured output.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "IEEE Control Systems Society"
+  },
+  {
+    "question": "What is a factor of safety used for in engineering design?",
+    "options": [
+      "To provide a margin between expected loads and failure capacity",
+      "To determine the color of a structure",
+      "To calculate employee salaries",
+      "To eliminate the need for testing"
+    ],
+    "correctAnswer": "To provide a margin between expected loads and failure capacity",
+    "explanation": "A factor of safety provides a design margin so that structures or components can withstand conditions beyond their anticipated operating loads.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Engineering Mechanics textbook"
+  },
+  {
+    "question": "What is finite element analysis primarily used for?",
+    "options": [
+      "Numerically analyzing complex physical systems by dividing them into smaller elements",
+      "Writing source code automatically",
+      "Measuring atmospheric humidity",
+      "Generating electrical power"
+    ],
+    "correctAnswer": "Numerically analyzing complex physical systems by dividing them into smaller elements",
+    "explanation": "Finite element analysis divides a complex domain into smaller elements and numerically approximates behavior such as stress, deformation, heat transfer, or fluid flow.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "NASA Engineering Fundamentals"
+  },
+  {
+    "question": "What is the primary purpose of a bearing in a rotating machine?",
+    "options": [
+      "To support moving parts and reduce friction",
+      "To increase electrical voltage",
+      "To store fuel",
+      "To generate heat intentionally"
+    ],
+    "correctAnswer": "To support moving parts and reduce friction",
+    "explanation": "Bearings support rotating or moving components while reducing friction and controlling relative motion.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "SKF Engineering Handbook"
+  },
+  {
+    "question": "What is a semiconductor?",
+    "options": [
+      "A material whose electrical conductivity lies between that of conductors and insulators",
+      "A material that cannot conduct electricity under any condition",
+      "A material used only in bridges",
+      "A material that always has perfect conductivity"
+    ],
+    "correctAnswer": "A material whose electrical conductivity lies between that of conductors and insulators",
+    "explanation": "Semiconductors have electrical properties between conductors and insulators and can have their conductivity controlled through factors such as doping.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "IEEE"
+  },
+  {
+    "question": "What is a cantilever beam?",
+    "options": [
+      "A beam fixed at one end and free at the other",
+      "A beam supported equally at both ends",
+      "A beam with no supports",
+      "A beam made exclusively from concrete"
+    ],
+    "correctAnswer": "A beam fixed at one end and free at the other",
+    "explanation": "A cantilever is a structural member fixed at one end while its other end extends freely.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Engineering Mechanics textbook"
+  },
+  {
+    "question": "What is laminar flow?",
+    "options": [
+      "Fluid flow in which particles generally move in smooth, orderly layers",
+      "Fluid flow that always contains shock waves",
+      "Fluid flow that occurs only in solids",
+      "Fluid flow with no velocity"
+    ],
+    "correctAnswer": "Fluid flow in which particles generally move in smooth, orderly layers",
+    "explanation": "Laminar flow is characterized by relatively smooth and orderly fluid motion with limited mixing between adjacent layers.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "Fluid Mechanics textbook"
+  },
+  {
+    "question": "What is an engineering drawing primarily used for?",
+    "options": [
+      "Communicating precise information about the design and manufacture of an object",
+      "Recording employee attendance",
+      "Measuring internet speed",
+      "Replacing all physical prototypes"
+    ],
+    "correctAnswer": "Communicating precise information about the design and manufacture of an object",
+    "explanation": "Engineering drawings communicate dimensions, geometry, tolerances, materials, and other technical requirements needed to make or inspect components.",
+    "categoryId": "engineering",
+    "difficulty": "medium",
+    "source": "American Society of Mechanical Engineers (ASME)"
+  },
+  {
+    "question": "What does the first law of thermodynamics express?",
+    "options": [
+      "Conservation of energy",
+      "Conservation of mass only",
+      "The impossibility of heat transfer",
+      "The law of electrical resistance"
+    ],
+    "correctAnswer": "Conservation of energy",
+    "explanation": "The first law of thermodynamics states that energy is conserved, with changes in a system's energy related to heat transfer and work.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "NIST Thermodynamics Reference"
+  },
+  {
+    "question": "What does the second law of thermodynamics establish?",
+    "options": [
+      "It places constraints on the direction of thermodynamic processes and introduces entropy",
+      "It states that all energy can be converted completely into useful work",
+      "It states that pressure is always constant",
+      "It eliminates the concept of heat"
+    ],
+    "correctAnswer": "It places constraints on the direction of thermodynamic processes and introduces entropy",
+    "explanation": "The second law establishes the directionality of spontaneous thermodynamic processes and provides the basis for the concept of entropy.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "NIST Thermodynamics Reference"
+  },
+  {
+    "question": "What is the purpose of a flywheel in a mechanical system?",
+    "options": [
+      "To store rotational kinetic energy and smooth variations in speed",
+      "To increase electrical resistance",
+      "To measure fluid pressure",
+      "To prevent all mechanical motion"
+    ],
+    "correctAnswer": "To store rotational kinetic energy and smooth variations in speed",
+    "explanation": "A flywheel stores kinetic energy in rotation and helps reduce speed fluctuations in systems with varying torque or power demands.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "American Society of Mechanical Engineers (ASME)"
+  },
+  {
+    "question": "What is the neutral axis of a beam?",
+    "options": [
+      "The line within a bending beam where longitudinal stress is ideally zero",
+      "The outermost surface of every beam",
+      "The point where the beam is always strongest",
+      "The line containing all external loads"
+    ],
+    "correctAnswer": "The line within a bending beam where longitudinal stress is ideally zero",
+    "explanation": "For an ideal beam undergoing pure bending, the neutral axis is the location where longitudinal tensile and compressive stresses change sign and are zero.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "Mechanics of Materials textbook"
+  },
+  {
+    "question": "What is the moment of inertia of an area used to determine in structural engineering?",
+    "options": [
+      "A section's resistance to bending about an axis",
+      "The electrical resistance of a conductor",
+      "The thermal conductivity of concrete",
+      "The density of a fluid"
+    ],
+    "correctAnswer": "A section's resistance to bending about an axis",
+    "explanation": "The second moment of area, commonly called area moment of inertia, influences the bending stress and deflection of structural members.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "Mechanics of Materials textbook"
+  },
+  {
+    "question": "What is buckling?",
+    "options": [
+      "Sudden lateral deformation of a slender member under compressive loading",
+      "Gradual heating of a conductor",
+      "Corrosion caused by water",
+      "Expansion of a fluid under pressure"
+    ],
+    "correctAnswer": "Sudden lateral deformation of a slender member under compressive loading",
+    "explanation": "Buckling is an instability phenomenon in which a slender structural member can undergo significant lateral deformation when subjected to compression.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "American Institute of Steel Construction"
+  },
+  {
+    "question": "What does Euler's critical load formula estimate?",
+    "options": [
+      "The buckling load of an ideal slender column",
+      "The melting point of steel",
+      "The electrical current in a wire",
+      "The pressure in a hydraulic pump"
+    ],
+    "correctAnswer": "The buckling load of an ideal slender column",
+    "explanation": "Euler's buckling formula estimates the critical load at which an ideal slender column becomes unstable under compression, subject to its assumptions.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "Mechanics of Materials textbook"
+  },
+  {
+    "question": "What is a stress concentration?",
+    "options": [
+      "A localized increase in stress caused by geometric discontinuities",
+      "A uniform reduction in stress throughout a structure",
+      "A reduction in material density",
+      "A method of increasing electrical voltage"
+    ],
+    "correctAnswer": "A localized increase in stress caused by geometric discontinuities",
+    "explanation": "Features such as holes, sharp corners, grooves, and notches can locally amplify stress compared with the nominal stress.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "ASM International"
+  },
+  {
+    "question": "What is creep in materials engineering?",
+    "options": [
+      "Time-dependent deformation under sustained load, especially at elevated temperature",
+      "Sudden fracture caused only by impact",
+      "Electrical current leakage",
+      "A type of fluid turbulence"
+    ],
+    "correctAnswer": "Time-dependent deformation under sustained load, especially at elevated temperature",
+    "explanation": "Creep is gradual deformation under sustained stress and becomes particularly important for many materials at elevated temperatures.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "ASM International"
+  },
+  {
+    "question": "What is the primary purpose of a heat sink in electronics?",
+    "options": [
+      "To transfer heat away from a component",
+      "To increase electrical resistance",
+      "To store digital information",
+      "To generate electromagnetic waves"
+    ],
+    "correctAnswer": "To transfer heat away from a component",
+    "explanation": "A heat sink increases the effective surface area available for heat transfer, helping dissipate heat from electronic components.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "IEEE"
+  },
+  {
+    "question": "What is resonance in a mechanical system?",
+    "options": [
+      "A condition where excitation frequency is near a system's natural frequency, potentially producing large oscillations",
+      "A state in which a machine cannot move",
+      "A method for reducing all vibration to zero",
+      "A form of corrosion"
+    ],
+    "correctAnswer": "A condition where excitation frequency is near a system's natural frequency, potentially producing large oscillations",
+    "explanation": "Resonance occurs when periodic excitation approaches a natural frequency of a system, potentially causing significantly increased vibration amplitudes.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "NASA Engineering Fundamentals"
+  },
+  {
+    "question": "What is computational fluid dynamics (CFD) used for?",
+    "options": [
+      "Numerically modeling fluid flow and related physical phenomena",
+      "Designing only electrical circuits",
+      "Managing employee payroll",
+      "Manufacturing concrete without water"
+    ],
+    "correctAnswer": "Numerically modeling fluid flow and related physical phenomena",
+    "explanation": "CFD uses numerical methods and computational models to analyze fluid motion, heat transfer, and related phenomena.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "NASA Computational Fluid Dynamics Resources"
+  },
+  {
+    "question": "What is a three-phase electrical system?",
+    "options": [
+      "A system using three alternating voltages or currents with phase differences of 120 degrees",
+      "A system with three batteries connected randomly",
+      "A system using only direct current",
+      "A system containing exactly three transformers"
+    ],
+    "correctAnswer": "A system using three alternating voltages or currents with phase differences of 120 degrees",
+    "explanation": "A balanced three-phase AC system has three sinusoidal quantities separated by 120 electrical degrees.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "IEEE"
+  },
+  {
+    "question": "What is the purpose of a power factor correction system?",
+    "options": [
+      "To improve the ratio of real power to apparent power in an AC system",
+      "To increase the physical size of a generator",
+      "To eliminate all electrical losses",
+      "To convert all AC power into DC power"
+    ],
+    "correctAnswer": "To improve the ratio of real power to apparent power in an AC system",
+    "explanation": "Power factor correction reduces the reactive component of current in suitable AC systems, improving the relationship between real and apparent power.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "IEEE"
+  },
+  {
+    "question": "What is additive manufacturing commonly known as?",
+    "options": [
+      "3D printing",
+      "Forging",
+      "Casting",
+      "Milling"
+    ],
+    "correctAnswer": "3D printing",
+    "explanation": "Additive manufacturing creates objects by adding material layer by layer from digital design data, commonly referred to as 3D printing.",
+    "categoryId": "engineering",
+    "difficulty": "hard",
+    "source": "ASTM International"
+  }
+]

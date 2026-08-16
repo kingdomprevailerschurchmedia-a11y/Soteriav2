@@ -137,10 +137,22 @@ class FirebaseIdentityRepository implements IdentityRepository {
 
     final normalizedQuery = query.toLowerCase();
     
+    // We use Filter.or to search across both display name and username
+    // Note: Prefix matching (greaterThanOrEqualTo/lessThanOrEqualTo) works within OR filters
     final snapshot = await _firestore
         .collection('public_profiles')
-        .where('displayNameNormalized', isGreaterThanOrEqualTo: normalizedQuery)
-        .where('displayNameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff')
+        .where(
+          Filter.or(
+            Filter.and(
+              Filter('displayNameNormalized', isGreaterThanOrEqualTo: normalizedQuery),
+              Filter('displayNameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff'),
+            ),
+            Filter.and(
+              Filter('usernameNormalized', isGreaterThanOrEqualTo: normalizedQuery),
+              Filter('usernameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff'),
+            ),
+          ),
+        )
         .limit(limit)
         .get();
 

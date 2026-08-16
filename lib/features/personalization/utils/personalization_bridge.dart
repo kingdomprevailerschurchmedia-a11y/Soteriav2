@@ -10,7 +10,8 @@ class PersonalizationBridge {
       'Arts': 'arts',
       'History': 'history',
       'Sports': 'sports',
-      'Current Affairs': 'current-affairs',
+      'Current Affairs': 'current_affairs',
+      'General Knowledge': 'general_knowledge',
       'Programming': 'programming',
       'Mathematics': 'mathematics',
       'Engineering': 'engineering',
@@ -21,7 +22,7 @@ class PersonalizationBridge {
       'Design': 'design',
     };
 
-    return mapping[label] ?? label.toLowerCase().replaceAll(' ', '-');
+    return mapping[label] ?? label.toLowerCase().replaceAll(' ', '_');
   }
 
   /// Maps canonical Category IDs to readable labels.
@@ -34,7 +35,10 @@ class PersonalizationBridge {
       'arts': 'Arts',
       'history': 'History',
       'sports': 'Sports',
-      'current-affairs': 'Current Affairs',
+      'current_affairs': 'Current Affairs',
+      'current-affairs': 'Current Affairs', // Legacy support
+      'general_knowledge': 'General Knowledge',
+      'general-knowledge': 'General Knowledge', // Legacy support
       'programming': 'Programming',
       'mathematics': 'Mathematics',
       'engineering': 'Engineering',
@@ -48,6 +52,13 @@ class PersonalizationBridge {
     if (reverseMapping.containsKey(id)) return reverseMapping[id]!;
     
     // Capitalize each word
-    return id.split('-').map((s) => s.isEmpty ? '' : '${s[0].toUpperCase()}${s.substring(1)}').join(' ');
+    return id.split('_').map((s) => s.isEmpty ? '' : '${s[0].toUpperCase()}${s.substring(1)}').join(' ');
+  }
+
+  /// Normalizes legacy Category IDs to canonical ones.
+  static String normalizeCategoryId(String id) {
+    if (id == 'current-affairs') return 'current_affairs';
+    if (id == 'general-knowledge') return 'general_knowledge';
+    return id;
   }
 }

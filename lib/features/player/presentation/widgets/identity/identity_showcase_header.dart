@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/avatar/presentation/widgets/avatar_selection_dialog.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/features/player/domain/models/competitive_identity.dart';
 import 'package:soteria/features/player/presentation/widgets/competitive_rank_badge.dart';
@@ -28,25 +29,28 @@ class IdentityShowcaseHeader extends StatelessWidget {
         children: [
           Row(
             children: [
-              Stack(
-                alignment: Alignment.center,
-                clipBehavior: Clip.none,
-                children: [
-                  SoteriaAvatar(
-                    size: 80,
-                    showGlow: true,
-                  ),
-                  Positioned(
-                    bottom: -5,
-                    right: -10,
-                    child: CompetitiveRankBadge(
-                      tierId: identity.rankProgress.tier.id,
-                      rankName: identity.rankProgress.currentRank,
-                      size: RankBadgeSize.medium,
-                      hasGlow: true,
+              GestureDetector(
+                onTap: () => AvatarSelectionDialog.show(context),
+                child: Stack(
+                  alignment: Alignment.center,
+                  clipBehavior: Clip.none,
+                  children: [
+                    SoteriaAvatar(
+                      size: 80,
+                      showGlow: true,
                     ),
-                  ),
-                ],
+                    Positioned(
+                      bottom: -5,
+                      right: -10,
+                      child: CompetitiveRankBadge(
+                        tierId: identity.rankProgress.tier.id,
+                        rankName: identity.rankProgress.currentRank,
+                        size: RankBadgeSize.medium,
+                        hasGlow: true,
+                      ),
+                    ),
+                  ],
+                ),
               ),
               SizedBox(width: SoteriaSpacing.xl),
               Expanded(

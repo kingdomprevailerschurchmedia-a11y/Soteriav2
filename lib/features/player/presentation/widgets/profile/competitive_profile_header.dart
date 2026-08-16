@@ -5,7 +5,9 @@ import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
+import '../../../../../core/avatar/presentation/widgets/avatar_selection_dialog.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
+import '../../../../../core/network/providers/connectivity_providers.dart';
 import '../../../domain/models/player_profile.dart';
 import '../../../domain/models/player_progression.dart';
 import '../../providers/streak_providers.dart';
@@ -27,6 +29,7 @@ class CompetitiveProfileHeader extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final momentumAsync = ref.watch(currentMomentumProvider);
+    final isOnline = ref.watch(isOnlineProvider);
 
     return SoteriaCard(
       hasGlow: true,
@@ -36,31 +39,36 @@ class CompetitiveProfileHeader extends ConsumerWidget {
         children: [
           Row(
             children: [
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  SoteriaAvatar(
-                    imageUrl: identity.photoUrl,
-                    size: 80.w,
-                    hasBorder: true,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      color: SoteriaColors.background,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: SoteriaColors.primary.withValues(alpha: 0.5),
-                        width: 2,
+              GestureDetector(
+                onTap: () => AvatarSelectionDialog.show(context),
+                child: Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    SoteriaAvatar(
+                      imageUrl: identity.photoUrl,
+                      size: 80.w,
+                      hasBorder: true,
+                      isOnline: isOnline,
+                      showStatus: true,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: SoteriaColors.background,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: SoteriaColors.primary.withValues(alpha: 0.5),
+                          width: 2,
+                        ),
+                      ),
+                      child: Icon(
+                        Icons.camera_alt_rounded,
+                        size: 14.w,
+                        color: SoteriaColors.primary,
                       ),
                     ),
-                    child: Icon(
-                      Icons.camera_alt_rounded,
-                      size: 14.w,
-                      color: SoteriaColors.primary,
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               SizedBox(width: SoteriaSpacing.lg),
               Expanded(

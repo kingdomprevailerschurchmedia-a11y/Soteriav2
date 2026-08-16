@@ -12,6 +12,8 @@ import '../domain/use_cases/load_player_profile_use_case.dart';
 import '../domain/use_cases/create_player_profile_use_case.dart';
 import '../domain/use_cases/update_player_profile_use_case.dart';
 import '../domain/use_cases/observe_player_profile_use_case.dart';
+import '../domain/repositories/profile_repository.dart';
+import '../data/repositories/firestore_profile_repository.dart';
 import '../domain/models/progression.dart';
 import '../domain/models/player_progression.dart';
 import '../services/player_bootstrap_service.dart';
@@ -33,6 +35,14 @@ import '../domain/services/competitive_ranking_engine.dart';
 final playerRepositoryProvider = Provider<PlayerRepository>((ref) {
   return FirestorePlayerRepository(
     database: ref.watch(firestoreDatabaseServiceProvider),
+  );
+});
+
+final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
+  return FirestoreProfileRepository(
+    FirebaseFirestore.instance,
+    ref.watch(leaderboardRepositoryProvider),
+    ref.watch(playerProgressionRepositoryProvider),
   );
 });
 
@@ -89,8 +99,10 @@ final currentPlayerStreamProvider = StreamProvider<PlayerProfile?>((ref) {
 });
 
 /// A convenience provider to access the current player profile data.
+/// Returns the latest data available, even during refresh states, to prevent UI flickering.
 final currentPlayerProvider = Provider<PlayerProfile?>((ref) {
-  return ref.watch(currentPlayerStreamProvider).value;
+  final asyncValue = ref.watch(currentPlayerStreamProvider);
+  return asyncValue.value;
 });
 
 /// Progression state for the current player.

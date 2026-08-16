@@ -11,6 +11,7 @@ class PublicProfileDto {
     return PublicCompetitiveProfile(
       userId: doc.id,
       displayName: data['displayName'] as String? ?? 'Scholar',
+      username: data['username'] as String? ?? '',
       avatarId: data['avatarId'] as String? ?? 'socrates',
       photoUrl: data['photoUrl'] as String?,
       currentRank: data['currentRank'] as String? ?? 'Unranked',
@@ -54,6 +55,8 @@ class PublicProfileDto {
     return {
       'displayName': profile.displayName,
       'displayNameNormalized': profile.displayName.toLowerCase(),
+      'username': profile.username,
+      'usernameNormalized': profile.username.toLowerCase(),
       'avatarId': profile.avatarId,
       'photoUrl': profile.photoUrl,
       'currentRank': profile.currentRank,

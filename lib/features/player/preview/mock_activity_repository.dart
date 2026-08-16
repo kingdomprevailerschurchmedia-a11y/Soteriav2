@@ -13,6 +13,7 @@ class MockActivityRepository extends ActivityRepository {
     List<String> userIds, {
     int limit = 20,
     CompetitiveActivityEvent? lastEvent,
+    List<ActivityVisibility>? visibilities,
   }) async {
     if (_isLoading) {
       await Future.delayed(const Duration(seconds: 10));
@@ -27,6 +28,7 @@ class MockActivityRepository extends ActivityRepository {
   Stream<List<CompetitiveActivityEvent>> watchSocialActivity(
     List<String> userIds, {
     int limit = 20,
+    List<ActivityVisibility>? visibilities,
   }) {
     return Stream.value(_events.take(limit).toList());
   }

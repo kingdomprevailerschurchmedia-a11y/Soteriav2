@@ -8,6 +8,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/avatar/data/avatar_catalog.dart';
+import 'package:soteria/core/network/providers/connectivity_providers.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
 import 'package:soteria/features/player/presentation/providers/public_profile_providers.dart';
 import 'package:soteria/features/player/presentation/widgets/match_history/competitive_match_history_card.dart';
@@ -43,7 +44,7 @@ class HeadToHeadScreen extends ConsumerWidget {
               padding: EdgeInsets.all(SoteriaSpacing.lg),
               child: Column(
                 children: [
-                  _buildVersusHeader(context, rivalProfileAsync),
+                  _buildVersusHeader(context, ref, rivalProfileAsync),
                   SizedBox(height: SoteriaSpacing.lg),
                   summaryAsync.when(
                     data: (summary) => _buildStatsSummary(context, summary),
@@ -96,15 +97,16 @@ class HeadToHeadScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildVersusHeader(BuildContext context, AsyncValue<dynamic> rivalProfileAsync) {
+  Widget _buildVersusHeader(BuildContext context, WidgetRef ref, AsyncValue<dynamic> rivalProfileAsync) {
+    final isOnline = ref.watch(isOnlineProvider);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Column(
+        Column(
           children: [
-            SoteriaAvatar(size: 64, isOnline: true),
-            SizedBox(height: 8),
-            Text('YOU', style: TextStyle(fontWeight: FontWeight.bold)),
+            SoteriaAvatar(size: 64, isOnline: isOnline, showStatus: true),
+            const SizedBox(height: 8),
+            const Text('YOU', style: TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         Padding(

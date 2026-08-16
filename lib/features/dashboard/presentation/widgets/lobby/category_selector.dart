@@ -15,17 +15,59 @@ class CategorySelector extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(practiceLobbyProvider);
 
+    if (state.isLoading && state.categories.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context),
+          SizedBox(height: SoteriaSpacing.md),
+          SizedBox(
+            height: 100.h,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: SoteriaColors.gold,
+                strokeWidth: 2,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
+    if (state.categories.isEmpty) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeader(context),
+          SizedBox(height: SoteriaSpacing.md),
+          Container(
+            height: 100.h,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              color: Colors.white.withValues(alpha: 0.03),
+              borderRadius: BorderRadius.circular(16.r),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.category_outlined, color: Colors.white24, size: 24.sp),
+                SizedBox(height: 8.h),
+                Text(
+                  'No categories available',
+                  style: context.bodySmall.copyWith(color: Colors.white24),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'SELECT CATEGORY',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        _buildHeader(context),
         SizedBox(height: SoteriaSpacing.md),
         SizedBox(
           height: 100.h,
@@ -47,6 +89,17 @@ class CategorySelector extends ConsumerWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildHeader(BuildContext context) {
+    return Text(
+      'SELECT CATEGORY',
+      style: context.labelSmall.copyWith(
+        color: SoteriaColors.gold,
+        letterSpacing: 2,
+        fontWeight: FontWeight.bold,
+      ),
     );
   }
 }

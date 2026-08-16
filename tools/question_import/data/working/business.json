@@ -1,0 +1,814 @@
+[
+  {
+    "question": "What is the primary purpose of a balance sheet?",
+    "options": [
+      "To show a company's financial position",
+      "To calculate employee salaries",
+      "To record only cash transactions",
+      "To determine market share"
+    ],
+    "correctAnswer": "To show a company's financial position",
+    "explanation": "A balance sheet reports a company's assets, liabilities, and equity at a specific point in time.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What does a business's revenue represent?",
+    "options": [
+      "Money earned from business activities",
+      "Money owed to employees",
+      "The total value of its buildings",
+      "Its outstanding loans"
+    ],
+    "correctAnswer": "Money earned from business activities",
+    "explanation": "Revenue is the income a business generates from selling goods or services before expenses are deducted.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What is a sole proprietorship?",
+    "options": [
+      "A business owned by one person",
+      "A business owned by shareholders",
+      "A company owned by two governments",
+      "A nonprofit organization"
+    ],
+    "correctAnswer": "A business owned by one person",
+    "explanation": "A sole proprietorship is a business structure in which one individual owns and operates the business.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "U.S. Small Business Administration"
+  },
+  {
+    "question": "What is profit?",
+    "options": [
+      "Revenue minus expenses",
+      "Expenses minus revenue",
+      "Assets minus sales",
+      "Sales plus liabilities"
+    ],
+    "correctAnswer": "Revenue minus expenses",
+    "explanation": "Profit is the amount remaining after a business subtracts its expenses from its revenue.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What is a customer in a business context?",
+    "options": [
+      "A person or organization that buys goods or services",
+      "A company's competitor",
+      "A company's employee",
+      "A government regulator"
+    ],
+    "correctAnswer": "A person or organization that buys goods or services",
+    "explanation": "Customers purchase products or services from businesses and generate revenue for them.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is entrepreneurship?",
+    "options": [
+      "The process of creating and managing a business",
+      "The process of calculating taxes",
+      "The study of employee behavior",
+      "The process of auditing government accounts"
+    ],
+    "correctAnswer": "The process of creating and managing a business",
+    "explanation": "Entrepreneurship involves identifying opportunities and creating, organizing, and managing ventures while accepting business risks.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "U.S. Small Business Administration"
+  },
+  {
+    "question": "What is a business plan?",
+    "options": [
+      "A document describing a business's goals and strategies",
+      "A list of employee birthdays",
+      "A company's tax receipt",
+      "A bank statement"
+    ],
+    "correctAnswer": "A document describing a business's goals and strategies",
+    "explanation": "A business plan outlines a company's objectives, strategies, market, operations, and financial expectations.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "U.S. Small Business Administration"
+  },
+  {
+    "question": "What is a brand?",
+    "options": [
+      "The identity and reputation associated with a business or product",
+      "A company's tax number",
+      "A type of business loan",
+      "A financial statement"
+    ],
+    "correctAnswer": "The identity and reputation associated with a business or product",
+    "explanation": "A brand represents the identity, perceptions, and associations customers have with a business or product.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "American Marketing Association"
+  },
+  {
+    "question": "What is marketing primarily concerned with?",
+    "options": [
+      "Understanding and satisfying customer needs",
+      "Preparing only financial statements",
+      "Hiring government employees",
+      "Manufacturing currency"
+    ],
+    "correctAnswer": "Understanding and satisfying customer needs",
+    "explanation": "Marketing involves identifying customer needs and creating, communicating, and delivering value to customers.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "American Marketing Association"
+  },
+  {
+    "question": "What is an employee?",
+    "options": [
+      "A person who works for an organization in exchange for compensation",
+      "A company's shareholder only",
+      "A business competitor",
+      "A customer who buys regularly"
+    ],
+    "correctAnswer": "A person who works for an organization in exchange for compensation",
+    "explanation": "Employees perform work for an organization under an employment relationship and receive compensation.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "International Labour Organization"
+  },
+  {
+    "question": "What is a partnership?",
+    "options": [
+      "A business owned by two or more people",
+      "A business owned only by a government",
+      "A company with no owners",
+      "A business owned by customers"
+    ],
+    "correctAnswer": "A business owned by two or more people",
+    "explanation": "A partnership is a business structure in which two or more people agree to share ownership and responsibilities.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "U.S. Small Business Administration"
+  },
+  {
+    "question": "What is an expense?",
+    "options": [
+      "A cost incurred in running a business",
+      "Money received from customers",
+      "An owner's investment only",
+      "A company's market share"
+    ],
+    "correctAnswer": "A cost incurred in running a business",
+    "explanation": "Expenses are costs businesses incur while producing goods, delivering services, and operating their organizations.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What is an asset?",
+    "options": [
+      "A resource owned or controlled by a business",
+      "A debt owed by a business",
+      "A customer's complaint",
+      "An employee's salary"
+    ],
+    "correctAnswer": "A resource owned or controlled by a business",
+    "explanation": "Assets are economic resources that a business owns or controls and expects to provide future benefits.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "International Accounting Standards Board"
+  },
+  {
+    "question": "What is a liability?",
+    "options": [
+      "An obligation or debt owed by a business",
+      "A company's cash balance",
+      "A customer's purchase",
+      "A business opportunity"
+    ],
+    "correctAnswer": "An obligation or debt owed by a business",
+    "explanation": "Liabilities are present obligations of a business that are expected to result in an economic outflow.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "International Accounting Standards Board"
+  },
+  {
+    "question": "What does CEO stand for?",
+    "options": [
+      "Chief Executive Officer",
+      "Corporate Earnings Officer",
+      "Chief Economic Organizer",
+      "Company Executive Operator"
+    ],
+    "correctAnswer": "Chief Executive Officer",
+    "explanation": "The CEO is generally the senior executive responsible for leading an organization and implementing its overall strategy.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is market research?",
+    "options": [
+      "The process of gathering information about customers and markets",
+      "The process of paying employees",
+      "The process of preparing tax returns",
+      "The process of producing inventory"
+    ],
+    "correctAnswer": "The process of gathering information about customers and markets",
+    "explanation": "Market research helps businesses understand customers, competitors, market conditions, and demand.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "U.S. Small Business Administration"
+  },
+  {
+    "question": "What is inventory?",
+    "options": [
+      "Goods a business holds for sale or production",
+      "Money owed to a bank",
+      "Employee benefits",
+      "Company advertising"
+    ],
+    "correctAnswer": "Goods a business holds for sale or production",
+    "explanation": "Inventory consists of goods and materials held by a business for sale or use in production.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "International Accounting Standards Board"
+  },
+  {
+    "question": "What is a startup?",
+    "options": [
+      "A newly established business designed to develop and grow",
+      "A government department",
+      "An established multinational corporation only",
+      "A type of financial statement"
+    ],
+    "correctAnswer": "A newly established business designed to develop and grow",
+    "explanation": "A startup is a newly established business typically seeking to develop a scalable product, service, or business model.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "OECD"
+  },
+  {
+    "question": "What is a competitor?",
+    "options": [
+      "A business offering similar products or services to the same market",
+      "A company's employee",
+      "A company's accountant",
+      "A business's supplier only"
+    ],
+    "correctAnswer": "A business offering similar products or services to the same market",
+    "explanation": "Competitors are businesses that seek to attract similar customers or satisfy similar needs.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "U.S. Small Business Administration"
+  },
+  {
+    "question": "What is a target market?",
+    "options": [
+      "A specific group of customers a business aims to serve",
+      "A company's internal accounting department",
+      "A group of business regulators",
+      "A company's suppliers"
+    ],
+    "correctAnswer": "A specific group of customers a business aims to serve",
+    "explanation": "A target market is the particular customer group a business chooses to focus its marketing and sales efforts on.",
+    "categoryId": "business",
+    "difficulty": "easy",
+    "source": "American Marketing Association"
+  },
+  {
+    "question": "What is cash flow?",
+    "options": [
+      "The movement of money into and out of a business",
+      "The total value of company assets",
+      "The number of customers a business has",
+      "The price of company shares"
+    ],
+    "correctAnswer": "The movement of money into and out of a business",
+    "explanation": "Cash flow tracks cash inflows and outflows over a period and is important for maintaining business liquidity.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is break-even point?",
+    "options": [
+      "The point where total revenue equals total costs",
+      "The point where sales are at their highest",
+      "The point where a company has no employees",
+      "The point where assets equal inventory"
+    ],
+    "correctAnswer": "The point where total revenue equals total costs",
+    "explanation": "At the break-even point, a business has neither a profit nor a loss because total revenue equals total costs.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is gross profit?",
+    "options": [
+      "Revenue minus cost of goods sold",
+      "Revenue minus all liabilities",
+      "Assets minus expenses",
+      "Cash minus inventory"
+    ],
+    "correctAnswer": "Revenue minus cost of goods sold",
+    "explanation": "Gross profit measures the amount remaining after subtracting the cost of goods sold from revenue.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What is net profit?",
+    "options": [
+      "Profit remaining after all relevant expenses are deducted",
+      "Total sales before expenses",
+      "Total assets minus inventory",
+      "Cash received from customers only"
+    ],
+    "correctAnswer": "Profit remaining after all relevant expenses are deducted",
+    "explanation": "Net profit is the income remaining after operating costs, interest, taxes, and other applicable expenses are accounted for.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What does ROI stand for?",
+    "options": [
+      "Return on Investment",
+      "Rate of Income",
+      "Revenue on Inventory",
+      "Return on Inventory"
+    ],
+    "correctAnswer": "Return on Investment",
+    "explanation": "ROI is a performance measure used to evaluate the return generated by an investment relative to its cost.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What is economies of scale?",
+    "options": [
+      "Lower average costs resulting from increased production",
+      "Higher taxes on large businesses",
+      "A reduction in product quality",
+      "A decrease in total production"
+    ],
+    "correctAnswer": "Lower average costs resulting from increased production",
+    "explanation": "Economies of scale occur when increasing production causes the average cost per unit to decline.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "OECD"
+  },
+  {
+    "question": "What is market share?",
+    "options": [
+      "A company's percentage of total sales in a market",
+      "The percentage of employees who own shares",
+      "The amount of company debt",
+      "The number of products in inventory"
+    ],
+    "correctAnswer": "A company's percentage of total sales in a market",
+    "explanation": "Market share measures a company's sales relative to total sales in the relevant market.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Investopedia"
+  },
+  {
+    "question": "What is a dividend?",
+    "options": [
+      "A distribution of company earnings to shareholders",
+      "A loan given to employees",
+      "A business tax",
+      "A payment made to suppliers"
+    ],
+    "correctAnswer": "A distribution of company earnings to shareholders",
+    "explanation": "Dividends are distributions that companies may make to shareholders, usually from profits or retained earnings.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Investor.gov"
+  },
+  {
+    "question": "What is working capital?",
+    "options": [
+      "Current assets minus current liabilities",
+      "Total assets minus total equity",
+      "Revenue minus taxes",
+      "Cash plus long-term debt"
+    ],
+    "correctAnswer": "Current assets minus current liabilities",
+    "explanation": "Working capital measures a company's short-term financial position by subtracting current liabilities from current assets.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is a monopoly?",
+    "options": [
+      "A market dominated by a single seller",
+      "A market with many identical sellers",
+      "A business owned by several partners",
+      "A market with no customers"
+    ],
+    "correctAnswer": "A market dominated by a single seller",
+    "explanation": "A monopoly exists when one firm has substantial control over the supply of a product or service in a market.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Federal Trade Commission"
+  },
+  {
+    "question": "What is an oligopoly?",
+    "options": [
+      "A market dominated by a small number of significant firms",
+      "A market with only one buyer",
+      "A market with no competition",
+      "A business owned by one individual"
+    ],
+    "correctAnswer": "A market dominated by a small number of significant firms",
+    "explanation": "An oligopoly is a market structure in which a small number of firms account for a significant share of market activity.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "OECD"
+  },
+  {
+    "question": "What is a merger?",
+    "options": [
+      "The combination of two or more companies into one business",
+      "The closure of a company",
+      "The hiring of a new CEO",
+      "The sale of company inventory"
+    ],
+    "correctAnswer": "The combination of two or more companies into one business",
+    "explanation": "A merger occurs when companies combine their businesses into a single organization or structure.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "U.S. Federal Trade Commission"
+  },
+  {
+    "question": "What is an acquisition?",
+    "options": [
+      "The purchase of control of one company by another",
+      "The creation of a new product",
+      "The payment of employee wages",
+      "The reduction of business expenses"
+    ],
+    "correctAnswer": "The purchase of control of one company by another",
+    "explanation": "An acquisition occurs when one company obtains control of another company, usually through purchasing its shares or assets.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "U.S. Securities and Exchange Commission"
+  },
+  {
+    "question": "What is franchising?",
+    "options": [
+      "A business arrangement where a franchisee operates using a franchisor's brand and system",
+      "A method of issuing government bonds",
+      "A system for calculating employee salaries",
+      "A process of liquidating a company"
+    ],
+    "correctAnswer": "A business arrangement where a franchisee operates using a franchisor's brand and system",
+    "explanation": "Franchising allows a franchisee to operate under an established brand and business model in exchange for fees and compliance with agreed terms.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "International Franchise Association"
+  },
+  {
+    "question": "What is a supply chain?",
+    "options": [
+      "The network involved in producing and delivering goods or services",
+      "A company's list of shareholders",
+      "A government's tax system",
+      "A business's employee hierarchy"
+    ],
+    "correctAnswer": "The network involved in producing and delivering goods or services",
+    "explanation": "A supply chain includes organizations, people, processes, and resources involved in producing and delivering products or services.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Council of Supply Chain Management Professionals"
+  },
+  {
+    "question": "What is outsourcing?",
+    "options": [
+      "Hiring an external organization to perform activities for a business",
+      "Opening a new company branch",
+      "Selling shares to employees",
+      "Increasing internal production"
+    ],
+    "correctAnswer": "Hiring an external organization to perform activities for a business",
+    "explanation": "Outsourcing involves contracting an external provider to perform functions that could otherwise be handled internally.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "OECD"
+  },
+  {
+    "question": "What is corporate social responsibility?",
+    "options": [
+      "A company's responsibility to consider its social and environmental impact",
+      "A company's obligation to maximize prices",
+      "A method of calculating corporate taxes",
+      "A system for hiring executives"
+    ],
+    "correctAnswer": "A company's responsibility to consider its social and environmental impact",
+    "explanation": "Corporate social responsibility refers to business practices that consider social, environmental, ethical, and stakeholder impacts.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "United Nations Global Compact"
+  },
+  {
+    "question": "What is a stakeholder?",
+    "options": [
+      "A person or group affected by or able to affect a business",
+      "Only a company's largest shareholder",
+      "Only a company's CEO",
+      "A business competitor"
+    ],
+    "correctAnswer": "A person or group affected by or able to affect a business",
+    "explanation": "Stakeholders can include employees, customers, investors, suppliers, governments, communities, and other groups connected to a business.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "International Organization for Standardization"
+  },
+  {
+    "question": "What is a value proposition?",
+    "options": [
+      "A statement explaining the value a product or service provides to customers",
+      "A company's annual tax statement",
+      "A list of business liabilities",
+      "A legal document for registering employees"
+    ],
+    "correctAnswer": "A statement explaining the value a product or service provides to customers",
+    "explanation": "A value proposition communicates why customers should choose a particular product or service over alternatives.",
+    "categoryId": "business",
+    "difficulty": "medium",
+    "source": "Harvard Business School"
+  },
+  {
+    "question": "What is customer acquisition cost?",
+    "options": [
+      "The average cost of acquiring a new customer",
+      "The average price paid by suppliers",
+      "The total cost of company equipment",
+      "The annual salary of a salesperson"
+    ],
+    "correctAnswer": "The average cost of acquiring a new customer",
+    "explanation": "Customer acquisition cost, or CAC, measures how much a business spends on average to acquire a new customer.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is customer lifetime value?",
+    "options": [
+      "The estimated total value a customer generates during their relationship with a business",
+      "The amount a customer spends on their first purchase",
+      "The cost of producing one product",
+      "The annual salary of a customer"
+    ],
+    "correctAnswer": "The estimated total value a customer generates during their relationship with a business",
+    "explanation": "Customer lifetime value estimates the revenue or profit a business expects to generate from a customer over the relationship's duration.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Harvard Business School"
+  },
+  {
+    "question": "What is EBITDA?",
+    "options": [
+      "Earnings before interest, taxes, depreciation, and amortization",
+      "Earnings before inventory, debt, and taxes",
+      "Equity balance including dividends, taxes, and assets",
+      "Estimated business income after total deductions"
+    ],
+    "correctAnswer": "Earnings before interest, taxes, depreciation, and amortization",
+    "explanation": "EBITDA is a commonly used financial metric that measures earnings before interest, taxes, depreciation, and amortization.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What does the price-to-earnings ratio compare?",
+    "options": [
+      "A company's share price with its earnings per share",
+      "Revenue with total assets",
+      "Debt with inventory",
+      "Cash flow with employee salaries"
+    ],
+    "correctAnswer": "A company's share price with its earnings per share",
+    "explanation": "The P/E ratio compares a company's market price per share with its earnings per share and is commonly used in equity valuation.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Investor.gov"
+  },
+  {
+    "question": "What is a hostile takeover?",
+    "options": [
+      "An attempt to acquire a company without the approval of its management or board",
+      "A merger approved by all shareholders",
+      "A company's voluntary closure",
+      "A government takeover of a private bank"
+    ],
+    "correctAnswer": "An attempt to acquire a company without the approval of its management or board",
+    "explanation": "A hostile takeover occurs when an acquiring party attempts to gain control despite opposition from the target company's management or board.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "U.S. Securities and Exchange Commission"
+  },
+  {
+    "question": "What is a leveraged buyout?",
+    "options": [
+      "An acquisition financed substantially with borrowed funds",
+      "An acquisition paid entirely with cash from profits",
+      "A merger between two government agencies",
+      "A stock sale made only to employees"
+    ],
+    "correctAnswer": "An acquisition financed substantially with borrowed funds",
+    "explanation": "In a leveraged buyout, significant debt is used to finance the acquisition of a company.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is opportunity cost?",
+    "options": [
+      "The value of the best alternative forgone when a choice is made",
+      "The total financial cost of a business",
+      "The cost of producing a defective product",
+      "The price charged by a competitor"
+    ],
+    "correctAnswer": "The value of the best alternative forgone when a choice is made",
+    "explanation": "Opportunity cost represents the benefit that could have been received from the best alternative that was not chosen.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Federal Reserve Bank"
+  },
+  {
+    "question": "What is price elasticity of demand?",
+    "options": [
+      "A measure of how demand responds to changes in price",
+      "A measure of employee productivity",
+      "A measure of company profitability",
+      "A measure of market capitalization"
+    ],
+    "correctAnswer": "A measure of how demand responds to changes in price",
+    "explanation": "Price elasticity of demand measures the responsiveness of quantity demanded to a change in a product's price.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Federal Reserve Bank"
+  },
+  {
+    "question": "What is a company's market capitalization?",
+    "options": [
+      "The market value of its outstanding shares",
+      "The total value of its physical inventory",
+      "Its annual revenue after taxes",
+      "Its total cash balance"
+    ],
+    "correctAnswer": "The market value of its outstanding shares",
+    "explanation": "Market capitalization is generally calculated by multiplying the current share price by the number of outstanding shares.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Investor.gov"
+  },
+  {
+    "question": "What is a bond?",
+    "options": [
+      "A debt security representing a loan from an investor to an issuer",
+      "An ownership share in a private company",
+      "A government tax document",
+      "A company's annual profit statement"
+    ],
+    "correctAnswer": "A debt security representing a loan from an investor to an issuer",
+    "explanation": "A bond is a debt instrument through which an investor lends money to an issuer in exchange for interest and repayment according to agreed terms.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Investor.gov"
+  },
+  {
+    "question": "What is diversification in business or investing?",
+    "options": [
+      "Spreading resources or investments across different areas to reduce concentration risk",
+      "Investing all resources in one product",
+      "Reducing a company's number of customers",
+      "Increasing the price of every product"
+    ],
+    "correctAnswer": "Spreading resources or investments across different areas to reduce concentration risk",
+    "explanation": "Diversification reduces dependence on a single investment, product, market, or source of revenue and can reduce certain types of risk.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Investor.gov"
+  },
+  {
+    "question": "What is vertical integration?",
+    "options": [
+      "A company expanding into different stages of its supply chain",
+      "Two unrelated companies sharing an office",
+      "A company selling only one product",
+      "A business reducing its workforce"
+    ],
+    "correctAnswer": "A company expanding into different stages of its supply chain",
+    "explanation": "Vertical integration occurs when a company controls multiple stages of production or distribution within its supply chain.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "OECD"
+  },
+  {
+    "question": "What is horizontal integration?",
+    "options": [
+      "A company combining with or acquiring another company at the same stage of production",
+      "A company buying its suppliers",
+      "A company entering a different industry",
+      "A company outsourcing its accounting"
+    ],
+    "correctAnswer": "A company combining with or acquiring another company at the same stage of production",
+    "explanation": "Horizontal integration occurs when businesses operating at the same level of a supply chain combine or one acquires another.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "OECD"
+  },
+  {
+    "question": "What is a network effect?",
+    "options": [
+      "A situation where a product or service becomes more valuable as more people use it",
+      "A decline in sales caused by competition",
+      "An increase in employee turnover",
+      "A reduction in production costs caused by inflation"
+    ],
+    "correctAnswer": "A situation where a product or service becomes more valuable as more people use it",
+    "explanation": "A network effect occurs when the value of a product or service to users increases as the number of users grows.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "OECD"
+  },
+  {
+    "question": "What is a business moat?",
+    "options": [
+      "A sustainable competitive advantage that protects a business from competitors",
+      "A company's emergency fund",
+      "A legal requirement for incorporation",
+      "A company's physical headquarters"
+    ],
+    "correctAnswer": "A sustainable competitive advantage that protects a business from competitors",
+    "explanation": "A business moat is a durable competitive advantage that can help a company maintain its market position and profitability.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Harvard Business School"
+  },
+  {
+    "question": "What is the purpose of a cash flow statement?",
+    "options": [
+      "To report cash inflows and outflows during a period",
+      "To show only a company's assets",
+      "To calculate market share",
+      "To list all company employees"
+    ],
+    "correctAnswer": "To report cash inflows and outflows during a period",
+    "explanation": "A cash flow statement provides information about how cash and cash equivalents move through operating, investing, and financing activities.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "International Accounting Standards Board"
+  },
+  {
+    "question": "Which financial statement primarily reports revenues and expenses over a period?",
+    "options": [
+      "Income statement",
+      "Balance sheet",
+      "Statement of changes in ownership",
+      "Inventory register"
+    ],
+    "correctAnswer": "Income statement",
+    "explanation": "An income statement reports income and expenses over a specified period and shows the resulting profit or loss.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "International Accounting Standards Board"
+  },
+  {
+    "question": "What is retained earnings?",
+    "options": [
+      "Accumulated profits retained by a company after distributions to owners",
+      "Money borrowed from a bank",
+      "The total value of company inventory",
+      "Revenue received before a sale"
+    ],
+    "correctAnswer": "Accumulated profits retained by a company after distributions to owners",
+    "explanation": "Retained earnings represent accumulated profits that have been retained in the business rather than distributed to shareholders.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "Corporate Finance Institute"
+  },
+  {
+    "question": "What is liquidity in business finance?",
+    "options": [
+      "The ability to meet short-term financial obligations",
+      "The ability to increase product prices",
+      "The number of shares a company issues",
+      "The rate at which employees are promoted"
+    ],
+    "correctAnswer": "The ability to meet short-term financial obligations",
+    "explanation": "Liquidity describes how readily a business can access cash or convert assets to cash to meet short-term obligations.",
+    "categoryId": "business",
+    "difficulty": "hard",
+    "source": "International Monetary Fund"
+  }
+]

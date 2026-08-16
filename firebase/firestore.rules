@@ -100,7 +100,10 @@ service cloud.firestore {
     // IDENTITY: Personal information (Sync layers)
     match /user_profiles/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId);
+      allow update: if isOwner(userId) &&
+                    isNotModifying(['email', 'country', 'timezone', 'language']);
+      allow delete: if isAdmin();
     }
 
     // PRESENCE: Real-time status
@@ -172,8 +175,27 @@ service cloud.firestore {
       allow write: if isAdmin() || (isAuthenticated() && request.resource.data.userId == request.auth.uid);
     }
 
-    // PUBLIC PROFILES: Read-only for authenticated users
-    match /public_profiles/{userId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    // PUBLIC PROFILES: Source for other players
+    match /public_profiles/{userId} {
+      allow read: if isAuthenticated();
+      allow update: if isOwner(userId) &&
+                    isNotModifying([
+                      'currentRank', 'rankTier', 'rankPoints', 'division',
+                      'careerHighlights', 'schemaVersion'
+                    ]);
+      allow create: if isOwner(userId);
+      allow delete: if isAdmin();
+    }
+
+    // USERNAME RESERVATION
+    match /usernames/{username} {
+      allow read: if true;
+      allow create: if isAuthenticated() &&
+                    request.resource.data.userId == request.auth.uid &&
+                    request.resource.data.username.lower() == username;
+      allow update: if false;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
 
     // SOCIAL & CHALLENGES
     match /friendships/{docId} {

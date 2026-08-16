@@ -37,7 +37,8 @@ enum NotificationType {
   liveEventStarted,
   liveEventEnding,
   rematchRequest,
-  systemAnnouncement;
+  systemAnnouncement,
+  socialConnection;
 
   static NotificationType fromString(String value) {
     return NotificationType.values.firstWhere(

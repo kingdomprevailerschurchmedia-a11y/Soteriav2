@@ -191,6 +191,7 @@ class VerificationStepRequest extends ConsumerWidget {
           ),
           SizedBox(height: SoteriaSpacing.sm),
           SoteriaTextField(
+            initialValue: state.target,
             hintText: 'name@example.com',
             onChanged: notifier.updateTarget,
             keyboardType: TextInputType.emailAddress,

@@ -19,8 +19,10 @@ class CareerStatisticsSection extends StatelessWidget {
         Text(
           'CAREER STATISTICS',
           style: context.labelSmall.copyWith(
-            color: SoteriaColors.muted,
-            letterSpacing: 1.5,
+            color: SoteriaColors.gold,
+            letterSpacing: 2.0,
+            fontWeight: FontWeight.w800,
+            fontSize: 13.sp,
           ),
         ),
         SizedBox(height: SoteriaSpacing.md),
@@ -28,9 +30,9 @@ class CareerStatisticsSection extends StatelessWidget {
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           crossAxisCount: 2,
-          mainAxisSpacing: SoteriaSpacing.md,
-          crossAxisSpacing: SoteriaSpacing.md,
-          childAspectRatio: 2.0,
+          mainAxisSpacing: 12.h,
+          crossAxisSpacing: 12.w,
+          childAspectRatio: 2.1,
           children: [
             _StatCard(
               label: 'TOTAL MATCHES',
@@ -79,18 +81,18 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SoteriaCard(
-      padding: EdgeInsets.all(SoteriaSpacing.md),
+      padding: EdgeInsets.all(12.w),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(SoteriaSpacing.xs),
+            padding: EdgeInsets.all(6.w),
             decoration: BoxDecoration(
               color: color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Icon(icon, color: color, size: 16.sp),
           ),
-          SizedBox(width: SoteriaSpacing.sm),
+          SizedBox(width: 10.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,12 +103,14 @@ class _StatCard extends StatelessWidget {
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.muted,
                     fontSize: 8.sp,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 Text(
                   value,
                   style: context.titleMedium.copyWith(
                     fontWeight: FontWeight.w900,
+                    fontSize: 16.sp,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

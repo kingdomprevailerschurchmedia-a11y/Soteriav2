@@ -51,16 +51,6 @@ class FirestoreCompetitiveSettlementRepository
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
-      // Maintain legacy players collection update if still required for UI
-      final playerRef = _database.instance
-          .collection('players')
-          .doc(settlement.uid);
-      transaction.set(
-        playerRef,
-        {'coins': FieldValue.increment(settlement.coinsWon)},
-        SetOptions(merge: true),
-      );
-
       // 3. Authoritative Progression Update (XP)
       if (settlement.xpEarned > 0) {
         final xpSource = settlement.result.mode == GameMode.tournament

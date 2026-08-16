@@ -33,7 +33,10 @@ class _VerificationOrchestratorState
   @override
   void initState() {
     super.initState();
-    _pageController = PageController();
+    final initialState = ref.read(verificationProvider(widget.type));
+    _pageController = PageController(
+      initialPage: _getPageIndex(initialState.step),
+    );
   }
 
   @override

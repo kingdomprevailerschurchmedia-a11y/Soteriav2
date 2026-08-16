@@ -1,0 +1,20 @@
+- `[x]` Fix `PracticeLobbyState.copyWith` in `practice_lobby_providers.dart` (Converted to Freezed)
+- `[x]` Add loading/empty state check to `CategorySelector` in `category_selector.dart`
+- `[x]` Add unit test for validation error clearing (Practice Lobby)
+- `[x]` Check and fix Pro Mode for same bugs:
+    - `[x]` Convert `ProLobbyState` to Freezed in `pro_lobby_providers.dart`
+    - `[x]` Add category fetching to `ProLobbyNotifier`
+    - `[x]` Implement `ProCategorySelector` widget
+    - `[x]` Add `ProCategorySelector` to `ProLobbyScreen`
+    - `[x]` Update and fix `pro_lobby_notifier_test.dart`
+- `[x]` Check and fix Versus Lobby:
+    - `[x]` Convert `VersusLobbyState` to Freezed in `matchmaking_providers.dart`
+    - `[x]` Add loading/empty state handling to `VersusCategorySelector`
+    - `[x]` Update `VersusLobbyScreen` to show validation errors
+    - `[x]` Add unit tests for Versus lobby validation
+- `[x]` Fix "Player profile not found" error in Pro Mode:
+    - `[x]` Update `FirestoreProModeRepository` to use `users` collection instead of `players`.
+    - `[x]` Update `FirestoreCompetitiveStatsRepository` to use `users` collection.
+    - `[x]` Update `FirestoreCompetitiveSettlementRepository` to use `users` collection and remove legacy `players` updates.
+    - `[x]` Update `FirestoreTournamentRepository` to use `users` collection.
+- `[x]` Verify build and run all tests

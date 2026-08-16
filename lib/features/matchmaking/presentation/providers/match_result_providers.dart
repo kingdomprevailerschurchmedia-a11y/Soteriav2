@@ -27,15 +27,18 @@ final currentMatchResultProvider = StreamProvider.family<CompetitiveMatchResult?
 
 final competitiveInsightsServiceProvider = Provider((ref) => CompetitiveInsightsService());
 
-final competitiveInsightsProvider = FutureProvider<CompetitiveInsights>((ref) async {
+final competitiveInsightsProvider = Provider<AsyncValue<CompetitiveInsights>>((ref) {
   final userId = ref.watch(authRepositoryProvider).currentUserId;
-  if (userId == null) return CompetitiveInsightsService().calculateInsights([]);
-  
+  if (userId == null) {
+    return AsyncValue.data(
+      ref.read(competitiveInsightsServiceProvider).calculateInsights([]),
+    );
+  }
+
   final historyAsync = ref.watch(matchHistoryProvider(userId));
-  return historyAsync.when(
-    data: (history) => ref.read(competitiveInsightsServiceProvider).calculateInsights(history),
-    loading: () => CompetitiveInsightsService().calculateInsights([]),
-    error: (_, __) => CompetitiveInsightsService().calculateInsights([]),
+  return historyAsync.whenData(
+    (history) =>
+        ref.read(competitiveInsightsServiceProvider).calculateInsights(history),
   );
 });
 

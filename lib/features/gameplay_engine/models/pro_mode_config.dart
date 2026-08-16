@@ -26,6 +26,7 @@ class ProModeConfig {
   factory ProModeConfig.defaults() => const ProModeConfig(
     entryFees: {10: 100, 20: 250, 30: 500, 50: 1000},
     difficultyMultipliers: {
+      'foundation': 1.0,
       'intermediate': 1.2,
       'advanced': 1.5,
       'expert': 2.0,

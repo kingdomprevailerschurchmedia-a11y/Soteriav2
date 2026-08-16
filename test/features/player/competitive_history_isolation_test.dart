@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
@@ -24,14 +25,14 @@ void main() {
         competitiveHistoryRepositoryProvider.overrideWithValue(mockRepository),
       ],
     );
+    addTearDown(container.dispose);
 
     // User A
     final userA = const UserSession(
       uid: 'user_A',
       status: SessionStatus.authenticated,
     );
-    container.read(sessionProvider.notifier).setSession(userA);
-
+    
     final resultA = SeasonResult(
       seasonId: 's1',
       userId: 'user_A',
@@ -49,23 +50,26 @@ void main() {
       updatedAt: DateTime.now(),
     );
 
-    when(
-      mockRepository.watchSeasonHistory('user_A'),
-    ).thenAnswer((_) => Stream.value([resultA]));
-    when(
-      mockRepository.getLatestSeasonResult('user_A'),
-    ).thenAnswer((_) async => resultA);
-    when(
-      mockRepository.getBestSeasonResult('user_A'),
-    ).thenAnswer((_) async => resultA);
+    when(mockRepository.watchSeasonHistory('user_A'))
+        .thenAnswer((_) => Stream.value([resultA]));
+    when(mockRepository.getLatestSeasonResult('user_A'))
+        .thenAnswer((_) async => resultA);
+    when(mockRepository.getBestSeasonResult('user_A'))
+        .thenAnswer((_) async => resultA);
 
-    // Wait for the summary provider to emit data
-    CompetitiveHistory? historyA;
-    while (historyA == null) {
-      await Future.delayed(const Duration(milliseconds: 10));
-      historyA = container.read(competitiveHistorySummaryProvider).value;
-    }
+    final completerA = Completer<CompetitiveHistory>();
+    container.listen<AsyncValue<CompetitiveHistory>>(
+      competitiveHistorySummaryProvider, 
+      (prev, next) {
+        if (next is AsyncData<CompetitiveHistory> && next.value.userId == 'user_A') {
+          if (!completerA.isCompleted) completerA.complete(next.value);
+        }
+      },
+      fireImmediately: true,
+    );
 
+    container.read(sessionProvider.notifier).setSession(userA);
+    final historyA = await completerA.future.timeout(const Duration(seconds: 2));
     expect(historyA.userId, 'user_A');
 
     // Logout
@@ -78,8 +82,7 @@ void main() {
       uid: 'user_B',
       status: SessionStatus.authenticated,
     );
-    container.read(sessionProvider.notifier).setSession(userB);
-
+    
     final resultB = SeasonResult(
       seasonId: 's2',
       userId: 'user_B',
@@ -97,23 +100,27 @@ void main() {
       updatedAt: DateTime.now(),
     );
 
-    when(
-      mockRepository.watchSeasonHistory('user_B'),
-    ).thenAnswer((_) => Stream.value([resultB]));
-    when(
-      mockRepository.getLatestSeasonResult('user_B'),
-    ).thenAnswer((_) async => resultB);
-    when(
-      mockRepository.getBestSeasonResult('user_B'),
-    ).thenAnswer((_) async => resultB);
+    when(mockRepository.watchSeasonHistory('user_B'))
+        .thenAnswer((_) => Stream.value([resultB]));
+    when(mockRepository.getLatestSeasonResult('user_B'))
+        .thenAnswer((_) async => resultB);
+    when(mockRepository.getBestSeasonResult('user_B'))
+        .thenAnswer((_) async => resultB);
 
-    // Wait for the summary provider to emit data for User B
-    CompetitiveHistory? historyB;
-    while (historyB == null || historyB.userId != 'user_B') {
-      await Future.delayed(const Duration(milliseconds: 10));
-      historyB = container.read(competitiveHistorySummaryProvider).value;
-    }
+    final completerB = Completer<CompetitiveHistory>();
+    container.listen<AsyncValue<CompetitiveHistory>>(
+      competitiveHistorySummaryProvider, 
+      (prev, next) {
+        if (next is AsyncData<CompetitiveHistory> && next.value.userId == 'user_B') {
+          if (!completerB.isCompleted) completerB.complete(next.value);
+        }
+      },
+      fireImmediately: true,
+    );
 
+    container.read(sessionProvider.notifier).setSession(userB);
+
+    final historyB = await completerB.future.timeout(const Duration(seconds: 2));
     expect(historyB.userId, 'user_B');
     expect(historyB.results.first.userId, 'user_B');
   });

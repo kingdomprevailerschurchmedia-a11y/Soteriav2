@@ -54,11 +54,10 @@ class GoalRegistry {
   ];
 
   static GoalDefinition? getById(String id) {
-    try {
-      return definitions.firstWhere((d) => d.id == id);
-    } catch (_) {
-      return null;
+    for (final def in definitions) {
+      if (def.id == id) return def;
     }
+    return null;
   }
 
   static List<GoalDefinition> getByType(GoalType type) {
