@@ -7,6 +7,7 @@ import '../../../player/domain/services/achievement_registry.dart';
 import '../../../player/domain/models/xp_transaction.dart';
 import '../../../player/data/repositories/firebase_player_progression_repository.dart';
 import '../../../player/domain/repositories/player_progression_repository.dart';
+import '../../../player/domain/models/season_reward_definition.dart' as player_models;
 
 class FirestoreRewardsRepository implements RewardsRepository {
   final FirebaseFirestore _firestore;
@@ -34,7 +35,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
           id: 'milestone_$milestoneId',
           title: def.name,
           description: def.description,
-          type: def.rewardType ?? RewardType.coins,
+          type: _mapPlayerRewardTypeToRewardType(def.rewardType),
           amount: def.rewardAmount ?? 0,
           source: RewardSource.milestone,
           status: RewardStatus.claimable,
@@ -60,7 +61,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
           id: 'goal_$goalId',
           title: def.title,
           description: def.description,
-          type: def.rewardType ?? RewardType.xp,
+          type: _mapPlayerRewardTypeToRewardType(def.rewardType),
           amount: def.rewardAmount ?? 0,
           source: RewardSource.milestone, // Using milestone as source for simplicity in mapping
           status: RewardStatus.claimable,
@@ -127,7 +128,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
         final def = MilestoneRegistry.getById(originalId);
         if (def == null) throw Exception('Definition not found');
 
-        rewardType = def.rewardType ?? RewardType.coins;
+        rewardType = _mapPlayerRewardTypeToRewardType(def.rewardType);
         amount = def.rewardAmount ?? 0;
         source = RewardSource.milestone;
         description = def.name;
@@ -147,7 +148,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
         final def = GoalRegistry.getById(defId);
         if (def == null) throw Exception('Definition not found');
 
-        rewardType = def.rewardType ?? RewardType.xp;
+        rewardType = _mapPlayerRewardTypeToRewardType(def.rewardType);
         amount = def.rewardAmount ?? 0;
         source = RewardSource.dailyChallenge;
         description = def.title;
@@ -203,8 +204,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
         );
 
         if (_progressionRepository is FirebasePlayerProgressionRepository) {
-          await (_progressionRepository as FirebasePlayerProgressionRepository)
-              .processXpTransaction(transaction, xpTx);
+          await _progressionRepository.processXpTransaction(transaction, xpTx);
         } else {
           // Non-atomic fallback if needed
           await _progressionRepository.applyXpTransaction(xpTx);
@@ -248,5 +248,21 @@ class FirestoreRewardsRepository implements RewardsRepository {
     if (source == RewardSource.dailyChallenge) return XpSource.goal;
     if (source == RewardSource.achievement) return XpSource.achievement;
     return XpSource.quizCompletion;
+  }
+
+  RewardType _mapPlayerRewardTypeToRewardType(player_models.RewardType? type) {
+    if (type == null) return RewardType.coins;
+    switch (type) {
+      case player_models.RewardType.xp:
+        return RewardType.xp;
+      case player_models.RewardType.coins:
+        return RewardType.coins;
+      case player_models.RewardType.tokens:
+        return RewardType.tokens;
+      case player_models.RewardType.cosmetic:
+        return RewardType.cosmetic;
+      default:
+        return RewardType.coins;
+    }
   }
 }

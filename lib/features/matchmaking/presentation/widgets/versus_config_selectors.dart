@@ -81,7 +81,7 @@ class VersusCategorySelector extends ConsumerWidget {
           itemCount: state.categories.length,
           itemBuilder: (context, index) {
             final category = state.categories[index];
-            final isSelected = state.category?.id == category.id;
+            final isSelected = state.categoryIds.contains(category.id);
 
             return LobbyCategoryCard(
               label: category.name,
@@ -89,7 +89,7 @@ class VersusCategorySelector extends ConsumerWidget {
               isSelected: isSelected,
               onTap: () => ref
                   .read(versusLobbyProvider.notifier)
-                  .updateCategory(category),
+                  .toggleCategory(category.id),
             );
           },
         ),

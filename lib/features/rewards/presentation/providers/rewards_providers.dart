@@ -18,13 +18,13 @@ import '../../../player/presentation/providers/progression_providers.dart';
 // --- Repositories ---
 final rewardsRepositoryProvider = Provider<RewardsRepository>((ref) {
   return FirestoreRewardsRepository(
-    ref.watch(firestoreDatabaseServiceProvider),
+    ref.watch(firestoreProvider),
     ref.watch(playerProgressionRepositoryProvider),
   );
 });
 
 final walletRepositoryProvider = Provider<WalletRepository>((ref) {
-  return FirestoreWalletRepository(ref.watch(firestoreDatabaseServiceProvider));
+  return FirestoreWalletRepository(ref.watch(firestoreProvider));
 });
 
 // --- Use Cases ---

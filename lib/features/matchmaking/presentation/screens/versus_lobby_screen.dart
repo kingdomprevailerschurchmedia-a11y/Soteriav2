@@ -97,15 +97,19 @@ class VersusLobbyScreen extends ConsumerWidget {
                     if (state.useInterests) {
                       final profile = ref.read(currentPlayerProvider);
                       categoryIds = profile?.favoriteCategories ?? [];
-                    } else if (state.category != null) {
-                      categoryIds = [state.category!.id];
+                    } else {
+                      categoryIds = state.categoryIds;
                     }
 
                     await ref.read(matchmakingControllerProvider.notifier).enterQueue(
                       configuration: {
                         'categoryIds': categoryIds,
                         'categoryId': categoryIds.isNotEmpty ? categoryIds.first : null,
-                        'categoryName': state.useInterests ? 'Interests' : state.category?.name,
+                        'categoryName': state.useInterests 
+                            ? 'Interests' 
+                            : (categoryIds.length == 1 
+                                ? state.categories.firstWhere((c) => c.id == categoryIds.first).name 
+                                : '${categoryIds.length} Categories'),
                         'difficulty': state.difficulty.name,
                         'questionCount': state.questionCount,
                         'useInterests': state.useInterests,

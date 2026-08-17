@@ -80,7 +80,7 @@ class ProCategorySelector extends ConsumerWidget {
           itemCount: state.categories.length,
           itemBuilder: (context, index) {
             final category = state.categories[index];
-            final isSelected = state.config.category?.id == category.id;
+            final isSelected = state.config.categoryIds.contains(category.id);
 
             return LobbyCategoryCard(
               label: category.name,
@@ -88,7 +88,7 @@ class ProCategorySelector extends ConsumerWidget {
               isSelected: isSelected,
               onTap: () => ref
                   .read(proLobbyProvider.notifier)
-                  .updateCategory(isSelected ? null : category),
+                  .toggleCategory(category.id),
             );
           },
         ),

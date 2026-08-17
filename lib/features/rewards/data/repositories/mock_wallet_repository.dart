@@ -150,4 +150,30 @@ class MockWalletRepository implements WalletRepository {
     }
     _walletController.add(_wallet);
   }
+
+  @override
+  Future<void> creditCurrency({
+    required String userId,
+    required int amount,
+    required String currency,
+    required String source,
+    required String referenceId,
+    String? description,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    if (currency == 'coins') {
+      _wallet = _wallet.copyWith(
+        coins: _wallet.coins + amount,
+        lifetimeCoinsEarned: _wallet.lifetimeCoinsEarned + amount,
+        updatedAt: DateTime.now(),
+      );
+    } else if (currency == 'tokens') {
+      _wallet = _wallet.copyWith(
+        tokens: _wallet.tokens + amount,
+        lifetimeTokensEarned: _wallet.lifetimeTokensEarned + amount,
+        updatedAt: DateTime.now(),
+      );
+    }
+    _walletController.add(_wallet);
+  }
 }

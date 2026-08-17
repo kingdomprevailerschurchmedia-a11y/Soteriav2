@@ -18,6 +18,7 @@ import '../../../../features/gameplay_engine/data/repositories/firestore_pro_mod
 import '../../../question_content/domain/repositories/category_repository.dart';
 import '../../../question_content/presentation/providers/category_providers.dart';
 
+import '../../../../features/gameplay_engine/domain/config/competitive_reward_config.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
 
 part 'pro_lobby_providers.freezed.dart';
@@ -109,7 +110,8 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
           isLoading: false,
           categories: categories,
           config: state.config.copyWith(
-            category: state.config.category ?? (categories.isNotEmpty ? categories.first : null),
+            category: categories.isNotEmpty ? categories.first : null,
+            categoryIds: categories.isNotEmpty ? [categories.first.id] : [],
           ),
         );
       }
@@ -127,7 +129,28 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
   void updateCategory(Category? category) {
     state = state.copyWith(
-      config: state.config.copyWith(category: category, useInterests: false),
+      config: state.config.copyWith(
+        category: category,
+        categoryIds: category != null ? [category.id] : [],
+        useInterests: false,
+      ),
+    );
+    _updateValidation();
+  }
+
+  void toggleCategory(String categoryId) {
+    final currentIds = List<String>.from(state.config.categoryIds);
+    if (currentIds.contains(categoryId)) {
+      currentIds.remove(categoryId);
+    } else {
+      currentIds.add(categoryId);
+    }
+    state = state.copyWith(
+      config: state.config.copyWith(
+        categoryIds: currentIds,
+        category: null, // Clear single category view
+        useInterests: false,
+      ),
     );
     _updateValidation();
   }
@@ -222,8 +245,17 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         );
         return;
       }
-    } else if (state.config.category != null) {
-      categoryIds = [state.config.category!.id];
+    } else {
+      categoryIds = state.config.categoryIds;
+      if (categoryIds.isEmpty) {
+        state = state.copyWith(
+          access: const ProModeAccessResult(
+            state: ProModeAccessState.locked,
+            message: 'PLEASE SELECT AT LEAST ONE CATEGORY',
+          ),
+        );
+        return;
+      }
     }
 
     final count = await ref.read(proModeRepositoryProvider).getAvailableQuestionCount(
@@ -256,8 +288,8 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       if (state.config.useInterests) {
         final profile = ref.read(currentPlayerProvider);
         categories = profile?.favoriteCategories ?? [];
-      } else if (state.config.category != null) {
-        categories = [state.config.category!.id];
+      } else {
+        categories = state.config.categoryIds;
       }
 
       final selectionResult = await ref.read(questionSelectionServiceProvider).selectQuestions(

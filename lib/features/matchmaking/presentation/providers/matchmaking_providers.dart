@@ -23,6 +23,7 @@ part 'matchmaking_providers.freezed.dart';
 abstract class VersusLobbyState with _$VersusLobbyState {
   const factory VersusLobbyState({
     Category? category,
+    @Default([]) List<String> categoryIds,
     @Default(Difficulty.medium) Difficulty difficulty,
     @Default(10) int questionCount,
     @Default([]) List<Category> categories,
@@ -48,6 +49,7 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
         isLoading: false,
         categories: categories,
         category: state.category ?? (categories.isNotEmpty ? categories.first : null),
+        categoryIds: state.categoryIds.isNotEmpty ? state.categoryIds : (categories.isNotEmpty ? [categories.first.id] : []),
       );
       _validate();
     } catch (e) {
@@ -56,7 +58,26 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
   }
 
   void updateCategory(Category category) {
-    state = state.copyWith(category: category, useInterests: false);
+    state = state.copyWith(
+      category: category,
+      categoryIds: [category.id],
+      useInterests: false,
+    );
+    _validate();
+  }
+
+  void toggleCategory(String categoryId) {
+    final currentIds = List<String>.from(state.categoryIds);
+    if (currentIds.contains(categoryId)) {
+      currentIds.remove(categoryId);
+    } else {
+      currentIds.add(categoryId);
+    }
+    state = state.copyWith(
+      categoryIds: currentIds,
+      category: null, // Clear single category
+      useInterests: false,
+    );
     _validate();
   }
 
@@ -86,8 +107,8 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
 
     if (player == null) {
       validationError = 'Player profile not found';
-    } else if (!state.useInterests && state.category == null) {
-      validationError = 'Please select a category';
+    } else if (!state.useInterests && state.categoryIds.isEmpty) {
+      validationError = 'Please select at least one category';
     } else if (state.difficulty == Difficulty.expert && level < 10) {
       validationError = 'Level 10 required for Expert difficulty';
     }

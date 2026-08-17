@@ -30,6 +30,7 @@ enum ProDifficulty {
 @immutable
 class ProSessionConfig {
   final Category? category;
+  final List<String> categoryIds;
   final ProDifficulty difficulty;
   final int questionCount;
   final int entryFee;
@@ -39,6 +40,7 @@ class ProSessionConfig {
 
   const ProSessionConfig({
     this.category,
+    this.categoryIds = const [],
     this.difficulty = ProDifficulty.intermediate,
     this.questionCount = 10,
     this.entryFee = 500, // Updated to match Intermediate default
@@ -49,6 +51,7 @@ class ProSessionConfig {
 
   ProSessionConfig copyWith({
     Category? category,
+    List<String>? categoryIds,
     ProDifficulty? difficulty,
     int? questionCount,
     int? entryFee,
@@ -58,6 +61,7 @@ class ProSessionConfig {
   }) {
     return ProSessionConfig(
       category: category ?? this.category,
+      categoryIds: categoryIds ?? this.categoryIds,
       difficulty: difficulty ?? this.difficulty,
       questionCount: questionCount ?? this.questionCount,
       entryFee: entryFee ?? this.entryFee,
