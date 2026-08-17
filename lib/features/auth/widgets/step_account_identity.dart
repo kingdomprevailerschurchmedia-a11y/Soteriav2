@@ -55,7 +55,33 @@ class StepAccountIdentity extends ConsumerWidget {
           prefixIcon: Icons.person_outline_rounded,
           onChanged: (val) => notifier.updateAccount(username: val),
           enabled: !state.isLoading,
+          suffixIcon: state.isUsernameChecking
+              ? const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                )
+              : state.usernameError != null
+                  ? const Icon(Icons.error_outline_rounded,
+                      color: SoteriaColors.error)
+                  : state.isUsernameAvailable
+                      ? const Icon(Icons.check_circle_outline_rounded,
+                          color: SoteriaColors.success)
+                      : null,
         ),
+        if (state.usernameError != null) ...[
+          SizedBox(height: 8.h),
+          Padding(
+            padding: const EdgeInsets.only(left: 4),
+            child: Text(
+              state.usernameError!,
+              style: context.labelSmall.copyWith(color: SoteriaColors.error),
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -79,6 +105,7 @@ class StepAccountIdentity extends ConsumerWidget {
     required ValueChanged<String>? onChanged,
     bool enabled = true,
     TextInputType? keyboardType,
+    Widget? suffixIcon,
   }) {
     return Container(
       height: 64.h,
@@ -109,6 +136,7 @@ class StepAccountIdentity extends ConsumerWidget {
               size: 24.sp,
             ),
           ),
+          suffixIcon: suffixIcon,
           border: InputBorder.none,
           contentPadding: EdgeInsets.symmetric(vertical: 20.h),
         ),

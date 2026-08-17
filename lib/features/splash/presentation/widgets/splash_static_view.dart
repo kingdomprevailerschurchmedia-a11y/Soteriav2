@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/config/soteria_branding_config.dart';
 
 /// A simplified, non-animated version of the splash screen branding.
 /// 
@@ -14,6 +14,13 @@ class SplashStaticView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
+
+    // Prevent rendering with 0 size during initial initialization
+    if (size.width == 0 || size.height == 0) {
+      return const SizedBox.shrink();
+    }
+
+    final logoSize = SoteriaBrandingConfig.getLogoSize(size);
 
     return Scaffold(
       backgroundColor: SoteriaColors.backgroundBottomRight,
@@ -33,33 +40,36 @@ class SplashStaticView extends StatelessWidget {
           // Branding
           Center(
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
                   'assets/images/logo_icon.png',
-                  width: size.width * 0.55,
-                  height: size.width * 0.55,
+                  width: logoSize,
+                  height: logoSize,
                   fit: BoxFit.contain,
                 ),
-                SizedBox(height: 24.h),
+                SizedBox(height: SoteriaBrandingConfig.getLogoToWordmarkGap()),
                 Text(
                   'SOTERIA',
+                  textAlign: TextAlign.center,
                   style: SoteriaTypography.displayMedium.copyWith(
                     color: SoteriaColors.textPrimary,
-                    fontSize: size.width * 0.085,
-                    fontWeight: FontWeight.w700,
-                    letterSpacing: size.width * 0.015,
+                    fontSize: SoteriaBrandingConfig.getWordmarkFontSize(size),
+                    fontWeight: SoteriaBrandingConfig.getWordmarkFontWeight(),
+                    letterSpacing: SoteriaBrandingConfig.getWordmarkLetterSpacing(),
                     height: 1.0,
                   ),
                 ),
-                SizedBox(height: 1.h),
+                SizedBox(height: SoteriaBrandingConfig.getWordmarkToTaglineGap()),
                 Text(
                   'COMPETE. LEARN. RISE.',
+                  textAlign: TextAlign.center,
                   style: SoteriaTypography.labelSmall.copyWith(
                     color: SoteriaColors.gold,
-                    fontSize: size.width * 0.024,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: size.width * 0.008,
+                    fontSize: SoteriaBrandingConfig.getTaglineFontSize(size),
+                    fontWeight: SoteriaBrandingConfig.getTaglineFontWeight(),
+                    letterSpacing: SoteriaBrandingConfig.getTaglineLetterSpacing(),
                     height: 1.0,
                   ),
                 ),
@@ -71,3 +81,4 @@ class SplashStaticView extends StatelessWidget {
     );
   }
 }
+

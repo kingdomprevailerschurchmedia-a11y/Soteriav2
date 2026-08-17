@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart' as gsi;
 import 'package:soteria/core/firebase/data_sources/auth_data_source.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../services/username_service.dart';
 import '../data/repositories/firebase_auth_repository.dart';
 import '../domain/repositories/auth_repository.dart';
 import '../domain/use_cases/check_auth_state_use_case.dart';
@@ -21,6 +23,10 @@ final authDataSourceProvider = Provider<AuthDataSource>((ref) {
 });
 
 // --- Repositories ---
+final usernameServiceProvider = Provider<UsernameService>((ref) {
+  return FirebaseUsernameService(FirebaseFirestore.instance);
+});
+
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   return FirebaseAuthRepository(dataSource: ref.watch(authDataSourceProvider));
 });

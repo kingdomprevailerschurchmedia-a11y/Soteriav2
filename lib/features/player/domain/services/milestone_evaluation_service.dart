@@ -88,14 +88,16 @@ class MilestoneEvaluationService {
         return statistics.career.seasonsPlayed.toDouble();
       case MilestoneType.statistic:
         return statistics.career.accuracy * 100; // Example: Accuracy %
-      case MilestoneType.careerBest:
-        // Achieved if current rank is the best rank
-        return progression.currentRank == statistics.career.bestRank ? 1.0 : 0.0;
+      case MilestoneType.welcome:
+        return 1.0;
       case MilestoneType.promotion:
         // This is tricky without event history, but we can check if they have any rank 
         // that isn't Unranked as a proxy for "First Rank/Promotion"
         return progression.currentRankTier != 'unranked' ? 1.0 : 0.0;
+      case MilestoneType.careerBest:
+        return 0.0; // Retired
     }
+    return 0.0;
   }
 
   int _evaluateRankTier(String currentTierId, String milestoneId) {

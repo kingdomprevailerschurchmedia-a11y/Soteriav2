@@ -17,28 +17,28 @@ class WalletScreen extends ConsumerWidget {
       id: 'bundle_starter',
       name: 'Starter',
       coins: 500,
-      price: 4.99,
+      price: 7500.00,
       icon: '🪙',
     ),
     CoinBundle(
       id: 'bundle_pro',
       name: 'Pro',
       coins: 2000,
-      price: 14.99,
+      price: 30000.00,
       icon: '💰',
     ),
     CoinBundle(
       id: 'bundle_elite',
       name: 'Elite',
       coins: 5000,
-      price: 29.99,
+      price: 75000.00,
       icon: '💎',
     ),
     CoinBundle(
       id: 'bundle_whale',
       name: 'Whale',
       coins: 15000,
-      price: 79.99,
+      price: 225000.00,
       icon: '🐳',
     ),
   ];
@@ -191,7 +191,7 @@ class WalletScreen extends ConsumerWidget {
                 ],
               ),
               child: Text(
-                '\$${bundle.price}',
+                '₦${bundle.price}',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14.sp,

@@ -5,6 +5,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
+import '../../../../core/design_system/config/soteria_branding_config.dart';
 
 class AuthHeroSection extends StatelessWidget {
   const AuthHeroSection({super.key, this.logo});
@@ -17,7 +18,7 @@ class AuthHeroSection extends StatelessWidget {
 
     return Column(
       children: [
-        SizedBox(height: 24.h),
+        SizedBox(height: 0),
 
         // Premium Glowing Hero Area
         SoteriaScaleIn(
@@ -48,10 +49,10 @@ class AuthHeroSection extends StatelessWidget {
                 ),
               ),
 
-              // Purple Glow behind logo (Resized for larger logo)
+              // Purple Glow behind logo
               Container(
-                width: isShort ? 140.w : 180.w,
-                height: isShort ? 140.w : 180.w,
+                width: SoteriaBrandingConfig.getLogoSize(MediaQuery.sizeOf(context)) * 1.2,
+                height: SoteriaBrandingConfig.getLogoSize(MediaQuery.sizeOf(context)) * 1.2,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
@@ -63,19 +64,17 @@ class AuthHeroSection extends StatelessWidget {
                 ),
               ),
 
-              // Shield Logo (Increased 3x)
+              // Shield Logo (Synced with Splash Screen dimensions)
               logo ??
                   Image.asset(
                     'assets/images/logo_icon.png',
-                    width: isShort ? 90.w : 120.w,
-                    height: isShort ? 90.w : 120.w,
+                    width: SoteriaBrandingConfig.getLogoSize(MediaQuery.sizeOf(context)),
+                    height: SoteriaBrandingConfig.getLogoSize(MediaQuery.sizeOf(context)),
                     fit: BoxFit.contain,
                   ),
             ],
           ),
         ),
-
-        SizedBox(height: 2.h),
 
         // Welcome Text with Gradient
         SoteriaFadeIn(
@@ -86,14 +85,14 @@ class AuthHeroSection extends StatelessWidget {
                 'Welcome to Soteria',
                 style: context.headlineLarge.copyWith(
                   fontWeight: FontWeight.w600,
-                  fontSize: isShort ? 30.sp : 40.sp,
+                  fontSize: isShort ? 24.sp : 32.sp,
                   color: Colors.white,
                   letterSpacing: -0.5,
                 ),
                 textAlign: TextAlign.center,
               ),
 
-              SizedBox(height: 8.h),
+              SizedBox(height: 4.h),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 40.w),
@@ -101,8 +100,8 @@ class AuthHeroSection extends StatelessWidget {
                   'Rise through knowledge.',
                   style: context.bodyLarge.copyWith(
                     color: Colors.white.withValues(alpha: 0.6),
-                    height: 1.4,
-                    fontSize: isShort ? 15.sp : 18.sp,
+                    height: 1.2,
+                    fontSize: isShort ? 14.sp : 16.sp,
                     fontWeight: FontWeight.w400,
                   ),
                   textAlign: TextAlign.center,
@@ -112,7 +111,7 @@ class AuthHeroSection extends StatelessWidget {
           ),
         ),
 
-        SizedBox(height: 32.h),
+        SizedBox(height: 12.h),
       ],
     );
   }

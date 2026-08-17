@@ -132,33 +132,15 @@ class _NavButton extends StatelessWidget {
                 horizontal: isShort ? 12.w : 14.w,
                 vertical: isShort ? 4.h : 6.h,
               ),
-              decoration: BoxDecoration(
-                gradient: isSelected
-                    ? LinearGradient(
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                        colors: [
-                          SoteriaColors.secondary.withValues(alpha: 0.2),
-                          SoteriaColors.primary.withValues(alpha: 0.1),
-                        ],
-                      )
-                    : null,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  if (isSelected)
-                    BoxShadow(
-                      color: SoteriaColors.secondary.withValues(alpha: 0.3),
-                      blurRadius: 25,
-                      spreadRadius: 2,
-                    ),
-                ],
+              decoration: const BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(16)),
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     icon,
-                    color: isSelected ? Colors.white : SoteriaColors.muted,
+                    color: isSelected ? SoteriaColors.secondary : SoteriaColors.muted,
                     size: isShort ? 18.sp : 22.sp,
                   ),
                   SizedBox(height: 2.h),
@@ -200,13 +182,13 @@ class _NavButton extends StatelessWidget {
               ),
             if (isSelected)
               Positioned(
-                bottom: 0,
+                bottom: -2.h,
                 child: Container(
-                  width: 20.w,
-                  height: 3.h,
+                  width: 6.r,
+                  height: 6.r,
                   decoration: BoxDecoration(
                     color: SoteriaColors.secondary,
-                    borderRadius: BorderRadius.circular(2),
+                    shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
                         color: SoteriaColors.secondary.withValues(alpha: 0.8),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../../../core/avatar/providers/avatar_providers.dart';
@@ -7,12 +8,61 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/glass_surface.dart';
+import '../../../player/presentation/providers/leaderboard_providers.dart';
+import '../../../../core/identity/providers/identity_providers.dart';
+import '../../../player/providers/player_providers.dart';
+import '../../../player/domain/models/leaderboard_entry.dart';
 
-class LeaderboardPreview extends StatelessWidget {
+class LeaderboardPreview extends ConsumerWidget {
   const LeaderboardPreview({super.key});
 
+  static final List<LeaderboardEntry> _seedScholars = [
+    LeaderboardEntry(
+      userId: 'seed_segun',
+      displayName: 'Segun',
+      avatarId: 'athena',
+      rankPoints: 24500,
+      rankTier: 'Master',
+      division: 1,
+      position: 1,
+      registrationOrder: 1,
+      lastUpdated: DateTime.now(),
+      createdAt: DateTime(2026, 1, 1),
+    ),
+    LeaderboardEntry(
+      userId: 'seed_peter',
+      displayName: 'Peter',
+      avatarId: 'isaac',
+      rankPoints: 22100,
+      rankTier: 'Master',
+      division: 2,
+      position: 2,
+      registrationOrder: 2,
+      lastUpdated: DateTime.now(),
+      createdAt: DateTime(2026, 1, 2),
+    ),
+    LeaderboardEntry(
+      userId: 'seed_micheal',
+      displayName: 'Micheal',
+      avatarId: 'elias',
+      rankPoints: 19800,
+      rankTier: 'Expert',
+      division: 3,
+      position: 3,
+      registrationOrder: 3,
+      lastUpdated: DateTime.now(),
+      createdAt: DateTime(2026, 1, 3),
+    ),
+  ];
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final topPlayersAsync = ref.watch(leaderboardControllerProvider(null));
+    final playerEntryAsync = ref.watch(playerLeaderboardEntryProvider);
+    final playerRankAsync = ref.watch(playerRankPositionProvider);
+    final currentUserId = ref.watch(sessionProvider).uid;
+    final currentPlayer = ref.watch(currentPlayerProvider);
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       child: Column(
@@ -30,7 +80,9 @@ class LeaderboardPreview extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  // TODO: Navigate to full leaderboard
+                },
                 child: Text(
                   'VIEW ALL',
                   style: context.labelSmall.copyWith(
@@ -43,33 +95,118 @@ class LeaderboardPreview extends StatelessWidget {
           ),
           GlassSurface(
             borderRadius: BorderRadius.circular(24),
-            child: Column(
-              children: [
-                _LeaderboardRow(
-                  rank: 1,
-                  name: 'Hypatia',
-                  xp: 24500,
-                  isGold: true,
-                  avatarId: 'athena',
-                ),
-                _LeaderboardRow(
-                  rank: 2,
-                  name: 'Archimedes',
-                  xp: 22100,
-                  avatarId: 'isaac',
-                ),
-                _LeaderboardRow(
-                  rank: 3,
-                  name: 'Euler',
-                  xp: 19800,
-                  avatarId: 'elias',
-                ),
-                const Divider(color: Colors.white10, height: 1),
-                _LeaderboardRow(rank: 42, name: 'You', xp: 12500, isMe: true),
-              ],
+            child: topPlayersAsync.when(
+              data: (entries) {
+                final merged = [...entries, ..._seedScholars];
+                
+                // Sort by XP (desc) then Registration Order (asc)
+                merged.sort((a, b) {
+                  if (b.rankPoints != a.rankPoints) {
+                    return b.rankPoints.compareTo(a.rankPoints);
+                  }
+                  return a.registrationOrder.compareTo(b.registrationOrder);
+                });
+
+                final previewList = merged.take(3).toList();
+                final bool isPlayerInTop3 = previewList.any((e) => e.userId == currentUserId);
+
+                return Column(
+                  children: [
+                    ...previewList.asMap().entries.map((item) {
+                      final index = item.key;
+                      final entry = item.value;
+                      return _LeaderboardRow(
+                        rank: index + 1,
+                        name: entry.userId == currentUserId ? 'You' : entry.displayName,
+                        xp: entry.rankPoints,
+                        isGold: index == 0,
+                        avatarId: entry.avatarId,
+                        imageUrl: entry.avatarUrl,
+                        isMe: entry.userId == currentUserId,
+                      );
+                    }),
+                    if (!isPlayerInTop3 && currentPlayer != null) ...[
+                      const Divider(color: Colors.white10, height: 1),
+                      Builder(
+                        builder: (context) {
+                          final playerEntry = playerEntryAsync.value;
+                          final rawRank = playerRankAsync.value ?? -1;
+                          
+                          int uiRank = rawRank;
+                          if (rawRank == -1) {
+                            uiRank = currentPlayer.registrationOrder;
+                          } else {
+                            final betterSeeds = _seedScholars.where((seed) {
+                              if (seed.rankPoints > currentPlayer.xp) return true;
+                              if (seed.rankPoints == currentPlayer.xp) {
+                                return seed.registrationOrder < currentPlayer.registrationOrder;
+                              }
+                              return false;
+                            }).length;
+                            uiRank += betterSeeds;
+                          }
+
+                          return _LeaderboardRow(
+                            rank: uiRank,
+                            name: 'You',
+                            xp: currentPlayer.xp,
+                            isMe: true,
+                            avatarId: playerEntry?.avatarId,
+                            imageUrl: playerEntry?.avatarUrl,
+                          );
+                        },
+                      ),
+                    ],
+                  ],
+                );
+              },
+              loading: () => Column(
+                children: List.generate(3, (index) => const _ShimmerRow()),
+              ),
+              error: (error, _) => Column(
+                children: [
+                  ..._seedScholars.asMap().entries.map((item) {
+                    final index = item.key;
+                    final entry = item.value;
+                    return _LeaderboardRow(
+                      rank: index + 1,
+                      name: entry.displayName,
+                      xp: entry.rankPoints,
+                      isGold: index == 0,
+                      avatarId: entry.avatarId,
+                    );
+                  }),
+                ],
+              ),
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ShimmerRow extends StatelessWidget {
+  const _ShimmerRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.white.withOpacity(0.05),
+      highlightColor: Colors.white.withOpacity(0.1),
+      child: Container(
+        padding: EdgeInsets.all(SoteriaSpacing.md),
+        child: Row(
+          children: [
+            Container(width: 24, height: 12, color: Colors.white),
+            SizedBox(width: SoteriaSpacing.sm),
+            CircleAvatar(radius: 12, backgroundColor: Colors.white),
+            SizedBox(width: SoteriaSpacing.md),
+            Expanded(child: Container(height: 12, color: Colors.white)),
+            SizedBox(width: SoteriaSpacing.md),
+            Container(width: 40, height: 12, color: Colors.white),
+          ],
+        ),
       ),
     );
   }
@@ -83,6 +220,7 @@ class _LeaderboardRow extends ConsumerWidget {
     this.isGold = false,
     this.isMe = false,
     this.avatarId,
+    this.imageUrl,
   });
 
   final int rank;
@@ -91,6 +229,7 @@ class _LeaderboardRow extends ConsumerWidget {
   final bool isGold;
   final bool isMe;
   final String? avatarId;
+  final String? imageUrl;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -100,13 +239,13 @@ class _LeaderboardRow extends ConsumerWidget {
 
     return Container(
       padding: EdgeInsets.all(SoteriaSpacing.md),
-      color: isMe ? SoteriaColors.primary.withValues(alpha: 0.05) : null,
+      color: isMe ? SoteriaColors.primary.withValues(alpha: 0.1) : null,
       child: Row(
         children: [
           SizedBox(
             width: 24,
             child: Text(
-              rank.toString(),
+              rank > 0 ? rank.toString() : '-',
               style: context.bodySmall.copyWith(
                 color: isGold ? SoteriaColors.gold : SoteriaColors.muted,
                 fontWeight: FontWeight.bold,
@@ -114,11 +253,19 @@ class _LeaderboardRow extends ConsumerWidget {
             ),
           ),
           SizedBox(width: SoteriaSpacing.sm),
-          SoteriaAvatar(avatar: avatar, size: 24, rank: rank, hasBorder: false),
+          SoteriaAvatar(
+            avatar: avatar, 
+            imageUrl: imageUrl,
+            size: 24, 
+            rank: rank, 
+            hasBorder: false
+          ),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(
             child: Text(
               name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: context.bodyMedium.copyWith(
                 fontWeight: isMe ? FontWeight.bold : FontWeight.normal,
               ),

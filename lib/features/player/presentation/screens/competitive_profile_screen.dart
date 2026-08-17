@@ -100,6 +100,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
                     duration: SoteriaAnimations.normal,
                     child: CompetitiveRankCard(
                       rankProgress: rankProgress,
+                      showRP: false,
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute(
                           builder: (_) => const CompetitiveRankOverviewScreen(),

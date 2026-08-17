@@ -51,20 +51,28 @@ class SoteriaAvatar extends ConsumerWidget {
     if (hasProvidedImageUrl) {
       effectiveImageUrl = imageUrl;
     } else if (!hasProvidedAvatar && !hasProvidedInitials) {
-      final profileImageUrl = profile?.avatarUrl;
-      final playerImageUrl = player?.photoUrl;
+      final profileUrl = profile?.avatarUrl;
+      final profileAvatar = profile?.selectedAvatarId;
+      final playerUrl = player?.photoUrl;
 
-      effectiveImageUrl = (profileImageUrl != null && profileImageUrl.isNotEmpty)
-          ? profileImageUrl
-          : (profileImageUrl == null && playerImageUrl != null && playerImageUrl.isNotEmpty)
-              ? playerImageUrl
-              : null;
+      // Priority logic:
+      // 1. If we have a custom profile photo (from identity), show it.
+      // 2. If we have a selected avatar ID in identity, don't show any photo (show the avatar instead).
+      // 3. Fallback to player photo (from gameplay).
+      if (profileUrl != null && profileUrl.isNotEmpty) {
+        effectiveImageUrl = profileUrl;
+      } else if (profileAvatar != null && profileAvatar.isNotEmpty) {
+        effectiveImageUrl = null;
+      } else if (playerUrl != null && playerUrl.isNotEmpty) {
+        effectiveImageUrl = playerUrl;
+      }
     }
 
-    final hasEffectiveImageUrl = effectiveImageUrl != null && effectiveImageUrl.isNotEmpty;
+    final hasEffectiveImageUrl =
+        effectiveImageUrl != null && effectiveImageUrl.isNotEmpty;
 
-    final effectiveAvatar =
-        avatar ??
+    // Use the provided avatar, or if we don't have an image, get the globally selected one.
+    final effectiveAvatar = avatar ??
         (hasEffectiveImageUrl || hasProvidedInitials
             ? null
             : ref.watch(selectedAvatarProvider));

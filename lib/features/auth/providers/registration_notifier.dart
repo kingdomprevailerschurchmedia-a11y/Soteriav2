@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../personalization/providers/personalization_notifier.dart';
@@ -11,11 +12,15 @@ import 'auth_providers.dart';
 class RegistrationNotifier extends Notifier<RegistrationDraft> {
   static const _kFirstNameKey = 'user_first_name';
   bool _mounted = true;
+  Timer? _debounceTimer;
 
   @override
   RegistrationDraft build() {
     _mounted = true;
-    ref.onDispose(() => _mounted = false);
+    ref.onDispose(() {
+      _mounted = false;
+      _debounceTimer?.cancel();
+    });
     final personalization = ref.watch(personalizationProvider);
     return RegistrationDraft(
       academicLevel: personalization.academicLevel,
@@ -33,7 +38,57 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
   }
 
   void updateAccount({String? email, String? username}) {
-    state = state.copyWith(email: email?.trim(), username: username);
+    if (username != null) {
+      final normalized = username.trim().toLowerCase();
+      state = state.copyWith(
+        email: email?.trim(),
+        username: normalized,
+        usernameError: _validateUsernameFormat(normalized),
+        isUsernameAvailable: false,
+      );
+
+      if (state.usernameError == null) {
+        _checkUsernameAvailability(normalized);
+      }
+    } else {
+      state = state.copyWith(email: email?.trim());
+    }
+  }
+
+  String? _validateUsernameFormat(String username) {
+    if (username.isEmpty) return 'Username cannot be empty';
+    if (username.length < 3) return 'Username too short';
+    if (username.length > 20) return 'Username too long';
+    if (!RegExp(r'^[a-z0-9_]+$').hasMatch(username)) {
+      return 'Only letters, numbers and underscores allowed';
+    }
+    return null;
+  }
+
+  void _checkUsernameAvailability(String username) {
+    _debounceTimer?.cancel();
+    state = state.copyWith(isUsernameChecking: true, usernameError: null);
+
+    _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
+      try {
+        final isAvailable =
+            await ref.read(usernameServiceProvider).isUsernameAvailable(username);
+        if (_mounted) {
+          state = state.copyWith(
+            isUsernameChecking: false,
+            isUsernameAvailable: isAvailable,
+            usernameError: isAvailable ? null : 'Username is already taken',
+          );
+        }
+      } catch (e) {
+        if (_mounted) {
+          state = state.copyWith(
+            isUsernameChecking: false,
+            usernameError: 'Failed to check availability',
+          );
+        }
+      }
+    });
   }
 
   void updateSecurity({String? password, String? confirm}) {
@@ -54,7 +109,9 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
         return state.firstName.isNotEmpty && state.lastName.isNotEmpty;
       case RegistrationStep.account:
         return IdentityValidator.isValidEmail(state.email) &&
-            IdentityValidator.isValidUsername(state.username);
+            IdentityValidator.isValidUsername(state.username) &&
+            state.isUsernameAvailable &&
+            !state.isUsernameChecking;
       case RegistrationStep.security:
         return IdentityValidator.getPasswordStrength(state.password) >= 1.0 &&
             state.password == state.confirmPassword;

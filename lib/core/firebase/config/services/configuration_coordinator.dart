@@ -21,10 +21,10 @@ class ConfigurationCoordinator {
       RemoteConfigKeys.minTimer: 5,
       RemoteConfigKeys.maxTimer: 60,
       RemoteConfigKeys.questionTransitionDelay: 1.5,
-      RemoteConfigKeys.pointsPerCorrect: 100,
+      RemoteConfigKeys.pointsPerCorrect: 0, // Deprecated: Use CompetitiveRewardConfig
       RemoteConfigKeys.wrongAnswerPenalty: 25,
       RemoteConfigKeys.streakBonus: 10,
-      RemoteConfigKeys.perfectRoundBonus: 500,
+      RemoteConfigKeys.perfectRoundBonus: 0, // Deprecated: Use CompetitiveRewardConfig
       RemoteConfigKeys.enablePractice: true,
       RemoteConfigKeys.enableProMode: false,
       RemoteConfigKeys.enableTournament: false,

@@ -112,7 +112,25 @@ class GoalEvaluationService {
       case GoalCategory.personalBest:
         return statistics.career.peakPosition.toDouble();
 
+      case GoalCategory.correctAnswers:
+        return resultsInRange
+            .map((r) => r.correctAnswers)
+            .fold(0.0, (a, b) => a + b);
+
+      case GoalCategory.xpEarned:
+        return resultsInRange
+            .map((r) => r.xpEarned)
+            .fold(0.0, (a, b) => a + b);
+
+      case GoalCategory.practiceCount:
+        return resultsInRange
+            .where((r) => r.gameMode == GameMode.practice)
+            .length
+            .toDouble();
+
       case GoalCategory.achievement:
+        return 0.0;
+      default:
         return 0.0;
     }
   }

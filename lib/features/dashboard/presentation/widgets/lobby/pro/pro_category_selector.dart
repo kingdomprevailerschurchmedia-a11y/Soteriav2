@@ -4,9 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../../../core/widgets/glass_surface.dart';
 import '../../../providers/pro_lobby_providers.dart';
-import '../../../../../question_content/domain/entities/category.dart';
+import '../lobby_config_widgets.dart';
 
 class ProCategorySelector extends ConsumerWidget {
   const ProCategorySelector({super.key});
@@ -22,7 +21,7 @@ class ProCategorySelector extends ConsumerWidget {
           _buildHeader(context),
           SizedBox(height: SoteriaSpacing.md),
           SizedBox(
-            height: 100.h,
+            height: 80.h,
             child: const Center(
               child: CircularProgressIndicator(
                 color: SoteriaColors.gold,
@@ -41,7 +40,7 @@ class ProCategorySelector extends ConsumerWidget {
           _buildHeader(context),
           SizedBox(height: SoteriaSpacing.md),
           Container(
-            height: 100.h,
+            height: 80.h,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.03),
@@ -55,7 +54,7 @@ class ProCategorySelector extends ConsumerWidget {
                 SizedBox(height: 8.h),
                 Text(
                   'No categories available',
-                  style: context.bodySmall.copyWith(color: Colors.white24),
+                  style: context.bodySmall.copyWith(color: Colors.white24, fontSize: 10.sp),
                 ),
               ],
             ),
@@ -69,112 +68,38 @@ class ProCategorySelector extends ConsumerWidget {
       children: [
         _buildHeader(context),
         SizedBox(height: SoteriaSpacing.md),
-        SizedBox(
-          height: 100.h,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: state.categories.length,
-            itemBuilder: (context, index) {
-              final category = state.categories[index];
-              final isSelected = state.config.category?.id == category.id;
-
-              return _CategoryCard(
-                category: category,
-                isSelected: isSelected,
-                onTap: () => ref
-                    .read(proLobbyProvider.notifier)
-                    .updateCategory(isSelected ? null : category),
-              );
-            },
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 8.w,
+            crossAxisSpacing: 8.w,
+            childAspectRatio: 1.1,
           ),
+          itemCount: state.categories.length,
+          itemBuilder: (context, index) {
+            final category = state.categories[index];
+            final isSelected = state.config.category?.id == category.id;
+
+            return LobbyCategoryCard(
+              label: category.name,
+              icon: _getIcon(category.icon),
+              isSelected: isSelected,
+              onTap: () => ref
+                  .read(proLobbyProvider.notifier)
+                  .updateCategory(isSelected ? null : category),
+            );
+          },
         ),
       ],
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Text(
-      'SELECT CATEGORY',
-      style: context.labelSmall.copyWith(
-        color: SoteriaColors.gold,
-        letterSpacing: 2,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-}
-
-class _CategoryCard extends StatelessWidget {
-  const _CategoryCard({
-    required this.category,
-    required this.isSelected,
-    required this.onTap,
-  });
-
-  final Category category;
-  final bool isSelected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 250),
-        width: 120.w,
-        margin: EdgeInsets.only(right: SoteriaSpacing.md),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(
-            color: isSelected
-                ? SoteriaColors.primary
-                : Colors.white.withValues(alpha: 0.1),
-            width: 2,
-          ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: SoteriaColors.primary.withValues(alpha: 0.3),
-                    blurRadius: 10,
-                    spreadRadius: 1,
-                  ),
-                ]
-              : null,
-        ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(14.r),
-          child: GlassSurface(
-            opacity: isSelected ? 0.15 : 0.05,
-            child: Padding(
-              padding: EdgeInsets.all(SoteriaSpacing.sm),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    _getIcon(category.icon),
-                    color: isSelected ? SoteriaColors.primary : Colors.white70,
-                    size: 24.sp,
-                  ),
-                  SizedBox(height: SoteriaSpacing.xs),
-                  Text(
-                    category.name,
-                    style: context.bodySmall.copyWith(
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      fontSize: 11.sp,
-                      color: isSelected ? Colors.white : Colors.white70,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+    return const LobbySectionHeader(
+      label: 'SELECT CATEGORY',
+      icon: Icons.grid_view_rounded,
     );
   }
 
@@ -188,6 +113,38 @@ class _CategoryCard extends StatelessWidget {
         return Icons.code_rounded;
       case 'network':
         return Icons.router_rounded;
+      case 'science':
+        return Icons.science_rounded;
+      case 'business':
+        return Icons.business_rounded;
+      case 'history':
+        return Icons.history_rounded;
+      case 'calculate':
+        return Icons.calculate_rounded;
+      case 'palette':
+        return Icons.palette_rounded;
+      case 'sports_basketball':
+        return Icons.sports_basketball_rounded;
+      case 'gavel':
+        return Icons.gavel_rounded;
+      case 'brush':
+        return Icons.brush_rounded;
+      case 'payments':
+        return Icons.payments_rounded;
+      case 'medical_services':
+        return Icons.medical_services_rounded;
+      case 'public':
+        return Icons.public_rounded;
+      case 'language':
+        return Icons.language_rounded;
+      case 'menu_book':
+        return Icons.menu_book_rounded;
+      case 'psychology':
+        return Icons.psychology_rounded;
+      case 'engineering':
+        return Icons.engineering_rounded;
+      case 'newspaper':
+        return Icons.newspaper_rounded;
       default:
         return Icons.category_rounded;
     }

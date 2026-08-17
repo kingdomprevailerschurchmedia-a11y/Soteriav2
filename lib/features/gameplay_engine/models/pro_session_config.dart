@@ -41,7 +41,7 @@ class ProSessionConfig {
     this.category,
     this.difficulty = ProDifficulty.intermediate,
     this.questionCount = 10,
-    this.entryFee = 100,
+    this.entryFee = 500, // Updated to match Intermediate default
     this.timerEnabled = true,
     this.minLevelRequirement = 1,
     this.useInterests = false,

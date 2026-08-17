@@ -67,18 +67,6 @@ class HeroCard extends ConsumerWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (rankProgress != null) ...[
-                      Padding(
-                        padding: EdgeInsets.only(top: 4.h),
-                        child: CompetitiveRankBadge(
-                          tierId: rankProgress!.tier.id,
-                          rankName: rankProgress!.currentRank,
-                          size: RankBadgeSize.small,
-                          hasGlow: rankProgress!.tier.displayOrder >= 3,
-                        ),
-                      ),
-                      SizedBox(width: 12.w),
-                    ],
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -87,28 +75,34 @@ class HeroCard extends ConsumerWidget {
                             'CURRENT RANK',
                             style: context.labelSmall.copyWith(
                               color: Colors.white.withValues(alpha: 0.4),
-                              letterSpacing: 2.0,
-                              fontWeight: FontWeight.w800,
+                              letterSpacing: 1.0,
+                              fontWeight: FontWeight.w600,
                               fontSize: 10.sp,
                             ),
                           ),
+                          SizedBox(height: 2.h),
                           Text(
-                            (rankProgress?.currentRank ?? 'UNRANKED').toUpperCase(),
-                            style: context.titleMedium.copyWith(
-                              color: SoteriaColors.gold,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 18.sp,
-                              letterSpacing: 1.0,
+                            rankProgress != null 
+                                ? rankProgress!.currentRank 
+                                : 'Unranked',
+                            style: context.displaySmall.copyWith(
+                              color: _getRankColor(rankProgress?.tier.id),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 32.sp,
+                              letterSpacing: -0.5,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    _StreakSummary(streak: streak),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: _StreakSummary(streak: streak),
+                    ),
                   ],
                 ),
                 
-                SizedBox(height: 20.h),
+                SizedBox(height: 16.h),
                 
                 // --- XP Section: Career Level ---
                 _SectionLabel(
@@ -120,7 +114,7 @@ class HeroCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     _HexagonLevelIndicator(level: level),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 12.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,6 +127,7 @@ class HeroCard extends ConsumerWidget {
                                 style: context.bodySmall.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
+                                  fontSize: 11.sp,
                                 ),
                               ),
                               Text(
@@ -140,21 +135,22 @@ class HeroCard extends ConsumerWidget {
                                 style: context.labelSmall.copyWith(
                                   color: SoteriaColors.xpColor,
                                   fontWeight: FontWeight.w900,
+                                  fontSize: 10.sp,
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(height: 6.h),
+                          SizedBox(height: 4.h),
                           _GlowingProgressBar(
                             progress: xpProgress,
                             color: SoteriaColors.xpColor,
                           ),
-                          SizedBox(height: 6.h),
+                          SizedBox(height: 4.h),
                           Text(
                             '$xpInCurrentLevel / $xpThreshold XP ($xpRemaining left)',
                             style: context.labelSmall.copyWith(
                               color: Colors.white.withValues(alpha: 0.3),
-                              fontSize: 9.sp,
+                              fontSize: 8.sp,
                             ),
                           ),
                         ],
@@ -164,20 +160,20 @@ class HeroCard extends ConsumerWidget {
                 ),
 
                 if (rankProgress != null) ...[
-                  SizedBox(height: 20.h),
+                  SizedBox(height: 16.h),
                   Container(
                     height: 1,
                     width: double.infinity,
                     color: Colors.white.withValues(alpha: 0.05),
                   ),
-                  SizedBox(height: 16.h),
+                  SizedBox(height: 12.h),
                   
                   // --- RP Section: Competitive Standing ---
                   _SectionLabel(
                     label: 'COMPETITIVE STANDING (RP)',
                     color: SoteriaColors.gold,
                   ),
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 6.h),
                   RankProgressBar(
                     progress: rankProgress!,
                     variant: RankProgressVariant.compact,
@@ -354,16 +350,13 @@ class _StreakSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final progress = (streak % 7);
-    final displayProgress = progress == 0 && streak > 0 ? 7 : progress;
-
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
       decoration: BoxDecoration(
-        color: Colors.black.withValues(alpha: 0.25),
-        borderRadius: BorderRadius.circular(12.r),
+        color: Colors.white.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(30.r),
         border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
+          color: Colors.white.withValues(alpha: 0.1),
           width: 1.0,
         ),
       ),
@@ -371,33 +364,58 @@ class _StreakSummary extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Image.asset(
-            'assets/icons/streak_icon.png',
-            width: 24.sp,
-            height: 24.sp,
-            fit: BoxFit.contain,
+          Icon(
+            Icons.local_fire_department_rounded,
+            color: Colors.orange,
+            size: 24.sp,
           ),
           SizedBox(width: 8.w),
+          Container(
+            width: 1.w,
+            height: 16.h,
+            color: Colors.white.withValues(alpha: 0.1),
+          ),
+          SizedBox(width: 10.w),
           Text(
-            '$displayProgress/7',
-            style: context.titleLarge.copyWith(
-              fontWeight: FontWeight.w900,
+            streak.toString(),
+            style: context.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
               color: Colors.white,
               fontSize: 18.sp,
             ),
           ),
-          SizedBox(width: 6.w),
+          SizedBox(width: 4.w),
           Text(
-            'DAYS STREAK',
+            'Streak',
             style: context.labelSmall.copyWith(
               color: Colors.white.withValues(alpha: 0.5),
-              fontSize: 8.sp,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.0,
+              fontSize: 11.sp,
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
       ),
     );
+  }
+}
+
+Color _getRankColor(String? tierId) {
+  switch (tierId?.toLowerCase()) {
+    case 'gold':
+      return SoteriaColors.gold;
+    case 'platinum':
+      return SoteriaColors.platinum;
+    case 'diamond':
+      return SoteriaColors.diamond;
+    case 'master':
+      return SoteriaColors.master;
+    case 'elite':
+      return SoteriaColors.elite;
+    case 'silver':
+      return SoteriaColors.silver;
+    case 'bronze':
+      return SoteriaColors.bronze;
+    default:
+      return SoteriaColors.gold;
   }
 }

@@ -10,6 +10,8 @@ import '../domain/use_cases/create_player_profile_use_case.dart';
 import '../domain/use_cases/update_player_profile_use_case.dart';
 import '../domain/repositories/player_progression_repository.dart';
 import '../domain/services/progression_service.dart';
+import '../domain/repositories/goal_repository.dart';
+import '../../question_content/domain/repositories/category_repository.dart';
 import '../../../core/logging/logger_service.dart';
 import '../../../core/identity/repositories/identity_repository.dart';
 
@@ -21,6 +23,8 @@ class PlayerBootstrapService {
   final ProgressionService _progressionService;
   final FirebaseFirestore _firestore;
   final IdentityRepository? _identityRepository;
+  final CategoryRepository? _categoryRepository;
+  final GoalRepository? _goalRepository;
 
   static const _kPersonalizationKey = 'user_personalization';
 
@@ -32,7 +36,11 @@ class PlayerBootstrapService {
     this._progressionService,
     this._firestore, {
     IdentityRepository? identityRepository,
-  }) : _identityRepository = identityRepository;
+    CategoryRepository? categoryRepository,
+    GoalRepository? goalRepository,
+  }) : _identityRepository = identityRepository,
+       _categoryRepository = categoryRepository,
+       _goalRepository = goalRepository;
 
   Future<PlayerProfile> bootstrap(auth.User user) async {
     LoggerService.i(
@@ -43,6 +51,12 @@ class PlayerBootstrapService {
     try {
       final existingProfile = await _loadProfile.execute(user.uid);
       final localInterests = await _getInterestsFromLocal();
+
+      // Ensure categories are seeded in background
+      _categoryRepository?.seedDefaultCategories();
+      
+      // Ensure goals are populated for the day
+      _goalRepository?.refreshGoals(user.uid);
 
       if (existingProfile != null) {
         LoggerService.i(
@@ -66,20 +80,61 @@ class PlayerBootstrapService {
 
         final now = DateTime.now();
         int newStreak = existingProfile.currentStreak;
-        int coins = existingProfile.coins;
+        bool shouldReward = false;
 
         // Calculate Streak
         if (_isYesterday(existingProfile.lastLogin, now)) {
           newStreak++;
           // Reward every 7 days
           if (newStreak % 7 == 0) {
-            coins += 100;
-            LoggerService.i('7-day streak reached! Granting 100 bonus coins.', feature: 'Player');
+            shouldReward = true;
           }
         } else if (!_isSameDay(existingProfile.lastLogin, now)) {
           // Missed a day or more, reset to 1
           newStreak = 1;
         }
+
+        // We use an atomic patch here to avoid overwriting concurrent changes 
+        // to other fields like 'coins' from reward claims.
+        final patchData = {
+          'lastLogin': Timestamp.fromDate(now),
+          'updatedAt': Timestamp.fromDate(now),
+          'favoriteCategories': mergedInterests,
+          'currentStreak': newStreak,
+          'highestStreak': newStreak > existingProfile.highestStreak 
+              ? newStreak 
+              : existingProfile.highestStreak,
+        };
+
+        if (shouldReward) {
+          patchData['coins'] = FieldValue.increment(500);
+          
+          final txRef = _firestore.collection('coin_transactions').doc();
+          patchData['lastCoinTransactionId'] = txRef.id; // Optional: track last tx in user doc
+          
+          // Log the transaction
+          await _firestore.collection('coin_transactions').doc(txRef.id).set({
+            'userId': user.uid,
+            'type': 'coins',
+            'direction': 'credit',
+            'amount': 500,
+            'source': 'streak',
+            'status': 'completed',
+            'createdAt': FieldValue.serverTimestamp(),
+            'metadata': {'streakCount': newStreak},
+          });
+
+          // Sync with wallets collection for Economy screen
+          await _firestore.collection('wallets').doc(user.uid).set({
+            'coins': FieldValue.increment(500),
+            'lifetimeCoinsEarned': FieldValue.increment(500),
+            'updatedAt': FieldValue.serverTimestamp(),
+          }, SetOptions(merge: true));
+          
+          LoggerService.i('7-day streak reached! Granting 500 bonus coins via increment and logging transaction.', feature: 'Player');
+        }
+
+        await _firestore.collection('users').doc(user.uid).update(patchData);
 
         final updatedProfile = existingProfile.copyWith(
           lastLogin: now,
@@ -89,9 +144,8 @@ class PlayerBootstrapService {
           highestStreak: newStreak > existingProfile.highestStreak 
               ? newStreak 
               : existingProfile.highestStreak,
-          coins: coins,
+          coins: shouldReward ? existingProfile.coins + 500 : existingProfile.coins,
         );
-        await _updateProfile.execute(updatedProfile);
 
         // Lazy Progression Migration
         await _migrateProgressionIfMissing(user.uid, existingProfile);

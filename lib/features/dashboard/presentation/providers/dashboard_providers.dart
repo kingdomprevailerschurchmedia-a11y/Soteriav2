@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/firebase/providers/firebase_providers.dart';
 import '../../../../core/logging/logger_service.dart';
 import '../../../player/providers/player_providers.dart';
+import '../../../player/presentation/providers/goal_providers.dart';
 import '../../domain/models/dashboard_state.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../../data/repositories/firestore_home_repository.dart';
@@ -27,6 +28,12 @@ class DashboardNotifier extends Notifier<DashboardState> {
     final playerAsync = ref.watch(currentPlayerStreamProvider);
     final announcementsAsync = ref.watch(announcementsProvider);
     final challengeAsync = ref.watch(dailyChallengeProvider);
+    
+    // Ensure daily goals are populated
+    ref.watch(goalRefreshProvider);
+    
+    // Track goal progress in real-time
+    ref.watch(goalEvaluationProvider);
 
     if (kDebugMode) {
       LoggerService.d(

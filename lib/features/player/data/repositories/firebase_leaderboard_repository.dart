@@ -28,8 +28,10 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
       rankTier: progression.currentRankTier,
       division: _parseDivision(progression.currentRank),
       position: 0, // Calculated client-side
+      registrationOrder: profile.registrationOrder,
       titleId: profile.equippedTitleId,
       lastUpdated: DateTime.now(),
+      createdAt: profile.createdAt,
     );
 
     final data = entry.toJson();
@@ -87,12 +89,12 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
   }) async {
     var query = _getBaseQuery(seasonId)
         .orderBy('rankPoints', descending: true)
-        .orderBy('userId', descending: false)
+        .orderBy('registrationOrder', descending: false)
         .limit(limit);
 
     if (lastCursor != null) {
       if (lastCursor is LeaderboardEntry) {
-        query = query.startAfter([lastCursor.rankPoints, lastCursor.userId]);
+        query = query.startAfter([lastCursor.rankPoints, lastCursor.registrationOrder]);
       } else if (lastCursor is DocumentSnapshot) {
         query = query.startAfterDocument(lastCursor);
       }
@@ -127,19 +129,19 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
     final entry = await getPlayerEntry(userId: userId, seasonId: seasonId);
     if (entry == null) return -1;
 
-    final countQuery = _getBaseQuery(
+    final betterXpQuery = _getBaseQuery(
       seasonId,
     ).where('rankPoints', isGreaterThan: entry.rankPoints);
 
-    final countSnapshot = await countQuery.count().get();
+    final betterXpSnapshot = await betterXpQuery.count().get();
 
-    final tieQuery = _getBaseQuery(seasonId)
+    final tieXpQuery = _getBaseQuery(seasonId)
         .where('rankPoints', isEqualTo: entry.rankPoints)
-        .where('userId', isLessThan: userId);
+        .where('registrationOrder', isLessThan: entry.registrationOrder);
 
-    final tieSnapshot = await tieQuery.count().get();
+    final tieXpSnapshot = await tieXpQuery.count().get();
 
-    return (countSnapshot.count ?? 0) + (tieSnapshot.count ?? 0) + 1;
+    return (betterXpSnapshot.count ?? 0) + (tieXpSnapshot.count ?? 0) + 1;
   }
 
   @override
@@ -153,14 +155,14 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
 
     final aboveQuery = _getBaseQuery(seasonId)
         .orderBy('rankPoints', descending: false)
-        .orderBy('userId', descending: true)
-        .startAfter([entry.rankPoints, entry.userId])
+        .orderBy('registrationOrder', descending: true)
+        .startAfter([entry.rankPoints, entry.registrationOrder])
         .limit(windowSize);
 
     final belowQuery = _getBaseQuery(seasonId)
         .orderBy('rankPoints', descending: true)
-        .orderBy('userId', descending: false)
-        .startAfter([entry.rankPoints, entry.userId])
+        .orderBy('registrationOrder', descending: false)
+        .startAfter([entry.rankPoints, entry.registrationOrder])
         .limit(windowSize);
 
     final results = await Future.wait([aboveQuery.get(), belowQuery.get()]);

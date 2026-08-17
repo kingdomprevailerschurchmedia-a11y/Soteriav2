@@ -29,58 +29,63 @@ class MilestoneCard extends StatelessWidget {
     final definition = progress.definition;
     final isClaimed = progress.playerState?.status == MilestoneStatus.claimed;
 
-    return SoteriaCard(
-      hasGlow: isCompleted && !isClaimed,
-      glowColor: SoteriaColors.gold,
-      onTap: onTap,
-      padding: EdgeInsets.all(SoteriaSpacing.md),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              _buildIcon(context, isCompleted),
-              SizedBox(width: SoteriaSpacing.md),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1638).withValues(alpha: 0.4),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20.r),
+          child: Padding(
+            padding: EdgeInsets.all(12.r),
+            child: Column(
+              children: [
+                Row(
                   children: [
-                    Text(
-                      definition.name,
-                      style: context.titleSmall.copyWith(
-                        color: isCompleted
-                            ? SoteriaColors.gold
-                            : SoteriaColors.textPrimary,
-                        fontWeight: FontWeight.bold,
+                    _buildIcon(context, isCompleted),
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            definition.name,
+                            style: context.bodyLarge.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            definition.description,
+                            style: context.bodySmall.copyWith(
+                              color: SoteriaColors.textSecondary,
+                              fontSize: 11.sp,
+                            ),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
                       ),
                     ),
-                    Text(
-                      definition.description,
-                      style: context.bodySmall.copyWith(
-                        color: SoteriaColors.textSecondary,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                    if (definition.rewardAmount != null) _buildRewardBadge(context),
                   ],
                 ),
-              ),
-              if (definition.rewardAmount != null) _buildRewardBadge(context),
-            ],
+                SizedBox(height: 16.h),
+                _buildProgressSection(context, isCompleted, isClaimed),
+                if (isCompleted && !isClaimed && onClaim != null) ...[
+                  SizedBox(height: 12.h),
+                  _buildClaimButton(context),
+                ],
+              ],
+            ),
           ),
-          if (!isCompleted) ...[
-            SizedBox(height: SoteriaSpacing.md),
-            _buildProgressSection(context),
-          ] else if (!isClaimed && onClaim != null) ...[
-            SizedBox(height: SoteriaSpacing.md),
-            _buildClaimSection(context),
-          ] else if (isClaimed) ...[
-            SizedBox(height: SoteriaSpacing.sm),
-            _buildCompletionBadge(context, 'CLAIMED'),
-          ] else ...[
-            SizedBox(height: SoteriaSpacing.sm),
-            _buildCompletionBadge(context, 'COMPLETED'),
-          ],
-        ],
+        ),
       ),
     );
   }
@@ -88,58 +93,53 @@ class MilestoneCard extends StatelessWidget {
   Widget _buildIcon(BuildContext context, bool isCompleted) {
     final definition = progress.definition;
     return Container(
-      width: 48.w,
-      height: 48.w,
+      width: 48.r,
+      height: 48.r,
       decoration: BoxDecoration(
-        color: isCompleted
-            ? SoteriaColors.gold.withValues(alpha: 0.1)
-            : Colors.white.withValues(alpha: 0.03),
-        borderRadius: SoteriaRadius.brMd,
-        border: Border.all(
-          color: isCompleted
-              ? SoteriaColors.gold.withValues(alpha: 0.2)
-              : Colors.white.withValues(alpha: 0.05),
-        ),
+        color: Colors.white.withValues(alpha: 0.03),
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
-      child: Icon(
-        isCompleted
-            ? _getIconData(definition.icon)
-            : Icons.lock_outline_rounded,
-        color: isCompleted ? SoteriaColors.gold : SoteriaColors.muted,
-        size: 24.sp,
-      ),
+      child: definition.id == 'first_game' && isCompleted
+          ? Center(
+              child: Image.asset(
+                'assets/icons/first_step_icon.png',
+                width: 24.w,
+                height: 24.w,
+              ),
+            )
+          : Icon(
+              isCompleted ? _getIconData(definition.icon) : Icons.lock_outline_rounded,
+              color: isCompleted ? SoteriaColors.gold : Colors.white24,
+              size: 20.sp,
+            ),
     );
   }
 
   Widget _buildRewardBadge(BuildContext context) {
     final definition = progress.definition;
-    final color = _getRewardColor(definition.rewardType!);
-
+    
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: SoteriaSpacing.sm,
-        vertical: 2.h,
+        horizontal: 8.w,
+        vertical: 4.h,
       ),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(SoteriaSpacing.xs),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        color: const Color(0xFF1E1638).withValues(alpha: 0.8),
+        borderRadius: BorderRadius.circular(10.r),
+        border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.3)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            _getRewardIcon(definition.rewardType!),
-            color: color,
-            size: 10.sp,
-          ),
+          Image.asset('assets/icons/coin_icon.png', width: 12.w),
           SizedBox(width: 4.w),
           Text(
             '${definition.rewardAmount}',
             style: context.labelSmall.copyWith(
-              color: color,
-              fontWeight: FontWeight.bold,
-              fontSize: 10.sp,
+              color: SoteriaColors.gold,
+              fontWeight: FontWeight.w900,
+              fontSize: 11.sp,
             ),
           ),
         ],
@@ -147,7 +147,7 @@ class MilestoneCard extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressSection(BuildContext context) {
+  Widget _buildProgressSection(BuildContext context, bool isCompleted, bool isClaimed) {
     return Column(
       children: [
         Row(
@@ -156,34 +156,42 @@ class MilestoneCard extends StatelessWidget {
             Text(
               'PROGRESS',
               style: context.labelSmall.copyWith(
-                color: SoteriaColors.muted,
-                fontSize: 8.sp,
+                color: Colors.white24,
+                fontSize: 9.sp,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.0,
               ),
             ),
             Text(
-              '${progress.playerState?.currentProgress.toInt() ?? 0} / ${progress.definition.threshold.toInt()}',
+              isClaimed ? 'CLAIMED' : '${progress.playerState?.currentProgress.toInt() ?? 0} / ${progress.definition.threshold.toInt()}',
               style: context.labelSmall.copyWith(
-                color: SoteriaColors.textPrimary,
+                color: isCompleted ? SoteriaColors.success : Colors.white70,
                 fontWeight: FontWeight.bold,
-                fontSize: 8.sp,
+                fontSize: 9.sp,
               ),
             ),
           ],
         ),
-        SizedBox(height: 4.h),
-        SoteriaProgressBar(
-          progress: progress.progressPercentage,
-          height: 4,
-          color: SoteriaColors.primary,
+        SizedBox(height: 8.h),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(4.r),
+          child: LinearProgressIndicator(
+            value: isCompleted ? 1.0 : progress.progressPercentage,
+            minHeight: 4.h,
+            backgroundColor: Colors.white.withValues(alpha: 0.05),
+            valueColor: AlwaysStoppedAnimation<Color>(
+              isCompleted ? SoteriaColors.success : SoteriaColors.secondary
+            ),
+          ),
         ),
       ],
     );
   }
 
-  Widget _buildClaimSection(BuildContext context) {
+  Widget _buildClaimButton(BuildContext context) {
     return SizedBox(
       width: double.infinity,
-      height: 32.h,
+      height: 40.h,
       child: ElevatedButton(
         onPressed: isClaiming ? null : onClaim,
         style: ElevatedButton.styleFrom(
@@ -191,7 +199,7 @@ class MilestoneCard extends StatelessWidget {
           foregroundColor: Colors.black,
           padding: EdgeInsets.zero,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(SoteriaSpacing.sm),
+            borderRadius: BorderRadius.circular(12.r),
           ),
         ),
         child: isClaiming
@@ -214,27 +222,6 @@ class MilestoneCard extends StatelessWidget {
     );
   }
 
-  Widget _buildCompletionBadge(BuildContext context, String label) {
-    return Row(
-      children: [
-        Icon(
-          Icons.check_circle_rounded,
-          color: SoteriaColors.success,
-          size: 12.sp,
-        ),
-        SizedBox(width: 4.w),
-        Text(
-          label,
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.success,
-            fontWeight: FontWeight.bold,
-            fontSize: 9.sp,
-          ),
-        ),
-      ],
-    );
-  }
-
   IconData _getIconData(String? iconName) {
     switch (iconName) {
       case 'stars_rounded':
@@ -253,28 +240,6 @@ class MilestoneCard extends StatelessWidget {
         return Icons.auto_awesome_rounded;
       default:
         return Icons.emoji_events_rounded;
-    }
-  }
-
-  IconData _getRewardIcon(RewardType type) {
-    switch (type) {
-      case RewardType.coins:
-        return Icons.monetization_on_rounded;
-      case RewardType.xp:
-        return Icons.bolt_rounded;
-      default:
-        return Icons.card_giftcard_rounded;
-    }
-  }
-
-  Color _getRewardColor(RewardType type) {
-    switch (type) {
-      case RewardType.coins:
-        return SoteriaColors.gold;
-      case RewardType.xp:
-        return SoteriaColors.xpColor;
-      default:
-        return SoteriaColors.secondary;
     }
   }
 }

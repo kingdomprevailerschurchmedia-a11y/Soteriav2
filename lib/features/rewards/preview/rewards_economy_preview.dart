@@ -12,7 +12,7 @@ class RewardsEconomyPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const RewardsScreen();
+    return normal();
   }
 
   static Widget normal() {
@@ -20,6 +20,16 @@ class RewardsEconomyPreview extends StatelessWidget {
       overrides: [
         rewardsRepositoryProvider.overrideWithValue(MockRewardsRepository()),
         walletRepositoryProvider.overrideWithValue(MockWalletRepository()),
+      ],
+      child: const RewardsScreen(),
+    );
+  }
+
+  static Widget proActive() {
+    return ProviderScope(
+      overrides: [
+        rewardsRepositoryProvider.overrideWithValue(MockRewardsRepository()),
+        walletRepositoryProvider.overrideWithValue(_ProWalletRepository()),
       ],
       child: const RewardsScreen(),
     );
@@ -49,12 +59,36 @@ class RewardsEconomyPreview extends StatelessWidget {
 class _EmptyWalletRepository extends MockWalletRepository {
   @override
   Future<Wallet> getWallet(String userId) async {
-    return const Wallet(coins: 0);
+    return Wallet.empty(userId);
   }
 
   @override
   Stream<Wallet> watchWallet(String userId) async* {
-    yield const Wallet(coins: 0);
+    yield Wallet.empty(userId);
+  }
+}
+
+class _ProWalletRepository extends MockWalletRepository {
+  @override
+  Future<Wallet> getWallet(String userId) async {
+    return Wallet(
+      userId: userId,
+      coins: 50000,
+      tokens: 150,
+      isPro: true,
+      proExpiresAt: DateTime.now().add(const Duration(days: 30)),
+    );
+  }
+
+  @override
+  Stream<Wallet> watchWallet(String userId) async* {
+    yield Wallet(
+      userId: userId,
+      coins: 50000,
+      tokens: 150,
+      isPro: true,
+      proExpiresAt: DateTime.now().add(const Duration(days: 30)),
+    );
   }
 }
 

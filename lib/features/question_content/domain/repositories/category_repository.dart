@@ -14,4 +14,7 @@ abstract interface class CategoryRepository {
   Future<List<Topic>> getTopics(String subcategoryId);
   Stream<List<Topic>> watchTopics(String subcategoryId);
   Future<Topic?> getTopicById(String id);
+
+  /// Seeds the initial set of categories if none exist.
+  Future<void> seedDefaultCategories();
 }

@@ -6,8 +6,6 @@ import 'package:soteria/core/firebase/config/providers/configuration_providers.d
 import 'package:soteria/features/dashboard/presentation/providers/pro_lobby_providers.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/pro_mode_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
-import 'package:soteria/features/gameplay_engine/models/game_state.dart';
-import 'package:soteria/features/gameplay_engine/models/pro_mode_result.dart';
 import 'package:soteria/features/gameplay_engine/models/pro_mode_access.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
@@ -31,8 +29,14 @@ class MockProModeRepository extends Mock implements ProModeRepository {
       ) as Future<int>);
 
   @override
-  Future<void> reserveEntryFee(String uid, String sessionId, int fee) => (super.noSuchMethod(
-        Invocation.method(#reserveEntryFee, [uid, sessionId, fee]),
+  Future<bool> validateEntry(String uid, Difficulty difficulty) => (super.noSuchMethod(
+        Invocation.method(#validateEntry, [uid, difficulty]),
+        returnValue: Future<bool>.value(true),
+      ) as Future<bool>);
+
+  @override
+  Future<void> reserveEntryFee(String uid, String sessionId, Difficulty difficulty, {bool isFree = false}) => (super.noSuchMethod(
+        Invocation.method(#reserveEntryFee, [uid, sessionId, difficulty], {#isFree: isFree}),
         returnValue: Future<void>.value(),
       ) as Future<void>);
 

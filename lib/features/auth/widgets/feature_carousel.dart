@@ -72,7 +72,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
     return Column(
       children: [
         SizedBox(
-          height: 80.h,
+          height: 64.h,
           child: PageView.builder(
             controller: _pageController,
             onPageChanged: (index) => setState(() => _currentPage = index),
@@ -99,8 +99,8 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                       children: [
                         // Illustration Placeholder / Large Icon
                         Container(
-                          width: 44.w,
-                          height: 44.w,
+                          width: 36.w,
+                          height: 36.w,
                           decoration: BoxDecoration(
                             color: const Color(0xFF1A1633),
                             borderRadius: BorderRadius.circular(10.r),
@@ -108,11 +108,11 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                           child: Icon(
                             feature['icon'],
                             color: SoteriaColors.gold,
-                            size: 22.sp,
+                            size: 18.sp,
                           ),
                         ),
 
-                        SizedBox(width: 16.w),
+                        SizedBox(width: 12.w),
 
                         Expanded(
                           child: Column(
@@ -125,7 +125,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                                 style: context.titleLarge.copyWith(
                                   fontWeight: FontWeight.w500,
                                   color: Colors.white,
-                                  fontSize: 18.sp,
+                                  fontSize: 15.sp,
                                 ),
                               ),
                               SizedBox(height: 2.h),
@@ -133,7 +133,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                                 feature['description'],
                                 style: context.bodySmall.copyWith(
                                   color: Colors.white.withValues(alpha: 0.6),
-                                  fontSize: 13.sp,
+                                  fontSize: 11.sp,
                                 ),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -146,7 +146,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
 
                         // Interaction Arrow
                         Container(
-                          padding: const EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.05),
                             shape: BoxShape.circle,
@@ -154,7 +154,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
                           child: Icon(
                             Icons.chevron_right_rounded,
                             color: Colors.white.withValues(alpha: 0.4),
-                            size: 20.sp,
+                            size: 16.sp,
                           ),
                         ),
                       ],
@@ -166,7 +166,7 @@ class _FeatureCarouselState extends State<FeatureCarousel> {
           ),
         ),
 
-        SizedBox(height: 16.h),
+        SizedBox(height: 8.h),
 
         // Animated Page Indicator
         Row(

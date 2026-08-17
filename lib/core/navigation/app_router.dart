@@ -334,56 +334,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                 ),
                 routes: [
                   GoRoute(
-                    path: 'practice',
-                    pageBuilder: (context, state) =>
-                        SoteriaPageTransitions.fade(
-                          child: const PracticeLobbyScreen(),
-                          key: state.pageKey,
-                        ),
-                    routes: [
-                      GoRoute(
-                        path: 'session',
-                        pageBuilder: (context, state) =>
-                            SoteriaPageTransitions.slideUp(
-                              child: const PracticeGameplayScreen(),
-                              key: state.pageKey,
-                            ),
-                      ),
-                      GoRoute(
-                        path: 'results',
-                        pageBuilder: (context, state) =>
-                            SoteriaPageTransitions.fade(
-                              child: PracticeResultsScreen(
-                                gameState: state.extra as GameState,
-                              ),
-                              key: state.pageKey,
-                            ),
-                      ),
-                      GoRoute(
-                        path: 'history',
-                        pageBuilder: (context, state) =>
-                            SoteriaPageTransitions.fade(
-                              child: const PracticeHistoryScreen(),
-                              key: state.pageKey,
-                            ),
-                        routes: [
-                          GoRoute(
-                            path: ':id',
-                            pageBuilder: (context, state) {
-                              final result = state.extra as PracticeResult;
-                              return SoteriaPageTransitions.fade(
-                                child: PracticeHistoryDetailScreen(
-                                  result: result,
-                                ),
-                                key: state.pageKey,
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  GoRoute(
                     path: 'pro-mode',
                     pageBuilder: (context, state) =>
                         SoteriaPageTransitions.fade(
@@ -652,14 +602,50 @@ final routerProvider = Provider<GoRouter>((ref) {
             navigatorKey: playNavigatorKey,
             routes: [
               GoRoute(
-                path: '/app/play',
+                path: SoteriaRoutes.practice,
                 pageBuilder: (context, state) => SoteriaPageTransitions.fade(
-                  child: const ComingSoonScreen(
-                    featureName: 'Battle Hub',
-                    category: 'Game',
-                  ),
+                  child: const PracticeLobbyScreen(),
                   key: state.pageKey,
                 ),
+                routes: [
+                  GoRoute(
+                    path: 'session',
+                    pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
+                      child: const PracticeGameplayScreen(),
+                      key: state.pageKey,
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'results',
+                    pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                      child: PracticeResultsScreen(
+                        gameState: state.extra as GameState,
+                      ),
+                      key: state.pageKey,
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'history',
+                    pageBuilder: (context, state) => SoteriaPageTransitions.fade(
+                      child: const PracticeHistoryScreen(),
+                      key: state.pageKey,
+                    ),
+                    routes: [
+                      GoRoute(
+                        path: ':id',
+                        pageBuilder: (context, state) {
+                          final result = state.extra as PracticeResult;
+                          return SoteriaPageTransitions.fade(
+                            child: PracticeHistoryDetailScreen(
+                              result: result,
+                            ),
+                            key: state.pageKey,
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ],
           ),

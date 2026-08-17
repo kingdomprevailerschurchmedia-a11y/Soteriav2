@@ -20,6 +20,9 @@ class RegistrationDraft {
   final bool acceptedTerms;
   final RegistrationStep step;
   final bool isLoading;
+  final bool isUsernameChecking;
+  final bool isUsernameAvailable;
+  final String? usernameError;
   final String? error;
 
   const RegistrationDraft({
@@ -36,6 +39,9 @@ class RegistrationDraft {
     this.acceptedTerms = false,
     this.step = RegistrationStep.personal,
     this.isLoading = false,
+    this.isUsernameChecking = false,
+    this.isUsernameAvailable = false,
+    this.usernameError,
     this.error,
   });
 
@@ -53,6 +59,9 @@ class RegistrationDraft {
     bool? acceptedTerms,
     RegistrationStep? step,
     bool? isLoading,
+    bool? isUsernameChecking,
+    bool? isUsernameAvailable,
+    String? usernameError,
     String? error,
   }) {
     return RegistrationDraft(
@@ -69,6 +78,9 @@ class RegistrationDraft {
       acceptedTerms: acceptedTerms ?? this.acceptedTerms,
       step: step ?? this.step,
       isLoading: isLoading ?? this.isLoading,
+      isUsernameChecking: isUsernameChecking ?? this.isUsernameChecking,
+      isUsernameAvailable: isUsernameAvailable ?? this.isUsernameAvailable,
+      usernameError: usernameError, // Allow null to clear error
       error: error,
     );
   }

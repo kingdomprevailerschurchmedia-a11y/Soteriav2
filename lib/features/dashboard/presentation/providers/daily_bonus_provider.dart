@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../player/providers/player_providers.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
+import '../../../../core/firebase/providers/firebase_providers.dart';
 
 final dailyBonusProvider = NotifierProvider<DailyBonusNotifier, DailyBonusState>(DailyBonusNotifier.new);
 
@@ -54,14 +55,19 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
       }
 
       final now = DateTime.now();
-      final isAlreadyClaimedToday = next.lastDailyRewardClaim != null &&
-          _isSameDay(next.lastDailyRewardClaim!, now);
+      final lastClaim = next.lastDailyRewardClaim;
+      final isAlreadyClaimedToday = lastClaim != null && _isSameDay(lastClaim, now);
 
-      state = state.copyWith(
-        lastClaimTime: next.lastDailyRewardClaim,
-        // Only stop claiming if we see the reward is now recorded as claimed
-        isClaiming: isAlreadyClaimedToday ? false : state.isClaiming,
-      );
+      // CRITICAL: Only update lastClaimTime from the stream if it's actually 
+      // recorded as claimed today, OR if our local state doesn't have a claim time yet.
+      // This prevents the "reversing" UI bug where a slow Firestore sync 
+      // briefly shows the reward as un-claimed again.
+      if (isAlreadyClaimedToday || state.lastClaimTime == null) {
+        state = state.copyWith(
+          lastClaimTime: lastClaim,
+          isClaiming: isAlreadyClaimedToday ? false : state.isClaiming,
+        );
+      }
     });
 
     return DailyBonusState(lastClaimTime: initialPlayer?.lastDailyRewardClaim);
@@ -83,16 +89,48 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
       }
 
       final now = DateTime.now();
-      
-      // Authoritative update in Firestore
-      await ref.read(playerRepositoryProvider).patchPlayerProfile(
-        session.uid!,
-        {
+      final db = ref.read(firestoreDatabaseServiceProvider);
+      final userRef = db.collection('users').doc(session.uid!);
+      final walletRef = db.collection('wallets').doc(session.uid!);
+      final gameProfileRef = db.collection('user_game_profiles').doc(session.uid!);
+      final txRef = db.collection('wallet_transactions').doc();
+
+      // Authoritative update in Firestore via Transaction for consistency
+      await db.instance.runTransaction((transaction) async {
+        // 1. Update Profile coins
+        transaction.set(userRef, {
           'coins': FieldValue.increment(100),
           'lastDailyRewardClaim': Timestamp.fromDate(now),
+          'lastCoinTransactionId': txRef.id,
           'updatedAt': Timestamp.fromDate(now),
-        },
-      );
+        }, SetOptions(merge: true));
+
+        // 2. Sync Wallet coins (used by Rewards screen)
+        transaction.set(walletRef, {
+          'coins': FieldValue.increment(100),
+          'lifetimeCoinsEarned': FieldValue.increment(100),
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+
+        // 3. Sync User Game Profile (Identity)
+        transaction.set(gameProfileRef, {
+          'coins': FieldValue.increment(100),
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+
+        // 4. Log transaction
+        transaction.set(txRef, {
+          'userId': session.uid,
+          'currency': 'coins',
+          'direction': 'credit',
+          'amount': 100,
+          'transactionType': 'dailyReward',
+          'source': 'dailyLogin',
+          'status': 'completed',
+          'createdAt': FieldValue.serverTimestamp(),
+          'metadata': {'claimDate': now.toIso8601String()},
+        });
+      });
 
       // We don't reset isClaiming here immediately because we want to wait 
       // for the Firestore stream to reflect the change, confirming it.

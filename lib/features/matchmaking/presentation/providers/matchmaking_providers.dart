@@ -47,7 +47,7 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
       state = state.copyWith(
         isLoading: false,
         categories: categories,
-        category: categories.isNotEmpty ? categories.first : null,
+        category: state.category ?? (categories.isNotEmpty ? categories.first : null),
       );
       _validate();
     } catch (e) {

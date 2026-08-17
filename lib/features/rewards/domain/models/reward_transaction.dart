@@ -16,15 +16,26 @@ enum TransactionStatus {
   cancelled,
 }
 
+enum WalletTransactionType {
+  purchase,
+  gameEntry,
+  tournamentEntry,
+  reward,
+  refund,
+  adminGrant,
+  promotion,
+}
+
 @freezed
 abstract class RewardTransaction with _$RewardTransaction {
   const factory RewardTransaction({
     required String id,
     required String userId,
-    required RewardType type,
+    required RewardType type, // Keep for backward compatibility with existing UI
+    required WalletTransactionType transactionType,
     required TransactionDirection direction,
     required int amount,
-    @Default('coins') String currency,
+    @Default('coins') String currency, // 'coins' or 'tokens'
     required RewardSource source,
     String? referenceId,
     @Default(TransactionStatus.completed) TransactionStatus status,
@@ -34,3 +45,5 @@ abstract class RewardTransaction with _$RewardTransaction {
 
   factory RewardTransaction.fromJson(Map<String, dynamic> json) => _$RewardTransactionFromJson(json);
 }
+
+typedef WalletTransaction = RewardTransaction;

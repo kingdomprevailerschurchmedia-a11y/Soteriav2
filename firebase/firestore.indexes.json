@@ -43,6 +43,23 @@
       ]
     },
     {
+      "collectionGroup": "leaderboard_global",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "rankPoints", "order": "DESCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "leaderboard_seasons",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "seasonId", "order": "ASCENDING" },
+        { "fieldPath": "rankPoints", "order": "DESCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "season_leaderboard",
       "queryScope": "COLLECTION",
       "fields": [

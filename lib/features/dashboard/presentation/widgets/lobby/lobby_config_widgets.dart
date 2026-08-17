@@ -310,6 +310,75 @@ class LobbyAdaptiveToggle extends StatelessWidget {
   }
 }
 
+class LobbyCategoryCard extends StatelessWidget {
+  final bool isSelected;
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  const LobbyCategoryCard({
+    super.key,
+    required this.isSelected,
+    required this.label,
+    required this.icon,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const color = SoteriaColors.primary;
+    return GestureDetector(
+      onTap: onTap,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        decoration: BoxDecoration(
+          color: isSelected ? color.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: isSelected ? color.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.05),
+            width: 1.5.w,
+          ),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: color.withValues(alpha: 0.25),
+                    blurRadius: 10,
+                    spreadRadius: -2,
+                  ),
+                ]
+              : null,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: isSelected ? color : Colors.white60,
+              size: 20.sp,
+            ),
+            SizedBox(height: 4.h),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 4.w),
+              child: Text(
+                label.toUpperCase(),
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: context.labelSmall.copyWith(
+                  color: isSelected ? Colors.white : Colors.white60,
+                  fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
+                  fontSize: 8.sp,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class LobbyCountCircle extends StatelessWidget {
   final int count;
   final bool isSelected;

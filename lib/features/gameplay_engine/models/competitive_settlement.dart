@@ -12,7 +12,11 @@ class CompetitiveSettlement {
   final SettlementStatus status;
   final int coinsWagered;
   final int coinsWon;
+  final int platformFee;
   final int xpEarned;
+  final int rankPointsChange;
+  final String? tournamentId;
+  final int? placement;
   final DateTime timestamp;
   final String? errorMessage;
 
@@ -24,7 +28,11 @@ class CompetitiveSettlement {
     this.status = SettlementStatus.pending,
     required this.coinsWagered,
     required this.coinsWon,
+    this.platformFee = 0,
     required this.xpEarned,
+    this.rankPointsChange = 0,
+    this.tournamentId,
+    this.placement,
     required this.timestamp,
     this.errorMessage,
   });
@@ -37,7 +45,11 @@ class CompetitiveSettlement {
     'status': status.name,
     'coinsWagered': coinsWagered,
     'coinsWon': coinsWon,
+    'platformFee': platformFee,
     'xpEarned': xpEarned,
+    'rankPointsChange': rankPointsChange,
+    if (tournamentId != null) 'tournamentId': tournamentId,
+    if (placement != null) 'placement': placement,
     'timestamp': timestamp.toIso8601String(),
     if (errorMessage != null) 'errorMessage': errorMessage,
   };
@@ -51,7 +63,11 @@ class CompetitiveSettlement {
         status: SettlementStatus.values.byName(json['status']),
         coinsWagered: json['coinsWagered'],
         coinsWon: json['coinsWon'],
+        platformFee: json['platformFee'] ?? 0,
         xpEarned: json['xpEarned'],
+        rankPointsChange: json['rankPointsChange'] ?? 0,
+        tournamentId: json['tournamentId'],
+        placement: json['placement'],
         timestamp: DateTime.parse(json['timestamp']),
         errorMessage: json['errorMessage'],
       );
@@ -68,7 +84,11 @@ class CompetitiveSettlement {
       status: status ?? this.status,
       coinsWagered: coinsWagered,
       coinsWon: coinsWon,
+      platformFee: platformFee,
       xpEarned: xpEarned,
+      rankPointsChange: rankPointsChange,
+      tournamentId: tournamentId,
+      placement: placement,
       timestamp: timestamp,
       errorMessage: errorMessage ?? this.errorMessage,
     );

@@ -35,15 +35,26 @@ class FirestoreProfileRepository implements ProfileRepository {
     String? oldUsername,
   }) async {
     await _firestore.runTransaction((transaction) async {
-      // 1. Username reservation
       final newUsername = userProfile.username.toLowerCase();
+      final usernameDoc = _firestore.collection('usernames').doc(newUsername);
+      final progressionDoc = _firestore.collection('player_progression').doc(userId);
+
+      // 1. ALL READS FIRST
+      DocumentSnapshot? usernameSnapshot;
       if (oldUsername != null && oldUsername.toLowerCase() != newUsername) {
-        final usernameDoc = _firestore.collection('usernames').doc(newUsername);
-        final snapshot = await transaction.get(usernameDoc);
-        if (snapshot.exists) {
-          throw Exception('Username already taken');
-        }
-        
+        usernameSnapshot = await transaction.get(usernameDoc);
+      }
+      final progressionSnapshot = await transaction.get(progressionDoc);
+
+      // 2. LOGIC & VALIDATION
+      if (usernameSnapshot != null && usernameSnapshot.exists) {
+        throw Exception('Username already taken');
+      }
+
+      // 3. ALL WRITES AFTER
+      
+      // Username reservation
+      if (oldUsername != null && oldUsername.toLowerCase() != newUsername) {
         // Remove old and add new
         transaction.delete(_firestore.collection('usernames').doc(oldUsername.toLowerCase()));
         transaction.set(usernameDoc, {
@@ -53,33 +64,30 @@ class FirestoreProfileRepository implements ProfileRepository {
         });
       } else if (oldUsername == null) {
          // Initial reservation if not already there (e.g. legacy users)
-         transaction.set(_firestore.collection('usernames').doc(newUsername), {
+         transaction.set(usernameDoc, {
           'userId': userId,
           'username': userProfile.username,
           'createdAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
       }
 
-      // 2. User Profile
+      // User Profile
       transaction.set(
         _firestore.collection('user_profiles').doc(userId),
         userProfile.toMap(),
         SetOptions(merge: true),
       );
 
-      // 3. Player Profile
+      // Player Profile
       transaction.set(
         _firestore.collection('users').doc(userId),
         PlayerProfileDto.toFirestore(playerProfile)..remove('createdAt'),
         SetOptions(merge: true),
       );
 
-      // 4. Public Profile
-      final progressionDoc = _firestore.collection('player_progression').doc(userId);
-      final progressionSnapshot = await transaction.get(progressionDoc);
-      
+      // Public Profile and Leaderboard Sync (if progression exists)
       if (progressionSnapshot.exists) {
-        final progression = PlayerProgression.fromJson(progressionSnapshot.data()!);
+        final progression = PlayerProgression.fromJson(progressionSnapshot.data()! as Map<String, dynamic>);
         
         final publicProfile = PublicCompetitiveProfile(
           userId: userId,

@@ -11,12 +11,14 @@ class RankProgressBar extends StatelessWidget {
   final RankProgress progress;
   final RankProgressVariant variant;
   final bool showLabels;
+  final bool showCurrentRP;
 
   const RankProgressBar({
     super.key,
     required this.progress,
     this.variant = RankProgressVariant.default_,
     this.showLabels = true,
+    this.showCurrentRP = true,
   });
 
   @override
@@ -73,15 +75,18 @@ class RankProgressBar extends StatelessWidget {
 
   Widget _buildLabels(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: progress.isMaxRank || !showCurrentRP
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          '${progress.currentRP} RP',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.bold,
+        if (showCurrentRP)
+          Text(
+            '${progress.currentRP} RP',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.textPrimary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
         if (!progress.isMaxRank)
           Text(
             '${progress.rpToNextRank} RP TO ${progress.nextRank?.toUpperCase()}',

@@ -27,24 +27,56 @@ class ProEntryFeeWidget extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.monetization_on_rounded,
-              color: SoteriaColors.gold,
-              size: 32,
-            ),
-            SizedBox(width: SoteriaSpacing.md),
-            Text(
-              state.config.entryFee.toString(),
-              style: context.displayMedium.copyWith(
-                fontWeight: FontWeight.w900,
-                color: state.hasInsufficientCoins
-                    ? SoteriaColors.error
-                    : SoteriaColors.textPrimary,
+            if (state.isFreeEntry) ...[
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: SoteriaColors.success.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: SoteriaColors.success.withValues(alpha: 0.3)),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.stars_rounded, color: SoteriaColors.success, size: 16),
+                    const SizedBox(width: 8),
+                    Text(
+                      'FREE ENTRY',
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.success,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
+              const SizedBox(width: 12),
+              Text(
+                '(${state.remainingFreeGames} REMAINING)',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.muted,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ] else ...[
+              const Icon(
+                Icons.monetization_on_rounded,
+                color: SoteriaColors.gold,
+                size: 32,
+              ),
+              SizedBox(width: SoteriaSpacing.md),
+              Text(
+                state.config.entryFee.toString(),
+                style: context.displayMedium.copyWith(
+                  fontWeight: FontWeight.w900,
+                  color: state.hasInsufficientCoins
+                      ? SoteriaColors.error
+                      : SoteriaColors.textPrimary,
+                ),
+              ),
+            ],
           ],
         ),
-        if (state.hasInsufficientCoins)
+        if (state.hasInsufficientCoins && !state.isFreeEntry)
           Padding(
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(

@@ -14,7 +14,7 @@ class SoteriaDivider extends StatelessWidget {
     final effectiveColor = color ?? Colors.white.withValues(alpha: 0.1);
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.h),
+      padding: EdgeInsets.symmetric(vertical: 0),
       child: Row(
         children: [
           Expanded(child: Divider(color: effectiveColor, thickness: 0.5)),

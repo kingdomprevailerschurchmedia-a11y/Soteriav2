@@ -33,7 +33,7 @@ class PrizePoolCard extends StatelessWidget {
             ),
             SizedBox(height: SoteriaSpacing.md),
             Text(
-              '\$${totalPrizePool.toStringAsFixed(0)}',
+              '₦${totalPrizePool.toStringAsFixed(0)}',
               style: context.displaySmall.copyWith(
                 color: SoteriaColors.gold,
                 fontWeight: FontWeight.w900,
@@ -83,7 +83,7 @@ class _PrizeRow extends StatelessWidget {
               ),
               SizedBox(width: SoteriaSpacing.md),
               Text(
-                '\$${prize.amount.toStringAsFixed(0)}',
+                '₦${prize.amount.toStringAsFixed(0)}',
                 style: context.titleMedium.copyWith(color: SoteriaColors.gold),
               ),
             ],

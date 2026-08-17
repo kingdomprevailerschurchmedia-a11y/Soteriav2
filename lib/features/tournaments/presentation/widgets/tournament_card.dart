@@ -23,7 +23,7 @@ class TournamentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Semantics(
       label:
-          'Tournament: ${tournament.name}, Prize Pool: \$${tournament.prizePool}',
+          'Tournament: ${tournament.name}, Prize Pool: ₦${tournament.prizePool}',
       button: true,
       onTapHint: 'View tournament details',
       child: SoteriaFadeIn(
@@ -92,7 +92,7 @@ class TournamentCard extends StatelessWidget {
       children: [
         _InfoItem(
           icon: Icons.emoji_events_rounded,
-          label: '\$${tournament.prizePool.toStringAsFixed(0)}',
+          label: '₦${tournament.prizePool.toStringAsFixed(0)}',
           color: SoteriaColors.gold,
         ),
         _InfoItem(

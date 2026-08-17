@@ -4,6 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
+import 'package:soteria/features/player/domain/models/rank_change.dart';
 import 'package:soteria/features/player/data/repositories/firebase_player_progression_repository.dart';
 import 'package:soteria/features/player/domain/services/progression_service.dart';
 import 'package:soteria/features/player/domain/services/competitive_ranking_engine.dart';
@@ -24,6 +25,8 @@ import 'package:soteria/features/player/domain/repositories/player_repository.da
 ])
 import 'ranking_security_test.mocks.dart';
 
+class MockTransaction extends Mock implements Transaction {}
+
 void main() {
   late MockFirebaseFirestore mockFirestore;
   late MockCollectionReference mockRankTxCollection;
@@ -40,6 +43,16 @@ void main() {
     when(
       mockFirestore.collection('rank_transactions'),
     ).thenReturn(mockRankTxCollection);
+
+    // Provide a generic stub for runTransaction to prevent FakeUsedError
+    when(mockFirestore.runTransaction<RankChange>(
+      any,
+      timeout: anyNamed('timeout'),
+      maxAttempts: anyNamed('maxAttempts'),
+    )).thenAnswer((invocation) async {
+      final handler = invocation.positionalArguments[0] as Future<RankChange> Function(Transaction);
+      return await handler(MockTransaction());
+    });
 
     repository = FirebasePlayerProgressionRepository(
       mockFirestore,

@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:firedart/firedart.dart';
+import 'package:soteria/core/network/firebase_admin_interop.dart';
+import 'package:googleapis/firestore/v1.dart' as google;
 
 // Standalone script for production question publication.
 // Usage: dart run bin/publish_ready_questions.dart [--execute] [--auth <email>:<password>]
@@ -22,51 +24,103 @@ void main(List<String> args) async {
     }
   }
 
+  // Initialize Admin Interop (Service Account) if available via environment variable
+  FirebaseAdminInterop? admin;
+  try {
+    admin = await FirebaseAdminInterop.initialize();
+  } catch (e) {
+    print('WARNING: Failed to initialize Admin SDK: $e');
+  }
+
   print('============================================================');
   print('SOTERIA — PRODUCTION QUESTION PUBLICATION');
   print('============================================================');
   print('Project ID:  $projectId');
   print('Mode:        ${execute ? "EXECUTE (PHYSICAL WRITE)" : "DRY RUN"}');
-  if (authEmail != null) {
-    print('Auth:        $authEmail');
+
+  if (admin != null) {
+    print('Auth Source: Service Account (ADC)');
+    print('Admin Email: ${admin.serviceAccountEmail}');
+  } else if (authEmail != null) {
+    print('Auth Source: Client Firebase Auth');
+    print('User Email:  $authEmail');
+  } else {
+    print('Auth Source: Unauthenticated (Read-only if rules allow)');
   }
   print('============================================================');
 
   try {
-    // 1. Initialize Firebase Auth and Sign In if provided
+    // 1. Initialize Firebase Auth and Sign In if provided (Fallback)
     if (authEmail != null && authPassword != null) {
       FirebaseAuth.initialize(apiKey, VolatileStore());
       await FirebaseAuth.instance.signIn(authEmail, authPassword);
-      print('Successfully authenticated as admin.');
+      print('Successfully authenticated as user.');
     }
 
-    // 2. Initialize Firestore
+    // 2. Initialize Firestore (Firedart fallback)
     Firestore.initialize(projectId);
 
-    final snapshot = await Firestore.instance
-        .collection('questions')
-        .get();
-
-    print('Total Questions in DB: ${snapshot.length}');
+    // 3. Pre-flight connectivity check for Admin SDK
+    if (admin != null) {
+      print('Verifying Admin Connectivity...');
+      await admin.verifyConnectivity();
+      print('Admin connectivity verified.');
+    }
 
     final List<String> readyIds = [];
     final List<String> blockedIds = [];
     final List<String> alreadyPublishedIds = [];
 
-    for (final doc in snapshot) {
-      final id = doc.id;
-      final status = doc['status'];
+    print('Fetching current question states...');
+
+    if (admin != null) {
+      // Use Admin SDK to list documents (bypasses rules)
+      String? nextPageToken;
+      final parent = 'projects/$projectId/databases/(default)/documents';
       
-      if (status == 'published') {
-        alreadyPublishedIds.add(id);
-        continue;
-      }
-      
-      if (status == 'approved') {
-        if (id.startsWith('prod_ca_')) {
-          blockedIds.add(id);
-        } else {
-          readyIds.add(id);
+      do {
+        final response = await admin.api.projects.databases.documents.list(
+          parent,
+          'questions',
+          pageSize: 300,
+          pageToken: nextPageToken,
+        );
+
+        final documents = response.documents ?? [];
+        for (final doc in documents) {
+          final id = doc.name!.split('/').last;
+          final status = doc.fields?['status']?.stringValue;
+          
+          if (status == 'published') {
+            alreadyPublishedIds.add(id);
+          } else if (status == 'approved') {
+            if (id.startsWith('prod_ca_')) {
+              blockedIds.add(id);
+            } else {
+              readyIds.add(id);
+            }
+          }
+        }
+        nextPageToken = response.nextPageToken;
+      } while (nextPageToken != null);
+    } else {
+      // Use Firedart (Subject to rules)
+      final snapshot = await Firestore.instance
+          .collection('questions')
+          .get();
+
+      for (final doc in snapshot) {
+        final id = doc.id;
+        final status = doc['status'];
+        
+        if (status == 'published') {
+          alreadyPublishedIds.add(id);
+        } else if (status == 'approved') {
+          if (id.startsWith('prod_ca_')) {
+            blockedIds.add(id);
+          } else {
+            readyIds.add(id);
+          }
         }
       }
     }
@@ -89,10 +143,19 @@ void main(List<String> args) async {
       int successCount = 0;
       for (final id in readyIds) {
         try {
-          await Firestore.instance.collection('questions').document(id).update({
+          final updates = {
             'status': 'published',
             'updatedAt': DateTime.now().toIso8601String(),
-          });
+          };
+
+          if (admin != null) {
+            // Use Admin SDK (Bypasses rules)
+            await admin.writeQuestion(id, updates);
+          } else {
+            // Use Firedart (Subject to rules)
+            await Firestore.instance.collection('questions').document(id).update(updates);
+          }
+          
           successCount++;
           print('  [PUBLISHED] $id');
         } catch (e) {

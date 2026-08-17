@@ -27,57 +27,82 @@ class FirebaseRegistrationRepository implements RegistrationRepository {
       final now = FieldValue.serverTimestamp();
       const schemaVersion = 1;
 
-      // 2. Batch write all profile documents to maintain atomicity
-      final batch = _firestore.batch();
+      // 2. Run Firestore Transaction to assign registration order and set profiles
+      await _firestore.runTransaction((transaction) async {
+        final systemMetaRef = _firestore.collection('metadata').doc('system');
+        final systemMetaDoc = await transaction.get(systemMetaRef);
 
-      // users/uid (Base Account)
-      batch.set(_firestore.collection('users').doc(uid), {
-        'uid': uid,
-        'email': draft.email,
-        'status': 'unverified',
-        'createdAt': now,
-        'updatedAt': now,
-        'schemaVersion': schemaVersion,
+        int currentCount = 3; // Start from 3 because seeds are 1, 2, 3
+        if (systemMetaDoc.exists) {
+          currentCount = systemMetaDoc.data()?['userCount'] ?? 3;
+        }
+        
+        final nextOrder = currentCount + 1;
+
+        // Update global counter
+        transaction.set(systemMetaRef, {'userCount': nextOrder}, SetOptions(merge: true));
+
+        // users/uid (Base Account)
+        transaction.set(_firestore.collection('users').doc(uid), {
+          'uid': uid,
+          'email': draft.email,
+          'status': 'unverified',
+          'registrationOrder': nextOrder,
+          'createdAt': now,
+          'updatedAt': now,
+          'schemaVersion': schemaVersion,
+        });
+
+        // user_profiles/uid (Personal Info)
+        transaction.set(_firestore.collection('user_profiles').doc(uid), {
+          'firstName': draft.firstName,
+          'lastName': draft.lastName,
+          'displayName': draft.displayName ?? draft.firstName,
+          'username': draft.username,
+          'email': draft.email,
+          'academicLevel': draft.academicLevel,
+          'interests': draft.interests.toList(),
+          'goals': draft.goals.toList(),
+          'createdAt': now,
+          'updatedAt': now,
+          'schemaVersion': schemaVersion,
+        });
+
+        // user_game_profiles/uid (Game Stats)
+        transaction.set(_firestore.collection('user_game_profiles').doc(uid), {
+          'xp': 0,
+          'level': 1,
+          'coins': 0,
+          'tokens': 0,
+          'lives': 5,
+          'rank': 'Novice',
+          'createdAt': now,
+          'updatedAt': now,
+          'schemaVersion': schemaVersion,
+        });
+
+        // user_preferences/uid (Settings)
+        transaction.set(_firestore.collection('user_preferences').doc(uid), {
+          'notificationsEnabled': true,
+          'dailyChallengeReminders': true,
+          'createdAt': now,
+          'updatedAt': now,
+          'schemaVersion': schemaVersion,
+        });
+
+        // welcome_bonus milestone (New User Reward)
+        transaction.set(
+          _firestore.collection('users').doc(uid).collection('milestones').doc('welcome_bonus'),
+          {
+            'userId': uid,
+            'milestoneId': 'welcome_bonus',
+            'status': 'completed',
+            'currentProgress': 1.0,
+            'unlockedAt': now,
+            'schemaVersion': 1,
+          },
+        );
       });
-
-      // user_profiles/uid (Personal Info)
-      batch.set(_firestore.collection('user_profiles').doc(uid), {
-        'firstName': draft.firstName,
-        'lastName': draft.lastName,
-        'displayName': draft.displayName ?? draft.firstName,
-        'username': draft.username,
-        'email': draft.email,
-        'academicLevel': draft.academicLevel,
-        'interests': draft.interests.toList(),
-        'goals': draft.goals.toList(),
-        'createdAt': now,
-        'updatedAt': now,
-        'schemaVersion': schemaVersion,
-      });
-
-      // user_game_profiles/uid (Game Stats)
-      batch.set(_firestore.collection('user_game_profiles').doc(uid), {
-        'xp': 0,
-        'level': 1,
-        'coins': 0,
-        'tokens': 0,
-        'lives': 5,
-        'rank': 'Novice',
-        'createdAt': now,
-        'updatedAt': now,
-        'schemaVersion': schemaVersion,
-      });
-
-      // user_preferences/uid (Settings)
-      batch.set(_firestore.collection('user_preferences').doc(uid), {
-        'notificationsEnabled': true,
-        'dailyChallengeReminders': true,
-        'createdAt': now,
-        'updatedAt': now,
-        'schemaVersion': schemaVersion,
-      });
-
-      await batch.commit();
 
       // 3. Send Verification Email
       await userCredential.user!.sendEmailVerification();

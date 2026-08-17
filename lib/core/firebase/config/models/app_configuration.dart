@@ -63,9 +63,11 @@ class GameplayConfig {
   final int minTimer;
   final int maxTimer;
   final double questionTransitionDelay;
-  final int pointsPerCorrect;
+  // Deprecated: Use CompetitiveRewardConfig
+  final int pointsPerCorrect; 
   final int wrongAnswerPenalty;
   final int streakBonus;
+  // Deprecated: Use CompetitiveRewardConfig
   final int perfectRoundBonus;
 
   const GameplayConfig({
@@ -84,10 +86,10 @@ class GameplayConfig {
       minTimer = 5,
       maxTimer = 60,
       questionTransitionDelay = 1.5,
-      pointsPerCorrect = 100,
+      pointsPerCorrect = 0,
       wrongAnswerPenalty = 25,
       streakBonus = 10,
-      perfectRoundBonus = 500;
+      perfectRoundBonus = 0;
 }
 
 @immutable

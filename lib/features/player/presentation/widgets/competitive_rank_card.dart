@@ -11,11 +11,13 @@ import 'rank_progress_bar.dart';
 class CompetitiveRankCard extends StatelessWidget {
   final RankProgress rankProgress;
   final VoidCallback? onTap;
+  final bool showRP;
 
   const CompetitiveRankCard({
     super.key,
     required this.rankProgress,
     this.onTap,
+    this.showRP = true,
   });
 
   @override
@@ -47,12 +49,13 @@ class CompetitiveRankCard extends StatelessWidget {
                         letterSpacing: 1.2,
                       ),
                     ),
-                    Text(
-                      '${rankProgress.currentRP} Rank Points',
-                      style: context.labelMedium.copyWith(
-                        color: SoteriaColors.textSecondary,
+                    if (showRP)
+                      Text(
+                        '${rankProgress.currentRP} RP',
+                        style: context.labelMedium.copyWith(
+                          color: SoteriaColors.textSecondary,
+                        ),
                       ),
-                    ),
                   ],
                 ),
               ),
@@ -67,6 +70,7 @@ class CompetitiveRankCard extends StatelessWidget {
           RankProgressBar(
             progress: rankProgress,
             variant: RankProgressVariant.default_,
+            showCurrentRP: showRP,
           ),
         ],
       ),

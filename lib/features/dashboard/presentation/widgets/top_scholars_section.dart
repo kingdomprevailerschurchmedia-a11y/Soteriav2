@@ -9,6 +9,7 @@ import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import 'package:soteria/core/avatar/presentation/widgets/avatar_frame.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/player/presentation/providers/leaderboard_providers.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
@@ -25,7 +26,9 @@ class TopScholarsSection extends ConsumerWidget {
       rankTier: 'Master',
       division: 1,
       position: 1,
+      registrationOrder: 1,
       lastUpdated: DateTime.now(),
+      createdAt: DateTime(2026, 1, 1),
     ),
     LeaderboardEntry(
       userId: 'seed_peter',
@@ -35,7 +38,9 @@ class TopScholarsSection extends ConsumerWidget {
       rankTier: 'Master',
       division: 2,
       position: 2,
+      registrationOrder: 2,
       lastUpdated: DateTime.now(),
+      createdAt: DateTime(2026, 1, 2),
     ),
     LeaderboardEntry(
       userId: 'seed_micheal',
@@ -45,7 +50,9 @@ class TopScholarsSection extends ConsumerWidget {
       rankTier: 'Expert',
       division: 3,
       position: 3,
+      registrationOrder: 3,
       lastUpdated: DateTime.now(),
+      createdAt: DateTime(2026, 1, 3),
     ),
   ];
 
@@ -118,71 +125,115 @@ class TopScholarsSection extends ConsumerWidget {
             ),
             child: Column(
               children: [
-                ...leaderboardState.when(
+                leaderboardState.when(
                   data: (entries) {
                     final merged = [...entries, ..._seedScholars];
-                    merged.sort((a, b) => b.rankPoints.compareTo(a.rankPoints));
-                    final top3 = merged.take(3).toList();
                     
-                    return top3.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final scholar = entry.value;
-                      return Column(
-                        children: [
-                          _ScholarRow(
-                            rank: index + 1,
-                            name: scholar.displayName,
-                            role: scholar.rankTier,
-                            xp: scholar.rankPoints,
-                            color: _getRankColor(index + 1),
-                            avatarId: scholar.avatarId ?? 'athena',
-                          ),
-                          if (index < 2) _Divider(),
-                        ],
-                      );
+                    // Sort by XP (desc) then Registration Order (asc)
+                    merged.sort((a, b) {
+                      if (b.rankPoints != a.rankPoints) {
+                        return b.rankPoints.compareTo(a.rankPoints);
+                      }
+                      return a.registrationOrder.compareTo(b.registrationOrder);
                     });
-                  },
-                  loading: () => [
-                    const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Center(child: CircularProgressIndicator(color: SoteriaColors.primary)),
-                    )
-                  ],
-                  error: (err, _) => [
-                    ..._seedScholars.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final scholar = entry.value;
-                      return Column(
-                        children: [
-                          _ScholarRow(
-                            rank: index + 1,
-                            name: scholar.displayName,
-                            role: scholar.rankTier,
-                            xp: scholar.rankPoints,
-                            color: _getRankColor(index + 1),
-                            avatarId: scholar.avatarId ?? 'athena',
-                          ),
-                          if (index < 2) _Divider(),
-                        ],
-                      );
-                    })
-                  ],
-                ),
-                
-                playerEntryAsync.when(
-                  data: (entry) {
-                    final rank = playerRankAsync.value ?? -1;
-                    if (entry == null || rank == -1) return const SizedBox.shrink();
+
+                    final top3 = merged.take(3).toList();
+                    final currentUid = ref.watch(sessionProvider).uid;
                     
-                    return _UserHighlightRow(
-                      rank: rank,
-                      name: 'You',
-                      role: entry.rankTier,
-                      xp: entry.rankPoints,
+                    return Column(
+                      children: top3.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final scholar = entry.value;
+                        final isMe = scholar.userId == currentUid;
+                        
+                        return Column(
+                          children: [
+                            _ScholarRow(
+                              rank: index + 1,
+                              name: isMe ? 'You' : scholar.displayName,
+                              role: scholar.rankTier,
+                              xp: scholar.rankPoints,
+                              color: _getRankColor(index + 1),
+                              avatarId: scholar.avatarId ?? 'athena',
+                              imageUrl: scholar.avatarUrl,
+                              isMe: isMe,
+                            ),
+                            if (index < top3.length - 1) _Divider(),
+                          ],
+                        );
+                      }).toList(),
                     );
                   },
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  loading: () => const Padding(
+                    padding: EdgeInsets.all(20.0),
+                    child: Center(
+                      child: CircularProgressIndicator(color: SoteriaColors.primary),
+                    ),
+                  ),
+                  error: (err, _) => Column(
+                    children: _seedScholars.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final scholar = entry.value;
+                      return Column(
+                        children: [
+                          _ScholarRow(
+                            rank: index + 1,
+                            name: scholar.displayName,
+                            role: scholar.rankTier,
+                            xp: scholar.rankPoints,
+                            color: _getRankColor(index + 1),
+                            avatarId: scholar.avatarId ?? 'athena',
+                            imageUrl: scholar.avatarUrl,
+                          ),
+                          if (index < 2) _Divider(),
+                        ],
+                      );
+                    }).toList(),
+                  ),
+                ),
+                
+                Consumer(
+                  builder: (context, ref, child) {
+                    final currentUid = ref.watch(sessionProvider).uid;
+                    final player = ref.watch(currentPlayerProvider);
+                    final playerEntry = playerEntryAsync.value;
+                    final rawRank = playerRankAsync.value ?? -1;
+
+                    if (currentUid == null || player == null) return const SizedBox.shrink();
+
+                    // Calculate actual UI rank considering seeds
+                    int uiRank = rawRank;
+                    if (rawRank == -1) {
+                      // Fallback: If not in leaderboard doc, estimate rank
+                      // 3 (seeds) + total_real_players? No, just use registration order.
+                      uiRank = player.registrationOrder;
+                    } else {
+                      // Add seeds that are ranked higher than the player
+                      final betterSeeds = _seedScholars.where((seed) {
+                        if (seed.rankPoints > player.xp) return true;
+                        if (seed.rankPoints == player.xp) {
+                          return seed.registrationOrder < player.registrationOrder;
+                        }
+                        return false;
+                      }).length;
+                      uiRank += betterSeeds;
+                    }
+
+                    // Only show highlight row if user is NOT in top 3
+                    if (uiRank <= 3) return const SizedBox.shrink();
+                    
+                    return Column(
+                      children: [
+                        _Divider(),
+                        _UserHighlightRow(
+                          rank: uiRank,
+                          name: 'You',
+                          role: playerEntry?.rankTier ?? 'Novice',
+                          xp: player.xp,
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ],
             ),
@@ -208,6 +259,8 @@ class _ScholarRow extends ConsumerWidget {
     required this.xp,
     required this.color,
     required this.avatarId,
+    this.imageUrl,
+    this.isMe = false,
   });
 
   final int rank;
@@ -216,11 +269,17 @@ class _ScholarRow extends ConsumerWidget {
   final int xp;
   final Color color;
   final String avatarId;
+  final String? imageUrl;
+  final bool isMe;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final avatar = ref.watch(avatarCatalogProvider).getById(avatarId);
-    return Padding(
+    return Container(
+      decoration: BoxDecoration(
+        color: isMe ? const Color(0xFF9155FD).withValues(alpha: 0.1) : null,
+        borderRadius: BorderRadius.circular(16.r),
+      ),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
       child: Row(
         children: [
@@ -228,6 +287,7 @@ class _ScholarRow extends ConsumerWidget {
           SizedBox(width: 12.w),
           SoteriaAvatar(
             avatar: avatar,
+            imageUrl: imageUrl,
             size: 33,
             frameStyle: _getFrameStyle(rank),
             showGlow: true,

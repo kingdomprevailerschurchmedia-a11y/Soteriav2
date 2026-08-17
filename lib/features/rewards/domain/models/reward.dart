@@ -13,6 +13,7 @@ enum RewardStatus {
 
 enum RewardType {
   coins,
+  tokens,
   xp,
   ticket,
   premiumCurrency,
@@ -29,11 +30,21 @@ enum RewardSource {
   milestone,
   streak,
   tournament,
+  tournamentReward,
+  proModeEntry,
+  proModeReward,
+  competitiveReward,
+  itemRedemption,
   season,
   rank,
   event,
   promotion,
+  purchase,
   purchaseBonus,
+  gameEntry,
+  tournamentEntry,
+  refund,
+  adminGrant,
 }
 
 @freezed

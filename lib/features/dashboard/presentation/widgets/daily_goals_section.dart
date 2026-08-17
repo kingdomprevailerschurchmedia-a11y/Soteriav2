@@ -5,6 +5,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../player/domain/models/goal.dart';
 import '../../../player/presentation/providers/goal_providers.dart';
 import '../../../player/presentation/screens/competitive_goals_screen.dart';
 
@@ -147,9 +148,31 @@ class DailyGoalsSection extends ConsumerWidget {
     );
   }
 
-  IconData _getIconForCategory(dynamic category) {
-    // Mapping GoalCategory to icons
-    return Icons.flash_on_rounded; // Default
+  IconData _getIconForCategory(GoalCategory category) {
+    switch (category) {
+      case GoalCategory.win:
+        return Icons.emoji_events_rounded;
+      case GoalCategory.gameCount:
+        return Icons.sports_esports_rounded;
+      case GoalCategory.rank:
+        return Icons.trending_up_rounded;
+      case GoalCategory.score:
+        return Icons.leaderboard_rounded;
+      case GoalCategory.streak:
+        return Icons.local_fire_department_rounded;
+      case GoalCategory.achievement:
+        return Icons.stars_rounded;
+      case GoalCategory.personalBest:
+        return Icons.bolt_rounded;
+      case GoalCategory.correctAnswers:
+        return Icons.fact_check_rounded;
+      case GoalCategory.practiceCount:
+        return Icons.menu_book_rounded;
+      case GoalCategory.xpEarned:
+        return Icons.trending_up_rounded;
+      default:
+        return Icons.flash_on_rounded;
+    }
   }
 
   Color _getColorForIndex(int index) {

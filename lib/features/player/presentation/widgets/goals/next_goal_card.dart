@@ -16,18 +16,18 @@ class NextGoalCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.all(SoteriaSpacing.lg),
+        padding: EdgeInsets.all(SoteriaSpacing.md),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              SoteriaColors.primary.withOpacity(0.2),
-              SoteriaColors.surface,
+              SoteriaColors.primary.withOpacity(0.15),
+              SoteriaColors.surface.withOpacity(0.5),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(SoteriaSpacing.lg),
-          border: Border.all(color: SoteriaColors.primary.withOpacity(0.3)),
+          borderRadius: BorderRadius.circular(20.r),
+          border: Border.all(color: SoteriaColors.primary.withOpacity(0.2)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,22 +40,30 @@ class NextGoalCard extends StatelessWidget {
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.primary,
                     letterSpacing: 1.2,
+                    fontSize: 9.sp,
+                    fontWeight: FontWeight.w900,
                   ),
                 ),
-                Icon(Icons.flag_rounded, color: SoteriaColors.primary, size: 20.w),
+                Icon(Icons.flag_rounded, color: SoteriaColors.primary, size: 16.w),
               ],
             ),
-            SizedBox(height: SoteriaSpacing.md),
+            SizedBox(height: 8.h),
             Text(
               progress.definition.title,
-              style: context.titleLarge.copyWith(fontWeight: FontWeight.w900),
+              style: context.titleMedium.copyWith(
+                fontWeight: FontWeight.w900,
+                fontSize: 18.sp,
+              ),
             ),
-            SizedBox(height: SoteriaSpacing.xs),
+            SizedBox(height: 2.h),
             Text(
               progress.definition.description,
-              style: context.bodySmall.copyWith(color: SoteriaColors.textSecondary),
+              style: context.bodySmall.copyWith(
+                color: SoteriaColors.textSecondary,
+                fontSize: 11.sp,
+              ),
             ),
-            SizedBox(height: SoteriaSpacing.lg),
+            SizedBox(height: 12.h),
             Row(
               children: [
                 Expanded(
@@ -63,16 +71,19 @@ class NextGoalCard extends StatelessWidget {
                     borderRadius: BorderRadius.circular(4.r),
                     child: LinearProgressIndicator(
                       value: progress.progressPercentage,
-                      backgroundColor: SoteriaColors.border,
+                      backgroundColor: Colors.white.withOpacity(0.05),
                       color: SoteriaColors.primary,
-                      minHeight: 8.h,
+                      minHeight: 6.h,
                     ),
                   ),
                 ),
-                SizedBox(width: SoteriaSpacing.md),
+                SizedBox(width: 12.w),
                 Text(
                   '${(progress.progressPercentage * 100).toInt()}%',
-                  style: context.labelSmall.copyWith(fontWeight: FontWeight.bold),
+                  style: context.labelSmall.copyWith(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 10.sp,
+                  ),
                 ),
               ],
             ),

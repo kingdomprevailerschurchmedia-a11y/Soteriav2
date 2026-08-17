@@ -11,7 +11,7 @@ abstract class CoinBundle with _$CoinBundle {
     required int coins,
     @Default(0) int bonusCoins,
     required double price,
-    @Default('USD') String currency,
+    @Default('NGN') String currency,
     String? displayPrice,
     required String icon,
     @Default(false) bool featured,

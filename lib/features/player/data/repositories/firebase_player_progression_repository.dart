@@ -116,95 +116,102 @@ class FirebasePlayerProgressionRepository
 
   @override
   Future<RankChange> applyCompetitiveResult(CompetitiveResult result) async {
-    // 1. Idempotency Check
+    return await _firestore.runTransaction((tx) async {
+      return await applyCompetitiveResultInTransaction(tx, result);
+    });
+  }
+
+  @override
+  Future<RankChange> applyCompetitiveResultInTransaction(
+    dynamic transaction,
+    CompetitiveResult result,
+  ) async {
+    final tx = transaction as Transaction;
+    
+    // 1. Idempotency Check (Session Level)
     final existingTx = await _rankTransactionCollection
         .where('resultId', isEqualTo: result.resultId)
         .limit(1)
         .get();
 
     if (existingTx.docs.isNotEmpty) {
-      // Return historical change if possible, or re-calculate (idempotent result)
-      final txData = RankTransaction.fromJson(existingTx.docs.first.data());
-      // We'd ideally fetch the RankChange record here, but for now we'll throw or return a cached view
-      throw Exception(
+       throw Exception(
         'Competitive result ${result.resultId} already processed.',
       );
     }
 
-    return await _firestore.runTransaction((tx) async {
-      final progressionDoc = _progressionCollection.doc(result.userId);
-      final snapshot = await tx.get(progressionDoc);
+    final progressionDoc = _progressionCollection.doc(result.userId);
+    final snapshot = await tx.get(progressionDoc);
 
-      PlayerProgression current;
-      if (!snapshot.exists) {
-        current = PlayerProgression.initial(result.userId, result.seasonId);
-      } else {
-        current = PlayerProgression.fromJson(snapshot.data()!);
-      }
+    PlayerProgression current;
+    if (!snapshot.exists) {
+      current = PlayerProgression.initial(result.userId, result.seasonId);
+    } else {
+      current = PlayerProgression.fromJson(snapshot.data()!);
+    }
 
-      // 2. Ranking Engine Calculation
-      final rankChange = _rankingEngine.calculateRankChange(
-        currentProgression: current,
-        result: result,
-      );
+    // 2. Ranking Engine Calculation
+    final rankChange = _rankingEngine.calculateRankChange(
+      currentProgression: current,
+      result: result,
+    );
 
-      // 3. Update Progression
-      final progress = _rankingEngine.calculateRankProgress(rankChange.newRankPoints);
+    // 3. Update Progression
+    final progress = _rankingEngine.calculateRankProgress(rankChange.newRankPoints);
 
-      final updated = current.copyWith(
-        currentRank: rankChange.newRank,
-        currentRankTier: progress.tier.id,
-        rankPoints: rankChange.newRankPoints,
-        rankProgress: progress.progressPercentage,
-        seasonRankPoints: current.seasonId == result.seasonId
-            ? rankChange.newRankPoints
-            : current.seasonRankPoints,
-        lastRankTransactionId: '${result.resultId}_tx',
-        lastUpdated: DateTime.now(),
-      );
+    final updated = current.copyWith(
+      currentRank: rankChange.newRank,
+      currentRankTier: progress.tier.id,
+      rankPoints: rankChange.newRankPoints,
+      rankProgress: progress.progressPercentage,
+      seasonRankPoints: current.seasonId == result.seasonId
+          ? rankChange.newRankPoints
+          : current.seasonRankPoints,
+      lastRankTransactionId: '${result.resultId}_tx',
+      lastUpdated: DateTime.now(),
+    );
 
-      // 4. Update Leaderboard (Sync in transaction)
-      final profile = await _playerRepository.getPlayerProfile(result.userId);
-      if (profile != null) {
-        await _leaderboardRepository.syncLeaderboardEntry(
-          profile: profile,
-          progression: updated,
-          seasonId: result.seasonId,
-          transaction: tx,
-        );
-        // Also sync global
-        await _leaderboardRepository.syncLeaderboardEntry(
-          profile: profile,
-          progression: updated,
-          seasonId: null,
-          transaction: tx,
-        );
-      }
-
-      // 5. Create Transaction Record
-      final rankTx = RankTransaction(
-        transactionId: '${result.resultId}_tx',
-        userId: result.userId,
+    // 4. Update Leaderboard (Sync in transaction)
+    final profile = await _playerRepository.getPlayerProfile(result.userId);
+    if (profile != null) {
+      await _leaderboardRepository.syncLeaderboardEntry(
+        profile: profile,
+        progression: updated,
         seasonId: result.seasonId,
-        resultId: result.resultId,
-        previousRankPoints: rankChange.previousRankPoints,
-        changeAmount: rankChange.changeAmount,
-        newRankPoints: rankChange.newRankPoints,
-        timestamp: DateTime.now(),
+        transaction: tx,
       );
+      // Also sync global
+      await _leaderboardRepository.syncLeaderboardEntry(
+        profile: profile,
+        progression: updated,
+        seasonId: null,
+        transaction: tx,
+      );
+    }
 
-      tx.set(progressionDoc, updated.toJson());
-      tx.set(
-        _rankTransactionCollection.doc(rankTx.transactionId),
-        rankTx.toJson(),
-      );
-      tx.set(
-        _rankHistoryCollection.doc(rankChange.changeId),
-        rankChange.toJson(),
-      );
+    // 5. Create Transaction Record
+    final rankTx = RankTransaction(
+      transactionId: '${result.resultId}_tx',
+      userId: result.userId,
+      seasonId: result.seasonId,
+      resultId: result.resultId,
+      previousRankPoints: rankChange.previousRankPoints,
+      changeAmount: rankChange.changeAmount,
+      newRankPoints: rankChange.newRankPoints,
+      timestamp: DateTime.now(),
+    );
 
-      return rankChange;
-    });
+    tx.set(progressionDoc, updated.toJson());
+    tx.set(
+      _rankTransactionCollection.doc(rankTx.transactionId),
+      rankTx.toJson(),
+    );
+    tx.set(
+      _rankHistoryCollection.doc(rankChange.changeId),
+      rankChange.toJson(),
+    );
+
+    return rankChange;
   }
 
   @override

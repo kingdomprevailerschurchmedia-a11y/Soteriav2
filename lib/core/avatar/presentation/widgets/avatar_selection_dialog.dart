@@ -86,7 +86,11 @@ class AvatarSelectionDialog extends ConsumerWidget {
                       label: 'Gallery',
                       onTap: (isUploading || isProfileLoading)
                           ? () {}
-                          : () => _pickImage(ref, ImageSource.gallery),
+                          : () => _pickImage(ref, ImageSource.gallery).then((_) {
+                              if (context.mounted && Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              }
+                            }),
                     ),
                   ),
                   SizedBox(width: 16.w),
@@ -96,7 +100,11 @@ class AvatarSelectionDialog extends ConsumerWidget {
                       label: 'Camera',
                       onTap: (isUploading || isProfileLoading)
                           ? () {}
-                          : () => _pickImage(ref, ImageSource.camera),
+                          : () => _pickImage(ref, ImageSource.camera).then((_) {
+                              if (context.mounted && Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              }
+                            }),
                     ),
                   ),
                 ],

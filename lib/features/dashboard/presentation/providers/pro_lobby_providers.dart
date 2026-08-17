@@ -40,6 +40,8 @@ abstract class ProLobbyState with _$ProLobbyState {
     @Default(false) bool isOffline,
     @Default(ProModeAccessResult.loading()) ProModeAccessResult access,
     @Default([]) List<Category> categories,
+    @Default(false) bool isFreeEntry,
+    @Default(0) int remainingFreeGames,
   }) = _ProLobbyState;
 
   const ProLobbyState._();
@@ -63,13 +65,13 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
   ProLobbyState _getInitialState() {
     final player = ref.read(currentPlayerProvider);
-    final proConfig = ref.read(configurationProvider).proMode;
-
-    const config = ProSessionConfig();
-    final fee = proConfig.entryFees[config.questionCount] ?? 100;
+    
+    const config = ProSessionConfig(difficulty: ProDifficulty.intermediate, questionCount: 10);
+    final fee = CompetitiveRewardConfig.proEntryFees[config.difficulty.toBaseDifficulty()] ?? 500;
+    
     final updatedConfig = config.copyWith(
       entryFee: fee,
-      minLevelRequirement: proConfig.minLevelRequirement,
+      minLevelRequirement: 1, // Default min level
     );
 
     ProModeAccessResult access = const ProModeAccessResult.available();
@@ -106,6 +108,9 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         state = state.copyWith(
           isLoading: false,
           categories: categories,
+          config: state.config.copyWith(
+            category: state.config.category ?? (categories.isNotEmpty ? categories.first : null),
+          ),
         );
       }
     } catch (e) {
@@ -138,19 +143,16 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   void updateDifficulty(ProDifficulty difficulty) {
-    final proConfig = ref.read(configurationProvider).proMode;
+    final fee = CompetitiveRewardConfig.proEntryFees[difficulty.toBaseDifficulty()] ?? 0;
     state = state.copyWith(
-      config: state.config.copyWith(difficulty: difficulty),
+      config: state.config.copyWith(difficulty: difficulty, entryFee: fee),
     );
     _updateValidation();
   }
 
   void updateQuestionCount(int count) {
-    final proConfig = ref.read(configurationProvider).proMode;
-    final fee = proConfig.entryFees[count] ?? 100;
-
     state = state.copyWith(
-      config: state.config.copyWith(questionCount: count, entryFee: fee),
+      config: state.config.copyWith(questionCount: count),
     );
     _updateValidation();
   }
@@ -164,10 +166,23 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
   void _updateValidation() {
     final player = ref.read(currentPlayerProvider);
+    final rewardConfig = ref.read(configurationProvider).rewards;
+
     if (player == null) {
       state = state.copyWith(access: const ProModeAccessResult(state: ProModeAccessState.locked));
       return;
     }
+
+    // Calculate free game status
+    final now = DateTime.now();
+    final bool isNewDay = player.lastProSessionDate == null ||
+        player.lastProSessionDate!.year != now.year ||
+        player.lastProSessionDate!.month != now.month ||
+        player.lastProSessionDate!.day != now.day;
+
+    final usedToday = isNewDay ? 0 : player.dailyProSessionsPlayed;
+    final remaining = (rewardConfig.dailyFreeGames - usedToday).clamp(0, rewardConfig.dailyFreeGames);
+    final isFree = remaining > 0;
 
     ProModeAccessResult access = const ProModeAccessResult.available();
 
@@ -177,11 +192,15 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         state: ProModeAccessState.locked,
         message: 'MINIMUM LEVEL ${state.config.minLevelRequirement} REQUIRED',
       );
-    } else if (player.coins < state.config.entryFee) {
+    } else if (!isFree && player.coins < state.config.entryFee) {
       access = const ProModeAccessResult(state: ProModeAccessState.insufficientTokens);
     }
 
-    state = state.copyWith(access: access);
+    state = state.copyWith(
+      access: access,
+      isFreeEntry: isFree,
+      remainingFreeGames: remaining,
+    );
     
     if (access.isAllowed) {
       _checkAvailability();
@@ -227,6 +246,9 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     final player = ref.read(currentPlayerProvider);
     if (player == null || !state.access.isAllowed) return null;
 
+    final isFree = state.isFreeEntry;
+    final fee = isFree ? 0 : state.config.entryFee;
+
     state = state.copyWith(isLoading: true);
     try {
       // 1. Select Questions first (Fail-fast content check)
@@ -260,7 +282,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       // 2. Reserve Fee (Authoritative atomic check)
       await ref
           .read(proModeRepositoryProvider)
-          .reserveEntryFee(player.uid, sessionId, state.config.entryFee);
+          .reserveEntryFee(player.uid, sessionId, state.config.difficulty.toBaseDifficulty(), isFree: isFree);
 
       final session = CompetitiveSession(
         sessionId: sessionId,
@@ -268,7 +290,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         config: state.config,
         questions: selectionResult.questions,
         startTime: DateTime.now(),
-        reservedFee: state.config.entryFee,
+        reservedFee: fee,
       );
 
       // 3. Create Session Record
@@ -292,16 +314,23 @@ final proLobbyProvider = NotifierProvider<ProLobbyNotifier, ProLobbyState>(
 
 final rewardPreviewProvider = Provider((ref) {
   final config = ref.watch(proLobbyProvider).config;
-  final proModeConfig = ref.watch(configurationProvider).proMode;
-
-  final multiplier =
-      proModeConfig.difficultyMultipliers[config.difficulty.name] ?? 1.0;
-  final baseReward = config.entryFee * 2; // Simple double your money
+  
+  final difficulty = config.difficulty.toBaseDifficulty();
+  final questionCount = config.questionCount;
+  
+  final maxRewards = CompetitiveRewardConfig.proMaxRewards[difficulty] ?? {};
+  final baseMaxReward = maxRewards[questionCount] ?? 0;
+  
+  // Accuracy multipliers
+  final perfectCoinMult = CompetitiveRewardConfig.getProCoinPayoutPercentage(1.0);
+  final perfectXpMult = CompetitiveRewardConfig.getProXpMultiplier(1.0);
+  
+  final baseXpPerCorrect = CompetitiveRewardConfig.proBaseXpPerCorrect[difficulty] ?? 0;
 
   return {
-    'potentialCoins': (baseReward * multiplier).toInt(),
-    'potentialXP': (config.questionCount * 20 * multiplier).toInt(),
-    'multiplier': multiplier,
+    'potentialCoins': (baseMaxReward * perfectCoinMult).round(),
+    'potentialXP': (questionCount * baseXpPerCorrect * perfectXpMult).round(),
+    'multiplier': perfectCoinMult,
   };
 });
 

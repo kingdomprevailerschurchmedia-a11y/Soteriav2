@@ -4,6 +4,18 @@ import '../models/season_reward_definition.dart';
 class MilestoneRegistry {
   static const List<MilestoneDefinition> definitions = [
     MilestoneDefinition(
+      id: 'welcome_bonus',
+      name: 'Welcome Gift',
+      description: 'Start your journey with a bonus!',
+      type: MilestoneType.welcome,
+      category: MilestoneCategory.participation,
+      threshold: 1,
+      icon: 'stars_rounded',
+      rewardType: RewardType.coins,
+      rewardAmount: 50,
+      displayOrder: -1,
+    ),
+    MilestoneDefinition(
       id: 'first_game',
       name: 'First Step',
       description: 'Complete your first competitive game.',
@@ -39,18 +51,7 @@ class MilestoneRegistry {
       rewardAmount: 250,
       displayOrder: 2,
     ),
-    MilestoneDefinition(
-      id: 'career_best',
-      name: 'Peak Performance',
-      description: 'Achieve a new career-best rank.',
-      type: MilestoneType.careerBest,
-      category: MilestoneCategory.ranking,
-      threshold: 1,
-      icon: 'auto_awesome_rounded',
-      rewardType: RewardType.coins,
-      rewardAmount: 500,
-      displayOrder: 3,
-    ),
+
     MilestoneDefinition(
       id: 'wins_10',
       name: 'Decathlon',

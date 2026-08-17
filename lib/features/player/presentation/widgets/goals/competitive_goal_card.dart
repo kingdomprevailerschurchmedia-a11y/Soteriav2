@@ -23,7 +23,7 @@ class CompetitiveGoalCard extends StatelessWidget {
       label: 'Goal: ${definition.title}. Progress: ${(progressValue * 100).toInt()}%.',
       child: SoteriaCard(
         onTap: onTap,
-        padding: EdgeInsets.all(SoteriaSpacing.lg),
+        padding: EdgeInsets.all(SoteriaSpacing.md),
         hasGlow: isCompleted,
         glowColor: SoteriaColors.success,
         child: Column(
@@ -43,24 +43,26 @@ class CompetitiveGoalCard extends StatelessWidget {
                   ),
               ],
             ),
-            SizedBox(height: SoteriaSpacing.md),
+            SizedBox(height: SoteriaSpacing.sm),
             Text(
               definition.title,
-              style: context.titleSmall.copyWith(
-                fontWeight: FontWeight.bold,
+              style: context.bodyLarge.copyWith(
+                fontWeight: FontWeight.w900,
                 color: isCompleted ? Colors.white38 : Colors.white,
+                fontSize: 14.sp,
               ),
             ),
-            SizedBox(height: SoteriaSpacing.xs),
+            SizedBox(height: 2.h),
             Text(
               definition.description,
               style: context.bodySmall.copyWith(
                 color: isCompleted ? Colors.white24 : Colors.white70,
+                fontSize: 11.sp,
               ),
             ),
-            SizedBox(height: SoteriaSpacing.lg),
+            SizedBox(height: SoteriaSpacing.md),
             _buildProgressBar(context),
-            SizedBox(height: SoteriaSpacing.sm),
+            SizedBox(height: 6.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

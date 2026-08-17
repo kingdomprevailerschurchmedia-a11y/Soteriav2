@@ -101,11 +101,17 @@ class _AchievementCard extends StatelessWidget {
                   : Colors.white.withValues(alpha: 0.03),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                _getIcon(definition.icon),
-                color: isUnlocked ? SoteriaColors.gold : SoteriaColors.muted,
-                size: 24.sp,
-              ),
+              child: definition.id == 'first_game' && isUnlocked
+                  ? Image.asset(
+                      'assets/icons/first_step_icon.png',
+                      width: 24.sp,
+                      height: 24.sp,
+                    )
+                  : Icon(
+                      _getIcon(definition.icon),
+                      color: isUnlocked ? SoteriaColors.gold : SoteriaColors.muted,
+                      size: 24.sp,
+                    ),
             ),
             SizedBox(width: SoteriaSpacing.md),
             Expanded(

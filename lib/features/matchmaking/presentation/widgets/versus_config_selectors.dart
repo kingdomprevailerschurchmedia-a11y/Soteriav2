@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/glass_surface.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
 import '../providers/matchmaking_providers.dart';
 import '../../../dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
@@ -23,7 +22,7 @@ class VersusCategorySelector extends ConsumerWidget {
           _buildHeader(context),
           SizedBox(height: SoteriaSpacing.md),
           SizedBox(
-            height: 90.h,
+            height: 80.h,
             child: const Center(
               child: CircularProgressIndicator(
                 color: SoteriaColors.gold,
@@ -42,7 +41,7 @@ class VersusCategorySelector extends ConsumerWidget {
           _buildHeader(context),
           SizedBox(height: SoteriaSpacing.md),
           Container(
-            height: 90.h,
+            height: 80.h,
             width: double.infinity,
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.03),
@@ -70,63 +69,29 @@ class VersusCategorySelector extends ConsumerWidget {
       children: [
         _buildHeader(context),
         SizedBox(height: SoteriaSpacing.md),
-        SizedBox(
-          height: 90.h,
-          child: ListView.builder(
-// ...
-            scrollDirection: Axis.horizontal,
-            itemCount: state.categories.length,
-            itemBuilder: (context, index) {
-              final category = state.categories[index];
-              final isSelected = state.category?.id == category.id;
-
-              return Padding(
-                padding: EdgeInsets.only(right: 10.w),
-                child: GestureDetector(
-                  onTap: () => ref
-                      .read(versusLobbyProvider.notifier)
-                      .updateCategory(category),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 250),
-                    width: 100.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16.r),
-                      border: Border.all(
-                        color: isSelected
-                            ? SoteriaColors.primary
-                            : Colors.white.withValues(alpha: 0.1),
-                        width: 1.5,
-                      ),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.r),
-                      child: GlassSurface(
-                        opacity: isSelected ? 0.15 : 0.05,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              _getIcon(category.icon),
-                              color: isSelected ? SoteriaColors.primary : Colors.white70,
-                              size: 24.sp,
-                            ),
-                            SizedBox(height: 4.h),
-                            Text(
-                              category.name,
-                              style: context.bodySmall.copyWith(
-                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                                fontSize: 9.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              );
-            },
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 8.w,
+            crossAxisSpacing: 8.w,
+            childAspectRatio: 1.1,
           ),
+          itemCount: state.categories.length,
+          itemBuilder: (context, index) {
+            final category = state.categories[index];
+            final isSelected = state.category?.id == category.id;
+
+            return LobbyCategoryCard(
+              label: category.name,
+              icon: _getIcon(category.icon),
+              isSelected: isSelected,
+              onTap: () => ref
+                  .read(versusLobbyProvider.notifier)
+                  .updateCategory(category),
+            );
+          },
         ),
       ],
     );
@@ -145,6 +110,22 @@ class VersusCategorySelector extends ConsumerWidget {
       case 'cloud': return Icons.cloud_rounded;
       case 'code': return Icons.code_rounded;
       case 'network': return Icons.router_rounded;
+      case 'science': return Icons.science_rounded;
+      case 'business': return Icons.business_rounded;
+      case 'history': return Icons.history_rounded;
+      case 'calculate': return Icons.calculate_rounded;
+      case 'palette': return Icons.palette_rounded;
+      case 'sports_basketball': return Icons.sports_basketball_rounded;
+      case 'gavel': return Icons.gavel_rounded;
+      case 'brush': return Icons.brush_rounded;
+      case 'payments': return Icons.payments_rounded;
+      case 'medical_services': return Icons.medical_services_rounded;
+      case 'public': return Icons.public_rounded;
+      case 'language': return Icons.language_rounded;
+      case 'menu_book': return Icons.menu_book_rounded;
+      case 'psychology': return Icons.psychology_rounded;
+      case 'engineering': return Icons.engineering_rounded;
+      case 'newspaper': return Icons.newspaper_rounded;
       default: return Icons.category_rounded;
     }
   }

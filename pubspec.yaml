@@ -68,6 +68,8 @@ dependencies:
   firebase_app_check: ^0.4.5+2
   google_sign_in: ^7.2.0
   fl_chart: ^1.2.0
+  in_app_purchase: ^3.2.0
+  confetti: ^0.7.0
 
   # ---------------------------------------------------------------------------
   # Google Cloud / Admin
@@ -178,3 +180,4 @@ flutter:
     - assets/images/
     - assets/avatars/
     - assets/icons/
+    - assets/ranks/

@@ -12,6 +12,7 @@ import 'package:soteria/features/player/presentation/providers/presence_coordina
 import 'package:soteria/features/notifications/providers/notification_providers.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_celebration_listener.dart';
+import 'package:soteria/features/player/presentation/widgets/streak_celebration_listener.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/splash/presentation/widgets/splash_static_view.dart';
 import '../firebase/providers/bootstrapper_provider.dart';
@@ -81,7 +82,9 @@ class SoteriaApp extends ConsumerWidget {
         if (!kDebugMode || !Platform.environment.containsKey('FLUTTER_TEST')) {
           ErrorWidget.builder = ErrorHandler.errorWidgetBuilder;
         }
-        return RankCelebrationListener(child: child!);
+        return StreakCelebrationListener(
+          child: RankCelebrationListener(child: child!),
+        );
       },
     );
   }

@@ -21,6 +21,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     // Stats
     @Default(0) int currentStreak,
     @Default(0) int highestStreak,
+    @Default(0) int lastStreakMilestoneCelebrated,
     @Default(0) int totalQuestionsAnswered,
     @Default(0) int correctAnswers,
     @Default(0.0) double accuracy,
@@ -30,6 +31,8 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default(0) int gamesWon,
     @Default(0) int practiceSessions,
     @Default(0) int proSessions,
+    @Default(0) int dailyProSessionsPlayed,
+    DateTime? lastProSessionDate,
     @Default(0) int versusMatches,
     @Default(0) int tournamentMatches,
 
@@ -45,6 +48,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default('active') String accountStatus, // active, suspended, deleted
 
     DateTime? lastDailyRewardClaim,
+    @Default(0) int registrationOrder,
     required DateTime createdAt,
     required DateTime lastLogin,
     required DateTime updatedAt,
@@ -65,6 +69,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     'coins': coins,
     'currentStreak': currentStreak,
     'highestStreak': highestStreak,
+    'lastStreakMilestoneCelebrated': lastStreakMilestoneCelebrated,
     'totalQuestionsAnswered': totalQuestionsAnswered,
     'correctAnswers': correctAnswers,
     'accuracy': accuracy,

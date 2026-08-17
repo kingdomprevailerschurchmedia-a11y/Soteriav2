@@ -14,6 +14,9 @@ enum GoalCategory {
   streak,
   achievement,
   personalBest,
+  correctAnswers,
+  xpEarned,
+  practiceCount,
 }
 
 enum GoalStatus { locked, active, completed, expired, claimed }

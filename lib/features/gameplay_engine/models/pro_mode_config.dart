@@ -11,8 +11,8 @@ enum RiskLevel {
 
 @immutable
 class ProModeConfig {
-  final Map<int, int> entryFees; // questionCount -> fee
-  final Map<String, double> difficultyMultipliers; // difficulty -> multiplier
+  final Map<int, int> entryFees; // Deprecated: Use CompetitiveRewardConfig
+  final Map<String, double> difficultyMultipliers; // Deprecated: Use CompetitiveRewardConfig
   final double riskFactor;
   final int minLevelRequirement;
 
@@ -23,15 +23,10 @@ class ProModeConfig {
     this.minLevelRequirement = 1,
   });
 
+  // Deprecated: Moving to CompetitiveRewardConfig source of truth
   factory ProModeConfig.defaults() => const ProModeConfig(
-    entryFees: {10: 100, 20: 250, 30: 500, 50: 1000},
-    difficultyMultipliers: {
-      'foundation': 1.0,
-      'intermediate': 1.2,
-      'advanced': 1.5,
-      'expert': 2.0,
-      'adaptive': 1.8,
-    },
+    entryFees: {}, 
+    difficultyMultipliers: {},
     riskFactor: 1.0,
     minLevelRequirement: 5,
   );

@@ -321,6 +321,23 @@ class FirestoreTournamentRepository implements TournamentRepository {
           await _progressionRepository.applyXpTransaction(xpTx);
         }
 
+        // Record reward in coin history
+        final coinTxRef = _database.collection('coin_transactions').doc();
+        batch.set(coinTxRef, {
+          'userId': r.uid,
+          'type': 'coins',
+          'direction': 'credit',
+          'amount': r.prize!.coins,
+          'source': 'tournamentReward',
+          'referenceId': tournamentId,
+          'status': 'completed',
+          'createdAt': FieldValue.serverTimestamp(),
+          'metadata': {
+            'tournamentId': tournamentId,
+            'rank': r.rank,
+          },
+        });
+
         // Record reward in history
         final rewardRef = playerRef.collection('rewards').doc();
         batch.set(rewardRef, {

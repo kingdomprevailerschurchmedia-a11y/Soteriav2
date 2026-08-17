@@ -50,7 +50,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
           nextGoalAsync.when(
             data: (progress) => progress != null
                 ? SliverPadding(
-                    padding: EdgeInsets.all(SoteriaSpacing.lg),
+                    padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 12.h),
                     sliver: SliverToBoxAdapter(
                       child: NextGoalCard(
                         progress: progress,
@@ -65,7 +65,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
 
           // Quick Actions
           SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+            padding: EdgeInsets.symmetric(horizontal: 20.w),
             sliver: SliverToBoxAdapter(
               child: Row(
                 children: [
@@ -78,7 +78,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  SizedBox(width: SoteriaSpacing.md),
+                  SizedBox(width: 12.w),
                   Expanded(
                     child: _ActionCard(
                       label: 'SET TARGET',
@@ -118,20 +118,21 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
 
         return SliverPadding(
           padding: EdgeInsets.symmetric(
-            horizontal: SoteriaSpacing.lg,
-            vertical: SoteriaSpacing.md,
+            horizontal: 20.w,
+            vertical: 12.h,
           ),
           sliver: SliverMainAxisGroup(
             slivers: [
               SliverToBoxAdapter(
                 child: Padding(
-                  padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                  padding: EdgeInsets.only(bottom: 8.h),
                   child: Text(
                     title,
                     style: context.labelSmall.copyWith(
                       color: SoteriaColors.textSecondary,
-                      letterSpacing: 2,
+                      letterSpacing: 1.5,
                       fontWeight: FontWeight.w900,
+                      fontSize: 10.sp,
                     ),
                   ),
                 ),
@@ -139,7 +140,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (context, index) => Padding(
-                    padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                    padding: EdgeInsets.only(bottom: 10.h),
                     child: CompetitiveGoalCard(
                       progress: goals[index],
                       onTap: () => _navigateToDetails(context, goals[index]),
@@ -182,21 +183,23 @@ class _ActionCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
+        padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          color: SoteriaColors.surface,
-          borderRadius: BorderRadius.circular(SoteriaSpacing.md),
-          border: Border.all(color: color?.withOpacity(0.5) ?? SoteriaColors.border),
+          color: SoteriaColors.surface.withOpacity(0.5),
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(color: color?.withOpacity(0.3) ?? SoteriaColors.border.withOpacity(0.5)),
         ),
         child: Column(
           children: [
-            Icon(icon, color: color ?? SoteriaColors.textPrimary, size: 24.w),
-            SizedBox(height: SoteriaSpacing.xs),
+            Icon(icon, color: color ?? SoteriaColors.textPrimary, size: 20.w),
+            SizedBox(height: 4.h),
             Text(
               label,
               style: context.labelSmall.copyWith(
                 color: color ?? SoteriaColors.textPrimary,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w900,
+                fontSize: 10.sp,
+                letterSpacing: 0.5,
               ),
             ),
           ],

@@ -18,7 +18,7 @@ class ProgressionConfig {
       displayOrder: 0,
       promotionThreshold: 100,
       demotionThreshold: 0,
-      visualToken: 'assets/ranks/unranked.svg',
+      visualToken: 'assets/ranks/unranked_badge.png',
     ),
     const RankTier(
       id: 'bronze',
@@ -28,7 +28,7 @@ class ProgressionConfig {
       displayOrder: 1,
       promotionThreshold: 500,
       demotionThreshold: 90,
-      visualToken: 'assets/ranks/bronze.svg',
+      visualToken: 'assets/ranks/bronze_badge.png',
     ),
     const RankTier(
       id: 'silver',
@@ -38,7 +38,7 @@ class ProgressionConfig {
       displayOrder: 2,
       promotionThreshold: 1000,
       demotionThreshold: 450,
-      visualToken: 'assets/ranks/silver.svg',
+      visualToken: 'assets/ranks/silver_badge.png',
     ),
     const RankTier(
       id: 'gold',
@@ -48,7 +48,7 @@ class ProgressionConfig {
       displayOrder: 3,
       promotionThreshold: 2000,
       demotionThreshold: 950,
-      visualToken: 'assets/ranks/gold.svg',
+      visualToken: 'assets/ranks/gold_badge.png',
     ),
     const RankTier(
       id: 'platinum',
@@ -58,7 +58,7 @@ class ProgressionConfig {
       displayOrder: 4,
       promotionThreshold: 3500,
       demotionThreshold: 1900,
-      visualToken: 'assets/ranks/platinum.svg',
+      visualToken: 'assets/ranks/platinium_badge.png',
     ),
     const RankTier(
       id: 'diamond',
@@ -68,7 +68,7 @@ class ProgressionConfig {
       displayOrder: 5,
       promotionThreshold: 5000,
       demotionThreshold: 3400,
-      visualToken: 'assets/ranks/diamond.svg',
+      visualToken: 'assets/ranks/diamond_badge.png',
     ),
     const RankTier(
       id: 'master',
@@ -78,7 +78,7 @@ class ProgressionConfig {
       displayOrder: 6,
       promotionThreshold: 7500,
       demotionThreshold: 4800,
-      visualToken: 'assets/ranks/master.svg',
+      visualToken: 'assets/ranks/master_badge.png',
     ),
     const RankTier(
       id: 'elite',
@@ -88,7 +88,7 @@ class ProgressionConfig {
       displayOrder: 7,
       promotionThreshold: 999999,
       demotionThreshold: 7200,
-      visualToken: 'assets/ranks/elite.svg',
+      visualToken: 'assets/ranks/elite_badge.png',
     ),
   ];
 

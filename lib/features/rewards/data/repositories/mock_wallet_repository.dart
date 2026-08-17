@@ -1,46 +1,41 @@
 import 'dart:async';
 import '../../domain/models/wallet.dart';
 import '../../domain/models/reward_transaction.dart';
-import '../../domain/models/coin_bundle.dart';
+import '../../domain/models/store_product.dart';
 import '../../domain/models/reward.dart';
 import '../../domain/repositories/wallet_repository.dart';
 
 class MockWalletRepository implements WalletRepository {
   Wallet _wallet = const Wallet(
+    userId: 'mock_user_1',
     coins: 12450,
+    tokens: 25,
     lifetimeCoinsEarned: 15000,
     lifetimeCoinsSpent: 2550,
+    isPro: true,
   );
 
-  final List<RewardTransaction> _transactions = [
-    RewardTransaction(
+  final List<WalletTransaction> _transactions = [
+    WalletTransaction(
       id: 'tx_1',
-      userId: 'user_1',
+      userId: 'mock_user_1',
       type: RewardType.coins,
+      transactionType: WalletTransactionType.reward,
       direction: TransactionDirection.credit,
       amount: 100,
       source: RewardSource.achievement,
       createdAt: DateTime.now().subtract(const Duration(hours: 2)),
     ),
-    RewardTransaction(
+    WalletTransaction(
       id: 'tx_2',
-      userId: 'user_1',
-      type: RewardType.coins,
+      userId: 'mock_user_1',
+      type: RewardType.tokens,
+      transactionType: WalletTransactionType.purchase,
       direction: TransactionDirection.credit,
-      amount: 250,
-      source: RewardSource.streak,
+      amount: 10,
+      currency: 'tokens',
+      source: RewardSource.purchase,
       createdAt: DateTime.now().subtract(const Duration(days: 1)),
-    ),
-    RewardTransaction(
-      id: 'tx_3',
-      userId: 'user_1',
-      type: RewardType.coins,
-      direction: TransactionDirection.debit,
-      amount: 100,
-      source: RewardSource.tournament,
-      referenceId: 'tourney_entry_1',
-      createdAt: DateTime.now().subtract(const Duration(days: 2)),
-      metadata: {'action': 'entry_fee'},
     ),
   ];
 
@@ -53,7 +48,7 @@ class MockWalletRepository implements WalletRepository {
   @override
   Future<Wallet> getWallet(String userId) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    return _wallet;
+    return _wallet.copyWith(userId: userId);
   }
 
   @override
@@ -62,73 +57,97 @@ class MockWalletRepository implements WalletRepository {
   }
 
   @override
-  Future<List<RewardTransaction>> getTransactionHistory(String userId) async {
+  Future<List<WalletTransaction>> getTransactionHistory(String userId, {String? currency}) async {
     await Future.delayed(const Duration(milliseconds: 800));
+    if (currency != null) {
+      return _transactions.where((t) => t.currency == currency).toList();
+    }
     return _transactions;
   }
 
   @override
-  Future<List<CoinBundle>> getCoinBundles() async {
+  Future<List<StoreProduct>> getStoreProducts() async {
     return [
-      const CoinBundle(
-        id: 'bundle_starter',
-        name: 'Starter',
-        coins: 500,
-        price: 4.99,
+      const StoreProduct(
+        id: StoreProduct.coin100,
+        name: '100 Coins',
+        description: 'Starter coin pack',
+        category: StoreProductCategory.coins,
+        quantity: 100,
+        price: 1500.00,
+        currencyCode: 'NGN',
+        displayPrice: '₦1,500',
         icon: '🪙',
-        displayPrice: '\$4.99',
       ),
-      const CoinBundle(
-        id: 'bundle_pro',
-        name: 'Pro',
-        coins: 2000,
-        bonusCoins: 200,
-        price: 14.99,
-        icon: '💰',
-        featured: true,
-        displayPrice: '\$14.99',
+      const StoreProduct(
+        id: StoreProduct.coin550,
+        name: '550 Coins',
+        description: 'Great for a few matches',
+        category: StoreProductCategory.coins,
+        quantity: 550,
+        price: 7500.00,
+        currencyCode: 'NGN',
+        displayPrice: '₦7,500',
+        icon: '🪙',
+        metadata: {'bonusPercentage': 10},
       ),
-      const CoinBundle(
-        id: 'bundle_elite',
-        name: 'Elite',
-        coins: 5000,
-        bonusCoins: 1000,
-        price: 29.99,
+      const StoreProduct(
+        id: StoreProduct.coin1200,
+        name: '1,200 Coins',
+        description: 'Popular choice for competitors',
+        category: StoreProductCategory.coins,
+        quantity: 1200,
+        price: 15000.00,
+        currencyCode: 'NGN',
+        displayPrice: '₦15,000',
+        icon: '🪙',
+        isPopular: true,
+        metadata: {'bonusPercentage': 20},
+      ),
+      const StoreProduct(
+        id: StoreProduct.proMonthly,
+        name: 'Soteria Pro Monthly',
+        description: 'Premium competitive learning',
+        category: StoreProductCategory.pro,
+        quantity: 1,
+        price: 15000.00,
+        currencyCode: 'NGN',
+        displayPrice: '₦15,000',
         icon: '💎',
-        displayPrice: '\$29.99',
       ),
     ];
   }
 
   @override
-  Future<String> initiatePurchase(String userId, String bundleId) async {
-    await Future.delayed(const Duration(seconds: 2));
-    // Simulate successful purchase
-    final bundles = await getCoinBundles();
-    final bundle = bundles.firstWhere((b) => b.id == bundleId);
-    
-    _wallet = _wallet.copyWith(
-      coins: _wallet.coins + bundle.coins + bundle.bonusCoins,
-      lifetimeCoinsEarned: _wallet.lifetimeCoinsEarned + bundle.coins + bundle.bonusCoins,
-      updatedAt: DateTime.now(),
-    );
-    _walletController.add(_wallet);
-    
-    return 'mock_tx_${DateTime.now().millisecondsSinceEpoch}';
+  Future<String> initiatePurchase(String userId, String productId) async {
+    await Future.delayed(const Duration(seconds: 1));
+    return 'mock_pending_tx_${DateTime.now().millisecondsSinceEpoch}';
   }
 
   @override
-  Future<void> redeemItem(String userId, String itemId, int cost) async {
+  Future<void> fulfillPurchase(String userId, String purchaseId, String verificationToken) async {
+    await Future.delayed(const Duration(seconds: 2));
+  }
+
+  @override
+  Future<void> spendCurrency(String userId, int amount, String currency, String source, String referenceId) async {
     await Future.delayed(const Duration(seconds: 1));
-    if (_wallet.coins < cost) {
-      throw Exception('Insufficient balance');
+    if (currency == 'coins' && _wallet.coins < amount) throw Exception('Insufficient coins');
+    if (currency == 'tokens' && _wallet.tokens < amount) throw Exception('Insufficient tokens');
+
+    if (currency == 'coins') {
+      _wallet = _wallet.copyWith(
+        coins: _wallet.coins - amount,
+        lifetimeCoinsSpent: _wallet.lifetimeCoinsSpent + amount,
+        updatedAt: DateTime.now(),
+      );
+    } else {
+      _wallet = _wallet.copyWith(
+        tokens: _wallet.tokens - amount,
+        lifetimeTokensSpent: _wallet.lifetimeTokensSpent + amount,
+        updatedAt: DateTime.now(),
+      );
     }
-    
-    _wallet = _wallet.copyWith(
-      coins: _wallet.coins - cost,
-      lifetimeCoinsSpent: _wallet.lifetimeCoinsSpent + cost,
-      updatedAt: DateTime.now(),
-    );
     _walletController.add(_wallet);
   }
 }

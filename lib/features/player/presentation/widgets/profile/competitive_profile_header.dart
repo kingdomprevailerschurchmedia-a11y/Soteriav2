@@ -7,9 +7,11 @@ import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../../core/avatar/presentation/widgets/avatar_selection_dialog.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
+import '../../../../../core/design_system/components/soteria_progress_bar.dart';
 import '../../../../../core/network/providers/connectivity_providers.dart';
 import '../../../domain/models/player_profile.dart';
 import '../../../domain/models/player_progression.dart';
+import '../../../domain/services/competitive_ranking_engine.dart';
 import '../../providers/streak_providers.dart';
 import '../competitive_rank_badge.dart';
 import '../streak/momentum_indicator.dart';
@@ -30,12 +32,15 @@ class CompetitiveProfileHeader extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final momentumAsync = ref.watch(currentMomentumProvider);
     final isOnline = ref.watch(isOnlineProvider);
+    final engine = CompetitiveRankingEngine();
+    final rankInfo = engine.calculateRankProgress(progression.rankPoints);
 
     return SoteriaCard(
       hasGlow: true,
       glowColor: SoteriaColors.primary.withValues(alpha: 0.3),
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
@@ -112,6 +117,28 @@ class CompetitiveProfileHeader extends ConsumerWidget {
               ),
             ],
           ),
+          SoteriaSpacing.gapLG,
+          
+          // XP Progress
+          _buildProgressRow(
+            context,
+            label: 'CAREER XP',
+            value: 'Lvl ${progression.currentLevel}',
+            progress: progression.xpProgress,
+            color: SoteriaColors.xpColor,
+          ),
+          
+          SoteriaSpacing.gapMD,
+          
+          // Rank Progress
+          _buildProgressRow(
+            context,
+            label: 'RANK PROGRESS',
+            value: rankInfo.isMaxRank ? 'ELITE' : '${(rankInfo.progressPercentage * 100).toInt()}%',
+            progress: rankInfo.progressPercentage,
+            color: SoteriaColors.gold,
+          ),
+
           SoteriaSpacing.gapMD,
           const Divider(color: Colors.white10),
           SoteriaSpacing.gapMD,
@@ -122,7 +149,7 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'RANK POINTS',
+                    'COMPETITIVE STANDING (RP)',
                     style: context.labelSmall.copyWith(
                       color: SoteriaColors.muted,
                       letterSpacing: 1.2,
@@ -171,6 +198,49 @@ class CompetitiveProfileHeader extends ConsumerWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildProgressRow(
+    BuildContext context, {
+    required String label,
+    required String value,
+    required double progress,
+    required Color color,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: context.labelSmall.copyWith(
+                color: SoteriaColors.muted,
+                letterSpacing: 1.2,
+                fontSize: 9.sp,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            Text(
+              value,
+              style: context.labelSmall.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 10.sp,
+              ),
+            ),
+          ],
+        ),
+        SizedBox(height: 6.h),
+        SoteriaProgressBar(
+          progress: progress,
+          color: color,
+          height: 6,
+          hasGlow: true,
+        ),
+      ],
     );
   }
 }

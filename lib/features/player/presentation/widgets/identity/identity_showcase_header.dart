@@ -104,7 +104,7 @@ class IdentityShowcaseHeader extends StatelessWidget {
                 ),
                 _VerticalDivider(),
                 _CompactStat(
-                  label: 'POINTS',
+                  label: 'RP',
                   value: identity.rankProgress.currentRP.toString(),
                   color: SoteriaColors.gold,
                 ),

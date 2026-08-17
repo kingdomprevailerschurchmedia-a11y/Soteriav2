@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/config/soteria_branding_config.dart';
 
 class SplashBranding extends StatelessWidget {
   final Animation<double> logoOpacity;
@@ -26,10 +27,11 @@ class SplashBranding extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final logoSize = size.width * 0.55; // Slightly smaller logo to give text more breathing room
+    final logoSize = SoteriaBrandingConfig.getLogoSize(size);
 
     return Center(
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           // ============================================================
@@ -54,7 +56,7 @@ class SplashBranding extends StatelessWidget {
             ),
           ),
 
-          SizedBox(height: 24.h), // Consistent gap between logo and text
+          SizedBox(height: SoteriaBrandingConfig.getLogoToWordmarkGap()),
 
           // ============================================================
           // WORDMARK + TAGLINE (GROUPED)
@@ -67,17 +69,17 @@ class SplashBranding extends StatelessWidget {
               // ============================================================
               FadeTransition(
                 opacity: wordmarkOpacity,
-                child: _Wordmark(availableWidth: size.width),
+                child: _Wordmark(size: size),
               ),
 
-              SizedBox(height: 1.h),
+              SizedBox(height: SoteriaBrandingConfig.getWordmarkToTaglineGap()),
 
               // ============================================================
               // TAGLINE
               // ============================================================
               FadeTransition(
                 opacity: taglineOpacity,
-                child: _Tagline(availableWidth: size.width),
+                child: _Tagline(size: size),
               ),
             ],
           ),
@@ -92,31 +94,22 @@ class SplashBranding extends StatelessWidget {
 // ============================================================================
 
 class _Wordmark extends StatelessWidget {
-  final double availableWidth;
+  final Size size;
 
-  const _Wordmark({required this.availableWidth});
+  const _Wordmark({required this.size});
 
   @override
   Widget build(BuildContext context) {
-    /*
-     * The wordmark is bold and authoritative as seen in the production branding.
-     */
-
-    final fontSize = availableWidth * 0.085; // Increased from 0.064
-
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Text(
-        'SOTERIA',
-        maxLines: 1,
-        textAlign: TextAlign.center,
-        style: SoteriaTypography.displayMedium.copyWith(
-          color: SoteriaColors.textPrimary,
-          fontSize: fontSize,
-          fontWeight: FontWeight.w700, // Bolder to match the "permanent" look
-          letterSpacing: availableWidth * 0.015, // Increased spacing
-          height: 1.0,
-        ),
+    return Text(
+      'SOTERIA',
+      maxLines: 1,
+      textAlign: TextAlign.center,
+      style: SoteriaTypography.displayMedium.copyWith(
+        color: SoteriaColors.textPrimary,
+        fontSize: SoteriaBrandingConfig.getWordmarkFontSize(size),
+        fontWeight: SoteriaBrandingConfig.getWordmarkFontWeight(),
+        letterSpacing: SoteriaBrandingConfig.getWordmarkLetterSpacing(),
+        height: 1.0,
       ),
     );
   }
@@ -127,27 +120,22 @@ class _Wordmark extends StatelessWidget {
 // ============================================================================
 
 class _Tagline extends StatelessWidget {
-  final double availableWidth;
+  final Size size;
 
-  const _Tagline({required this.availableWidth});
+  const _Tagline({required this.size});
 
   @override
   Widget build(BuildContext context) {
-    final fontSize = availableWidth * 0.024; // Increased from 0.0205
-
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Text(
-        'COMPETE. LEARN. RISE.',
-        maxLines: 1,
-        textAlign: TextAlign.center,
-        style: SoteriaTypography.labelSmall.copyWith(
-          color: SoteriaColors.gold,
-          fontSize: fontSize,
-          fontWeight: FontWeight.w900, // Much bolder for visibility
-          letterSpacing: availableWidth * 0.008,
-          height: 1.0,
-        ),
+    return Text(
+      'COMPETE. LEARN. RISE.',
+      maxLines: 1,
+      textAlign: TextAlign.center,
+      style: SoteriaTypography.labelSmall.copyWith(
+        color: SoteriaColors.gold,
+        fontSize: SoteriaBrandingConfig.getTaglineFontSize(size),
+        fontWeight: SoteriaBrandingConfig.getTaglineFontWeight(),
+        letterSpacing: SoteriaBrandingConfig.getTaglineLetterSpacing(),
+        height: 1.0,
       ),
     );
   }

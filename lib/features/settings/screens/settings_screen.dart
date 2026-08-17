@@ -210,53 +210,56 @@ class _SettingsItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-      leading: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: iconColor.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(10),
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
         ),
-        child: Icon(icon, color: iconColor, size: 20),
-      ),
-      title: Text(
-        title,
-        style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
-      ),
-      subtitle: subtitle != null
-          ? Row(
-              children: [
-                if (isThemeItem) ...[
-                  Container(
-                    width: 6,
-                    height: 6,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF7C4DFF),
-                      shape: BoxShape.circle,
+        title: Text(
+          title,
+          style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+        ),
+        subtitle: subtitle != null
+            ? Row(
+                children: [
+                  if (isThemeItem) ...[
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF7C4DFF),
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                  Flexible(
+                    child: Text(
+                      subtitle!,
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.muted,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(width: 8),
                 ],
-                Flexible(
-                  child: Text(
-                    subtitle!,
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.muted,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
-            )
-          : null,
-      trailing: const Icon(
-        Icons.chevron_right_rounded,
-        color: Colors.white24,
-        size: 24,
+              )
+            : null,
+        trailing: const Icon(
+          Icons.chevron_right_rounded,
+          color: Colors.white24,
+          size: 24,
+        ),
       ),
     );
   }

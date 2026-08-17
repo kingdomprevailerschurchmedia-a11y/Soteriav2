@@ -15,6 +15,7 @@ enum MilestoneType {
   statistic,
   careerBest,
   promotion,
+  welcome,
 }
 
 enum MilestoneCategory { general, participation, victory, ranking, social }

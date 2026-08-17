@@ -61,10 +61,6 @@ class PlayerProfileScreen extends ConsumerWidget {
             ),
             SoteriaSpacing.gapLG,
             RepaintBoundary(
-              child: RankProgressSection(progression: profile.progression),
-            ),
-            SoteriaSpacing.gapLG,
-            RepaintBoundary(
               child: EngagementSummarySection(
                 progression: profile.progression,
                 winStreak: profile.streak,
@@ -174,6 +170,14 @@ class PlayerProfileScreen extends ConsumerWidget {
           padding: EdgeInsets.zero,
           child: Column(
             children: [
+              _AccountTile(
+                icon: Icons.person_rounded,
+                iconColor: const Color(0xFF7C4DFF),
+                title: 'Profile Information',
+                subtitle: 'View and edit your personal details',
+                onTap: () => context.push(SoteriaRoutes.profileInformation),
+              ),
+              _AccountDivider(),
               _AccountTile(
                 icon: Icons.account_balance_wallet_rounded,
                 iconColor: SoteriaColors.xpColor,

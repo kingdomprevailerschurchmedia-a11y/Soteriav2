@@ -78,7 +78,7 @@ class QuestionCountSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selected = ref.watch(practiceLobbyProvider).config.questionCount;
-    final counts = [10, 20, 30, 50, 100];
+    final counts = [10, 20, 30, 50];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

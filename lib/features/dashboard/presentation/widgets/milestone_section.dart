@@ -102,11 +102,17 @@ class _DashboardMilestoneCard extends StatelessWidget {
               color: SoteriaColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.stars_rounded,
-              color: SoteriaColors.primary,
-              size: 20.sp,
-            ),
+            child: progress.definition.id == 'first_game'
+                ? Image.asset(
+                    'assets/icons/first_step_icon.png',
+                    width: 24.w,
+                    height: 24.w,
+                  )
+                : Icon(
+                    Icons.stars_rounded,
+                    color: SoteriaColors.primary,
+                    size: 20.sp,
+                  ),
           ),
           SizedBox(width: SoteriaSpacing.md),
           Expanded(

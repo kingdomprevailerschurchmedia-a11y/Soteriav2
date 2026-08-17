@@ -19,6 +19,8 @@ import '../domain/models/player_progression.dart';
 import '../services/player_bootstrap_service.dart';
 import '../presentation/providers/progression_providers.dart';
 import '../presentation/providers/leaderboard_providers.dart';
+import '../presentation/providers/goal_providers.dart';
+import '../../question_content/presentation/providers/category_providers.dart';
 
 import '../domain/repositories/achievement_repository.dart';
 import '../data/repositories/firebase_achievement_repository.dart';
@@ -82,6 +84,8 @@ final playerBootstrapServiceProvider = Provider(
     ref.watch(progressionServiceProvider),
     FirebaseFirestore.instance,
     identityRepository: ref.watch(identityRepositoryProvider),
+    categoryRepository: ref.watch(categoryRepositoryProvider),
+    goalRepository: ref.watch(goalRepositoryProvider),
   ),
 );
 

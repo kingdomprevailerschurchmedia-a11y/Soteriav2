@@ -95,21 +95,45 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
       _debounceTimer?.cancel();
     });
 
-    // We only initialize once to avoid overwriting user edits when the background stream updates
-    if (playerProfile != null && !state.isInitialized) {
+    if (playerProfile != null) {
       final effectiveUserProfile = userProfile ?? _createNewProfile(authUser, playerProfile);
       
-      return ProfileEditState(
-        originalUserProfile: userProfile, 
-        originalPlayerProfile: playerProfile,
-        editedUserProfile: effectiveUserProfile,
-        editedPlayerProfile: playerProfile,
-        accountEmail: authUser?.email ?? playerProfile.email,
-        isInitialized: true,
-      );
+      // If not initialized, do a full initialization
+      if (!state.isInitialized) {
+        return ProfileEditState(
+          originalUserProfile: userProfile, 
+          originalPlayerProfile: playerProfile,
+          editedUserProfile: effectiveUserProfile,
+          editedPlayerProfile: playerProfile,
+          accountEmail: authUser?.email ?? playerProfile.email,
+          isInitialized: true,
+        );
+      } else {
+        // Already initialized. We want to update the "originals" but preserve 
+        // user edits in the "edited" profiles.
+        // HOWEVER, we must sync the avatar fields to the edited profiles 
+        // so that save() doesn't revert them to old values.
+        
+        return state.copyWith(
+          originalUserProfile: userProfile,
+          originalPlayerProfile: playerProfile,
+          editedUserProfile: state.editedUserProfile?.copyWith(
+            avatarUrl: userProfile?.avatarUrl,
+            selectedAvatarId: userProfile?.selectedAvatarId ?? state.editedUserProfile?.selectedAvatarId ?? 'socrates',
+          ),
+          editedPlayerProfile: state.editedPlayerProfile?.copyWith(
+            photoUrl: (userProfile?.avatarUrl != null && userProfile!.avatarUrl!.isNotEmpty)
+                ? userProfile.avatarUrl!
+                : playerProfile.photoUrl,
+            selectedAvatarId: (userProfile?.selectedAvatarId != null && userProfile!.selectedAvatarId.isNotEmpty)
+                ? userProfile.selectedAvatarId
+                : playerProfile.selectedAvatarId,
+          ),
+        );
+      }
     }
 
-    return state;
+    return ProfileEditState();
   }
 
   UserProfile _createNewProfile(auth.User? user, PlayerProfile player) {
@@ -124,17 +148,47 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
   }
 
   void updateFirstName(String value) {
-    if (state.editedUserProfile == null) return;
-    state = state.copyWith(
-      editedUserProfile: state.editedUserProfile!.copyWith(firstName: value.trim()),
+    if (state.editedUserProfile == null || state.editedPlayerProfile == null) return;
+    final newValue = value.trim();
+    final currentDisplayName = state.editedUserProfile!.displayName;
+    final expectedOldDisplayName = '${state.editedUserProfile!.firstName} ${state.editedUserProfile!.lastName}'.trim();
+    
+    var newState = state.copyWith(
+      editedUserProfile: state.editedUserProfile!.copyWith(firstName: newValue),
     );
+
+    // Auto-update display name if it matches the full name pattern (meaning user hasn't customized it)
+    if (currentDisplayName == expectedOldDisplayName || currentDisplayName.isEmpty) {
+      final newDisplayName = '$newValue ${state.editedUserProfile!.lastName}'.trim();
+      newState = newState.copyWith(
+        editedUserProfile: newState.editedUserProfile!.copyWith(displayName: newDisplayName),
+        editedPlayerProfile: state.editedPlayerProfile!.copyWith(displayName: newDisplayName),
+      );
+    }
+    
+    state = newState;
   }
 
   void updateLastName(String value) {
-    if (state.editedUserProfile == null) return;
-    state = state.copyWith(
-      editedUserProfile: state.editedUserProfile!.copyWith(lastName: value.trim()),
+    if (state.editedUserProfile == null || state.editedPlayerProfile == null) return;
+    final newValue = value.trim();
+    final currentDisplayName = state.editedUserProfile!.displayName;
+    final expectedOldDisplayName = '${state.editedUserProfile!.firstName} ${state.editedUserProfile!.lastName}'.trim();
+
+    var newState = state.copyWith(
+      editedUserProfile: state.editedUserProfile!.copyWith(lastName: newValue),
     );
+
+    // Auto-update display name if it matches the full name pattern
+    if (currentDisplayName == expectedOldDisplayName || currentDisplayName.isEmpty) {
+      final newDisplayName = '${state.editedUserProfile!.firstName} $newValue'.trim();
+      newState = newState.copyWith(
+        editedUserProfile: newState.editedUserProfile!.copyWith(displayName: newDisplayName),
+        editedPlayerProfile: state.editedPlayerProfile!.copyWith(displayName: newDisplayName),
+      );
+    }
+
+    state = newState;
   }
 
   void updateDisplayName(String value) {
@@ -215,8 +269,11 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
         oldUsername: state.originalUserProfile?.username ?? state.originalPlayerProfile?.username,
       );
 
-      // Refresh source providers
-      ref.read(profileProvider.notifier).refresh();
+      // 1. Manually update UserProfile provider for immediate UI feedback
+      final profileNotifier = ref.read(profileProvider.notifier);
+      profileNotifier.state = state.editedUserProfile;
+
+      // 2. Invalidate PlayerProfile stream to trigger a fresh background sync
       ref.invalidate(currentPlayerStreamProvider);
 
       state = state.copyWith(

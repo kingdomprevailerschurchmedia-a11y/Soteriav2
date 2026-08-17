@@ -91,7 +91,7 @@ class RecentAchievementsSection extends ConsumerWidget {
                 date: item.unlockedAt != null ? _formatDate(item.unlockedAt!) : '',
                 color: _getCategoryColor(item.def.category),
                 isUnlocked: item.isUnlocked,
-                icon: _getIcon(item.def.icon),
+                icon: _getIcon(item.def),
                 currentProgress: item.currentValue.toInt(),
                 totalProgress: item.def.threshold.toInt(),
               );
@@ -161,33 +161,52 @@ class RecentAchievementsSection extends ConsumerWidget {
     }
   }
 
-  Widget _getIcon(String iconName) {
+  Widget _getIcon(AchievementDefinition def) {
+    if (def.id == 'first_game') {
+      return Image.asset(
+        'assets/icons/first_step_icon.png',
+        width: 24.w,
+        height: 24.w,
+      );
+    }
     IconData iconData;
-    switch (iconName) {
+    switch (def.icon) {
       case 'stars_rounded':
         iconData = Icons.stars_rounded;
+        break;
       case 'psychology_rounded':
         iconData = Icons.psychology_rounded;
+        break;
       case 'emoji_events_rounded':
         iconData = Icons.emoji_events_rounded;
+        break;
       case 'military_tech_rounded':
         iconData = Icons.military_tech_rounded;
+        break;
       case 'workspace_premium_rounded':
         iconData = Icons.workspace_premium_rounded;
+        break;
       case 'local_fire_department_rounded':
         iconData = Icons.local_fire_department_rounded;
+        break;
       case 'bolt_rounded':
         iconData = Icons.bolt_rounded;
+        break;
       case 'trending_up_rounded':
         iconData = Icons.trending_up_rounded;
+        break;
       case 'shield_rounded':
         iconData = Icons.shield_rounded;
+        break;
       case 'play_arrow_rounded':
         iconData = Icons.play_arrow_rounded;
+        break;
       case 'sports_esports_rounded':
         iconData = Icons.sports_esports_rounded;
+        break;
       case 'auto_awesome_rounded':
         iconData = Icons.auto_awesome_rounded;
+        break;
       default:
         iconData = Icons.emoji_events_rounded;
     }
@@ -331,7 +350,7 @@ class _AchievementCard extends StatelessWidget {
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const Spacer(),
+                    SizedBox(height: 12.h),
 
                     // Bottom Section: Date or Progress
                     if (isUnlocked)

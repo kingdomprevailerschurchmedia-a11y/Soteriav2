@@ -92,7 +92,7 @@ class RewardCard extends ConsumerWidget {
   Widget _buildAction(BuildContext context, WidgetRef ref) {
     if (reward.status == RewardStatus.claimable) {
       return ElevatedButton(
-        onPressed: () => ref.read(rewardsControllerProvider.notifier).claimReward(reward.id),
+        onPressed: () => ref.read(rewardsNotifierProvider.notifier).claimReward(reward.id),
         style: ElevatedButton.styleFrom(
           backgroundColor: SoteriaColors.primary,
           foregroundColor: Colors.white,

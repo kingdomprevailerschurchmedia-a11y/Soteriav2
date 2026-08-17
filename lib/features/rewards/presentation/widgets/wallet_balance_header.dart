@@ -15,71 +15,111 @@ class WalletBalanceHeader extends ConsumerWidget {
 
     return walletAsync.when(
       data: (wallet) => GlassSurface(
-        padding: EdgeInsets.all(24.r),
-        borderRadius: BorderRadius.circular(24.r),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        borderRadius: BorderRadius.circular(28.r),
+        opacity: 0.08,
         child: Column(
           children: [
-            Text(
-              'Your Wallet',
-              style: TextStyle(
-                color: SoteriaColors.textSecondary,
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SoteriaSpacing.gapXS,
-            Wrap(
-              alignment: WrapAlignment.center,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              spacing: 8.w,
+            Row(
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      Icons.monetization_on,
-                      color: SoteriaColors.gold,
-                      size: 36.r,
-                    ),
-                    SoteriaSpacing.gapXS,
-                    Text(
-                      wallet.coins.toString().replaceAllMapped(
-                          RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},'),
-                      style: TextStyle(
-                        color: SoteriaColors.textPrimary,
-                        fontSize: 36.sp,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: -1,
-                      ),
-                    ),
-                  ],
-                ),
-                Text(
-                  'Coins',
-                  style: TextStyle(
+                Expanded(
+                  child: _BalanceColumn(
+                    label: 'COINS',
+                    value: wallet.coins,
+                    iconPath: 'assets/icons/coin_icon.png',
                     color: SoteriaColors.gold,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                Container(
+                  width: 1.w,
+                  height: 60.h,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withOpacity(0),
+                        Colors.white.withOpacity(0.1),
+                        Colors.white.withOpacity(0),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: _BalanceColumn(
+                    label: 'TOKENS',
+                    value: wallet.tokens,
+                    iconData: Icons.confirmation_number, // Blue-ish token icon
+                    color: const Color(0xFF7C4DFF),
                   ),
                 ),
               ],
             ),
-            if (wallet.lifetimeCoinsEarned > 0) ...[
-              SoteriaSpacing.gapSM,
-              Text(
-                '+${(wallet.lifetimeCoinsEarned - wallet.lifetimeCoinsSpent).toString()} earned this season',
-                style: TextStyle(
-                  color: SoteriaColors.success,
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ],
           ],
         ),
       ),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => SizedBox(height: 120.h, child: const Center(child: CircularProgressIndicator())),
       error: (e, _) => Center(child: Text('Error loading wallet', style: TextStyle(color: SoteriaColors.error))),
+    );
+  }
+}
+
+class _BalanceColumn extends StatelessWidget {
+  final String label;
+  final int value;
+  final String? iconPath;
+  final IconData? iconData;
+  final Color color;
+
+  const _BalanceColumn({
+    required this.label,
+    required this.value,
+    this.iconPath,
+    this.iconData,
+    required this.color,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          label,
+          style: TextStyle(
+            color: SoteriaColors.textSecondary,
+            fontSize: 10.sp,
+            fontWeight: FontWeight.w900,
+            letterSpacing: 1.0,
+          ),
+        ),
+        SoteriaSpacing.gapXS,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (iconPath != null)
+              Image.asset(iconPath!, width: 20.w, height: 20.w)
+            else if (iconData != null)
+              Icon(iconData, color: color, size: 20.w),
+            SoteriaSpacing.gapSM,
+            Text(
+              value.toString(),
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 26.sp,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        Text(
+          'Balance',
+          style: TextStyle(
+            color: SoteriaColors.textSecondary.withOpacity(0.5),
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ],
     );
   }
 }

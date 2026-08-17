@@ -16,63 +16,66 @@ class RankHistorySection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final historyAsync = ref.watch(rankHistoryProvider);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            left: SoteriaSpacing.sm,
-            bottom: SoteriaSpacing.sm,
-          ),
-          child: Text(
-            'COMPETITIVE HISTORY',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
-              letterSpacing: 2,
-              fontWeight: FontWeight.bold,
+    return historyAsync.when(
+      data: (history) {
+        if (history.isEmpty) {
+          return Container(
+            padding: EdgeInsets.all(24.r),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E1638).withValues(alpha: 0.2),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
-          ),
-        ),
-        SoteriaCard(
-          padding: EdgeInsets.zero,
-          child: historyAsync.when(
-            data: (history) {
-              if (history.isEmpty) {
-                return Padding(
-                  padding: EdgeInsets.all(SoteriaSpacing.lg),
-                  child: Center(
-                    child: Text(
-                      'No competitive matches played yet.',
-                      style: context.bodySmall,
-                    ),
+            child: Center(
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.person_search_rounded,
+                    color: Colors.white10,
+                    size: 48.r,
                   ),
-                );
-              }
-              return ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: history.length,
-                separatorBuilder: (context, index) => Divider(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  height: 1,
-                ),
-                itemBuilder: (context, index) {
-                  final change = history[index];
-                  return _RankHistoryTile(change: change);
-                },
-              );
+                  SizedBox(height: 12.h),
+                  Text(
+                    'No competitive matches played yet.',
+                    textAlign: TextAlign.center,
+                    style: context.bodySmall.copyWith(color: Colors.white70),
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    'Play matches to build your history!',
+                    textAlign: TextAlign.center,
+                    style: context.bodySmall.copyWith(color: Colors.white30, fontSize: 10.sp),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+        return SoteriaCard(
+          padding: EdgeInsets.zero,
+          child: ListView.separated(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: history.length,
+            separatorBuilder: (context, index) => Divider(
+              color: Colors.white.withValues(alpha: 0.05),
+              height: 1,
+            ),
+            itemBuilder: (context, index) {
+              final change = history[index];
+              return _RankHistoryTile(change: change);
             },
-            loading: () => const Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Center(child: CircularProgressIndicator()),
-            ),
-            error: (err, _) => Padding(
-              padding: EdgeInsets.all(24.0),
-              child: Center(child: Text('Error loading history')),
-            ),
           ),
-        ),
-      ],
+        );
+      },
+      loading: () => const Padding(
+        padding: EdgeInsets.all(24.0),
+        child: Center(child: CircularProgressIndicator()),
+      ),
+      error: (err, _) => Container(
+        padding: EdgeInsets.all(24.r),
+        child: Center(child: Text('Error loading history')),
+      ),
     );
   }
 }

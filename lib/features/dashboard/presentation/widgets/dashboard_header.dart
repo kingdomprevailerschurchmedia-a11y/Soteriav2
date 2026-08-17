@@ -151,7 +151,11 @@ class _ChallengesAction extends ConsumerWidget {
       children: [
         IconButton(
           onPressed: nav.playChallenges,
-          icon: const Icon(Icons.bolt_rounded, color: SoteriaColors.gold),
+          icon: Image.asset(
+            'assets/icons/flash_icon.png',
+            width: 24.sp,
+            height: 24.sp,
+          ),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white.withValues(alpha: 0.05),
           ),

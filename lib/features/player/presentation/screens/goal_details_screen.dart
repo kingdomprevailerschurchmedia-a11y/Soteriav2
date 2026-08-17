@@ -157,13 +157,28 @@ class GoalDetailsScreen extends ConsumerWidget {
 
   IconData _getIconForCategory(GoalCategory category) {
     switch (category) {
-      case GoalCategory.win: return Icons.emoji_events_rounded;
-      case GoalCategory.gameCount: return Icons.sports_esports_rounded;
-      case GoalCategory.rank: return Icons.military_tech_rounded;
-      case GoalCategory.score: return Icons.analytics_rounded;
-      case GoalCategory.streak: return Icons.local_fire_department_rounded;
-      case GoalCategory.achievement: return Icons.stars_rounded;
-      case GoalCategory.personalBest: return Icons.auto_awesome_rounded;
+      case GoalCategory.win:
+        return Icons.emoji_events_rounded;
+      case GoalCategory.gameCount:
+        return Icons.sports_esports_rounded;
+      case GoalCategory.rank:
+        return Icons.military_tech_rounded;
+      case GoalCategory.score:
+        return Icons.analytics_rounded;
+      case GoalCategory.streak:
+        return Icons.local_fire_department_rounded;
+      case GoalCategory.achievement:
+        return Icons.stars_rounded;
+      case GoalCategory.personalBest:
+        return Icons.auto_awesome_rounded;
+      case GoalCategory.correctAnswers:
+        return Icons.fact_check_rounded;
+      case GoalCategory.xpEarned:
+        return Icons.trending_up_rounded;
+      case GoalCategory.practiceCount:
+        return Icons.menu_book_rounded;
+      default:
+        return Icons.flash_on_rounded;
     }
   }
 

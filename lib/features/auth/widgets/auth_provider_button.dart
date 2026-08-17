@@ -105,13 +105,14 @@ class _AuthProviderButtonState extends State<AuthProviderButton>
                           SizedBox(width: 16.w),
                           Flexible(
                             child: Text(
-                              widget.provider.name,
-                              style: context.titleSmall.copyWith(
+                              widget.provider.name.toUpperCase(),
+                              style: context.labelLarge.copyWith(
                                 color: isEmail
                                     ? SoteriaColors.secondary
                                     : Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18.sp,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14.sp,
+                                letterSpacing: 1.2,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
