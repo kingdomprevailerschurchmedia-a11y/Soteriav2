@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/widgets/feedback/soteria_linear_progress.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
@@ -131,8 +132,8 @@ class _VerificationOrchestratorState
                     children: [
                       Align(
                         alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: () {
+                        child: SoteriaBackButton(
+                          onTap: () {
                             if (state.step == VerificationStep.sent ||
                                 state.step == VerificationStep.otp) {
                               ref
@@ -144,15 +145,6 @@ class _VerificationOrchestratorState
                               Navigator.of(context).pop();
                             }
                           },
-                          icon: const Icon(
-                            Icons.arrow_back_rounded,
-                            color: Colors.white,
-                          ),
-                          style: IconButton.styleFrom(
-                            backgroundColor: Colors.white.withValues(
-                              alpha: 0.05,
-                            ),
-                          ),
                         ),
                       ),
                       Text(

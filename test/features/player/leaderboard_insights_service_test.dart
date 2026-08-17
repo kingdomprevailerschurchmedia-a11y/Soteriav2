@@ -15,6 +15,7 @@ void main() {
       userId: 'u1',
       displayName: 'You',
       rankPoints: 2895,
+      xp: 28950,
       rankTier: 'Platinum',
       division: 2,
       position: 115,

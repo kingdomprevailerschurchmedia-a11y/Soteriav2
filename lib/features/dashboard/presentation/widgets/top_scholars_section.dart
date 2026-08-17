@@ -22,7 +22,8 @@ class TopScholarsSection extends ConsumerWidget {
       userId: 'seed_segun',
       displayName: 'Segun',
       avatarId: 'athena',
-      rankPoints: 24500,
+      rankPoints: 1200,
+      xp: 24500,
       rankTier: 'Master',
       division: 1,
       position: 1,
@@ -34,7 +35,8 @@ class TopScholarsSection extends ConsumerWidget {
       userId: 'seed_peter',
       displayName: 'Peter',
       avatarId: 'isaac',
-      rankPoints: 22100,
+      rankPoints: 1100,
+      xp: 22100,
       rankTier: 'Master',
       division: 2,
       position: 2,
@@ -46,7 +48,8 @@ class TopScholarsSection extends ConsumerWidget {
       userId: 'seed_micheal',
       displayName: 'Micheal',
       avatarId: 'elias',
-      rankPoints: 19800,
+      rankPoints: 950,
+      xp: 19800,
       rankTier: 'Expert',
       division: 3,
       position: 3,
@@ -129,7 +132,7 @@ class TopScholarsSection extends ConsumerWidget {
                   data: (entries) {
                     final merged = [...entries, ..._seedScholars];
                     
-                    // Sort by XP (desc) then Registration Order (asc)
+                    // Sort by Points (desc) then Registration Order (asc)
                     merged.sort((a, b) {
                       if (b.rankPoints != a.rankPoints) {
                         return b.rankPoints.compareTo(a.rankPoints);

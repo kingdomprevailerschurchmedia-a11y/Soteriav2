@@ -139,7 +139,10 @@ class _PreferenceSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(24),
           opacity: 0.05,
           padding: EdgeInsets.zero,
-          child: Column(children: items),
+          child: Material(
+            type: MaterialType.transparency,
+            child: Column(children: items),
+          ),
         ),
       ],
     );

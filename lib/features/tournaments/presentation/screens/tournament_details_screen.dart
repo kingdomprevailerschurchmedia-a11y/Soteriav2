@@ -8,6 +8,7 @@ import 'package:soteria/core/design_system/components/soteria_badge.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import 'package:soteria/features/tournaments/domain/models/tournament.dart';
 import 'package:soteria/features/tournaments/domain/models/tournament_status.dart';
@@ -130,7 +131,12 @@ class TournamentDetailsScreen extends ConsumerWidget {
     return SliverAppBar(
       expandedHeight: 250.h,
       pinned: true,
-      leading: const BackButton(),
+      backgroundColor: SoteriaColors.backgroundBottomRight,
+      leadingWidth: 60,
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Center(child: SoteriaBackButton()),
+      ),
       flexibleSpace: FlexibleSpaceBar(
         background: Image.network(bannerUrl, fit: BoxFit.cover),
         title: Text(title, style: context.titleMedium),

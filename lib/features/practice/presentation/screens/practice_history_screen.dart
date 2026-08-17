@@ -10,6 +10,7 @@ import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
 import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/features/practice/presentation/providers/practice_history_providers.dart';
 import 'package:soteria/features/practice/presentation/widgets/history/practice_performance_widgets.dart';
 import 'package:soteria/features/practice/domain/models/practice_result.dart';
@@ -101,11 +102,14 @@ class PracticeHistoryScreen extends ConsumerWidget {
         'Practice Journey',
         style: context.titleLarge.copyWith(color: SoteriaColors.gold),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: SoteriaColors.backgroundBottomRight,
+      elevation: 0,
+      pinned: true,
       floating: true,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-        onPressed: () => context.pop(),
+      leadingWidth: 60,
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Center(child: SoteriaBackButton()),
       ),
     );
   }

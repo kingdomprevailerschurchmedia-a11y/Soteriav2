@@ -10,6 +10,9 @@ abstract interface class MilestoneRepository {
   /// Records milestone progress or completion.
   Future<void> updateMilestoneState(PlayerMilestone milestone);
 
+  /// Claims rewards for a completed milestone.
+  Future<void> claimMilestone(String userId, String milestoneId);
+
   /// Fetches a specific player milestone.
   Future<PlayerMilestone?> getPlayerMilestone(
     String userId,

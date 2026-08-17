@@ -22,6 +22,7 @@ import '../../domain/models/competitive_season.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/design_system/components/soteria_stats_widgets.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../features/player/providers/player_providers.dart';
 import 'milestones_screen.dart';
 
@@ -103,19 +104,7 @@ class _Header extends ConsumerWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Back Button
-            GestureDetector(
-              onTap: () => context.pop(),
-              child: Container(
-                width: 44.r,
-                height: 44.r,
-                decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.05),
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-                ),
-                child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
-              ),
-            ),
+            const SoteriaBackButton(),
             
             // Title
             Text(
@@ -396,8 +385,12 @@ class _CareerBestCard extends ConsumerWidget {
                         border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.1)),
                       ),
                       child: Center(
-                        child: Icon(Icons.emoji_events_rounded, 
-                                     color: SoteriaColors.gold, size: 28.sp),
+                        child: Image.asset(
+                          'assets/icons/trophy_icon.png',
+                          width: 28.sp,
+                          height: 28.sp,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                     SizedBox(width: 16.w),

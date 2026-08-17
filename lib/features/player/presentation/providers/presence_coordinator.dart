@@ -104,15 +104,21 @@ class PresenceCoordinator extends WidgetsBindingObserver {
 
 final presenceCoordinatorProvider = Provider<PresenceCoordinator>((ref) {
   final coordinator = PresenceCoordinator(ref);
-  
+
   // Auto-initialize based on auth state
-  ref.listen(authRepositoryProvider.select((s) => s.currentUserId), (prev, next) {
+  final sub = ref.listen(authRepositoryProvider.select((s) => s.currentUserId),
+      (prev, next) {
     if (next != null) {
       coordinator.initialize();
     } else {
       coordinator.dispose();
     }
   }, fireImmediately: true);
+
+  ref.onDispose(() {
+    sub.close();
+    coordinator.dispose();
+  });
 
   return coordinator;
 });

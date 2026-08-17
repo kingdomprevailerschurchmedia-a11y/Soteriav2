@@ -11,6 +11,7 @@ abstract class LeaderboardEntry with _$LeaderboardEntry {
     String? avatarUrl,
     String? avatarId,
     required int rankPoints,
+    @Default(0) int xp,
     required String rankTier,
     required int division,
     required int position,

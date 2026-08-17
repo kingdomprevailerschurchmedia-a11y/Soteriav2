@@ -55,10 +55,16 @@ final availableRewardsProvider = FutureProvider<List<Reward>>((ref) async {
   
   return rewards.map((r) {
     if (r.id == 'reward_daily_1') {
+      final isAlreadyClaimedToday = dailyBonus.isAlreadyClaimedToday;
       return r.copyWith(
         amount: 100,
-        status: dailyBonus.canClaim ? RewardStatus.claimable : RewardStatus.claimed,
-        claimedAt: dailyBonus.canClaim ? null : dailyBonus.lastClaimTime,
+        status: isAlreadyClaimedToday
+            ? RewardStatus.claimed
+            : (dailyBonus.isClaiming
+                ? RewardStatus.available // Use available for loading state
+                : RewardStatus.claimable),
+        claimedAt: isAlreadyClaimedToday ? dailyBonus.lastClaimTime : null,
+        metadata: {...r.metadata, 'isClaiming': dailyBonus.isClaiming},
       );
     }
     return r;

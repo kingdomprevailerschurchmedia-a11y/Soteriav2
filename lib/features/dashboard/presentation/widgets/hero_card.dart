@@ -9,7 +9,6 @@ import '../../../../core/design_system/animations/soteria_animation_widgets.dart
 import '../../../../core/widgets/animations/animated_numeric_counter.dart';
 import '../../../player/domain/models/rank_progress.dart';
 import '../../../player/presentation/widgets/competitive_rank_badge.dart';
-import '../../../player/presentation/widgets/rank_progress_bar.dart';
 import '../../../player/providers/player_providers.dart';
 
 class HeroCard extends ConsumerWidget {
@@ -158,27 +157,6 @@ class HeroCard extends ConsumerWidget {
                     ),
                   ],
                 ),
-
-                if (rankProgress != null) ...[
-                  SizedBox(height: 16.h),
-                  Container(
-                    height: 1,
-                    width: double.infinity,
-                    color: Colors.white.withValues(alpha: 0.05),
-                  ),
-                  SizedBox(height: 12.h),
-                  
-                  // --- RP Section: Competitive Standing ---
-                  _SectionLabel(
-                    label: 'COMPETITIVE STANDING (RP)',
-                    color: SoteriaColors.gold,
-                  ),
-                  SizedBox(height: 6.h),
-                  RankProgressBar(
-                    progress: rankProgress!,
-                    variant: RankProgressVariant.compact,
-                  ),
-                ],
               ],
             ),
           ),
@@ -364,10 +342,11 @@ class _StreakSummary extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            Icons.local_fire_department_rounded,
-            color: Colors.orange,
-            size: 24.sp,
+          Image.asset(
+            'assets/icons/streak_icon.png',
+            width: 24.sp,
+            height: 24.sp,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 8.w),
           Container(

@@ -160,7 +160,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
        *
        * Startup work continues independently.
        */
-      Future<void>.delayed(const Duration(milliseconds: 5000), () {
+      Future<void>.delayed(const Duration(milliseconds: 2000), () {
         if (!mounted) return;
 
         _minimumSplashDurationComplete = true;

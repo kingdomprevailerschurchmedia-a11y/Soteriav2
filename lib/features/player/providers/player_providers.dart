@@ -86,6 +86,7 @@ final playerBootstrapServiceProvider = Provider(
     identityRepository: ref.watch(identityRepositoryProvider),
     categoryRepository: ref.watch(categoryRepositoryProvider),
     goalRepository: ref.watch(goalRepositoryProvider),
+    leaderboardRepository: ref.watch(leaderboardRepositoryProvider),
   ),
 );
 
@@ -122,6 +123,46 @@ final playerBootstrapStatusProvider = FutureProvider<void>((ref) async {
     await ref.read(playerBootstrapServiceProvider).bootstrap(authUser);
   }
 });
+
+final playerLeaderboardSyncProvider = Provider<void>((ref) {
+  // Listen to profile changes
+  ref.listen<PlayerProfile?>(currentPlayerProvider, (previous, next) {
+    if (next != null) {
+      _sync(ref, next);
+    }
+  });
+
+  // Listen to progression changes (which includes XP and Rank)
+  ref.listen<AsyncValue<PlayerProgression>>(competitiveProgressionProvider,
+      (previous, next) {
+    final player = ref.read(currentPlayerProvider);
+    if (player != null && next.hasValue) {
+      _sync(ref, player, progression: next.value);
+    }
+  });
+});
+
+Future<void> _sync(Ref ref, PlayerProfile profile,
+    {PlayerProgression? progression}) async {
+  final prog = progression ?? ref.read(competitiveProgressionProvider).value;
+  if (prog == null) return;
+
+  final leaderboardRepo = ref.read(leaderboardRepositoryProvider);
+
+  // Sync Global
+  await leaderboardRepo.syncLeaderboardEntry(
+    profile: profile,
+    progression: prog,
+    seasonId: null,
+  );
+
+  // Sync Seasonal
+  await leaderboardRepo.syncLeaderboardEntry(
+    profile: profile,
+    progression: prog,
+    seasonId: prog.seasonId,
+  );
+}
 
 /// A provider that synchronizes the avatar selection and profile picture between [UserProfile] and [PlayerProfile].
 /// This ensures that changes made in the [AvatarSelectionDialog] are reflected across both identity models.

@@ -6,6 +6,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/providers/player_providers.dart';
@@ -27,6 +28,9 @@ class VersusLobbyScreen extends ConsumerWidget {
     final player = ref.watch(currentPlayerProvider);
     final isOnline = ref.watch(isOnlineProvider);
 
+    final fromDashboard =
+        GoRouterState.of(context).uri.queryParameters['fromDashboard'] == 'true';
+
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
@@ -39,7 +43,11 @@ class VersusLobbyScreen extends ConsumerWidget {
           child: SafeArea(
             child: Column(
               children: [
-                _LobbyHeader(player: player, isOnline: isOnline),
+                _LobbyHeader(
+                  player: player,
+                  isOnline: isOnline,
+                  showBackButton: fromDashboard,
+                ),
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
@@ -130,9 +138,14 @@ class VersusLobbyScreen extends ConsumerWidget {
 }
 
 class _LobbyHeader extends StatelessWidget {
-  const _LobbyHeader({this.player, required this.isOnline});
+  const _LobbyHeader({
+    this.player,
+    required this.isOnline,
+    this.showBackButton = false,
+  });
   final dynamic player;
   final bool isOnline;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
@@ -140,24 +153,10 @@ class _LobbyHeader extends StatelessWidget {
       padding: EdgeInsets.all(SoteriaSpacing.lg),
       child: Row(
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: 0.05),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-            ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.white,
-                size: 16,
-              ),
-              onPressed: () => context.pop(),
-            ),
-          ),
+          if (showBackButton)
+            const SoteriaBackButton()
+          else
+            const SizedBox.shrink(),
           const Spacer(),
           if (player != null)
             SoteriaAvatar(

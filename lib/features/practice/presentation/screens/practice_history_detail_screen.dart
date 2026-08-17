@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/features/practice/domain/models/practice_result.dart';
 
@@ -48,9 +49,10 @@ class PracticeHistoryDetailScreen extends ConsumerWidget {
         style: context.titleLarge.copyWith(color: SoteriaColors.gold),
       ),
       backgroundColor: Colors.transparent,
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
-        onPressed: () => Navigator.of(context).pop(),
+      leadingWidth: 60,
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Center(child: SoteriaBackButton()),
       ),
     );
   }

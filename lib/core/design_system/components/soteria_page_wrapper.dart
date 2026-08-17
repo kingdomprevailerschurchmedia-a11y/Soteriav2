@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 
 class SoteriaPageWrapper extends StatelessWidget {
   final Widget body;
@@ -56,6 +57,11 @@ class SoteriaPageWrapper extends StatelessWidget {
               backgroundColor: Colors.transparent,
               elevation: 0,
               centerTitle: false,
+              leadingWidth: 60,
+              leading: const Padding(
+                padding: EdgeInsets.only(left: 16),
+                child: Center(child: SoteriaBackButton()),
+              ),
             )
           : null,
       floatingActionButton: floatingActionButton,

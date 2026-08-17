@@ -35,15 +35,15 @@ class NavigationCoordinator {
   }
 
   void playPractice() {
-    navigateTo('/app/practice');
+    navigateTo('/app/practice?fromDashboard=true');
   }
 
   void playProMode() {
-    navigateTo('/app/pro-mode');
+    navigateTo('/app/pro-mode?fromDashboard=true');
   }
 
   void playVersus() {
-    navigateTo('/app/versus');
+    navigateTo('/app/versus?fromDashboard=true');
   }
 
   void playChallenges() {

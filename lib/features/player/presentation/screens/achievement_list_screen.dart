@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../../core/design_system/components/soteria_stats_widgets.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../providers/achievement_providers.dart';
 import '../../domain/models/achievement.dart';
+import '../../providers/player_providers.dart';
 
 class AchievementListScreen extends ConsumerWidget {
   const AchievementListScreen({super.key});
@@ -19,52 +23,97 @@ class AchievementListScreen extends ConsumerWidget {
     final earnedMap = ref.watch(playerAchievementMapProvider);
 
     return SafeGradientScaffold(
-      appBar: AppBar(
-        title: const Text('ACHIEVEMENTS'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: ListView.builder(
-        cacheExtent: 1000,
-        padding: EdgeInsets.all(SoteriaSpacing.lg),
-        itemCount: AchievementCategory.values.length,
-        itemBuilder: (context, catIndex) {
-          final category = AchievementCategory.values[catIndex];
-          final catDefinitions = definitions.where((d) => d.category == category).toList();
-          
-          if (catDefinitions.isEmpty) return const SizedBox.shrink();
+      body: Column(
+        children: [
+          _Header(),
+          Expanded(
+            child: ListView.builder(
+              cacheExtent: 1000,
+              padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+              itemCount: AchievementCategory.values.length,
+              itemBuilder: (context, catIndex) {
+                final category = AchievementCategory.values[catIndex];
+                final catDefinitions =
+                    definitions.where((d) => d.category == category).toList();
 
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
-                child: Text(
-                  category.name.toUpperCase(),
-                  style: context.labelSmall.copyWith(
-                    color: SoteriaColors.gold,
-                    letterSpacing: 2.0,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-              ),
-              ...catDefinitions.map((def) {
-                final playerState = earnedMap[def.id];
-                return RepaintBoundary(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
-                    child: _AchievementCard(
-                      definition: def,
-                      playerState: playerState,
+                if (catDefinitions.isEmpty) return const SizedBox.shrink();
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
+                      child: Text(
+                        category.name.toUpperCase(),
+                        style: context.labelSmall.copyWith(
+                          color: SoteriaColors.gold,
+                          letterSpacing: 2.0,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                     ),
-                  ),
+                    ...catDefinitions.map((def) {
+                      final playerState = earnedMap[def.id];
+                      return RepaintBoundary(
+                        child: Padding(
+                          padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                          child: _AchievementCard(
+                            definition: def,
+                            playerState: playerState,
+                          ),
+                        ),
+                      );
+                    }),
+                    SoteriaSpacing.gapLG,
+                  ],
                 );
-              }),
-              SoteriaSpacing.gapLG,
-            ],
-          );
-        },
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _Header extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(currentPlayerProvider);
+
+    return SafeArea(
+      bottom: false,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            // Back Button
+            const SoteriaBackButton(),
+
+            // Title
+            Text(
+              'ACHIEVEMENTS',
+              style: context.titleMedium.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.5,
+                fontSize: 18.sp,
+              ),
+            ),
+
+            // Coin Balance
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E1638).withValues(alpha: 0.8),
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+              ),
+              child: SoteriaCoinWidget(amount: player?.coins ?? 0, size: 16),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -101,9 +150,11 @@ class _AchievementCard extends StatelessWidget {
                   : Colors.white.withValues(alpha: 0.03),
                 shape: BoxShape.circle,
               ),
-              child: definition.id == 'first_game' && isUnlocked
+              child: (definition.id == 'first_game' || definition.id == 'welcome_bonus') && isUnlocked
                   ? Image.asset(
-                      'assets/icons/first_step_icon.png',
+                      definition.id == 'first_game' 
+                          ? 'assets/icons/first_step_icon.png'
+                          : 'assets/icons/star_icon.png',
                       width: 24.sp,
                       height: 24.sp,
                     )

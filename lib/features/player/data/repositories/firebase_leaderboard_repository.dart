@@ -24,7 +24,9 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
       displayName: profile.displayName,
       avatarUrl: profile.photoUrl,
       avatarId: profile.selectedAvatarId,
-      rankPoints: progression.rankPoints,
+      rankPoints:
+          seasonId == null ? progression.lifetimeXp : progression.rankPoints,
+      xp: progression.lifetimeXp,
       rankTier: progression.currentRankTier,
       division: _parseDivision(progression.currentRank),
       position: 0, // Calculated client-side

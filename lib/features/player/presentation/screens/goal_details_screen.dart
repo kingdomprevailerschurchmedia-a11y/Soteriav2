@@ -133,6 +133,12 @@ class GoalDetailsScreen extends ConsumerWidget {
           label: 'TYPE',
           value: definition.type.name.toUpperCase(),
         ),
+        if (definition.rewardAmount != null)
+          _MetaItem(
+            label: 'REWARD',
+            value: '${definition.rewardAmount} ${definition.rewardType?.name.toUpperCase()}',
+            isHighlight: true,
+          ),
         if (playerState != null)
           _MetaItem(
             label: 'DEADLINE',
@@ -221,11 +227,13 @@ class _MetaItem extends StatelessWidget {
   final String label;
   final String value;
   final bool isWarning;
+  final bool isHighlight;
 
   const _MetaItem({
     required this.label,
     required this.value,
     this.isWarning = false,
+    this.isHighlight = false,
   });
 
   @override
@@ -235,12 +243,15 @@ class _MetaItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(label, style: context.labelSmall.copyWith(color: SoteriaColors.textSecondary)),
+          Text(label,
+              style: context.labelSmall.copyWith(color: SoteriaColors.textSecondary)),
           Text(
             value,
             style: context.bodyMedium.copyWith(
               fontWeight: FontWeight.bold,
-              color: isWarning ? SoteriaColors.warning : SoteriaColors.textPrimary,
+              color: isWarning
+                  ? SoteriaColors.warning
+                  : (isHighlight ? SoteriaColors.gold : SoteriaColors.textPrimary),
             ),
           ),
         ],

@@ -8,6 +8,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_text_field.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/presentation/widgets/avatar_selection_dialog.dart';
@@ -124,6 +125,11 @@ class _ProfileInformationScreenState extends ConsumerState<ProfileInformationScr
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
+          leadingWidth: 60,
+          leading: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Center(child: SoteriaBackButton()),
+          ),
           title: Text(
             'PROFILE INFORMATION',
             style: context.titleMedium.copyWith(

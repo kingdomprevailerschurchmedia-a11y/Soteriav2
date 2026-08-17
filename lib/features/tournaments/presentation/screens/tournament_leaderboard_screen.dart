@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import '../providers/tournament_leaderboard_provider.dart';
 import '../widgets/leaderboard_card.dart';
@@ -25,7 +26,11 @@ class TournamentLeaderboardScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Final Leaderboard'),
         backgroundColor: Colors.transparent,
-        leading: const BackButton(),
+        leadingWidth: 60,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Center(child: SoteriaBackButton()),
+        ),
       ),
       body: leaderboardAsync.when(
         data: (rankings) {

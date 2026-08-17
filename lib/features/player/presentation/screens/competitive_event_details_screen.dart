@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import '../providers/event_providers.dart';
 import '../../domain/models/live_event.dart';
 import '../../domain/models/event_participation.dart';
@@ -28,9 +29,10 @@ class CompetitiveEventDetailsScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => context.pop(),
+        leadingWidth: 60,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Center(child: SoteriaBackButton()),
         ),
       ),
       body: Container(

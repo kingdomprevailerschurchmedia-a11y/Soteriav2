@@ -28,13 +28,22 @@ class FirebaseBootstrapper {
     final config = FirebaseConfig.fromEnvironment();
 
     try {
-      // 1. Initialize Core (Redundant if done in main, but safe)
-      await FirebaseInitializer.initializeCore(config);
+      // 1. Initialize Core with a timeout to prevent hanging the entire app
+      LoggerService.i('Firebase Bootstrap: Initializing Core...', feature: 'Firebase');
+      await FirebaseInitializer.initializeCore(config).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () => throw TimeoutException('Firebase Core initialization timed out'),
+      );
 
       // 2. Essential initialization only
-      await FirebaseInitializer.initializeCrashlytics();
+      LoggerService.i('Firebase Bootstrap: Initializing Crashlytics...', feature: 'Firebase');
+      await FirebaseInitializer.initializeCrashlytics().timeout(
+        const Duration(seconds: 5),
+        onTimeout: () => LoggerService.w('Crashlytics initialization timed out, continuing...', feature: 'Firebase'),
+      );
 
       // 3. Defer non-critical services (don't await them here)
+      LoggerService.i('Firebase Bootstrap: Initializing background services...', feature: 'Firebase');
       unawaited(FirebaseInitializer.initializeAppCheck(securityCoordinator));
       unawaited(FirebaseInitializer.initializeGoogleSignIn());
       unawaited(FirebaseInitializer.initializeAnalytics());
@@ -42,7 +51,7 @@ class FirebaseBootstrapper {
       unawaited(FirebaseInitializer.configureFirestoreOffline());
 
       _status = BootstrapperStatus.success;
-      LoggerService.i('Firebase Bootstrap successful. Project: ${FirebaseInitializer.getProjectId()}');
+      LoggerService.i('Firebase Bootstrap successful. Project: ${FirebaseInitializer.getProjectId()}', feature: 'Firebase');
     } catch (e, st) {
       _status = BootstrapperStatus.failure;
       _error = e;

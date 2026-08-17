@@ -77,7 +77,7 @@ class MilestonesScreen extends ConsumerWidget {
                   onClaim: p.playerState?.status == MilestoneStatus.completed
                       ? () => _claimReward(context, ref, p)
                       : null,
-                  isClaiming: ref.watch(rewardClaimControllerProvider).isLoading,
+                  isClaiming: ref.watch(milestoneClaimControllerProvider).isLoading,
                 ),
               ),
             ),
@@ -98,7 +98,7 @@ class MilestonesScreen extends ConsumerWidget {
         onClaim: p.playerState?.status == MilestoneStatus.completed
             ? () => _claimReward(context, ref, p)
             : null,
-        isClaiming: ref.watch(rewardClaimControllerProvider).isLoading,
+        isClaiming: ref.watch(milestoneClaimControllerProvider).isLoading,
       ),
     );
   }
@@ -111,8 +111,10 @@ class MilestonesScreen extends ConsumerWidget {
     final userId = ref.read(authRepositoryProvider).currentUserId;
     if (userId == null) return;
 
-    final grantId = 'milestone_${p.definition.id}_$userId';
-    await ref.read(rewardClaimControllerProvider.notifier).claim(grantId);
+    await ref.read(milestoneClaimControllerProvider.notifier).claim(
+      userId: userId,
+      milestoneId: p.definition.id,
+    );
 
     if (context.mounted) {
       // If bottom sheet is open, pop it

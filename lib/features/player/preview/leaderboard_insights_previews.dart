@@ -19,6 +19,7 @@ class LeaderboardInsightsPreviews {
       userId: 'u1',
       displayName: 'You',
       rankPoints: points,
+      xp: points * 10,
       rankTier: tier,
       division: 2,
       position: position,

@@ -185,6 +185,7 @@ class SocialPreviews extends StatelessWidget {
       avatarId: 'socrates',
       rankTier: rp > 2500 ? 'Gold' : 'Silver',
       rankPoints: rp,
+      xp: rp * 10,
       division: 1,
       position: position,
       lastUpdated: DateTime.now(),

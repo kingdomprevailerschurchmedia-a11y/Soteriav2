@@ -84,6 +84,7 @@ class ProfileEditState {
 
 class ProfileEditNotifier extends Notifier<ProfileEditState> {
   Timer? _debounceTimer;
+  bool _isInitialized = false;
 
   @override
   ProfileEditState build() {
@@ -99,7 +100,8 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
       final effectiveUserProfile = userProfile ?? _createNewProfile(authUser, playerProfile);
       
       // If not initialized, do a full initialization
-      if (!state.isInitialized) {
+      if (!_isInitialized) {
+        _isInitialized = true;
         return ProfileEditState(
           originalUserProfile: userProfile, 
           originalPlayerProfile: playerProfile,
@@ -114,14 +116,15 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
         // HOWEVER, we must sync the avatar fields to the edited profiles 
         // so that save() doesn't revert them to old values.
         
-        return state.copyWith(
+        final currentState = state;
+        return currentState.copyWith(
           originalUserProfile: userProfile,
           originalPlayerProfile: playerProfile,
-          editedUserProfile: state.editedUserProfile?.copyWith(
+          editedUserProfile: currentState.editedUserProfile?.copyWith(
             avatarUrl: userProfile?.avatarUrl,
-            selectedAvatarId: userProfile?.selectedAvatarId ?? state.editedUserProfile?.selectedAvatarId ?? 'socrates',
+            selectedAvatarId: userProfile?.selectedAvatarId ?? currentState.editedUserProfile?.selectedAvatarId ?? 'socrates',
           ),
-          editedPlayerProfile: state.editedPlayerProfile?.copyWith(
+          editedPlayerProfile: currentState.editedPlayerProfile?.copyWith(
             photoUrl: (userProfile?.avatarUrl != null && userProfile!.avatarUrl!.isNotEmpty)
                 ? userProfile.avatarUrl!
                 : playerProfile.photoUrl,

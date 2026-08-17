@@ -16,6 +16,7 @@ import 'package:soteria/features/dashboard/presentation/widgets/lobby/lobby_conf
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/presentation/providers/progression_providers.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/features/gameplay_engine/models/practice_session_config.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/network/providers/connectivity_providers.dart';
@@ -29,6 +30,9 @@ class PracticeLobbyScreen extends ConsumerWidget {
     final player = ref.watch(currentPlayerProvider);
     final isOnline = ref.watch(isOnlineProvider);
 
+    final fromDashboard =
+        GoRouterState.of(context).uri.queryParameters['fromDashboard'] == 'true';
+
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
@@ -41,7 +45,11 @@ class PracticeLobbyScreen extends ConsumerWidget {
           child: SafeArea(
             child: Column(
               children: [
-                _LobbyHeader(player: player, isOnline: isOnline),
+                _LobbyHeader(
+                  player: player,
+                  isOnline: isOnline,
+                  showBackButton: fromDashboard,
+                ),
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
@@ -104,16 +112,28 @@ class PracticeLobbyScreen extends ConsumerWidget {
 }
 
 class _LobbyHeader extends StatelessWidget {
-  const _LobbyHeader({this.player, required this.isOnline});
+  const _LobbyHeader({
+    this.player,
+    required this.isOnline,
+    this.showBackButton = false,
+  });
   final dynamic player;
   final bool isOnline;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg, vertical: SoteriaSpacing.md),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.lg,
+        vertical: SoteriaSpacing.md,
+      ),
       child: Row(
         children: [
+          if (showBackButton)
+            const SoteriaBackButton()
+          else
+            const SizedBox.shrink(),
           const Spacer(),
           if (player != null)
             Row(

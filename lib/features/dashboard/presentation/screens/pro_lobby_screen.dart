@@ -7,6 +7,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/design_system/animations/soteria_animations.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../shared/widgets/soteria_page.dart';
@@ -36,6 +37,9 @@ class ProLobbyScreen extends ConsumerWidget {
     final player = ref.watch(currentPlayerProvider);
     final isOnline = ref.watch(isOnlineProvider);
 
+    final fromDashboard =
+        GoRouterState.of(context).uri.queryParameters['fromDashboard'] == 'true';
+
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
@@ -50,7 +54,11 @@ class ProLobbyScreen extends ConsumerWidget {
               children: [
                 Column(
                   children: [
-                    _ProHeader(player: player, isOnline: isOnline),
+                    _ProHeader(
+                      player: player,
+                      isOnline: isOnline,
+                      showBackButton: fromDashboard,
+                    ),
                     Expanded(
                       child: CustomScrollView(
                         slivers: [
@@ -225,34 +233,28 @@ class _OfflineOverlay extends StatelessWidget {
 }
 
 class _ProHeader extends StatelessWidget {
-  const _ProHeader({this.player, required this.isOnline});
+  const _ProHeader({
+    this.player,
+    required this.isOnline,
+    this.showBackButton = false,
+  });
   final dynamic player;
   final bool isOnline;
+  final bool showBackButton;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg, vertical: SoteriaSpacing.md),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.lg,
+        vertical: SoteriaSpacing.md,
+      ),
       child: Row(
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: 0.05),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-            ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.white,
-                size: 16,
-              ),
-              onPressed: () => context.pop(),
-            ),
-          ),
+          if (showBackButton)
+            const SoteriaBackButton()
+          else
+            const SizedBox.shrink(),
           const Spacer(),
           if (player != null)
             Row(

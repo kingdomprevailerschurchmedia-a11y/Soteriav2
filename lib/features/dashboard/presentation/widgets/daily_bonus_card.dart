@@ -17,10 +17,10 @@ class DailyBonusCard extends ConsumerWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: SoteriaSpacing.containerPadding(context),
+        horizontal: SoteriaSpacing.lg,
       ),
       child: SoteriaCard(
-        padding: EdgeInsets.all(SoteriaSpacing.md),
+        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
         child: Row(
           children: [
             Container(
@@ -35,16 +35,18 @@ class DailyBonusCard extends ConsumerWidget {
                 height: 20.sp,
               ),
             ),
-            SoteriaSpacing.gapMD,
+            SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     'DAILY REWARD',
                     style: context.bodyMedium.copyWith(
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.5,
+                      fontSize: 13.sp,
                     ),
                   ),
                   Text(
@@ -61,35 +63,40 @@ class DailyBonusCard extends ConsumerWidget {
                 ],
               ),
             ),
-            ElevatedButton(
-              onPressed: canClaim && !dailyBonus.isClaiming 
-                ? () => ref.read(dailyBonusProvider.notifier).claim() 
-                : null,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: SoteriaColors.gold,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(horizontal: 16.w),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.r),
-                ),
-                disabledBackgroundColor: SoteriaColors.muted.withValues(alpha: 0.2),
-              ),
-              child: dailyBonus.isClaiming
-                ? SizedBox(
-                    width: 16.r,
-                    height: 16.r,
-                    child: const CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.black,
-                    ),
-                  )
-                : Text(
-                    canClaim ? 'Claim' : 'Claimed',
-                    style: TextStyle(
-                      fontSize: 13.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+            SizedBox(width: 8.w),
+            SizedBox(
+              height: 32.h,
+              child: ElevatedButton(
+                onPressed: canClaim && !dailyBonus.isClaiming 
+                  ? () => ref.read(dailyBonusProvider.notifier).claim() 
+                  : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: SoteriaColors.gold,
+                  foregroundColor: Colors.black,
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.r),
                   ),
+                  disabledBackgroundColor: SoteriaColors.muted.withValues(alpha: 0.2),
+                ),
+                child: dailyBonus.isClaiming
+                  ? SizedBox(
+                      width: 14.r,
+                      height: 14.r,
+                      child: const CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.black,
+                      ),
+                    )
+                  : Text(
+                      canClaim ? 'Claim' : 'Claimed',
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+              ),
             ),
           ],
         ),

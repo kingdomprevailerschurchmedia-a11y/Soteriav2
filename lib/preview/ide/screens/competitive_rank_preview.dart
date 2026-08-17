@@ -11,6 +11,8 @@ import '../../../features/player/domain/models/rank_progress.dart';
 import '../../../features/player/domain/models/competitive_season.dart';
 import '../../../features/player/domain/models/player_profile.dart';
 import '../../../features/player/domain/config/progression_config.dart';
+import '../../../features/player/domain/models/milestone.dart';
+import '../../../features/player/domain/models/season_reward_definition.dart';
 import '../preview_scaffold.dart';
 
 void main() {
@@ -72,10 +74,10 @@ class CompetitiveRankPreview extends StatelessWidget {
       overrides: [
         rankProgressProvider.overrideWithValue(AsyncValue.data(mockProgress)),
         playerRankPositionProvider.overrideWith((ref) => Future.value(-1)),
-        currentSeasonProvider.overrideWith((ref) => Future.value(null)),
-        currentUserPersonalRecordsProvider.overrideWith((ref) => Future.value([])),
-        nextCompetitiveMilestoneProvider.overrideWith((ref) => Future.value(mockMilestone)),
-        rankHistoryProvider.overrideWith((ref) => Future.value([])),
+        currentSeasonProvider.overrideWith((ref) => Stream.value(null)),
+        currentUserPersonalRecordsProvider.overrideWith((ref) => Stream.value([])),
+        nextCompetitiveMilestoneProvider.overrideWith((ref) => AsyncValue.data(mockMilestone)),
+        rankHistoryProvider.overrideWith((ref) => Stream.value([])),
         currentPlayerProvider.overrideWithValue(mockPlayer),
       ],
       child: const CompetitiveRankOverviewScreen(),

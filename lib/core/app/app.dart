@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/themes/soteria_theme.dart';
 import 'package:soteria/core/navigation/app_router.dart';
 import 'package:soteria/core/errors/error_handler.dart';
@@ -14,7 +15,6 @@ import 'package:soteria/core/firebase/config/providers/configuration_providers.d
 import 'package:soteria/features/player/presentation/widgets/rank_celebration_listener.dart';
 import 'package:soteria/features/player/presentation/widgets/streak_celebration_listener.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
-import 'package:soteria/features/splash/presentation/widgets/splash_static_view.dart';
 import '../firebase/providers/bootstrapper_provider.dart';
 
 class SoteriaApp extends ConsumerWidget {
@@ -30,19 +30,16 @@ class SoteriaApp extends ConsumerWidget {
       splitScreenMode: true,
       builder: (context, child) {
         return firebaseInit.when(
-          data: (_) => _buildApp(context, ref),
+          data: (_) {
+            // Remove native splash only after we have data and are ready to build the app
+            FlutterNativeSplash.remove();
+            return _buildApp(context, ref);
+          },
           loading: () {
-            // Remove native splash as soon as our themed static view is ready
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              FlutterNativeSplash.remove();
-            });
-            // We return a minimal MaterialApp to provide Directionality and other
-            // required ancestors for the Scaffold in SplashStaticView.
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: SoteriaTheme.darkTheme,
-              home: const SplashStaticView(),
-            );
+            // Native splash remains visible.
+            // We return a minimal themed Container to avoid any white flash
+            // if the system removes the native splash before Flutter is ready.
+            return Container(color: SoteriaColors.backgroundBottomRight);
           },
           error: (error, stack) => _buildErrorApp(context, ref, error),
         );
@@ -55,6 +52,7 @@ class SoteriaApp extends ConsumerWidget {
     ref.watch(authCoordinatorProvider);
     ref.watch(presenceCoordinatorProvider);
     ref.watch(playerAvatarSyncProvider);
+    ref.watch(playerLeaderboardSyncProvider);
 
     // Initialize background services with a staggered delay to ensure splash animation is smooth
     WidgetsBinding.instance.addPostFrameCallback((_) {

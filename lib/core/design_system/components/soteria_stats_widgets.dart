@@ -60,10 +60,11 @@ class SoteriaCoinWidget extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(
-          Icons.monetization_on_rounded,
-          color: SoteriaColors.gold,
-          size: size.sp,
+        Image.asset(
+          'assets/icons/coin_icon.png',
+          width: size.sp,
+          height: size.sp,
+          fit: BoxFit.contain,
         ),
         SizedBox(width: 4.w),
         Text(
@@ -135,10 +136,11 @@ class SoteriaStreakWidget extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
-            Icons.local_fire_department_rounded,
-            color: Colors.orange,
-            size: 16,
+          Image.asset(
+            'assets/icons/streak_icon.png',
+            width: 16.sp,
+            height: 16.sp,
+            fit: BoxFit.contain,
           ),
           SizedBox(width: 4.w),
           Text(

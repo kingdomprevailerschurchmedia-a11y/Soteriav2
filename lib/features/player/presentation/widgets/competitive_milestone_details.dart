@@ -51,13 +51,27 @@ class CompetitiveMilestoneDetails extends StatelessWidget {
                     : Colors.white.withValues(alpha: 0.05),
               ),
             ),
-            child: Icon(
-              isCompleted
-                  ? _getIconData(definition.icon)
-                  : Icons.lock_outline_rounded,
-              color: isCompleted ? SoteriaColors.gold : SoteriaColors.muted,
-              size: 40.sp,
-            ),
+            child: (definition.id == 'first_game' ||
+                        definition.id == 'welcome_bonus') &&
+                    isCompleted
+                ? Center(
+                    child: Image.asset(
+                      definition.id == 'first_game'
+                          ? 'assets/icons/first_step_icon.png'
+                          : 'assets/icons/star_icon.png',
+                      width: 40.w,
+                      height: 40.w,
+                      fit: BoxFit.contain,
+                    ),
+                  )
+                : Icon(
+                    isCompleted
+                        ? _getIconData(definition.icon)
+                        : Icons.lock_outline_rounded,
+                    color:
+                        isCompleted ? SoteriaColors.gold : SoteriaColors.muted,
+                    size: 40.sp,
+                  ),
           ),
           SizedBox(height: SoteriaSpacing.xl),
           Text(
@@ -84,7 +98,7 @@ class CompetitiveMilestoneDetails extends StatelessWidget {
           if (definition.rewardType != null) _buildRewardSection(context),
           SizedBox(height: SoteriaSpacing.xxxl),
           if (isCompleted && !isClaimed && onClaim != null)
-            SoteriaButton.primary(
+            SoteriaButton.reward(
               label: 'CLAIM REWARD',
               onPressed: onClaim,
               isLoading: isClaiming,

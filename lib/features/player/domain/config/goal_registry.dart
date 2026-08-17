@@ -11,8 +11,8 @@ class GoalRegistry {
       category: GoalCategory.gameCount,
       target: 3,
       icon: 'sports_esports_rounded',
-      rewardType: RewardType.xp,
-      rewardAmount: 250,
+      rewardType: RewardType.coins,
+      rewardAmount: 100,
       displayOrder: 1,
     ),
     GoalDefinition(
@@ -23,8 +23,8 @@ class GoalRegistry {
       category: GoalCategory.win,
       target: 2,
       icon: 'emoji_events_rounded',
-      rewardType: RewardType.xp,
-      rewardAmount: 500,
+      rewardType: RewardType.coins,
+      rewardAmount: 250,
       displayOrder: 2,
     ),
     GoalDefinition(
@@ -36,7 +36,7 @@ class GoalRegistry {
       target: 20,
       icon: 'fact_check_rounded',
       rewardType: RewardType.xp,
-      rewardAmount: 300,
+      rewardAmount: 500,
       displayOrder: 3,
     ),
     GoalDefinition(
@@ -48,7 +48,7 @@ class GoalRegistry {
       target: 1,
       icon: 'menu_book_rounded',
       rewardType: RewardType.xp,
-      rewardAmount: 150,
+      rewardAmount: 200,
       displayOrder: 4,
     ),
     GoalDefinition(
@@ -59,8 +59,8 @@ class GoalRegistry {
       category: GoalCategory.gameCount,
       target: 20,
       icon: 'military_tech_rounded',
-      rewardType: RewardType.xp,
-      rewardAmount: 2000,
+      rewardType: RewardType.coins,
+      rewardAmount: 1000,
       displayOrder: 3,
     ),
     GoalDefinition(
@@ -71,8 +71,8 @@ class GoalRegistry {
       category: GoalCategory.win,
       target: 10,
       icon: 'workspace_premium_rounded',
-      rewardType: RewardType.xp,
-      rewardAmount: 5000,
+      rewardType: RewardType.coins,
+      rewardAmount: 2500,
       displayOrder: 4,
     ),
   ];

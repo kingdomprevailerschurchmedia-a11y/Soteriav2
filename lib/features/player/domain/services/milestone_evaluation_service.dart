@@ -11,7 +11,7 @@ class MilestoneEvaluationService {
     required String userId,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
-    required CompetitiveHistory history,
+    required CompetitiveHistory? history,
     required List<PlayerMilestone> currentStates,
     List<MilestoneDefinition>? definitions,
   }) {
@@ -68,7 +68,7 @@ class MilestoneEvaluationService {
     required MilestoneDefinition definition,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
-    required CompetitiveHistory history,
+    required CompetitiveHistory? history,
   }) {
     switch (definition.type) {
       case MilestoneType.count:
@@ -123,13 +123,11 @@ class MilestoneEvaluationService {
     return currentOrder >= requiredOrder ? 1 : 0;
   }
 
-  double _evaluatePeakPosition(CompetitiveHistory history, double threshold) {
-    if (history.bestResult == null) return 0.0;
+  double _evaluatePeakPosition(CompetitiveHistory? history, double threshold) {
+    if (history == null || history.bestResult == null) return 0.0;
     // For position milestones, threshold is usually Top X (e.g. 100)
     // Progress is binary (1 if achieved, 0 if not) for these definitions
-    return (history.bestResult!.finalPosition <= threshold &&
-            history.bestResult!.finalPosition > 0)
-        ? threshold
-        : 0.0;
+    final finalPos = history.bestResult?.finalPosition ?? 0;
+    return (finalPos <= threshold && finalPos > 0) ? threshold : 0.0;
   }
 }

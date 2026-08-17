@@ -7,7 +7,7 @@ import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 
-enum SoteriaButtonVariant { primary, secondary, ghost, danger, outline, text }
+enum SoteriaButtonVariant { primary, secondary, ghost, danger, outline, text, reward }
 
 enum SoteriaButtonSize { sm, md, lg }
 
@@ -95,7 +95,7 @@ class SoteriaButton extends StatefulWidget {
     this.uppercase = true,
   }) : variant = SoteriaButtonVariant.ghost;
 
-  const SoteriaButton.text({
+  const SoteriaButton.reward({
     super.key,
     required this.label,
     this.onPressed,
@@ -103,9 +103,9 @@ class SoteriaButton extends StatefulWidget {
     this.icon,
     this.trailingIcon,
     this.isLoading = false,
-    this.isFullWidth = false,
+    this.isFullWidth = true,
     this.uppercase = true,
-  }) : variant = SoteriaButtonVariant.text;
+  }) : variant = SoteriaButtonVariant.reward;
 
   @override
   State<SoteriaButton> createState() => _SoteriaButtonState();
@@ -219,6 +219,21 @@ class _SoteriaButtonState extends State<SoteriaButton>
                 ]
               : null,
         );
+      case SoteriaButtonVariant.reward:
+        return BoxDecoration(
+          gradient: isEnabled ? SoteriaGradients.reward : null,
+          color: isEnabled ? null : SoteriaColors.gold.withValues(alpha: 0.3),
+          borderRadius: SoteriaRadius.brLg,
+          boxShadow: isEnabled
+              ? [
+                  BoxShadow(
+                    color: SoteriaColors.gold.withValues(alpha: 0.3),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ]
+              : null,
+        );
       case SoteriaButtonVariant.secondary:
         return BoxDecoration(
           color: Colors.white.withValues(alpha: 0.08),
@@ -290,6 +305,8 @@ class _SoteriaButtonState extends State<SoteriaButton>
     switch (widget.variant) {
       case SoteriaButtonVariant.primary:
         return SoteriaColors.textPrimary;
+      case SoteriaButtonVariant.reward:
+        return Colors.black;
       case SoteriaButtonVariant.secondary:
         return SoteriaColors.textPrimary;
       case SoteriaButtonVariant.ghost:

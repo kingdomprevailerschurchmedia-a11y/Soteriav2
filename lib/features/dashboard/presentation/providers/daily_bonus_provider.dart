@@ -14,20 +14,27 @@ class DailyBonusState {
 
   bool get canClaim {
     if (isClaiming) return false;
-    if (lastClaimTime == null) return true;
+    return !isAlreadyClaimedToday;
+  }
+
+  bool get isAlreadyClaimedToday {
+    if (lastClaimTime == null) return false;
     final now = DateTime.now();
-    
-    // Check if it's a new calendar day
-    final lastClaimDate = DateTime(lastClaimTime!.year, lastClaimTime!.month, lastClaimTime!.day);
-    final today = DateTime(now.year, now.month, now.day);
-    
-    return today.isAfter(lastClaimDate);
+    return _isSameDay(lastClaimTime!, now);
+  }
+
+  static bool _isSameDay(DateTime d1, DateTime d2) {
+    return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
   }
 
   Duration get nextClaimIn {
     if (lastClaimTime == null) return Duration.zero;
     final now = DateTime.now();
-    final nextClaim = DateTime(lastClaimTime!.year, lastClaimTime!.month, lastClaimTime!.day).add(const Duration(days: 1));
+    final nextClaim = DateTime(
+      lastClaimTime!.year,
+      lastClaimTime!.month,
+      lastClaimTime!.day,
+    ).add(const Duration(days: 1));
     final diff = nextClaim.difference(now);
     return diff.isNegative ? Duration.zero : diff;
   }
@@ -56,16 +63,19 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
 
       final now = DateTime.now();
       final lastClaim = next.lastDailyRewardClaim;
-      final isAlreadyClaimedToday = lastClaim != null && _isSameDay(lastClaim, now);
+      final isActuallyClaimedToday =
+          lastClaim != null && DailyBonusState._isSameDay(lastClaim, now);
 
-      // CRITICAL: Only update lastClaimTime from the stream if it's actually 
-      // recorded as claimed today, OR if our local state doesn't have a claim time yet.
-      // This prevents the "reversing" UI bug where a slow Firestore sync 
-      // briefly shows the reward as un-claimed again.
-      if (isAlreadyClaimedToday || state.lastClaimTime == null) {
+      // We update the state if:
+      // 1. It's newly confirmed as claimed today in Firestore.
+      // 2. We don't have a claim time yet.
+      // 3. We aren't currently claiming (preventing flickering/reversion).
+      if (isActuallyClaimedToday ||
+          state.lastClaimTime == null ||
+          !state.isClaiming) {
         state = state.copyWith(
           lastClaimTime: lastClaim,
-          isClaiming: isAlreadyClaimedToday ? false : state.isClaiming,
+          isClaiming: isActuallyClaimedToday ? false : state.isClaiming,
         );
       }
     });
@@ -73,12 +83,9 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
     return DailyBonusState(lastClaimTime: initialPlayer?.lastDailyRewardClaim);
   }
 
-  bool _isSameDay(DateTime d1, DateTime d2) {
-    return d1.year == d2.year && d1.month == d2.month && d1.day == d2.day;
-  }
-
   Future<void> claim() async {
-    if (!state.canClaim || state.isClaiming) return;
+    // Double-check to prevent race conditions or rapid double-taps
+    if (state.isAlreadyClaimedToday || state.isClaiming) return;
 
     state = state.copyWith(isClaiming: true);
 
@@ -97,13 +104,29 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
 
       // Authoritative update in Firestore via Transaction for consistency
       await db.instance.runTransaction((transaction) async {
+        final userSnap = await transaction.get(userRef);
+        if (userSnap.exists) {
+          final data = userSnap.data()!;
+          final lastClaim = data['lastDailyRewardClaim'];
+          if (lastClaim != null) {
+            final lastClaimDate = (lastClaim as Timestamp).toDate();
+            if (DailyBonusState._isSameDay(lastClaimDate, now)) {
+              throw Exception('Reward already claimed today');
+            }
+          }
+        }
+
         // 1. Update Profile coins
-        transaction.set(userRef, {
-          'coins': FieldValue.increment(100),
-          'lastDailyRewardClaim': Timestamp.fromDate(now),
-          'lastCoinTransactionId': txRef.id,
-          'updatedAt': Timestamp.fromDate(now),
-        }, SetOptions(merge: true));
+        transaction.set(
+          userRef,
+          {
+            'coins': FieldValue.increment(100),
+            'lastDailyRewardClaim': Timestamp.fromDate(now),
+            'lastCoinTransactionId': txRef.id,
+            'updatedAt': Timestamp.fromDate(now),
+          },
+          SetOptions(merge: true),
+        );
 
         // 2. Sync Wallet coins (used by Rewards screen)
         transaction.set(walletRef, {

@@ -52,7 +52,7 @@ void main(List<String> args) async {
 
       print('Processing $docId (${batch.length} events)...');
 
-      final perfDocRef = performanceCollection.doc(docId);
+      final perfDocRef = performanceCollection.document(docId);
       
       // Load current state for manual aggregation (Firedart lacks complex increments in some versions)
       Map<String, dynamic> currentData = {};

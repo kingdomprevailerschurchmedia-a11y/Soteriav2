@@ -3,10 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/config/soteria_breakpoints.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import 'package:soteria/features/tournaments/domain/models/tournament.dart';
 import 'package:soteria/features/tournaments/domain/models/tournament_status.dart';
@@ -62,7 +64,12 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
           expandedHeight: 200.h,
           floating: false,
           pinned: true,
-          leading: const BackButton(),
+          backgroundColor: SoteriaColors.backgroundBottomRight,
+          leadingWidth: 60,
+          leading: const Padding(
+            padding: EdgeInsets.only(left: 16),
+            child: Center(child: SoteriaBackButton()),
+          ),
           flexibleSpace: FlexibleSpaceBar(
             title: Text('Tournaments', style: context.titleLarge),
             background: _FeaturedTournament(

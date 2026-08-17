@@ -7,6 +7,7 @@ import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_d
 import '../../../core/design_system/colors/soteria_colors.dart';
 import '../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../core/design_system/typography/soteria_typography.dart';
+import '../../../core/design_system/components/soteria_back_button.dart';
 import '../../../core/widgets/glass_surface.dart';
 
 class SettingsScreen extends StatelessWidget {
@@ -28,27 +29,10 @@ class SettingsScreen extends StatelessWidget {
         ),
         centerTitle: true,
         leadingWidth: 70,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 20),
           child: Center(
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: 0.05),
-                border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-              ),
-              child: IconButton(
-                padding: EdgeInsets.zero,
-                icon: const Icon(
-                  Icons.arrow_back_ios_new_rounded,
-                  color: Colors.white,
-                  size: 16,
-                ),
-                onPressed: () => context.pop(),
-              ),
-            ),
+            child: SoteriaBackButton(),
           ),
         ),
       ),

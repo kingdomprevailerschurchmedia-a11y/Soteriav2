@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../design_system/colors/soteria_colors.dart';
 import '../../../design_system/typography/soteria_typography.dart';
+import '../../../design_system/components/soteria_back_button.dart';
 import '../../../widgets/safe_gradient_scaffold.dart';
 import '../../providers/avatar_providers.dart';
 import '../widgets/soteria_avatar.dart';
@@ -27,12 +28,10 @@ class AvatarSelectionScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: Colors.white,
-          ),
-          onPressed: () => Navigator.of(context).pop(),
+        leadingWidth: 60,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Center(child: SoteriaBackButton()),
         ),
       ),
       body: Padding(

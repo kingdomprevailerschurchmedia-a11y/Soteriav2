@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import '../../../../core/widgets/glass_surface.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/activity_providers.dart';
 import '../widgets/activity/competitive_activity_card.dart';
@@ -64,6 +65,11 @@ class _CompetitiveActivityScreenState
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        leadingWidth: 60,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Center(child: SoteriaBackButton()),
+        ),
         titleTextStyle: context.titleMedium.copyWith(
           fontWeight: FontWeight.w900,
           letterSpacing: 2,

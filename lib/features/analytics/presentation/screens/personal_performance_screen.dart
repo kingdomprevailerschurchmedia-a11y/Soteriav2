@@ -14,6 +14,7 @@ import '../charts/soteria_progress_chart.dart';
 import '../../domain/models/performance_analytics.dart';
 import '../../domain/models/analytics_enums.dart';
 
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/utils/soteria_responsive.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 
@@ -31,70 +32,68 @@ class PersonalPerformanceScreen extends ConsumerWidget {
         decoration: const BoxDecoration(
           gradient: SoteriaColors.backgroundGradient,
         ),
-        child: SafeArea(
-          child: CustomScrollView(
-            cacheExtent: 1000,
-            slivers: [
-              _buildAppBar(context, ref),
-              SliverPadding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: SoteriaSpacing.containerPadding(context),
+        child: CustomScrollView(
+          cacheExtent: 1000,
+          slivers: [
+            _buildAppBar(context, ref),
+            SliverPadding(
+              padding: EdgeInsets.symmetric(
+                horizontal: SoteriaSpacing.containerPadding(context),
+              ),
+              sliver: SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: SoteriaSpacing.adaptive(
+                        context,
+                        SoteriaSpacing.mdStatic,
+                      ),
+                    ),
+                    PeriodSelector(
+                      selectedPeriod: selectedPeriod,
+                      onPeriodChanged: (period) =>
+                          ref
+                                  .read(selectedTimePeriodProvider.notifier)
+                                  .state =
+                              period,
+                    ),
+                    SizedBox(
+                      height: SoteriaSpacing.adaptive(
+                        context,
+                        SoteriaSpacing.lgStatic,
+                      ),
+                    ),
+                  ],
                 ),
-                sliver: SliverToBoxAdapter(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: SoteriaSpacing.adaptive(
-                          context,
-                          SoteriaSpacing.mdStatic,
-                        ),
-                      ),
-                      PeriodSelector(
-                        selectedPeriod: selectedPeriod,
-                        onPeriodChanged: (period) =>
-                            ref
-                                    .read(selectedTimePeriodProvider.notifier)
-                                    .state =
-                                period,
-                      ),
-                      SizedBox(
-                        height: SoteriaSpacing.adaptive(
-                          context,
-                          SoteriaSpacing.lgStatic,
-                        ),
-                      ),
-                    ],
+              ),
+            ),
+            analyticsAsync.when(
+              data: (analytics) => _buildAnalyticsContent(context, analytics),
+              loading: () => const SliverFillRemaining(
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: SoteriaColors.primary,
                   ),
                 ),
               ),
-              analyticsAsync.when(
-                data: (analytics) => _buildAnalyticsContent(context, analytics),
-                loading: () => const SliverFillRemaining(
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      color: SoteriaColors.primary,
+              error: (error, stack) => SliverFillRemaining(
+                child: Center(
+                  child: Text(
+                    'Performance insights are temporarily unavailable.',
+                    style: SoteriaTypography.bodyMedium.copyWith(
+                      color: SoteriaColors.error,
                     ),
                   ),
                 ),
-                error: (error, stack) => SliverFillRemaining(
-                  child: Center(
-                    child: Text(
-                      'Performance insights are temporarily unavailable.',
-                      style: SoteriaTypography.bodyMedium.copyWith(
-                        color: SoteriaColors.error,
-                      ),
-                    ),
-                  ),
-                ),
               ),
-              SliverPadding(
-                padding: EdgeInsets.only(
-                  bottom: 40.h + MediaQuery.paddingOf(context).bottom,
-                ),
+            ),
+            SliverPadding(
+              padding: EdgeInsets.only(
+                bottom: 40.h + MediaQuery.paddingOf(context).bottom,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -102,14 +101,20 @@ class PersonalPerformanceScreen extends ConsumerWidget {
 
   Widget _buildAppBar(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
-      backgroundColor: Colors.transparent,
+      backgroundColor: SoteriaColors.backgroundBottomRight,
       elevation: 0,
       pinned: true,
       centerTitle: false,
+      leadingWidth: 60.w,
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Center(child: SoteriaBackButton()),
+      ),
       title: Text(
         'Your Performance',
         style: SoteriaTypography.headlineMedium.copyWith(
           color: SoteriaColors.textPrimary,
+          fontSize: 20.sp,
         ),
       ),
       actions: [

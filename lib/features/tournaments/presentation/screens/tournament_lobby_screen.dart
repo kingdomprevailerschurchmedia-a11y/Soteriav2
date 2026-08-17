@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/avatar/data/avatar_catalog.dart';
@@ -39,23 +40,10 @@ class TournamentLobbyScreen extends ConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Padding(
-          padding: EdgeInsets.all(8.w),
-          child: Container(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white.withValues(alpha: 0.05),
-              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-            ),
-            child: IconButton(
-              padding: EdgeInsets.zero,
-              icon: const Icon(
-                Icons.arrow_back_ios_new_rounded,
-                color: Colors.white,
-                size: 16,
-              ),
-              onPressed: () => context.pop(),
-            ),
+        leading: const Padding(
+          padding: EdgeInsets.all(8.0),
+          child: Center(
+            child: SoteriaBackButton(),
           ),
         ),
       ),

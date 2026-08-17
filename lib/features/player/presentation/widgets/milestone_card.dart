@@ -6,6 +6,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/components/soteria_progress_bar.dart';
+import '../../../../core/design_system/components/soteria_button.dart';
 import '../../domain/models/milestone.dart';
 import '../../domain/models/season_reward_definition.dart';
 
@@ -100,10 +101,12 @@ class MilestoneCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
-      child: definition.id == 'first_game' && isCompleted
+      child: (definition.id == 'first_game' || definition.id == 'welcome_bonus') && isCompleted
           ? Center(
               child: Image.asset(
-                'assets/icons/first_step_icon.png',
+                definition.id == 'first_game' 
+                    ? 'assets/icons/first_step_icon.png'
+                    : 'assets/icons/star_icon.png',
                 width: 24.w,
                 height: 24.w,
               ),
@@ -189,36 +192,12 @@ class MilestoneCard extends StatelessWidget {
   }
 
   Widget _buildClaimButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 40.h,
-      child: ElevatedButton(
-        onPressed: isClaiming ? null : onClaim,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: SoteriaColors.gold,
-          foregroundColor: Colors.black,
-          padding: EdgeInsets.zero,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.r),
-          ),
-        ),
-        child: isClaiming
-            ? SizedBox(
-                width: 16.w,
-                height: 16.w,
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Colors.black,
-                ),
-              )
-            : Text(
-                'CLAIM REWARD',
-                style: context.labelSmall.copyWith(
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.0,
-                ),
-              ),
-      ),
+    return SoteriaButton.reward(
+      label: 'CLAIM REWARD',
+      onPressed: onClaim,
+      isLoading: isClaiming,
+      isFullWidth: true,
+      size: SoteriaButtonSize.sm,
     );
   }
 

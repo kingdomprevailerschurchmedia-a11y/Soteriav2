@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/milestone.dart';
 import '../../domain/repositories/milestone_repository.dart';
 import '../../data/repositories/firebase_milestone_repository.dart';
@@ -13,13 +14,38 @@ import '../../../auth/providers/auth_providers.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/models/reward_grant.dart';
 import '../../domain/models/season_reward_definition.dart';
-
+import '../../domain/models/season_result.dart';
 import '../../domain/config/milestone_registry.dart';
 import '../../domain/services/progression_reward_service.dart';
 
 final milestoneRepositoryProvider = Provider<MilestoneRepository>((ref) {
   return FirebaseMilestoneRepository(FirebaseFirestore.instance);
 });
+
+final milestoneClaimControllerProvider =
+    NotifierProvider<MilestoneClaimNotifier, AsyncValue<void>>(
+      MilestoneClaimNotifier.new,
+    );
+
+class MilestoneClaimNotifier extends Notifier<AsyncValue<void>> {
+  @override
+  AsyncValue<void> build() {
+    return const AsyncValue.data(null);
+  }
+
+  Future<void> claim({
+    required String userId,
+    required String milestoneId,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      await ref.read(milestoneRepositoryProvider).claimMilestone(userId, milestoneId);
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+}
 
 final milestoneEvaluationServiceProvider = Provider<MilestoneEvaluationService>(
   (ref) {
@@ -96,12 +122,10 @@ final nextCompetitiveMilestoneProvider = Provider<AsyncValue<MilestoneProgress?>
 final Provider<void> milestoneEvaluationProvider = Provider<void>((ref) {
   final statsAsync = ref.watch(competitiveStatisticsProvider);
   final progressionAsync = ref.watch(competitiveProgressionProvider);
-  final historyAsync = ref.watch(competitiveHistorySummaryProvider);
   final playerStatesAsync = ref.watch(playerMilestonesProvider);
 
   if (statsAsync.hasValue &&
       progressionAsync.hasValue &&
-      historyAsync.hasValue &&
       playerStatesAsync.hasValue) {
     final userId = ref.watch(authRepositoryProvider).currentUserId;
     if (userId == null) return;
@@ -112,7 +136,7 @@ final Provider<void> milestoneEvaluationProvider = Provider<void>((ref) {
           userId: userId,
           statistics: statsAsync.value!,
           progression: progressionAsync.value!,
-          history: historyAsync.value!,
+          history: null,
           currentStates: playerStatesAsync.value!,
         );
 

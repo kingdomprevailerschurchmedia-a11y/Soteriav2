@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/design_system/animations/soteria_animations.dart';
@@ -40,6 +41,11 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
+        leadingWidth: 60,
+        leading: const Padding(
+          padding: EdgeInsets.only(left: 16),
+          child: Center(child: SoteriaBackButton()),
+        ),
       ),
       body: profileAsync.when(
         data: (profile) {

@@ -5,6 +5,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/features/player/domain/models/goal.dart';
+import 'package:soteria/features/player/domain/models/season_reward_definition.dart';
 
 class CompetitiveGoalCard extends StatelessWidget {
   final GoalProgress progress;
@@ -145,16 +146,43 @@ class CompetitiveGoalCard extends StatelessWidget {
   }
 
   Widget _buildRewardBadge(BuildContext context) {
+    final definition = progress.definition;
+    final isXP = definition.rewardType == RewardType.xp;
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(Icons.stars_rounded, color: SoteriaColors.gold, size: 12.sp),
+        if (isXP)
+          Image.asset(
+            'assets/icons/flash_icon.png',
+            width: 14.sp,
+            height: 14.sp,
+            fit: BoxFit.contain,
+          )
+        else
+          Image.asset(
+            'assets/icons/coin_icon.png',
+            width: 14.sp,
+            height: 14.sp,
+            fit: BoxFit.contain,
+          ),
+        SizedBox(width: 6.w),
+        Text(
+          '${definition.rewardAmount}',
+          style: context.labelSmall.copyWith(
+            color: isXP ? SoteriaColors.xpColor : SoteriaColors.gold,
+            fontWeight: FontWeight.w900,
+            fontSize: 12.sp,
+          ),
+        ),
         SizedBox(width: 4.w),
         Text(
           'REWARD',
           style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            fontWeight: FontWeight.bold,
+            color: Colors.white.withValues(alpha: 0.4),
+            fontWeight: FontWeight.w900,
+            fontSize: 9.sp,
+            letterSpacing: 0.5,
           ),
         ),
       ],

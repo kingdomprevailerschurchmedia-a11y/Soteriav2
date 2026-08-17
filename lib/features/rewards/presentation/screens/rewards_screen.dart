@@ -5,6 +5,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/widgets/glass_surface.dart';
+import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/rewards_providers.dart';
 import '../widgets/wallet_balance_header.dart';
@@ -73,17 +74,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
-                    child: Container(
-                      padding: EdgeInsets.all(8.r),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.1),
-                        shape: BoxShape.circle,
-                      ),
-                      child: Icon(Icons.arrow_back, color: Colors.white, size: 20.r),
-                    ),
-                  ),
+                  const SoteriaBackButton(),
                   _buildSmallCoinChip(),
                 ],
               ),
@@ -338,6 +329,20 @@ class _EarnItemCard extends ConsumerWidget {
   }
 
   Widget _buildAction(BuildContext context, WidgetRef ref) {
+    final isClaiming = reward.metadata['isClaiming'] == true ||
+        ref.watch(rewardsNotifierProvider).isLoading;
+
+    if (isClaiming && reward.status != RewardStatus.claimed) {
+      return SizedBox(
+        width: 24.r,
+        height: 24.r,
+        child: const CircularProgressIndicator(
+          strokeWidth: 2,
+          color: SoteriaColors.primary,
+        ),
+      );
+    }
+
     if (reward.status == RewardStatus.claimable) {
       return GestureDetector(
         onTap: () => ref.read(rewardsNotifierProvider.notifier).claimReward(reward.id),

@@ -12,6 +12,7 @@ import '../domain/repositories/player_progression_repository.dart';
 import '../domain/services/progression_service.dart';
 import '../domain/repositories/goal_repository.dart';
 import '../../question_content/domain/repositories/category_repository.dart';
+import '../domain/repositories/leaderboard_repository.dart';
 import '../../../core/logging/logger_service.dart';
 import '../../../core/identity/repositories/identity_repository.dart';
 
@@ -25,6 +26,7 @@ class PlayerBootstrapService {
   final IdentityRepository? _identityRepository;
   final CategoryRepository? _categoryRepository;
   final GoalRepository? _goalRepository;
+  final LeaderboardRepository? _leaderboardRepository;
 
   static const _kPersonalizationKey = 'user_personalization';
 
@@ -38,9 +40,11 @@ class PlayerBootstrapService {
     IdentityRepository? identityRepository,
     CategoryRepository? categoryRepository,
     GoalRepository? goalRepository,
+    LeaderboardRepository? leaderboardRepository,
   }) : _identityRepository = identityRepository,
        _categoryRepository = categoryRepository,
-       _goalRepository = goalRepository;
+       _goalRepository = goalRepository,
+       _leaderboardRepository = leaderboardRepository;
 
   Future<PlayerProfile> bootstrap(auth.User user) async {
     LoggerService.i(
@@ -150,6 +154,9 @@ class PlayerBootstrapService {
         // Lazy Progression Migration
         await _migrateProgressionIfMissing(user.uid, existingProfile);
 
+        // Authoritative Leaderboard Sync (Ensures user appears in Top Scholars)
+        await _syncLeaderboard(updatedProfile);
+
         return updatedProfile;
       } else {
         LoggerService.i(
@@ -180,6 +187,9 @@ class PlayerBootstrapService {
 
         // Initialize new progression record
         await _initializeNewProgression(user.uid);
+
+        // Authoritative Leaderboard Sync (Ensures user appears in Top Scholars)
+        await _syncLeaderboard(newProfile);
 
         return newProfile;
       }
@@ -252,6 +262,22 @@ class PlayerBootstrapService {
   Future<void> _initializeNewProgression(String userId) async {
     final initial = PlayerProgression.initial(userId, 'current_season');
     await _progressionRepository.updateProgression(initial);
+  }
+
+  Future<void> _syncLeaderboard(PlayerProfile profile) async {
+    try {
+      final progression = await _progressionRepository.getProgression(profile.uid);
+      if (progression != null && _leaderboardRepository != null) {
+        await _leaderboardRepository!.syncLeaderboardEntry(
+          profile: profile,
+          progression: progression,
+          seasonId: null, // Global
+        );
+        LoggerService.d('Leaderboard synced during bootstrap', feature: 'Player');
+      }
+    } catch (e) {
+      LoggerService.w('Leaderboard sync failed during bootstrap: $e', feature: 'Player');
+    }
   }
 
   Future<List<String>> _getInterestsFromLocal() async {

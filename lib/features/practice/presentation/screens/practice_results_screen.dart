@@ -132,7 +132,9 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
         'Practice Results',
         style: context.titleLarge.copyWith(color: SoteriaColors.gold),
       ),
-      backgroundColor: Colors.transparent,
+      backgroundColor: SoteriaColors.backgroundBottomRight,
+      pinned: true,
+      elevation: 0,
       automaticallyImplyLeading: false,
     );
   }

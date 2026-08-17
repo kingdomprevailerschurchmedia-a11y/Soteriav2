@@ -13,8 +13,10 @@ class FirebaseInitializer {
   static Future<void> initializeCore(FirebaseConfig config) async {
     LoggerService.i(
       'Initializing Firebase Core for environment: ${config.environment.name}',
+      feature: 'Firebase',
     );
     await Firebase.initializeApp(options: config.options);
+    LoggerService.i('Firebase Core initialized successfully', feature: 'Firebase');
   }
 
   static Future<void> initializeCrashlytics() async {

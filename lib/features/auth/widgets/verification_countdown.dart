@@ -25,9 +25,10 @@ class VerificationCountdown extends StatelessWidget {
             style: context.bodySmall.copyWith(color: SoteriaColors.muted),
           )
         else
-          SoteriaButton.text(
+          SoteriaButton.ghost(
             label: 'Resend Verification Code',
             onPressed: isLoading ? null : onResend,
+            isFullWidth: false,
           ),
       ],
     );
