@@ -72,16 +72,32 @@ class FirestoreProfileRepository implements ProfileRepository {
       }
 
       // User Profile
+      final userProfileMap = userProfile.toMap();
+      final restrictedUserProfileFields = ['email', 'country', 'timezone', 'language'];
+      for (final field in restrictedUserProfileFields) {
+        userProfileMap.remove(field);
+      }
+
       transaction.set(
         _firestore.collection('user_profiles').doc(userId),
-        userProfile.toMap(),
+        userProfileMap,
         SetOptions(merge: true),
       );
 
       // Player Profile
+      final playerProfileMap = PlayerProfileDto.toFirestore(playerProfile);
+      final restrictedPlayerFields = [
+        'xp', 'level', 'isPro', 'badges', 'achievements',
+        'gamesPlayed', 'gamesWon', 'accuracy',
+        'role', 'accountStatus', 'createdAt', 'email'
+      ];
+      for (final field in restrictedPlayerFields) {
+        playerProfileMap.remove(field);
+      }
+
       transaction.set(
         _firestore.collection('users').doc(userId),
-        PlayerProfileDto.toFirestore(playerProfile)..remove('createdAt'),
+        playerProfileMap,
         SetOptions(merge: true),
       );
 
@@ -116,9 +132,18 @@ class FirestoreProfileRepository implements ProfileRepository {
           updatedAt: DateTime.now(),
         );
 
+        final publicProfileMap = PublicProfileDto.toFirestore(publicProfile);
+        final restrictedPublicFields = [
+          'currentRank', 'rankTier', 'rankPoints', 'division',
+          'careerHighlights', 'schemaVersion'
+        ];
+        for (final field in restrictedPublicFields) {
+          publicProfileMap.remove(field);
+        }
+
         transaction.set(
           _firestore.collection('public_profiles').doc(userId),
-          PublicProfileDto.toFirestore(publicProfile),
+          publicProfileMap,
           SetOptions(merge: true),
         );
 

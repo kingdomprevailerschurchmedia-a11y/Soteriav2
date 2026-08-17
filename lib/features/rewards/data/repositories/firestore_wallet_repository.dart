@@ -18,14 +18,34 @@ class FirestoreWalletRepository implements WalletRepository {
       return Wallet.empty(userId);
     }
     
-    return Wallet.fromJson({...doc.data()!, 'userId': userId});
+    return _mapFirestoreToWallet(doc);
   }
 
   @override
   Stream<Wallet> watchWallet(String userId) {
     return _firestore.collection('wallets').doc(userId).snapshots().map((doc) {
       if (!doc.exists) return Wallet.empty(userId);
-      return Wallet.fromJson({...doc.data()!, 'userId': userId});
+      return _mapFirestoreToWallet(doc);
+    });
+  }
+
+  Wallet _mapFirestoreToWallet(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    
+    // Convert Firestore Timestamps to ISO 8601 strings for model parsing
+    final mappedData = Map<String, dynamic>.from(data);
+    
+    if (data['proExpiresAt'] is Timestamp) {
+      mappedData['proExpiresAt'] = (data['proExpiresAt'] as Timestamp).toDate().toIso8601String();
+    }
+    
+    if (data['updatedAt'] is Timestamp) {
+      mappedData['updatedAt'] = (data['updatedAt'] as Timestamp).toDate().toIso8601String();
+    }
+
+    return Wallet.fromJson({
+      ...mappedData,
+      'userId': doc.id,
     });
   }
 
@@ -46,8 +66,15 @@ class FirestoreWalletRepository implements WalletRepository {
 
     return snapshot.docs.map((doc) {
       final data = doc.data();
+      
+      // Ensure 'type' is present for model parsing if only 'currency' exists
+      final mappedData = Map<String, dynamic>.from(data);
+      if (mappedData['type'] == null && mappedData['currency'] != null) {
+        mappedData['type'] = mappedData['currency'];
+      }
+      
       return WalletTransaction.fromJson({
-        ...data,
+        ...mappedData,
         'id': doc.id,
         'createdAt': (data['createdAt'] as Timestamp).toDate().toIso8601String(),
       });
@@ -180,6 +207,7 @@ class FirestoreWalletRepository implements WalletRepository {
 
       transaction.set(txRef, {
         'userId': userId,
+        'type': currency, // Added for model consistency
         'currency': currency,
         'direction': 'debit',
         'amount': amount,
@@ -232,6 +260,7 @@ class FirestoreWalletRepository implements WalletRepository {
       // 4. Log Transaction
       transaction.set(txRef, {
         'userId': userId,
+        'type': currency, // Added for model consistency
         'currency': currency,
         'direction': 'credit',
         'amount': amount,
