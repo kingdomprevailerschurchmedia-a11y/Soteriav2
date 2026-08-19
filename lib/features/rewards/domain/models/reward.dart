@@ -33,6 +33,8 @@ enum RewardSource {
   tournamentReward,
   proModeEntry,
   proModeReward,
+  practice,
+  goalCompletion,
   competitiveReward,
   itemRedemption,
   season,
@@ -45,6 +47,7 @@ enum RewardSource {
   tournamentEntry,
   refund,
   adminGrant,
+  unknown,
 }
 
 @freezed

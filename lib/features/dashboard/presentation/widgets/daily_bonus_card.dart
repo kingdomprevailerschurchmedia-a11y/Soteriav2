@@ -20,22 +20,26 @@ class DailyBonusCard extends ConsumerWidget {
         horizontal: SoteriaSpacing.lg,
       ),
       child: SoteriaCard(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        borderRadius: 20,
         child: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(SoteriaSpacing.sm),
+              padding: EdgeInsets.all(10.w),
               decoration: BoxDecoration(
                 color: SoteriaColors.gold.withValues(alpha: 0.1),
-                shape: BoxShape.circle,
+                borderRadius: BorderRadius.circular(12.r),
+                border: Border.all(
+                  color: SoteriaColors.gold.withValues(alpha: 0.2),
+                ),
               ),
               child: Image.asset(
                 'assets/icons/rewards_icon.png',
-                width: 20.sp,
-                height: 20.sp,
+                width: 24.sp,
+                height: 24.sp,
               ),
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: 16.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,54 +50,58 @@ class DailyBonusCard extends ConsumerWidget {
                     style: context.bodyMedium.copyWith(
                       fontWeight: FontWeight.w900,
                       letterSpacing: 0.5,
-                      fontSize: 13.sp,
+                      fontSize: 14.sp,
+                      color: Colors.white,
                     ),
                   ),
+                  SizedBox(height: 2.h),
                   Text(
                     canClaim 
-                      ? 'Claim your daily 100 coins!' 
+                      ? 'Claim your daily bonus!' 
                       : 'Next reward in ${_formatDuration(dailyBonus.nextClaimIn)}',
                     style: context.labelSmall.copyWith(
                       color: SoteriaColors.muted,
-                      fontSize: 10.sp,
+                      fontSize: 12.sp,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
             ),
             SizedBox(width: 8.w),
             SizedBox(
-              height: 32.h,
+              height: 36.h,
               child: ElevatedButton(
                 onPressed: canClaim && !dailyBonus.isClaiming 
                   ? () => ref.read(dailyBonusProvider.notifier).claim() 
                   : null,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: SoteriaColors.gold,
-                  foregroundColor: Colors.black,
-                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  backgroundColor: Colors.white.withValues(alpha: 0.08),
+                  foregroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.r),
+                    borderRadius: BorderRadius.circular(10.r),
+                    side: BorderSide(
+                      color: Colors.white.withValues(alpha: 0.1),
+                    ),
                   ),
-                  disabledBackgroundColor: SoteriaColors.muted.withValues(alpha: 0.2),
+                  disabledBackgroundColor: Colors.white.withValues(alpha: 0.05),
                 ),
                 child: dailyBonus.isClaiming
                   ? SizedBox(
-                      width: 14.r,
-                      height: 14.r,
+                      width: 16.r,
+                      height: 16.r,
                       child: const CircularProgressIndicator(
                         strokeWidth: 2,
-                        color: Colors.black,
+                        color: Colors.white,
                       ),
                     )
                   : Text(
                       canClaim ? 'Claim' : 'Claimed',
                       style: TextStyle(
-                        fontSize: 11.sp,
+                        fontSize: 13.sp,
                         fontWeight: FontWeight.bold,
+                        color: canClaim ? Colors.white : SoteriaColors.muted,
                       ),
                     ),
               ),

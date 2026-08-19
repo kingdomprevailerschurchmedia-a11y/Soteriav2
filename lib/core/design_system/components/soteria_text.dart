@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 
 class SoteriaText extends StatelessWidget {
@@ -7,35 +8,85 @@ class SoteriaText extends StatelessWidget {
     super.key,
     this.color,
     this.textAlign,
-  }) : style = null,
-       _variant = _TextVariant.displayLarge;
+    this.maxLines,
+    this.minFontSize = 12,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.displayLarge;
+
   const SoteriaText.displayMedium(
     this.text, {
     super.key,
     this.color,
     this.textAlign,
-  }) : style = null,
-       _variant = _TextVariant.displayMedium;
-  const SoteriaText.headline(this.text, {super.key, this.color, this.textAlign})
-    : style = null,
-      _variant = _TextVariant.headline;
-  const SoteriaText.title(this.text, {super.key, this.color, this.textAlign})
-    : style = null,
-      _variant = _TextVariant.title;
-  const SoteriaText.body(this.text, {super.key, this.color, this.textAlign})
-    : style = null,
-      _variant = _TextVariant.body;
-  const SoteriaText.label(this.text, {super.key, this.color, this.textAlign})
-    : style = null,
-      _variant = _TextVariant.label;
-  const SoteriaText.caption(this.text, {super.key, this.color, this.textAlign})
-    : style = null,
-      _variant = _TextVariant.caption;
+    this.maxLines,
+    this.minFontSize = 12,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.displayMedium;
+
+  const SoteriaText.headline(
+    this.text, {
+    super.key,
+    this.color,
+    this.textAlign,
+    this.maxLines,
+    this.minFontSize = 12,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.headline;
+
+  const SoteriaText.title(
+    this.text, {
+    super.key,
+    this.color,
+    this.textAlign,
+    this.maxLines,
+    this.minFontSize = 10,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.title;
+
+  const SoteriaText.body(
+    this.text, {
+    super.key,
+    this.color,
+    this.textAlign,
+    this.maxLines,
+    this.minFontSize = 8,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.body;
+
+  const SoteriaText.label(
+    this.text, {
+    super.key,
+    this.color,
+    this.textAlign,
+    this.maxLines,
+    this.minFontSize = 6,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.label;
+
+  const SoteriaText.caption(
+    this.text, {
+    super.key,
+    this.color,
+    this.textAlign,
+    this.maxLines,
+    this.minFontSize = 6,
+    this.style,
+    this.overflow,
+  }) : _variant = _TextVariant.caption;
 
   final String text;
   final Color? color;
   final TextAlign? textAlign;
+  final int? maxLines;
+  final double minFontSize;
   final TextStyle? style;
+  final TextOverflow? overflow;
   final _TextVariant _variant;
 
   @override
@@ -65,10 +116,15 @@ class SoteriaText extends StatelessWidget {
         break;
     }
 
-    return Text(
+    final effectiveStyle = baseStyle.merge(style).copyWith(color: color);
+
+    return AutoSizeText(
       text,
       textAlign: textAlign,
-      style: baseStyle.copyWith(color: color),
+      style: effectiveStyle,
+      maxLines: maxLines,
+      minFontSize: minFontSize,
+      overflow: overflow ?? (maxLines != null ? TextOverflow.ellipsis : null),
     );
   }
 }

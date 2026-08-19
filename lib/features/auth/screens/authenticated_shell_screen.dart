@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/shared/widgets/soteria_page.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -16,22 +17,20 @@ class AuthenticatedShellScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final playerAsync = ref.watch(currentPlayerStreamProvider);
 
-    return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: SoteriaColors.backgroundGradient,
-            ),
-            child: playerAsync.when(
+    return SoteriaPage(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Stack(
+          children: [
+            playerAsync.when(
               data: (player) => _buildContent(context, ref, player),
               loading: () => const Center(child: SoteriaLoader()),
               error: (error, _) =>
                   Center(child: Text('Error loading profile: $error')),
             ),
-          ),
-          const CompetitiveNotificationOverlay(),
-        ],
+            const CompetitiveNotificationOverlay(),
+          ],
+        ),
       ),
     );
   }

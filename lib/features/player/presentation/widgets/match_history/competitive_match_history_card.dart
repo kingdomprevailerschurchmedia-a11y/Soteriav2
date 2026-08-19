@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:soteria/features/player/domain/models/competitive_match.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 
@@ -58,23 +59,28 @@ class CompetitiveMatchHistoryCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _getResultText(),
-                              style: context.titleLarge.copyWith(
-                                fontWeight: FontWeight.w900,
-                                color: color,
-                                letterSpacing: -0.5,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              AutoSizeText(
+                                _getResultText(),
+                                maxLines: 1,
+                                minFontSize: 14,
+                                style: context.titleLarge.copyWith(
+                                  fontWeight: FontWeight.w900,
+                                  color: color,
+                                  letterSpacing: -0.5,
+                                ),
                               ),
-                            ),
-                            if (match.rankChange != null) ...[
-                              SizedBox(height: SoteriaSpacing.xs),
-                              _buildRankChangeInfo(context),
+                              if (match.rankChange != null) ...[
+                                SizedBox(height: SoteriaSpacing.xs),
+                                _buildRankChangeInfo(context),
+                              ],
                             ],
-                          ],
+                          ),
                         ),
+                        SizedBox(width: 8.w),
                         _buildPrimaryStats(context),
                       ],
                     ),

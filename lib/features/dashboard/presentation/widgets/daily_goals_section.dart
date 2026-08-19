@@ -8,6 +8,7 @@ import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../player/domain/models/goal.dart';
 import '../../../player/presentation/providers/goal_providers.dart';
 import '../../../player/presentation/screens/competitive_goals_screen.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class DailyGoalsSection extends ConsumerWidget {
   const DailyGoalsSection({super.key});
@@ -108,12 +109,14 @@ class DailyGoalsSection extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
+                AutoSizeText(
                   completedCount == goals.length
                       ? 'All daily goals completed!'
                       : 'Complete daily goals to earn bonus XP!',
+                  maxLines: 2,
+                  minFontSize: 10,
                   style: context.titleMedium.copyWith(
-                    color: SoteriaColors.muted,
+                    color: Colors.white,
                     fontWeight: FontWeight.w600,
                     height: 1.4,
                     fontSize: 14.sp,

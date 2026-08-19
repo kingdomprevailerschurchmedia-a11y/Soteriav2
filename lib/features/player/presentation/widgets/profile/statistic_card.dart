@@ -3,6 +3,7 @@ import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class StatisticCard extends StatelessWidget {
   final String label;
@@ -44,8 +45,10 @@ class StatisticCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(
+                  AutoSizeText(
                     value,
+                    maxLines: 1,
+                    minFontSize: 10,
                     style: context.titleMedium.copyWith(
                       fontWeight: FontWeight.w900,
                       fontSize: 16,

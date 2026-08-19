@@ -193,6 +193,23 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
   }
 
   @override
+  Future<List<PracticeResult>> getResultsByDateRange(
+    String userId,
+    DateTime start,
+    DateTime end,
+  ) async {
+    final snapshot = await _resultsCollection(userId)
+        .where('completedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(start))
+        .where('completedAt', isLessThanOrEqualTo: Timestamp.fromDate(end))
+        .orderBy('completedAt', descending: true)
+        .get();
+
+    return snapshot.docs
+        .map((doc) => PracticeResult.fromJson(doc.data()))
+        .toList();
+  }
+
+  @override
   Future<void> deleteResult(String userId, String resultId) async {
     await _resultsCollection(userId).doc(resultId).delete();
   }

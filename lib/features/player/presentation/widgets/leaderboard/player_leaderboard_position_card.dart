@@ -51,6 +51,8 @@ class PlayerLeaderboardPositionCard extends StatelessWidget {
                         child: SoteriaText.headline(
                           '#${entry.position}',
                           color: SoteriaColors.gold,
+                          maxLines: 1,
+                          minFontSize: 16,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -71,10 +73,14 @@ class PlayerLeaderboardPositionCard extends StatelessWidget {
                       SoteriaText.headline(
                         '${entry.rankPoints} RP',
                         color: Colors.white,
+                        maxLines: 1,
+                        minFontSize: 14,
                       ),
                       SoteriaText.caption(
                         'Top ${percentile.toStringAsFixed(1)}%',
                         color: SoteriaColors.success,
+                        maxLines: 1,
+                        minFontSize: 8,
                       ),
                     ],
                   ),

@@ -40,97 +40,103 @@ class DashboardHeader extends ConsumerWidget {
       label: 'Dashboard Header. Player: $playerName. Level: $level',
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(width: SoteriaSpacing.xs),
-                SoteriaScaleIn(
-                  duration: const Duration(milliseconds: 700),
-                  delay: const Duration(milliseconds: 200),
-                  child: GestureDetector(
+            // Left: Avatar and Level
+            SoteriaScaleIn(
+              duration: const Duration(milliseconds: 700),
+              delay: const Duration(milliseconds: 200),
+              child: Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.center,
+                children: [
+                  GestureDetector(
                     onTap: () => nav.go('/app/profile'),
                     child: Hero(
                       tag: 'player_avatar',
                       child: SoteriaAvatar(
                         isOnline: isOnline,
                         showStatus: true,
-                        size: 52,
+                        size: 64.r,
                         showGlow: true,
                       ),
                     ),
                   ),
-                ),
-                SizedBox(width: 8.w),
-                SoteriaSlideLeft(
-                  duration: const Duration(milliseconds: 600),
-                  offset: 10.0,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        greeting,
-                        style: context.labelSmall.copyWith(
-                          color: SoteriaColors.gold,
-                          letterSpacing: 1.5,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 10.sp,
-                        ),
+                  Positioned(
+                    bottom: -28.h,
+                    child: SoteriaScaleIn(
+                      duration: const Duration(milliseconds: 700),
+                      delay: const Duration(milliseconds: 400),
+                      child: _HeaderBadge(
+                        label: 'LEVEL $level',
+                        icon: Icons.auto_awesome_rounded,
+                        color: SoteriaColors.primary,
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: 8.w),
+            // Middle: Greeting and Name
+            Expanded(
+              child: SoteriaSlideLeft(
+                duration: const Duration(milliseconds: 600),
+                offset: 10.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      greeting,
+                      style: context.labelSmall.copyWith(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        letterSpacing: 0.5,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Text(
                             playerName,
                             style: context.displaySmall.copyWith(
                               fontWeight: FontWeight.w900,
-                              letterSpacing: -1.0,
-                              fontSize: 24.sp,
+                              letterSpacing: -0.5,
+                              fontSize: 22.sp,
                             ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(width: 8.w),
-                          Text('👋', style: TextStyle(fontSize: 20.sp)),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-                SoteriaScaleIn(
-                  duration: const Duration(milliseconds: 700),
-                  delay: const Duration(milliseconds: 300),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: () => nav.navigateTo('/app/wallet'),
-                        child: _CompactStat(
-                          assetPath: 'assets/icons/coin_icon.png',
-                          value: coins.toString(),
-                          label: 'Coins',
                         ),
-                      ),
-                      SizedBox(width: SoteriaSpacing.sm),
-                      _ChallengesAction(),
-                    ],
-                  ),
+                        SizedBox(width: 6.w),
+                        Text('👋', style: TextStyle(fontSize: 18.sp)),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-            SizedBox(height: SoteriaSpacing.sm),
-            Padding(
-              padding: EdgeInsets.only(left: SoteriaSpacing.xs),
-              child: SoteriaScaleIn(
-                duration: const Duration(milliseconds: 700),
-                delay: const Duration(milliseconds: 400),
-                child: _HeaderBadge(
-                  label: 'LEVEL $level',
-                  icon: Icons.auto_awesome_rounded,
-                  color: SoteriaColors.primary,
-                ),
+            // Right: Stats and Action
+            SoteriaScaleIn(
+              duration: const Duration(milliseconds: 700),
+              delay: const Duration(milliseconds: 300),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () => nav.navigateTo('/app/wallet'),
+                    child: _CompactStat(
+                      assetPath: 'assets/icons/coin_icon.png',
+                      value: coins.toString(),
+                      label: 'Coins',
+                    ),
+                  ),
+                  SizedBox(width: 12.w),
+                  _ChallengesAction(),
+                ],
               ),
             ),
           ],

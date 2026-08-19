@@ -43,12 +43,12 @@ class SoteriaCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(effectiveRadius),
       padding:
           padding ?? EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
-      opacity: opacity ?? (isElevated ? 0.15 : 0.05),
-      blur: blur ?? 12.0,
+      opacity: opacity ?? (isElevated ? 0.2 : 0.08),
+      blur: blur ?? 15.0,
       useBlur: useBlur,
       border: Border.all(
-        color: borderColor ?? Colors.white.withValues(alpha: 0.12),
-        width: 1,
+        color: borderColor ?? Colors.white.withValues(alpha: 0.1),
+        width: 1.2,
       ),
       child: child,
     );

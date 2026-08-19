@@ -7,8 +7,9 @@ import '../../domain/models/rank_transaction.dart';
 import '../../domain/repositories/player_progression_repository.dart';
 import '../../domain/services/progression_service.dart';
 import '../../domain/services/competitive_ranking_engine.dart';
-import '../../domain/repositories/leaderboard_repository.dart';
-import '../../domain/repositories/player_repository.dart';
+import 'package:soteria/features/player/domain/models/player_profile.dart';
+import 'package:soteria/features/player/domain/repositories/player_repository.dart';
+import 'package:soteria/features/player/domain/repositories/leaderboard_repository.dart';
 
 class FirebasePlayerProgressionRepository
     implements PlayerProgressionRepository {
@@ -76,11 +77,13 @@ class FirebasePlayerProgressionRepository
 
   /// Internal helper to process an XP transaction within an existing Firestore transaction.
   /// Used by other repositories to ensure atomicity across features.
+  @override
   Future<void> processXpTransaction(
-    Transaction tx,
-    XpTransaction transaction,
+    dynamic transaction,
+    XpTransaction xpTransaction,
   ) async {
-    final txDoc = _xpTransactionCollection.doc(transaction.transactionId);
+    final tx = transaction as Transaction;
+    final txDoc = _xpTransactionCollection.doc(xpTransaction.transactionId);
 
     // 1. Idempotency check inside the atomic transaction
     final txSnapshot = await tx.get(txDoc);
@@ -88,13 +91,13 @@ class FirebasePlayerProgressionRepository
       return; // Already applied
     }
 
-    final progressionDoc = _progressionCollection.doc(transaction.userId);
+    final progressionDoc = _progressionCollection.doc(xpTransaction.userId);
     final snapshot = await tx.get(progressionDoc);
 
     PlayerProgression current;
     if (!snapshot.exists) {
       current = PlayerProgression.initial(
-        transaction.userId,
+        xpTransaction.userId,
         'current_season',
       );
     } else {
@@ -102,16 +105,16 @@ class FirebasePlayerProgressionRepository
     }
 
     // 2. Extra safety: Check if this specific transaction ID was the last one processed
-    if (current.lastXpTransactionId == transaction.transactionId) {
+    if (current.lastXpTransactionId == xpTransaction.transactionId) {
       return;
     }
 
     final updated = _progressionService
-        .addXp(current, transaction.amount)
-        .copyWith(lastXpTransactionId: transaction.transactionId);
+        .addXp(current, xpTransaction.amount)
+        .copyWith(lastXpTransactionId: xpTransaction.transactionId);
 
     tx.set(progressionDoc, updated.toJson());
-    tx.set(txDoc, transaction.toJson());
+    tx.set(txDoc, xpTransaction.toJson());
   }
 
   @override
@@ -124,17 +127,16 @@ class FirebasePlayerProgressionRepository
   @override
   Future<RankChange> applyCompetitiveResultInTransaction(
     dynamic transaction,
-    CompetitiveResult result,
-  ) async {
+    CompetitiveResult result, {
+    PlayerProfile? profile,
+  }) async {
     final tx = transaction as Transaction;
     
-    // 1. Idempotency Check (Session Level)
-    final existingTx = await _rankTransactionCollection
-        .where('resultId', isEqualTo: result.resultId)
-        .limit(1)
-        .get();
+    // 1. Idempotency Check (Session Level) - Using deterministic ID for document get
+    final txDocRef = _rankTransactionCollection.doc('${result.resultId}_tx');
+    final txSnapshot = await tx.get(txDocRef);
 
-    if (existingTx.docs.isNotEmpty) {
+    if (txSnapshot.exists) {
        throw Exception(
         'Competitive result ${result.resultId} already processed.',
       );
@@ -172,17 +174,17 @@ class FirebasePlayerProgressionRepository
     );
 
     // 4. Update Leaderboard (Sync in transaction)
-    final profile = await _playerRepository.getPlayerProfile(result.userId);
-    if (profile != null) {
+    final playerProfile = profile ?? await _playerRepository.getPlayerProfile(result.userId);
+    if (playerProfile != null) {
       await _leaderboardRepository.syncLeaderboardEntry(
-        profile: profile,
+        profile: playerProfile,
         progression: updated,
         seasonId: result.seasonId,
         transaction: tx,
       );
       // Also sync global
       await _leaderboardRepository.syncLeaderboardEntry(
-        profile: profile,
+        profile: playerProfile,
         progression: updated,
         seasonId: null,
         transaction: tx,
@@ -203,7 +205,7 @@ class FirebasePlayerProgressionRepository
 
     tx.set(progressionDoc, updated.toJson());
     tx.set(
-      _rankTransactionCollection.doc(rankTx.transactionId),
+      txDocRef,
       rankTx.toJson(),
     );
     tx.set(

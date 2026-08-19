@@ -60,7 +60,13 @@ final walletProvider = StreamProvider<Wallet>((ref) {
 /// Available rewards for the user
 final availableRewardsProvider = FutureProvider<List<Reward>>((ref) async {
   final session = ref.watch(sessionProvider);
-  final userId = session.uid ?? 'anonymous';
+  
+  // Guard against unauthenticated requests to avoid Firestore permission rule errors
+  if (!session.isAuthenticated || session.uid == null) {
+    return [];
+  }
+  
+  final userId = session.uid!;
   final rewards = await ref.watch(rewardsRepositoryProvider).getAvailableRewards(userId);
   
   final dailyBonus = ref.watch(dailyBonusProvider);

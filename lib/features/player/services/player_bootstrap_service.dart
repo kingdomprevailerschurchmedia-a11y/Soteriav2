@@ -111,34 +111,42 @@ class PlayerBootstrapService {
         };
 
         if (shouldReward) {
-          patchData['coins'] = FieldValue.increment(500);
-          
-          final txRef = _firestore.collection('coin_transactions').doc();
-          patchData['lastCoinTransactionId'] = txRef.id; // Optional: track last tx in user doc
-          
-          // Log the transaction
-          await _firestore.collection('coin_transactions').doc(txRef.id).set({
-            'userId': user.uid,
-            'type': 'coins',
-            'direction': 'credit',
-            'amount': 500,
-            'source': 'streak',
-            'status': 'completed',
-            'createdAt': FieldValue.serverTimestamp(),
-            'metadata': {'streakCount': newStreak},
+          await _firestore.runTransaction((transaction) async {
+            final txRef = _firestore.collection('wallet_transactions').doc();
+            final nowTimestamp = FieldValue.serverTimestamp();
+
+            // 1. Log the authoritative transaction
+            transaction.set(txRef, {
+              'userId': user.uid,
+              'type': 'coins',
+              'direction': 'credit',
+              'amount': 500,
+              'transactionType': 'reward',
+              'source': 'streak',
+              'status': 'completed',
+              'createdAt': nowTimestamp,
+              'metadata': {'streakCount': newStreak},
+            });
+
+            // 2. Update users document with lastCoinTransactionId for security rules
+            final userPatch = Map<String, dynamic>.from(patchData);
+            userPatch['coins'] = FieldValue.increment(500);
+            userPatch['lastCoinTransactionId'] = txRef.id;
+            transaction.update(_firestore.collection('users').doc(user.uid), userPatch);
+
+            // 3. Sync with wallets collection
+            transaction.set(_firestore.collection('wallets').doc(user.uid), {
+              'coins': FieldValue.increment(500),
+              'lifetimeCoinsEarned': FieldValue.increment(500),
+              'lastTransactionId': txRef.id,
+              'updatedAt': nowTimestamp,
+            }, SetOptions(merge: true));
           });
-
-          // Sync with wallets collection for Economy screen
-          await _firestore.collection('wallets').doc(user.uid).set({
-            'coins': FieldValue.increment(500),
-            'lifetimeCoinsEarned': FieldValue.increment(500),
-            'updatedAt': FieldValue.serverTimestamp(),
-          }, SetOptions(merge: true));
           
-          LoggerService.i('7-day streak reached! Granting 500 bonus coins via increment and logging transaction.', feature: 'Player');
+          LoggerService.i('7-day streak reached! Granted 500 bonus coins via atomic transaction.', feature: 'Player');
+        } else {
+          await _firestore.collection('users').doc(user.uid).update(patchData);
         }
-
-        await _firestore.collection('users').doc(user.uid).update(patchData);
 
         final updatedProfile = existingProfile.copyWith(
           lastLogin: now,

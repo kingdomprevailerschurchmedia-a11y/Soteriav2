@@ -7,6 +7,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_divider.dart';
+import 'package:soteria/shared/widgets/soteria_page.dart';
 import '../models/identity_provider.dart';
 import '../providers/auth_landing_notifier.dart';
 import '../widgets/auth_hero_section.dart';
@@ -29,13 +30,7 @@ class AuthLandingScreen extends ConsumerWidget {
       }
     });
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/welcomescreen_bg.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
+    return SoteriaPage(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(

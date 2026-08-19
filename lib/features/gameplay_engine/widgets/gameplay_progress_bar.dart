@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -28,24 +29,31 @@ class GameplayProgressBar extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Question $current of $total'.toUpperCase(),
+                'QUESTION $current OF $total',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: 1.5,
+                  color: SoteriaColors.textSecondary,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.5,
+                  fontSize: 10.sp,
                 ),
               ),
               Text(
                 '${(progress * 100).toInt()}%',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.primary,
+                  color: SoteriaColors.secondary,
                   fontWeight: FontWeight.bold,
+                  fontSize: 12.sp,
                 ),
               ),
             ],
           ),
           SizedBox(height: SoteriaSpacing.sm),
-          SoteriaProgressBar(progress: progress, height: 6, hasGlow: true),
+          SoteriaProgressBar(
+            progress: progress,
+            height: 4.5,
+            color: SoteriaColors.secondary,
+            hasGlow: true,
+          ),
         ],
       ),
     );

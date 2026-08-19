@@ -87,26 +87,18 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
               if (didPop) return;
               _confirmExit(context);
             },
-            child: SafeArea(
-              child: Column(
-                children: [
-                  _buildHeader(context, engineState),
-                  Expanded(
-                    child: QuestionPresenter(
-                      question: engineState.currentQuestion!,
-                      currentQuestionIndex: engineState.currentQuestionIndex,
-                      totalQuestions: engineState.questions.length,
-                      sessionId: engineState.sessionId,
-                      gameConfig: gameConfig,
-                      timerChild: Consumer(
-                        builder: (context, ref, _) {
-                          final timerState = ref.watch(timerEngineProvider);
-                          return AdaptiveTimerDisplay(state: timerState);
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+            child: QuestionPresenter(
+              question: engineState.currentQuestion!,
+              currentQuestionIndex: engineState.currentQuestionIndex,
+              totalQuestions: engineState.questions.length,
+              sessionId: engineState.sessionId,
+              gameConfig: gameConfig,
+              onClose: () => _confirmExit(context),
+              timerChild: Consumer(
+                builder: (context, ref, _) {
+                  final timerState = ref.watch(timerEngineProvider);
+                  return AdaptiveTimerDisplay(state: timerState);
+                },
               ),
             ),
           ),
@@ -120,26 +112,6 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
             onRetry: () => ref.refresh(practiceQuestionsProvider),
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context, dynamic state) {
-    return Padding(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white),
-            onPressed: () => _confirmExit(context),
-          ),
-          Text(
-            'Practice Mode',
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.white70),
-          ),
-          const SizedBox(width: 48), // Spacer for centering
-        ],
       ),
     );
   }

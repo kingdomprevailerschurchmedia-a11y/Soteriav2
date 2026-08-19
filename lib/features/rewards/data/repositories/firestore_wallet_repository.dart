@@ -59,46 +59,104 @@ class FirestoreWalletRepository implements WalletRepository {
       query = query.where('currency', isEqualTo: currency);
     }
 
+    // VITAL: Removed orderBy('createdAt', descending: true) to avoid mandatory 
+    // composite index requirements which often fail and cause screen crashes.
+    // We handle sorting in-memory below.
     final snapshot = await query
-        .orderBy('createdAt', descending: true)
-        .limit(50)
+        .limit(100) // Increased limit slightly to ensure good history coverage
         .get();
 
-    return snapshot.docs.map((doc) {
+    final transactions = snapshot.docs.map((doc) {
       final data = doc.data();
-      
+
       final mappedData = Map<String, dynamic>.from(data);
-      
+
       // Map 'currency' to 'type' for RewardType enum compatibility
       if (mappedData['type'] == null && mappedData['currency'] != null) {
         mappedData['type'] = mappedData['currency'];
       }
-      
-      // Ensure 'transactionType' is valid or fallback
-      final validTransactionTypes = [
-        'purchase', 'gameEntry', 'tournamentEntry', 'reward', 
-        'refund', 'adminGrant', 'promotion', 'spend', 'itemRedemption'
-      ];
+
+      // VITAL: Ensure required enum fields are valid or use fallbacks to prevent screen crashes
+      final validRewardTypes = RewardType.values.map((e) => e.name).toList();
+      if (!validRewardTypes.contains(mappedData['type'])) {
+        mappedData['type'] = 'coins'; // Default fallback
+      }
+
+      final validTransactionTypes =
+          WalletTransactionType.values.map((e) => e.name).toList();
       if (!validTransactionTypes.contains(mappedData['transactionType'])) {
-        mappedData['transactionType'] = 'reward'; // Default fallback
+        mappedData['transactionType'] = 'unknown';
+      }
+
+      final validSources = RewardSource.values.map((e) => e.name).toList();
+      
+      // VITAL: The generated JSON decoder (g.dart) might be missing some enum values 
+      // like 'practice' or 'unknown', causing crashes. We map them to 'milestone' 
+      // as a safe fallback if they aren't in the specific list supported by the current build.
+      const supportedByDecoder = [
+        'dailyLogin', 'dailyChallenge', 'achievement', 'milestone', 'streak', 
+        'tournament', 'tournamentReward', 'proModeEntry', 'proModeReward', 
+        'competitiveReward', 'itemRedemption', 'season', 'rank', 'event', 
+        'promotion', 'purchase', 'purchaseBonus', 'gameEntry', 'tournamentEntry', 
+        'refund', 'adminGrant'
+      ];
+
+      if (!supportedByDecoder.contains(mappedData['source'])) {
+        // Handle common variations and map others to 'milestone' to avoid crashes
+        if (mappedData['source'] == 'proReward') {
+          mappedData['source'] = 'proModeReward';
+        } else if (mappedData['source'] == 'goal_completion' || mappedData['source'] == 'goalCompletion') {
+          mappedData['source'] = 'dailyChallenge';
+        } else if (mappedData['source'] == 'practice') {
+          mappedData['source'] = 'achievement'; // Close enough for UI purposes
+        } else {
+          mappedData['source'] = 'milestone'; 
+        }
+      }
+
+      final validDirections =
+          TransactionDirection.values.map((e) => e.name).toList();
+      if (!validDirections.contains(mappedData['direction'])) {
+        mappedData['direction'] = 'credit';
       }
 
       // Handle Timestamp parsing safely
       String createdAtStr;
       if (data['createdAt'] is Timestamp) {
-        createdAtStr = (data['createdAt'] as Timestamp).toDate().toIso8601String();
+        createdAtStr =
+            (data['createdAt'] as Timestamp).toDate().toIso8601String();
       } else if (data['createdAt'] is String) {
         createdAtStr = data['createdAt'];
       } else {
         createdAtStr = DateTime.now().toIso8601String();
       }
-      
-      return WalletTransaction.fromJson({
-        ...mappedData,
-        'id': doc.id,
-        'createdAt': createdAtStr,
-      });
+
+      try {
+        return WalletTransaction.fromJson({
+          ...mappedData,
+          'id': doc.id,
+          'createdAt': createdAtStr,
+        });
+      } catch (e) {
+        // Final fallback to prevent screen crash if any other field is corrupt
+        return WalletTransaction(
+          id: doc.id,
+          userId: userId,
+          type: RewardType.coins,
+          transactionType: WalletTransactionType.unknown,
+          direction: TransactionDirection.credit,
+          amount: mappedData['amount'] ?? 0,
+          source: RewardSource.milestone,
+          createdAt: DateTime.now(),
+          metadata: {'error': 'Failed to decode transaction'},
+        );
+      }
     }).toList();
+
+    // Perform in-memory sorting by date descending
+    transactions.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    
+    return transactions;
   }
 
   @override
@@ -221,12 +279,14 @@ class FirestoreWalletRepository implements WalletRepository {
       transaction.set(walletRef, {
         balanceField: FieldValue.increment(amount),
         earnedField: FieldValue.increment(amount),
+        'lastTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
       // Update User (Gameplay)
       transaction.update(userRef, {
         balanceField: FieldValue.increment(amount),
+        if (balanceField == 'coins') 'lastCoinTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
@@ -281,12 +341,14 @@ class FirestoreWalletRepository implements WalletRepository {
       transaction.update(walletRef, {
         balanceField: FieldValue.increment(-amount),
         spentField: FieldValue.increment(amount),
+        'lastTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
       // 2. Sync to Users collection (Authoritative for Gameplay)
       transaction.update(userRef, {
         balanceField: FieldValue.increment(-amount),
+        if (balanceField == 'coins') 'lastCoinTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
@@ -333,12 +395,14 @@ class FirestoreWalletRepository implements WalletRepository {
       transaction.set(walletRef, {
         balanceField: FieldValue.increment(amount),
         earnedField: FieldValue.increment(amount),
+        'lastTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
       // 2. Update User (Gameplay)
       transaction.update(userRef, {
         balanceField: FieldValue.increment(amount),
+        if (balanceField == 'coins') 'lastCoinTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 

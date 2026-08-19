@@ -140,15 +140,15 @@ class _NavButton extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color: isSelected ? SoteriaColors.secondary : SoteriaColors.muted,
-                    size: isShort ? 18.sp : 22.sp,
+                    color: isSelected ? Colors.white : SoteriaColors.muted,
+                    size: isShort ? 20.sp : 24.sp,
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 4.h),
                   Text(
                     label,
                     style: TextStyle(
                       color: isSelected ? Colors.white : SoteriaColors.muted,
-                      fontSize: 9.sp,
+                      fontSize: 10.sp,
                       fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
                     ),
                   ),
@@ -157,8 +157,8 @@ class _NavButton extends StatelessWidget {
             ),
             if (badgeCount > 0)
               Positioned(
-                top: 2,
-                right: 2,
+                top: 0,
+                right: 0,
                 child: Container(
                   padding: const EdgeInsets.all(4),
                   decoration: const BoxDecoration(
@@ -182,18 +182,18 @@ class _NavButton extends StatelessWidget {
               ),
             if (isSelected)
               Positioned(
-                bottom: -2.h,
+                bottom: -8.h,
                 child: Container(
-                  width: 6.r,
-                  height: 6.r,
+                  width: 12.w,
+                  height: 3.h,
                   decoration: BoxDecoration(
-                    color: SoteriaColors.secondary,
-                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(100),
                     boxShadow: [
                       BoxShadow(
-                        color: SoteriaColors.secondary.withValues(alpha: 0.8),
-                        blurRadius: 8,
-                        spreadRadius: 1,
+                        color: Colors.white.withValues(alpha: 0.8),
+                        blurRadius: 10,
+                        spreadRadius: 2,
                       ),
                     ],
                   ),

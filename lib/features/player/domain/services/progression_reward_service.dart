@@ -44,15 +44,12 @@ class ProgressionRewardService {
     // 1. Verify not already claimed and is completed
     if (goalState.claimedAt != null || !goalState.isCompleted) return null;
 
-    // 2. Lookup definition
-    final definition = GoalRegistry.getById(goalId.split('_').take(3).join('_')); // Handle dynamic IDs like daily_games_3_TIMESTAMP
-    // Wait, the registry IDs are fixed. The PlayerGoal.goalId might contain the template ID or be the full ID.
-    // Let's assume GoalRegistry contains the definition IDs.
-    
     final defId = _resolveDefinitionId(goalId);
     final definitionObj = GoalRegistry.getById(defId);
-    
-    if (definitionObj == null || definitionObj.rewardType != RewardType.xp) return null;
+
+    if (definitionObj == null || definitionObj.rewardType != RewardType.xp) {
+      return null;
+    }
 
     // 3. Create XP Transaction
     return XpTransaction(
@@ -63,6 +60,16 @@ class ProgressionRewardService {
       referenceId: goalId,
       createdAt: DateTime.now(),
     );
+  }
+
+  /// Checks if a goal has a coin reward and returns the amount.
+  int? getGoalCoinReward(String goalId) {
+    final defId = _resolveDefinitionId(goalId);
+    final definition = GoalRegistry.getById(defId);
+    if (definition != null && definition.rewardType == RewardType.coins) {
+      return definition.rewardAmount;
+    }
+    return null;
   }
 
   String _resolveDefinitionId(String goalId) {

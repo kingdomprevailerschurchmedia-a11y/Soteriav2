@@ -2,6 +2,7 @@ import '../../domain/models/analytics_enums.dart';
 import '../../domain/models/performance_analytics.dart';
 import '../../domain/repositories/performance_analytics_repository.dart';
 import '../../../quiz/domain/repositories/quiz_history_repository.dart';
+import '../../../practice/domain/repositories/practice_result_repository.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
 import '../../../quiz/domain/models/quiz_result.dart';
 import 'analytics_aggregator.dart';
@@ -9,11 +10,15 @@ import 'analytics_aggregator.dart';
 class PerformanceAnalyticsRepositoryImpl
     implements PerformanceAnalyticsRepository {
   final QuizHistoryRepository _historyRepository;
+  final PracticeResultRepository _practiceRepository;
 
   // Simple in-memory cache
   final Map<String, PersonalPerformanceAnalytics> _cache = {};
 
-  PerformanceAnalyticsRepositoryImpl(this._historyRepository);
+  PerformanceAnalyticsRepositoryImpl(
+    this._historyRepository,
+    this._practiceRepository,
+  );
 
   @override
   Future<PersonalPerformanceAnalytics> getAnalytics({
@@ -31,14 +36,26 @@ class PerformanceAnalyticsRepositoryImpl
     final start = _getStartDate(period, now);
 
     // Get current period results
-    List<QuizResult> currentResults = await _historyRepository
-        .getResultsByDateRange(playerId, start, now);
+    final quizResults = await _historyRepository.getResultsByDateRange(
+      playerId,
+      start,
+      now,
+    );
+    final practiceResults = await _practiceRepository.getResultsByDateRange(
+      playerId,
+      start,
+      now,
+    );
+
+    List<QuizResult> currentResults = [
+      ...quizResults,
+      ...practiceResults.map(AnalyticsAggregator.mapPracticeToQuiz),
+    ];
 
     // Apply filters
     if (category != null) {
-      currentResults = currentResults
-          .where((r) => r.category == category)
-          .toList();
+      currentResults =
+          currentResults.where((r) => r.category == category).toList();
     }
     if (mode != null) {
       currentResults = currentResults.where((r) => r.gameMode == mode).toList();
@@ -46,18 +63,29 @@ class PerformanceAnalyticsRepositoryImpl
 
     // Get previous period results for comparison
     final prevStart = _getPreviousPeriodStart(period, start);
-    List<QuizResult> previousResults = await _historyRepository
-        .getResultsByDateRange(playerId, prevStart, start);
+    final prevQuizResults = await _historyRepository.getResultsByDateRange(
+      playerId,
+      prevStart,
+      start,
+    );
+    final prevPracticeResults = await _practiceRepository.getResultsByDateRange(
+      playerId,
+      prevStart,
+      start,
+    );
+
+    List<QuizResult> previousResults = [
+      ...prevQuizResults,
+      ...prevPracticeResults.map(AnalyticsAggregator.mapPracticeToQuiz),
+    ];
 
     if (category != null) {
-      previousResults = previousResults
-          .where((r) => r.category == category)
-          .toList();
+      previousResults =
+          previousResults.where((r) => r.category == category).toList();
     }
     if (mode != null) {
-      previousResults = previousResults
-          .where((r) => r.gameMode == mode)
-          .toList();
+      previousResults =
+          previousResults.where((r) => r.gameMode == mode).toList();
     }
 
     final analytics = AnalyticsAggregator.aggregate(

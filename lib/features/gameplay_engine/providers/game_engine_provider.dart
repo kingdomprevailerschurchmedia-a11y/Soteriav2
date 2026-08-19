@@ -16,14 +16,18 @@ import 'package:soteria/features/gameplay_engine/timer/models/timer_state.dart';
 import 'package:soteria/features/gameplay_engine/timer/models/timer_status.dart';
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/providers/lifeline_controller.dart';
+import 'package:soteria/features/gameplay_engine/lifelines/providers/lifeline_results_provider.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progress_snapshot.dart';
 import 'package:soteria/features/gameplay_engine/progression/providers/progression_providers.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_policy.dart';
 import 'package:soteria/features/gameplay_engine/integrity/providers/integrity_providers.dart';
 import 'package:soteria/features/gameplay_engine/integrity/models/integrity_signal.dart';
 import 'package:soteria/features/question_presentation/providers/presentation_providers.dart';
+import 'package:soteria/core/logging/logger_service.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
 import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
+import 'package:soteria/features/gameplay_engine/providers/competitive_gameplay_providers.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/presentation/providers/progression_providers.dart' as player_prog;
 import 'package:soteria/core/identity/providers/identity_providers.dart';
@@ -114,36 +118,52 @@ class GameEngine extends StateNotifier<GameState> {
   GameState get debugState => state;
 
   /// Starts the game session.
-  Future<void> startSession(List<Question> questions) async {
-    state = state.copyWith(
-      lifecycle: GameLifecycle.loading,
-      questions: questions,
-    );
+  Future<void> startSession(List<Question> questions, {String? sessionId}) async {
+    try {
+      state = state.copyWith(
+        lifecycle: GameLifecycle.loading,
+        questions: questions,
+        sessionId: sessionId,
+      );
 
-    // Initialize Integrity Monitoring
-    _integrity?.startSession(state.sessionId, config.mode);
+      // Initialize Integrity Monitoring
+      _integrity?.startSession(state.sessionId, config.mode);
 
-    // Hydrate progression baseline from authoritative record
-    final authoritativeProg = ref?.read(player_prog.competitiveProgressionProvider).value;
-    if (authoritativeProg != null) {
-      _progression?.hydrate(ProgressSnapshot.fromProgression(authoritativeProg));
-    } else {
-      _progression?.resetSession();
+      // Authoritative remote start for competitive modes
+      if (config.mode == GameMode.pro) {
+        await ref
+            ?.read(competitiveRepositoryProvider)
+            .startCompetitiveSession(state.sessionId);
+      }
+
+      // Hydrate progression baseline from authoritative record
+      final authoritativeProg =
+          ref?.read(player_prog.competitiveProgressionProvider).value;
+      if (authoritativeProg != null) {
+        _progression?.hydrate(
+          ProgressSnapshot.fromProgression(authoritativeProg),
+        );
+      } else {
+        _progression?.resetSession();
+      }
+
+      // Simulate preparation time for loading animations
+      await Future.delayed(const Duration(milliseconds: 800));
+
+      state = state.copyWith(
+        lifecycle: GameLifecycle.playing,
+        startTime: DateTime.now(),
+        lives: config.initialLives,
+      );
+
+      _startQuestionTimer();
+
+      analytics?.trackEvent('Game Started', {'mode': config.mode.name});
+      _saveCheckpoint();
+    } catch (e, st) {
+      LoggerService.e('Game session initialization failed', error: e, stackTrace: st);
+      state = state.copyWith(lifecycle: GameLifecycle.failed);
     }
-
-    // Simulate preparation time for loading animations
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    state = state.copyWith(
-      lifecycle: GameLifecycle.playing,
-      startTime: DateTime.now(),
-      lives: config.initialLives,
-    );
-
-    _startQuestionTimer();
-
-    analytics?.trackEvent('Game Started', {'mode': config.mode.name});
-    _saveCheckpoint();
   }
 
   /// Hydrates the engine with a previously saved state (for session resume).
@@ -269,6 +289,7 @@ class GameEngine extends StateNotifier<GameState> {
     ref?.read(answerSelectionProvider.notifier).reset();
     ref?.read(isResultRevealedProvider.notifier).state = false;
     ref?.read(showExplanationProvider.notifier).state = false;
+    ref?.read(lifelineResultsProvider.notifier).reset();
 
     if (state.currentQuestionIndex + 1 >= state.questions.length) {
       _endSession(GameLifecycle.completed);

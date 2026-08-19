@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
+import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/feedback/soteria_loader.dart';
 import '../../../../core/widgets/feedback/soteria_error_widget.dart';
@@ -50,7 +51,10 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
 
     // Initialize the engine with the locked questions from the session
     Future.microtask(() {
-      ref.read(gameEngineProvider(_gameConfig).notifier).startSession(widget.session.questions);
+      ref.read(gameEngineProvider(_gameConfig).notifier).startSession(
+        widget.session.questions,
+        sessionId: widget.session.sessionId,
+      );
     });
   }
 
@@ -85,9 +89,49 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
       );
     }
 
-    if (engineState.lifecycle == GameLifecycle.completed || engineState.lifecycle == GameLifecycle.failed) {
+    if (engineState.lifecycle == GameLifecycle.completed) {
       Future.microtask(() => context.go(SoteriaRoutes.proResults, extra: engineState));
       return const SafeGradientScaffold(body: Center(child: SoteriaLoader()));
+    }
+
+    if (engineState.lifecycle == GameLifecycle.failed) {
+      return SafeGradientScaffold(
+        body: Center(
+          child: Padding(
+            padding: EdgeInsets.all(SoteriaSpacing.xl),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.error_outline_rounded,
+                  color: SoteriaColors.error,
+                  size: 64,
+                ),
+                SizedBox(height: SoteriaSpacing.xl),
+                Text(
+                  'MATCH INITIALIZATION FAILED',
+                  style: context.titleLarge.copyWith(
+                    color: SoteriaColors.error,
+                    fontWeight: FontWeight.w900,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: SoteriaSpacing.md),
+                Text(
+                  'We encountered a secure communication error while starting your Pro Mode session. No coins have been deducted.',
+                  style: context.bodyMedium.copyWith(color: Colors.white70),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: SoteriaSpacing.xxl),
+                SoteriaButton.primary(
+                  label: 'RETURN TO LOBBY',
+                  onPressed: () => context.go(SoteriaRoutes.proMode),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
     }
 
     return PopScope(
@@ -97,74 +141,21 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
         _handleExit(context);
       },
       child: SafeGradientScaffold(
-        body: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(context, engineState),
-              Expanded(
-                child: QuestionPresenter(
-                  question: engineState.currentQuestion!,
-                  currentQuestionIndex: engineState.currentQuestionIndex,
-                  totalQuestions: engineState.questions.length,
-                  sessionId: engineState.sessionId,
-                  gameConfig: _gameConfig,
-                  timerChild: Consumer(
-                    builder: (context, ref, _) {
-                      final timerState = ref.watch(timerEngineProvider);
-                      return AdaptiveTimerDisplay(state: timerState);
-                    },
-                  ),
-                ),
-              ),
-            ],
+        body: QuestionPresenter(
+          question: engineState.currentQuestion!,
+          currentQuestionIndex: engineState.currentQuestionIndex,
+          totalQuestions: engineState.questions.length,
+          sessionId: engineState.sessionId,
+          gameConfig: _gameConfig,
+          onClose: () => _handleExit(context),
+          timerChild: Consumer(
+            builder: (context, ref, _) {
+              final timerState = ref.watch(timerEngineProvider);
+              return AdaptiveTimerDisplay(state: timerState);
+            },
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildHeader(BuildContext context, dynamic state) {
-    return Padding(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.close, color: Colors.white70),
-            onPressed: () => _handleExit(context),
-          ),
-          Column(
-            children: [
-              Text(
-                'PRO CHALLENGE',
-                style: context.labelSmall.copyWith(color: SoteriaColors.gold, fontWeight: FontWeight.bold, letterSpacing: 1.5),
-              ),
-              if (widget.session.config.category != null)
-                Text(
-                  widget.session.config.category!.name.toUpperCase(),
-                  style: context.bodySmall.copyWith(color: Colors.white38, fontSize: 10.sp),
-                ),
-            ],
-          ),
-          _buildLives(state.lives),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLives(int lives) {
-    return Row(
-      children: List.generate(3, (index) {
-        final bool isActive = index < lives;
-        return Padding(
-          padding: EdgeInsets.only(left: 4.w),
-          child: Icon(
-            isActive ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-            color: isActive ? SoteriaColors.error : Colors.white10,
-            size: 18.sp,
-          ),
-        );
-      }),
     );
   }
 

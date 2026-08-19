@@ -12,10 +12,12 @@ import 'package:soteria/features/auth/services/auth_coordinator.dart';
 import 'package:soteria/features/player/presentation/providers/presence_coordinator.dart';
 import 'package:soteria/features/notifications/providers/notification_providers.dart';
 import 'package:soteria/core/firebase/config/providers/configuration_providers.dart';
+import 'package:soteria/core/firebase/providers/bootstrapper_provider.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_celebration_listener.dart';
 import 'package:soteria/features/player/presentation/widgets/streak_celebration_listener.dart';
-import 'package:soteria/features/player/providers/player_providers.dart';
-import '../firebase/providers/bootstrapper_provider.dart';
+import 'package:soteria/features/player/presentation/providers/goal_providers.dart';
+import 'package:soteria/features/player/presentation/providers/milestone_providers.dart';
 
 class SoteriaApp extends ConsumerWidget {
   const SoteriaApp({super.key});
@@ -53,6 +55,10 @@ class SoteriaApp extends ConsumerWidget {
     ref.watch(presenceCoordinatorProvider);
     ref.watch(playerAvatarSyncProvider);
     ref.watch(playerLeaderboardSyncProvider);
+
+    // Ensure real-time goal and milestone evaluation across the entire app
+    ref.watch(goalEvaluationProvider);
+    ref.watch(milestoneEvaluationProvider);
 
     // Initialize background services with a staggered delay to ensure splash animation is smooth
     WidgetsBinding.instance.addPostFrameCallback((_) {

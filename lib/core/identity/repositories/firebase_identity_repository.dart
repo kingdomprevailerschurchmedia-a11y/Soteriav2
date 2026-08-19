@@ -124,10 +124,15 @@ class FirebaseIdentityRepository implements IdentityRepository {
 
   @override
   Future<void> updateUserProfile(String uid, UserProfile profile) async {
+    final map = profile.toMap();
+    // Exclude protected fields from direct update to avoid permission denial
+    map.remove('email');
+    map['updatedAt'] = FieldValue.serverTimestamp();
+    
     await _database
         .collection('user_profiles')
         .doc(uid)
-        .set(profile.toMap(), SetOptions(merge: true));
+        .set(map, SetOptions(merge: true));
   }
 
   @override

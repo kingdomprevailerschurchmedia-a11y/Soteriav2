@@ -137,7 +137,7 @@ class SoteriaStreakWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Image.asset(
-            'assets/icons/streak_icon.png',
+            'assets/icons/star_icon.png',
             width: 16.sp,
             height: 16.sp,
             fit: BoxFit.contain,

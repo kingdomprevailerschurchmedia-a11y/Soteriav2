@@ -36,19 +36,19 @@ class _IndicatorDot extends StatelessWidget {
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeOutQuint,
       margin: EdgeInsets.symmetric(horizontal: 6.w),
-      height: 8.h,
-      width: isActive ? 28.w : 8.w,
+      height: 6.h,
+      width: isActive ? 32.w : 8.w,
       decoration: BoxDecoration(
         color: isActive
-            ? SoteriaColors.gold
-            : SoteriaColors.secondary.withValues(alpha: 0.2),
+            ? const Color(0xFFB456FF)
+            : Colors.white.withValues(alpha: 0.1),
         borderRadius: SoteriaRadius.brFull,
         boxShadow: isActive
             ? [
                 BoxShadow(
-                  color: SoteriaColors.gold.withValues(alpha: 0.4),
+                  color: const Color(0xFFB456FF).withValues(alpha: 0.5),
                   blurRadius: 12,
-                  offset: const Offset(0, 2),
+                  spreadRadius: 1,
                 ),
               ]
             : null,

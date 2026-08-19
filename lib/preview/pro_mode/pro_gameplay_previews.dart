@@ -146,7 +146,7 @@ class _FakeGameEngine extends GameEngine {
   GameState get debugState => _mockState;
 
   @override
-  Future<void> startSession(List<Question> questions) async {
+  Future<void> startSession(List<Question> questions, {String? sessionId}) async {
     state = _mockState;
   }
 

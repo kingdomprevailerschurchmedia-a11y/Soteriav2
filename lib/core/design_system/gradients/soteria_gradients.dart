@@ -89,4 +89,35 @@ class SoteriaGradients {
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
   );
+
+  // Quick Action Gradients
+  static const LinearGradient practiceAction = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF4A148C), Color(0xFF2E1A8A)],
+  );
+
+  static const LinearGradient proModeAction = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFFE58C3D), Color(0xFF633912)],
+  );
+
+  static const LinearGradient versusAction = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF1565C0), Color(0xFF0D47A1)],
+  );
+
+  static const LinearGradient targetAction = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xFF2E7D32), Color(0xFF1B5E20)],
+  );
+
+  static LinearGradient xpProgress = const LinearGradient(
+    begin: Alignment.centerLeft,
+    end: Alignment.centerRight,
+    colors: [Color(0xFF7C4DFF), Color(0xFFFF4081)],
+  );
 }

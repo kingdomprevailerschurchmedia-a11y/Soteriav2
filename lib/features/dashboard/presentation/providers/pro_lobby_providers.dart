@@ -28,6 +28,7 @@ final proModeRepositoryProvider = Provider<ProModeRepository>((ref) {
   return FirestoreProModeRepository(
     ref.watch(firestoreDatabaseServiceProvider),
     ref.watch(playerProgressionRepositoryProvider),
+    ref.watch(playerRepositoryProvider),
   );
 });
 

@@ -165,11 +165,13 @@ class FirestoreRewardsRepository implements RewardsRepository {
       if (rewardType == RewardType.coins) {
         transaction.update(userRef, {
           'coins': FieldValue.increment(amount),
+          'lastCoinTransactionId': txRef.id,
           'updatedAt': FieldValue.serverTimestamp(),
         });
         transaction.set(walletRef, {
           'coins': FieldValue.increment(amount),
           'lifetimeCoinsEarned': FieldValue.increment(amount),
+          'lastTransactionId': txRef.id,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
         

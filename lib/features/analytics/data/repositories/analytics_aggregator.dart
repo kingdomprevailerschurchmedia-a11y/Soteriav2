@@ -1,6 +1,7 @@
 import 'dart:math';
 import '../../../quiz/domain/models/quiz_result.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
+import '../../../practice/domain/models/practice_result.dart' as practice;
 import '../../domain/models/analytics_enums.dart';
 import '../../domain/models/performance_analytics.dart';
 import '../../domain/models/category_performance.dart';
@@ -533,6 +534,57 @@ class AnalyticsAggregator {
         ),
       ],
       calculatedAt: DateTime.now(),
+    );
+  }
+
+  static QuizResult mapPracticeToQuiz(practice.PracticeResult p) {
+    // Pick the most relevant category from practice performance
+    String category = 'Practice';
+    if (p.categoryPerformance.isNotEmpty) {
+      category = p.categoryPerformance.entries
+          .reduce((a, b) => a.value.total > b.value.total ? a : b)
+          .key;
+    }
+
+    // Pick the most relevant difficulty
+    Difficulty difficulty = Difficulty.medium;
+    if (p.difficultyPerformance.isNotEmpty) {
+      difficulty = p.difficultyPerformance.entries
+          .reduce((a, b) => a.value > b.value ? a : b)
+          .key;
+    }
+
+    final avgResponseTime = p.totalQuestions > 0
+        ? Duration(
+          milliseconds: (p.totalTime.inMilliseconds / p.totalQuestions).round(),
+        )
+        : Duration.zero;
+
+    return QuizResult(
+      sessionId: p.sessionId,
+      playerId: p.userId,
+      gameMode: GameMode.practice,
+      category: category,
+      difficulty: difficulty,
+      totalQuestions: p.totalQuestions,
+      answeredQuestions: p.answeredQuestions,
+      correctAnswers: p.correctAnswers,
+      wrongAnswers: p.incorrectAnswers,
+      skipped: p.skippedQuestions,
+      timedOut: 0,
+      accuracy: p.accuracy,
+      finalScore: p.score,
+      xpEarned: p.xpEarned,
+      coinsEarned: p.coinsEarned,
+      longestStreak: 0,
+      finalStreak: 0,
+      averageResponseTime: avgResponseTime,
+      fastestResponseTime: avgResponseTime, // Fallback
+      slowestResponseTime: avgResponseTime, // Fallback
+      questionResults: [],
+      completedAt: p.completedAt,
+      completionTime: p.totalTime,
+      performanceRating: 'Practice',
     );
   }
 }

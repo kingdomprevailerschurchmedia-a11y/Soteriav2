@@ -8,6 +8,7 @@ import '../../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../../core/avatar/presentation/widgets/avatar_selection_dialog.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
 import '../../../../../core/design_system/components/soteria_progress_bar.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../../../core/network/providers/connectivity_providers.dart';
 import '../../../domain/models/player_profile.dart';
 import '../../../domain/models/player_progression.dart';
@@ -80,17 +81,20 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    AutoSizeText(
                       identity.displayName,
                       style: context.headlineSmall.copyWith(
                         fontWeight: FontWeight.w900,
                         letterSpacing: -0.5,
                       ),
                       maxLines: 1,
+                      minFontSize: 16,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    Text(
+                    AutoSizeText(
                       '@${identity.username}',
+                      maxLines: 1,
+                      minFontSize: 10,
                       style: context.bodyMedium.copyWith(
                         color: SoteriaColors.muted,
                         fontWeight: FontWeight.w500,
@@ -214,15 +218,20 @@ class CompetitiveProfileHeader extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              label,
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.muted,
-                letterSpacing: 1.2,
-                fontSize: 9.sp,
-                fontWeight: FontWeight.w900,
+            Expanded(
+              child: Text(
+                label,
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.muted,
+                  letterSpacing: 1.2,
+                  fontSize: 9.sp,
+                  fontWeight: FontWeight.w900,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+            SizedBox(width: 8.w),
             Text(
               value,
               style: context.labelSmall.copyWith(

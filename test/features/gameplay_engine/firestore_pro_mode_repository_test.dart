@@ -12,6 +12,8 @@ import 'package:soteria/features/player/domain/repositories/player_progression_r
 import 'package:soteria/features/player/domain/models/xp_transaction.dart';
 import 'package:soteria/features/player/domain/models/rank_change.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
+import 'package:soteria/features/player/domain/repositories/player_repository.dart';
+import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:soteria/features/question_content/domain/entities/question.dart';
@@ -20,16 +22,21 @@ import 'package:soteria/features/question_content/domain/entities/difficulty.dar
 class MockDatabaseService extends Mock implements IDatabaseService {}
 class MockFirebaseFirestore extends Mock implements FirebaseFirestore {}
 class MockCollectionReference extends Mock implements CollectionReference<Map<String, dynamic>> {}
-class MockDocumentReference extends Mock implements DocumentReference<Map<String, dynamic>> {}
+class MockDocumentReference extends Mock implements DocumentReference<Map<String, dynamic>> {
+  @override
+  String get id => 'mock-id';
+}
 class MockDocumentSnapshot extends Mock implements DocumentSnapshot<Map<String, dynamic>> {}
 class MockTransaction extends Mock implements Transaction {}
 class MockPlayerProgressionRepository extends Mock implements PlayerProgressionRepository {}
+class MockPlayerRepository extends Mock implements PlayerRepository {}
 
 void main() {
   late FirestoreProModeRepository repository;
   late MockDatabaseService mockDatabase;
   late MockFirebaseFirestore mockFirestore;
   late MockPlayerProgressionRepository mockProgressionRepo;
+  late MockPlayerRepository mockPlayerRepo;
 
   setUpAll(() {
     registerFallbackValue(Duration.zero);
@@ -44,7 +51,8 @@ void main() {
     mockDatabase = MockDatabaseService();
     mockFirestore = MockFirebaseFirestore();
     mockProgressionRepo = MockPlayerProgressionRepository();
-    repository = FirestoreProModeRepository(mockDatabase, mockProgressionRepo);
+    mockPlayerRepo = MockPlayerRepository();
+    repository = FirestoreProModeRepository(mockDatabase, mockProgressionRepo, mockPlayerRepo);
     
     when(() => mockDatabase.instance).thenReturn(mockFirestore);
   });
@@ -88,24 +96,34 @@ void main() {
         ],
       );
 
+      final mockProfile = PlayerProfile(
+        uid: 'test-player',
+        displayName: 'Test',
+        photoUrl: null,
+        registrationOrder: 1,
+        createdAt: DateTime.now(),
+        updatedAt: DateTime.now(),
+        coins: 1000,
+        xp: 100,
+        level: 1,
+      );
+      when(() => mockPlayerRepo.getPlayerProfile('test-player')).thenAnswer((_) async => mockProfile);
+
       final mockTransaction = MockTransaction();
       final mockRef = MockDocumentReference();
       final mockSnapshot = MockDocumentSnapshot();
       final mockCollection = MockCollectionReference();
 
-      when(() => mockFirestore.collection(any())).thenReturn(mockCollection);
+      when(() => mockDatabase.collection(any())).thenReturn(mockCollection);
       when(() => mockCollection.doc(any())).thenReturn(mockRef);
       
-      when(() => mockFirestore.runTransaction<void>(
-        any(),
-        timeout: any(named: 'timeout'),
-        maxAttempts: any(named: 'maxAttempts'),
-      )).thenAnswer((invocation) async {
-        final handler = invocation.positionalArguments[0] as Future<void> Function(Transaction);
-        await handler(mockTransaction);
+      when(() => mockFirestore.runTransaction<void>(any())).thenAnswer((invocation) async {
+        final handler = invocation.positionalArguments[0]
+            as Future<void> Function(Transaction);
+        return await handler(mockTransaction);
       });
 
-      when(() => mockTransaction.get(any())).thenAnswer((invocation) async {
+      when(() => mockTransaction.get<Map<String, dynamic>>(any())).thenAnswer((invocation) async {
         return mockSnapshot;
       });
 
@@ -120,11 +138,7 @@ void main() {
         'reservedFee': 500,
       });
 
-      // Result document stub (for idempotency check inside transaction)
-      // Actually, we use the same mockSnapshot, so we need to be careful.
-      // But we can return a result doc stub for the second get.
-      
-      when(() => mockTransaction.set(any(), any())).thenReturn(mockTransaction);
+      when(() => mockTransaction.set<Map<String, dynamic>>(any(), any(), any())).thenReturn(mockTransaction);
       when(() => mockTransaction.update(any(), any())).thenReturn(mockTransaction);
       
       // Final result fetch stub

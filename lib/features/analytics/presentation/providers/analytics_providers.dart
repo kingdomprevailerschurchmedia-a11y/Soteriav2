@@ -11,11 +11,14 @@ import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart'
     as quiz_enums;
 import 'package:soteria/features/quiz/data/repository/quiz_repository_provider.dart';
+import 'package:soteria/features/quiz/presentation/providers/history_providers.dart';
+import 'package:soteria/features/practice/presentation/providers/practice_history_providers.dart';
 
 final performanceAnalyticsRepositoryProvider =
     Provider<PerformanceAnalyticsRepository>((ref) {
       final historyRepo = ref.watch(quizHistoryRepositoryProvider);
-      return PerformanceAnalyticsRepositoryImpl(historyRepo);
+      final practiceRepo = ref.watch(practiceResultRepositoryProvider);
+      return PerformanceAnalyticsRepositoryImpl(historyRepo, practiceRepo);
     });
 
 final questionAnalyticsRepositoryProvider =
@@ -38,6 +41,10 @@ final personalPerformanceAnalyticsProvider =
       if (playerId == null) {
         throw Exception('User not logged in');
       }
+
+      // Watch histories to trigger re-calculation when results are added
+      ref.watch(historyListProvider);
+      ref.watch(practiceHistoryListProvider);
 
       final period = ref.watch(selectedTimePeriodProvider);
       final category = ref.watch(selectedAnalyticsCategoryProvider);

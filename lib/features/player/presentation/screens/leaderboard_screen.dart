@@ -21,6 +21,8 @@ import '../widgets/season_header.dart';
 import 'player_search_screen.dart';
 import '../../../social/presentation/providers/social_leaderboard_providers.dart';
 
+import '../../../../shared/widgets/soteria_page.dart';
+
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
 
@@ -55,56 +57,87 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
     final insightsAsync = ref.watch(leaderboardInsightsProvider);
     final movementHistoryAsync = ref.watch(rankMovementHistoryProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(
+    return SoteriaPage(
+      useSafeArea: false,
+      showBackground: false,
+      child: Scaffold(
+        extendBody: true,
         backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'LEADERBOARD',
-          style: context.titleMedium.copyWith(
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search_rounded),
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const PlayerSearchScreen()),
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          surfaceTintColor: Colors.transparent,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          title: Text(
+            'LEADERBOARD',
+            style: context.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 2,
             ),
           ),
-          SizedBox(width: SoteriaSpacing.sm),
-        ],
-        bottom: TabBar(
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.search_rounded),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const PlayerSearchScreen(),
+                ),
+              ),
+            ),
+            SizedBox(width: SoteriaSpacing.sm),
+          ],
+          bottom: TabBar(
+            controller: _tabController,
+            indicatorColor: SoteriaColors.primary,
+            labelColor: SoteriaColors.textPrimary,
+            unselectedLabelColor: SoteriaColors.muted,
+            tabs: const [
+              Tab(text: 'FRIENDS'),
+              Tab(text: 'SEASON'),
+              Tab(text: 'GLOBAL'),
+            ],
+          ),
+        ),
+        body: TabBarView(
           controller: _tabController,
-          indicatorColor: SoteriaColors.primary,
-          labelColor: SoteriaColors.textPrimary,
-          unselectedLabelColor: SoteriaColors.muted,
-          tabs: const [
-            Tab(text: 'FRIENDS'),
-            Tab(text: 'SEASON'),
-            Tab(text: 'GLOBAL'),
+          children: [
+            _buildFriendsLeaderboard(
+              context,
+              friendsLeaderboardAsync,
+              session.uid,
+            ),
+            _buildStandardLeaderboard(
+              context,
+              currentSeasonId,
+              playerEntryAsync,
+              totalPlayersAsync,
+              neighborhoodAsync,
+              insightsAsync,
+              movementHistoryAsync,
+              session.uid,
+            ),
+            _buildStandardLeaderboard(
+              context,
+              null,
+              playerEntryAsync,
+              totalPlayersAsync,
+              neighborhoodAsync,
+              insightsAsync,
+              movementHistoryAsync,
+              session.uid,
+            ), // Global
           ],
         ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildFriendsLeaderboard(context, friendsLeaderboardAsync, session.uid),
-          _buildStandardLeaderboard(context, currentSeasonId, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid),
-          _buildStandardLeaderboard(context, null, playerEntryAsync, totalPlayersAsync, neighborhoodAsync, insightsAsync, movementHistoryAsync, session.uid), // Global
-        ],
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: playerEntryAsync.when(
-        data: (entry) {
-          if (entry == null) return null;
-          // Only show floating entry if user is not in the visible list (placeholder logic)
-          return _CurrentUserStickyRow(entry: entry);
-        },
-        loading: () => null,
-        error: (_, __) => null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: playerEntryAsync.when(
+          data: (entry) {
+            if (entry == null) return null;
+            // Only show floating entry if user is not in the visible list (placeholder logic)
+            return _CurrentUserStickyRow(entry: entry);
+          },
+          loading: () => null,
+          error: (_, _) => null,
+        ),
       ),
     );
   }
@@ -174,7 +207,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                       );
                     },
                     loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
                   );
                 }
 
@@ -193,7 +226,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                       );
                     },
                     loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
                   );
                 }
 
@@ -213,7 +246,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                       );
                     },
                     loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
                   );
                 }
 
@@ -227,7 +260,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                       );
                     },
                     loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
+                    error: (_, _) => const SizedBox.shrink(),
                   );
                 }
 
@@ -284,7 +317,12 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           return _buildFriendsEmptyState(context);
         }
         return ListView.builder(
-          padding: EdgeInsets.all(SoteriaSpacing.md),
+          padding: EdgeInsets.only(
+            left: SoteriaSpacing.md,
+            right: SoteriaSpacing.md,
+            top: SoteriaSpacing.md,
+            bottom: 100.h,
+          ),
           itemCount: entries.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {

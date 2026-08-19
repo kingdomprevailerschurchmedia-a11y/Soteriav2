@@ -7,6 +7,8 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/widgets/animations/animated_numeric_counter.dart';
+import '../../../../core/design_system/gradients/soteria_gradients.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../player/domain/models/rank_progress.dart';
 import '../../../player/presentation/widgets/competitive_rank_badge.dart';
 import '../../../player/providers/player_providers.dart';
@@ -73,21 +75,25 @@ class HeroCard extends ConsumerWidget {
                           Text(
                             'CURRENT RANK',
                             style: context.labelSmall.copyWith(
-                              color: Colors.white.withValues(alpha: 0.4),
+                              color: Colors.white,
                               letterSpacing: 1.0,
                               fontWeight: FontWeight.w600,
                               fontSize: 10.sp,
                             ),
                           ),
                           SizedBox(height: 2.h),
-                          Text(
+                          AutoSizeText(
                             rankProgress != null 
                                 ? rankProgress!.currentRank 
                                 : 'Unranked',
+                            maxLines: 1,
+                            minFontSize: 20,
                             style: context.displaySmall.copyWith(
-                              color: _getRankColor(rankProgress?.tier.id),
+                              foreground: Paint()..shader = const LinearGradient(
+                                colors: [Color(0xFF8A55FD), Color(0xFFE58C3D)],
+                              ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
                               fontWeight: FontWeight.bold,
-                              fontSize: 32.sp,
+                              fontSize: 36.sp,
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -142,7 +148,7 @@ class HeroCard extends ConsumerWidget {
                           SizedBox(height: 4.h),
                           _GlowingProgressBar(
                             progress: xpProgress,
-                            color: SoteriaColors.xpColor,
+                            gradient: SoteriaGradients.xpProgress,
                           ),
                           SizedBox(height: 4.h),
                           Text(
@@ -285,14 +291,15 @@ class _HexagonPainter extends CustomPainter {
 }
 
 class _GlowingProgressBar extends StatelessWidget {
-  const _GlowingProgressBar({required this.progress, required this.color});
+  const _GlowingProgressBar({required this.progress, this.color, this.gradient});
   final double progress;
-  final Color color;
+  final Color? color;
+  final Gradient? gradient;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 4.h,
+      height: 6.h,
       width: double.infinity,
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
@@ -303,14 +310,15 @@ class _GlowingProgressBar extends StatelessWidget {
           FractionallySizedBox(
             widthFactor: progress.clamp(0.0, 1.0),
             child: Container(
-              height: 4.h,
+              height: 6.h,
               decoration: BoxDecoration(
                 color: color,
+                gradient: gradient,
                 borderRadius: BorderRadius.circular(100),
                 boxShadow: [
                   BoxShadow(
-                    color: color.withValues(alpha: 0.4),
-                    blurRadius: 6,
+                    color: (color ?? Colors.purple).withValues(alpha: 0.4),
+                    blurRadius: 8,
                   ),
                 ],
               ),

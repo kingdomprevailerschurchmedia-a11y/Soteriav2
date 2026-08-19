@@ -34,7 +34,7 @@ class MilestoneSection extends StatelessWidget {
                   Text(
                     'NEXT MILESTONE',
                     style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
+                      color: const Color(0xFFB456FF),
                       letterSpacing: 2.0,
                       fontWeight: FontWeight.w800,
                       fontSize: 13.sp,
@@ -93,28 +93,32 @@ class _DashboardMilestoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SoteriaCard(
       onTap: onTap,
-      padding: EdgeInsets.all(SoteriaSpacing.md),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      borderRadius: 20,
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(SoteriaSpacing.sm),
+            padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
-              color: SoteriaColors.primary.withValues(alpha: 0.1),
+              color: Colors.white.withValues(alpha: 0.05),
               shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white.withValues(alpha: 0.1),
+              ),
             ),
             child: progress.definition.id == 'first_game'
                 ? Image.asset(
                     'assets/icons/first_step_icon.png',
-                    width: 24.w,
-                    height: 24.w,
+                    width: 28.w,
+                    height: 28.w,
                   )
                 : Icon(
                     Icons.stars_rounded,
-                    color: SoteriaColors.primary,
-                    size: 20.sp,
+                    color: const Color(0xFFB456FF),
+                    size: 24.sp,
                   ),
           ),
-          SizedBox(width: SoteriaSpacing.md),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,13 +128,15 @@ class _DashboardMilestoneCard extends StatelessWidget {
                   style: context.bodyMedium.copyWith(
                     fontWeight: FontWeight.w900,
                     letterSpacing: 0.5,
+                    color: Colors.white,
                   ),
                 ),
+                SizedBox(height: 2.h),
                 Text(
                   progress.definition.description,
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.muted,
-                    fontSize: 10.sp,
+                    fontSize: 12.sp,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -138,15 +144,16 @@ class _DashboardMilestoneCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: SoteriaSpacing.md),
+          SizedBox(width: 12.w),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 '${(progress.progressPercentage * 100).toInt()}%',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.primary,
+                  color: const Color(0xFFB456FF),
                   fontWeight: FontWeight.w900,
+                  fontSize: 14.sp,
                 ),
               ),
               if (progress.definition.rewardAmount != null)
@@ -154,7 +161,7 @@ class _DashboardMilestoneCard extends StatelessWidget {
                   '+${progress.definition.rewardAmount} ${progress.definition.rewardType?.name.toUpperCase()}',
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.gold,
-                    fontSize: 8.sp,
+                    fontSize: 10.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

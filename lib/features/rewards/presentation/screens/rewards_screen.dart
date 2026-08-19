@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,12 +40,14 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return SoteriaPage(
-      useSafeArea: true,
+      useSafeArea: false,
+      showBackground: false,
       child: Scaffold(
+        extendBody: true,
         backgroundColor: Colors.transparent,
-        appBar: _buildAppBar(context),
         body: Column(
           children: [
+            _buildAppBar(context),
             _buildTabBar(),
             Expanded(
               child: TabBarView(
@@ -64,7 +67,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(200.h),
+      preferredSize: Size.fromHeight(160.h),
       child: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
@@ -82,15 +85,15 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
               // Decorative header icon
               Image.asset(
                 'assets/icons/rewards_store.png',
-                width: 200.r,
-                height: 120.r,
+                width: 150.r,
+                height: 90.r,
                 fit: BoxFit.contain,
               ),
               Text(
                 'Rewards & Economy',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 20.sp,
+                  fontSize: 18.sp,
                   fontWeight: FontWeight.bold,
                   letterSpacing: 0.5,
                 ),
@@ -144,22 +147,25 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
   }
 
   Widget _buildTabBar() {
-    return TabBar(
-      controller: _tabController,
-      indicator: UnderlineTabIndicator(
-        borderSide: BorderSide(width: 0.h, color: SoteriaColors.secondary),
-        insets: EdgeInsets.zero,
+    return Padding(
+      padding: EdgeInsets.only(top: 0.h, bottom: 8.h),
+      child: TabBar(
+        controller: _tabController,
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(width: 2.h, color: SoteriaColors.secondary),
+          insets: EdgeInsets.zero,
+        ),
+        indicatorSize: TabBarIndicatorSize.label,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.white.withOpacity(0.4),
+        labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
+        dividerColor: Colors.transparent,
+        tabs: const [
+          Tab(text: 'Earn'),
+          Tab(text: 'Store'),
+          Tab(text: 'History'),
+        ],
       ),
-      indicatorSize: TabBarIndicatorSize.label,
-      labelColor: Colors.white,
-      unselectedLabelColor: Colors.white.withOpacity(0.4),
-      labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
-      dividerColor: Colors.transparent,
-      tabs: const [
-        Tab(text: 'Earn'),
-        Tab(text: 'Store'),
-        Tab(text: 'History'),
-      ],
     );
   }
 }

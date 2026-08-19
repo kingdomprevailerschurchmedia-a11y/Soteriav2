@@ -3,6 +3,7 @@ import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 import '../../../domain/models/season_result.dart';
 import '../../../domain/models/player_profile.dart';
 
@@ -84,9 +85,12 @@ class _SummaryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        Text(
+        AutoSizeText(
           value,
+          maxLines: 1,
+          minFontSize: 10,
           style: context.titleMedium.copyWith(
             color: isGold ? SoteriaColors.gold : SoteriaColors.textPrimary,
             fontWeight: FontWeight.bold,

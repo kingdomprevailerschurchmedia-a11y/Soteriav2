@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -43,106 +44,118 @@ class ProLobbyScreen extends ConsumerWidget {
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
+      useSafeArea: false,
       child: Scaffold(
-        backgroundColor: SoteriaColors.background,
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: SoteriaColors.backgroundGradient,
-          ),
-          child: SafeArea(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    _ProHeader(
-                      player: player,
-                      isOnline: isOnline,
-                      showBackButton: fromDashboard,
-                    ),
-                    Expanded(
-                      child: CustomScrollView(
-                        slivers: [
-                          SliverPadding(
-                            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-                            sliver: SliverList(
-                              delegate: SliverChildListDelegate([
-                                SoteriaFadeIn(
-                                  duration: SoteriaAnimations.medium,
-                                  child: Semantics(
-                                    header: true,
-                                    label: 'Pro Mode Lobby',
-                                    child: const LobbyHeroHeader(
-                                      part1: 'PRO',
-                                      part2: 'MODE',
-                                      part3: 'CHALLENGE',
-                                      subtitle: "High stakes. Professional integrity. Rank points at risk.",
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                      _ProHeader(
+                        player: player,
+                        isOnline: isOnline,
+                        showBackButton: fromDashboard,
+                      ),
+                      Expanded(
+                        child: CustomScrollView(
+                          slivers: [
+                            SliverPadding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: SoteriaSpacing.lg,
+                              ),
+                              sliver: SliverList(
+                                delegate: SliverChildListDelegate([
+                                  SoteriaFadeIn(
+                                    duration: SoteriaAnimations.medium,
+                                    child: Semantics(
+                                      header: true,
+                                      label: 'Pro Mode Lobby',
+                                      child: const LobbyHeroHeader(
+                                        part1: 'PRO',
+                                        part2: 'MODE',
+                                        part3: 'CHALLENGE',
+                                        subtitle:
+                                            "High stakes. Professional integrity. Rank points at risk.",
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SizedBox(height: SoteriaSpacing.md),
-                                if (state.access.state == ProModeAccessState.locked)
-                                  _LockedStateCard(message: state.access.message)
-                                else ...[
-                                  const ProEntryFeeWidget(),
                                   SizedBox(height: SoteriaSpacing.md),
-                                  LobbyInterestsCard(
-                                    value: state.config.useInterests,
-                                    onChanged: (val) => ref
-                                        .read(proLobbyProvider.notifier)
-                                        .setUseInterests(val),
-                                  ),
-                                  SizedBox(height: SoteriaSpacing.md),
-                                  if (!state.config.useInterests) ...[
-                                    const ProCategorySelector(),
+                                  if (state.access.state ==
+                                      ProModeAccessState.locked)
+                                    _LockedStateCard(
+                                      message: state.access.message,
+                                    )
+                                  else ...[
+                                    const ProEntryFeeWidget(),
                                     SizedBox(height: SoteriaSpacing.md),
+                                    LobbyInterestsCard(
+                                      value: state.config.useInterests,
+                                      onChanged:
+                                          (val) => ref
+                                              .read(proLobbyProvider.notifier)
+                                              .setUseInterests(val),
+                                    ),
+                                    SizedBox(height: SoteriaSpacing.md),
+                                    if (!state.config.useInterests) ...[
+                                      const ProCategorySelector(),
+                                      SizedBox(height: SoteriaSpacing.md),
+                                    ],
+                                    const DifficultySelectorSection(),
+                                    SizedBox(height: SoteriaSpacing.md),
+                                    const QuestionCountSelectorSection(),
+                                    SizedBox(height: SoteriaSpacing.lg),
+                                    const ProSessionSummaryCard(),
                                   ],
-                                  const DifficultySelectorSection(),
-                                  SizedBox(height: SoteriaSpacing.md),
-                                  const QuestionCountSelectorSection(),
                                   SizedBox(height: SoteriaSpacing.lg),
-                                  const ProSessionSummaryCard(),
-                                ],
-                                SizedBox(height: SoteriaSpacing.lg),
-                              ]),
+                                ]),
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    LobbyStartAction(
-                      enabled: state.access.isAllowed,
-                      error: _getErrorMessage(state.access),
-                      label: 'INITIALIZE SESSION',
-                      helperText: 'Authoritative Validation • Secure Settlement',
-                      onStart: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ProEntryConfirmationDialog(
-                            fee: state.config.entryFee,
-                            onConfirm: () async {
-                              final session = await ref
-                                  .read(proLobbyProvider.notifier)
-                                  .startSession();
-                              if (session != null && context.mounted) {
-                                // Navigate to Game
-                                context.push(SoteriaRoutes.proGameplay, extra: session);
-                              }
-                            },
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-                if (state.isOffline)
-                  _OfflineOverlay(
-                    onRetry: () =>
-                        ref.read(proLobbyProvider.notifier).checkConnection(),
+                      LobbyStartAction(
+                        enabled: state.access.isAllowed,
+                        error: _getErrorMessage(state.access),
+                        label: 'INITIALIZE SESSION',
+                        helperText:
+                            'Authoritative Validation • Secure Settlement',
+                        onStart: () {
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => ProEntryConfirmationDialog(
+                                  fee: state.config.entryFee,
+                                  onConfirm: () async {
+                                    final session = await ref
+                                        .read(proLobbyProvider.notifier)
+                                        .startSession();
+                                    if (session != null && context.mounted) {
+                                      // Navigate to Game
+                                      context.push(
+                                        SoteriaRoutes.proGameplay,
+                                        extra: session,
+                                      );
+                                    }
+                                  },
+                                ),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-              ],
+                  if (state.isOffline)
+                    _OfflineOverlay(
+                      onRetry:
+                          () =>
+                              ref
+                                  .read(proLobbyProvider.notifier)
+                                  .checkConnection(),
+                    ),
+                ],
+              ),
             ),
-          ),
-        ),
       ),
     );
   }

@@ -4,12 +4,14 @@ import '../models/player_progression.dart';
 import '../config/goal_registry.dart';
 import '../../../quiz/domain/models/quiz_result.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
+import '../../../practice/domain/models/practice_result.dart';
 
 class GoalEvaluationService {
   /// Evaluates a list of player goals against authoritative data.
   List<PlayerGoal> evaluate({
     required List<PlayerGoal> playerGoals,
     required List<QuizResult> recentResults,
+    required List<PracticeResult> practiceResults,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
     List<GoalDefinition>? definitions,
@@ -27,14 +29,20 @@ class GoalEvaluationService {
       }
 
       final definitionId = _resolveDefinitionId(playerGoal.goalId);
-      final definition = definitions?.firstWhere((d) => d.id == definitionId, orElse: () => GoalRegistry.getById(definitionId)!) ?? GoalRegistry.getById(definitionId);
-      
+      final definition =
+          definitions?.firstWhere(
+            (d) => d.id == definitionId,
+            orElse: () => GoalRegistry.getById(definitionId)!,
+          ) ??
+          GoalRegistry.getById(definitionId);
+
       if (definition == null) continue;
 
       final double progress = _calculateProgress(
         definition: definition,
         playerGoal: playerGoal,
         recentResults: recentResults,
+        practiceResults: practiceResults,
         statistics: statistics,
         progression: progression,
       );
@@ -60,11 +68,20 @@ class GoalEvaluationService {
     required GoalDefinition definition,
     required PlayerGoal playerGoal,
     required List<QuizResult> recentResults,
+    required List<PracticeResult> practiceResults,
     required CompetitiveStatistics statistics,
     required PlayerProgression progression,
   }) {
     // Filter results that fall within the goal's time window
     final resultsInRange = recentResults
+        .where(
+          (r) =>
+              r.completedAt.isAfter(playerGoal.startedAt) &&
+              r.completedAt.isBefore(playerGoal.expiresAt),
+        )
+        .toList();
+
+    final practiceInRange = practiceResults
         .where(
           (r) =>
               r.completedAt.isAfter(playerGoal.startedAt) &&
@@ -113,20 +130,25 @@ class GoalEvaluationService {
         return statistics.career.peakPosition.toDouble();
 
       case GoalCategory.correctAnswers:
-        return resultsInRange
+        final quizCorrect = resultsInRange
             .map((r) => r.correctAnswers)
             .fold(0.0, (a, b) => a + b);
+        final practiceCorrect = practiceInRange
+            .map((r) => r.correctAnswers)
+            .fold(0.0, (a, b) => a + b);
+        return quizCorrect + practiceCorrect;
 
       case GoalCategory.xpEarned:
-        return resultsInRange
+        final quizXp = resultsInRange
             .map((r) => r.xpEarned)
             .fold(0.0, (a, b) => a + b);
+        final practiceXp = practiceInRange
+            .map((r) => r.xpEarned)
+            .fold(0.0, (a, b) => a + b);
+        return quizXp + practiceXp;
 
       case GoalCategory.practiceCount:
-        return resultsInRange
-            .where((r) => r.gameMode == GameMode.practice)
-            .length
-            .toDouble();
+        return practiceInRange.length.toDouble();
 
       case GoalCategory.achievement:
         return 0.0;

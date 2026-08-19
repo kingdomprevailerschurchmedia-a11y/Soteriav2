@@ -39,6 +39,7 @@ class CompetitiveSession {
       return json;
     }).toList(),
     'startTime': startTime.toIso8601String(),
+    'updatedAt': startTime.toIso8601String(),
     'status': status,
     'reservedFee': reservedFee,
   };

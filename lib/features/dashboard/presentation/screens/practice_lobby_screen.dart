@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,76 +37,80 @@ class PracticeLobbyScreen extends ConsumerWidget {
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
+      useSafeArea: false,
+      showBackground: false,
       child: Scaffold(
-        backgroundColor: SoteriaColors.background,
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: SoteriaColors.backgroundGradient,
-          ),
-          child: SafeArea(
-            child: Column(
-              children: [
-                _LobbyHeader(
-                  player: player,
-                  isOnline: isOnline,
-                  showBackButton: fromDashboard,
-                ),
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            LobbyHeroHeader(
-                              part1: 'READY',
-                              part2: 'TO',
-                              part3: 'TRAIN?',
-                              subtitle: "Let's build your knowledge and climb the ranks 🚀",
-                            ),
-                            SizedBox(height: SoteriaSpacing.md),
-                            LobbyInterestsCard(
-                              value: state.config.useInterests,
-                              onChanged: (val) => ref.read(practiceLobbyProvider.notifier).setUseInterests(val),
-                            ),
-                            SizedBox(height: SoteriaSpacing.md),
-                            if (!state.config.useInterests) ...[
-                              const CategorySelector(),
-                              SizedBox(height: SoteriaSpacing.lg),
-                            ],
-                            const DifficultySelector(),
-                            SizedBox(height: SoteriaSpacing.md),
-                            const QuestionCountSelector(),
-                            SizedBox(height: SoteriaSpacing.lg),
-                            if (state.estimatedRewards != null)
-                              SessionSummaryCard(
-                                rewards: state.estimatedRewards!,
-                              ),
-                            SizedBox(height: SoteriaSpacing.lg),
-                          ]),
-                        ),
-                      ),
-                    ],
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+                  _LobbyHeader(
+                    player: player,
+                    isOnline: isOnline,
+                    showBackButton: fromDashboard,
                   ),
-                ),
-                LobbyStartAction(
-                  enabled: state.validationError == null,
-                  error: state.validationError,
-                  label: 'START PRACTICE',
-                  helperText: 'Earn XP • Improve • Climb the leaderboard',
-                  onStart: () async {
-                    final session = await ref
-                        .read(practiceLobbyProvider.notifier)
-                        .startSession();
-                    if (session != null && context.mounted) {
-                      context.push(SoteriaRoutes.practiceSession);
-                    }
-                  },
-                ),
-              ],
+                  Expanded(
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: SoteriaSpacing.lg,
+                          ),
+                          sliver: SliverList(
+                            delegate: SliverChildListDelegate([
+                              LobbyHeroHeader(
+                                part1: 'READY',
+                                part2: 'TO',
+                                part3: 'TRAIN?',
+                                subtitle:
+                                    "Let's build your knowledge and climb the ranks 🚀",
+                              ),
+                              SizedBox(height: SoteriaSpacing.md),
+                              LobbyInterestsCard(
+                                value: state.config.useInterests,
+                                onChanged:
+                                    (val) => ref
+                                        .read(practiceLobbyProvider.notifier)
+                                        .setUseInterests(val),
+                              ),
+                              SizedBox(height: SoteriaSpacing.md),
+                              if (!state.config.useInterests) ...[
+                                const CategorySelector(),
+                                SizedBox(height: SoteriaSpacing.lg),
+                              ],
+                              const DifficultySelector(),
+                              SizedBox(height: SoteriaSpacing.md),
+                              const QuestionCountSelector(),
+                              SizedBox(height: SoteriaSpacing.lg),
+                              if (state.estimatedRewards != null)
+                                SessionSummaryCard(
+                                  rewards: state.estimatedRewards!,
+                                ),
+                              SizedBox(height: SoteriaSpacing.lg),
+                            ]),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  LobbyStartAction(
+                    enabled: state.validationError == null,
+                    error: state.validationError,
+                    label: 'START PRACTICE',
+                    helperText: 'Earn XP • Improve • Climb the leaderboard',
+                    onStart: () async {
+                      final session = await ref
+                          .read(practiceLobbyProvider.notifier)
+                          .startSession();
+                      if (session != null && context.mounted) {
+                        context.push(SoteriaRoutes.practiceSession);
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-        ),
       ),
     );
   }

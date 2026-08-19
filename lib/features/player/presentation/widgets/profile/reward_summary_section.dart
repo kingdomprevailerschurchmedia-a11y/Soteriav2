@@ -90,11 +90,14 @@ class _RewardItem extends StatelessWidget {
         children: [
           _buildIcon(),
           SizedBox(height: SoteriaSpacing.xs),
-          Text(
-            '+${reward.amount}',
-            style: context.labelMedium.copyWith(
-              color: _getTypeColor(reward.type),
-              fontWeight: FontWeight.w900,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              '+${reward.amount}',
+              style: context.labelMedium.copyWith(
+                color: _getTypeColor(reward.type),
+                fontWeight: FontWeight.w900,
+              ),
             ),
           ),
         ],

@@ -5,6 +5,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
+import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
 import '../../../../core/utils/soteria_responsive.dart';
 
@@ -35,7 +36,7 @@ class QuickActionsGrid extends ConsumerWidget {
               Text(
                 'QUICK ACTIONS',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.gold,
+                  color: const Color(0xFFB456FF),
                   letterSpacing: 2.0,
                   fontWeight: FontWeight.w800,
                   fontSize: 13.sp,
@@ -51,13 +52,13 @@ class QuickActionsGrid extends ConsumerWidget {
             padding: EdgeInsets.zero,
             mainAxisSpacing: 12.h,
             crossAxisSpacing: 12.w,
-            childAspectRatio: 1.38,
+            childAspectRatio: 1.35,
             children: [
               _ActionCard(
                 title: 'Practice',
                 subtitle: 'Level Up',
                 icon: Icons.menu_book_rounded,
-                color: const Color(0xFF9155FD),
+                gradient: SoteriaGradients.practiceAction,
                 delay: 100,
                 onTap: nav.playPractice,
               ),
@@ -65,7 +66,7 @@ class QuickActionsGrid extends ConsumerWidget {
                 title: 'Pro Mode',
                 subtitle: 'Win Coins',
                 icon: Icons.emoji_events_rounded,
-                color: const Color(0xFFFF9F43),
+                gradient: SoteriaGradients.proModeAction,
                 delay: 200,
                 onTap: nav.playProMode,
               ),
@@ -73,7 +74,7 @@ class QuickActionsGrid extends ConsumerWidget {
                 title: 'Versus',
                 subtitle: '1v1 Match',
                 icon: Icons.flash_on_rounded,
-                color: const Color(0xFF2196F3),
+                gradient: SoteriaGradients.versusAction,
                 delay: 300,
                 onTap: nav.playVersus,
               ),
@@ -81,7 +82,7 @@ class QuickActionsGrid extends ConsumerWidget {
                 title: 'Tournament',
                 subtitle: 'Compete',
                 icon: Icons.workspace_premium_rounded,
-                color: const Color(0xFF4CAF50),
+                gradient: SoteriaGradients.targetAction,
                 delay: 400,
                 onTap: nav.playTournament,
               ),
@@ -98,7 +99,7 @@ class _ActionCard extends StatefulWidget {
     required this.title,
     required this.subtitle,
     required this.icon,
-    required this.color,
+    required this.gradient,
     required this.delay,
     required this.onTap,
   });
@@ -106,7 +107,7 @@ class _ActionCard extends StatefulWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final Color color;
+  final Gradient gradient;
   final int delay;
   final VoidCallback onTap;
 
@@ -155,16 +156,50 @@ class _ActionCardState extends State<_ActionCard>
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24.r),
-                color: Colors.white.withValues(alpha: 0.03),
-                border: Border.all(
-                  color: widget.color.withValues(alpha: 0.2),
-                  width: 1.2,
-                ),
+                gradient: widget.gradient,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 15,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24.r),
                 child: Stack(
                   children: [
+                    // Background Pattern (Concentric Circles)
+                    Positioned(
+                      right: -30.w,
+                      bottom: -30.h,
+                      child: Opacity(
+                        opacity: 0.1,
+                        child: Container(
+                          width: 120.r,
+                          height: 120.r,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: -15.w,
+                      bottom: -15.h,
+                      child: Opacity(
+                        opacity: 0.1,
+                        child: Container(
+                          width: 90.r,
+                          height: 90.r,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.white, width: 2),
+                          ),
+                        ),
+                      ),
+                    ),
                     // Ghost Icon
                     Positioned(
                       right: -10.w,
@@ -174,37 +209,30 @@ class _ActionCardState extends State<_ActionCard>
                         child: Icon(
                           widget.icon,
                           size: 80.sp,
-                          color: widget.color,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.all(12.w),
+                      padding: EdgeInsets.all(SoteriaSpacing.adaptive(context, 16.w)),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           // Glowing Icon Container
                           Container(
-                            padding: EdgeInsets.all(6.w),
+                            padding: EdgeInsets.all(8.w),
                             decoration: BoxDecoration(
-                              color: widget.color.withValues(alpha: 0.3),
+                              color: Colors.white.withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(14.r),
                               border: Border.all(
-                                color: widget.color.withValues(alpha: 0.5),
-                                width: 1.5,
+                                color: Colors.white.withValues(alpha: 0.2),
+                                width: 1.2,
                               ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: widget.color.withValues(alpha: 0.6),
-                                  blurRadius: 15,
-                                  spreadRadius: 1,
-                                ),
-                              ],
                             ),
                             child: Icon(
                               widget.icon,
                               color: Colors.white,
-                              size: 22.sp,
+                              size: 24.sp,
                             ),
                           ),
                           const Spacer(),
@@ -213,38 +241,39 @@ class _ActionCardState extends State<_ActionCard>
                             style: context.titleMedium.copyWith(
                               fontWeight: FontWeight.w900,
                               color: Colors.white,
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                               letterSpacing: 0.2,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                           Text(
                             widget.subtitle,
                             style: context.labelSmall.copyWith(
-                              color: Colors.white.withValues(alpha: 0.5),
+                              color: Colors.white.withValues(alpha: 0.7),
                               fontWeight: FontWeight.w600,
                               fontSize: 13.sp,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ],
                       ),
                     ),
                     // Action Arrow Button
                     Positioned(
-                      right: 12.w,
-                      bottom: 12.h,
+                      right: 16.w,
+                      bottom: 16.h,
                       child: Container(
-                        padding: EdgeInsets.all(6.w),
+                        padding: EdgeInsets.all(8.w),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.08),
+                          color: Colors.white.withValues(alpha: 0.1),
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.1),
-                          ),
                         ),
                         child: Icon(
                           Icons.keyboard_arrow_right_rounded,
                           color: Colors.white,
-                          size: 16.sp,
+                          size: 18.sp,
                         ),
                       ),
                     ),

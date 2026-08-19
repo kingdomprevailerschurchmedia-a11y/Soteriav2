@@ -39,9 +39,9 @@ class AnswerCard extends StatelessWidget {
     double opacity = 0.08;
 
     if (isSelected) {
-      borderColor = SoteriaColors.primary;
-      glowColor = SoteriaColors.primary.withValues(alpha: 0.2);
-      opacity = 0.15;
+      borderColor = SoteriaColors.secondary;
+      glowColor = SoteriaColors.secondary.withValues(alpha: 0.3);
+      opacity = 0.2;
     } else if (isCorrect) {
       borderColor = SoteriaColors.success;
       glowColor = SoteriaColors.success.withValues(alpha: 0.2);
@@ -75,22 +75,29 @@ class AnswerCard extends StatelessWidget {
             duration: SoteriaAnimations.fast,
             curve: Curves.easeInOut,
             decoration: BoxDecoration(
-              borderRadius: SoteriaRadius.brLg,
+              borderRadius: SoteriaRadius.brXl,
               boxShadow: [
                 if (isSelected || isCorrect || isWrong)
-                  BoxShadow(color: glowColor, blurRadius: 15, spreadRadius: -5),
+                  BoxShadow(
+                    color: glowColor,
+                    blurRadius: 20,
+                    spreadRadius: -8,
+                  ),
               ],
             ),
             child: GlassSurface(
-              borderRadius: SoteriaRadius.brLg,
+              borderRadius: SoteriaRadius.brXl,
               opacity: opacity,
-              padding: EdgeInsets.all(SoteriaSpacing.lg),
-              border: Border.all(color: borderColor, width: 1.5),
+              padding: EdgeInsets.symmetric(
+                horizontal: SoteriaSpacing.lg,
+                vertical: SoteriaSpacing.sm,
+              ),
+              border: Border.all(color: borderColor, width: 1.2),
               child: Row(
                 children: [
                   if (prefix != null) ...[
                     _AnswerPrefix(prefix: prefix!, visualState: visualState),
-                    SizedBox(width: SoteriaSpacing.md),
+                    SizedBox(width: SoteriaSpacing.lg),
                   ],
                   Expanded(
                     child: Text(
@@ -102,6 +109,7 @@ class AnswerCard extends StatelessWidget {
                         color: isLocked && !isCorrect && !isWrong
                             ? SoteriaColors.muted
                             : SoteriaColors.textPrimary,
+                        fontSize: 16.sp,
                       ),
                     ),
                   ),
@@ -139,10 +147,12 @@ class _AnswerPrefix extends StatelessWidget {
 
     Color bgColor = Colors.white.withValues(alpha: 0.1);
     Color textColor = SoteriaColors.textSecondary;
+    Color glowColor = Colors.transparent;
 
     if (isSelected) {
-      bgColor = SoteriaColors.primary;
+      bgColor = SoteriaColors.secondary;
       textColor = Colors.white;
+      glowColor = SoteriaColors.secondary.withValues(alpha: 0.4);
     } else if (isCorrect) {
       bgColor = SoteriaColors.success;
       textColor = Colors.white;
@@ -153,15 +163,29 @@ class _AnswerPrefix extends StatelessWidget {
 
     return AnimatedContainer(
       duration: SoteriaAnimations.fast,
-      width: 32.w,
-      height: 32.w,
+      width: 42.w,
+      height: 42.w,
       alignment: Alignment.center,
-      decoration: BoxDecoration(color: bgColor, shape: BoxShape.circle),
+      decoration: BoxDecoration(
+        color: bgColor,
+        shape: BoxShape.circle,
+        boxShadow: [
+          if (isSelected)
+            BoxShadow(color: glowColor, blurRadius: 10, spreadRadius: 2),
+        ],
+        border: Border.all(
+          color: isSelected
+              ? SoteriaColors.secondary.withValues(alpha: 0.5)
+              : Colors.white.withValues(alpha: 0.1),
+          width: 1,
+        ),
+      ),
       child: Text(
         prefix,
         style: context.labelLarge.copyWith(
           color: textColor,
           fontWeight: FontWeight.w900,
+          fontSize: 18.sp,
         ),
       ),
     );

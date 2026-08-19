@@ -114,7 +114,7 @@ class _AnnouncementItem extends StatelessWidget {
                       fontSize: 12.sp,
                       fontWeight: FontWeight.bold,
                     ),
-                    maxLines: 1,
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],

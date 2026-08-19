@@ -45,9 +45,15 @@ class SoteriaColors {
   static const Color info = Color(0xFF448AFF);
 
   // Status Colors (Extended)
-  static const Color xpColor = Color(0xFF00E5FF);
+  static const Color xpColor = Color(0xFFB456FF); // More purple/pink to match image
   static const Color coinColor = Color(0xFFFFD700);
   static const Color levelColor = Color(0xFF7C4DFF);
+
+  // Quick Action Specific Colors
+  static const Color practicePurple = Color(0xFF6B4EEA);
+  static const Color proModeOrange = Color(0xFFE58C3D);
+  static const Color versusBlue = Color(0xFF42A5F5);
+  static const Color targetGreen = Color(0xFF66BB6A);
 
   // Rank Colors
   static const Color bronze = Color(0xFFCD7F32);

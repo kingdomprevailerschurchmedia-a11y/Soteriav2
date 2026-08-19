@@ -107,6 +107,7 @@ void main() {
       final updated = service.evaluate(
         playerGoals: [playerGoal],
         recentResults: results,
+        practiceResults: [],
         statistics: mockStats,
         progression: mockProgression,
       );
@@ -183,6 +184,7 @@ void main() {
       final updated = service.evaluate(
         playerGoals: [playerGoal],
         recentResults: results,
+        practiceResults: [],
         statistics: mockStats,
         progression: mockProgression,
       );
@@ -205,6 +207,7 @@ void main() {
         final updated = service.evaluate(
           playerGoals: [playerGoal],
           recentResults: [],
+          practiceResults: [],
           statistics: mockStats,
           progression: mockProgression,
         );

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,8 @@ import '../widgets/profile/achievement_summary_section.dart';
 import '../widgets/profile/engagement_summary_section.dart';
 import '../widgets/profile/career_statistics_section.dart';
 
+import '../../../../shared/widgets/soteria_page.dart';
+
 class PlayerProfileScreen extends ConsumerWidget {
   const PlayerProfileScreen({super.key});
 
@@ -22,12 +25,17 @@ class PlayerProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final profileAsync = ref.watch(competitiveProfileProvider);
 
-    return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: profileAsync.when(
-        data: (profile) => _buildProfileContent(context, profile, ref),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => _buildErrorState(context, err),
+    return SoteriaPage(
+      useSafeArea: false,
+      showBackground: false,
+      child: Scaffold(
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: profileAsync.when(
+          data: (profile) => _buildProfileContent(context, profile, ref),
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (err, stack) => _buildErrorState(context, err),
+        ),
       ),
     );
   }

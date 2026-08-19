@@ -23,7 +23,20 @@ class FirestoreProfileRepository implements ProfileRepository {
 
   @override
   Future<bool> checkUsernameAvailability(String username) async {
-    final doc = await _firestore.collection('usernames').doc(username.toLowerCase()).get();
+    final normalized = username.trim().toLowerCase();
+    final doc = await _firestore.collection('usernames').doc(normalized).get();
+    
+    if (!doc.exists) return true;
+    
+    // If it exists, check if it belongs to the current user (case insensitive comparison)
+    // We get the current user ID from the reservation document
+    final data = doc.data();
+    final userId = data?['userId'] as String?;
+    
+    // Note: We don't have the current UID here directly, so we rely on the caller 
+    // or assume if it exists it's taken, but the rules allow the owner to overwrite it.
+    // However, for availability UI, we should probably know if it's "taken by ME".
+    // For now, let's keep it simple: if doc exists, it's not "available" for a NEW reservation.
     return !doc.exists;
   }
 
@@ -85,6 +98,7 @@ class FirestoreProfileRepository implements ProfileRepository {
       for (final field in restrictedUserProfileFields) {
         userProfileMap.remove(field);
       }
+      userProfileMap['updatedAt'] = FieldValue.serverTimestamp();
 
       transaction.set(
         _firestore.collection('user_profiles').doc(userId),
@@ -102,11 +116,13 @@ class FirestoreProfileRepository implements ProfileRepository {
         'correctAnswers', 'practiceSessions', 'proSessions', 'versusMatches',
         'tournamentMatches', 'registrationOrder', 'lastLogin', 'updatedAt',
         'version', 'lastDailyRewardClaim', 'dailyProSessionsPlayed',
-        'lastProSessionDate', 'lastRankTransactionId', 'lastXpTransactionId'
+        'lastProSessionDate', 'lastRankTransactionId', 'lastXpTransactionId',
+        'lastStreakMilestoneCelebrated'
       ];
       for (final field in restrictedPlayerFields) {
         playerProfileMap.remove(field);
       }
+      playerProfileMap['updatedAt'] = FieldValue.serverTimestamp();
 
       transaction.set(
         _firestore.collection('users').doc(userId),

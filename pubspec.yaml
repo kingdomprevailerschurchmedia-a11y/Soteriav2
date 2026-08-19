@@ -77,6 +77,9 @@ dependencies:
 
   googleapis: ^13.2.0
   googleapis_auth: ^1.6.0
+  auto_size_text: ^3.0.0
+  integration_test:
+    sdk: flutter
 
 dev_dependencies:
   # ---------------------------------------------------------------------------
@@ -109,8 +112,6 @@ dev_dependencies:
   firedart: ^0.9.8
 
   flutter_launcher_icons: ^0.14.4
-  integration_test:
-    sdk: flutter
 
 # =============================================================================
 # FLUTTER LAUNCHER ICONS

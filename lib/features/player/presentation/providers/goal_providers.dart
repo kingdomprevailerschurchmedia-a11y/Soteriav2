@@ -11,6 +11,10 @@ import 'progression_providers.dart';
 import 'history_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../quiz/presentation/providers/history_providers.dart';
+import '../../../practice/presentation/providers/practice_history_providers.dart';
+import '../../../rewards/presentation/providers/rewards_providers.dart';
+import '../../domain/models/xp_transaction.dart';
+import '../../domain/models/season_reward_definition.dart';
 
 final goalRepositoryProvider = Provider<GoalRepository>((ref) {
   return FirebaseGoalRepository(FirebaseFirestore.instance);
@@ -87,28 +91,65 @@ final goalHistoryProvider = FutureProvider<List<PlayerGoal>>((ref) async {
 final goalEvaluationProvider = Provider<void>((ref) {
   final goalsAsync = ref.watch(playerGoalsProvider);
   final resultsAsync = ref.watch(historyListProvider);
+  final practiceAsync = ref.watch(practiceHistoryListProvider);
   final statsAsync = ref.watch(competitiveStatisticsProvider);
   final progressionAsync = ref.watch(competitiveProgressionProvider);
 
   if (goalsAsync.hasValue &&
       resultsAsync.hasValue &&
+      practiceAsync.hasValue &&
       statsAsync.hasValue &&
       progressionAsync.hasValue) {
     final userId = ref.watch(authRepositoryProvider).currentUserId;
     if (userId == null) return;
 
-    final updated = ref
-        .read(goalEvaluationServiceProvider)
-        .evaluate(
-          playerGoals: goalsAsync.value!,
-          recentResults: resultsAsync.value!,
-          statistics: statsAsync.value!,
-          progression: progressionAsync.value!,
-        );
+    final updated = ref.read(goalEvaluationServiceProvider).evaluate(
+      playerGoals: goalsAsync.value!,
+      recentResults: resultsAsync.value!,
+      practiceResults: practiceAsync.value!,
+      statistics: statsAsync.value!,
+      progression: progressionAsync.value!,
+    );
 
     if (updated.isNotEmpty) {
       final repository = ref.read(goalRepositoryProvider);
-      for (final goal in updated) {
+      final rewardService = ref.read(progressionRewardServiceProvider);
+      final walletRepo = ref.read(walletRepositoryProvider);
+      final applyXp = ref.read(applyXpTransactionProvider);
+
+      for (var goal in updated) {
+        // Check if newly completed for automated rewards
+        if (goal.status == GoalStatus.completed) {
+          // Process XP rewards
+          final xpTx = rewardService.processGoalReward(
+            userId: userId,
+            goalId: goal.goalId,
+            goalState: goal,
+          );
+          if (xpTx != null) {
+            applyXp(xpTx);
+          }
+
+          // Process Coin rewards
+          final coinAmount = rewardService.getGoalCoinReward(goal.goalId);
+          if (coinAmount != null && coinAmount > 0) {
+            walletRepo.creditCurrency(
+              userId: userId,
+              amount: coinAmount,
+              currency: 'coins',
+              source: 'goal_completion',
+              referenceId: goal.goalId,
+              description: 'Reward for completing goal',
+            );
+          }
+
+          // Mark as claimed to prevent re-processing
+          goal = goal.copyWith(
+            status: GoalStatus.claimed,
+            claimedAt: DateTime.now(),
+          );
+        }
+
         repository.updateGoalProgress(goal);
       }
     }

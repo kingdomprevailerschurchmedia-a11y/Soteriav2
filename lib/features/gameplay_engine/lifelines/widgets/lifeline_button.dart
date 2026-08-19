@@ -7,6 +7,9 @@ import 'package:soteria/core/widgets/glass_surface.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_type.dart';
 import 'package:soteria/features/gameplay_engine/lifelines/models/lifeline_status.dart';
 
+import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
+
 class LifelineButton extends StatelessWidget {
   const LifelineButton({
     super.key,
@@ -24,15 +27,18 @@ class LifelineButton extends StatelessWidget {
     final isUsed = status == LifelineStatus.used;
     final isAvailable = status == LifelineStatus.available;
 
-    Color iconColor = SoteriaColors.primary;
-    double opacity = 0.08;
+    Color iconColor = Colors.white;
+    Color glowColor = SoteriaColors.secondary.withValues(alpha: 0.3);
+    double opacity = 0.12;
 
     if (isUsed) {
       iconColor = SoteriaColors.muted;
-      opacity = 0.03;
+      opacity = 0.05;
+      glowColor = Colors.transparent;
     } else if (!isAvailable) {
       iconColor = SoteriaColors.muted.withValues(alpha: 0.5);
-      opacity = 0.02;
+      opacity = 0.03;
+      glowColor = Colors.transparent;
     }
 
     return Semantics(
@@ -47,24 +53,40 @@ class LifelineButton extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              GlassSurface(
-                borderRadius: SoteriaRadius.brFull,
-                opacity: opacity,
-                padding: EdgeInsets.all(12.w),
-                child: Icon(_getIcon(type), color: iconColor, size: 24.w),
-              ),
-              if (isUsed)
-                Padding(
-                  padding: EdgeInsets.only(top: 4.h),
-                  child: Container(
-                    width: 4.w,
-                    height: 4.w,
-                    decoration: const BoxDecoration(
-                      color: SoteriaColors.muted,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
+              Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    if (isAvailable)
+                      BoxShadow(
+                        color: glowColor,
+                        blurRadius: 12,
+                        spreadRadius: 2,
+                      ),
+                  ],
                 ),
+                child: GlassSurface(
+                  borderRadius: SoteriaRadius.brFull,
+                  opacity: opacity,
+                  padding: EdgeInsets.all(16.w),
+                  border: Border.all(
+                    color: isAvailable
+                        ? Colors.white.withValues(alpha: 0.2)
+                        : Colors.white.withValues(alpha: 0.05),
+                    width: 1,
+                  ),
+                  child: Icon(_getIcon(type), color: iconColor, size: 28.w),
+                ),
+              ),
+              SizedBox(height: SoteriaSpacing.xs),
+              Text(
+                _getLabel(type),
+                style: context.labelSmall.copyWith(
+                  color: isAvailable ? SoteriaColors.textSecondary : SoteriaColors.muted,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 11.sp,
+                ),
+              ),
             ],
           ),
         ),
@@ -77,7 +99,7 @@ class LifelineButton extends StatelessWidget {
       case LifelineType.fiftyFifty:
         return Icons.exposure_minus_2_rounded;
       case LifelineType.pauseTimer:
-        return Icons.pause_circle_outline_rounded;
+        return Icons.pause_rounded;
       case LifelineType.askAudience:
         return Icons.groups_rounded;
     }
@@ -86,11 +108,11 @@ class LifelineButton extends StatelessWidget {
   String _getLabel(LifelineType type) {
     switch (type) {
       case LifelineType.fiftyFifty:
-        return '50/50';
+        return 'Deduct';
       case LifelineType.pauseTimer:
-        return 'Pause Timer';
+        return 'Pause';
       case LifelineType.askAudience:
-        return 'Ask the Audience';
+        return 'Ask Friend';
     }
   }
 }

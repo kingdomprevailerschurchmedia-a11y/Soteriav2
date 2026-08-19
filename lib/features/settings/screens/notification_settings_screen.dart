@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/glass_surface.dart';
+import 'package:soteria/shared/widgets/soteria_page.dart';
 import 'package:go_router/go_router.dart';
 
 class NotificationSettingsScreen extends ConsumerWidget {
@@ -11,29 +12,27 @@ class NotificationSettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: Text(
-          'NOTIFICATION SETTINGS',
-          style: context.titleMedium.copyWith(
-            fontWeight: FontWeight.w900,
-            letterSpacing: 2.5,
+    return SoteriaPage(
+      child: Scaffold(
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: Text(
+            'NOTIFICATION SETTINGS',
+            style: context.titleMedium.copyWith(
+              fontWeight: FontWeight.w900,
+              letterSpacing: 2.5,
+            ),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.chevron_left_rounded),
+            onPressed: () => context.pop(),
           ),
         ),
-        centerTitle: true,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.chevron_left_rounded),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: SoteriaColors.backgroundGradient,
-        ),
-        child: ListView(
+        body: ListView(
           padding: EdgeInsets.fromLTRB(
             SoteriaSpacing.lg,
             kToolbarHeight + SoteriaSpacing.xl,

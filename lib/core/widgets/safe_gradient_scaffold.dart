@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:soteria/core/design_system/gradients/soteria_gradients.dart';
+import '../../shared/widgets/soteria_background.dart';
 
 class SafeGradientScaffold extends StatelessWidget {
   const SafeGradientScaffold({
@@ -26,13 +26,11 @@ class SafeGradientScaffold extends StatelessWidget {
       appBar: appBar,
       bottomNavigationBar: bottomNavigationBar,
       floatingActionButton: floatingActionButton,
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: SoteriaGradients.primaryBackground,
-        ),
-        child: SafeArea(child: body),
+      body: Stack(
+        children: [
+          const SoteriaBackground(),
+          SafeArea(child: body),
+        ],
       ),
     );
   }

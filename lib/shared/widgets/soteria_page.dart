@@ -5,6 +5,7 @@ import '../../core/design_system/colors/soteria_colors.dart';
 import '../../core/design_system/spacing/soteria_spacing.dart';
 import '../../core/design_system/typography/soteria_typography.dart';
 import '../../core/identity/providers/identity_providers.dart';
+import 'soteria_background.dart';
 
 class SoteriaPage extends ConsumerWidget {
   const SoteriaPage({
@@ -15,6 +16,7 @@ class SoteriaPage extends ConsumerWidget {
     this.onRetry,
     this.showOfflineBanner = true,
     this.useSafeArea = true,
+    this.showBackground = true,
   });
 
   final Widget child;
@@ -23,6 +25,7 @@ class SoteriaPage extends ConsumerWidget {
   final VoidCallback? onRetry;
   final bool showOfflineBanner;
   final bool useSafeArea;
+  final bool showBackground;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -34,6 +37,7 @@ class SoteriaPage extends ConsumerWidget {
       type: MaterialType.transparency,
       child: Stack(
         children: [
+          if (showBackground) const SoteriaBackground(),
           if (useSafeArea) SafeArea(child: child) else child,
           if (showOfflineBanner && isOffline)
             Positioned(

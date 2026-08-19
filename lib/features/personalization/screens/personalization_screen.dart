@@ -85,193 +85,242 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
             _onBack();
           }
         },
-        child: Column(
-          children: [
-            // Header Section
-            Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: SoteriaSpacing.lg,
-                vertical: SoteriaSpacing.md,
-              ),
-              child: Column(
-                children: [
-                  Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // Back Button
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Opacity(
-                          opacity: state.currentStep > 0 ? 1.0 : 0.0,
-                          child: GestureDetector(
-                            onTap: state.currentStep > 0 ? _onBack : null,
-                            child: Container(
-                              width: 40.w,
-                              height: 40.w,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withValues(alpha: 0.05),
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                  color: Colors.white.withValues(alpha: 0.1),
-                                ),
-                              ),
-                              child: const Icon(
-                                Icons.chevron_left_rounded,
-                                color: Colors.white,
-                                size: 24,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      // Logo & Title
-                      Column(
-                        children: [
-                          Image.asset(
-                            'assets/images/personalisation_icon.png',
-                            width: 64.w,
-                            height: 64.w,
-                            fit: BoxFit.contain,
-                          ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            'Personalization',
-                            style: context.titleLarge.copyWith(
-                              color: SoteriaColors.gold,
-                              fontSize: 22.sp,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 24.h),
-                  // Progress Bar Redesign
-                  Column(
-                    children: [
-                      Container(
-                        height: 6.h,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.05),
-                          borderRadius: BorderRadius.circular(3.r),
-                        ),
-                        child: FractionallySizedBox(
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                const Color(0xFF2E1A8A).withValues(alpha: 0.4),
+                const Color(0xFF0B012A).withValues(alpha: 0.8),
+              ],
+            ),
+          ),
+          child: Column(
+            children: [
+              // Header Section
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: SoteriaSpacing.lg,
+                  vertical: SoteriaSpacing.md,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 16.h),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        // Back Button
+                        Align(
                           alignment: Alignment.centerLeft,
-                          widthFactor: state.progress,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [SoteriaColors.gold, Color(0xFFB8860B)],
-                              ),
-                              borderRadius: BorderRadius.circular(3.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: SoteriaColors.gold.withValues(
-                                    alpha: 0.4,
+                          child: Opacity(
+                            opacity: state.currentStep > 0 ? 1.0 : 0.0,
+                            child: GestureDetector(
+                              onTap: state.currentStep > 0 ? _onBack : null,
+                              child: Container(
+                                width: 44.w,
+                                height: 44.w,
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.05),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white.withValues(alpha: 0.1),
                                   ),
-                                  blurRadius: 8,
-                                  spreadRadius: 1,
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 12.w,
-                              vertical: 4.h,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.05),
-                              borderRadius: BorderRadius.circular(12.r),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.1),
-                              ),
-                            ),
-                            child: Text(
-                              'Step ${state.currentStep + 1} of 5',
-                              style: context.bodySmall.copyWith(
-                                color: Colors.white,
-                                fontSize: 12.sp,
-                                fontWeight: FontWeight.w500,
+                                child: const Icon(
+                                  Icons.chevron_left_rounded,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            // Content
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: const [
-                  StepAcademicLevel(),
-                  StepInterests(),
-                  StepGoals(),
-                  StepNotifications(),
-                  StepSummary(),
-                ],
-              ),
-            ),
-
-            // Footer Redesign
-            Padding(
-              padding: EdgeInsets.all(SoteriaSpacing.lg),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SoteriaButton.primary(
-                    label: state.currentStep == 4
-                        ? 'COMPLETE PROFILE'
-                        : 'CONTINUE',
-                    onPressed: isValid
-                        ? () => _onContinue(state.currentStep, isValid)
-                        : null,
-                    size: SoteriaButtonSize.lg,
-                    icon: Icons.auto_awesome_rounded,
-                    trailingIcon: Icons.arrow_forward_rounded,
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.lock_outline_rounded,
-                        size: 14.sp,
-                        color: SoteriaColors.textSecondary.withValues(
-                          alpha: 0.5,
                         ),
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        'Your information is safe and secure with us.',
-                        style: context.bodySmall.copyWith(
-                          color: SoteriaColors.textSecondary.withValues(
-                            alpha: 0.5,
+                        // Title
+                        Text(
+                          'Personalization',
+                          style: context.titleLarge.copyWith(
+                            color: Colors.white,
+                            fontSize: 24.sp,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.5,
                           ),
-                          fontSize: 12.sp,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 32.h),
+                    // Progress Bar Redesign
+                    Column(
+                      children: [
+                        Container(
+                          height: 8.h,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                          child: FractionallySizedBox(
+                            alignment: Alignment.centerLeft,
+                            widthFactor: state.progress,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                gradient: const LinearGradient(
+                                  colors: [Color(0xFF8A55FD), Color(0xFFFF4081)],
+                                ),
+                                borderRadius: BorderRadius.circular(100),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF8A55FD).withValues(
+                                      alpha: 0.4,
+                                    ),
+                                    blurRadius: 10,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 12.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'YOUR PROGRESS',
+                              style: context.labelSmall.copyWith(
+                                color: Colors.white.withValues(alpha: 0.4),
+                                letterSpacing: 1.5,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 10.sp,
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 4.h,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF8A55FD).withValues(alpha: 0.15),
+                                borderRadius: BorderRadius.circular(100),
+                                border: Border.all(
+                                  color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
+                                ),
+                              ),
+                              child: Text(
+                                'STEP ${state.currentStep + 1}/5',
+                                style: context.bodySmall.copyWith(
+                                  color: Colors.white,
+                                  fontSize: 11.sp,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              // Content
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: const [
+                    StepAcademicLevel(),
+                    StepInterests(),
+                    StepGoals(),
+                    StepNotifications(),
+                    StepSummary(),
+                  ],
+                ),
+              ),
+
+              // Footer Redesign
+              Padding(
+                padding: EdgeInsets.all(SoteriaSpacing.lg),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      onTap: isValid
+                          ? () => _onContinue(state.currentStep, isValid)
+                          : null,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: double.infinity,
+                        height: 56.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          gradient: isValid
+                              ? const LinearGradient(
+                                  colors: [Color(0xFF8A55FD), Color(0xFFE58C3D)],
+                                )
+                              : null,
+                          color: isValid ? null : Colors.white.withValues(alpha: 0.05),
+                          boxShadow: isValid
+                              ? [
+                                  BoxShadow(
+                                    color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
+                                    blurRadius: 20,
+                                    offset: const Offset(0, 10),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Center(
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Text(
+                                state.currentStep == 4
+                                    ? 'COMPLETE PROFILE'
+                                    : 'CONTINUE',
+                                style: context.titleMedium.copyWith(
+                                  color: isValid ? Colors.white : SoteriaColors.muted,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              Icon(
+                                Icons.arrow_forward_rounded,
+                                color: isValid ? Colors.white : SoteriaColors.muted,
+                                size: 20,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ],
-                  ),
-                ],
+                    ),
+                    SizedBox(height: 20.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.verified_user_rounded,
+                          size: 14.sp,
+                          color: Colors.white.withValues(alpha: 0.3),
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          'Secure & Private Profile Setup',
+                          style: context.bodySmall.copyWith(
+                            color: Colors.white.withValues(alpha: 0.3),
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 8.h),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

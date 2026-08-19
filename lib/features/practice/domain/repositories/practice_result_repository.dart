@@ -18,6 +18,13 @@ abstract interface class PracticeResultRepository {
     String? categoryId,
   });
 
+  /// Fetches practice results within a date range.
+  Future<List<PracticeResult>> getResultsByDateRange(
+    String userId,
+    DateTime start,
+    DateTime end,
+  );
+
   /// Deletes a practice result (optional, for cleanup/privacy).
   Future<void> deleteResult(String userId, String resultId);
 }

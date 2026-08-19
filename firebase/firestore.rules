@@ -29,8 +29,18 @@ service cloud.firestore {
     }
 
     // Checks if the request is trying to modify restricted fields
+    // Returns true if NONE of the restricted fields are present in the change set
     function isNotModifying(fields) {
-      return !(request.resource.data.diff(resource.data).affectedKeys().hasAny(fields));
+      let affectedKeys = request.resource.data.diff(resource.data).affectedKeys();
+      return !affectedKeys.hasAny(fields);
+    }
+
+    function isSafeProfileUpdate() {
+      return isNotModifying([
+        'xp', 'level', 'coins', 'badges', 'achievements', 'role',
+        'accountStatus', 'createdAt', 'email', 'registrationOrder',
+        'lastRankTransactionId', 'lastXpTransactionId'
+      ]);
     }
 
     // -------------------------------------------------------------------------
@@ -57,7 +67,7 @@ service cloud.firestore {
       // XP and Coins can only be updated if a corresponding transaction/settlement exists
       allow update: if isOwner(userId) &&
                     (
-                      isNotModifying(['xp', 'level', 'coins', 'badges', 'achievements', 'role', 'accountStatus', 'createdAt', 'email']) ||
+                      isSafeProfileUpdate() ||
                       (
                         request.resource.data.diff(resource.data).affectedKeys().hasAny(['coins']) &&
                         (
@@ -118,6 +128,15 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
+    match /user_game_profiles/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(userId) || isAdmin();
+    }
+
+    match /user_preferences/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
     // PRESENCE: Real-time status
     match /presence/{userId} {
       allow read: if isAuthenticated();
@@ -144,13 +163,24 @@ service cloud.firestore {
     }
 
     match /wallet_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isOwner(request.resource.data.userId) &&
                     (
                       (request.resource.data.transactionType == 'spend' &&
                        existsAfter(/databases/$(database)/documents/users/$(request.auth.uid))) ||
                       (request.resource.data.transactionType == 'reward' &&
-                       getAfter(/databases/$(database)/documents/settlements/$(request.resource.data.referenceId)).data.coinsWon == request.resource.data.amount)
+                       (
+                         (request.resource.data.source == 'dailyLogin') ||
+                         (request.resource.data.source == 'milestone' &&
+                          getAfter(/databases/$(database)/documents/users/$(request.auth.uid)/milestones/$(request.resource.data.referenceId)).data.status == 'claimed') ||
+                         (request.resource.data.source == 'dailyChallenge' &&
+                          getAfter(/databases/$(database)/documents/users/$(request.auth.uid)/competitive_goals/$(request.resource.data.referenceId)).data.status == 'claimed') ||
+                         (request.resource.data.source == 'purchase' &&
+                          getAfter(/databases/$(database)/documents/purchases/$(request.resource.data.referenceId)).data.status == 'completed') ||
+                         (existsAfter(/databases/$(database)/documents/settlements/$(request.resource.data.referenceId)) &&
+                          getAfter(/databases/$(database)/documents/settlements/$(request.resource.data.referenceId)).data.coinsWon == request.resource.data.amount)
+                       )
+                      )
                     );
     }
 
@@ -172,31 +202,32 @@ service cloud.firestore {
     }
 
     match /xp_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (isAdmin() || resource == null || resource.data.userId == request.auth.uid);
       allow create: if isOwner(request.resource.data.userId) &&
                     request.resource.data.amount >= 0 && request.resource.data.amount < 5000;
     }
 
     match /rank_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isOwner(request.resource.data.userId);
     }
 
     match /coin_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isOwner(request.resource.data.userId);
     }
 
     match /rank_history/{docId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isOwner(request.resource.data.userId) &&
                     existsAfter(/databases/$(database)/documents/rank_transactions/$(request.resource.data.referenceResultId + '_tx'));
       allow update: if isOwner(resource.data.userId) && isNotModifying(['changeId', 'userId', 'newRankPoints']);
     }
 
     match /rank_movement_history/{docId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
-      allow write: if isAdmin();
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
     }
 
     // TOURNAMENTS & EVENTS
@@ -218,7 +249,7 @@ service cloud.firestore {
 
     // SEASON REWARD GRANTS
     match /season_reward_grants/{grantId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow write: if isAdmin() || (isAuthenticated() && request.resource.data.userId == request.auth.uid);
     }
 
@@ -240,14 +271,50 @@ service cloud.firestore {
       allow create: if isAuthenticated() &&
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.username.lower() == username;
-      allow update: if false;
+      allow update: if isAuthenticated() &&
+                    resource.data.userId == request.auth.uid &&
+                    request.resource.data.userId == request.auth.uid;
       allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
 
     // SOCIAL & CHALLENGES
     match /friendships/{docId} {
       allow read: if isAuthenticated();
-      allow write: if isAuthenticated() && (request.auth.uid in request.resource.data.userIds || isAdmin());
+      allow write: if isAuthenticated() && (
+        (resource == null ? request.resource.data.userIds : resource.data.userIds).hasAny([request.auth.uid]) ||
+        isAdmin()
+      );
+    }
+
+    match /friend_requests/{requestId} {
+      allow read: if isAuthenticated() && (
+        (resource != null && (request.auth.uid == resource.data.senderId || request.auth.uid == resource.data.receiverId)) ||
+        (resource == null && (requestId.startsWith(request.auth.uid + '_') || requestId.endsWith('_' + request.auth.uid)))
+      );
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.senderId;
+      allow update: if isAuthenticated() && (
+        (request.auth.uid == resource.data.senderId && request.resource.data.status == 'cancelled') ||
+        (request.auth.uid == resource.data.receiverId && request.resource.data.status in ['accepted', 'declined'])
+      );
+      allow delete: if isAdmin();
+    }
+
+    match /follows/{followId} {
+      allow read: if isAuthenticated() && (
+        (resource != null && (request.auth.uid == resource.data.followerId || request.auth.uid == resource.data.followingId)) ||
+        (resource == null && (followId.startsWith(request.auth.uid + '_') || followId.endsWith('_' + request.auth.uid)))
+      );
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.followerId;
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.followerId;
+    }
+
+    match /blocks/{blockId} {
+      allow read: if isAuthenticated() && (
+        (resource != null && (request.auth.uid == resource.data.blockerId || request.auth.uid == resource.data.blockedId)) ||
+        (resource == null && (blockId.startsWith(request.auth.uid + '_') || blockId.endsWith('_' + request.auth.uid)))
+      );
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.blockerId;
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.blockerId;
     }
 
     match /challenges/{challengeId} {
@@ -299,7 +366,7 @@ service cloud.firestore {
     }
 
     match /settlements/{settlementId} {
-      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
       allow create: if isOwner(request.resource.data.uid) &&
                     existsAfter(/databases/$(database)/documents/competitive_sessions/$(request.resource.data.sessionId)) &&
                     getAfter(/databases/$(database)/documents/competitive_sessions/$(request.resource.data.sessionId)).data.status == 'settled';
@@ -308,7 +375,7 @@ service cloud.firestore {
 
     // MATCHMAKING POOL
     match /matchmaking_pool/{sessionId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
       allow update: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
       allow write: if isAdmin();
@@ -335,12 +402,6 @@ service cloud.firestore {
     match /leaderboard_seasons/{docId} {
       allow read: if isAuthenticated();
       allow write: if isAuthenticated() && docId.endsWith('_' + request.auth.uid);
-    }
-
-    match /rank_movement_history/{eventId} {
-      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if isAdmin();
     }
   }
 }

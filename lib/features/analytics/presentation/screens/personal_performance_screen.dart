@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,8 @@ import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/utils/soteria_responsive.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 
+import '../../../../shared/widgets/soteria_page.dart';
+
 class PersonalPerformanceScreen extends ConsumerWidget {
   const PersonalPerformanceScreen({super.key});
 
@@ -26,13 +29,13 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     final analyticsAsync = ref.watch(personalPerformanceAnalyticsProvider);
     final selectedPeriod = ref.watch(selectedTimePeriodProvider);
 
-    return Scaffold(
-      backgroundColor: SoteriaColors.background,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: SoteriaColors.backgroundGradient,
-        ),
-        child: CustomScrollView(
+    return SoteriaPage(
+      useSafeArea: false,
+      showBackground: false,
+      child: Scaffold(
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: CustomScrollView(
           cacheExtent: 1000,
           slivers: [
             _buildAppBar(context, ref),
@@ -52,11 +55,9 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                     ),
                     PeriodSelector(
                       selectedPeriod: selectedPeriod,
-                      onPeriodChanged: (period) =>
-                          ref
-                                  .read(selectedTimePeriodProvider.notifier)
-                                  .state =
-                              period,
+                      onPeriodChanged: (period) => ref
+                          .read(selectedTimePeriodProvider.notifier)
+                          .state = period,
                     ),
                     SizedBox(
                       height: SoteriaSpacing.adaptive(
@@ -92,6 +93,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
               padding: EdgeInsets.only(
                 bottom: 40.h + MediaQuery.paddingOf(context).bottom,
               ),
+              sliver: const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
           ],
         ),
@@ -101,8 +103,10 @@ class PersonalPerformanceScreen extends ConsumerWidget {
 
   Widget _buildAppBar(BuildContext context, WidgetRef ref) {
     return SliverAppBar(
-      backgroundColor: SoteriaColors.backgroundBottomRight,
+      backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
       elevation: 0,
+      scrolledUnderElevation: 0,
       pinned: true,
       centerTitle: false,
       leadingWidth: 60.w,

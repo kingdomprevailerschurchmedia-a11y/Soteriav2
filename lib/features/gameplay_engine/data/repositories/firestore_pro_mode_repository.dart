@@ -15,17 +15,24 @@ import '../../../quiz/domain/services/quiz_scoring_engine.dart';
 import '../../../quiz/domain/models/scoring_configuration.dart';
 import '../../../quiz/domain/models/player_answer.dart';
 
-import '../../../player/domain/repositories/player_progression_repository.dart';
-import '../../../player/data/repositories/firebase_player_progression_repository.dart';
-import '../../../player/domain/models/xp_transaction.dart';
-import '../../../player/domain/models/competitive_result.dart';
+import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
+import 'package:soteria/features/player/domain/repositories/player_repository.dart';
+import 'package:soteria/features/player/domain/models/player_profile.dart';
+import 'package:soteria/features/player/data/repositories/firebase_player_progression_repository.dart';
+import 'package:soteria/features/player/domain/models/xp_transaction.dart';
+import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import '../../../../core/logging/logger_service.dart';
 
 class FirestoreProModeRepository implements ProModeRepository {
   final IDatabaseService _database;
   final PlayerProgressionRepository _progressionRepository;
+  final PlayerRepository _playerRepository;
 
-  FirestoreProModeRepository(this._database, this._progressionRepository);
+  FirestoreProModeRepository(
+    this._database,
+    this._progressionRepository,
+    this._playerRepository,
+  );
 
   @override
   Future<bool> validateEntry(String uid, Difficulty difficulty) async {
@@ -43,8 +50,46 @@ class FirestoreProModeRepository implements ProModeRepository {
   @override
   Future<void> reserveEntryFee(String uid, String sessionId, Difficulty difficulty, {bool isFree = false}) async {
     final int fee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
-    
-    await _database.instance.runTransaction((transaction) async {
+    final now = DateTime.now();
+
+    // 1. Pre-transaction check: Check for existing active sessions to prevent parallel play.
+    // Firestore transactions do not support collection queries.
+    // We allow entry if existing sessions are "stale" (not updated for 20+ mins).
+    final existingSessions = await _database
+        .collection('competitive_sessions')
+        .where('uid', isEqualTo: uid)
+        .where('status', whereIn: ['initialized', 'active'])
+        .get();
+
+    final activeSessions = existingSessions.docs.where((doc) {
+      final data = doc.data();
+      final updatedAt = data['updatedAt'];
+      final startTime = data['startTime'];
+
+      DateTime? lastActivity;
+      if (updatedAt is String) {
+        lastActivity = DateTime.tryParse(updatedAt);
+      } else if (updatedAt is Timestamp) {
+        lastActivity = updatedAt.toDate();
+      } else if (startTime is String) {
+        lastActivity = DateTime.tryParse(startTime);
+      }
+
+      if (lastActivity == null) return true;
+      return now.difference(lastActivity).inMinutes < 20;
+    }).toList();
+
+    if (activeSessions.isNotEmpty) {
+      LoggerService.w(
+        'Pro Mode Entry Blocked: Active session exists',
+        feature: 'GameplayEngine',
+        metadata: {'uid': uid, 'sessionId': activeSessions.first.id},
+      );
+      throw Exception('An active competitive session already exists.');
+    }
+
+    // 2. Authoritative Atomic Transaction for Fee & Stats
+    await _database.instance.runTransaction<void>((transaction) async {
       final playerRef = _database.collection('users').doc(uid);
       final playerDoc = await transaction.get(playerRef);
 
@@ -54,33 +99,21 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       final data = playerDoc.data() ?? {};
       final int currentCoins = data['coins'] ?? 0;
-      
+
       // Authoritative daily reset check
-      final now = DateTime.now();
-      final lastSessionDate = data['lastProSessionDate'] != null 
-          ? (data['lastProSessionDate'] is Timestamp 
-              ? (data['lastProSessionDate'] as Timestamp).toDate() 
+      final lastSessionDate = data['lastProSessionDate'] != null
+          ? (data['lastProSessionDate'] is Timestamp
+              ? (data['lastProSessionDate'] as Timestamp).toDate()
               : DateTime.parse(data['lastProSessionDate']))
           : null;
-      
-      bool isNewDay = lastSessionDate == null || 
-          lastSessionDate.year != now.year || 
-          lastSessionDate.month != now.month || 
+
+      bool isNewDay = lastSessionDate == null ||
+          lastSessionDate.year != now.year ||
+          lastSessionDate.month != now.month ||
           lastSessionDate.day != now.day;
 
       if (!isFree && currentCoins < fee) {
         throw Exception('Insufficient coins for Pro Mode entry.');
-      }
-
-      // Hardening: Check for existing active sessions to prevent parallel play
-      final activeSessions = await _database
-          .collection('competitive_sessions')
-          .where('uid', isEqualTo: uid)
-          .where('status', isEqualTo: 'initialized')
-          .get();
-
-      if (activeSessions.docs.isNotEmpty) {
-        throw Exception('An active competitive session already exists.');
       }
 
       // 1. Update player stats
@@ -99,18 +132,27 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       // 2. Log coin transaction (only if fee was paid)
       if (!isFree) {
-        final coinTxRef = _database.collection('coin_transactions').doc();
-        transaction.set(coinTxRef, {
+        final txId = _database.collection('wallet_transactions').doc().id;
+        
+        final txData = {
           'userId': uid,
           'type': 'coins',
+          'currency': 'coins',
           'direction': 'debit',
           'amount': fee,
+          'transactionType': 'spend',
           'source': 'proModeEntry',
           'referenceId': sessionId,
           'status': 'completed',
           'createdAt': FieldValue.serverTimestamp(),
           'metadata': {'sessionId': sessionId, 'action': 'entry_fee'},
-        });
+        };
+
+        transaction.set(_database.collection('wallet_transactions').doc(txId), txData);
+        
+        // Sync to legacy if needed
+        final coinTxRef = _database.collection('coin_transactions').doc(txId);
+        transaction.set(coinTxRef, txData);
       }
 
       // 3. Create a reservation record
@@ -230,10 +272,15 @@ class FirestoreProModeRepository implements ProModeRepository {
         ? Duration(milliseconds: totalResponseTime.inMilliseconds ~/ totalAnswered)
         : Duration.zero;
 
-    await _database.instance.runTransaction((transaction) async {
+    // PRE-FETCH: Get Player Profile outside the transaction to reduce transaction duration
+    final playerProfile = await _playerRepository.getPlayerProfile(finalState.playerId);
+    if (playerProfile == null) throw Exception('Player profile not found');
+
+    await _database.instance.runTransaction<void>((transaction) async {
       final sessionRef = _database.collection('competitive_sessions').doc(sessionId);
       final resultRef = _database.collection('pro_results').doc(sessionId);
       
+      // BATCH READ: Start all necessary transaction reads sequentially
       final sessionDoc = await transaction.get(sessionRef);
       if (!sessionDoc.exists) throw Exception('Session not found');
       
@@ -245,6 +292,8 @@ class FirestoreProModeRepository implements ProModeRepository {
       final difficulty = Difficulty.values.byName(configData['difficulty']);
       final questionCount = (configData['questionCount'] as num).toInt();
       final reservedFee = (sessionData['reservedFee'] as num?)?.toInt();
+
+      // ... logic continues ...
 
       // VITAL SECURITY: Verify that the fee paid matches the difficulty config
       final expectedFee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
@@ -388,12 +437,7 @@ class FirestoreProModeRepository implements ProModeRepository {
             createdAt: DateTime.now(),
           );
           
-          if (_progressionRepository is FirebasePlayerProgressionRepository) {
-            await (_progressionRepository as FirebasePlayerProgressionRepository)
-                .processXpTransaction(transaction, xpTx);
-          } else {
-            await _progressionRepository.applyXpTransaction(xpTx);
-          }
+          await _progressionRepository.processXpTransaction(transaction, xpTx);
         }
 
         // 4. Authoritative Rank Point (RP) Update - USING TRANSACTION-AWARE METHOD
@@ -407,12 +451,11 @@ class FirestoreProModeRepository implements ProModeRepository {
           completedAt: DateTime.now(),
         );
         
-        if (_progressionRepository is FirebasePlayerProgressionRepository) {
-          await (_progressionRepository as FirebasePlayerProgressionRepository)
-              .applyCompetitiveResultInTransaction(transaction, compResult);
-        } else {
-          await _progressionRepository.applyCompetitiveResult(compResult);
-        }
+        await _progressionRepository.applyCompetitiveResultInTransaction(
+          transaction, 
+          compResult,
+          profile: playerProfile,
+        );
 
         // 5. Store Settlement Record for auditing
         final settlementRef = _database.collection('settlements').doc(sessionId);

@@ -4,6 +4,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
+import 'package:soteria/core/design_system/components/soteria_text.dart';
 import 'package:soteria/features/player/domain/models/goal.dart';
 import 'package:soteria/features/player/domain/models/season_reward_definition.dart';
 
@@ -45,21 +46,25 @@ class CompetitiveGoalCard extends StatelessWidget {
               ],
             ),
             SizedBox(height: SoteriaSpacing.sm),
-            Text(
+            SoteriaText.body(
               definition.title,
               style: context.bodyLarge.copyWith(
                 fontWeight: FontWeight.w900,
                 color: isCompleted ? Colors.white38 : Colors.white,
                 fontSize: 14.sp,
               ),
+              maxLines: 1,
+              minFontSize: 10,
             ),
             SizedBox(height: 2.h),
-            Text(
+            SoteriaText.caption(
               definition.description,
               style: context.bodySmall.copyWith(
                 color: isCompleted ? Colors.white24 : Colors.white70,
                 fontSize: 11.sp,
               ),
+              maxLines: 2,
+              minFontSize: 8,
             ),
             SizedBox(height: SoteriaSpacing.md),
             _buildProgressBar(context),

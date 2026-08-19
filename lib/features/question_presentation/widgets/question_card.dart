@@ -31,19 +31,34 @@ class QuestionContentCard extends StatelessWidget {
       alignment: Alignment.center,
       children: [
         // Ambient glow behind the question card
-        const Positioned(
+        Positioned(
           top: -20,
           child: AmbientGlow(
-            color: SoteriaColors.primary,
-            size: 150,
-            opacity: 0.1,
+            color: SoteriaColors.secondary,
+            size: 250,
+            opacity: 0.08,
           ),
         ),
-        GlassSurface(
-          borderRadius: SoteriaRadius.brXl,
-          opacity: 0.05,
-          padding: EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
-          child: Semantics(
+        Container(
+          decoration: BoxDecoration(
+            borderRadius: SoteriaRadius.brXl,
+            boxShadow: [
+              BoxShadow(
+                color: SoteriaColors.secondary.withValues(alpha: 0.1),
+                blurRadius: 40,
+                spreadRadius: -10,
+              ),
+            ],
+          ),
+          child: GlassSurface(
+            borderRadius: SoteriaRadius.brXl,
+            opacity: 0.12,
+            padding: EdgeInsets.all(SoteriaSpacing.xl),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.08),
+              width: 1.2,
+            ),
+            child: Semantics(
             label: 'Question: $text',
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -51,10 +66,7 @@ class QuestionContentCard extends StatelessWidget {
                 if (category != null || difficulty != null)
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: SoteriaSpacing.adaptive(
-                        context,
-                        SoteriaSpacing.mdStatic,
-                      ),
+                      bottom: SoteriaSpacing.lg,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -63,26 +75,62 @@ class QuestionContentCard extends StatelessWidget {
                           _Tag(
                             label: category!.toUpperCase(),
                             color: SoteriaColors.gold,
+                            icon: Icons.science_outlined,
                           ),
                         if (category != null && difficulty != null)
                           SizedBox(width: SoteriaSpacing.sm),
                         if (difficulty != null)
                           _Tag(
                             label: difficulty!.toUpperCase(),
-                            color: SoteriaColors.primary,
+                            color: SoteriaColors.secondary,
+                            icon: Icons.bar_chart_rounded,
                           ),
                       ],
                     ),
                   ),
+                // Center "?" icon
+                Container(
+                  width: 60.w,
+                  height: 60.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: [
+                        SoteriaColors.secondary.withValues(alpha: 0.3),
+                        SoteriaColors.primary.withValues(alpha: 0.1),
+                      ],
+                    ),
+                    border: Border.all(
+                      color: SoteriaColors.secondary.withValues(alpha: 0.4),
+                      width: 1.5,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: SoteriaColors.secondary.withValues(alpha: 0.2),
+                        blurRadius: 15,
+                        spreadRadius: 2,
+                      ),
+                    ],
+                  ),
+                  child: Center(
+                    child: Text(
+                      '?',
+                      style: context.displaySmall.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(height: SoteriaSpacing.xl),
                 Text(
                   text,
-                  style: (isShort ? context.titleLarge : context.displayMedium)
-                      .copyWith(
-                        fontSize: isShort ? 20.sp : 24.sp,
-                        height: 1.4,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.5,
-                      ),
+                  style: context.titleLarge.copyWith(
+                    fontSize: 22.sp,
+                    height: 1.5,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
                   textAlign: TextAlign.center,
                 ),
                 if (mediaUrl != null) ...[
@@ -111,6 +159,7 @@ class QuestionContentCard extends StatelessWidget {
               ],
             ),
           ),
+          ),
         ),
       ],
     );
@@ -118,28 +167,38 @@ class QuestionContentCard extends StatelessWidget {
 }
 
 class _Tag extends StatelessWidget {
-  const _Tag({required this.label, required this.color});
+  const _Tag({required this.label, required this.color, this.icon});
 
   final String label;
   final Color color;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.sm, vertical: 4),
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: SoteriaRadius.brFull,
-        border: Border.all(color: color.withValues(alpha: 0.3), width: 0.5),
+        color: color.withValues(alpha: 0.15),
+        borderRadius: SoteriaRadius.brMd,
+        border: Border.all(color: color.withValues(alpha: 0.4), width: 1),
       ),
-      child: Text(
-        label,
-        style: context.labelSmall.copyWith(
-          color: color,
-          fontWeight: FontWeight.w900,
-          fontSize: 10.sp,
-          letterSpacing: 1.2,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, color: color, size: 12.sp),
+            SizedBox(width: 4.w),
+          ],
+          Text(
+            label,
+            style: context.labelSmall.copyWith(
+              color: color,
+              fontWeight: FontWeight.w900,
+              fontSize: 10.sp,
+              letterSpacing: 1.0,
+            ),
+          ),
+        ],
       ),
     );
   }

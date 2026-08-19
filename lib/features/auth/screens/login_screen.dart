@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_divider.dart';
+import 'package:soteria/shared/widgets/soteria_page.dart';
 import 'package:soteria/core/widgets/feedback/feedback_components.dart';
 import '../providers/login_notifier.dart';
 import '../widgets/login_hero_section.dart';
@@ -28,13 +29,7 @@ class LoginScreen extends ConsumerWidget {
 
     final state = ref.watch(loginProvider);
 
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage('assets/images/welcomescreen_bg.png'),
-          fit: BoxFit.cover,
-        ),
-      ),
+    return SoteriaPage(
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: SafeArea(
