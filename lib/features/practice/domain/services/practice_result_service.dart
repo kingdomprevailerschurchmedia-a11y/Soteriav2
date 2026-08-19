@@ -85,7 +85,7 @@ class PracticeResultService {
     });
 
     final difficultyPerformance = diffResults.map((diff, results) {
-      final total = results.where((r) ? r : false).length; // Fixed possible null/type issue
+      final total = results.where((r) => r).length; 
       return MapEntry(diff, results.isNotEmpty ? (total / results.length) : 0.0);
     });
 
