@@ -162,8 +162,8 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               _buildMetric('CORRECT', '${result.correctAnswers}', SoteriaColors.success),
-              _buildMetric('INCORRECT', '${result.incorrectAnswers}', SoteriaColors.error),
               _buildMetric('XP', '+${result.xpEarned}', SoteriaColors.primary),
+              _buildMetric('COINS', '+${result.coinsEarned}', SoteriaColors.gold),
             ],
           ),
         ],

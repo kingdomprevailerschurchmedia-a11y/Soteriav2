@@ -69,7 +69,7 @@ final competitiveRewardProvider =
 
       // Pro Mode Multipliers (would normally come from Remote Config via config)
       final multiplier = config.difficultyMultiplier;
-      final baseEntryFee = (gameState.metadata['reservedFee'] as int?) ?? 100;
+      final baseEntryFee = ((gameState.metadata['reservedFee'] as num?)?.toInt()) ?? 100;
 
       final currentAccuracy = gameState.questions.isEmpty
           ? 0.0

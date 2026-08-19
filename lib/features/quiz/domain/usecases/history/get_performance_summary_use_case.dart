@@ -52,14 +52,14 @@ class GetPerformanceSummaryUseCase {
     int totalMillis = 0;
 
     for (final result in results) {
-      totalScore += result.finalScore;
-      totalAccuracy += result.accuracy;
-      totalXp += result.xpEarned;
+      totalScore += result.finalScore.toInt();
+      totalAccuracy += result.accuracy.toDouble();
+      totalXp += result.xpEarned.toInt();
       totalMillis += result.averageResponseTime.inMilliseconds;
 
-      if (result.finalScore > bestScore) bestScore = result.finalScore;
-      if (result.accuracy > bestAccuracy) bestAccuracy = result.accuracy;
-      if (result.longestStreak > bestStreak) bestStreak = result.longestStreak;
+      if (result.finalScore > bestScore) bestScore = result.finalScore.toInt();
+      if (result.accuracy > bestAccuracy) bestAccuracy = result.accuracy.toDouble();
+      if (result.longestStreak > bestStreak) bestStreak = result.longestStreak.toInt();
     }
 
     return PerformanceSummary(

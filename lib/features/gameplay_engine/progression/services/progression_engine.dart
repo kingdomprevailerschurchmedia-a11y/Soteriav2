@@ -35,7 +35,7 @@ class ProgressionEngine {
 
     // Check for speed bonus event
     if (policy.allowSpeedBonus && answer.isCorrect) {
-      final responseTimeMs = answer.metadata['responseTimeMs'] as int? ?? 10000;
+      final responseTimeMs = (answer.metadata['responseTimeMs'] as num?)?.toInt() ?? 10000;
       if (responseTimeMs < 5000) {
         events.add(
           SpeedBonusEvent(scoreDelta - policy.pointsPerCorrect, responseTimeMs),

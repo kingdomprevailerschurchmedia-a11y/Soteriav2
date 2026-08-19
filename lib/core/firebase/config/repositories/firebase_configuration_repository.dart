@@ -114,8 +114,8 @@ class FirebaseConfigurationRepository implements ConfigurationRepository {
           : {};
 
       return ProModeConfig(
-        entryFees: feesMap.map((k, v) => MapEntry(int.parse(k), v as int)),
-        difficultyMultipliers: multsMap.map((k, v) => MapEntry(k, v as double)),
+        entryFees: feesMap.map((k, v) => MapEntry(int.parse(k), (v as num).toInt())),
+        difficultyMultipliers: multsMap.map((k, v) => MapEntry(k, (v as num).toDouble())),
         riskFactor: _remoteConfig.getDouble(RemoteConfigKeys.proModeRiskFactor),
         minLevelRequirement: _remoteConfig.getInt(
           RemoteConfigKeys.proModeMinLevel,

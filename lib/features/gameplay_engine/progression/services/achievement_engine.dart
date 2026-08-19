@@ -56,23 +56,23 @@ class AchievementEngine {
       case AchievementRequirementType.streak:
         return snapshot.currentStreak.toDouble();
       case AchievementRequirementType.gamesPlayed:
-        final baseline = careerContext['gamesPlayed'] as int? ?? 0;
+        final baseline = (careerContext['gamesPlayed'] as num?)?.toInt() ?? 0;
         // careerContext for gamesPlayed usually reflects the state BEFORE this round.
         return (isRoundEnd && !isBefore) ? (baseline + 1).toDouble() : baseline.toDouble();
       case AchievementRequirementType.gamesWon:
-        final baseline = careerContext['gamesWon'] as int? ?? 0;
+        final baseline = (careerContext['gamesWon'] as num?)?.toInt() ?? 0;
         // This is hard to know mid-round. Typically wins are checked at round end.
         return (isRoundEnd && !isBefore && snapshot.lives > 0) ? (baseline + 1).toDouble() : baseline.toDouble();
       case AchievementRequirementType.correctAnswers:
-        final baseline = careerContext['correctAnswers'] as int? ?? 0;
+        final baseline = (careerContext['correctAnswers'] as num?)?.toInt() ?? 0;
         return (baseline + snapshot.sessionCorrectAnswers).toDouble();
       case AchievementRequirementType.accuracy:
         // Accuracy is best calculated at round end from career context
-        return (careerContext['accuracy'] as double? ?? 0.0) * 100;
+        return ((careerContext['accuracy'] as num? ?? 0.0).toDouble()) * 100;
       case AchievementRequirementType.categoryMastery:
         final category = definition.metadata['category'] as String?;
         if (category == null) return 0.0;
-        final careerMastery = (careerContext['categoryMastery'] as Map<String, dynamic>? ?? {})[category] as int? ?? 0;
+        final careerMastery = ((careerContext['categoryMastery'] as Map<String, dynamic>? ?? {})[category] as num?)?.toInt() ?? 0;
         final sessionMastery = snapshot.sessionCategoryMastery[category] ?? 0;
         return (careerMastery + sessionMastery).toDouble();
       default:

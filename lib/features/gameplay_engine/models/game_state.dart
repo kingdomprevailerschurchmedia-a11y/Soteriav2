@@ -87,7 +87,12 @@ class GameState {
     'playerId': playerId,
     'lifecycle': lifecycle.name,
     'currentQuestionIndex': currentQuestionIndex,
-    'questions': questions.map((e) => e.toJson()).toList(),
+    'questions': questions.map((q) {
+      final json = q.toJson();
+      // Hardening: Ensure nested options are serialized
+      json['options'] = q.options.map((a) => a.toJson()).toList();
+      return json;
+    }).toList(),
     'score': score,
     'streak': streak,
     'lives': lives,

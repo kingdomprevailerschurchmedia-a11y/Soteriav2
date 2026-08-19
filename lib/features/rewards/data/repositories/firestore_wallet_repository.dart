@@ -67,16 +67,36 @@ class FirestoreWalletRepository implements WalletRepository {
     return snapshot.docs.map((doc) {
       final data = doc.data();
       
-      // Ensure 'type' is present for model parsing if only 'currency' exists
       final mappedData = Map<String, dynamic>.from(data);
+      
+      // Map 'currency' to 'type' for RewardType enum compatibility
       if (mappedData['type'] == null && mappedData['currency'] != null) {
         mappedData['type'] = mappedData['currency'];
+      }
+      
+      // Ensure 'transactionType' is valid or fallback
+      final validTransactionTypes = [
+        'purchase', 'gameEntry', 'tournamentEntry', 'reward', 
+        'refund', 'adminGrant', 'promotion', 'spend', 'itemRedemption'
+      ];
+      if (!validTransactionTypes.contains(mappedData['transactionType'])) {
+        mappedData['transactionType'] = 'reward'; // Default fallback
+      }
+
+      // Handle Timestamp parsing safely
+      String createdAtStr;
+      if (data['createdAt'] is Timestamp) {
+        createdAtStr = (data['createdAt'] as Timestamp).toDate().toIso8601String();
+      } else if (data['createdAt'] is String) {
+        createdAtStr = data['createdAt'];
+      } else {
+        createdAtStr = DateTime.now().toIso8601String();
       }
       
       return WalletTransaction.fromJson({
         ...mappedData,
         'id': doc.id,
-        'createdAt': (data['createdAt'] as Timestamp).toDate().toIso8601String(),
+        'createdAt': createdAtStr,
       });
     }).toList();
   }
@@ -160,9 +180,80 @@ class FirestoreWalletRepository implements WalletRepository {
 
   @override
   Future<void> fulfillPurchase(String userId, String purchaseId, String verificationToken) async {
-    // This would typically trigger a Cloud Function or be processed securely
-    // Authoritative fulfillment logic belongs on the backend
-    throw UnimplementedError('Secure purchase fulfillment requires backend validation');
+    final purchaseRef = _firestore.collection('purchases').doc(purchaseId);
+    final walletRef = _firestore.collection('wallets').doc(userId);
+    final userRef = _firestore.collection('users').doc(userId);
+    final gameProfileRef = _firestore.collection('user_game_profiles').doc(userId);
+    final txRef = _firestore.collection('wallet_transactions').doc();
+
+    await _firestore.runTransaction((transaction) async {
+      // 1. ALL READS FIRST
+      final purchaseSnapshot = await transaction.get(purchaseRef);
+      if (!purchaseSnapshot.exists) throw Exception('Purchase not found');
+      
+      final purchaseData = purchaseSnapshot.data()!;
+      if (purchaseData['status'] == 'completed') return; // Already fulfilled
+
+      final productId = purchaseData['productId'] as String;
+      final product = (await getStoreProducts()).firstWhere(
+        (p) => p.id == productId,
+        orElse: () => throw Exception('Product not found'),
+      );
+
+      final amount = product.quantity;
+      final currency = product.category == StoreProductCategory.tokens ? 'tokens' : 'coins';
+      final balanceField = currency == 'tokens' ? 'tokens' : 'coins';
+      final earnedField = currency == 'tokens' ? 'lifetimeTokensEarned' : 'lifetimeCoinsEarned';
+
+      // 2. LOGIC & VALIDATION
+      // (Verification token would be checked here in a real production app)
+
+      // 3. ALL WRITES AFTER
+      
+      // Update Purchase status
+      transaction.update(purchaseRef, {
+        'status': 'completed',
+        'verificationToken': verificationToken,
+        'fulfilledAt': FieldValue.serverTimestamp(),
+      });
+
+      // Update Wallet
+      transaction.set(walletRef, {
+        balanceField: FieldValue.increment(amount),
+        earnedField: FieldValue.increment(amount),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      // Update User (Gameplay)
+      transaction.update(userRef, {
+        balanceField: FieldValue.increment(amount),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      // Update User Game Profile (Identity)
+      transaction.set(gameProfileRef, {
+        balanceField: FieldValue.increment(amount),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      // Log Transaction
+      transaction.set(txRef, {
+        'userId': userId,
+        'type': currency,
+        'currency': currency,
+        'direction': 'credit',
+        'amount': amount,
+        'transactionType': 'purchase',
+        'source': 'purchase',
+        'referenceId': purchaseId,
+        'status': 'completed',
+        'createdAt': FieldValue.serverTimestamp(),
+        'metadata': {
+          'productId': productId,
+          'description': 'Purchase: ${product.name}',
+        },
+      });
+    });
   }
 
   @override

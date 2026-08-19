@@ -6,9 +6,21 @@ import '../../data/repositories/firestore_practice_result_repository.dart';
 import '../../domain/models/practice_result.dart';
 import '../../domain/models/practice_history.dart';
 
+import '../../../player/presentation/providers/progression_providers.dart';
+import '../../../player/presentation/providers/leaderboard_providers.dart';
+
 final practiceResultRepositoryProvider = Provider<PracticeResultRepository>((ref) {
   final firestore = ref.watch(firebaseFirestoreProvider);
-  return FirestorePracticeResultRepository(firestore);
+  final progressionRepo = ref.watch(playerProgressionRepositoryProvider);
+  final leaderboardRepo = ref.watch(leaderboardRepositoryProvider);
+  final progressionService = ref.watch(progressionServiceProvider);
+  
+  return FirestorePracticeResultRepository(
+    firestore, 
+    progressionRepo,
+    leaderboardRepo,
+    progressionService,
+  );
 });
 
 final practiceHistoryListProvider = FutureProvider<List<PracticeResult>>((ref) async {

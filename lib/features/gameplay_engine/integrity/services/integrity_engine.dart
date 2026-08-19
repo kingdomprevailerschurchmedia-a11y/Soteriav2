@@ -18,7 +18,7 @@ class IntegrityEngine {
 
       // Logic for background grace period
       if (signal.type == IntegritySignalType.appBackgrounded) {
-        final duration = signal.metadata['durationMs'] as int? ?? 0;
+        final duration = (signal.metadata['durationMs'] as num?)?.toInt() ?? 0;
         if (duration < policy.backgroundGracePeriod.inMilliseconds) {
           impact *= 0.1; // Minimal impact for quick switches
         }

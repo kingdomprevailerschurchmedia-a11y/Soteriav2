@@ -24,6 +24,9 @@ enum WalletTransactionType {
   refund,
   adminGrant,
   promotion,
+  spend,
+  itemRedemption,
+  unknown,
 }
 
 @freezed

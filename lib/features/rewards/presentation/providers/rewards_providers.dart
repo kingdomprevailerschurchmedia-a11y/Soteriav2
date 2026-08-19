@@ -14,6 +14,7 @@ import '../../domain/use_cases/claim_reward_use_case.dart';
 import '../../data/repositories/firestore_rewards_repository.dart';
 import '../../data/repositories/firestore_wallet_repository.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
+import '../../../player/providers/player_providers.dart';
 
 // --- Repositories ---
 final rewardsRepositoryProvider = Provider<RewardsRepository>((ref) {
@@ -42,7 +43,18 @@ final walletProvider = StreamProvider<Wallet>((ref) {
     return Stream.value(Wallet.empty('anonymous'));
   }
   
-  return ref.watch(walletRepositoryProvider).watchWallet(session.uid!);
+  // Watch authoritative coin balance from PlayerProfile to ensure real-time consistency
+  // across different feature modules (Dashboard, Rewards, etc.)
+  final playerProfile = ref.watch(currentPlayerProvider);
+  
+  return ref.watch(walletRepositoryProvider).watchWallet(session.uid!).map((wallet) {
+    if (playerProfile != null) {
+      // Prioritize the coin balance from the authoritative PlayerProfile (users collection)
+      // while maintaining other economy-specific fields from the wallet document.
+      return wallet.copyWith(coins: playerProfile.coins);
+    }
+    return wallet;
+  });
 });
 
 /// Available rewards for the user
@@ -119,6 +131,28 @@ class RewardsNotifier extends AsyncNotifier<void> {
       
       ref.read(purchaseStateProvider.notifier).state = AsyncValue.data(txId);
       ref.invalidate(transactionHistoryProvider);
+    } catch (e, st) {
+      ref.read(purchaseStateProvider.notifier).state = AsyncValue.error(e, st);
+    }
+  }
+
+  Future<void> completePurchase(String purchaseId, String token) async {
+    ref.read(purchaseStateProvider.notifier).state = const AsyncValue.loading();
+    try {
+      final session = ref.read(sessionProvider);
+      if (!session.isAuthenticated || session.uid == null) {
+        throw Exception('Authentication required');
+      }
+
+      await ref.read(walletRepositoryProvider).fulfillPurchase(
+        session.uid!,
+        purchaseId,
+        token,
+      );
+
+      ref.read(purchaseStateProvider.notifier).state = const AsyncValue.data(null);
+      ref.invalidate(transactionHistoryProvider);
+      ref.invalidate(walletProvider);
     } catch (e, st) {
       ref.read(purchaseStateProvider.notifier).state = AsyncValue.error(e, st);
     }

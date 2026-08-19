@@ -29,6 +29,7 @@ enum QuestionStatus {
 
 @freezed
 abstract class Question with _$Question {
+  @JsonSerializable(explicitToJson: true)
   const factory Question({
     required String id,
     required String text,
@@ -60,6 +61,8 @@ abstract class Question with _$Question {
 
   factory Question.fromJson(Map<String, dynamic> json) => _$QuestionFromJson(json);
 
+  Map<String, dynamic> toJson() => _$QuestionToJson(this as _Question);
+
   const Question._();
 
   bool isAnswerCorrect(String answerId) => correctOptionIds.contains(answerId);
@@ -80,4 +83,6 @@ abstract class Answer with _$Answer {
   }) = _Answer;
 
   factory Answer.fromJson(Map<String, dynamic> json) => _$AnswerFromJson(json);
+
+  Map<String, dynamic> toJson() => _$AnswerToJson(this as _Answer);
 }

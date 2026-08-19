@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:state_notifier/state_notifier.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';

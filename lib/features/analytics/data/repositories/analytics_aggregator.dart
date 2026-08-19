@@ -83,15 +83,15 @@ class AnalyticsAggregator {
     Duration slowest = Duration.zero;
 
     for (final r in results) {
-      questions += r.totalQuestions;
-      correct += r.correctAnswers;
-      incorrect += r.wrongAnswers;
-      skipped += r.skipped;
-      timedOut += r.timedOut;
-      xp += r.xpEarned;
-      if (r.finalScore > bestScore) bestScore = r.finalScore;
-      if (r.accuracy > bestAccuracy) bestAccuracy = r.accuracy;
-      if (r.longestStreak > bestStreak) bestStreak = r.longestStreak;
+      questions += r.totalQuestions.toInt();
+      correct += r.correctAnswers.toInt();
+      incorrect += r.wrongAnswers.toInt();
+      skipped += r.skipped.toInt();
+      timedOut += r.timedOut.toInt();
+      xp += r.xpEarned.toInt();
+      if (r.finalScore > bestScore) bestScore = r.finalScore.toInt();
+      if (r.accuracy > bestAccuracy) bestAccuracy = r.accuracy.toDouble();
+      if (r.longestStreak > bestStreak) bestStreak = r.longestStreak.toInt();
       if (r.averageResponseTime < fastest) fastest = r.averageResponseTime;
       if (r.averageResponseTime > slowest) slowest = r.averageResponseTime;
     }

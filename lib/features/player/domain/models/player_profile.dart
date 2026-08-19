@@ -30,6 +30,8 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default(0) int gamesPlayed,
     @Default(0) int gamesWon,
     @Default(0) int practiceSessions,
+    @Default(0) int dailyPracticeSessionsPlayed,
+    DateTime? lastPracticeSessionDate,
     @Default(0) int proSessions,
     @Default(0) int dailyProSessionsPlayed,
     DateTime? lastProSessionDate,

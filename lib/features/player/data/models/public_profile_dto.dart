@@ -16,8 +16,8 @@ class PublicProfileDto {
       photoUrl: data['photoUrl'] as String?,
       currentRank: data['currentRank'] as String? ?? 'Unranked',
       rankTier: data['rankTier'] as String? ?? 'None',
-      rankPoints: data['rankPoints'] as int? ?? 0,
-      division: data['division'] as int? ?? 1,
+      rankPoints: (data['rankPoints'] as num?)?.toInt() ?? 0,
+      division: (data['division'] as num?)?.toInt() ?? 1,
       equippedTitle: data['equippedTitle'] != null
           ? CompetitiveTitle.fromJson(data['equippedTitle'])
           : null,
@@ -41,7 +41,7 @@ class PublicProfileDto {
               seasonsPlayed: 0,
             ),
       updatedAt: _parseDate(data['updatedAt']),
-      schemaVersion: data['schemaVersion'] as int? ?? 1,
+      schemaVersion: (data['schemaVersion'] as num?)?.toInt() ?? 1,
     );
   }
 

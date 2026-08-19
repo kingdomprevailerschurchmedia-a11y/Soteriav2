@@ -6,10 +6,11 @@ import '../../../../features/question_content/domain/entities/difficulty.dart';
 import '../models/practice_result.dart';
 import 'practice_insight_engine.dart';
 import 'practice_recommendation_service.dart';
+import '../../../../features/gameplay_engine/domain/config/competitive_reward_config.dart';
 
 class PracticeResultService {
   /// Finalizes a practice session by calculating detailed results and performance metrics.
-  static PracticeResult calculateResult(GameState state, String userId, {List<GameResult> history = const []}) {
+  static PracticeResult calculateResult(GameState state, String userId, {List<GameResult> history = const [], bool rewardsEligible = true}) {
     final now = DateTime.now();
     final totalQuestions = state.questions.length;
     final answers = state.answerHistory;
@@ -84,9 +85,12 @@ class PracticeResultService {
     });
 
     final difficultyPerformance = diffResults.map((diff, results) {
-      final total = results.where((r) => r).length;
+      final total = results.where((r) ? r : false).length; // Fixed possible null/type issue
       return MapEntry(diff, results.isNotEmpty ? (total / results.length) : 0.0);
     });
+
+    final xpEarned = rewardsEligible ? (correct * CompetitiveRewardConfig.practiceXpPerCorrect) : 0;
+    final coinsEarned = rewardsEligible ? (correct * CompetitiveRewardConfig.practiceCoinsPerCorrect) : 0;
 
     var result = PracticeResult(
       sessionId: state.sessionId,
@@ -103,7 +107,8 @@ class PracticeResultService {
       categoryPerformance: categoryPerformance,
       difficultyPerformance: difficultyPerformance,
       reviewItems: reviewItems,
-      xpEarned: state.xp,
+      xpEarned: xpEarned,
+      coinsEarned: coinsEarned,
       performanceMessage: _getPerformanceMessage(accuracy),
     );
 

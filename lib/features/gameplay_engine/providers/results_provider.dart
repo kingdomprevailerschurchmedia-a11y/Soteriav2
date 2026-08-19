@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/legacy.dart';
+import 'package:state_notifier/state_notifier.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
@@ -28,8 +29,9 @@ final postGameRepositoryProvider = Provider<PostGameRepository>((ref) {
 
 class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
   final PostGameRepository _repository;
+  final Ref _ref;
 
-  ResultsNotifier(this._repository) : super(const AsyncValue.data(null));
+  ResultsNotifier(this._repository, this._ref) : super(const AsyncValue.data(null));
 
   Future<void> processCompletedSession(
     GameState gameState,
@@ -44,7 +46,7 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
 
     // Analytics
     final responseTimes = history
-        .map((r) => r.metadata['responseTimeMs'] as int? ?? 0)
+        .map((r) => (r.metadata['responseTimeMs'] as num?)?.toInt() ?? 0)
         .toList();
     final avgResponse = responseTimes.isEmpty
         ? 0
@@ -68,7 +70,8 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
 
     final result = GameResult(
       sessionId: gameState.sessionId,
-      playerId: ref.read(sessionProvider).uid ?? '',
+      playerId: _ref.read(sessionProvider).uid ?? '',
+      mode: config.mode,
       finalScore: gameState.score,
       totalXP: gameState.xp + rewards.totalXP,
       totalQuestions: gameState.questions.length,
@@ -84,6 +87,8 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
       avgResponseTime: Duration(milliseconds: avgResponse.toInt()),
       fastestAnswerTime: Duration(milliseconds: fastest),
       slowestAnswerTime: Duration(milliseconds: slowest),
+      answers: history,
+      timestamp: DateTime.now(),
     );
 
     try {
@@ -100,7 +105,7 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
 final resultsProvider =
     StateNotifierProvider<ResultsNotifier, AsyncValue<GameResult?>>((ref) {
       final repo = ref.watch(postGameRepositoryProvider);
-      return ResultsNotifier(repo);
+      return ResultsNotifier(repo, ref);
     });
 
 final answerReviewProvider = Provider.family<List<AnswerReview>, GameState>((
@@ -127,7 +132,7 @@ final answerReviewProvider = Provider.family<List<AnswerReview>, GameState>((
           : (result.metadata['selectedIds'] as List<String>? ?? []),
       isCorrect: result.isCorrect,
       responseTime: Duration(
-        milliseconds: result.metadata['responseTimeMs'] as int? ?? 0,
+        milliseconds: (result.metadata['responseTimeMs'] as num?)?.toInt() ?? 0,
       ),
     );
   }).toList();

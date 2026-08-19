@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../domain/models/competitive_challenge.dart';
+import '../../../../../core/design_system/colors/soteria_colors.dart';
+import '../../../domain/models/competitive_challenge.dart';
 
 class ChallengeStatusBadge extends StatelessWidget {
   final ChallengeStatus status;

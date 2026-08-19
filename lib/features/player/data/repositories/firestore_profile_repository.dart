@@ -41,7 +41,9 @@ class FirestoreProfileRepository implements ProfileRepository {
 
       // 1. ALL READS FIRST
       DocumentSnapshot? usernameSnapshot;
-      if (oldUsername != null && oldUsername.toLowerCase() != newUsername) {
+      if (oldUsername != null && 
+          oldUsername.isNotEmpty && 
+          oldUsername.toLowerCase() != newUsername) {
         usernameSnapshot = await transaction.get(usernameDoc);
       }
       final progressionSnapshot = await transaction.get(progressionDoc);
@@ -54,7 +56,9 @@ class FirestoreProfileRepository implements ProfileRepository {
       // 3. ALL WRITES AFTER
       
       // Username reservation
-      if (oldUsername != null && oldUsername.toLowerCase() != newUsername) {
+      if (oldUsername != null && 
+          oldUsername.isNotEmpty && 
+          oldUsername.toLowerCase() != newUsername) {
         // Remove old and add new
         transaction.delete(_firestore.collection('usernames').doc(oldUsername.toLowerCase()));
         transaction.set(usernameDoc, {
@@ -62,8 +66,8 @@ class FirestoreProfileRepository implements ProfileRepository {
           'username': userProfile.username,
           'createdAt': FieldValue.serverTimestamp(),
         });
-      } else if (oldUsername == null) {
-         // Initial reservation if not already there (e.g. legacy users)
+      } else if (oldUsername == null || oldUsername.isEmpty) {
+         // Initial reservation if not already there (e.g. legacy users or new signups)
          transaction.set(usernameDoc, {
           'userId': userId,
           'username': userProfile.username,
@@ -73,7 +77,11 @@ class FirestoreProfileRepository implements ProfileRepository {
 
       // User Profile
       final userProfileMap = userProfile.toMap();
-      final restrictedUserProfileFields = ['email', 'country', 'timezone', 'language'];
+      final restrictedUserProfileFields = [
+        'email', 'country', 'timezone', 'language',
+        'academicLevel', 'institution', 'faculty', 'department',
+        'interests'
+      ];
       for (final field in restrictedUserProfileFields) {
         userProfileMap.remove(field);
       }
@@ -89,7 +97,12 @@ class FirestoreProfileRepository implements ProfileRepository {
       final restrictedPlayerFields = [
         'xp', 'level', 'isPro', 'badges', 'achievements',
         'gamesPlayed', 'gamesWon', 'accuracy',
-        'role', 'accountStatus', 'createdAt', 'email'
+        'role', 'accountStatus', 'createdAt', 'email',
+        'coins', 'currentStreak', 'highestStreak', 'totalQuestionsAnswered',
+        'correctAnswers', 'practiceSessions', 'proSessions', 'versusMatches',
+        'tournamentMatches', 'registrationOrder', 'lastLogin', 'updatedAt',
+        'version', 'lastDailyRewardClaim', 'dailyProSessionsPlayed',
+        'lastProSessionDate', 'lastRankTransactionId', 'lastXpTransactionId'
       ];
       for (final field in restrictedPlayerFields) {
         playerProfileMap.remove(field);

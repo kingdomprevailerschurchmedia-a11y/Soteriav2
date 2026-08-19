@@ -21,7 +21,7 @@ class ScoreEngine {
       // Apply speed bonus if applicable
       if (policy.allowSpeedBonus) {
         final responseTimeMs =
-            result.metadata['responseTimeMs'] as int? ?? 10000;
+            (result.metadata['responseTimeMs'] as num?)?.toInt() ?? 10000;
         score += _calculateSpeedBonus(responseTimeMs);
       }
 

@@ -147,7 +147,7 @@ class FirestoreCompetitiveSettlementRepository
         seasonId: 'current_season', 
         outcome: _mapToCompetitiveOutcome(settlement),
         mode: settlement.result.mode.name,
-        score: settlement.result.finalScore,
+        score: settlement.result.finalScore.toInt(),
         completedAt: settlement.timestamp,
       );
       

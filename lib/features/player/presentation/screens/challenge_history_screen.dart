@@ -9,8 +9,9 @@ import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../providers/challenge_providers.dart';
-import '../models/competitive_challenge.dart';
+import '../../domain/models/competitive_challenge.dart';
 import '../providers/public_profile_providers.dart';
+import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:intl/intl.dart';
 
 class ChallengeHistoryScreen extends ConsumerWidget {

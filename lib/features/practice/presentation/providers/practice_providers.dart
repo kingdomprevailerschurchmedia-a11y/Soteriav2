@@ -84,10 +84,31 @@ class PracticeResultNotifier extends StateNotifier<PracticeResultState> {
       final userId = ref.read(authRepositoryProvider).currentUserId;
       if (userId == null) throw Exception('User not authenticated');
 
-      final result = PracticeResultService.calculateResult(gameState, userId);
+      final player = ref.read(currentPlayerProvider);
+      bool rewardsEligible = true;
+      if (player != null) {
+        final now = DateTime.now();
+        final lastDate = player.lastPracticeSessionDate;
+        final isNewDay = lastDate == null || 
+            lastDate.year != now.year || 
+            lastDate.month != now.month || 
+            lastDate.day != now.day;
+        
+        final dailyCount = isNewDay ? 0 : player.dailyPracticeSessionsPlayed;
+        rewardsEligible = dailyCount < 5;
+      }
+
+      final result = PracticeResultService.calculateResult(
+        gameState, 
+        userId,
+        rewardsEligible: rewardsEligible,
+      );
       
       // Persist the result
-      await ref.read(practiceResultRepositoryProvider).recordResult(result);
+      await ref.read(practiceResultRepositoryProvider).recordResult(
+        result, 
+        rewardsEligible: rewardsEligible,
+      );
 
       // Trigger global question analytics updates (Secure individual events)
       final analyticsRepo = ref.read(questionAnalyticsRepositoryProvider);

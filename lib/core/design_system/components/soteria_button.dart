@@ -107,6 +107,18 @@ class SoteriaButton extends StatefulWidget {
     this.uppercase = true,
   }) : variant = SoteriaButtonVariant.reward;
 
+  const SoteriaButton.text({
+    super.key,
+    required this.label,
+    this.onPressed,
+    this.size = SoteriaButtonSize.md,
+    this.icon,
+    this.trailingIcon,
+    this.isLoading = false,
+    this.isFullWidth = true,
+    this.uppercase = true,
+  }) : variant = SoteriaButtonVariant.text;
+
   @override
   State<SoteriaButton> createState() => _SoteriaButtonState();
 }

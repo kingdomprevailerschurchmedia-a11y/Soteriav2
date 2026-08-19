@@ -28,3 +28,9 @@ final answerSelectionProvider =
 final isResultRevealedProvider = StateProvider.autoDispose<bool>(
   (ref) => false,
 );
+
+/// Tracks if the explanation view should be shown.
+/// Usually happens after a short delay following the result reveal.
+final showExplanationProvider = StateProvider.autoDispose<bool>(
+  (ref) => false,
+);

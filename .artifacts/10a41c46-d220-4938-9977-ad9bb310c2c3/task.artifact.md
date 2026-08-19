@@ -1,0 +1,3 @@
+- `[x]` Regenerate splash screen resources
+- `[/]` Verify generated resources
+- `[ ]` Run build to verify fix

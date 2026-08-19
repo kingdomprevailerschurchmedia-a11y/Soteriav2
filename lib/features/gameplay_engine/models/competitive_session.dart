@@ -32,7 +32,12 @@ class CompetitiveSession {
       'entryFee': config.entryFee,
       'timerEnabled': config.timerEnabled,
     },
-    'questions': questions.map((q) => q.toJson()).toList(),
+    'questions': questions.map((q) {
+      final json = q.toJson();
+      // Hardening: Ensure nested options are serialized to prevent Firestore "Invalid argument" errors
+      json['options'] = q.options.map((a) => a.toJson()).toList();
+      return json;
+    }).toList(),
     'startTime': startTime.toIso8601String(),
     'status': status,
     'reservedFee': reservedFee,

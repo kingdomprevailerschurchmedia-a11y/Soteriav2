@@ -10,6 +10,7 @@ import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../providers/challenge_providers.dart';
 import '../widgets/challenge/incoming_challenge_card.dart';
 import '../widgets/challenge/outgoing_challenge_card.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 
 class ChallengeCenterScreen extends ConsumerStatefulWidget {
   const ChallengeCenterScreen({super.key});
@@ -184,105 +185,109 @@ class _ChallengeCenterScreenState extends ConsumerState<ChallengeCenterScreen>
 
   Widget _buildEmptyState(String line1, String line2, String subtext) {
     return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // Atmospheric Circles
-              Container(
-                width: 240.w,
-                height: 240.w,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.05), width: 1),
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                // Atmospheric Circles
+                Container(
+                  width: 240.w,
+                  height: 240.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.05), width: 1),
+                  ),
                 ),
-              ),
-              Container(
-                width: 180.w,
-                height: 180.w,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+                Container(
+                  width: 180.w,
+                  height: 180.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.1), width: 1),
+                  ),
                 ),
-              ),
-              // Glow Effect
-              Container(
-                width: 100.w,
-                height: 100.w,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: SoteriaColors.secondary.withValues(alpha: 0.3),
-                      blurRadius: 60,
-                      spreadRadius: 20,
-                    ),
-                  ],
+                // Glow Effect
+                Container(
+                  width: 100.w,
+                  height: 100.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: SoteriaColors.secondary.withValues(alpha: 0.3),
+                        blurRadius: 60,
+                        spreadRadius: 20,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              // Main Icon
-              ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Color(0xFFB980FF), Color(0xFF7C4DFF)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ).createShader(bounds),
-                child: Icon(
-                  Icons.bolt_rounded,
-                  size: 100.sp,
-                  color: Colors.white,
+                // Main Icon
+                ShaderMask(
+                  shaderCallback: (bounds) => const LinearGradient(
+                    colors: [Color(0xFFB980FF), Color(0xFF7C4DFF)],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ).createShader(bounds),
+                  child: Icon(
+                    Icons.bolt_rounded,
+                    size: 100.sp,
+                    color: Colors.white,
+                  ),
                 ),
-              ),
-              // Small stars/plus decorations
-              ...List.generate(4, (index) {
-                final offsets = [
-                  Offset(-100.w, -60.h),
-                  Offset(100.w, 40.h),
-                  Offset(-80.w, 80.h),
-                  Offset(80.w, -80.h),
-                ];
-                return Transform.translate(
-                  offset: offsets[index],
-                  child: Icon(Icons.add, size: 12.sp, color: Colors.white.withValues(alpha: 0.2)),
-                );
-              }),
-            ],
-          ),
-          SizedBox(height: 40.h),
-          Text(
-            line1,
-            style: context.headlineMedium.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w900,
-              fontSize: 32.sp,
+                // Small stars/plus decorations
+                ...List.generate(4, (index) {
+                  final offsets = [
+                    Offset(-100.w, -60.h),
+                    Offset(100.w, 40.h),
+                    Offset(-80.w, 80.h),
+                    Offset(80.w, -80.h),
+                  ];
+                  return Transform.translate(
+                    offset: offsets[index],
+                    child: Icon(Icons.add, size: 12.sp, color: Colors.white.withValues(alpha: 0.2)),
+                  );
+                }),
+              ],
             ),
-          ),
-          ShaderMask(
-            shaderCallback: (bounds) => const LinearGradient(
-              colors: [Color(0xFFB980FF), Color(0xFF7C4DFF)],
-            ).createShader(bounds),
-            child: Text(
-              line2,
+            SizedBox(height: 40.h),
+            Text(
+              line1,
               style: context.headlineMedium.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.w900,
                 fontSize: 32.sp,
               ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            subtext,
-            textAlign: TextAlign.center,
-            style: context.bodyMedium.copyWith(
-              color: Colors.white.withValues(alpha: 0.5),
-              height: 1.5,
-              fontWeight: FontWeight.w500,
+            ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [Color(0xFFB980FF), Color(0xFF7C4DFF)],
+              ).createShader(bounds),
+              child: Text(
+                line2,
+                style: context.headlineMedium.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 32.sp,
+                ),
+              ),
             ),
-          ),
-        ],
+            SizedBox(height: 16.h),
+            Text(
+              subtext,
+              textAlign: TextAlign.center,
+              style: context.bodyMedium.copyWith(
+                color: Colors.white.withValues(alpha: 0.5),
+                height: 1.5,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -298,19 +303,26 @@ class _ChallengeCenterScreenState extends ConsumerState<ChallengeCenterScreen>
       ),
       child: Row(
         children: [
-          Container(
-            padding: EdgeInsets.all(12.w),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: SoteriaColors.secondary.withValues(alpha: 0.5)),
-              boxShadow: [
-                BoxShadow(
-                  color: SoteriaColors.secondary.withValues(alpha: 0.2),
-                  blurRadius: 10,
+          Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: () => context.push(SoteriaRoutes.playerSearch),
+              borderRadius: BorderRadius.circular(30.r),
+              child: Container(
+                padding: EdgeInsets.all(12.w),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: SoteriaColors.secondary.withValues(alpha: 0.5)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: SoteriaColors.secondary.withValues(alpha: 0.2),
+                      blurRadius: 10,
+                    ),
+                  ],
                 ),
-              ],
+                child: const Icon(Icons.person_add_rounded, color: Colors.white, size: 24),
+              ),
             ),
-            child: const Icon(Icons.person_add_rounded, color: Colors.white, size: 24),
           ),
           SizedBox(width: 16.w),
           Expanded(

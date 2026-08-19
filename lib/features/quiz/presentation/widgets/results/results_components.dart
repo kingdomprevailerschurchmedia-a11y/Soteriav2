@@ -26,7 +26,7 @@ class ResultsHero extends StatelessWidget {
         ),
         SizedBox(height: SoteriaSpacing.xl),
         TweenAnimationBuilder<int>(
-          tween: IntTween(begin: 0, end: result.finalScore),
+          tween: IntTween(begin: 0, end: result.finalScore.toInt()),
           duration: const Duration(seconds: 2),
           curve: Curves.easeOutCubic,
           builder: (context, value, _) {

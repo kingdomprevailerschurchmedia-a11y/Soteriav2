@@ -16,6 +16,8 @@ import '../../../../features/gameplay_engine/models/competitive_session.dart';
 import '../../../../features/gameplay_engine/providers/game_engine_provider.dart';
 import '../../../../features/gameplay_engine/providers/competitive_gameplay_providers.dart';
 import '../../../../features/question_presentation/widgets/question_presenter.dart';
+import '../../../../features/gameplay_engine/timer/widgets/adaptive_timer_display.dart';
+import '../../../../features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import '../../../../core/navigation/soteria_routes.dart';
 
 class ProGameplayScreen extends ConsumerStatefulWidget {
@@ -36,8 +38,11 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
     _gameConfig = GameConfiguration(
       mode: GameMode.pro,
       questionCount: widget.session.config.questionCount,
-      questionTimer: widget.session.config.timerEnabled ? const Duration(seconds: 15) : null,
+      questionTimer: widget.session.config.timerEnabled 
+          ? const Duration(seconds: 15) 
+          : const Duration(seconds: 20), // Default timer if not specified
       allowLifelines: true,
+      autoAdvance: false, // Don't auto-advance so user can read explanation
       difficultyMultiplier: _getMultiplier(widget.session.config.difficulty.name),
       categoryId: widget.session.config.category?.id,
       metadata: {'reservedFee': widget.session.reservedFee},
@@ -103,6 +108,12 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
                   totalQuestions: engineState.questions.length,
                   sessionId: engineState.sessionId,
                   gameConfig: _gameConfig,
+                  timerChild: Consumer(
+                    builder: (context, ref, _) {
+                      final timerState = ref.watch(timerEngineProvider);
+                      return AdaptiveTimerDisplay(state: timerState);
+                    },
+                  ),
                 ),
               ),
             ],

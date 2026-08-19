@@ -48,13 +48,13 @@ abstract class PracticeHistory with _$PracticeHistory {
     final Map<String, int> catCorrect = {};
 
     for (final res in results) {
-      totalQuestions += res.totalQuestions;
-      totalCorrect += res.correctAnswers;
-      totalAccuracy += res.accuracy;
+      totalQuestions += res.totalQuestions.toInt();
+      totalCorrect += res.correctAnswers.toInt();
+      totalAccuracy += res.accuracy.toDouble();
 
       res.categoryPerformance.forEach((catId, perf) {
-        catCounts[catId] = (catCounts[catId] ?? 0) + perf.total;
-        catCorrect[catId] = (catCorrect[catId] ?? 0) + perf.correct;
+        catCounts[catId] = (catCounts[catId] ?? 0) + perf.total.toInt();
+        catCorrect[catId] = (catCorrect[catId] ?? 0) + perf.correct.toInt();
       });
     }
 
@@ -83,9 +83,9 @@ abstract class PracticeHistory with _$PracticeHistory {
         accuracy: res.accuracy,
       )).toList(),
       personalBests: PersonalBests(
-        highestAccuracy: results.map((r) => r.accuracy).fold(0.0, (max, v) => v > max ? v : max),
-        mostQuestionsInSession: results.map((r) => r.totalQuestions).fold(0, (max, v) => v > max ? v : max),
-        bestScore: results.map((r) => r.score).fold(0, (max, v) => v > max ? v : max),
+        highestAccuracy: results.map((r) => r.accuracy.toDouble()).fold(0.0, (max, v) => v > max ? v : max),
+        mostQuestionsInSession: results.map((r) => r.totalQuestions.toInt()).fold(0, (max, v) => v > max ? v : max),
+        bestScore: results.map((r) => r.score.toInt()).fold(0, (max, v) => v > max ? v : max),
         longestSession: results.map((r) => r.totalTime).fold(Duration.zero, (max, v) => v > max ? v : max),
       ),
       recentSessions: results,

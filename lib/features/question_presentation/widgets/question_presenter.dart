@@ -40,6 +40,7 @@ class QuestionPresenter extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedId = ref.watch(answerSelectionProvider);
     final isRevealed = ref.watch(isResultRevealedProvider);
+    final showExplanation = ref.watch(showExplanationProvider);
     final lifelineResults = ref.watch(lifelineResultsProvider);
     final lifelineState = ref.watch(lifelineControllerProvider(sessionId));
 
@@ -129,14 +130,21 @@ class QuestionPresenter extends ConsumerWidget {
                       isRevealed: isRevealed,
                       onAnswerSelected: isRevealed
                           ? (id) {}
-                          : (id) {
+                          : (id) async {
                               ref.read(answerSelectionProvider.notifier).select(id);
                               ref.read(isResultRevealedProvider.notifier).state =
                                   true;
+                              
                               if (gameConfig != null) {
                                 ref
                                     .read(gameEngineProvider(gameConfig!).notifier)
                                     .submitAnswer([id]);
+                              }
+
+                              // Delay the explanation to allow user to see the result
+                              await Future.delayed(const Duration(milliseconds: 1500));
+                              if (context.mounted) {
+                                ref.read(showExplanationProvider.notifier).state = true;
                               }
                             },
                       hiddenOptionIds: lifelineResults.hiddenOptionIds,
@@ -146,12 +154,13 @@ class QuestionPresenter extends ConsumerWidget {
                   ],
                 ),
               ),
-              if (isRevealed)
+              if (showExplanation)
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: QuestionExplanationView(
                     question: question,
                     onContinue: () {
+                      ref.read(showExplanationProvider.notifier).state = false;
                       if (gameConfig != null) {
                         ref
                             .read(gameEngineProvider(gameConfig!).notifier)

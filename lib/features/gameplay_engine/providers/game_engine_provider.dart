@@ -76,6 +76,9 @@ class GameEngine extends StateNotifier<GameState> {
   void _handleTimeout() {
     state = state.copyWith(lifecycle: GameLifecycle.timeout);
 
+    // Reveal the correct answer in UI
+    ref?.read(isResultRevealedProvider.notifier).state = true;
+
     final result = AnswerResult(
       submissionId: 'timeout_${DateTime.now().millisecondsSinceEpoch}',
       questionId: state.currentQuestion?.id ?? 'unknown',
@@ -87,6 +90,13 @@ class GameEngine extends StateNotifier<GameState> {
     );
 
     _handleAnswerResult(result);
+
+    // Show explanation after a delay
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        ref?.read(showExplanationProvider.notifier).state = true;
+      }
+    });
   }
 
   @override
@@ -258,6 +268,7 @@ class GameEngine extends StateNotifier<GameState> {
     // Reset UI state for the next question
     ref?.read(answerSelectionProvider.notifier).reset();
     ref?.read(isResultRevealedProvider.notifier).state = false;
+    ref?.read(showExplanationProvider.notifier).state = false;
 
     if (state.currentQuestionIndex + 1 >= state.questions.length) {
       _endSession(GameLifecycle.completed);

@@ -195,8 +195,8 @@ class FirestoreProModeRepository implements ProModeRepository {
       );
 
       final scoreResult = scoringEngine.calculate(question, playerAnswer, currentStreak);
-      authoritativeScore += scoreResult.totalScore;
-      authoritativeXP += scoreResult.xpEarned;
+      authoritativeScore += scoreResult.totalScore.toInt();
+      authoritativeXP += scoreResult.xpEarned.toInt();
       
       currentStreak = scoringEngine.calculateNewStreak(currentStreak, playerAnswer);
       if (currentStreak > maxStreak) maxStreak = currentStreak;
@@ -243,8 +243,8 @@ class FirestoreProModeRepository implements ProModeRepository {
       final sessionData = sessionDoc.data() as Map<String, dynamic>;
       final configData = sessionData['config'] as Map<String, dynamic>;
       final difficulty = Difficulty.values.byName(configData['difficulty']);
-      final questionCount = configData['questionCount'] as int;
-      final reservedFee = sessionData['reservedFee'] as int?;
+      final questionCount = (configData['questionCount'] as num).toInt();
+      final reservedFee = (sessionData['reservedFee'] as num?)?.toInt();
 
       // VITAL SECURITY: Verify that the fee paid matches the difficulty config
       final expectedFee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
@@ -403,7 +403,7 @@ class FirestoreProModeRepository implements ProModeRepository {
           seasonId: 'current_season',
           outcome: result.accuracy >= 0.7 ? CompetitiveOutcome.win : CompetitiveOutcome.loss,
           mode: 'pro',
-          score: result.finalScore,
+          score: result.finalScore.toInt(),
           completedAt: DateTime.now(),
         );
         

@@ -16,6 +16,8 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../providers/practice_providers.dart';
 import '../../../dashboard/presentation/providers/practice_lobby_providers.dart';
 import '../../../../core/navigation/soteria_routes.dart';
+import '../../../gameplay_engine/timer/widgets/adaptive_timer_display.dart';
+import '../../../gameplay_engine/timer/providers/timer_engine_provider.dart';
 
 class PracticeGameplayScreen extends ConsumerStatefulWidget {
   const PracticeGameplayScreen({super.key});
@@ -57,6 +59,8 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
           categoryId: config.categoryIds.isNotEmpty ? config.categoryIds.first : null,
           allowLifelines: true,
           initialLives: 999,
+          questionTimer: const Duration(seconds: 30), // Added timer for practice
+          autoAdvance: false, // Don't auto-advance so user can read explanation
         );
 
         final engineState = ref.watch(gameEngineProvider(gameConfig));
@@ -94,6 +98,12 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
                       totalQuestions: engineState.questions.length,
                       sessionId: engineState.sessionId,
                       gameConfig: gameConfig,
+                      timerChild: Consumer(
+                        builder: (context, ref, _) {
+                          final timerState = ref.watch(timerEngineProvider);
+                          return AdaptiveTimerDisplay(state: timerState);
+                        },
+                      ),
                     ),
                   ),
                 ],

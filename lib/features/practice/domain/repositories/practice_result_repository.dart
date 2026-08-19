@@ -2,7 +2,7 @@ import '../models/practice_result.dart';
 
 abstract interface class PracticeResultRepository {
   /// Records a completed practice session result.
-  Future<void> recordResult(PracticeResult result);
+  Future<void> recordResult(PracticeResult result, {bool rewardsEligible = true});
 
   /// Fetches recent practice results for a user.
   Future<List<PracticeResult>> getRecentResults(
