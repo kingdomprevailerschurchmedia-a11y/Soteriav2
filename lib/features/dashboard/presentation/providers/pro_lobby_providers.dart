@@ -20,6 +20,7 @@ import '../../../question_content/presentation/providers/category_providers.dart
 
 import '../../../../features/gameplay_engine/domain/config/competitive_reward_config.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
+import '../../../../core/network/providers/connectivity_providers.dart';
 
 part 'pro_lobby_providers.freezed.dart';
 
@@ -124,7 +125,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   Future<void> checkConnection() async {
-    state = state.copyWith(isOffline: false);
+    state = state.copyWith(isOffline: false, error: null);
     _updateValidation();
   }
 
@@ -277,12 +278,19 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
   Future<CompetitiveSession?> startSession() async {
     final player = ref.read(currentPlayerProvider);
+    final isOnline = ref.read(isOnlineProvider);
+    
+    if (!isOnline) {
+      state = state.copyWith(isOffline: true);
+      return null;
+    }
+
     if (player == null || !state.access.isAllowed) return null;
 
     final isFree = state.isFreeEntry;
     final fee = isFree ? 0 : state.config.entryFee;
 
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(isLoading: true, error: null);
     try {
       // 1. Select Questions first (Fail-fast content check)
       List<String> categories = [];
@@ -293,19 +301,26 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         categories = state.config.categoryIds;
       }
 
-      final selectionResult = await ref.read(questionSelectionServiceProvider).selectQuestions(
-        QuestionSelectionRequest(
-          categoryIds: categories,
-          difficulty: state.config.difficulty.toBaseDifficulty(),
-          questionCount: state.config.questionCount,
-          mode: GameMode.pro,
-        ),
-      );
+      final selectionResult = await ref
+          .read(questionSelectionServiceProvider)
+          .selectQuestions(
+            QuestionSelectionRequest(
+              categoryIds: categories,
+              difficulty: state.config.difficulty.toBaseDifficulty(),
+              questionCount: state.config.questionCount,
+              mode: GameMode.pro,
+            ),
+          )
+          .timeout(const Duration(seconds: 15), onTimeout: () {
+            throw Exception('Content selection timed out. Check your connection.');
+          });
 
       if (selectionResult.status != SelectionStatus.success) {
         state = state.copyWith(
           isLoading: false,
-          access: const ProModeAccessResult(state: ProModeAccessState.insufficientContent),
+          access: selectionResult.status == SelectionStatus.error
+              ? const ProModeAccessResult(state: ProModeAccessState.error, message: 'ERROR LOADING QUESTIONS')
+              : const ProModeAccessResult(state: ProModeAccessState.insufficientContent),
         );
         return null;
       }
@@ -315,7 +330,15 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       // 2. Reserve Fee (Authoritative atomic check)
       await ref
           .read(proModeRepositoryProvider)
-          .reserveEntryFee(player.uid, sessionId, state.config.difficulty.toBaseDifficulty(), isFree: isFree);
+          .reserveEntryFee(
+            player.uid, 
+            sessionId, 
+            state.config.difficulty.toBaseDifficulty(), 
+            isFree: isFree
+          )
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+            throw Exception('Secure fee reservation timed out.');
+          });
 
       final session = CompetitiveSession(
         sessionId: sessionId,
@@ -329,7 +352,10 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       // 3. Create Session Record
       await ref
           .read(proModeRepositoryProvider)
-          .createCompetitiveSession(session);
+          .createCompetitiveSession(session)
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+            throw Exception('Session creation timed out.');
+          });
 
       state = state.copyWith(isLoading: false);
       return session;

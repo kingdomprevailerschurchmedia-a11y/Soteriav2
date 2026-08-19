@@ -102,11 +102,11 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: SoteriaSpacing.lg,
-                  vertical: SoteriaSpacing.md,
+                  vertical: 8.h,
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 4.h),
                     Stack(
                       alignment: Alignment.center,
                       children: [
@@ -118,8 +118,8 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                             child: GestureDetector(
                               onTap: state.currentStep > 0 ? _onBack : null,
                               child: Container(
-                                width: 44.w,
-                                height: 44.w,
+                                width: 36.w,
+                                height: 36.w,
                                 decoration: BoxDecoration(
                                   color: Colors.white.withValues(alpha: 0.05),
                                   shape: BoxShape.circle,
@@ -130,7 +130,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                 child: const Icon(
                                   Icons.chevron_left_rounded,
                                   color: Colors.white,
-                                  size: 28,
+                                  size: 24,
                                 ),
                               ),
                             ),
@@ -141,19 +141,19 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                           'Personalization',
                           style: context.titleLarge.copyWith(
                             color: Colors.white,
-                            fontSize: 24.sp,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w900,
                             letterSpacing: -0.5,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 32.h),
+                    SizedBox(height: 16.h),
                     // Progress Bar Redesign
                     Column(
                       children: [
                         Container(
-                          height: 8.h,
+                          height: 6.h,
                           width: double.infinity,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.05),
@@ -173,7 +173,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                     color: const Color(0xFF8A55FD).withValues(
                                       alpha: 0.4,
                                     ),
-                                    blurRadius: 10,
+                                    blurRadius: 8,
                                     spreadRadius: 1,
                                   ),
                                 ],
@@ -181,7 +181,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 12.h),
+                        SizedBox(height: 8.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -191,13 +191,13 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                 color: Colors.white.withValues(alpha: 0.4),
                                 letterSpacing: 1.5,
                                 fontWeight: FontWeight.w800,
-                                fontSize: 10.sp,
+                                fontSize: 9.sp,
                               ),
                             ),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 12.w,
-                                vertical: 4.h,
+                                horizontal: 10.w,
+                                vertical: 2.h,
                               ),
                               decoration: BoxDecoration(
                                 color: const Color(0xFF8A55FD).withValues(alpha: 0.15),
@@ -210,7 +210,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                 'STEP ${state.currentStep + 1}/5',
                                 style: context.bodySmall.copyWith(
                                   color: Colors.white,
-                                  fontSize: 11.sp,
+                                  fontSize: 10.sp,
                                   fontWeight: FontWeight.w900,
                                 ),
                               ),
@@ -240,7 +240,10 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
 
               // Footer Redesign
               Padding(
-                padding: EdgeInsets.all(SoteriaSpacing.lg),
+                padding: EdgeInsets.symmetric(
+                  horizontal: SoteriaSpacing.lg,
+                  vertical: 12.h,
+                ),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -251,7 +254,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
                         width: double.infinity,
-                        height: 56.h,
+                        height: 52.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16.r),
                           gradient: isValid
@@ -264,8 +267,8 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                               ? [
                                   BoxShadow(
                                     color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 10),
+                                    blurRadius: 15,
+                                    offset: const Offset(0, 8),
                                   ),
                                 ]
                               : null,
@@ -282,26 +285,27 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                   color: isValid ? Colors.white : SoteriaColors.muted,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 0.5,
+                                  fontSize: 16.sp,
                                 ),
                               ),
                               SizedBox(width: 8.w),
                               Icon(
                                 Icons.arrow_forward_rounded,
                                 color: isValid ? Colors.white : SoteriaColors.muted,
-                                size: 20,
+                                size: 18,
                               ),
                             ],
                           ),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 12.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.verified_user_rounded,
-                          size: 14.sp,
+                          size: 12.sp,
                           color: Colors.white.withValues(alpha: 0.3),
                         ),
                         SizedBox(width: 6.w),
@@ -309,13 +313,12 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                           'Secure & Private Profile Setup',
                           style: context.bodySmall.copyWith(
                             color: Colors.white.withValues(alpha: 0.3),
-                            fontSize: 12.sp,
+                            fontSize: 11.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8.h),
                   ],
                 ),
               ),

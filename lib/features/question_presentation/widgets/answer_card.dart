@@ -63,7 +63,7 @@ class AnswerCard extends StatelessWidget {
       enabled: !isLocked,
       label: semanticLabel,
       child: Padding(
-        padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+        padding: EdgeInsets.only(bottom: SoteriaSpacing.sm),
         child: GestureDetector(
           onTap: isLocked
               ? null
@@ -90,14 +90,14 @@ class AnswerCard extends StatelessWidget {
               opacity: opacity,
               padding: EdgeInsets.symmetric(
                 horizontal: SoteriaSpacing.lg,
-                vertical: SoteriaSpacing.sm,
+                vertical: 6.h,
               ),
               border: Border.all(color: borderColor, width: 1.2),
               child: Row(
                 children: [
                   if (prefix != null) ...[
                     _AnswerPrefix(prefix: prefix!, visualState: visualState),
-                    SizedBox(width: SoteriaSpacing.lg),
+                    SizedBox(width: SoteriaSpacing.md),
                   ],
                   Expanded(
                     child: Text(
@@ -109,7 +109,7 @@ class AnswerCard extends StatelessWidget {
                         color: isLocked && !isCorrect && !isWrong
                             ? SoteriaColors.muted
                             : SoteriaColors.textPrimary,
-                        fontSize: 16.sp,
+                        fontSize: 15.sp,
                       ),
                     ),
                   ),
@@ -163,8 +163,8 @@ class _AnswerPrefix extends StatelessWidget {
 
     return AnimatedContainer(
       duration: SoteriaAnimations.fast,
-      width: 42.w,
-      height: 42.w,
+      width: 36.w,
+      height: 36.w,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: bgColor,
@@ -185,7 +185,7 @@ class _AnswerPrefix extends StatelessWidget {
         style: context.labelLarge.copyWith(
           color: textColor,
           fontWeight: FontWeight.w900,
-          fontSize: 18.sp,
+          fontSize: 16.sp,
         ),
       ),
     );

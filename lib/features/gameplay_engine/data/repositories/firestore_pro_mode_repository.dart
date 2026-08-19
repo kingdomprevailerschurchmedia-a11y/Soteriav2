@@ -53,13 +53,16 @@ class FirestoreProModeRepository implements ProModeRepository {
     final now = DateTime.now();
 
     // 1. Pre-transaction check: Check for existing active sessions to prevent parallel play.
-    // Firestore transactions do not support collection queries.
-    // We allow entry if existing sessions are "stale" (not updated for 20+ mins).
+    // We use a timeout to prevent hanging on flaky connections.
     final existingSessions = await _database
         .collection('competitive_sessions')
         .where('uid', isEqualTo: uid)
         .where('status', whereIn: ['initialized', 'active'])
-        .get();
+        .get()
+        .timeout(const Duration(seconds: 5), onTimeout: () {
+          LoggerService.e('Pro Mode Entry: Active session check timed out', feature: 'GameplayEngine');
+          throw Exception('Connection timeout checking for active sessions. Please try again.');
+        });
 
     final activeSessions = existingSessions.docs.where((doc) {
       final data = doc.data();
@@ -180,28 +183,45 @@ class FirestoreProModeRepository implements ProModeRepository {
     List<String>? categoryIds,
     required Difficulty difficulty,
   }) async {
-    Query query = _database.collection('questions')
-        .where('status', isEqualTo: 'published')
-        .where('difficulty', isEqualTo: difficulty.name);
-
-    if (categoryIds != null && categoryIds.isNotEmpty) {
-      if (categoryIds.length == 1) {
-        query = query.where('categoryId', isEqualTo: categoryIds.first);
-      } else {
-        // Firestore 'in' operator supports up to 10-30 items depending on SDK version
-        query = query.where('categoryId', whereIn: categoryIds);
+    try {
+      if (categoryIds == null || categoryIds.isEmpty) {
+        final query = _database.collection('questions')
+            .where('status', isEqualTo: 'published')
+            .where('difficulty', isEqualTo: difficulty.name);
+        final snapshot = await query.count().get().timeout(const Duration(seconds: 5));
+        return snapshot.count ?? 0;
       }
-    }
 
-    final snapshot = await query.count().get();
-    final count = snapshot.count ?? 0;
-    
-    LoggerService.d(
-      'Pro Mode Content Check: categories=$categoryIds, difficulty=${difficulty.name}, available=$count',
-      feature: 'GameplayEngine',
-    );
-    
-    return count;
+      // Firestore 'in'/'whereIn' operator supports up to 30 items.
+      // We chunk the categories to avoid "Invalid Query" errors.
+      int totalCount = 0;
+      const int chunkSize = 30;
+      
+      for (var i = 0; i < categoryIds.length; i += chunkSize) {
+        final chunk = categoryIds.sublist(
+          i, 
+          i + chunkSize > categoryIds.length ? categoryIds.length : i + chunkSize
+        );
+        
+        final query = _database.collection('questions')
+            .where('status', isEqualTo: 'published')
+            .where('difficulty', isEqualTo: difficulty.name)
+            .where('categoryId', whereIn: chunk);
+            
+        final snapshot = await query.count().get().timeout(const Duration(seconds: 5));
+        totalCount += snapshot.count ?? 0;
+      }
+
+      LoggerService.d(
+        'Pro Mode Content Check: categories=${categoryIds.length}, difficulty=${difficulty.name}, total=$totalCount',
+        feature: 'GameplayEngine',
+      );
+      
+      return totalCount;
+    } catch (e) {
+      LoggerService.e('Pro Mode Content Check failed', error: e, feature: 'GameplayEngine');
+      return 0; // Default to 0 to prevent allowing entry if check fails
+    }
   }
 
   @override

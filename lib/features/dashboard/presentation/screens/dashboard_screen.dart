@@ -171,17 +171,22 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                   ),
 
-                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
-
-                  // Season Status
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: SeasonHeader())),
-
-                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
+                  const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
 
                   // Daily Bonus
                   const SliverToBoxAdapter(
                     child: RepaintBoundary(child: DailyBonusCard()),
                   ),
+
+                  const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
+
+                  // Quick Actions
+                  const SliverToBoxAdapter(child: RepaintBoundary(child: QuickActionsGrid())),
+
+                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
+
+                  // Season Status
+                  const SliverToBoxAdapter(child: RepaintBoundary(child: SeasonHeader())),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
@@ -201,11 +206,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       ),
                     ),
                   ),
-
-                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
-
-                  // Quick Actions
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: QuickActionsGrid())),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 

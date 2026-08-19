@@ -18,7 +18,9 @@ class MilestoneSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+          padding: EdgeInsets.symmetric(
+            horizontal: SoteriaSpacing.containerPadding(context),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -70,7 +72,9 @@ class MilestoneSection extends StatelessWidget {
         ),
         SizedBox(height: SoteriaSpacing.md),
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+          padding: EdgeInsets.symmetric(
+            horizontal: SoteriaSpacing.containerPadding(context),
+          ),
           child: _DashboardMilestoneCard(
             progress: progress,
             onTap: () => Navigator.of(context).push(

@@ -133,7 +133,10 @@ class GameEngine extends StateNotifier<GameState> {
       if (config.mode == GameMode.pro) {
         await ref
             ?.read(competitiveRepositoryProvider)
-            .startCompetitiveSession(state.sessionId);
+            .startCompetitiveSession(state.sessionId)
+            .timeout(const Duration(seconds: 10), onTimeout: () {
+              throw Exception('Match activation timed out. Check your connection.');
+            });
       }
 
       // Hydrate progression baseline from authoritative record

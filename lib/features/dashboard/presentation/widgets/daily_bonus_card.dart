@@ -17,7 +17,7 @@ class DailyBonusCard extends ConsumerWidget {
 
     return Padding(
       padding: EdgeInsets.symmetric(
-        horizontal: SoteriaSpacing.lg,
+        horizontal: SoteriaSpacing.containerPadding(context),
       ),
       child: SoteriaCard(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

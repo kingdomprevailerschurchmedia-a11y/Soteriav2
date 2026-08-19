@@ -106,14 +106,14 @@ class QuestionPresenter extends ConsumerWidget {
                       SizedBox(width: 48.w), // Spacer to balance header
                   ],
                 ),
-                SizedBox(height: SoteriaSpacing.lg),
+                SizedBox(height: SoteriaSpacing.sm),
                 // Progress Bar
                 GameplayProgressBar(
                   current: currentQuestionIndex + 1,
                   total: totalQuestions,
                   progress: (currentQuestionIndex + 1) / totalQuestions,
                 ),
-                SizedBox(height: SoteriaSpacing.xl),
+                SizedBox(height: SoteriaSpacing.lg),
                 // Lifelines Row
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -134,15 +134,15 @@ class QuestionPresenter extends ConsumerWidget {
                     );
                   }).toList(),
                 ),
-                SizedBox(height: SoteriaSpacing.lg),
+                SizedBox(height: SoteriaSpacing.md),
                 // Question Card & Answers
                 Expanded(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       if (lifelineResults.audienceVotes != null) ...[
                         AudienceChart(votes: lifelineResults.audienceVotes!),
-                        SizedBox(height: SoteriaSpacing.lg),
+                        SizedBox(height: SoteriaSpacing.md),
                       ],
                       AnimatedSwitcher(
                         duration: SoteriaAnimations.normal,
@@ -153,7 +153,7 @@ class QuestionPresenter extends ConsumerWidget {
                           difficulty: question.difficulty.name,
                         ),
                       ),
-                      SizedBox(height: SoteriaSpacing.lg),
+                      SizedBox(height: SoteriaSpacing.md),
                       renderer.buildAnswerArea(
                         question: question,
                         selectedAnswerId: selectedId,
@@ -182,7 +182,7 @@ class QuestionPresenter extends ConsumerWidget {
                     ],
                   ),
                 ),
-                SizedBox(height: SoteriaSpacing.lg),
+                SizedBox(height: SoteriaSpacing.sm),
               ],
             ),
           ),

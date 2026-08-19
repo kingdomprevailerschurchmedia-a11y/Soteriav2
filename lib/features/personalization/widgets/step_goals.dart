@@ -57,7 +57,7 @@ class StepGoals extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
-        SizedBox(height: SoteriaSpacing.md),
+        SizedBox(height: 16.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -69,7 +69,7 @@ class StepGoals extends ConsumerWidget {
                       text: 'What are your ',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -77,7 +77,7 @@ class StepGoals extends ConsumerWidget {
                       text: 'goals?',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         color: const Color(0xFF7C4DFF),
                       ),
                     ),
@@ -90,33 +90,33 @@ class StepGoals extends ConsumerWidget {
               child: const Icon(
                 Icons.auto_awesome_rounded,
                 color: Color(0xFF7C4DFF),
-                size: 24,
+                size: 20,
               ),
             ),
           ],
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 4.h),
         Text(
           'Select all that apply. You can change these anytime.',
           style: context.bodySmall.copyWith(
             color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-            fontSize: 16.sp,
+            fontSize: 13.sp,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.xl),
+        SizedBox(height: SoteriaSpacing.lg),
         ...goals.map((goal) {
           final title = goal['title'] as String;
           final isSelected = state.goals.contains(title);
           final isGold = goal['isGold'] as bool;
 
           return Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.only(bottom: 8.h),
             child: GestureDetector(
               onTap: () => notifier.toggleGoal(title),
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 250),
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(16.r),
                   border: Border.all(
                     color: isSelected
                         ? const Color(0xFF7C4DFF)
@@ -129,28 +129,28 @@ class StepGoals extends ConsumerWidget {
                             color: const Color(
                               0xFF7C4DFF,
                             ).withValues(alpha: 0.2),
-                            blurRadius: 10,
+                            blurRadius: 8,
                             spreadRadius: 1,
                           ),
                         ]
                       : null,
                 ),
                 child: GlassSurface(
-                  borderRadius: BorderRadius.circular(20.r),
+                  borderRadius: BorderRadius.circular(16.r),
                   child: Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: 16.w,
-                      vertical: 12.h,
+                      horizontal: 14.w,
+                      vertical: 10.h,
                     ),
                     child: Row(
                       children: [
                         // Icon Container
                         Container(
-                          width: 48.w,
-                          height: 48.w,
+                          width: 40.w,
+                          height: 40.w,
                           decoration: BoxDecoration(
                             color: Colors.white.withValues(alpha: 0.05),
-                            borderRadius: BorderRadius.circular(12.r),
+                            borderRadius: BorderRadius.circular(10.r),
                             border: Border.all(
                               color: Colors.white.withValues(alpha: 0.1),
                             ),
@@ -161,11 +161,11 @@ class StepGoals extends ConsumerWidget {
                               color: isGold
                                   ? SoteriaColors.gold
                                   : const Color(0xFF7C4DFF),
-                              size: 24.w,
+                              size: 20.w,
                             ),
                           ),
                         ),
-                        SizedBox(width: 14.w),
+                        SizedBox(width: 12.w),
                         // Text Content
                         Expanded(
                           child: Column(
@@ -176,7 +176,7 @@ class StepGoals extends ConsumerWidget {
                                 style: context.titleMedium.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.w600,
-                                  fontSize: 16.sp,
+                                  fontSize: 15.sp,
                                 ),
                               ),
                               SizedBox(height: 2.h),
@@ -186,7 +186,7 @@ class StepGoals extends ConsumerWidget {
                                   color: SoteriaColors.textSecondary.withValues(
                                     alpha: 0.6,
                                   ),
-                                  fontSize: 12.sp,
+                                  fontSize: 11.sp,
                                 ),
                               ),
                             ],
@@ -194,13 +194,13 @@ class StepGoals extends ConsumerWidget {
                         ),
                         // Checkbox
                         Container(
-                          width: 24.w,
-                          height: 24.w,
+                          width: 20.w,
+                          height: 20.w,
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? const Color(0xFF5B3FD9)
                                 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(6.r),
+                            borderRadius: BorderRadius.circular(5.r),
                             border: Border.all(
                               color: isSelected
                                   ? const Color(0xFF7C4DFF)
@@ -212,7 +212,7 @@ class StepGoals extends ConsumerWidget {
                               ? const Icon(
                                   Icons.check,
                                   color: Colors.white,
-                                  size: 16,
+                                  size: 14,
                                 )
                               : null,
                         ),

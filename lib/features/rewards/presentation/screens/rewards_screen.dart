@@ -67,10 +67,11 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return PreferredSize(
-      preferredSize: Size.fromHeight(160.h),
+      preferredSize: Size.fromHeight(200.h),
       child: SafeArea(
+        bottom: false,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 4.h, bottom: 0.h),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -85,8 +86,8 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
               // Decorative header icon
               Image.asset(
                 'assets/icons/rewards_store.png',
-                width: 150.r,
-                height: 90.r,
+                width: 220.r,
+                height: 130.r,
                 fit: BoxFit.contain,
               ),
               Text(

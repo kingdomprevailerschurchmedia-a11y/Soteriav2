@@ -28,7 +28,9 @@ class SeasonHeader extends ConsumerWidget {
         return SoteriaCard(
           onTap: () => context.push('/app/season'),
           padding: EdgeInsets.all(SoteriaSpacing.sm),
-          margin: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
+          margin: EdgeInsets.symmetric(
+            horizontal: SoteriaSpacing.containerPadding(context),
+          ),
           hasGlow: status == SeasonStatus.ending,
           glowColor: status == SeasonStatus.ending
               ? SoteriaColors.error

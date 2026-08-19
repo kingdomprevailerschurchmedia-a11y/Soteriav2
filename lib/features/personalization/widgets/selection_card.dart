@@ -27,9 +27,9 @@ class SelectionCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
-        margin: EdgeInsets.only(bottom: 12.h),
+        margin: EdgeInsets.only(bottom: 8.h),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24.r),
+          borderRadius: BorderRadius.circular(20.r),
           gradient: isSelected
               ? LinearGradient(
                   begin: Alignment.topLeft,
@@ -50,28 +50,28 @@ class SelectionCard extends StatelessWidget {
               ? [
                   BoxShadow(
                     color: const Color(0xFF8A55FD).withValues(alpha: 0.1),
-                    blurRadius: 20,
+                    blurRadius: 15,
                     spreadRadius: 2,
                   ),
                 ]
               : null,
         ),
         child: GlassSurface(
-          borderRadius: BorderRadius.circular(24.r),
+          borderRadius: BorderRadius.circular(20.r),
           opacity: isSelected ? 0.2 : 0.05,
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             child: Row(
               children: [
                 // Icon Container
                 Container(
-                  width: 52.w,
-                  height: 52.w,
+                  width: 44.w,
+                  height: 44.w,
                   decoration: BoxDecoration(
                     color: isSelected 
                         ? const Color(0xFF8A55FD).withValues(alpha: 0.2)
                         : Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(16.r),
+                    borderRadius: BorderRadius.circular(14.r),
                     border: Border.all(
                       color: isSelected
                           ? const Color(0xFF8A55FD).withValues(alpha: 0.3)
@@ -82,11 +82,11 @@ class SelectionCard extends StatelessWidget {
                     child: Icon(
                       icon,
                       color: Colors.white,
-                      size: 26.w,
+                      size: 22.w,
                     ),
                   ),
                 ),
-                SizedBox(width: 16.w),
+                SizedBox(width: 14.w),
                 // Text Content
                 Expanded(
                   child: Column(
@@ -96,18 +96,18 @@ class SelectionCard extends StatelessWidget {
                       Text(
                         title,
                         style: context.titleMedium.copyWith(
-                          fontSize: 18.sp,
+                          fontSize: 16.sp,
                           color: Colors.white,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
                       if (subtitle != null) ...[
-                        SizedBox(height: 4.h),
+                        SizedBox(height: 2.h),
                         Text(
                           subtitle!,
                           style: context.bodySmall.copyWith(
                             color: Colors.white.withValues(alpha: 0.5),
-                            fontSize: 13.sp,
+                            fontSize: 12.sp,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -118,8 +118,8 @@ class SelectionCard extends StatelessWidget {
                 // Trailing Indicator
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
-                  width: 32.w,
-                  height: 32.w,
+                  width: 28.w,
+                  height: 28.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: isSelected
@@ -135,7 +135,7 @@ class SelectionCard extends StatelessWidget {
                   child: Icon(
                     isSelected ? Icons.check : Icons.chevron_right_rounded,
                     color: Colors.white,
-                    size: 20.w,
+                    size: 18.w,
                   ),
                 ),
               ],

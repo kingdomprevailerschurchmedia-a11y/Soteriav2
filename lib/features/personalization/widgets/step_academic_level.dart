@@ -45,7 +45,7 @@ class StepAcademicLevel extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
-        SizedBox(height: 32.h),
+        SizedBox(height: 16.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -57,7 +57,7 @@ class StepAcademicLevel extends ConsumerWidget {
                       text: 'What is your current ',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 28.sp,
+                        fontSize: 24.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -65,7 +65,7 @@ class StepAcademicLevel extends ConsumerWidget {
                       text: 'academic level?',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 28.sp,
+                        fontSize: 24.sp,
                         color: const Color(0xFF7C4DFF),
                       ),
                     ),
@@ -78,15 +78,15 @@ class StepAcademicLevel extends ConsumerWidget {
               child: const Icon(
                 Icons.auto_awesome_rounded,
                 color: Color(0xFF7C4DFF),
-                size: 24,
+                size: 20,
               ),
             ),
           ],
         ),
-        SizedBox(height: SoteriaSpacing.xl),
+        SizedBox(height: SoteriaSpacing.lg),
         ...options.map(
           (opt) => Padding(
-            padding: EdgeInsets.only(bottom: 16.h),
+            padding: EdgeInsets.only(bottom: 8.h),
             child: SelectionCard(
               title: opt['title'] as String,
               subtitle: opt['subtitle'] as String,

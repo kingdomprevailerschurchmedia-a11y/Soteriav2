@@ -51,7 +51,7 @@ class StepNotifications extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
-        SizedBox(height: SoteriaSpacing.md),
+        SizedBox(height: 16.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -63,7 +63,7 @@ class StepNotifications extends ConsumerWidget {
                       text: 'Notification ',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -71,7 +71,7 @@ class StepNotifications extends ConsumerWidget {
                       text: 'Preferences',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         color: const Color(0xFF7C4DFF),
                       ),
                     ),
@@ -84,37 +84,37 @@ class StepNotifications extends ConsumerWidget {
               child: const Icon(
                 Icons.auto_awesome_rounded,
                 color: Color(0xFF7C4DFF),
-                size: 24,
+                size: 20,
               ),
             ),
           ],
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 4.h),
         Text(
           'Stay updated with your progress and competitions.',
           style: context.bodySmall.copyWith(
             color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-            fontSize: 16.sp,
+            fontSize: 13.sp,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.xl),
+        SizedBox(height: SoteriaSpacing.lg),
         ...prefs.map(
           (pref) => Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.only(bottom: 8.h),
             child: GlassSurface(
-              borderRadius: BorderRadius.circular(20.r),
+              borderRadius: BorderRadius.circular(16.r),
               opacity: 0.05,
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
                 child: Row(
                   children: [
                     // Icon Container
                     Container(
-                      width: 48.w,
-                      height: 48.w,
+                      width: 40.w,
+                      height: 40.w,
                       decoration: BoxDecoration(
                         color: Colors.white.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(12.r),
+                        borderRadius: BorderRadius.circular(10.r),
                         border: Border.all(
                           color: Colors.white.withValues(alpha: 0.1),
                         ),
@@ -123,11 +123,11 @@ class StepNotifications extends ConsumerWidget {
                         child: Icon(
                           pref['icon'] as IconData,
                           color: const Color(0xFF7C4DFF),
-                          size: 24.w,
+                          size: 20.w,
                         ),
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 14.w),
                     // Text
                     Expanded(
                       child: Column(
@@ -138,6 +138,7 @@ class StepNotifications extends ConsumerWidget {
                             style: context.titleMedium.copyWith(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
+                              fontSize: 15.sp,
                             ),
                           ),
                           SizedBox(height: 2.h),
@@ -147,23 +148,26 @@ class StepNotifications extends ConsumerWidget {
                               color: SoteriaColors.textSecondary.withValues(
                                 alpha: 0.6,
                               ),
-                              fontSize: 12.sp,
+                              fontSize: 11.sp,
                             ),
                           ),
                         ],
                       ),
                     ),
                     // Switch
-                    Switch(
-                      value: state.notificationPrefs[pref['key']] ?? true,
-                      onChanged: (val) => notifier.updateNotificationPref(
-                        pref['key'] as String,
-                        val,
+                    Transform.scale(
+                      scale: 0.8,
+                      child: Switch(
+                        value: state.notificationPrefs[pref['key']] ?? true,
+                        onChanged: (val) => notifier.updateNotificationPref(
+                          pref['key'] as String,
+                          val,
+                        ),
+                        activeThumbColor: Colors.white,
+                        activeTrackColor: const Color(0xFF5B3FD9),
+                        inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
+                        inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
                       ),
-                      activeThumbColor: Colors.white,
-                      activeTrackColor: const Color(0xFF5B3FD9),
-                      inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
-                      inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
                     ),
                   ],
                 ),
@@ -171,18 +175,18 @@ class StepNotifications extends ConsumerWidget {
             ),
           ),
         ),
-        SizedBox(height: 20.h),
+        SizedBox(height: 16.h),
         // Banner
         GlassSurface(
-          borderRadius: BorderRadius.circular(24.r),
+          borderRadius: BorderRadius.circular(20.r),
           opacity: 0.05,
           child: Padding(
-            padding: EdgeInsets.all(20.w),
+            padding: EdgeInsets.all(16.w),
             child: Row(
               children: [
                 Container(
-                  width: 50.w,
-                  height: 50.w,
+                  width: 44.w,
+                  height: 44.w,
                   decoration: BoxDecoration(
                     color: SoteriaColors.gold.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
@@ -193,10 +197,10 @@ class StepNotifications extends ConsumerWidget {
                   child: const Icon(
                     Icons.shield_outlined,
                     color: SoteriaColors.gold,
-                    size: 24,
+                    size: 20,
                   ),
                 ),
-                SizedBox(width: 16.w),
+                SizedBox(width: 14.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -206,55 +210,27 @@ class StepNotifications extends ConsumerWidget {
                         style: context.titleMedium.copyWith(
                           color: SoteriaColors.gold,
                           fontWeight: FontWeight.bold,
+                          fontSize: 16.sp,
                         ),
                       ),
-                      SizedBox(height: 4.h),
+                      SizedBox(height: 2.h),
                       Text(
-                        'You can change these preferences anytime in settings.',
+                        'You can change these anytime in settings.',
                         style: context.bodySmall.copyWith(
                           color: SoteriaColors.textSecondary.withValues(
                             alpha: 0.7,
                           ),
-                          fontSize: 13.sp,
+                          fontSize: 12.sp,
                         ),
                       ),
                     ],
                   ),
                 ),
-                // Bell with badge
-                Stack(
-                  children: [
-                    const Icon(
-                      Icons.notifications_rounded,
-                      color: Color(0xFF7C4DFF),
-                      size: 40,
-                    ),
-                    Positioned(
-                      right: 0,
-                      top: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(4),
-                        decoration: const BoxDecoration(
-                          color: SoteriaColors.gold,
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
           ),
         ),
-        SizedBox(height: 40.h),
+        SizedBox(height: 24.h),
       ],
     );
   }

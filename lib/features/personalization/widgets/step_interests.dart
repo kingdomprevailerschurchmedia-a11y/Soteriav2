@@ -39,7 +39,7 @@ class StepInterests extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: SoteriaSpacing.md),
+          SizedBox(height: 16.h),
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -51,7 +51,7 @@ class StepInterests extends ConsumerWidget {
                         text: 'Select your ',
                         style: context.headlineMedium.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 32.sp,
+                          fontSize: 24.sp,
                           color: Colors.white,
                         ),
                       ),
@@ -59,7 +59,7 @@ class StepInterests extends ConsumerWidget {
                         text: 'interests',
                         style: context.headlineMedium.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 32.sp,
+                          fontSize: 24.sp,
                           color: const Color(0xFF7C4DFF),
                         ),
                       ),
@@ -72,23 +72,23 @@ class StepInterests extends ConsumerWidget {
                 child: const Icon(
                   Icons.auto_awesome_rounded,
                   color: Color(0xFF7C4DFF),
-                  size: 24,
+                  size: 20,
                 ),
               ),
             ],
           ),
-          SizedBox(height: 8.h),
+          SizedBox(height: 4.h),
           Text(
             'Choose at least one to personalize your feed.',
             style: context.bodySmall.copyWith(
               color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-              fontSize: 16.sp,
+              fontSize: 13.sp,
             ),
           ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: SoteriaSpacing.lg),
           Wrap(
-            spacing: 12.w,
-            runSpacing: 12.h,
+            spacing: 8.w,
+            runSpacing: 8.h,
             children: interests.map((item) {
               final label = item['label'] as String;
               final icon = item['icon'] as IconData;
@@ -99,14 +99,14 @@ class StepInterests extends ConsumerWidget {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 250),
                   padding: EdgeInsets.symmetric(
-                    horizontal: 16.w,
-                    vertical: 12.h,
+                    horizontal: 14.w,
+                    vertical: 10.h,
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
                         ? const Color(0xFF5B3FD9)
                         : Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(16.r),
+                    borderRadius: BorderRadius.circular(12.r),
                     border: Border.all(
                       color: isSelected
                           ? const Color(0xFF7C4DFF)
@@ -118,7 +118,7 @@ class StepInterests extends ConsumerWidget {
                               color: const Color(
                                 0xFF5B3FD9,
                               ).withValues(alpha: 0.4),
-                              blurRadius: 10,
+                              blurRadius: 8,
                               spreadRadius: 1,
                             ),
                           ]
@@ -129,7 +129,7 @@ class StepInterests extends ConsumerWidget {
                     children: [
                       Icon(
                         icon,
-                        size: 20.w,
+                        size: 16.w,
                         color: isSelected ? Colors.white : SoteriaColors.muted,
                       ),
                       SizedBox(width: 8.w),
@@ -137,7 +137,7 @@ class StepInterests extends ConsumerWidget {
                         label,
                         style: context.labelLarge.copyWith(
                           color: Colors.white,
-                          fontSize: 15.sp,
+                          fontSize: 13.sp,
                           fontWeight: isSelected
                               ? FontWeight.w600
                               : FontWeight.normal,
@@ -164,19 +164,19 @@ class StepInterests extends ConsumerWidget {
               );
             }).toList(),
           ),
-          SizedBox(height: 40.h),
+          SizedBox(height: 24.h),
           // Great choices! Banner
           if (state.interests.isNotEmpty)
             GlassSurface(
-              borderRadius: BorderRadius.circular(24.r),
+              borderRadius: BorderRadius.circular(20.r),
               opacity: 0.05,
               child: Padding(
-                padding: EdgeInsets.all(20.w),
+                padding: EdgeInsets.all(16.w),
                 child: Row(
                   children: [
                     Container(
-                      width: 50.w,
-                      height: 50.w,
+                      width: 44.w,
+                      height: 44.w,
                       decoration: BoxDecoration(
                         gradient: const LinearGradient(
                           colors: [Color(0xFF2E1A8A), Color(0xFF5B3FD9)],
@@ -186,10 +186,10 @@ class StepInterests extends ConsumerWidget {
                       child: const Icon(
                         Icons.auto_awesome_rounded,
                         color: SoteriaColors.gold,
-                        size: 24,
+                        size: 20,
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 14.w),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,40 +199,27 @@ class StepInterests extends ConsumerWidget {
                             style: context.titleMedium.copyWith(
                               color: SoteriaColors.gold,
                               fontWeight: FontWeight.bold,
+                              fontSize: 16.sp,
                             ),
                           ),
-                          SizedBox(height: 4.h),
+                          SizedBox(height: 2.h),
                           Text(
                             'We\'ll show you the best content based on your interests.',
                             style: context.bodySmall.copyWith(
                               color: SoteriaColors.textSecondary.withValues(
                                 alpha: 0.7,
                               ),
-                              fontSize: 13.sp,
+                              fontSize: 12.sp,
                             ),
                           ),
                         ],
-                      ),
-                    ),
-                    // Decorative image placeholder
-                    Container(
-                      width: 60.w,
-                      height: 60.w,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(12.r),
-                      ),
-                      child: const Icon(
-                        Icons.description_outlined,
-                        color: Color(0xFF7C4DFF),
-                        size: 30,
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-          SizedBox(height: SoteriaSpacing.xl),
+          SizedBox(height: SoteriaSpacing.lg),
         ],
       ),
     );

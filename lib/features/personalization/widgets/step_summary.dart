@@ -18,7 +18,7 @@ class StepSummary extends ConsumerWidget {
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
-        SizedBox(height: SoteriaSpacing.md),
+        SizedBox(height: 16.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -30,7 +30,7 @@ class StepSummary extends ConsumerWidget {
                       text: 'Review ',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         color: Colors.white,
                       ),
                     ),
@@ -38,7 +38,7 @@ class StepSummary extends ConsumerWidget {
                       text: 'your profile',
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
-                        fontSize: 32.sp,
+                        fontSize: 24.sp,
                         color: const Color(0xFF7C4DFF),
                       ),
                     ),
@@ -51,20 +51,20 @@ class StepSummary extends ConsumerWidget {
               child: const Icon(
                 Icons.auto_awesome_rounded,
                 color: Color(0xFF7C4DFF),
-                size: 24,
+                size: 20,
               ),
             ),
           ],
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 4.h),
         Text(
           'Tell us about yourself so we can personalize your experience.',
           style: context.bodySmall.copyWith(
             color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-            fontSize: 16.sp,
+            fontSize: 13.sp,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.xl),
+        SizedBox(height: SoteriaSpacing.lg),
 
         // Academic Level Section
         _SummarySection(
@@ -74,7 +74,7 @@ class StepSummary extends ConsumerWidget {
           child: _buildAcademicLevel(context, state.academicLevel),
         ),
 
-        SizedBox(height: 24.h),
+        SizedBox(height: 16.h),
 
         // Interests Section
         _SummarySection(
@@ -88,7 +88,7 @@ class StepSummary extends ConsumerWidget {
           ),
         ),
 
-        SizedBox(height: 24.h),
+        SizedBox(height: 16.h),
 
         // Goals Section
         _SummarySection(
@@ -98,7 +98,7 @@ class StepSummary extends ConsumerWidget {
           child: _buildGoals(context, state.goals),
         ),
 
-        SizedBox(height: 40.h),
+        SizedBox(height: 24.h),
       ],
     );
   }

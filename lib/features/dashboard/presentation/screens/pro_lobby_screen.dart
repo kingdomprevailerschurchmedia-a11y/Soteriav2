@@ -44,6 +44,7 @@ class ProLobbyScreen extends ConsumerWidget {
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
+      onRetry: () => ref.read(proLobbyProvider.notifier).checkConnection(),
       useSafeArea: false,
       child: Scaffold(
         extendBody: true,
@@ -168,6 +169,8 @@ class ProLobbyScreen extends ConsumerWidget {
         return access.message?.toUpperCase() ?? 'NOT ENOUGH QUESTIONS AVAILABLE';
       case ProModeAccessState.locked:
         return access.message?.toUpperCase();
+      case ProModeAccessState.error:
+        return access.message?.toUpperCase() ?? 'INITIALIZATION ERROR';
       default:
         return null;
     }

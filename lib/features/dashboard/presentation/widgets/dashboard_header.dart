@@ -39,7 +39,9 @@ class DashboardHeader extends ConsumerWidget {
       header: true,
       label: 'Dashboard Header. Player: $playerName. Level: $level',
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        padding: EdgeInsets.symmetric(
+          horizontal: SoteriaSpacing.containerPadding(context),
+        ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [

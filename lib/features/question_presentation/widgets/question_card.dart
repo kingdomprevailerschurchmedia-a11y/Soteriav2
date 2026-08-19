@@ -53,7 +53,10 @@ class QuestionContentCard extends StatelessWidget {
           child: GlassSurface(
             borderRadius: SoteriaRadius.brXl,
             opacity: 0.12,
-            padding: EdgeInsets.all(SoteriaSpacing.xl),
+            padding: EdgeInsets.symmetric(
+              horizontal: SoteriaSpacing.xl,
+              vertical: SoteriaSpacing.lg,
+            ),
             border: Border.all(
               color: Colors.white.withValues(alpha: 0.08),
               width: 1.2,
@@ -66,7 +69,7 @@ class QuestionContentCard extends StatelessWidget {
                 if (category != null || difficulty != null)
                   Padding(
                     padding: EdgeInsets.only(
-                      bottom: SoteriaSpacing.lg,
+                      bottom: SoteriaSpacing.md,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -90,8 +93,8 @@ class QuestionContentCard extends StatelessWidget {
                   ),
                 // Center "?" icon
                 Container(
-                  width: 60.w,
-                  height: 60.w,
+                  width: 48.w,
+                  height: 48.w,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: LinearGradient(
@@ -107,8 +110,8 @@ class QuestionContentCard extends StatelessWidget {
                     boxShadow: [
                       BoxShadow(
                         color: SoteriaColors.secondary.withValues(alpha: 0.2),
-                        blurRadius: 15,
-                        spreadRadius: 2,
+                        blurRadius: 10,
+                        spreadRadius: 1,
                       ),
                     ],
                   ),
@@ -118,16 +121,17 @@ class QuestionContentCard extends StatelessWidget {
                       style: context.displaySmall.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
+                        fontSize: 24.sp,
                       ),
                     ),
                   ),
                 ),
-                SizedBox(height: SoteriaSpacing.xl),
+                SizedBox(height: SoteriaSpacing.lg),
                 Text(
                   text,
                   style: context.titleLarge.copyWith(
-                    fontSize: 22.sp,
-                    height: 1.5,
+                    fontSize: 20.sp,
+                    height: 1.4,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
