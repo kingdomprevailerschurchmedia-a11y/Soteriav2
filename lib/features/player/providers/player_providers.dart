@@ -167,67 +167,54 @@ Future<void> _sync(Ref ref, PlayerProfile profile,
 /// A provider that synchronizes the avatar selection and profile picture between [UserProfile] and [PlayerProfile].
 /// This ensures that changes made in the [AvatarSelectionDialog] are reflected across both identity models.
 final playerAvatarSyncProvider = Provider<void>((ref) {
-  Future<void> syncLeaderboard(PlayerProfile profile) async {
-    final progressionAsync = ref.read(competitiveProgressionProvider);
-    if (progressionAsync is AsyncData<PlayerProgression>) {
-      final progression = progressionAsync.value;
-      final leaderboardRepo = ref.read(leaderboardRepositoryProvider);
-      
-      // Sync global
-      await leaderboardRepo.syncLeaderboardEntry(
-        profile: profile,
-        progression: progression,
-        seasonId: null,
-      );
-      
-      // Sync seasonal
-      await leaderboardRepo.syncLeaderboardEntry(
-        profile: profile,
-        progression: progression,
-        seasonId: progression.seasonId,
-      );
+  // Listen to profile changes
+  ref.listen<UserProfile?>(profileProvider, (previous, next) async {
+    if (next == null) return;
+
+    final player = ref.read(currentPlayerProvider);
+    if (player == null) return;
+
+    bool needsUpdate = false;
+    final Map<String, dynamic> updates = {};
+
+    // Sync Avatar ID (including empty string when clearing)
+    if (next.selectedAvatarId != player.selectedAvatarId) {
+      updates['selectedAvatarId'] = next.selectedAvatarId;
+      needsUpdate = true;
     }
-  }
 
-  // Sync Avatar ID
-  ref.listen<String?>(
-    profileProvider.select((p) => p?.selectedAvatarId),
-    (previous, next) async {
-      if (next != null && next.isNotEmpty) {
-        final player = ref.read(currentPlayerProvider);
-        if (player != null && player.selectedAvatarId != next) {
-          final updated = player.copyWith(
-            selectedAvatarId: next,
-            updatedAt: DateTime.now(),
-          );
-          await ref.read(playerRepositoryProvider).patchPlayerProfile(
-            player.uid, 
-            {'selectedAvatarId': next, 'updatedAt': DateTime.now().toIso8601String()},
-          );
-          await syncLeaderboard(updated);
-        }
-      }
-    },
-  );
+    // Sync Photo URL (including empty string when clearing)
+    if (next.avatarUrl != player.photoUrl) {
+      updates['photoUrl'] = next.avatarUrl;
+      needsUpdate = true;
+    }
 
-  // Sync Custom Avatar URL
-  ref.listen<String?>(
-    profileProvider.select((p) => p?.avatarUrl),
-    (previous, next) async {
-      if (next != null) {
-        final player = ref.read(currentPlayerProvider);
-        if (player != null && player.photoUrl != next) {
-          final updated = player.copyWith(
-            photoUrl: next,
-            updatedAt: DateTime.now(),
-          );
-           await ref.read(playerRepositoryProvider).patchPlayerProfile(
-            player.uid, 
-            {'photoUrl': next, 'updatedAt': DateTime.now().toIso8601String()},
-          );
-           await syncLeaderboard(updated);
-        }
+    if (needsUpdate) {
+      final now = DateTime.now();
+      updates['updatedAt'] = now.toIso8601String();
+
+      final updatedPlayer = player.copyWith(
+        selectedAvatarId: next.selectedAvatarId,
+        photoUrl: next.avatarUrl,
+        updatedAt: now,
+      );
+
+      // 1. Update Player Profile in Firestore
+      await ref
+          .read(playerRepositoryProvider)
+          .patchPlayerProfile(player.uid, updates);
+
+      // 2. Sync to Leaderboard (Global & Seasonal)
+      await _sync(ref, updatedPlayer);
+
+      // 3. Invalidate Leaderboard providers to ensure UI sees the new avatar
+      ref.invalidate(leaderboardControllerProvider(null));
+      final seasonId = ref.read(currentSeasonIdProvider);
+      if (seasonId != null) {
+        ref.invalidate(leaderboardControllerProvider(seasonId));
       }
-    },
-  );
+      ref.invalidate(playerLeaderboardEntryProvider);
+      ref.invalidate(leaderboardAroundPlayerProvider);
+    }
+  });
 });

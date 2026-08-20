@@ -50,42 +50,47 @@ class FirestoreProfileRepository implements ProfileRepository {
     await _firestore.runTransaction((transaction) async {
       final newUsername = userProfile.username.toLowerCase();
       final usernameDoc = _firestore.collection('usernames').doc(newUsername);
-      final progressionDoc = _firestore.collection('player_progression').doc(userId);
+      final progressionDoc =
+          _firestore.collection('player_progression').doc(userId);
 
       // 1. ALL READS FIRST
       DocumentSnapshot? usernameSnapshot;
-      if (oldUsername != null && 
-          oldUsername.isNotEmpty && 
-          oldUsername.toLowerCase() != newUsername) {
+      if (oldUsername?.toLowerCase() != newUsername) {
         usernameSnapshot = await transaction.get(usernameDoc);
       }
       final progressionSnapshot = await transaction.get(progressionDoc);
 
       // 2. LOGIC & VALIDATION
       if (usernameSnapshot != null && usernameSnapshot.exists) {
-        throw Exception('Username already taken');
+        final data = usernameSnapshot.data() as Map<String, dynamic>?;
+        if (data?['userId'] != userId) {
+          throw Exception('Username already taken');
+        }
       }
 
       // 3. ALL WRITES AFTER
-      
+
       // Username reservation
-      if (oldUsername != null && 
-          oldUsername.isNotEmpty && 
-          oldUsername.toLowerCase() != newUsername) {
-        // Remove old and add new
-        transaction.delete(_firestore.collection('usernames').doc(oldUsername.toLowerCase()));
+      if (oldUsername?.toLowerCase() != newUsername) {
+        // If we are changing username or setting it for the first time
+        if (oldUsername != null && oldUsername.isNotEmpty) {
+          transaction.delete(
+            _firestore.collection('usernames').doc(oldUsername.toLowerCase()),
+          );
+        }
+
         transaction.set(usernameDoc, {
           'userId': userId,
           'username': userProfile.username,
           'createdAt': FieldValue.serverTimestamp(),
         });
-      } else if (oldUsername == null || oldUsername.isEmpty) {
-         // Initial reservation if not already there (e.g. legacy users or new signups)
-         transaction.set(usernameDoc, {
-          'userId': userId,
-          'username': userProfile.username,
-          'createdAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
+      } else {
+        // Just ensure it exists if it's the same (handles casing updates or safety sync)
+        transaction.set(
+          usernameDoc,
+          {'userId': userId, 'username': userProfile.username},
+          SetOptions(merge: true),
+        );
       }
 
       // User Profile

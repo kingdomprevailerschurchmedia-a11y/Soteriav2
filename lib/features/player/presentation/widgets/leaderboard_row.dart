@@ -65,6 +65,7 @@ class LeaderboardRow extends ConsumerWidget {
             SizedBox(width: 8.w),
             SoteriaAvatar(
               avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+              imageUrl: entry.avatarUrl,
               size: 40,
               rank: position,
             ),

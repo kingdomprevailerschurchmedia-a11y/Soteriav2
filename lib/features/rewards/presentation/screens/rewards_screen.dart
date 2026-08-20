@@ -930,7 +930,7 @@ class _HistoryItemCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          _getTitle(tx.source).toUpperCase(),
+                          _getTitle(tx).toUpperCase(),
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 14.sp,
@@ -1036,23 +1036,39 @@ class _HistoryItemCard extends StatelessWidget {
       case RewardSource.achievement: return Icons.emoji_events_rounded;
       case RewardSource.streak: return Icons.local_fire_department_rounded;
       case RewardSource.tournament:
+      case RewardSource.tournamentEntry:
       case RewardSource.tournamentReward: return Icons.sports_esports_rounded;
       case RewardSource.dailyLogin: return Icons.calendar_today_rounded;
       case RewardSource.itemRedemption: return Icons.shopping_bag_rounded;
       case RewardSource.purchase: return Icons.monetization_on_rounded;
+      case RewardSource.proModeEntry: return Icons.play_circle_filled_rounded;
       default: return Icons.stars_rounded;
     }
   }
 
-  String _getTitle(RewardSource source) {
-    switch (source) {
+  String _getTitle(WalletTransaction tx) {
+    if (tx.direction == TransactionDirection.debit) {
+      switch (tx.source) {
+        case RewardSource.proModeEntry:
+          return 'Pro Mode Entry Fee';
+        case RewardSource.tournament:
+        case RewardSource.tournamentEntry:
+          return 'Tournament Entry Fee';
+        case RewardSource.itemRedemption:
+          return 'Store Purchase';
+        default:
+          return 'Game Entry Fee';
+      }
+    }
+
+    switch (tx.source) {
       case RewardSource.achievement: return 'Achievement';
-      case RewardSource.streak: return 'Streak';
-      case RewardSource.tournament:
-      case RewardSource.tournamentReward: return 'Tournament';
-      case RewardSource.dailyLogin: return 'Daily Reward';
-      case RewardSource.itemRedemption: return 'Shop Purchase';
-      case RewardSource.purchase: return 'Store Purchase';
+      case RewardSource.streak: return 'Streak bonus';
+      case RewardSource.tournamentReward: return 'Tournament Prize';
+      case RewardSource.dailyLogin: return 'Daily Login Reward';
+      case RewardSource.purchase: return 'Coin Pack';
+      case RewardSource.proModeReward: return 'Pro Mode Reward';
+      case RewardSource.refund: return 'Refund';
       default: return 'Reward';
     }
   }
@@ -1060,12 +1076,22 @@ class _HistoryItemCard extends StatelessWidget {
   String _getDescription(WalletTransaction tx) {
     if (tx.metadata['description'] != null) return tx.metadata['description'];
     
+    if (tx.direction == TransactionDirection.debit) {
+       switch (tx.source) {
+        case RewardSource.proModeEntry: return 'High stakes challenge entry';
+        case RewardSource.tournament:
+        case RewardSource.tournamentEntry: return 'Competitive event entry';
+        case RewardSource.itemRedemption: return 'Shop item acquisition';
+        default: return 'Gameplay participation fee';
+      }
+    }
+
     switch (tx.source) {
       case RewardSource.achievement: return 'Completed unique challenge';
       case RewardSource.streak: return 'Consecutive day bonus';
-      case RewardSource.tournament: return 'Entry fee for event';
       case RewardSource.tournamentReward: return 'Prize from competition';
       case RewardSource.purchase: return 'Credits added from store';
+      case RewardSource.proModeReward: return 'Earnings from Pro Mode';
       default: return 'Wallet transaction processed';
     }
   }

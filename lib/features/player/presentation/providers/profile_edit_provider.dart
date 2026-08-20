@@ -158,6 +158,7 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
     
     var newState = state.copyWith(
       editedUserProfile: state.editedUserProfile!.copyWith(firstName: newValue),
+      isSaved: false,
     );
 
     // Auto-update display name if it matches the full name pattern (meaning user hasn't customized it)
@@ -180,6 +181,7 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
 
     var newState = state.copyWith(
       editedUserProfile: state.editedUserProfile!.copyWith(lastName: newValue),
+      isSaved: false,
     );
 
     // Auto-update display name if it matches the full name pattern
@@ -199,6 +201,7 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
     state = state.copyWith(
       editedUserProfile: state.editedUserProfile!.copyWith(displayName: value.trim()),
       editedPlayerProfile: state.editedPlayerProfile!.copyWith(displayName: value.trim()),
+      isSaved: false,
     );
   }
 
@@ -206,6 +209,7 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
     if (state.editedUserProfile == null) return;
     state = state.copyWith(
       editedUserProfile: state.editedUserProfile!.copyWith(bio: value.trim()),
+      isSaved: false,
     );
   }
 
@@ -218,6 +222,7 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
       editedPlayerProfile: state.editedPlayerProfile!.copyWith(username: normalized),
       usernameError: _validateUsernameFormat(normalized),
       isUsernameAvailable: normalized == (state.originalUserProfile?.username.toLowerCase() ?? state.originalPlayerProfile?.username.toLowerCase()),
+      isSaved: false,
     );
 
     if (state.usernameError == null && normalized != (state.originalUserProfile?.username.toLowerCase() ?? state.originalPlayerProfile?.username.toLowerCase())) {
@@ -259,7 +264,7 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
   Future<void> save() async {
     if (!state.canSave) return;
     
-    state = state.copyWith(isSaving: true, error: null);
+    state = state.copyWith(isSaving: true, error: null, isSaved: false);
 
     try {
       final session = ref.read(sessionProvider);

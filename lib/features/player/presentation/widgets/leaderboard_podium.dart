@@ -85,6 +85,7 @@ class _PodiumItem extends StatelessWidget {
           children: [
             SoteriaAvatar(
               avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+              imageUrl: entry.avatarUrl,
               size: isWinner ? 64 : 52,
               rank: entry.position,
             ),

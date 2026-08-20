@@ -59,15 +59,17 @@ class DashboardHeader extends ConsumerWidget {
                     child: Hero(
                       tag: 'player_avatar',
                       child: SoteriaAvatar(
-                        isOnline: isOnline,
-                        showStatus: true,
-                        size: 64.r,
-                        showGlow: true,
-                      ),
+                      isOnline: isOnline,
+                      showStatus: true,
+                      size: 64.r,
+                      showGlow: true,
+                      imageUrl: avatarUrl,
+                    ),
                     ),
                   ),
                   Positioned(
                     bottom: -28.h,
+                    left: 0,
                     child: SoteriaScaleIn(
                       duration: const Duration(milliseconds: 700),
                       delay: const Duration(milliseconds: 400),
