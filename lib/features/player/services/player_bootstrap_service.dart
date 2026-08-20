@@ -75,7 +75,7 @@ class PlayerBootstrapService {
             mergedInterests = localInterests;
           } else if (_identityRepository != null) {
             // Fallback: Check user_profiles collection for interests saved during registration
-            final userIdentityProfile = await _identityRepository!.getUserProfile(user.uid);
+            final userIdentityProfile = await _identityRepository.getUserProfile(user.uid);
             if (userIdentityProfile != null && userIdentityProfile.interests.isNotEmpty) {
                mergedInterests = userIdentityProfile.interests.map((label) => PersonalizationBridge.labelToCategoryId(label)).toList();
             }
@@ -174,7 +174,7 @@ class PlayerBootstrapService {
         
         List<String> initialInterests = localInterests;
         if (initialInterests.isEmpty && _identityRepository != null) {
-           final userIdentityProfile = await _identityRepository!.getUserProfile(user.uid);
+           final userIdentityProfile = await _identityRepository.getUserProfile(user.uid);
             if (userIdentityProfile != null && userIdentityProfile.interests.isNotEmpty) {
                initialInterests = userIdentityProfile.interests.map((label) => PersonalizationBridge.labelToCategoryId(label)).toList();
             }
@@ -276,7 +276,7 @@ class PlayerBootstrapService {
     try {
       final progression = await _progressionRepository.getProgression(profile.uid);
       if (progression != null && _leaderboardRepository != null) {
-        await _leaderboardRepository!.syncLeaderboardEntry(
+        await _leaderboardRepository.syncLeaderboardEntry(
           profile: profile,
           progression: progression,
           seasonId: null, // Global

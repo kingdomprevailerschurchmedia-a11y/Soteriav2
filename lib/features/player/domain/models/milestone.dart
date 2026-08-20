@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
+import '../../../../core/utils/json_converters.dart';
 import 'season_reward_definition.dart';
 
 part 'milestone.freezed.dart';
@@ -51,8 +51,8 @@ abstract class PlayerMilestone with _$PlayerMilestone {
     required String milestoneId,
     required MilestoneStatus status,
     required double currentProgress,
-    DateTime? unlockedAt,
-    DateTime? claimedAt,
+    @TimestampConverter() DateTime? unlockedAt,
+    @TimestampConverter() DateTime? claimedAt,
     @Default(1) int schemaVersion,
   }) = _PlayerMilestone;
 

@@ -1,4 +1,3 @@
-import '../models/rank_tier.dart';
 
 class RankingConfig {
   // Base points for results

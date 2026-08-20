@@ -1,4 +1,3 @@
-import '../../models/quiz_result.dart';
 import '../../repositories/quiz_history_repository.dart';
 
 class PerformanceSummary {

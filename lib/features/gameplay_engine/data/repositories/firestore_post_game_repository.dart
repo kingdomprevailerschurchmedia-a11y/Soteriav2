@@ -70,7 +70,7 @@ class FirestorePostGameRepository implements PostGameRepository {
         );
 
         if (_progressionRepository is FirebasePlayerProgressionRepository) {
-          await (_progressionRepository as FirebasePlayerProgressionRepository)
+          await (_progressionRepository)
               .processXpTransaction(transaction, xpTx);
         } else {
           // Fallback if not using Firestore implementation (unlikely in prod)

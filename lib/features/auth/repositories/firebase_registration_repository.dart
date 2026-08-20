@@ -98,7 +98,7 @@ class FirebaseRegistrationRepository implements RegistrationRepository {
             'milestoneId': 'welcome_bonus',
             'status': 'completed',
             'currentProgress': 1.0,
-            'unlockedAt': now,
+            'unlockedAt': DateTime.now().toIso8601String(),
             'schemaVersion': 1,
           },
         );

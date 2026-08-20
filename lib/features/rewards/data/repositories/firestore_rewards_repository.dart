@@ -135,7 +135,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
 
         transaction.update(milestoneRef, {
           'status': 'claimed',
-          'claimedAt': FieldValue.serverTimestamp(),
+          'claimedAt': DateTime.now().toIso8601String(),
         });
       } else if (type == 'goal') {
         final goalRef = userRef.collection('competitive_goals').doc(originalId);
@@ -155,7 +155,7 @@ class FirestoreRewardsRepository implements RewardsRepository {
 
         transaction.update(goalRef, {
           'status': 'claimed',
-          'claimedAt': FieldValue.serverTimestamp(),
+          'claimedAt': DateTime.now().toIso8601String(),
         });
       } else {
         throw Exception('Unknown reward type: $type');

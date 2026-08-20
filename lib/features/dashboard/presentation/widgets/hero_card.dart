@@ -291,7 +291,7 @@ class _HexagonPainter extends CustomPainter {
 }
 
 class _GlowingProgressBar extends StatelessWidget {
-  const _GlowingProgressBar({required this.progress, this.color, this.gradient});
+  const _GlowingProgressBar({required this.progress, this.gradient}) : color = null;
   final double progress;
   final Color? color;
   final Gradient? gradient;

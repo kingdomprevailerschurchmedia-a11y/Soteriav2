@@ -405,8 +405,7 @@ class _PreviewSection extends StatelessWidget {
     required this.title,
     required this.child,
     this.height = 600,
-    this.width,
-  });
+  }) : width = null;
 
   @override
   Widget build(BuildContext context) {

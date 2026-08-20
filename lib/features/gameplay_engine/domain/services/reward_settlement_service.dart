@@ -1,6 +1,5 @@
 import '../config/competitive_reward_config.dart';
 import '../../models/game_result.dart';
-import '../../models/game_mode.dart';
 import '../../models/competitive_settlement.dart';
 import '../../../question_content/domain/entities/difficulty.dart';
 

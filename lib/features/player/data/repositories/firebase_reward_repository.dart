@@ -35,10 +35,22 @@ class FirebaseRewardRepository implements RewardRepository {
         .orderBy('createdAt', descending: true)
         .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => RewardGrant.fromJson(doc.data()))
-              .toList(),
+          (snapshot) => snapshot.docs.map((doc) {
+            final data = Map<String, dynamic>.from(doc.data());
+            _sanitizeDates(data);
+            return RewardGrant.fromJson(data);
+          }).toList(),
         );
+  }
+
+  void _sanitizeDates(Map<String, dynamic> data) {
+    final dateKeys = ['grantedAt', 'claimedAt', 'createdAt', 'updatedAt'];
+    for (final key in dateKeys) {
+      final value = data[key];
+      if (value is Timestamp) {
+        data[key] = value.toDate().toIso8601String();
+      }
+    }
   }
 
   @override
@@ -48,9 +60,11 @@ class FirebaseRewardRepository implements RewardRepository {
         .orderBy('createdAt', descending: true)
         .get();
 
-    return snapshot.docs
-        .map((doc) => RewardGrant.fromJson(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) {
+      final data = Map<String, dynamic>.from(doc.data());
+      _sanitizeDates(data);
+      return RewardGrant.fromJson(data);
+    }).toList();
   }
 
   @override
@@ -63,9 +77,11 @@ class FirebaseRewardRepository implements RewardRepository {
         .where('seasonId', isEqualTo: seasonId)
         .get();
 
-    return snapshot.docs
-        .map((doc) => RewardGrant.fromJson(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) {
+      final data = Map<String, dynamic>.from(doc.data());
+      _sanitizeDates(data);
+      return RewardGrant.fromJson(data);
+    }).toList();
   }
 
   @override
@@ -75,9 +91,11 @@ class FirebaseRewardRepository implements RewardRepository {
         .where('status', isEqualTo: GrantStatus.pending.name)
         .get();
 
-    return snapshot.docs
-        .map((doc) => RewardGrant.fromJson(doc.data()))
-        .toList();
+    return snapshot.docs.map((doc) {
+      final data = Map<String, dynamic>.from(doc.data());
+      _sanitizeDates(data);
+      return RewardGrant.fromJson(data);
+    }).toList();
   }
 
   @override
@@ -97,7 +115,9 @@ class FirebaseRewardRepository implements RewardRepository {
 
       if (!snapshot.exists) throw Exception('Reward grant not found');
 
-      final grant = RewardGrant.fromJson(snapshot.data()!);
+      final data = Map<String, dynamic>.from(snapshot.data()!);
+      _sanitizeDates(data);
+      final grant = RewardGrant.fromJson(data);
 
       if (grant.status != GrantStatus.granted &&
           grant.status != GrantStatus.eligible) {
@@ -108,11 +128,13 @@ class FirebaseRewardRepository implements RewardRepository {
         throw Exception('Reward already claimed');
       }
 
+      final now = DateTime.now().toIso8601String();
+
       // Update grant status
       tx.update(grantDoc, {
         'status': GrantStatus.claimed.name,
-        'claimedAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
+        'claimedAt': now,
+        'updatedAt': now,
       });
 
       // Integration with Economy/Progression happens here (AUTHORITATIVE)

@@ -4,7 +4,6 @@ import '../models/question_dto.dart';
 import '../mappers/question_mapper.dart';
 import '../validators/question_validator.dart';
 import '../data_sources/firestore_data_source.dart';
-import '../../domain/entities/question.dart';
 
 class ImportResult {
   final int total;

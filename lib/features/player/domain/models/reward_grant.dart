@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 import 'season_reward_definition.dart';
 
 part 'reward_grant.freezed.dart';
@@ -17,10 +18,10 @@ abstract class RewardGrant with _$RewardGrant {
     required int amount,
     required GrantStatus status,
     String? transactionId,
-    DateTime? grantedAt,
-    DateTime? claimedAt,
-    required DateTime createdAt,
-    required DateTime updatedAt,
+    @TimestampConverter() DateTime? grantedAt,
+    @TimestampConverter() DateTime? claimedAt,
+    @TimestampConverter() required DateTime createdAt,
+    @TimestampConverter() required DateTime updatedAt,
   }) = _RewardGrant;
 
   factory RewardGrant.fromJson(Map<String, dynamic> json) =>

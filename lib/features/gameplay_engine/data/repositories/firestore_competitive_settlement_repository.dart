@@ -132,7 +132,7 @@ class FirestoreCompetitiveSettlementRepository
         );
 
         if (_progressionRepository is FirebasePlayerProgressionRepository) {
-          await (_progressionRepository as FirebasePlayerProgressionRepository)
+          await (_progressionRepository)
               .processXpTransaction(transaction, xpTx);
         } else {
           // Fallback - should ideally be avoided for atomicity

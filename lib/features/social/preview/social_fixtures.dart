@@ -1,6 +1,5 @@
 import '../../social/domain/models/friendship.dart';
 import '../../social/domain/models/friend_request.dart';
-import '../../social/domain/models/relationship_status.dart';
 
 class SocialFixtures {
   static Friendship friendship({String? otherUserId}) => Friendship(

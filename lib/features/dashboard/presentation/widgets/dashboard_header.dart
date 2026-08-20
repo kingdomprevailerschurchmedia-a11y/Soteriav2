@@ -242,12 +242,10 @@ class _HeaderBadge extends StatelessWidget {
 
 class _CompactStat extends StatelessWidget {
   const _CompactStat({
-    this.icon,
     this.assetPath,
     required this.value,
     required this.label,
-    this.color,
-  });
+  }) : icon = null : color = null;
 
   final IconData? icon;
   final String? assetPath;

@@ -21,10 +21,20 @@ class FirebaseMilestoneRepository implements MilestoneRepository {
   @override
   Stream<List<PlayerMilestone>> watchPlayerMilestones(String userId) {
     return _milestoneCollection(userId).snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => PlayerMilestone.fromJson(doc.data()))
-          .toList();
+      return snapshot.docs.map((doc) {
+        final data = Map<String, dynamic>.from(doc.data());
+        _sanitizeDate(data, 'unlockedAt');
+        _sanitizeDate(data, 'claimedAt');
+        return PlayerMilestone.fromJson(data);
+      }).toList();
     });
+  }
+
+  void _sanitizeDate(Map<String, dynamic> data, String key) {
+    final value = data[key];
+    if (value is Timestamp) {
+      data[key] = value.toDate().toIso8601String();
+    }
   }
 
   @override
@@ -46,7 +56,10 @@ class FirebaseMilestoneRepository implements MilestoneRepository {
       final milestoneSnap = await tx.get(milestoneDoc);
       if (!milestoneSnap.exists) throw Exception('Milestone not found');
 
-      final milestone = PlayerMilestone.fromJson(milestoneSnap.data()!);
+      final data = Map<String, dynamic>.from(milestoneSnap.data()!);
+      _sanitizeDate(data, 'unlockedAt');
+      _sanitizeDate(data, 'claimedAt');
+      final milestone = PlayerMilestone.fromJson(data);
       if (milestone.status == MilestoneStatus.claimed) return; // Already claimed
 
       if (milestone.status != MilestoneStatus.completed) {
@@ -82,6 +95,9 @@ class FirebaseMilestoneRepository implements MilestoneRepository {
   ) async {
     final doc = await _milestoneCollection(userId).doc(milestoneId).get();
     if (!doc.exists) return null;
-    return PlayerMilestone.fromJson(doc.data()!);
+    final data = Map<String, dynamic>.from(doc.data()!);
+    _sanitizeDate(data, 'unlockedAt');
+    _sanitizeDate(data, 'claimedAt');
+    return PlayerMilestone.fromJson(data);
   }
 }

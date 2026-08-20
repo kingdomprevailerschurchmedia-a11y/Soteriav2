@@ -205,7 +205,7 @@ class LeaderboardController
         _lastEntry = entries.last;
         state = AsyncValue.data([...state.value!, ...entries]);
       }
-    } catch (e, st) {
+    } catch (e) {
       // Don't set state to error to avoid losing current list, 
       // but maybe notify UI somehow or just log.
       print('Error loading more leaderboard entries: $e');
