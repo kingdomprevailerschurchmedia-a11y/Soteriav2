@@ -46,6 +46,7 @@ class ProLobbyScreen extends ConsumerWidget {
       error: state.error,
       onRetry: () => ref.read(proLobbyProvider.notifier).checkConnection(),
       useSafeArea: false,
+      showBackground: false,
       child: Scaffold(
         extendBody: true,
         backgroundColor: Colors.transparent,

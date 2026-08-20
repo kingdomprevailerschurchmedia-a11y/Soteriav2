@@ -183,12 +183,21 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   // Quick Actions
                   const SliverToBoxAdapter(child: RepaintBoundary(child: QuickActionsGrid())),
 
-                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
-
                   // Season Status
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: SeasonHeader())),
-
-                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
+                  SliverToBoxAdapter(
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final seasonAsync = ref.watch(currentSeasonProvider);
+                        if (seasonAsync.value == null) return const SizedBox.shrink();
+                        return const Column(
+                          children: [
+                            SoteriaSpacing.gapMD,
+                            RepaintBoundary(child: SeasonHeader()),
+                          ],
+                        );
+                      }
+                    ),
+                  ),
 
                   // Milestone Section
                   SliverToBoxAdapter(
@@ -197,7 +206,12 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         builder: (context, ref, _) {
                           return ref.watch(nextCompetitiveMilestoneProvider).when(
                             data: (next) => next != null
-                                ? MilestoneSection(progress: next)
+                                ? Column(
+                                    children: [
+                                      SoteriaSpacing.gapMD,
+                                      MilestoneSection(progress: next),
+                                    ],
+                                  )
                                 : const SizedBox.shrink(),
                             loading: () => const SizedBox.shrink(),
                             error: (err, st) => const SizedBox.shrink(),
@@ -207,7 +221,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                   ),
 
-                  const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
+                  const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
 
                   // Daily Goals
                   const SliverToBoxAdapter(child: RepaintBoundary(child: DailyGoalsSection())),

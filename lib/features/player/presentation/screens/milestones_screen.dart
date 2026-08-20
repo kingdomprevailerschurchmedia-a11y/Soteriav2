@@ -186,7 +186,10 @@ class MilestonesScreen extends ConsumerWidget {
           SizedBox(height: SoteriaSpacing.md),
           const Text('Failed to load achievements'),
           TextButton(
-            onPressed: () => ref.refresh(milestoneProgressProvider),
+            onPressed: () {
+              ref.invalidate(playerMilestonesProvider);
+              ref.invalidate(milestoneProgressProvider);
+            },
             child: const Text('Retry'),
           ),
         ],

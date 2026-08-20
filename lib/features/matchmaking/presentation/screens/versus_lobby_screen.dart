@@ -34,15 +34,14 @@ class VersusLobbyScreen extends ConsumerWidget {
     return SoteriaPage(
       isLoading: state.isLoading,
       error: state.error,
+      useSafeArea: false,
+      showBackground: false,
       child: Scaffold(
-        backgroundColor: SoteriaColors.background,
-        body: Container(
-          decoration: const BoxDecoration(
-            gradient: SoteriaColors.backgroundGradient,
-          ),
-          child: SafeArea(
-            child: Column(
-              children: [
+        extendBody: true,
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
                 _LobbyHeader(
                   player: player,
                   isOnline: isOnline,

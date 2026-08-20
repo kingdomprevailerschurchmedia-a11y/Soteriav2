@@ -34,6 +34,10 @@ class NavigationCoordinator {
     navigateTo('/app/settings');
   }
 
+  void openWallet() {
+    navigateTo('/app/wallet');
+  }
+
   void playPractice() {
     navigateTo('/app/practice?fromDashboard=true');
   }

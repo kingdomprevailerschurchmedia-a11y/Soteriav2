@@ -144,12 +144,18 @@ class PersonalPerformanceScreen extends ConsumerWidget {
           RepaintBoundary(child: _buildOverviewSection(context, analytics)),
           SoteriaSpacing.gapLG,
           RepaintBoundary(child: _buildTrendSection(context, analytics)),
-          SoteriaSpacing.gapLG,
-          RepaintBoundary(child: _buildInsightsSection(context, analytics)),
-          SoteriaSpacing.gapLG,
-          RepaintBoundary(child: _buildCategorySection(context, analytics)),
-          SoteriaSpacing.gapLG,
-          RepaintBoundary(child: _buildDifficultySection(context, analytics)),
+          if (analytics.insights.isNotEmpty) ...[
+            SoteriaSpacing.gapLG,
+            RepaintBoundary(child: _buildInsightsSection(context, analytics)),
+          ],
+          if (analytics.categoryPerformance.isNotEmpty) ...[
+            SoteriaSpacing.gapLG,
+            RepaintBoundary(child: _buildCategorySection(context, analytics)),
+          ],
+          if (analytics.difficultyPerformance.isNotEmpty) ...[
+            SoteriaSpacing.gapLG,
+            RepaintBoundary(child: _buildDifficultySection(context, analytics)),
+          ],
           SoteriaSpacing.gapLG,
           RepaintBoundary(child: _buildConsistencySection(context, analytics)),
         ]),
@@ -283,10 +289,12 @@ class PersonalPerformanceScreen extends ConsumerWidget {
         SizedBox(
           height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
         ),
-        ...analytics.insights.map(
-          (insight) => Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
-            child: InsightCard(insight: insight),
+        ...analytics.insights.asMap().entries.map(
+          (entry) => Padding(
+            padding: EdgeInsets.only(
+              bottom: entry.key == analytics.insights.length - 1 ? 0 : 12.h,
+            ),
+            child: InsightCard(insight: entry.value),
           ),
         ),
       ],

@@ -22,12 +22,17 @@ final achievementServiceProvider = Provider<AchievementService>((ref) {
 });
 
 /// Stream provider for the current player's earned achievements.
-final playerAchievementsStreamProvider = StreamProvider<List<PlayerAchievement>>((ref) {
-  final userId = ref.watch(authRepositoryProvider).currentUserId;
-  if (userId == null) return Stream.value([]);
+final playerAchievementsStreamProvider =
+    StreamProvider<List<PlayerAchievement>>((ref) {
+      final session = ref.watch(sessionProvider);
+      if (!session.isAuthenticated || session.uid == null) {
+        return Stream.value([]);
+      }
 
-  return ref.watch(achievementRepositoryProvider).watchPlayerAchievements(userId);
-});
+      return ref
+          .watch(achievementRepositoryProvider)
+          .watchPlayerAchievements(session.uid!);
+    });
 
 /// Computed provider for a map of achievement ID to player state.
 final playerAchievementMapProvider = Provider<Map<String, PlayerAchievement>>((ref) {

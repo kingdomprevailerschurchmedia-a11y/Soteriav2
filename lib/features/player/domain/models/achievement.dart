@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 import 'season_reward_definition.dart';
 
 part 'achievement.freezed.dart';
@@ -70,8 +71,8 @@ abstract class PlayerAchievement with _$PlayerAchievement {
     required AchievementStatus status,
     required double currentValue,
     required double targetValue,
-    DateTime? unlockedAt,
-    DateTime? claimedAt,
+    @TimestampConverter() DateTime? unlockedAt,
+    @TimestampConverter() DateTime? claimedAt,
     @Default(1) int schemaVersion,
   }) = _PlayerAchievement;
 

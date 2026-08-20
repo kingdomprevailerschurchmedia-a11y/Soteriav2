@@ -7,6 +7,7 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 import '../../../player/presentation/providers/challenge_providers.dart';
 
 class DashboardHeader extends ConsumerWidget {
@@ -129,7 +130,7 @@ class DashboardHeader extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   GestureDetector(
-                    onTap: () => nav.navigateTo('/app/wallet'),
+                    onTap: nav.openWallet,
                     child: _CompactStat(
                       assetPath: 'assets/icons/coin_icon.png',
                       value: coins.toString(),

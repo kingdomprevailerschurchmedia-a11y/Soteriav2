@@ -78,6 +78,7 @@ import 'package:soteria/features/dashboard/presentation/screens/dashboard_screen
 import 'package:soteria/features/dashboard/presentation/screens/practice_lobby_screen.dart';
 import 'package:soteria/features/dashboard/presentation/screens/home_shell.dart';
 import 'package:soteria/features/rewards/presentation/screens/rewards_screen.dart';
+import 'package:soteria/features/wallet/presentation/screens/wallet_screen.dart';
 import 'package:soteria/shared/screens/coming_soon_screen.dart';
 import 'package:soteria/features/settings/screens/settings_screen.dart';
 import 'package:soteria/features/settings/screens/notification_settings_screen.dart';
@@ -400,6 +401,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                           child: const MatchFoundScreen(),
                           key: state.pageKey,
                         ),
+                  ),
+                  GoRoute(
+                    path: 'wallet',
+                    pageBuilder: (context, state) => SoteriaPageTransitions.slideUp(
+                      child: const WalletScreen(),
+                      key: state.pageKey,
+                    ),
                   ),
                   GoRoute(
                     path: 'versus/:id',

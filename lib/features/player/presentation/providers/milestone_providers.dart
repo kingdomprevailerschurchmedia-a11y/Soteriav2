@@ -64,9 +64,13 @@ final milestoneDefinitionsProvider = FutureProvider<List<MilestoneDefinition>>((
 });
 
 final playerMilestonesProvider = StreamProvider<List<PlayerMilestone>>((ref) {
-  final userId = ref.watch(authRepositoryProvider).currentUserId;
-  if (userId == null) return Stream.value([]);
-  return ref.watch(milestoneRepositoryProvider).watchPlayerMilestones(userId);
+  final session = ref.watch(sessionProvider);
+  if (!session.isAuthenticated || session.uid == null) {
+    return Stream.value([]);
+  }
+  return ref
+      .watch(milestoneRepositoryProvider)
+      .watchPlayerMilestones(session.uid!);
 });
 
 final milestoneProgressProvider = Provider<AsyncValue<List<MilestoneProgress>>>(

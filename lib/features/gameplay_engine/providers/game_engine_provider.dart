@@ -165,6 +165,25 @@ class GameEngine extends StateNotifier<GameState> {
       _saveCheckpoint();
     } catch (e, st) {
       LoggerService.e('Game session initialization failed', error: e, stackTrace: st);
+      
+      // Authoritative refund for competitive modes on failure
+      if (config.mode == GameMode.pro && state.sessionId != null) {
+        try {
+          final difficulty = config.mode == GameMode.pro 
+              ? Difficulty.values.firstWhere((d) => d.name == config.metadata['difficulty'], orElse: () => Difficulty.medium)
+              : Difficulty.medium;
+
+          await ref?.read(proModeRepositoryProvider).refundEntryFee(
+            state.playerId, 
+            state.sessionId!, 
+            difficulty,
+          );
+          LoggerService.i('Pro Mode entry fee refunded after initialization failure', feature: 'GameplayEngine');
+        } catch (refundError) {
+          LoggerService.e('Failed to refund Pro Mode entry fee', error: refundError, feature: 'GameplayEngine');
+        }
+      }
+      
       state = state.copyWith(lifecycle: GameLifecycle.failed);
     }
   }

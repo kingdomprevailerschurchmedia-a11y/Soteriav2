@@ -32,10 +32,20 @@ class FirebaseAchievementRepository implements AchievementRepository {
   @override
   Stream<List<PlayerAchievement>> watchPlayerAchievements(String userId) {
     return _achievementCollection(userId).snapshots().map((snapshot) {
-      return snapshot.docs
-          .map((doc) => PlayerAchievement.fromJson(doc.data()))
-          .toList();
+      return snapshot.docs.map((doc) {
+        final data = Map<String, dynamic>.from(doc.data());
+        _sanitizeDate(data, 'unlockedAt');
+        _sanitizeDate(data, 'claimedAt');
+        return PlayerAchievement.fromJson(data);
+      }).toList();
     });
+  }
+
+  void _sanitizeDate(Map<String, dynamic> data, String key) {
+    final value = data[key];
+    if (value is Timestamp) {
+      data[key] = value.toDate().toIso8601String();
+    }
   }
 
   @override

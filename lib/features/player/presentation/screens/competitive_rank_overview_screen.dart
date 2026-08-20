@@ -46,7 +46,10 @@ class CompetitiveRankOverviewScreen extends ConsumerWidget {
               Text('Failed to load rank data: $e', style: context.bodyMedium),
               SoteriaSpacing.gapMD,
               ElevatedButton(
-                onPressed: () => ref.invalidate(rankProgressProvider),
+                onPressed: () {
+                  ref.invalidate(competitiveProgressionProvider);
+                  ref.invalidate(rankProgressProvider);
+                },
                 child: const Text('RETRY'),
               ),
             ],

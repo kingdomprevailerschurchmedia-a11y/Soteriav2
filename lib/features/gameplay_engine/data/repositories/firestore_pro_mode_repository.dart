@@ -494,4 +494,60 @@ class FirestoreProModeRepository implements ProModeRepository {
     if (!snapshot.exists || snapshot.data() == null) return null;
     return ProModeResult.fromJson(snapshot.data()!);
   }
+
+  @override
+  Future<void> refundEntryFee(String uid, String sessionId, Difficulty difficulty) async {
+    final int fee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
+
+    await _database.instance.runTransaction<void>((transaction) async {
+      final playerRef = _database.collection('users').doc(uid);
+      final reservationRef = _database.collection('pro_reservations').doc(sessionId);
+      final sessionRef = _database.collection('competitive_sessions').doc(sessionId);
+
+      final reservationDoc = await transaction.get(reservationRef);
+      if (!reservationDoc.exists) return; // Already refunded or never reserved
+
+      final resData = reservationDoc.data() ?? {};
+      if (resData['status'] == 'refunded') return; // Idempotency
+
+      // 1. Restore coins (if a fee was actually paid)
+      final int reservedFee = (resData['fee'] as num?)?.toInt() ?? fee;
+      if (reservedFee > 0) {
+        transaction.update(playerRef, {
+          'coins': FieldValue.increment(reservedFee),
+          'updatedAt': FieldValue.serverTimestamp(),
+        });
+
+        // 2. Log refund transaction
+        final txId = _database.collection('wallet_transactions').doc().id;
+        final txData = {
+          'userId': uid,
+          'type': 'coins',
+          'currency': 'coins',
+          'direction': 'credit',
+          'amount': reservedFee,
+          'transactionType': 'refund',
+          'source': 'proModeRefund',
+          'referenceId': sessionId,
+          'status': 'completed',
+          'createdAt': FieldValue.serverTimestamp(),
+          'metadata': {'sessionId': sessionId, 'action': 'initialization_failure_refund'},
+        };
+        transaction.set(_database.collection('wallet_transactions').doc(txId), txData);
+        
+        // Sync to legacy if needed
+        final coinTxRef = _database.collection('coin_transactions').doc(txId);
+        transaction.set(coinTxRef, txData);
+      }
+
+      // 3. Update reservation status
+      transaction.update(reservationRef, {'status': 'refunded'});
+      
+      // 4. Update session status (using set merge for resilience)
+      transaction.set(sessionRef, {
+        'status': 'refunded',
+        'refundedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    });
+  }
 }

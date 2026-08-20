@@ -13,4 +13,5 @@ abstract interface class ProModeRepository {
   });
   Future<ProModeResult> completeSession(String sessionId, GameState finalState);
   Future<ProModeResult?> getResult(String sessionId);
+  Future<void> refundEntryFee(String uid, String sessionId, Difficulty difficulty);
 }

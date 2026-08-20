@@ -20,11 +20,11 @@ class FirestoreCompetitiveRepository implements CompetitiveRepository {
 
   @override
   Future<void> startCompetitiveSession(String sessionId) async {
-    await _database.collection('competitive_sessions').doc(sessionId).update({
+    await _database.collection('competitive_sessions').doc(sessionId).set({
       'status': 'active',
       'startedAt': DateTime.now().toIso8601String(),
       'updatedAt': DateTime.now().toIso8601String(),
-    });
+    }, SetOptions(merge: true));
   }
 
   @override

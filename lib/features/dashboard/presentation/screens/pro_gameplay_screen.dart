@@ -46,16 +46,11 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
       autoAdvance: false, // Don't auto-advance so user can read explanation
       difficultyMultiplier: _getMultiplier(widget.session.config.difficulty.name),
       categoryId: widget.session.config.category?.id,
-      metadata: {'reservedFee': widget.session.reservedFee},
+      metadata: {
+        'reservedFee': widget.session.reservedFee,
+        'difficulty': widget.session.config.difficulty.toBaseDifficulty().name,
+      },
     );
-
-    // Initialize the engine with the locked questions from the session
-    Future.microtask(() {
-      ref.read(gameEngineProvider(_gameConfig).notifier).startSession(
-        widget.session.questions,
-        sessionId: widget.session.sessionId,
-      );
-    });
   }
 
   double _getMultiplier(String difficulty) {
@@ -74,7 +69,29 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
     // Watch ProGameplayNotifier for heartbeats
     ref.watch(proGameplayProvider(_gameConfig));
 
-    if (engineState.lifecycle == GameLifecycle.loading || engineState.lifecycle == GameLifecycle.initializing) {
+    if (engineState.lifecycle == GameLifecycle.initializing) {
+      // Adopt robust initialization pattern from Practice mode
+      Future.microtask(() {
+        ref.read(gameEngineProvider(_gameConfig).notifier).startSession(
+          widget.session.questions,
+          sessionId: widget.session.sessionId,
+        );
+      });
+      return const SafeGradientScaffold(
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SoteriaLoader(),
+              SizedBox(height: 24),
+              Text('PREPARING PRO MATCH...', style: TextStyle(color: SoteriaColors.gold, letterSpacing: 2, fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+      );
+    }
+
+    if (engineState.lifecycle == GameLifecycle.loading) {
       return const SafeGradientScaffold(
         body: Center(
           child: Column(
@@ -118,7 +135,7 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
                 ),
                 SizedBox(height: SoteriaSpacing.md),
                 Text(
-                  'We encountered a secure communication error while starting your Pro Mode session. No coins have been deducted.',
+                  'We encountered a secure communication error while starting your Pro Mode session. Your entry fee has been automatically refunded to your wallet.',
                   style: context.bodyMedium.copyWith(color: Colors.white70),
                   textAlign: TextAlign.center,
                 ),

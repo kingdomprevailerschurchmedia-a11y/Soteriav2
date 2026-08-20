@@ -47,6 +47,7 @@ class SoteriaRoutes {
   static const String versusMatchReplay = '/app/versus/replay/:id';
   static const String competitiveInsights = '/app/versus/insights';
   static const String rewards = '/app/rewards';
+  static const String wallet = '/app/wallet';
   static const String profile = '/app/profile';
   static const String publicProfile = '/app/profile/external/:id';
   static const String playerSearch = '/app/profile/search';
