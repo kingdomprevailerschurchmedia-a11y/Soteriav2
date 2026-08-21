@@ -47,6 +47,7 @@ class GameEngine extends StateNotifier<GameState> {
   final Ref? ref;
 
   StreamSubscription<TimerState>? _timerSubscription;
+  bool _isInitializing = false;
 
   GameEngine({
     required this.config,
@@ -117,7 +118,15 @@ class GameEngine extends StateNotifier<GameState> {
 
   /// Starts the game session.
   Future<void> startSession(List<Question> questions, {String? sessionId}) async {
+    if (_isInitializing) {
+      LoggerService.w('Ignoring concurrent startSession call', feature: 'GameplayEngine');
+      return;
+    }
+    _isInitializing = true;
+
     try {
+      LoggerService.i('Initializing game session: sessionId=$sessionId, mode=${config.mode.name}', feature: 'GameplayEngine');
+
       state = state.copyWith(
         lifecycle: GameLifecycle.loading,
         questions: questions,
@@ -129,12 +138,14 @@ class GameEngine extends StateNotifier<GameState> {
 
       // Authoritative remote start for competitive modes
       if (config.mode == GameMode.pro) {
+        LoggerService.d('Activating Pro Mode match on server...', feature: 'GameplayEngine');
         await ref
             ?.read(competitiveRepositoryProvider)
             .startCompetitiveSession(state.sessionId)
-            .timeout(const Duration(seconds: 10), onTimeout: () {
+            .timeout(const Duration(seconds: 20), onTimeout: () {
               throw Exception('Match activation timed out. Check your connection.');
             });
+        LoggerService.i('Pro Mode match activated successfully', feature: 'GameplayEngine');
       }
 
       // Hydrate progression baseline from authoritative record
@@ -183,6 +194,8 @@ class GameEngine extends StateNotifier<GameState> {
       }
       
       state = state.copyWith(lifecycle: GameLifecycle.failed);
+    } finally {
+      _isInitializing = false;
     }
   }
 

@@ -30,6 +30,7 @@ class ProGameplayScreen extends ConsumerStatefulWidget {
 
 class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
   late final GameConfiguration _gameConfig;
+  bool _hasStarted = false;
 
   @override
   void initState() {
@@ -69,12 +70,15 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
 
     if (engineState.lifecycle == GameLifecycle.initializing) {
       // Adopt robust initialization pattern from Practice mode
-      Future.microtask(() {
-        ref.read(gameEngineProvider(_gameConfig).notifier).startSession(
-          widget.session.questions,
-          sessionId: widget.session.sessionId,
-        );
-      });
+      if (!_hasStarted) {
+        _hasStarted = true;
+        Future.microtask(() {
+          ref.read(gameEngineProvider(_gameConfig).notifier).startSession(
+                widget.session.questions,
+                sessionId: widget.session.sessionId,
+              );
+        });
+      }
       return const SafeGradientScaffold(
         body: Center(
           child: Column(
@@ -133,8 +137,14 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
                 ),
                 SizedBox(height: SoteriaSpacing.md),
                 Text(
-                  'We encountered a secure communication error while starting your Pro Mode session. Your entry fee has been automatically refunded to your wallet.',
+                  'We encountered a secure communication error while starting your Pro Mode session.',
                   style: context.bodyMedium.copyWith(color: Colors.white70),
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: SoteriaSpacing.sm),
+                Text(
+                  'Possible causes: Unstable internet connection or match server latency. Your entry fee of ${widget.session.reservedFee} coins has been automatically refunded to your wallet.',
+                  style: context.labelSmall.copyWith(color: SoteriaColors.textSecondary),
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: SoteriaSpacing.xxl),
