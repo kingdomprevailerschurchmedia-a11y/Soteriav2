@@ -28,8 +28,7 @@ class AchievementListScreen extends ConsumerWidget {
           _Header(),
           Expanded(
             child: ListView.builder(
-              cacheExtent: 1000,
-              padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+              cacheExtent: 1000.0, padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
               itemCount: AchievementCategory.values.length,
               itemBuilder: (context, catIndex) {
                 final category = AchievementCategory.values[catIndex];

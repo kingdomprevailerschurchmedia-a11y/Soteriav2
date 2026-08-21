@@ -4,7 +4,6 @@ import 'package:soteria/features/gameplay_engine/logic/competitive_settlement_en
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
 import 'package:soteria/features/gameplay_engine/models/pro_session_config.dart';
-import 'package:soteria/features/gameplay_engine/progression/models/reward_summary.dart';
 
 void main() {
   group('CompetitiveSettlementEngine', () {

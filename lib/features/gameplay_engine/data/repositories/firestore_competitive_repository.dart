@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/firebase/services/firebase_interfaces.dart';
 import '../../domain/repositories/competitive_repository.dart';
 import '../../models/game_state.dart';

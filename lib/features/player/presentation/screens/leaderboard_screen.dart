@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
@@ -175,8 +176,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
               return true;
             },
             child: ListView.builder(
-              cacheExtent: 500,
-              padding: EdgeInsets.only(
+              cacheExtent: 500.0, padding: EdgeInsets.only(
                 left: SoteriaSpacing.md,
                 right: SoteriaSpacing.md,
                 bottom: 100.h,

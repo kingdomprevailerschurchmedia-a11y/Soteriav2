@@ -104,8 +104,9 @@ class RegistrationActionBox extends StatelessWidget {
   bool _isActionEnabled() {
     if (status == TournamentStatus.registrationOpen) return true;
     if (status == TournamentStatus.live ||
-        status == TournamentStatus.startingSoon)
+        status == TournamentStatus.startingSoon) {
       return true;
+    }
     return false;
   }
 }

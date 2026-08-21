@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/widgets/glass_surface.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/features/player/presentation/providers/match_history_providers.dart';
@@ -48,7 +47,7 @@ class RecentOpponentsSection extends ConsumerWidget {
               );
             },
             loading: () => _buildLoadingState(),
-            error: (_, __) => _buildErrorState(),
+            error: (_, _) => _buildErrorState(),
           ),
         ),
       ],
@@ -113,7 +112,7 @@ class _OpponentItem extends ConsumerWidget {
                 ],
               ),
               loading: () => CircleAvatar(radius: 32.r, backgroundColor: Colors.white10),
-              error: (_, __) => const Icon(Icons.error),
+              error: (_, _) => const Icon(Icons.error),
             ),
             SizedBox(height: SoteriaSpacing.xs),
             profileAsync.maybeWhen(

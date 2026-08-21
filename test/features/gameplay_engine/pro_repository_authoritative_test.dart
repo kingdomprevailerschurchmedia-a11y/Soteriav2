@@ -9,8 +9,10 @@ import 'package:soteria/features/question_content/domain/entities/difficulty.dar
 import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
 import 'package:soteria/features/player/domain/models/xp_transaction.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
+import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import 'package:soteria/features/player/domain/repositories/player_repository.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
+import 'package:soteria/features/player/domain/models/rank_change.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FakeDatabaseService extends Fake implements IDatabaseService {
@@ -122,13 +124,14 @@ class FakePlayerProgressionRepository extends Fake implements PlayerProgressionR
       changeId: 'id',
       userId: result.userId,
       seasonId: result.seasonId,
-      resultId: result.resultId,
+      referenceResultId: result.resultId,
       previousRankPoints: 1000,
       changeAmount: 10,
       newRankPoints: 1010,
       previousRank: 'Gold',
       newRank: 'Gold',
-      timestamp: DateTime.now(),
+      type: RankChangeType.increase,
+      createdAt: DateTime.now(),
     );
   }
 }
@@ -139,9 +142,11 @@ class FakePlayerRepository extends Fake implements PlayerRepository {
     return PlayerProfile(
       uid: uid,
       displayName: 'Test',
-      photoUrl: null,
+      email: 'test@example.com',
+      photoUrl: '',
       registrationOrder: 1,
       createdAt: DateTime.now(),
+      lastLogin: DateTime.now(),
       updatedAt: DateTime.now(),
       coins: 1000,
       xp: 100,

@@ -1,5 +1,4 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
 import 'package:soteria/features/player/presentation/providers/leaderboard_providers.dart';

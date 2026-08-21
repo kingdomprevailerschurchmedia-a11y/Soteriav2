@@ -4,7 +4,6 @@ import '../../domain/models/question.dart';
 import '../../domain/models/quiz_session.dart';
 import '../../domain/models/quiz_result.dart';
 import '../../domain/models/player_answer.dart';
-import '../../domain/models/answer_option.dart';
 import '../../domain/models/power_up_state.dart';
 import 'quiz_remote_data_source.dart';
 import 'quiz_local_data_source.dart';

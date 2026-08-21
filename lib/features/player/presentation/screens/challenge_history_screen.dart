@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
@@ -70,7 +69,7 @@ class _ChallengeHistoryCard extends ConsumerWidget {
                 imageUrl: profile?.photoUrl,
               ),
               loading: () => const SizedBox(width: 48, height: 48, child: CircularProgressIndicator()),
-              error: (_, __) => const Icon(Icons.error, size: 48),
+              error: (_, _) => const Icon(Icons.error, size: 48),
             ),
             SizedBox(width: SoteriaSpacing.md),
             Expanded(

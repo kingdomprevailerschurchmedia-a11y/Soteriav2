@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
-import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';

@@ -13,7 +13,6 @@ import 'package:soteria/features/player/presentation/widgets/identity/featured_b
 import 'package:soteria/features/player/presentation/widgets/identity/title_selection_sheet.dart';
 import 'package:soteria/features/player/presentation/widgets/identity/badge_customization_sheet.dart';
 import 'package:soteria/features/player/presentation/providers/activity_providers.dart';
-import 'package:soteria/features/player/domain/models/competitive_activity_event.dart';
 import 'package:soteria/features/player/domain/models/competitive_event.dart';
 import 'package:soteria/features/player/domain/models/competitive_identity.dart';
 import 'package:soteria/features/player/presentation/widgets/profile/statistic_card.dart';
@@ -206,7 +205,7 @@ class CompetitiveShowcaseScreen extends ConsumerWidget {
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 

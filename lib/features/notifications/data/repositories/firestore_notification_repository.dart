@@ -9,12 +9,10 @@ class FirestoreNotificationRepository implements NotificationRepository {
   final String? _userId;
 
   FirestoreNotificationRepository({
-    required IDatabaseService database,
-    required IMessagingService fcm,
-    String? userId,
-  })  : _database = database,
-        _fcm = fcm,
-        _userId = userId;
+    required this._database,
+    required this._fcm,
+    this._userId,
+  });
 
   CollectionReference<Map<String, dynamic>> get _notificationsCollection =>
       _database.collection('users').doc(_userId).collection('notifications');

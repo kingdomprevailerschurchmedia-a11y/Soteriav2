@@ -4,7 +4,6 @@ import '../domain/models/competitive_activity_event.dart';
 import '../domain/models/competitive_event.dart';
 import '../presentation/providers/activity_providers.dart';
 import '../presentation/screens/competitive_activity_screen.dart';
-import '../../auth/providers/auth_providers.dart';
 import 'mock_activity_repository.dart';
 
 class ActivityPreviews {

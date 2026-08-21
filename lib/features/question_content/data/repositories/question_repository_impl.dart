@@ -13,8 +13,7 @@ class QuestionRepositoryImpl implements QuestionRepository {
   // In-memory cache.
   final Map<String, Question> _cache = {};
 
-  QuestionRepositoryImpl({required FirestoreQuestionDataSource remoteSource})
-    : _remoteSource = remoteSource;
+  QuestionRepositoryImpl({required this._remoteSource});
 
   @override
   Future<List<Question>> getQuestions({

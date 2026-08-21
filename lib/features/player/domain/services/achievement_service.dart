@@ -12,12 +12,10 @@ class AchievementService {
   final PlayerRepository _playerRepository;
 
   AchievementService({
-    required AchievementRepository achievementRepository,
-    required PlayerProgressionRepository progressionRepository,
-    required PlayerRepository playerRepository,
-  })  : _achievementRepository = achievementRepository,
-        _progressionRepository = progressionRepository,
-        _playerRepository = playerRepository;
+    required this._achievementRepository,
+    required this._progressionRepository,
+    required this._playerRepository,
+  });
 
   /// Authoritatively evaluates all achievements for a user.
   Future<void> evaluateAchievements(String userId) async {

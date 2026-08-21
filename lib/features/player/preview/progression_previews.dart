@@ -3,15 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/player_progression.dart';
 import '../presentation/providers/progression_providers.dart';
 import '../presentation/widgets/player_progression_card.dart';
-import '../presentation/widgets/rank_badge.dart';
 import '../presentation/widgets/level_up_celebration.dart';
-import '../presentation/widgets/rank_promotion_celebration.dart';
-import '../presentation/widgets/rank_demotion_notice.dart';
 import '../domain/models/rank_change.dart';
 import '../presentation/screens/rank_promotion_screen.dart';
 import '../presentation/screens/rank_demotion_screen.dart';
 import '../presentation/widgets/competitive_rank_badge.dart';
-import '../presentation/widgets/rank_change_details.dart';
 
 class ProgressionPreviewWrapper extends StatelessWidget {
   final Widget child;

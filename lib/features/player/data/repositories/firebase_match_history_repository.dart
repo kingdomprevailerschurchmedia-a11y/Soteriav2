@@ -11,12 +11,10 @@ class FirebaseMatchHistoryRepository implements MatchHistoryRepository {
   final QuizHistoryRepository _quizRepository;
 
   FirebaseMatchHistoryRepository({
-    required CompetitiveResultRepository resultRepository,
-    required RankHistoryRepository rankRepository,
-    required QuizHistoryRepository quizRepository,
-  }) : _resultRepository = resultRepository,
-       _rankRepository = rankRepository,
-       _quizRepository = quizRepository;
+    required this._resultRepository,
+    required this._rankRepository,
+    required this._quizRepository,
+  });
 
   @override
   Future<List<CompetitiveMatch>> getMatchHistory(
@@ -80,8 +78,6 @@ class FirebaseMatchHistoryRepository implements MatchHistoryRepository {
           ),
         )
         .catchError((_) => null);
-
-    if (result == null) return null;
 
     final rankChange = await _rankRepository
         .getRankHistory(userId, limit: 50)

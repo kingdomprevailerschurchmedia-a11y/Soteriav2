@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
-import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/components/soteria_back_button.dart';
-import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/providers/player_providers.dart';
 import '../providers/matchmaking_providers.dart';
@@ -42,93 +37,98 @@ class VersusLobbyScreen extends ConsumerWidget {
         body: SafeArea(
           child: Column(
             children: [
-                _LobbyHeader(
-                  player: player,
-                  isOnline: isOnline,
-                  showBackButton: fromDashboard,
-                ),
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverPadding(
-                        padding: EdgeInsets.all(SoteriaSpacing.lg),
-                        sliver: SliverList(
-                          delegate: SliverChildListDelegate([
-                            LobbyHeroHeader(
-                              part1: 'FIND',
-                              part2: 'YOUR',
-                              part3: 'RIVAL',
-                              subtitle: "Challenge opponents and climb the competitive ladder ⚔️",
-                            ),
-                            SizedBox(height: SoteriaSpacing.md),
-                            ref.watch(rankProgressProvider).when(
-                              data: (rank) => MatchmakingRankCard(
-                                rankName: rank.currentRank,
-                                tier: rank.tier.name,
-                                points: rank.currentRP,
+              _LobbyHeader(
+                player: player,
+                isOnline: isOnline,
+                showBackButton: fromDashboard,
+              ),
+              Expanded(
+                child: CustomScrollView(
+                  slivers: [
+                    SliverPadding(
+                      padding: EdgeInsets.all(SoteriaSpacing.lg),
+                      sliver: SliverList(
+                        delegate: SliverChildListDelegate([
+                          const LobbyHeroHeader(
+                            part1: 'FIND',
+                            part2: 'YOUR',
+                            part3: 'RIVAL',
+                            subtitle:
+                                "Challenge opponents and climb the competitive ladder ⚔️",
+                          ),
+                          SizedBox(height: SoteriaSpacing.md),
+                          ref.watch(rankProgressProvider).when(
+                                data: (rank) => MatchmakingRankCard(
+                                  rankName: rank.currentRank,
+                                  tier: rank.tier.name,
+                                  points: rank.currentRP,
+                                ),
+                                loading: () => const SizedBox.shrink(),
+                                error: (_, _) => const SizedBox.shrink(),
                               ),
-                              loading: () => const SizedBox.shrink(),
-                              error: (_, __) => const SizedBox.shrink(),
-                            ),
+                          SizedBox(height: SoteriaSpacing.lg),
+                          LobbyInterestsCard(
+                            value: state.useInterests,
+                            onChanged: (val) => ref
+                                .read(versusLobbyProvider.notifier)
+                                .setUseInterests(val),
+                          ),
+                          SizedBox(height: SoteriaSpacing.md),
+                          if (!state.useInterests) ...[
+                            const VersusCategorySelector(),
                             SizedBox(height: SoteriaSpacing.lg),
-                            LobbyInterestsCard(
-                              value: state.useInterests,
-                              onChanged: (val) => ref
-                                  .read(versusLobbyProvider.notifier)
-                                  .setUseInterests(val),
-                            ),
-                            SizedBox(height: SoteriaSpacing.md),
-                            if (!state.useInterests) ...[
-                              const VersusCategorySelector(),
-                              SizedBox(height: SoteriaSpacing.lg),
-                            ],
-                            const VersusDifficultySelector(),
-                            SizedBox(height: SoteriaSpacing.md),
-                            const VersusQuestionCountSelector(),
-                            SizedBox(height: SoteriaSpacing.lg),
-                            const RecentOpponentsSection(),
-                            SizedBox(height: SoteriaSpacing.lg),
-                          ]),
-                        ),
+                          ],
+                          const VersusDifficultySelector(),
+                          SizedBox(height: SoteriaSpacing.md),
+                          const VersusQuestionCountSelector(),
+                          SizedBox(height: SoteriaSpacing.lg),
+                          const RecentOpponentsSection(),
+                          SizedBox(height: SoteriaSpacing.lg),
+                        ]),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-                LobbyStartAction(
-                  enabled: state.validationError == null,
-                  error: state.validationError,
-                  label: 'FIND OPPONENT',
-                  helperText: 'Competitive Integrity • Professional Matchmaking',
-                  onStart: () async {
-                    List<String> categoryIds = [];
-                    if (state.useInterests) {
-                      final profile = ref.read(currentPlayerProvider);
-                      categoryIds = profile?.favoriteCategories ?? [];
-                    } else {
-                      categoryIds = state.categoryIds;
-                    }
+              ),
+              LobbyStartAction(
+                enabled: state.validationError == null,
+                error: state.validationError,
+                label: 'FIND OPPONENT',
+                helperText: 'Competitive Integrity • Professional Matchmaking',
+                onStart: () async {
+                  List<String> categoryIds = [];
+                  if (state.useInterests) {
+                    final profile = ref.read(currentPlayerProvider);
+                    categoryIds = profile?.favoriteCategories ?? [];
+                  } else {
+                    categoryIds = state.categoryIds;
+                  }
 
-                    await ref.read(matchmakingControllerProvider.notifier).enterQueue(
-                      configuration: {
-                        'categoryIds': categoryIds,
-                        'categoryId': categoryIds.isNotEmpty ? categoryIds.first : null,
-                        'categoryName': state.useInterests 
-                            ? 'Interests' 
-                            : (categoryIds.length == 1 
-                                ? state.categories.firstWhere((c) => c.id == categoryIds.first).name 
-                                : '${categoryIds.length} Categories'),
-                        'difficulty': state.difficulty.name,
-                        'questionCount': state.questionCount,
-                        'useInterests': state.useInterests,
-                      },
-                    );
-                    if (context.mounted) {
-                      context.push('/app/matchmaking');
-                    }
-                  },
-                ),
-              ],
-            ),
+                  await ref
+                      .read(matchmakingControllerProvider.notifier)
+                      .enterQueue(
+                    configuration: {
+                      'categoryIds': categoryIds,
+                      'categoryId':
+                          categoryIds.isNotEmpty ? categoryIds.first : null,
+                      'categoryName': state.useInterests
+                          ? 'Interests'
+                          : (categoryIds.length == 1
+                              ? state.categories
+                                  .firstWhere((c) => c.id == categoryIds.first)
+                                  .name
+                              : '${categoryIds.length} Categories'),
+                      'difficulty': state.difficulty.name,
+                      'questionCount': state.questionCount,
+                      'useInterests': state.useInterests,
+                    },
+                  );
+                  if (context.mounted) {
+                    context.push('/app/matchmaking');
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),

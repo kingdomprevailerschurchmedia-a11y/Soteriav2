@@ -15,7 +15,6 @@ import '../../../../core/navigation/soteria_routes.dart';
 import '../models/game_state.dart';
 import '../models/pro_mode_result.dart';
 import '../providers/pro_mode_results_provider.dart';
-import '../../dashboard/presentation/providers/pro_lobby_providers.dart';
 
 class ProModeResultsScreen extends ConsumerStatefulWidget {
   final GameState? gameState;

@@ -29,10 +29,10 @@ class FirebaseSocialRepository implements SocialRepository {
   @override
   Future<RelationshipStatus> getRelationshipStatus(String currentUserId, String otherUserId) async {
     // Check block status first
-    final blockDoc = await _firestore.collection('blocks').doc('$currentUserId\_$otherUserId').get();
+    final blockDoc = await _firestore.collection('blocks').doc('${currentUserId}_$otherUserId').get();
     if (blockDoc.exists) return RelationshipStatus.blocked;
 
-    final blockedByDoc = await _firestore.collection('blocks').doc('$otherUserId\_$currentUserId').get();
+    final blockedByDoc = await _firestore.collection('blocks').doc('${otherUserId}_$currentUserId').get();
     if (blockedByDoc.exists) return RelationshipStatus.blockedBy;
 
     // Check friendship

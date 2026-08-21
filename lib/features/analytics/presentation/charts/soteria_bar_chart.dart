@@ -71,7 +71,7 @@ class SoteriaBarChart extends StatelessWidget {
                 backDrawRodData: BackgroundBarChartRodData(
                   show: true,
                   toY: 100,
-                  color: SoteriaColors.border.withOpacity(0.05),
+                  color: SoteriaColors.border.withValues(alpha: 0.05),
                 ),
               ),
             ],

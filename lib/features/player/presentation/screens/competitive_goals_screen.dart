@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../domain/models/goal.dart';
 import '../providers/goal_providers.dart';
 import '../widgets/goals/competitive_goal_card.dart';
 import '../widgets/goals/next_goal_card.dart';
-import 'goal_details_screen.dart';
 import 'goal_selection_screen.dart';
 import 'goal_history_screen.dart';
 import 'competitive_progression_screen.dart';
@@ -60,7 +58,7 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
                   )
                 : const SliverToBoxAdapter(child: SizedBox.shrink()),
             loading: () => const SliverToBoxAdapter(child: LinearProgressIndicator()),
-            error: (_, __) => const SliverToBoxAdapter(child: SizedBox.shrink()),
+            error: (_, _) => const SliverToBoxAdapter(child: SizedBox.shrink()),
           ),
 
           // Quick Actions
@@ -185,9 +183,9 @@ class _ActionCard extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 12.h),
         decoration: BoxDecoration(
-          color: SoteriaColors.surface.withOpacity(0.5),
+          color: SoteriaColors.surface.withValues(alpha: 0.5),
           borderRadius: BorderRadius.circular(16.r),
-          border: Border.all(color: color?.withOpacity(0.3) ?? SoteriaColors.border.withOpacity(0.5)),
+          border: Border.all(color: color?.withValues(alpha: 0.3) ?? SoteriaColors.border.withValues(alpha: 0.5)),
         ),
         child: Column(
           children: [

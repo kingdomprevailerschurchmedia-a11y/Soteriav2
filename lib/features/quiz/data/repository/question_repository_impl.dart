@@ -10,10 +10,9 @@ class QuestionRepositoryImpl implements IQuestionRepository {
   final IQuestionLocalDataSource _localDataSource;
 
   QuestionRepositoryImpl({
-    required IQuestionRemoteDataSource remoteDataSource,
-    required IQuestionLocalDataSource localDataSource,
-  }) : _remoteDataSource = remoteDataSource,
-       _localDataSource = localDataSource;
+    required this._remoteDataSource,
+    required this._localDataSource,
+  });
 
   @override
   Future<List<Question>> loadQuestions({

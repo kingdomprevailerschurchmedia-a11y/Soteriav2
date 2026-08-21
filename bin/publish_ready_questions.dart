@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:firedart/firedart.dart';
 import 'package:soteria/core/network/firebase_admin_interop.dart';
-import 'package:googleapis/firestore/v1.dart' as google;
 
 // Standalone script for production question publication.
 // Usage: dart run bin/publish_ready_questions.dart [--execute] [--auth <email>:<password>]

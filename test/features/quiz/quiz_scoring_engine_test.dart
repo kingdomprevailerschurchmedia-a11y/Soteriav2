@@ -1,11 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart' as qc;
 import 'package:soteria/features/question_content/domain/entities/difficulty.dart' as qc_difficulty;
 import 'package:soteria/features/quiz/domain/models/player_answer.dart';
 import 'package:soteria/features/quiz/domain/models/scoring_configuration.dart';
 import 'package:soteria/features/quiz/domain/services/quiz_scoring_engine.dart';
-import 'package:soteria/features/quiz/domain/models/answer_option.dart';
 
 void main() {
   group('QuizScoringEngine Tests', () {

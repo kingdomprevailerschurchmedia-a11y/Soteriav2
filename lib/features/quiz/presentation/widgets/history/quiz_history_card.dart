@@ -6,7 +6,6 @@ import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../domain/models/quiz_result.dart';
-import '../../../domain/models/quiz_enums.dart';
 
 class QuizHistoryCard extends StatelessWidget {
   const QuizHistoryCard({super.key, required this.result, required this.onTap});

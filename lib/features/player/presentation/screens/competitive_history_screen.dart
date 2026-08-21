@@ -59,8 +59,7 @@ class CompetitiveHistoryScreen extends ConsumerWidget {
     }
 
     return ListView(
-      cacheExtent: 500,
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+      cacheExtent: 500.0, padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       children: [
         if (currentSeason != null && progression != null) ...[
           _buildSectionHeader('Current Season'),

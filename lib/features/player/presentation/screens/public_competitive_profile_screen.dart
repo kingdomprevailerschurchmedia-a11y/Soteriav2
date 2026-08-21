@@ -62,8 +62,7 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
 
   Widget _buildContent(BuildContext context, WidgetRef ref, PublicCompetitiveProfile profile, String? currentUserId, RelationshipStatus relationship) {
     return ListView(
-      cacheExtent: 1000,
-      padding: EdgeInsets.symmetric(
+      cacheExtent: 1000.0, padding: EdgeInsets.symmetric(
         horizontal: SoteriaSpacing.containerPadding(context),
       ),
       children: [

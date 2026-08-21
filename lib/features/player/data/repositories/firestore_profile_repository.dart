@@ -137,7 +137,7 @@ class FirestoreProfileRepository implements ProfileRepository {
 
       // Public Profile and Leaderboard Sync (if progression exists)
       if (progressionSnapshot.exists) {
-        final progression = PlayerProgression.fromJson(progressionSnapshot.data()! as Map<String, dynamic>);
+        final progression = PlayerProgression.fromJson(progressionSnapshot.data()!);
         
         final publicProfile = PublicCompetitiveProfile(
           userId: userId,

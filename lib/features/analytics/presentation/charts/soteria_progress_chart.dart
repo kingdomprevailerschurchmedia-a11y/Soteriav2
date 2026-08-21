@@ -31,7 +31,7 @@ class SoteriaProgressChart extends StatelessWidget {
             painter: _ProgressPainter(
               value: value,
               color: progressColor,
-              backgroundColor: SoteriaColors.border.withOpacity(0.1),
+              backgroundColor: SoteriaColors.border.withValues(alpha: 0.1),
             ),
           ),
           Column(

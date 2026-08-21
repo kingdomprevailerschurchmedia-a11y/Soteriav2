@@ -1,12 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../../../core/firebase/providers/firebase_providers.dart';
-import '../../../core/identity/providers/identity_providers.dart';
+import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
+import 'package:soteria/core/identity/models/user_profile.dart';
 import '../../auth/providers/auth_providers.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/repositories/player_repository.dart';
 import '../data/repositories/firestore_player_repository.dart';
-import '../domain/services/progression_service.dart';
 import '../domain/use_cases/get_progression_use_case.dart';
 import '../domain/use_cases/load_player_profile_use_case.dart';
 import '../domain/use_cases/create_player_profile_use_case.dart';
@@ -24,14 +24,7 @@ import '../../question_content/presentation/providers/category_providers.dart';
 
 import '../domain/repositories/achievement_repository.dart';
 import '../data/repositories/firebase_achievement_repository.dart';
-import '../domain/repositories/player_progression_repository.dart';
-import '../data/repositories/firebase_player_progression_repository.dart';
 
-import '../domain/repositories/achievement_repository.dart';
-import '../data/repositories/firebase_achievement_repository.dart';
-import '../domain/repositories/player_progression_repository.dart';
-import '../data/repositories/firebase_player_progression_repository.dart';
-import '../domain/services/competitive_ranking_engine.dart';
 
 // --- Repositories ---
 final playerRepositoryProvider = Provider<PlayerRepository>((ref) {
@@ -184,8 +177,8 @@ final playerAvatarSyncProvider = Provider<void>((ref) {
     }
 
     // Sync Photo URL (including empty string when clearing)
-    if (next.avatarUrl != player.photoUrl) {
-      updates['photoUrl'] = next.avatarUrl;
+    if ((next.avatarUrl ?? '') != player.photoUrl) {
+      updates['photoUrl'] = next.avatarUrl ?? '';
       needsUpdate = true;
     }
 
@@ -195,7 +188,7 @@ final playerAvatarSyncProvider = Provider<void>((ref) {
 
       final updatedPlayer = player.copyWith(
         selectedAvatarId: next.selectedAvatarId,
-        photoUrl: next.avatarUrl,
+        photoUrl: next.avatarUrl ?? '',
         updatedAt: now,
       );
 

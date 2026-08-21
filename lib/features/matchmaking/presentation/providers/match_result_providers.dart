@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import '../../domain/models/competitive_match_result.dart';
 import '../../domain/repositories/match_result_repository.dart';

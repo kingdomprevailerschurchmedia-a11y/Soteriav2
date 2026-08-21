@@ -11,7 +11,6 @@ import 'package:soteria/features/player/domain/repositories/player_progression_r
 import 'package:soteria/features/player/domain/services/progression_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/core/identity/repositories/identity_repository.dart';
-import 'package:soteria/core/identity/models/user_profile.dart';
 
 class MockLoadPlayerProfileUseCase extends Mock implements LoadPlayerProfileUseCase {}
 class MockCreatePlayerProfileUseCase extends Mock implements CreatePlayerProfileUseCase {}

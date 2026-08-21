@@ -8,7 +8,6 @@ import '../../../features/player/presentation/providers/milestone_providers.dart
 import '../../../features/player/presentation/providers/personal_record_providers.dart';
 import '../../../features/player/providers/player_providers.dart';
 import '../../../features/player/domain/models/rank_progress.dart';
-import '../../../features/player/domain/models/competitive_season.dart';
 import '../../../features/player/domain/models/player_profile.dart';
 import '../../../features/player/domain/config/progression_config.dart';
 import '../../../features/player/domain/models/milestone.dart';

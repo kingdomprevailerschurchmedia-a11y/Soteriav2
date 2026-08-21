@@ -4,7 +4,6 @@ import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/radius/soteria_radius.dart';
-import '../../../../../core/design_system/components/soteria_card.dart';
 import '../../../../../core/design_system/gradients/soteria_gradients.dart';
 import '../../../../../core/widgets/glass_surface.dart';
 import '../../../domain/models/competitive_activity_event.dart';
@@ -91,7 +90,7 @@ class CompetitiveActivityCard extends ConsumerWidget {
                                 ],
                               ),
                               loading: () => CircleAvatar(radius: 18.r, backgroundColor: SoteriaColors.surface),
-                              error: (_, __) => CircleAvatar(radius: 18.r, backgroundColor: SoteriaColors.surface),
+                              error: (_, _) => CircleAvatar(radius: 18.r, backgroundColor: SoteriaColors.surface),
                             ),
                             SizedBox(width: SoteriaSpacing.md),
                             Expanded(
@@ -109,7 +108,7 @@ class CompetitiveActivityCard extends ConsumerWidget {
                                           ),
                                         ),
                                         loading: () => const Text('...'),
-                                        error: (_, __) => const Text('Player'),
+                                        error: (_, _) => const Text('Player'),
                                       ),
                                       const Spacer(),
                                       Text(

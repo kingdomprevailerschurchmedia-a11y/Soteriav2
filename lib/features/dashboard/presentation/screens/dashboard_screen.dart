@@ -10,6 +10,7 @@ import '../../../../core/logging/logger_service.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
 import '../../../player/presentation/providers/milestone_providers.dart';
+import '../../../player/presentation/providers/season_providers.dart';
 import '../../../player/presentation/screens/competitive_rank_overview_screen.dart';
 import '../../../../core/network/providers/connectivity_providers.dart';
 import '../providers/dashboard_providers.dart';
@@ -71,8 +72,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
           color: SoteriaColors.primary,
           child: CustomScrollView(
-                cacheExtent: 1000, // Pre-render some area to reduce jank during scroll
-                physics: const AlwaysScrollableScrollPhysics(
+                cacheExtent: 1000.0, physics: const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics(),
                 ),
                 slivers: [

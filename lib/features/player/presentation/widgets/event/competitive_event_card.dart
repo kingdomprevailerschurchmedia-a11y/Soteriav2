@@ -30,7 +30,7 @@ class CompetitiveEventCard extends StatelessWidget {
         boxShadow: [
           if (event.status == LiveEventStatus.live || event.status == LiveEventStatus.ending)
             BoxShadow(
-              color: SoteriaColors.primary.withOpacity(0.1),
+              color: SoteriaColors.primary.withValues(alpha: 0.1),
               blurRadius: 10,
               spreadRadius: 2,
             ),

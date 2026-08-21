@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:soteria/features/player/presentation/widgets/player_progression_card.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_badge.dart';
-import 'package:soteria/features/player/domain/config/progression_config.dart';
 import 'package:soteria/core/design_system/themes/soteria_theme.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';

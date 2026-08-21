@@ -10,7 +10,6 @@ import '../../domain/config/progression_config.dart';
 import '../../domain/models/rank_progress.dart';
 import '../../domain/models/rank_tier.dart';
 import '../widgets/competitive_rank_badge.dart';
-import '../widgets/rank_progress_bar.dart';
 
 class CompetitiveProgressionScreen extends ConsumerWidget {
   const CompetitiveProgressionScreen({super.key});
@@ -154,7 +153,7 @@ class _RankRoadmapItem extends StatelessWidget {
       decoration: BoxDecoration(
         color: SoteriaColors.surface,
         borderRadius: BorderRadius.circular(SoteriaSpacing.md),
-        border: Border.all(color: SoteriaColors.gold.withOpacity(0.3)),
+        border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.3)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -29,7 +29,7 @@ class MetricCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(16.w),
       decoration: BoxDecoration(
-        color: SoteriaColors.surface.withOpacity(0.5),
+        color: SoteriaColors.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(16.r),
         border: Border.all(color: SoteriaColors.border),
       ),

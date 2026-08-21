@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:soteria/features/player/presentation/widgets/season_header.dart';
 import 'package:soteria/features/player/presentation/widgets/season_countdown_widget.dart';
 import 'package:soteria/features/player/domain/models/season_countdown.dart';
 import 'package:soteria/features/player/preview/season_previews.dart';

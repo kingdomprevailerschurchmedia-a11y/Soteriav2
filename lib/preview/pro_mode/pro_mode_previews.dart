@@ -3,8 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/dashboard/presentation/screens/pro_lobby_screen.dart';
 import 'package:soteria/features/dashboard/presentation/providers/pro_lobby_providers.dart';
 import 'package:soteria/features/gameplay_engine/models/pro_mode_access.dart';
-import 'package:soteria/features/player/providers/player_providers.dart';
-import 'package:soteria/features/player/domain/models/player_profile.dart';
 
 class ProModePreviews {
   static Widget available() {

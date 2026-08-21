@@ -15,7 +15,6 @@ import '../../../social/presentation/providers/social_providers.dart';
 import '../providers/challenge_providers.dart';
 import '../../domain/models/competitive_challenge.dart';
 import '../providers/public_profile_providers.dart';
-import '../providers/presence_providers.dart';
 
 class CreateChallengeScreen extends ConsumerStatefulWidget {
   final String? initialOpponentId;
@@ -287,7 +286,7 @@ class _FriendSelectorItem extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          error: (_, __) => const Icon(Icons.error_outline, color: SoteriaColors.error),
+          error: (_, _) => const Icon(Icons.error_outline, color: SoteriaColors.error),
         ),
       ),
     );

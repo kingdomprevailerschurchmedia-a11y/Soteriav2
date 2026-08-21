@@ -3,9 +3,6 @@ import 'package:soteria/features/question_content/data/mappers/taxonomy_mapper.d
 import 'package:soteria/features/question_content/data/models/category_dto.dart';
 import 'package:soteria/features/question_content/data/models/subcategory_dto.dart';
 import 'package:soteria/features/question_content/data/models/topic_dto.dart';
-import 'package:soteria/features/question_content/domain/entities/category.dart';
-import 'package:soteria/features/question_content/domain/entities/subcategory.dart';
-import 'package:soteria/features/question_content/domain/entities/topic.dart';
 
 void main() {
   group('TaxonomyMapper', () {

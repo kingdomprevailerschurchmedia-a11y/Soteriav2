@@ -110,7 +110,7 @@ class _CompetitiveMatchHistoryScreenState
               ),
             ),
             loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-            error: (_, __) =>
+            error: (_, _) =>
                 const SliverToBoxAdapter(child: SizedBox.shrink()),
           ),
 

@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:soteria/core/network/firebase_admin_interop.dart';
-import 'package:googleapis/firestore/v1.dart';
 
 /// Read-only diagnostic script to report the current Firestore status distribution for the questions collection.
 /// Usage:

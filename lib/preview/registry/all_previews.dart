@@ -9,7 +9,6 @@ import '../../../features/tournaments/presentation/screens/tournament_discovery_
 import '../../../features/tournaments/presentation/screens/tournament_lobby_screen.dart';
 import '../../../features/tournaments/presentation/screens/tournament_results_screen.dart';
 import '../../../features/tournaments/presentation/screens/tournament_leaderboard_screen.dart';
-import '../../../features/player/presentation/screens/player_profile_screen.dart';
 import '../../../features/auth/presentation/widgets/logout_confirmation_dialog.dart';
 import '../../../features/gameplay_engine/pages/competitive_review_screen.dart';
 import '../../../features/quiz/preview/question_loader_previews.dart';
@@ -52,10 +51,6 @@ import '../personalization/personalization_preview.dart';
 import '../practice/practice_previews.dart';
 import '../pro_mode/pro_mode_previews.dart';
 import '../pro_mode/pro_gameplay_previews.dart';
-import '../../features/dashboard/presentation/screens/practice_lobby_screen.dart';
-import '../../features/practice/presentation/screens/practice_gameplay_screen.dart';
-import '../../features/practice/presentation/screens/practice_results_screen.dart';
-import '../../features/gameplay_engine/models/game_state.dart';
 
 void registerAllPreviews() {
   final r = PreviewRegistry.instance;

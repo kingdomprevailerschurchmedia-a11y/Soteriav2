@@ -7,7 +7,6 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/core/design_system/components/soteria_badge.dart';
 import 'package:soteria/core/design_system/components/soteria_page_wrapper.dart';
-import 'package:soteria/core/design_system/animations/soteria_animations.dart';
 import '../models/game_result.dart';
 import '../models/competitive_session.dart';
 import '../providers/competitive_results_provider.dart';

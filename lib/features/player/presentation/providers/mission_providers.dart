@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/features/player/data/repositories/firebase_mission_repository.dart';
 import 'package:soteria/features/player/domain/models/competitive_mission.dart';
 import 'package:soteria/features/player/domain/repositories/mission_repository.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
@@ -10,10 +11,10 @@ final missionRepositoryProvider = Provider<MissionRepository>((ref) {
 });
 
 final activeMissionsProvider = StreamProvider<List<CompetitiveMission>>((ref) {
-  final user = ref.watch(currentUserProvider).value;
-  if (user == null) return Stream.value([]);
+  final userId = ref.watch(sessionProvider).uid;
+  if (userId == null) return Stream.value([]);
   
-  return ref.watch(missionRepositoryProvider).watchActiveMissions(user.uid);
+  return ref.watch(missionRepositoryProvider).watchActiveMissions(userId);
 });
 
 final dailyMissionsProvider = Provider<AsyncValue<List<CompetitiveMission>>>((ref) {
@@ -35,8 +36,8 @@ final seasonalMissionsProvider = Provider<AsyncValue<List<CompetitiveMission>>>(
 });
 
 final missionHistoryProvider = FutureProvider<List<CompetitiveMission>>((ref) async {
-  final user = ref.watch(currentUserProvider).value;
-  if (user == null) return [];
+  final userId = ref.watch(sessionProvider).uid;
+  if (userId == null) return [];
   
-  return ref.read(missionRepositoryProvider).getMissionHistory(user.uid);
+  return ref.read(missionRepositoryProvider).getMissionHistory(userId);
 });

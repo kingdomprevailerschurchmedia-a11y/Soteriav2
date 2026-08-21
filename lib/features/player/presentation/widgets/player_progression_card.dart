@@ -7,7 +7,6 @@ import '../../../../core/design_system/components/soteria_progress_bar.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../domain/models/player_progression.dart';
 import '../../domain/config/progression_config.dart';
-import '../../domain/config/progression_config.dart';
 
 class PlayerProgressionCard extends StatelessWidget {
   final PlayerProgression progression;

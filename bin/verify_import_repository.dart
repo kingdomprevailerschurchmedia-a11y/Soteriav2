@@ -1,7 +1,4 @@
 import 'package:firedart/firedart.dart';
-import 'package:soteria/features/question_content/data/data_sources/firestore_data_source.dart';
-import 'package:soteria/features/question_content/data/repositories/question_repository_impl.dart';
-import 'package:soteria/features/question_content/domain/entities/question.dart';
 import 'package:soteria/core/firebase/services/firebase_interfaces.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' as cf;
 
@@ -32,7 +29,7 @@ void main() async {
 
   final snapshot = await Firestore.instance
       .collection('questions')
-      .where('status', '==', 'published')
+      .where('status', isEqualTo: 'published')
       .get();
 
   print('Published Questions Found: ${snapshot.length}');

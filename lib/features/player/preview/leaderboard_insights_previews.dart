@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
 import 'package:soteria/features/player/domain/models/rank_movement_event.dart';
 import 'package:soteria/features/player/domain/services/leaderboard_insights_service.dart';
-import '../presentation/providers/leaderboard_providers.dart';
 import '../presentation/widgets/leaderboard/player_leaderboard_position_card.dart';
 import '../presentation/widgets/leaderboard/leaderboard_neighborhood.dart';
 import '../presentation/widgets/leaderboard/rank_progress_card.dart';
@@ -82,7 +80,7 @@ class LeaderboardInsightsPreviews {
   static Widget insightCard() {
     return const Center(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: LeaderboardInsightCard(
           insight: LeaderboardInsight(
             title: 'Elite Performer',

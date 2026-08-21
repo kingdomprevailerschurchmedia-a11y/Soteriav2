@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
-import 'package:soteria/features/quiz/presentation/controllers/quiz_controller.dart';
 import 'package:soteria/features/quiz/presentation/providers/quiz_providers.dart';
 
 void main() {

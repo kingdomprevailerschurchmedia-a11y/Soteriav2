@@ -3,14 +3,9 @@ import 'package:mocktail/mocktail.dart';
 import 'package:soteria/core/firebase/services/firebase_interfaces.dart';
 import 'package:soteria/features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
-import 'package:soteria/features/gameplay_engine/models/game_result.dart';
-import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
-import 'package:soteria/features/gameplay_engine/models/pro_mode_result.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
-import 'package:soteria/features/player/domain/models/xp_transaction.dart';
-import 'package:soteria/features/player/domain/models/rank_change.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import 'package:soteria/features/player/domain/repositories/player_repository.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
@@ -99,9 +94,11 @@ void main() {
       final mockProfile = PlayerProfile(
         uid: 'test-player',
         displayName: 'Test',
-        photoUrl: null,
+        email: 'test@example.com',
+        photoUrl: '',
         registrationOrder: 1,
         createdAt: DateTime.now(),
+        lastLogin: DateTime.now(),
         updatedAt: DateTime.now(),
         coins: 1000,
         xp: 100,

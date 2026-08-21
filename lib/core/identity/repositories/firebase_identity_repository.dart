@@ -10,12 +10,10 @@ import '../models/user_session.dart';
 
 class FirebaseIdentityRepository implements IdentityRepository {
   FirebaseIdentityRepository({
-    required IAuthService auth,
-    required IDatabaseService database,
-    required IStorageService storage,
-  }) : _auth = auth,
-       _database = database,
-       _storage = storage;
+    required this._auth,
+    required this._database,
+    required this._storage,
+  });
 
   final IAuthService _auth;
   final IDatabaseService _database;

@@ -3,7 +3,6 @@ import '../../domain/models/reward.dart';
 import '../../domain/repositories/rewards_repository.dart';
 import '../../../player/domain/config/milestone_registry.dart';
 import '../../../player/domain/config/goal_registry.dart';
-import '../../../player/domain/services/achievement_registry.dart';
 import '../../../player/domain/models/xp_transaction.dart';
 import '../../../player/data/repositories/firebase_player_progression_repository.dart';
 import '../../../player/domain/repositories/player_progression_repository.dart';

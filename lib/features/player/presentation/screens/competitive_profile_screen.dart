@@ -71,8 +71,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
       color: SoteriaColors.primary,
       backgroundColor: SoteriaColors.background,
       child: ListView(
-        cacheExtent: 1000,
-        padding: EdgeInsets.symmetric(
+        cacheExtent: 1000.0, padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.containerPadding(context),
         ),
         children: [
@@ -91,7 +90,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
                       )
                     : const SizedBox.shrink(),
                 loading: () => const Center(child: CircularProgressIndicator()),
-                error: (_, __) => const SizedBox.shrink(),
+                error: (_, _) => const SizedBox.shrink(),
               ),
           SoteriaSpacing.gapLG,
           ref.watch(rankProgressProvider).when(
@@ -129,7 +128,7 @@ class CompetitiveProfileScreen extends ConsumerWidget {
               ),
             ),
             loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
+            error: (_, _) => const SizedBox.shrink(),
           ),
           SoteriaSpacing.gapLG,
           ref

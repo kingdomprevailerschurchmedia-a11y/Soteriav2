@@ -7,7 +7,6 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/navigation/providers/navigation_providers.dart';
-import '../../../../core/navigation/soteria_routes.dart';
 import '../../../player/presentation/providers/challenge_providers.dart';
 
 class DashboardHeader extends ConsumerWidget {
@@ -246,9 +245,11 @@ class _HeaderBadge extends StatelessWidget {
 class _CompactStat extends StatelessWidget {
   const _CompactStat({
     this.assetPath,
+    this.icon,
     required this.value,
     required this.label,
-  }) : icon = null : color = null;
+    this.color,
+  });
 
   final IconData? icon;
   final String? assetPath;

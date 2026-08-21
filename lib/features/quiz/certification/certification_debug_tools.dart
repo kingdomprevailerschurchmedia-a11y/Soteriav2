@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../presentation/providers/quiz_providers.dart';
-import '../domain/models/quiz_enums.dart';
 
 class CertificationDebugTools extends ConsumerWidget {
   const CertificationDebugTools({super.key});

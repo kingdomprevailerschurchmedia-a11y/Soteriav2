@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +10,6 @@ import 'package:soteria/core/widgets/glass_surface.dart';
 import '../providers/competitive_profile_provider.dart';
 import '../../domain/models/competitive_profile.dart';
 import '../widgets/profile/competitive_profile_header.dart';
-import '../widgets/profile/rank_progress_section.dart';
 import '../widgets/profile/achievement_summary_section.dart';
 import '../widgets/profile/engagement_summary_section.dart';
 import '../widgets/profile/career_statistics_section.dart';

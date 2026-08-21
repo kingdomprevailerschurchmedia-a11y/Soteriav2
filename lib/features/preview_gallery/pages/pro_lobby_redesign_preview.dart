@@ -48,8 +48,7 @@ class _MockProLobbyNotifier extends ProLobbyNotifier {
         entryFee: 100,
       ),
       access: const ProModeAccessResult(
-        state: ProModeAccessState.allowed,
-        isAllowed: true,
+        state: ProModeAccessState.available,
       ),
     );
   }

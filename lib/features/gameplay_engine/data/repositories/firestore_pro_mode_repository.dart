@@ -8,7 +8,6 @@ import '../../models/game_mode.dart';
 import '../../models/game_result.dart';
 import '../../domain/config/competitive_reward_config.dart';
 import '../../domain/services/reward_settlement_service.dart';
-import '../../models/competitive_settlement.dart';
 import '../../progression/models/reward_summary.dart';
 import '../../../question_content/domain/entities/difficulty.dart';
 import '../../../quiz/domain/services/quiz_scoring_engine.dart';
@@ -17,8 +16,6 @@ import '../../../quiz/domain/models/player_answer.dart';
 
 import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
 import 'package:soteria/features/player/domain/repositories/player_repository.dart';
-import 'package:soteria/features/player/domain/models/player_profile.dart';
-import 'package:soteria/features/player/data/repositories/firebase_player_progression_repository.dart';
 import 'package:soteria/features/player/domain/models/xp_transaction.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import '../../../../core/logging/logger_service.dart';

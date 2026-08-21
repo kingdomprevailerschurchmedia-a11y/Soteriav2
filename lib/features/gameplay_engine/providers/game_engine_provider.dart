@@ -28,6 +28,9 @@ import 'package:soteria/features/gameplay_engine/domain/repositories/gameplay_re
 import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
 import 'package:soteria/features/gameplay_engine/providers/competitive_gameplay_providers.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
+import 'package:soteria/features/dashboard/presentation/providers/pro_lobby_providers.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/presentation/providers/progression_providers.dart' as player_prog;
 import 'package:soteria/core/identity/providers/identity_providers.dart';
@@ -48,18 +51,13 @@ class GameEngine extends StateNotifier<GameState> {
   GameEngine({
     required this.config,
     this.analytics,
-    AnswerProcessor? answerProcessor,
-    TimerEngine? timerEngine,
-    ProgressionNotifier? progression,
-    IntegrityNotifier? integrity,
-    GameplayRepository? repository,
+    this._answerProcessor,
+    this._timerEngine,
+    this._progression,
+    this._integrity,
+    this._repository,
     this.ref,
-  }) : _answerProcessor = answerProcessor,
-       _timerEngine = timerEngine,
-       _progression = progression,
-       _integrity = integrity,
-       _repository = repository,
-       super(
+  }) : super(
          GameState(
            sessionId: DateTime.now().millisecondsSinceEpoch.toString(),
            playerId: ref?.read(currentPlayerProvider)?.uid ?? 'unknown',

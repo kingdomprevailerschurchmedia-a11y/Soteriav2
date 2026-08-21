@@ -51,7 +51,7 @@ class MissionHistoryScreen extends ConsumerWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.history, size: 64, color: SoteriaColors.muted.withOpacity(0.5)),
+          Icon(Icons.history, size: 64, color: SoteriaColors.muted.withValues(alpha: 0.5)),
           const SizedBox(height: 16),
           const Text(
             'No history yet',
@@ -95,7 +95,7 @@ class _HistoryCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(10),
             decoration: BoxDecoration(
-              color: (isExpired ? SoteriaColors.error : SoteriaColors.success).withOpacity(0.1),
+              color: (isExpired ? SoteriaColors.error : SoteriaColors.success).withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(

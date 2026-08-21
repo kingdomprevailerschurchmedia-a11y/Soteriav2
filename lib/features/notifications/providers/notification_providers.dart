@@ -1,7 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import '../domain/models/app_notification.dart';

@@ -231,8 +231,9 @@ class QuizAnswerOption extends StatelessWidget {
   }
 
   Color _getLetterTextColor() {
-    if (state == QuizAnswerState.defaultState)
+    if (state == QuizAnswerState.defaultState) {
       return SoteriaColors.textSecondary;
+    }
     if (state == QuizAnswerState.disabled) return SoteriaColors.muted;
     return Colors.white;
   }

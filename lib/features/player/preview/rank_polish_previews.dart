@@ -3,7 +3,6 @@ import '../domain/models/rank_progress.dart';
 import '../domain/models/rank_tier.dart';
 import '../presentation/widgets/competitive_rank_card.dart';
 import '../presentation/widgets/rank_progress_bar.dart';
-import '../presentation/widgets/competitive_rank_badge.dart';
 
 class RankPolishPreviews extends StatelessWidget {
   const RankPolishPreviews({super.key});

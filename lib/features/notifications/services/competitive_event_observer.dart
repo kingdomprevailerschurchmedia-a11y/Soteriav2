@@ -18,8 +18,6 @@ import '../../../core/services/time_service.dart';
 import '../domain/models/app_notification.dart';
 import '../domain/repositories/notification_repository.dart';
 import '../providers/notification_providers.dart';
-import '../../player/domain/models/competitive_badge.dart';
-import '../../player/domain/models/competitive_title.dart';
 import '../../player/providers/player_providers.dart';
 import '../../social/domain/models/friendship.dart';
 import '../../social/presentation/providers/social_providers.dart';

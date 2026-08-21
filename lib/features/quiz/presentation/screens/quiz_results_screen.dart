@@ -9,7 +9,6 @@ import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/navigation/soteria_routes.dart';
 import '../providers/quiz_providers.dart';
-import '../../domain/models/quiz_result.dart';
 import '../widgets/results/results_components.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';

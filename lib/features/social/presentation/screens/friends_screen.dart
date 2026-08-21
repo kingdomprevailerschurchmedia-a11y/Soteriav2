@@ -48,8 +48,7 @@ class FriendsScreen extends ConsumerWidget {
         ],
       ),
       body: CustomScrollView(
-        cacheExtent: 1000,
-        slivers: [
+        cacheExtent: 1000.0, slivers: [
           if (incomingRequests.isNotEmpty)
             SliverToBoxAdapter(child: _buildRequestsBanner(context, incomingRequests.length)),
           
@@ -73,7 +72,7 @@ class FriendsScreen extends ConsumerWidget {
                 );
               },
               loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
             ),
           ),
 
@@ -207,7 +206,7 @@ class _FriendListTile extends ConsumerWidget {
         );
       },
       loading: () => const SizedBox(height: 72, child: Center(child: CircularProgressIndicator(strokeWidth: 2))),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

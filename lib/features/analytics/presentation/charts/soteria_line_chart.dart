@@ -35,7 +35,7 @@ class SoteriaLineChart extends StatelessWidget {
           drawVerticalLine: false,
           horizontalInterval: (trend.maxValue - trend.minValue) / 4,
           getDrawingHorizontalLine: (value) => FlLine(
-            color: SoteriaColors.border.withOpacity(0.05),
+            color: SoteriaColors.border.withValues(alpha: 0.05),
             strokeWidth: 1,
           ),
         ),
@@ -59,7 +59,7 @@ class SoteriaLineChart extends StatelessWidget {
                 return Text(
                   value.toInt().toString(),
                   style: SoteriaTypography.bodySmall.copyWith(
-                    color: SoteriaColors.muted.withOpacity(0.5),
+                    color: SoteriaColors.muted.withValues(alpha: 0.5),
                   ),
                 );
               },
@@ -96,8 +96,8 @@ class SoteriaLineChart extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  lineColor.withOpacity(0.2),
-                  lineColor.withOpacity(0.0),
+                  lineColor.withValues(alpha: 0.2),
+                  lineColor.withValues(alpha: 0.0),
                 ],
               ),
             ),

@@ -71,7 +71,7 @@ class TitleSelectionSheet extends ConsumerWidget {
               child: ListView.separated(
                 shrinkWrap: true,
                 itemCount: ownedTitles.length + 1,
-                separatorBuilder: (_, __) => SizedBox(height: SoteriaSpacing.md),
+                separatorBuilder: (_, _) => SizedBox(height: SoteriaSpacing.md),
                 itemBuilder: (context, index) {
                   if (index == 0) {
                     return _TitleOption(

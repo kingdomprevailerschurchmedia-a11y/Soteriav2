@@ -6,12 +6,9 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
-import '../../../../core/widgets/animations/animated_numeric_counter.dart';
 import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../../../player/domain/models/rank_progress.dart';
-import '../../../player/presentation/widgets/competitive_rank_badge.dart';
-import '../../../player/providers/player_providers.dart';
 
 class HeroCard extends ConsumerWidget {
   const HeroCard({

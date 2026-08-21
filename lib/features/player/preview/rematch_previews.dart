@@ -4,7 +4,6 @@ import '../presentation/widgets/presence/recent_opponents_section.dart';
 import '../presentation/widgets/presence/recent_opponents_list.dart';
 import '../presentation/widgets/presence/recent_opponent_card.dart';
 import '../presentation/providers/match_history_providers.dart';
-import 'presence_fixtures.dart';
 
 class RematchPreviews {
   static Widget recentSection() {

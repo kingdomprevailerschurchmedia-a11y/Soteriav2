@@ -67,7 +67,7 @@ class NextGoalSection extends ConsumerWidget {
         );
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 
@@ -81,12 +81,14 @@ class NextGoalSection extends ConsumerWidget {
       case GoalCategory.streak: iconData = Icons.local_fire_department_rounded; break;
       case GoalCategory.achievement: iconData = Icons.stars_rounded; break;
       case GoalCategory.personalBest: iconData = Icons.auto_awesome_rounded; break;
+      case GoalCategory.correctAnswers: iconData = Icons.check_circle_rounded; break;
+      default: iconData = Icons.help_outline_rounded;
     }
 
     return Container(
       padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
-        color: SoteriaColors.primary.withOpacity(0.1),
+        color: SoteriaColors.primary.withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: Icon(iconData, color: SoteriaColors.primary, size: 20.w),

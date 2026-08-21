@@ -19,8 +19,9 @@ class TournamentSettlementEngine {
         if (b.accuracy != a.accuracy) return b.accuracy.compareTo(a.accuracy);
 
         // Lower time is better
-        if (a.completionTime != b.completionTime)
+        if (a.completionTime != b.completionTime) {
           return a.completionTime.compareTo(b.completionTime);
+        }
 
         // Earlier timestamp is better (tie-breaker)
         return a.completionTimestamp.compareTo(b.completionTimestamp);

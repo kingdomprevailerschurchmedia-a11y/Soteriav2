@@ -3,7 +3,6 @@ import '../../domain/models/daily_engagement.dart';
 import '../../domain/models/player_progression.dart';
 import '../../domain/repositories/engagement_repository.dart';
 import '../../domain/services/engagement_service.dart';
-import '../../domain/services/progression_service.dart';
 
 class FirebaseEngagementRepository implements EngagementRepository {
   final FirebaseFirestore _firestore;

@@ -26,7 +26,7 @@ void main() {
   Widget createTestableWidget(Widget child) {
     return ScreenUtilInit(
       designSize: const Size(360, 690),
-      builder: (_, __) => MaterialApp(home: Scaffold(body: child)),
+      builder: (_, _) => MaterialApp(home: Scaffold(body: child)),
     );
   }
 

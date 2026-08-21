@@ -14,10 +14,9 @@ import '../../../player/domain/models/xp_transaction.dart';
 
 class FirestoreTournamentRepository implements TournamentRepository {
   FirestoreTournamentRepository({
-    required IDatabaseService database,
-    required PlayerProgressionRepository progressionRepository,
-  }) : _database = database,
-       _progressionRepository = progressionRepository;
+    required this._database,
+    required this._progressionRepository,
+  });
 
   final IDatabaseService _database;
   final PlayerProgressionRepository _progressionRepository;

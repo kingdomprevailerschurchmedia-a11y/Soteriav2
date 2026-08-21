@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
@@ -8,7 +7,6 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/feedback/soteria_loader.dart';
-import '../../../../core/widgets/feedback/soteria_error_widget.dart';
 import '../../../../core/widgets/overlays/soteria_dialog.dart';
 import '../../../../features/gameplay_engine/models/game_configuration.dart';
 import '../../../../features/gameplay_engine/models/game_mode.dart';

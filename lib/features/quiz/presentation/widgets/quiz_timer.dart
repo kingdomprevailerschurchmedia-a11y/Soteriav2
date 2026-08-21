@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/animations/soteria_animations.dart';
 import '../../domain/models/quiz_enums.dart';
 import '../../domain/models/timer_state.dart';
 

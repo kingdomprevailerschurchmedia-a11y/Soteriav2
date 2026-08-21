@@ -118,8 +118,9 @@ class AnalyticsAggregator {
     List<QuizResult> results,
     _Totals totals,
   ) {
-    if (results.isEmpty)
+    if (results.isEmpty) {
       return _Averages(accuracy: 0, score: 0, responseTime: Duration.zero);
+    }
 
     double totalAccuracy = 0;
     int totalScore = 0;
@@ -316,9 +317,9 @@ class AnalyticsAggregator {
     final accConsistency = max(0.0, 1.0 - (sqrt(accuracyVar) * 2));
 
     String level;
-    if (accConsistency > 0.85)
+    if (accConsistency > 0.85) {
       level = 'Highly Consistent';
-    else if (accConsistency > 0.7)
+    } else if (accConsistency > 0.7)
       level = 'Consistent';
     else if (accConsistency > 0.5)
       level = 'Variable';

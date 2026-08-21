@@ -14,7 +14,6 @@ import '../../../domain/models/player_profile.dart';
 import '../../../domain/models/player_progression.dart';
 import '../../../domain/services/competitive_ranking_engine.dart';
 import '../../providers/streak_providers.dart';
-import '../competitive_rank_badge.dart';
 import '../streak/momentum_indicator.dart';
 
 class CompetitiveProfileHeader extends ConsumerWidget {
@@ -198,7 +197,7 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                   )
                 : const SizedBox.shrink(),
             loading: () => const SizedBox.shrink(),
-            error: (_, __) => const SizedBox.shrink(),
+            error: (_, _) => const SizedBox.shrink(),
           ),
         ],
       ),

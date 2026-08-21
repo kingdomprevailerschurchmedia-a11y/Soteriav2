@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/match_lifecycle_providers.dart';
 
@@ -55,7 +54,7 @@ class VersusLiveScoreboard extends ConsumerWidget {
         );
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

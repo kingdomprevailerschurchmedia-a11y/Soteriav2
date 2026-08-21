@@ -81,11 +81,11 @@ class CompetitivePlayerCard extends ConsumerWidget {
                 ],
               ),
             ),
-            if (trailing != null) trailing!,
+            ?trailing,
           ],
         ),
         loading: () => const _LoadingPlaceholder(),
-        error: (_, __) => const _ErrorState(),
+        error: (_, _) => const _ErrorState(),
       ),
     );
   }

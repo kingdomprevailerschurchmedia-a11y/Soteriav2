@@ -1,10 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/features/tournaments/presentation/providers/tournament_gameplay_provider.dart';
-import 'package:soteria/features/tournaments/domain/models/tournament.dart';
-import 'package:soteria/features/tournaments/domain/models/tournament_status.dart';
-import 'package:soteria/features/tournaments/presentation/providers/tournament_realtime_provider.dart';
-import 'package:soteria/features/preview_gallery/models/mock_data_factory.dart';
 
 void main() {
   test(

@@ -31,7 +31,7 @@ class OutgoingChallengeCard extends ConsumerWidget {
                 ? _buildProfileInfo(context, profile)
                 : const Text('Unknown Rival'),
             loading: () => const LinearProgressIndicator(),
-            error: (_, __) => const Text('Error loading rival'),
+            error: (_, _) => const Text('Error loading rival'),
           ),
           const Divider(height: 32, color: Colors.white10),
           _buildStatusInfo(context),

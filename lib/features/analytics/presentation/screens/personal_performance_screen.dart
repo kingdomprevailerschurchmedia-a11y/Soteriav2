@@ -36,8 +36,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
         extendBody: true,
         backgroundColor: Colors.transparent,
         body: CustomScrollView(
-          cacheExtent: 1000,
-          slivers: [
+          cacheExtent: 1000.0, slivers: [
             _buildAppBar(context, ref),
             SliverPadding(
               padding: EdgeInsets.symmetric(

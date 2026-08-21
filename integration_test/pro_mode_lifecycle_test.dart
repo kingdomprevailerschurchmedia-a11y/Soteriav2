@@ -1,16 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:soteria/main.dart' as app;
-import 'package:soteria/features/dashboard/presentation/providers/pro_lobby_providers.dart';
 import 'package:soteria/features/gameplay_engine/domain/repositories/pro_mode_repository.dart';
 import 'package:soteria/features/gameplay_engine/models/pro_mode_result.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
-import 'package:soteria/features/gameplay_engine/models/game_state.dart';
-import 'package:soteria/features/gameplay_engine/models/competitive_session.dart';
-import 'package:soteria/features/gameplay_engine/models/pro_mode_config.dart';
-import 'package:soteria/features/gameplay_engine/models/pro_session_config.dart';
 
 class MockProModeRepository extends Mock implements ProModeRepository {}
 
@@ -29,6 +22,7 @@ void main() {
       when(() => mockRepo.completeSession(any(), any()))
           .thenAnswer((_) async => ProModeResult(
                 sessionId: 'test-session',
+                playerId: 'test-player',
                 mode: GameMode.pro,
                 finalScore: 1000,
                 totalXP: 200,

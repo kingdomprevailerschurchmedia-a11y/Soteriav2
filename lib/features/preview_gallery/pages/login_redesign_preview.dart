@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
-import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/features/preview_gallery/widgets/preview_wrapper.dart';
 
 class LoginRedesignPreview extends StatelessWidget {

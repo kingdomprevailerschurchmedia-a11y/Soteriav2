@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
-import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../../../core/avatar/providers/avatar_providers.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
@@ -195,8 +194,8 @@ class _ShimmerRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: Colors.white.withOpacity(0.05),
-      highlightColor: Colors.white.withOpacity(0.1),
+      baseColor: Colors.white.withValues(alpha: 0.05),
+      highlightColor: Colors.white.withValues(alpha: 0.1),
       child: Container(
         padding: EdgeInsets.all(SoteriaSpacing.md),
         child: Row(

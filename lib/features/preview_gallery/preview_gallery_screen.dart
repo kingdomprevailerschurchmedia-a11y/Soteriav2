@@ -142,8 +142,9 @@ class _RecentItemsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final recents = ref.watch(galleryRecentProvider);
-    if (recents.isEmpty)
+    if (recents.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
 
     final allItems = ref.watch(galleryItemsProvider);
     final recentItems = allItems
@@ -180,8 +181,9 @@ class _FavoritesSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favorites = ref.watch(galleryFavoritesProvider);
-    if (favorites.isEmpty)
+    if (favorites.isEmpty) {
       return const SliverToBoxAdapter(child: SizedBox.shrink());
+    }
 
     final allItems = ref.watch(galleryItemsProvider);
     final favoriteItems = allItems

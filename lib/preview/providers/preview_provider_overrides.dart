@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
-import 'package:go_router/go_router.dart';
 import '../../../core/firebase/providers/firebase_providers.dart';
 import '../../../core/navigation/providers/navigation_providers.dart';
 import '../../../core/navigation/navigation_service.dart';
-import '../../../core/navigation/app_router.dart';
 import '../../../features/quiz/presentation/providers/recovery_providers.dart';
 import '../mock/fake_auth_service.dart';
 import '../mock/fake_database_service.dart';

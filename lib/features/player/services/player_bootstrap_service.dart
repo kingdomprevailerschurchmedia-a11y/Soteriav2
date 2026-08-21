@@ -37,14 +37,11 @@ class PlayerBootstrapService {
     this._progressionRepository,
     this._progressionService,
     this._firestore, {
-    IdentityRepository? identityRepository,
-    CategoryRepository? categoryRepository,
-    GoalRepository? goalRepository,
-    LeaderboardRepository? leaderboardRepository,
-  }) : _identityRepository = identityRepository,
-       _categoryRepository = categoryRepository,
-       _goalRepository = goalRepository,
-       _leaderboardRepository = leaderboardRepository;
+    this._identityRepository,
+    this._categoryRepository,
+    this._goalRepository,
+    this._leaderboardRepository,
+  });
 
   Future<PlayerProfile> bootstrap(auth.User user) async {
     LoggerService.i(

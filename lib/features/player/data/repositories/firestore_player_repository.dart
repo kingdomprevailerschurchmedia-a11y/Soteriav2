@@ -5,8 +5,7 @@ import '../../domain/repositories/player_repository.dart';
 import '../models/player_profile_dto.dart';
 
 class FirestorePlayerRepository implements PlayerRepository {
-  FirestorePlayerRepository({required IDatabaseService database})
-    : _database = database;
+  FirestorePlayerRepository({required this._database});
 
   final IDatabaseService _database;
 

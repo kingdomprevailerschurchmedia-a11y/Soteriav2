@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 import 'package:soteria/features/matchmaking/presentation/providers/match_lifecycle_providers.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import '../../domain/models/player_presence.dart';
-import '../../domain/repositories/presence_repository.dart';
 import 'presence_providers.dart';
 
 class PresenceCoordinator extends WidgetsBindingObserver {

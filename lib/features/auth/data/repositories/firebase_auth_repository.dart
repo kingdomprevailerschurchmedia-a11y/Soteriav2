@@ -6,8 +6,7 @@ import '../mappers/identity_exception_mapper.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
 
 class FirebaseAuthRepository implements AuthRepository {
-  FirebaseAuthRepository({required AuthDataSource dataSource})
-    : _dataSource = dataSource;
+  FirebaseAuthRepository({required this._dataSource});
 
   final AuthDataSource _dataSource;
 

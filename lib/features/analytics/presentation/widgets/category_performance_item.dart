@@ -39,7 +39,7 @@ class CategoryPerformanceItem extends StatelessWidget {
                 height: 6.h,
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: SoteriaColors.border.withOpacity(0.05),
+                  color: SoteriaColors.border.withValues(alpha: 0.05),
                   borderRadius: BorderRadius.circular(3.r),
                 ),
               ),
@@ -54,7 +54,7 @@ class CategoryPerformanceItem extends StatelessWidget {
                     borderRadius: BorderRadius.circular(3.r),
                     boxShadow: [
                       BoxShadow(
-                        color: SoteriaColors.primary.withOpacity(0.3),
+                        color: SoteriaColors.primary.withValues(alpha: 0.3),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

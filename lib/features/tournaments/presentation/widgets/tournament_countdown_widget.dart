@@ -23,7 +23,7 @@ class TournamentCountdownWidget extends ConsumerWidget {
     return countdown.when(
       data: (duration) => _buildCountdown(context, duration),
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 

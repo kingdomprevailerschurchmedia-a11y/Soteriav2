@@ -58,8 +58,7 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
         .toList();
 
     return CustomScrollView(
-      cacheExtent: 1000,
-      slivers: [
+      cacheExtent: 1000.0, slivers: [
         SliverAppBar(
           expandedHeight: 200.h,
           floating: false,

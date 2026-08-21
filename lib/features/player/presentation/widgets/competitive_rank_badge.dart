@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
 
 enum RankBadgeSize { small, medium, large, extraLarge }
 
@@ -55,7 +54,7 @@ class CompetitiveRankBadge extends StatelessWidget {
               width: badgeSize,
               height: badgeSize,
               fit: BoxFit.contain,
-              errorBuilder: (context, _, __) => Icon(
+              errorBuilder: (context, _, _) => Icon(
                 Icons.shield_rounded,
                 color: rankColor.withValues(alpha: 0.5),
                 size: badgeSize * 0.6,
