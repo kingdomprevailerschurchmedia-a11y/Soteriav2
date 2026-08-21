@@ -76,7 +76,17 @@ class FirestoreProModeRepository implements ProModeRepository {
       }
 
       if (lastActivity == null) return true;
-      return now.difference(lastActivity).inMinutes < 20;
+      
+      final diff = now.difference(lastActivity);
+      
+      // STUCK SESSION RECOVERY: 
+      // If a session is only "initialized" and has had no activity for 5 minutes, 
+      // it's likely a zombie from a failed start. We ignore it.
+      if (data['status'] == 'initialized' && diff.inMinutes >= 5) {
+        return false;
+      }
+      
+      return diff.inMinutes < 20;
     }).toList();
 
     if (activeSessions.isNotEmpty) {
@@ -91,6 +101,15 @@ class FirestoreProModeRepository implements ProModeRepository {
     // 2. Authoritative Atomic Transaction for Fee & Stats
     await _database.instance.runTransaction<void>((transaction) async {
       final playerRef = _database.collection('users').doc(uid);
+      final reservationRef = _database.collection('pro_reservations').doc(sessionId);
+      
+      // IDEMPOTENCY CHECK: Ensure we don't charge twice for the same sessionId on retries
+      final existingRes = await transaction.get(reservationRef);
+      if (existingRes.exists) {
+        LoggerService.i('Pro Mode Entry: Reservation already exists for session $sessionId', feature: 'GameplayEngine');
+        return;
+      }
+
       final playerDoc = await transaction.get(playerRef);
 
       if (!playerDoc.exists) {
@@ -200,12 +219,15 @@ class FirestoreProModeRepository implements ProModeRepository {
           i + chunkSize > categoryIds.length ? categoryIds.length : i + chunkSize
         );
         
-        final query = _database.collection('questions')
-            .where('status', isEqualTo: 'published')
-            .where('difficulty', isEqualTo: difficulty.name)
-            .where('categoryId', whereIn: chunk);
+        var query = _database.collection('questions')
+            .where('status', isEqualTo: 'published');
             
-        final snapshot = await query.count().get().timeout(const Duration(seconds: 5));
+        // Adaptive Difficulty: Omit the difficulty filter to count all available content
+        if (difficulty != Difficulty.adaptive) {
+          query = query.where('difficulty', isEqualTo: difficulty.name);
+        }
+            
+        final snapshot = await query.where('categoryId', whereIn: chunk).count().get().timeout(const Duration(seconds: 5));
         totalCount += snapshot.count ?? 0;
       }
 

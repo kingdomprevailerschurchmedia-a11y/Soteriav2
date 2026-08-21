@@ -361,6 +361,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       return session;
     } catch (e) {
       state = state.copyWith(isLoading: false, error: e.toString());
+      LoggerService.e('Pro Mode Session Start failed', error: e, feature: 'GameplayEngine');
       return null;
     }
   }

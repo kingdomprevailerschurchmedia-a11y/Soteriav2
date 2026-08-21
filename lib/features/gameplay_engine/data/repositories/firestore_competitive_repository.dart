@@ -21,13 +21,13 @@ class FirestoreCompetitiveRepository implements CompetitiveRepository {
 
   @override
   Future<void> startCompetitiveSession(String sessionId) async {
-    // We use update instead of set(merge:true) to ensure the session was already created
-    // by the lobby before we attempt to start it.
-    await _database.collection('competitive_sessions').doc(sessionId).update({
+    // We use set(merge:true) to be resilient to race conditions where the lobby 
+    // might still be writing the session doc when the engine tries to activate it.
+    await _database.collection('competitive_sessions').doc(sessionId).set({
       'status': 'active',
       'startedAt': DateTime.now().toIso8601String(),
       'updatedAt': DateTime.now().toIso8601String(),
-    });
+    }, SetOptions(merge: true));
   }
 
   @override
