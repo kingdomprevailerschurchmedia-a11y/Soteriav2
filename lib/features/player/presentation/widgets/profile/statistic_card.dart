@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
-import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
 import 'package:auto_size_text/auto_size_text.dart';

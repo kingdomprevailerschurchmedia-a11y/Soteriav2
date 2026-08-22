@@ -5,7 +5,7 @@ import '../../domain/models/app_notification.dart';
 import '../../domain/repositories/notification_repository.dart';
 
 class NotificationRepositoryImpl implements NotificationRepository {
-  NotificationRepositoryImpl({required IMessagingService fcm}) : _fcm = fcm;
+  NotificationRepositoryImpl({required this._fcm});
 
   final IMessagingService _fcm;
   static const _kNotificationsKey = 'soteria_notifications';

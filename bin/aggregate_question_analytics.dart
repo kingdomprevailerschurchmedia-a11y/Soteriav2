@@ -1,7 +1,5 @@
 import 'dart:io';
 import 'package:firedart/firedart.dart';
-import 'package:soteria/features/analytics/domain/models/question_analytics_event.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
 
 /// Admin script to aggregate question analytics events into global performance documents.
 /// This fulfills the Spark-plan requirement for secure aggregation without Cloud Functions.
@@ -83,8 +81,9 @@ void main(List<String> args) async {
         final responseTimeMs = data['responseTime'] ?? 0;
         final mode = data['mode'] ?? 'practice';
 
-        if (outcome == 'correct') newCorrect++;
-        else if (outcome == 'incorrect') newIncorrect++;
+        if (outcome == 'correct') {
+          newCorrect++;
+        } else if (outcome == 'incorrect') newIncorrect++;
         else if (outcome == 'timedOut') newTimeout++;
         else if (outcome == 'skipped') newSkip++;
 

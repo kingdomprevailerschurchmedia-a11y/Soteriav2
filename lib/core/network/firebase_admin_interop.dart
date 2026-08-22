@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:googleapis/firestore/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
 
 class FirebaseAdminInterop {
   static const String _expectedProjectId = 'soteriav2-b4042';

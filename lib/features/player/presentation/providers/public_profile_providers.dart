@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import '../../domain/models/public_competitive_profile.dart';
 import 'identity_providers.dart';
 

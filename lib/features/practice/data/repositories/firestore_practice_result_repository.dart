@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../domain/models/practice_result.dart';
 import '../../domain/repositories/practice_result_repository.dart';
 import '../../../player/domain/repositories/player_progression_repository.dart';
-import '../../../player/data/repositories/firebase_player_progression_repository.dart';
 import '../../../player/domain/models/xp_transaction.dart';
 import '../../../player/domain/repositories/leaderboard_repository.dart';
 import '../../../player/data/models/player_profile_dto.dart';

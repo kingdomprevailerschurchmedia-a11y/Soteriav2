@@ -124,8 +124,7 @@ class _CompetitiveActivityScreenState
       color: SoteriaColors.primary,
       backgroundColor: SoteriaColors.background,
       child: ListView.builder(
-        cacheExtent: 1000,
-        controller: _scrollController,
+        cacheExtent: 1000.0, controller: _scrollController,
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.lg,
           vertical: SoteriaSpacing.lg,
@@ -435,9 +434,7 @@ class _ActivityEventDetailView extends StatelessWidget {
   }
 
   String _formatFullDate(DateTime date) {
-    return DateFormat('MMMM d, yyyy').format(date) +
-        ' at ' +
-        DateFormat('HH:mm').format(date);
+    return '${DateFormat('MMMM d, yyyy').format(date)} at ${DateFormat('HH:mm').format(date)}';
   }
 }
 

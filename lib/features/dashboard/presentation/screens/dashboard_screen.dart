@@ -72,8 +72,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
           color: SoteriaColors.primary,
           child: CustomScrollView(
-                cacheExtent: 1000, // Pre-render some area to reduce jank during scroll
-                physics: const AlwaysScrollableScrollPhysics(
+                cacheExtent: 1000.0, physics: const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics(),
                 ),
                 slivers: [

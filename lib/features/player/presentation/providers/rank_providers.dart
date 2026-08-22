@@ -73,7 +73,7 @@ final acknowledgeRankChangeActionProvider = Provider<
 final currentRankPointsProvider = Provider<int>((ref) {
   return ref
       .watch(competitiveProgressionProvider)
-      .when(data: (p) => p.rankPoints, loading: () => 0, error: (_, __) => 0);
+      .when(data: (p) => p.rankPoints, loading: () => 0, error: (_, _) => 0);
 });
 
 final currentRankNameProvider = Provider<String>((ref) {
@@ -82,7 +82,7 @@ final currentRankNameProvider = Provider<String>((ref) {
       .when(
         data: (p) => p.currentRank,
         loading: () => 'Unranked',
-        error: (_, __) => 'Unranked',
+        error: (_, _) => 'Unranked',
       );
 });
 

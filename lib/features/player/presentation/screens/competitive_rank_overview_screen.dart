@@ -425,7 +425,7 @@ class _CareerBestCard extends ConsumerWidget {
                 );
               },
               loading: () => const Center(child: LinearProgressIndicator(color: SoteriaColors.gold)),
-              error: (_, __) => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
             ),
           ),
         ),
@@ -480,7 +480,7 @@ class _MilestonesSection extends ConsumerWidget {
                 )
               : const SizedBox.shrink(),
           loading: () => const Center(child: CircularProgressIndicator(color: SoteriaColors.secondary)),
-          error: (_, __) => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
         ),
         SoteriaSpacing.gapMD,
         // Pagination dots

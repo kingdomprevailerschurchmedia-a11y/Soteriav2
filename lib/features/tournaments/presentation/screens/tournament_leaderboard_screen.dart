@@ -46,10 +46,9 @@ class TournamentLeaderboardScreen extends ConsumerWidget {
               _LeaderboardHeader(),
               Expanded(
                 child: ListView.separated(
-                  padding: EdgeInsets.all(SoteriaSpacing.lg),
-                  itemCount: rankings.length,
-                  cacheExtent: 1000, // Optimize scrolling
-                  separatorBuilder: (_, __) =>
+                  cacheExtent: 1000.0, padding: EdgeInsets.all(SoteriaSpacing.lg),
+                  itemCount: rankings.length, // Optimize scrolling
+                  separatorBuilder: (_, _) =>
                       SizedBox(height: SoteriaSpacing.md),
                   itemBuilder: (context, index) {
                     final r = rankings[index];

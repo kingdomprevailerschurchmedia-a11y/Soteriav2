@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/design_system/colors/soteria_colors.dart';
 import '../../core/design_system/spacing/soteria_spacing.dart';
@@ -186,7 +185,7 @@ class _SubcategoryList extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: subcategories.length,
-      separatorBuilder: (_, __) => SizedBox(height: 8.h),
+      separatorBuilder: (_, _) => SizedBox(height: 8.h),
       itemBuilder: (context, index) {
         final sub = subcategories[index];
         return GlassSurface(

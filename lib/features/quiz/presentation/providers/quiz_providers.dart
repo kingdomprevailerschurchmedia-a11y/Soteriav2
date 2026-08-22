@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 export '../../data/repository/quiz_repository_provider.dart';
-import '../../domain/repositories/quiz_repository.dart';
 import '../../domain/usecases/load_questions_use_case.dart';
 import '../../domain/usecases/create_quiz_session_use_case.dart';
 import '../../domain/usecases/submit_answer_use_case.dart';

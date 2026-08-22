@@ -22,7 +22,7 @@ class PresenceLabel extends ConsumerWidget {
         return _buildText(_getStatusText(presence), _getStatusColor(presence));
       },
       loading: () => _buildText('...', SoteriaColors.muted),
-      error: (_, __) => _buildText('Unavailable', SoteriaColors.muted),
+      error: (_, _) => _buildText('Unavailable', SoteriaColors.muted),
     );
   }
 

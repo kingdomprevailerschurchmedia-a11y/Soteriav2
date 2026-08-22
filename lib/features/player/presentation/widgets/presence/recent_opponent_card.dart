@@ -79,7 +79,7 @@ class RecentOpponentCard extends ConsumerWidget {
           ],
         ),
         loading: () => const _LoadingPlaceholder(),
-        error: (_, __) => const SizedBox.shrink(),
+        error: (_, _) => const SizedBox.shrink(),
       ),
     );
   }

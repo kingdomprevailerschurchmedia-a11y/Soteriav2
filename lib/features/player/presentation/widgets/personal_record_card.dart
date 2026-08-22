@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/components/soteria_text.dart';
-import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../domain/models/competitive_personal_record.dart';
 import 'package:intl/intl.dart';
 

@@ -60,7 +60,7 @@ class MatchHistorySummarySection extends ConsumerWidget {
             );
           },
           loading: () => _buildLoading(),
-          error: (_, __) => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
         ),
       ],
     );

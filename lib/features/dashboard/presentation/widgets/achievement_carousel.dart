@@ -6,7 +6,6 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../player/presentation/providers/achievement_providers.dart';
-import '../../../player/domain/models/achievement.dart';
 
 class AchievementCarousel extends ConsumerWidget {
   const AchievementCarousel({super.key});

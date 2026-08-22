@@ -7,7 +7,6 @@ import '../../data/repositories/firebase_player_progression_repository.dart';
 import '../../domain/services/progression_service.dart';
 import '../../domain/services/competitive_ranking_engine.dart';
 import '../../domain/models/player_statistics.dart';
-import '../../domain/models/player_profile.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../providers/player_providers.dart';
 import '../../domain/repositories/competitive_result_repository.dart';
@@ -63,13 +62,13 @@ final competitiveProgressionProvider = StreamProvider<PlayerProgression>((ref) {
 final currentCompetitiveLevelProvider = Provider<int>((ref) {
   return ref
       .watch(competitiveProgressionProvider)
-      .when(data: (p) => p.currentLevel, loading: () => 1, error: (_, __) => 1);
+      .when(data: (p) => p.currentLevel, loading: () => 1, error: (_, _) => 1);
 });
 
 final lifetimeCompetitiveXpProvider = Provider<int>((ref) {
   return ref
       .watch(competitiveProgressionProvider)
-      .when(data: (p) => p.lifetimeXp, loading: () => 0, error: (_, __) => 0);
+      .when(data: (p) => p.lifetimeXp, loading: () => 0, error: (_, _) => 0);
 });
 
 final competitiveXpProgressProvider = Provider<double>((ref) {
@@ -78,7 +77,7 @@ final competitiveXpProgressProvider = Provider<double>((ref) {
       .when(
         data: (p) => p.xpProgress,
         loading: () => 0.0,
-        error: (_, __) => 0.0,
+        error: (_, _) => 0.0,
       );
 });
 
@@ -86,7 +85,7 @@ final currentStreakProvider = Provider<int>((ref) {
   return ref.watch(competitiveProgressionProvider).when(
     data: (p) => p.dailyStreak,
     loading: () => 0,
-    error: (_, __) => 0,
+    error: (_, _) => 0,
   );
 });
 
@@ -94,7 +93,7 @@ final longestStreakProvider = Provider<int>((ref) {
   return ref.watch(competitiveProgressionProvider).when(
     data: (p) => p.longestStreak,
     loading: () => 0,
-    error: (_, __) => 0,
+    error: (_, _) => 0,
   );
 });
 

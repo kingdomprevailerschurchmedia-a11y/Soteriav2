@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
-import 'package:soteria/features/question_content/domain/entities/question.dart';
 import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import 'package:soteria/features/gameplay_engine/timer/services/timer_policy_resolver.dart';
 

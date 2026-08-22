@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/design_system/colors/soteria_colors.dart';
 import '../../core/design_system/spacing/soteria_spacing.dart';
@@ -26,7 +25,7 @@ class QuestionBankPreview extends StatelessWidget {
       body: ListView.separated(
         padding: EdgeInsets.all(SoteriaSpacing.lg),
         itemCount: QuestionSeedData.questions.length,
-        separatorBuilder: (_, __) => SizedBox(height: 16.h),
+        separatorBuilder: (_, _) => SizedBox(height: 16.h),
         itemBuilder: (context, index) {
           final q = QuestionSeedData.questions[index];
           return _QuestionCard(question: q);

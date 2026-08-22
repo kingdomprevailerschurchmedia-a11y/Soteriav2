@@ -138,7 +138,7 @@ void main() {
       // Should still be timeout, not answered
       expect(engine.debugState.lifecycle, GameLifecycle.timeout);
       expect(engine.debugState.answerHistory.length, 1);
-      expect(engine.debugState.answerHistory.first.metadata?['timeout'], isTrue);
+      expect(engine.debugState.answerHistory.first.metadata['timeout'], isTrue);
     });
 
     test('Session completion resets timer engine', () async {

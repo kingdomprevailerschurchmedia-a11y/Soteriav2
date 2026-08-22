@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 import 'package:soteria/core/network/firebase_admin_interop.dart';
 import 'package:googleapis/firestore/v1.dart';
 
@@ -57,7 +56,9 @@ void main() async {
 
   // 1. Category Distribution for Approved
   final Map<String, int> catDistribution = {};
-  for (final cat in canonicalCategories) catDistribution[cat] = 0;
+  for (final cat in canonicalCategories) {
+    catDistribution[cat] = 0;
+  }
 
   final Map<String, Map<String, int>> matrix = {};
   for (final cat in canonicalCategories) {
@@ -144,7 +145,7 @@ void main() async {
 
   print('\nCATEGORY × DIFFICULTY MATRIX (APPROVED):');
   print('  ${"Category".padRight(20)} | Easy | Med  | Hard | Total');
-  print('  ' + '-' * 50);
+  print('  ${'-' * 50}');
   for (final cat in canonicalCategories) {
     final m = matrix[cat]!;
     final total = m['easy']! + m['medium']! + m['hard']!;

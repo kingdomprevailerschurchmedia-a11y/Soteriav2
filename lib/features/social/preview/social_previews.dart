@@ -19,9 +19,7 @@ import 'package:soteria/features/player/domain/models/competitive_activity_event
 import 'package:soteria/features/player/domain/models/competitive_event.dart';
 import 'package:soteria/features/player/domain/models/competitive_statistics.dart';
 
-import 'package:soteria/features/player/presentation/screens/player_search_screen.dart';
 import 'package:soteria/features/player/domain/models/public_competitive_profile.dart';
-import 'package:soteria/features/player/presentation/providers/public_profile_providers.dart';
 import 'package:soteria/features/player/presentation/widgets/search/player_search_result_card.dart';
 
 class SocialPreviews extends StatelessWidget {

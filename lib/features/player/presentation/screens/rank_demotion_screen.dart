@@ -3,7 +3,6 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
-import '../../../../core/design_system/animations/soteria_animations.dart';
 import '../../domain/models/rank_change.dart';
 import '../widgets/competitive_rank_badge.dart';
 import '../widgets/rank_change_details.dart';

@@ -72,8 +72,7 @@ class NotificationCenterScreen extends ConsumerWidget {
             final categories = grouped.keys.toList();
 
             return ListView.builder(
-              cacheExtent: 1000,
-              padding: EdgeInsets.fromLTRB(
+              cacheExtent: 1000.0, padding: EdgeInsets.fromLTRB(
                 SoteriaSpacing.lg,
                 kToolbarHeight + SoteriaSpacing.xl,
                 SoteriaSpacing.lg,

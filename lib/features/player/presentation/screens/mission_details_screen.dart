@@ -65,7 +65,7 @@ class MissionDetailsScreen extends ConsumerWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: SoteriaColors.primary.withOpacity(0.1),
+            color: SoteriaColors.primary.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Text(
@@ -213,7 +213,7 @@ class MissionDetailsScreen extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: SoteriaColors.xpColor.withOpacity(0.1),
+              color: SoteriaColors.xpColor.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: const Icon(

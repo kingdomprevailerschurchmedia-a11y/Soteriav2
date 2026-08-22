@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:soteria/features/quiz/domain/models/quiz_enums.dart';
 import 'package:soteria/features/question_content/domain/entities/question.dart' as qc;
 import 'package:soteria/features/question_content/domain/entities/difficulty.dart' as qc_difficulty;
 import 'package:soteria/features/quiz/domain/models/player_answer.dart';

@@ -38,8 +38,7 @@ class SettingsScreen extends StatelessWidget {
           ),
         ),
         body: ListView(
-          physics: const BouncingScrollPhysics(),
-          cacheExtent: 1000,
+          cacheExtent: 1000.0, physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.symmetric(
             horizontal: SoteriaSpacing.containerPadding(context),
             vertical: 24.h,

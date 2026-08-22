@@ -74,7 +74,7 @@ class DailyGoalsSection extends ConsumerWidget {
           dailyGoalsAsync.when(
             data: (goals) => _buildGoalsRow(context, goals),
             loading: () => const _LoadingGoalsCard(),
-            error: (_, __) => const SizedBox.shrink(),
+            error: (_, _) => const SizedBox.shrink(),
           ),
         ],
       ),

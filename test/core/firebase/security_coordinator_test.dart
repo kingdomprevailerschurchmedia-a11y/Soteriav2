@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:soteria/core/firebase/config/firebase_config.dart';
 import 'package:soteria/core/firebase/security/services/security_coordinator.dart';
-import 'package:soteria/core/firebase/security/models/security_status.dart';
 
 void main() {
   group('SecurityCoordinator', () {

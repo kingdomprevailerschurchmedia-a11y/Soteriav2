@@ -77,7 +77,7 @@ class EventLeaderboardScreen extends ConsumerWidget {
               delta: 0,
             ),
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

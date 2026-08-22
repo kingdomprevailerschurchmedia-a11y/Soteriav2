@@ -9,13 +9,11 @@ import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/core/design_system/components/soteria_back_button.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
-import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import '../providers/tournament_details_provider.dart';
 import 'package:soteria/features/tournaments/presentation/providers/tournament_gameplay_provider.dart';
 import 'package:soteria/features/tournaments/presentation/widgets/tournament_countdown_widget.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TournamentLobbyScreen extends ConsumerWidget {
   final String tournamentId;

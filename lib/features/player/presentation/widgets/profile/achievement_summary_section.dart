@@ -7,7 +7,6 @@ import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../../core/design_system/components/soteria_card.dart';
 import '../../providers/milestone_providers.dart';
-import '../../providers/achievement_providers.dart';
 import '../../../domain/models/milestone.dart';
 import '../../../domain/models/achievement.dart';
 
@@ -66,7 +65,7 @@ class AchievementSummarySection extends ConsumerWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: earned.length,
-              separatorBuilder: (_, __) => SizedBox(width: SoteriaSpacing.md),
+              separatorBuilder: (_, _) => SizedBox(width: SoteriaSpacing.md),
               itemBuilder: (context, index) {
                 final achievement = earned[index];
                 return _AchievementBadge(achievement: achievement);
@@ -82,7 +81,7 @@ class AchievementSummarySection extends ConsumerWidget {
             ? _NextMilestoneCard(progress: next, onTap: onViewAll)
             : const SizedBox.shrink(),
           loading: () => const SizedBox.shrink(),
-          error: (_, __) => const SizedBox.shrink(),
+          error: (_, _) => const SizedBox.shrink(),
         ),
 
         if (earned.isEmpty && nextMilestoneAsync.value == null)

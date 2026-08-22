@@ -31,7 +31,7 @@ class IncomingChallengeCard extends ConsumerWidget {
                 ? _buildProfileInfo(context, profile)
                 : const Text('Unknown Challenger'),
             loading: () => const LinearProgressIndicator(),
-            error: (_, __) => const Text('Error loading challenger'),
+            error: (_, _) => const Text('Error loading challenger'),
           ),
           const Divider(height: 32, color: Colors.white10),
           _buildRulesInfo(context),

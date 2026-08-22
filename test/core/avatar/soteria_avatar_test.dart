@@ -11,7 +11,7 @@ void main() {
     return ProviderScope(
       child: ScreenUtilInit(
         designSize: const Size(360, 690),
-        builder: (_, __) => MaterialApp(
+        builder: (_, _) => MaterialApp(
           home: Scaffold(body: child),
         ),
       ),

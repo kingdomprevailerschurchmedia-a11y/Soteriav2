@@ -9,7 +9,7 @@ import 'package:soteria/features/player/domain/models/competitive_result.dart';
 class CompetitiveInsightsPreviews {
   static Widget standard() => ProviderScope(
     overrides: [
-      competitiveInsightsProvider.overrideWithValue(AsyncValue.data(
+      competitiveInsightsProvider.overrideWith((ref) => Future.value(
         CompetitiveInsights(
           accuracyTrend: _mockTrend('Accuracy', [65, 70, 68, 75, 74, 80]),
           scoreTrend: _mockTrend('Score', [800, 950, 1100, 850, 1200, 1250]),

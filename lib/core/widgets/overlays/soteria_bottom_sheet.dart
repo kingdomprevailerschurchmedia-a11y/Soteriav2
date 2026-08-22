@@ -84,7 +84,7 @@ class SoteriaBottomSheet extends StatelessWidget {
                               .copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
-                  if (action != null) action,
+                  ?action,
                 ],
               ),
             ),

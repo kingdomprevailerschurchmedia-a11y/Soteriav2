@@ -5,7 +5,6 @@ import '../../domain/models/quiz_enums.dart';
 import '../states/quiz_state.dart';
 import '../../domain/models/timer_state.dart';
 import '../../domain/models/power_up_state.dart';
-import '../../domain/models/quiz_session.dart';
 import '../../domain/models/quiz_result.dart';
 
 class QuizEnginePreview extends StatelessWidget {

@@ -87,11 +87,12 @@ class MockMatchHistoryNotifier extends MatchHistoryNotifier {
   @override
   AsyncValue<List<CompetitiveMatch>> get state {
     if (_isLoading) return const AsyncValue.loading();
-    if (_hasError)
+    if (_hasError) {
       return AsyncValue.error(
         'Failed to load match history',
         StackTrace.current,
       );
+    }
     return AsyncValue.data(_matches);
   }
 

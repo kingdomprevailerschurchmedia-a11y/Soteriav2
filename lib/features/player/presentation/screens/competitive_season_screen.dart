@@ -7,7 +7,6 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/season_providers.dart';
 import '../providers/rank_providers.dart';
@@ -23,9 +22,7 @@ import '../widgets/activity/competitive_activity_card.dart';
 import '../providers/activity_providers.dart';
 import '../../domain/models/competitive_season.dart';
 import '../../domain/models/milestone.dart';
-import '../../domain/models/reward_grant.dart';
 import '../../domain/models/season_reward_definition.dart';
-import '../../../../shared/widgets/soteria_page.dart';
 
 class CompetitiveSeasonScreen extends ConsumerWidget {
   const CompetitiveSeasonScreen({super.key});
@@ -229,7 +226,7 @@ class CompetitiveSeasonScreen extends ConsumerWidget {
                           );
                         },
                         loading: () => const Center(child: CircularProgressIndicator()),
-                        error: (_, __) => const SizedBox.shrink(),
+                        error: (_, _) => const SizedBox.shrink(),
                       ),
                     ],
                   ),

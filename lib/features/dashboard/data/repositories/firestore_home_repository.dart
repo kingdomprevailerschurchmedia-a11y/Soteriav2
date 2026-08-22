@@ -1,11 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/core/firebase/services/firebase_interfaces.dart';
 import '../../domain/repositories/home_repository.dart';
 import '../../domain/models/dashboard_state.dart';
 
 class FirestoreHomeRepository implements HomeRepository {
-  FirestoreHomeRepository({required IDatabaseService database})
-    : _database = database;
+  FirestoreHomeRepository({required this._database});
 
   final IDatabaseService _database;
 

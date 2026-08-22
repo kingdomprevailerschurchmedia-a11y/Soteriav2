@@ -27,7 +27,7 @@ final socialPresenceProvider = StreamProvider<Map<String, PlayerPresence>>((ref)
       return ref.watch(presenceRepositoryProvider).watchPresenceMultiple(friendIds.cast<String>());
     },
     loading: () => Stream.value({}),
-    error: (_, __) => Stream.value({}),
+    error: (_, _) => Stream.value({}),
   );
 });
 

@@ -38,9 +38,9 @@ class WalletBalanceHeader extends ConsumerWidget {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        Colors.white.withOpacity(0),
-                        Colors.white.withOpacity(0.1),
-                        Colors.white.withOpacity(0),
+                        Colors.white.withValues(alpha: 0),
+                        Colors.white.withValues(alpha: 0.1),
+                        Colors.white.withValues(alpha: 0),
                       ],
                     ),
                   ),
@@ -114,7 +114,7 @@ class _BalanceColumn extends StatelessWidget {
         Text(
           'Balance',
           style: TextStyle(
-            color: SoteriaColors.textSecondary.withOpacity(0.5),
+            color: SoteriaColors.textSecondary.withValues(alpha: 0.5),
             fontSize: 11.sp,
             fontWeight: FontWeight.w500,
           ),

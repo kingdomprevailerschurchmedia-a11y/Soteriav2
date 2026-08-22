@@ -10,7 +10,6 @@ import '../../../../core/design_system/components/soteria_badge.dart';
 import '../providers/season_providers.dart';
 import 'season_countdown_widget.dart';
 import '../../domain/models/competitive_season.dart';
-import '../../domain/models/season_countdown.dart';
 
 class SeasonHeader extends ConsumerWidget {
   const SeasonHeader({super.key});
@@ -93,7 +92,7 @@ class SeasonHeader extends ConsumerWidget {
                           isEndingSoon: status == SeasonStatus.ending,
                         ),
                         loading: () => const SizedBox.shrink(),
-                        error: (_, __) => const SizedBox.shrink(),
+                        error: (_, _) => const SizedBox.shrink(),
                       ),
                     ],
                   ),

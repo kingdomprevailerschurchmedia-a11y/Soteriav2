@@ -5,13 +5,11 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
-import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import 'package:soteria/features/matchmaking/presentation/providers/match_result_providers.dart';
 import 'package:soteria/features/matchmaking/domain/services/competitive_insights_service.dart';
 import 'package:soteria/features/analytics/presentation/charts/soteria_line_chart.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
-import 'package:go_router/go_router.dart';
 
 class CompetitiveInsightsScreen extends ConsumerWidget {
   const CompetitiveInsightsScreen({super.key});
@@ -31,7 +29,7 @@ class CompetitiveInsightsScreen extends ConsumerWidget {
         body: insightsAsync.when(
           data: (insights) => _buildContent(context, insights),
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, __) => Center(child: Text('Error: $e')),
+          error: (e, _) => Center(child: Text('Error: $e')),
         ),
       ),
     );

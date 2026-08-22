@@ -14,7 +14,7 @@ class EventRewardCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(SoteriaSpacing.md),
       decoration: BoxDecoration(
-        color: SoteriaColors.surface.withOpacity(0.5),
+        color: SoteriaColors.surface.withValues(alpha: 0.5),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: SoteriaColors.border),
       ),

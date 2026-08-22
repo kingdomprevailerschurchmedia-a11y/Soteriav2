@@ -75,7 +75,7 @@ class RewardHistoryScreen extends ConsumerWidget {
           children: [
             Icon(
               Icons.card_giftcard,
-              color: SoteriaColors.muted.withOpacity(0.5),
+              color: SoteriaColors.muted.withValues(alpha: 0.5),
               size: 64,
             ),
             const SizedBox(height: 16),

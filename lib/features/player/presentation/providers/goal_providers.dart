@@ -8,13 +8,10 @@ import '../../domain/services/progression_reward_service.dart';
 import '../../domain/config/goal_registry.dart';
 import 'statistics_providers.dart';
 import 'progression_providers.dart';
-import 'history_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../../../quiz/presentation/providers/history_providers.dart';
 import '../../../practice/presentation/providers/practice_history_providers.dart';
 import '../../../rewards/presentation/providers/rewards_providers.dart';
-import '../../domain/models/xp_transaction.dart';
-import '../../domain/models/season_reward_definition.dart';
 
 final goalRepositoryProvider = Provider<GoalRepository>((ref) {
   return FirebaseGoalRepository(FirebaseFirestore.instance);

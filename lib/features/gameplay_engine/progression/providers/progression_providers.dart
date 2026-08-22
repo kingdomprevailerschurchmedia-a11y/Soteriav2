@@ -20,15 +20,11 @@ class ProgressionNotifier extends StateNotifier<ProgressSnapshot> {
   final Function(ProgressionEvent)? _onEvent;
 
   ProgressionNotifier({
-    required ProgressionEngine engine,
-    required EngagementService engagementService,
-    EngagementRepository? engagementRepository,
-    Function(ProgressionEvent)? onEvent,
-  }) : _engine = engine,
-       _engagementService = engagementService,
-       _engagementRepository = engagementRepository,
-       _onEvent = onEvent,
-       super(ProgressSnapshot.initial());
+    required this._engine,
+    required this._engagementService,
+    this._engagementRepository,
+    this._onEvent,
+  }) : super(ProgressSnapshot.initial());
 
   /// Updates progression based on a question result.
   void handleAnswer(

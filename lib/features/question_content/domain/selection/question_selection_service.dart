@@ -14,10 +14,13 @@ class QuestionSelectionService {
     try {
       final List<Question> pool = [];
       
+      // Handle Adaptive Difficulty: Pull from all difficulties to create a dynamic range
+      final Difficulty? filterDifficulty = request.difficulty == Difficulty.adaptive ? null : request.difficulty;
+      
       // If no categories specified, search across all categories
       if (request.categoryIds.isEmpty) {
         final questions = await _repository.getQuestions(
-          difficulty: request.difficulty,
+          difficulty: filterDifficulty,
           limit: request.questionCount * 2,
         );
         pool.addAll(questions);
@@ -26,7 +29,7 @@ class QuestionSelectionService {
         final results = await Future.wait(
           request.categoryIds.map((categoryId) => _repository.getQuestions(
             categoryId: categoryId,
-            difficulty: request.difficulty,
+            difficulty: filterDifficulty,
             limit: request.questionCount * 2,
           ))
         );

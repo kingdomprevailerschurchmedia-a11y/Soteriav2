@@ -19,12 +19,12 @@ class InsightCard extends StatelessWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            SoteriaColors.primary.withOpacity(0.15),
-            SoteriaColors.primary.withOpacity(0.05),
+            SoteriaColors.primary.withValues(alpha: 0.15),
+            SoteriaColors.primary.withValues(alpha: 0.05),
           ],
         ),
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: SoteriaColors.primary.withOpacity(0.2)),
+        border: Border.all(color: SoteriaColors.primary.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,7 +46,7 @@ class InsightCard extends StatelessWidget {
                     Text(
                       insight.type.name.toUpperCase(),
                       style: SoteriaTypography.labelSmall.copyWith(
-                        color: SoteriaColors.primary.withOpacity(0.8),
+                        color: SoteriaColors.primary.withValues(alpha: 0.8),
                         letterSpacing: 1.2,
                       ),
                     ),
@@ -84,7 +84,7 @@ class InsightCard extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
               decoration: BoxDecoration(
-                color: SoteriaColors.background.withOpacity(0.4),
+                color: SoteriaColors.background.withValues(alpha: 0.4),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Row(
@@ -153,7 +153,7 @@ class InsightCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(8.w),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: Icon(icon, color: color, size: 20.w),

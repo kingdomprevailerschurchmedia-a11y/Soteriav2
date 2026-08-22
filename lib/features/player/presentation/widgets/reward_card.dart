@@ -29,7 +29,7 @@ class RewardCard extends StatelessWidget {
           if (grant.status == GrantStatus.eligible ||
               grant.status == GrantStatus.granted)
             BoxShadow(
-              color: _getTypeColor(grant.type).withOpacity(0.1),
+              color: _getTypeColor(grant.type).withValues(alpha: 0.1),
               blurRadius: 10,
               spreadRadius: 2,
             ),
@@ -119,7 +119,7 @@ class RewardCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: Icon(icon, color: color, size: 24),
@@ -152,7 +152,7 @@ class RewardCard extends StatelessWidget {
       margin: const EdgeInsets.only(top: 4),
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(4),
       ),
       child: Text(

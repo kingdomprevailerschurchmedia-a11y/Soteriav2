@@ -12,10 +12,9 @@ class QuizRepositoryImpl implements QuizRepository {
   final QuizLocalDataSource _localDataSource;
 
   QuizRepositoryImpl({
-    required QuizRemoteDataSource remoteDataSource,
-    required QuizLocalDataSource localDataSource,
-  }) : _remoteDataSource = remoteDataSource,
-       _localDataSource = localDataSource;
+    required this._remoteDataSource,
+    required this._localDataSource,
+  });
 
   @override
   Future<List<Question>> loadQuestions({

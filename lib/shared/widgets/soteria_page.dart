@@ -1,8 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/design_system/colors/soteria_colors.dart';
-import '../../core/design_system/spacing/soteria_spacing.dart';
 import '../../core/design_system/typography/soteria_typography.dart';
 import '../../core/identity/providers/identity_providers.dart';
 import 'soteria_background.dart';

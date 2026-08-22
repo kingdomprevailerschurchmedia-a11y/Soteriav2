@@ -53,7 +53,7 @@ void main() {
     container = createContainer(level: 5);
     
     // Listen to the provider to keep it alive (autoDispose)
-    container.listen(versusLobbyProvider, (_, __) {});
+    container.listen(versusLobbyProvider, (_, _) {});
     
     // Wait for init
     await Future.delayed(const Duration(milliseconds: 50));

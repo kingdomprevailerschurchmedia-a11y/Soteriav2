@@ -184,8 +184,9 @@ class _DeviceInfoViewer extends StatelessWidget {
     return FutureBuilder<AppDiagnostics>(
       future: DiagnosticsService.getDiagnostics(),
       builder: (context, snapshot) {
-        if (!snapshot.hasData)
+        if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
+        }
         final data = snapshot.data!.toMap();
         return ListView(
           padding: EdgeInsets.all(16.w),

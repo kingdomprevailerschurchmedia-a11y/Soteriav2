@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../../../core/design_system/components/soteria_badge.dart';
 
 class RankBadge extends StatelessWidget {
   final String rankName;
@@ -36,7 +35,7 @@ class RankBadge extends StatelessWidget {
             width: isLarge ? 18.sp : 14.sp,
             height: isLarge ? 18.sp : 14.sp,
             fit: BoxFit.contain,
-            errorBuilder: (context, _, __) => Icon(
+            errorBuilder: (context, _, _) => Icon(
               Icons.shield_rounded,
               color: rankColor,
               size: isLarge ? 18.sp : 14.sp,

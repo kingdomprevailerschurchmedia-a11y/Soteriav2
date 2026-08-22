@@ -43,8 +43,8 @@ dependencies:
   # Serialization / Models
   # ---------------------------------------------------------------------------
 
-  freezed_annotation: any
-  json_annotation: any
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
 
   # ---------------------------------------------------------------------------
   # Native Splash
@@ -81,6 +81,8 @@ dependencies:
   integration_test:
     sdk: flutter
 
+  firedart: any
+  state_notifier: any
 dev_dependencies:
   # ---------------------------------------------------------------------------
   # Testing
@@ -109,8 +111,6 @@ dev_dependencies:
 
   mockito: ^5.4.5
   mocktail: ^1.0.4
-  firedart: ^0.9.8
-
   flutter_launcher_icons: ^0.14.4
 
 # =============================================================================

@@ -24,9 +24,8 @@ class LifelineController
     required this.sessionId,
     required TimerEngine timerEngine,
     this.onEvent,
-    LifelineResultsNotifier? resultsNotifier,
-  }) : _resultsNotifier = resultsNotifier,
-       _engines = {
+    this._resultsNotifier,
+  }) : _engines = {
          LifelineType.fiftyFifty: FiftyFiftyEngine(),
          LifelineType.pauseTimer: PauseTimerEngine(timerEngine),
          LifelineType.askAudience: AskAudienceEngine(),

@@ -26,7 +26,7 @@ class CompetitiveReviewScreen extends StatelessWidget {
       body: ListView.separated(
         padding: EdgeInsets.all(SoteriaSpacing.xl),
         itemCount: items.length,
-        separatorBuilder: (_, __) => SizedBox(height: SoteriaSpacing.lg),
+        separatorBuilder: (_, _) => SizedBox(height: SoteriaSpacing.lg),
         itemBuilder: (context, index) => _ReviewItemCard(item: items[index]),
       ),
     );
@@ -84,7 +84,7 @@ class _ReviewItemCard extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(SoteriaSpacing.md),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03),
+              color: Colors.white.withValues(alpha: 0.03),
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(

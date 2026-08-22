@@ -7,7 +7,6 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_text_field.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
-import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';

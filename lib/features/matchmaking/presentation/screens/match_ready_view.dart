@@ -65,7 +65,7 @@ class MatchReadyView extends ConsumerWidget {
                       photoUrl: opp?.photoUrl,
                     ),
                     loading: () => const CircularProgressIndicator(),
-                    error: (_, __) => const _ReadyPlayerCard(label: '???', isReady: false),
+                    error: (_, _) => const _ReadyPlayerCard(label: '???', isReady: false),
                   ),
                 ],
               ),

@@ -3,7 +3,7 @@ import '../../domain/models/achievement.dart';
 import '../../domain/services/achievement_registry.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../providers/player_providers.dart';
-import '../../../auth/providers/auth_providers.dart';
+import '../../../../core/identity/providers/identity_providers.dart';
 
 import '../../domain/services/achievement_service.dart';
 import 'progression_providers.dart';

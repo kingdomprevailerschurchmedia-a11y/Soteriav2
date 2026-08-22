@@ -1,54 +1,31 @@
-import 'game_mode.dart';
 import 'game_result.dart';
-import '../progression/models/reward_summary.dart';
-import '../answer/models/answer_result.dart';
 
 /// Specialized result model for Pro Mode sessions.
 class ProModeResult extends GameResult {
   final String rating;
 
   const ProModeResult({
-    required String sessionId,
-    required String playerId,
-    required GameMode mode,
-    required int finalScore,
-    required int totalXP,
-    required int totalQuestions,
-    required int correctAnswers,
-    required int wrongAnswers,
-    int skippedQuestions = 0,
-    required Duration totalDuration,
-    required double accuracy,
-    required int maxStreak,
-    RewardSummary rewards = const RewardSummary(),
-    Duration avgResponseTime = Duration.zero,
-    Duration fastestAnswerTime = Duration.zero,
-    Duration slowestAnswerTime = Duration.zero,
-    List<AnswerResult> answers = const [],
-    required DateTime timestamp,
-    bool isSynced = true,
+    required super.sessionId,
+    required super.playerId,
+    required super.mode,
+    required super.finalScore,
+    required super.totalXP,
+    required super.totalQuestions,
+    required super.correctAnswers,
+    required super.wrongAnswers,
+    super.skippedQuestions,
+    required super.totalDuration,
+    required super.accuracy,
+    required super.maxStreak,
+    super.rewards,
+    super.avgResponseTime,
+    super.fastestAnswerTime,
+    super.slowestAnswerTime,
+    super.answers,
+    required super.timestamp,
+    super.isSynced,
     required this.rating,
-  }) : super(
-         sessionId: sessionId,
-         playerId: playerId,
-         mode: mode,
-         finalScore: finalScore,
-         totalXP: totalXP,
-         totalQuestions: totalQuestions,
-         correctAnswers: correctAnswers,
-         wrongAnswers: wrongAnswers,
-         skippedQuestions: skippedQuestions,
-         totalDuration: totalDuration,
-         accuracy: accuracy,
-         maxStreak: maxStreak,
-         rewards: rewards,
-         avgResponseTime: avgResponseTime,
-         fastestAnswerTime: fastestAnswerTime,
-         slowestAnswerTime: slowestAnswerTime,
-         answers: answers,
-         timestamp: timestamp,
-         isSynced: isSynced,
-       );
+  });
 
   factory ProModeResult.fromGameResult(GameResult result) {
     return ProModeResult(

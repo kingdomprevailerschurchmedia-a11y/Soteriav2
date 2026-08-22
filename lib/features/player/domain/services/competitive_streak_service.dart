@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/competitive_streak.dart';
 import '../models/competitive_result.dart';
 import '../repositories/streak_repository.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/animations/soteria_animations.dart';
@@ -66,8 +65,9 @@ class _ScoreGainAnimationState extends ConsumerState<ScoreGainAnimation>
     });
 
     final result = ref.read(quizControllerProvider).lastScoreResult;
-    if (result == null || result.totalScore == 0)
+    if (result == null || result.totalScore == 0) {
       return const SizedBox.shrink();
+    }
 
     return AnimatedBuilder(
       animation: _controller,

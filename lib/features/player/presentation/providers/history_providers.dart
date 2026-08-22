@@ -56,12 +56,15 @@ final competitiveHistorySummaryProvider =
         return const AsyncValue.loading();
       }
 
-      if (historyAsync.hasError)
+      if (historyAsync.hasError) {
         return AsyncValue.error(historyAsync.error!, historyAsync.stackTrace!);
-      if (latestAsync.hasError)
+      }
+      if (latestAsync.hasError) {
         return AsyncValue.error(latestAsync.error!, latestAsync.stackTrace!);
-      if (bestAsync.hasError)
+      }
+      if (bestAsync.hasError) {
         return AsyncValue.error(bestAsync.error!, bestAsync.stackTrace!);
+      }
 
       return AsyncValue.data(
         CompetitiveHistory(

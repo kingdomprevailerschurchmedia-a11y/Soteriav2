@@ -58,7 +58,7 @@ class RewardSummarySection extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: recentRewards.length,
-              separatorBuilder: (_, __) => SizedBox(width: SoteriaSpacing.md),
+              separatorBuilder: (_, _) => SizedBox(width: SoteriaSpacing.md),
               itemBuilder: (context, index) {
                 final reward = recentRewards[index];
                 return _RewardItem(reward: reward);

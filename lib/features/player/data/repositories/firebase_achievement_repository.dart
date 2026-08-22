@@ -6,7 +6,6 @@ import '../../domain/repositories/player_progression_repository.dart';
 import '../../domain/services/achievement_registry.dart';
 import '../../domain/services/progression_service.dart';
 import '../../../../core/logging/logger_service.dart';
-import '../../domain/models/player_progression.dart';
 import 'package:soteria/features/player/data/repositories/firebase_player_progression_repository.dart';
 
 class FirebaseAchievementRepository implements AchievementRepository {
@@ -103,7 +102,7 @@ class FirebaseAchievementRepository implements AchievementRepository {
         );
 
         if (_progressionRepository is FirebasePlayerProgressionRepository) {
-          await (_progressionRepository as FirebasePlayerProgressionRepository)
+          await (_progressionRepository)
               .processXpTransaction(tx, xpTx);
         } else {
           // Fallback for non-firestore implementations (e.g. mocks in some tests)

@@ -2,8 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progress_snapshot.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_result.dart';
 import 'package:soteria/features/gameplay_engine/progression/services/achievement_engine.dart';
-import 'package:soteria/features/player/domain/models/achievement.dart';
-import 'package:soteria/features/player/domain/services/achievement_registry.dart';
 
 void main() {
   group('AchievementEngine Tests', () {

@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
-import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/presentation/providers/public_profile_providers.dart';
 import '../../../player/providers/player_providers.dart';
@@ -83,7 +81,7 @@ class MatchFoundScreen extends ConsumerWidget {
                             isReady: session.opponentReady,
                           ),
                           loading: () => const CircularProgressIndicator(),
-                          error: (_, __) => const _PlayerCard(
+                          error: (_, _) => const _PlayerCard(
                             name: '???',
                             rank: 'Unknown',
                             tier: '',
@@ -115,7 +113,7 @@ class MatchFoundScreen extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, __) => Center(child: Text('Error: $e')),
+          error: (e, _) => Center(child: Text('Error: $e')),
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../preview/pro_mode/pro_mode_results_previews.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 

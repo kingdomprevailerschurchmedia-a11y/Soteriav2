@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,13 +19,11 @@ import '../widgets/lobby/pro/pro_category_selector.dart';
 import '../widgets/lobby/pro/pro_session_summary_card.dart';
 import '../widgets/lobby/pro/pro_entry_fee_widget.dart';
 import '../widgets/lobby/pro/pro_confirmation_dialog.dart';
-import '../widgets/lobby/pro/competitive_badge.dart';
 import '../../../../features/tournaments/domain/models/tournament.dart';
 import '../../../../features/gameplay_engine/models/pro_mode_access.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/network/providers/connectivity_providers.dart';
-import '../widgets/lobby/lobby_config_widgets.dart';
 
 class ProLobbyScreen extends ConsumerWidget {
   final Tournament? tournament;

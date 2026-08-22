@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/components/soteria_state_views.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
@@ -15,9 +14,7 @@ import 'package:soteria/features/tournaments/presentation/providers/tournament_l
 import 'package:soteria/features/tournaments/presentation/screens/tournament_details_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_discovery_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_lobby_screen.dart';
-import 'package:soteria/features/tournaments/presentation/screens/tournament_gameplay_screen.dart';
 import 'package:soteria/features/tournaments/presentation/screens/tournament_results_screen.dart';
-import 'package:soteria/features/tournaments/presentation/screens/tournament_leaderboard_screen.dart';
 import 'package:soteria/features/tournaments/presentation/widgets/tournament_card.dart';
 import 'package:soteria/features/tournaments/presentation/widgets/tournament_countdown_widget.dart';
 

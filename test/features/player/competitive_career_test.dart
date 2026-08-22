@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:soteria/features/player/domain/models/competitive_career_summary.dart';
 import 'package:soteria/features/player/domain/models/competitive_personal_record.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:soteria/features/player/domain/models/season_result.dart';

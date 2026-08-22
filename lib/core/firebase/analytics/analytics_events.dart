@@ -16,7 +16,7 @@ class ScreenViewEvent extends SoteriaAnalyticsEvent {
   ScreenViewEvent({required String screenName, String? screenClass})
     : super('screen_view', {
         'screen_name': screenName,
-        if (screenClass != null) 'screen_class': screenClass,
+        'screen_class': ?screenClass,
       });
 }
 
@@ -66,6 +66,6 @@ class NotificationOpenedEvent extends SoteriaAnalyticsEvent {
   NotificationOpenedEvent({required String type, String? action})
     : super('notification_opened', {
         'notification_type': type,
-        if (action != null) 'action': action,
+        'action': ?action,
       });
 }

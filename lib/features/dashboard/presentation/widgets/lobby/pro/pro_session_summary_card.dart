@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../../core/design_system/typography/soteria_typography.dart';

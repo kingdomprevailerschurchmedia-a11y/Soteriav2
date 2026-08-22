@@ -30,7 +30,7 @@ class PlayerPresenceIndicator extends ConsumerWidget {
         return _buildDot(_getStatusColor(presence.status));
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 

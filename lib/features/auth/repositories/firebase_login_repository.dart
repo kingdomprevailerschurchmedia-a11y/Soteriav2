@@ -52,13 +52,8 @@ class FirebaseLoginRepository implements LoginRepository {
             '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
       );
 
-      final gsi.GoogleSignInAccount? googleUser = await _googleSignIn
+      final gsi.GoogleSignInAccount googleUser = await _googleSignIn
           .authenticate();
-
-      if (googleUser == null) {
-        LoggerService.i('Google Sign-In cancelled by user', feature: 'Auth');
-        return const AuthenticationResult.failure(null);
-      }
 
       LoggerService.i(
         'Google user authenticated: ${googleUser.email}',
@@ -66,14 +61,14 @@ class FirebaseLoginRepository implements LoginRepository {
       );
 
       final gsi.GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+          googleUser.authentication;
       final String? idToken = googleAuth.idToken;
 
       // In v7.x+, accessToken is retrieved via the authorizationClient.
       final gsi.GoogleSignInClientAuthorization authz = await googleUser
           .authorizationClient
           .authorizeScopes(['email', 'profile']);
-      final String? accessToken = authz.accessToken;
+      final String accessToken = authz.accessToken;
 
       final credential = GoogleAuthProvider.credential(
         idToken: idToken,

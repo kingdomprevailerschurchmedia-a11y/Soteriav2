@@ -81,7 +81,7 @@ class RivalryCard extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator(strokeWidth: 2)),
-          error: (_, __) => const Icon(Icons.error),
+          error: (_, _) => const Icon(Icons.error),
         ),
       ),
     );

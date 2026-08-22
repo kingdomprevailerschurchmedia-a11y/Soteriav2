@@ -6,7 +6,6 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/features/player/domain/models/competitive_match.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import 'package:soteria/features/player/presentation/widgets/rank_badge.dart';
-import 'package:soteria/features/player/presentation/screens/public_competitive_profile_screen.dart';
 
 import 'package:go_router/go_router.dart';
 

@@ -1,13 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
-import 'package:soteria/core/design_system/animations/soteria_animations.dart';
-import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
 import 'package:soteria/features/dashboard/presentation/providers/practice_lobby_providers.dart';
 import 'package:soteria/features/dashboard/presentation/widgets/lobby/category_selector.dart';
@@ -18,7 +14,6 @@ import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/presentation/providers/progression_providers.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/design_system/components/soteria_back_button.dart';
-import 'package:soteria/features/gameplay_engine/models/practice_session_config.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/network/providers/connectivity_providers.dart';
 

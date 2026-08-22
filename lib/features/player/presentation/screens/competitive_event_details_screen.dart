@@ -126,7 +126,7 @@ class CompetitiveEventDetailsScreen extends ConsumerWidget {
       height: 200,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: SoteriaColors.primary.withOpacity(0.1),
+        color: SoteriaColors.primary.withValues(alpha: 0.1),
         image: const DecorationImage(
            image: AssetImage('assets/images/challenge.png'),
            fit: BoxFit.cover,
@@ -139,7 +139,7 @@ class CompetitiveEventDetailsScreen extends ConsumerWidget {
             end: Alignment.bottomCenter,
             colors: [
               Colors.transparent,
-              SoteriaColors.backgroundMid2.withOpacity(0.8),
+              SoteriaColors.backgroundMid2.withValues(alpha: 0.8),
             ],
           ),
         ),

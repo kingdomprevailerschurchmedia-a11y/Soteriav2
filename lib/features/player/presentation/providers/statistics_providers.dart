@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/competitive_statistics.dart';
-import '../../domain/services/competitive_statistics_service.dart';
 import 'competitive_profile_provider.dart';
 import 'service_providers.dart';
 

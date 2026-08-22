@@ -7,7 +7,6 @@ import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../auth/providers/auth_providers.dart';
 import '../providers/milestone_providers.dart';
-import '../providers/reward_providers.dart';
 import '../widgets/milestone_card.dart';
 import '../widgets/competitive_milestone_details.dart';
 import '../widgets/milestone_celebration.dart';

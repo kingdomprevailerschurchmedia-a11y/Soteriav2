@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 
 class MatchHistoryLoadingState extends StatelessWidget {
@@ -15,8 +14,8 @@ class MatchHistoryLoadingState extends StatelessWidget {
         (index) => Padding(
           padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
           child: Shimmer.fromColors(
-            baseColor: Colors.white.withOpacity(0.05),
-            highlightColor: Colors.white.withOpacity(0.1),
+            baseColor: Colors.white.withValues(alpha: 0.05),
+            highlightColor: Colors.white.withValues(alpha: 0.1),
             child: Container(
               height: 100.h,
               width: double.infinity,

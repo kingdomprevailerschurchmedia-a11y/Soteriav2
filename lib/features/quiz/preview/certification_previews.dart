@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../presentation/screens/quiz_gameplay_screen.dart';
 import '../presentation/screens/quiz_results_screen.dart';
-import '../presentation/providers/quiz_providers.dart';
-import '../domain/models/quiz_enums.dart';
 import '../certification/certification_debug_tools.dart';
 import 'gameplay_previews.dart';
 

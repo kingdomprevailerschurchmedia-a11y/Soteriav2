@@ -7,7 +7,6 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
-import '../../../../core/design_system/animations/soteria_animations.dart';
 import '../providers/competitive_profile_provider.dart';
 import '../../../analytics/presentation/providers/analytics_providers.dart';
 import '../widgets/career/season_trend_chart.dart';

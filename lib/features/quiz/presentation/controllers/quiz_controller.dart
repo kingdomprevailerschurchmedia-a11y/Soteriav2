@@ -438,8 +438,9 @@ class QuizController extends Notifier<QuizState> {
     if (state.session == null ||
         state.status == QuizStatus.completing ||
         state.status == QuizStatus.finalizing ||
-        state.status == QuizStatus.completed)
+        state.status == QuizStatus.completed) {
       return;
+    }
 
     state = state.copyWith(status: QuizStatus.completing, isLoading: true);
 

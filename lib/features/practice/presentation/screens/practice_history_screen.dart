@@ -38,8 +38,7 @@ class PracticeHistoryScreen extends ConsumerWidget {
     }
 
     return CustomScrollView(
-      cacheExtent: 1000,
-      physics: const BouncingScrollPhysics(),
+      cacheExtent: 1000.0, physics: const BouncingScrollPhysics(),
       slivers: [
         _buildAppBar(context),
         SliverPadding(

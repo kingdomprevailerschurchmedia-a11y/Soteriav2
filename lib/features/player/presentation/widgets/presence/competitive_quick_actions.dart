@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
 import 'package:soteria/features/player/domain/models/player_presence.dart';
@@ -67,7 +65,7 @@ class CompetitiveQuickActions extends ConsumerWidget {
         return _buildChallengeButton(context);
       },
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (_, __) => _buildChallengeButton(context),
+      error: (_, _) => _buildChallengeButton(context),
     );
   }
 

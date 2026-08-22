@@ -1,6 +1,5 @@
 import 'package:uuid/uuid.dart';
 import '../models/competitive_personal_record.dart';
-import '../models/competitive_result.dart';
 import '../models/competitive_match.dart';
 import '../models/competitive_streak.dart';
 import '../models/player_progression.dart';

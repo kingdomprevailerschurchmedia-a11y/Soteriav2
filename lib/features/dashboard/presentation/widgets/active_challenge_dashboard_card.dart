@@ -28,7 +28,7 @@ class ActiveChallengeDashboardCard extends ConsumerWidget {
         return _ChallengeCard(challenge: challenge);
       },
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }
@@ -77,7 +77,7 @@ class _ChallengeCard extends ConsumerWidget {
                     imageUrl: profile?.photoUrl,
                   ),
                   loading: () => const SizedBox(width: 40, height: 40, child: CircularProgressIndicator()),
-                  error: (_, __) => const Icon(Icons.error),
+                  error: (_, _) => const Icon(Icons.error),
                 ),
                 SizedBox(width: SoteriaSpacing.md),
                 Expanded(

@@ -22,9 +22,9 @@ class RecommendationCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.all(20.w),
       decoration: BoxDecoration(
-        color: SoteriaColors.gold.withOpacity(0.05),
+        color: SoteriaColors.gold.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(20.r),
-        border: Border.all(color: SoteriaColors.gold.withOpacity(0.2)),
+        border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

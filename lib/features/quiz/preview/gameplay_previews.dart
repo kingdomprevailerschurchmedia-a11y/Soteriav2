@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/quiz_enums.dart';
 import '../domain/models/question.dart';
-import '../domain/models/answer_option.dart';
 import '../domain/models/timer_state.dart';
 import '../domain/models/power_up_state.dart';
 import '../presentation/states/quiz_state.dart';

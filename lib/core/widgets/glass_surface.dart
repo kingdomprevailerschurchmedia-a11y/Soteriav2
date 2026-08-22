@@ -1,6 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:soteria/core/design_system/blur/soteria_blur.dart';
 import 'package:soteria/core/design_system/borders/soteria_borders.dart';
 import 'package:soteria/core/design_system/radius/soteria_radius.dart';
 

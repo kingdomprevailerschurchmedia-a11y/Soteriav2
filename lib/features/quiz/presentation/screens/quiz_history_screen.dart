@@ -50,8 +50,7 @@ class QuizHistoryScreen extends ConsumerWidget {
         color: SoteriaColors.primary,
         backgroundColor: SoteriaColors.background,
         child: CustomScrollView(
-          cacheExtent: 1000,
-          slivers: [
+          cacheExtent: 1000.0, slivers: [
             const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
             SliverToBoxAdapter(child: HistoryFilterBar()),
             const SliverToBoxAdapter(child: SoteriaSpacing.gapXL),
@@ -66,7 +65,7 @@ class QuizHistoryScreen extends ConsumerWidget {
                 ),
               ),
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              error: (_, __) =>
+              error: (_, _) =>
                   const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
 
@@ -80,7 +79,7 @@ class QuizHistoryScreen extends ConsumerWidget {
                 ),
               ),
               loading: () => const SliverToBoxAdapter(child: SizedBox.shrink()),
-              error: (_, __) =>
+              error: (_, _) =>
                   const SliverToBoxAdapter(child: SizedBox.shrink()),
             ),
 

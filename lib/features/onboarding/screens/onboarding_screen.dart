@@ -4,11 +4,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
-import 'package:soteria/core/widgets/premium_background.dart';
 import 'package:soteria/features/onboarding/providers/onboarding_notifier.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_indicator.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_page.dart';
-import 'package:soteria/features/onboarding/widgets/onboarding_button.dart';
 
 import 'package:soteria/core/utils/soteria_responsive.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';

@@ -20,14 +20,14 @@ class NextGoalCard extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              SoteriaColors.primary.withOpacity(0.15),
-              SoteriaColors.surface.withOpacity(0.5),
+              SoteriaColors.primary.withValues(alpha: 0.15),
+              SoteriaColors.surface.withValues(alpha: 0.5),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
           borderRadius: BorderRadius.circular(20.r),
-          border: Border.all(color: SoteriaColors.primary.withOpacity(0.2)),
+          border: Border.all(color: SoteriaColors.primary.withValues(alpha: 0.2)),
         ),
         child: Stack(
           children: [
@@ -94,7 +94,7 @@ class NextGoalCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4.r),
                         child: LinearProgressIndicator(
                           value: progress.progressPercentage,
-                          backgroundColor: Colors.white.withOpacity(0.05),
+                          backgroundColor: Colors.white.withValues(alpha: 0.05),
                           color: SoteriaColors.primary,
                           minHeight: 6.h,
                         ),

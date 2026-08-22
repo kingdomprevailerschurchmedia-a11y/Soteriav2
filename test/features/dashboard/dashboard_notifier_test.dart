@@ -1,7 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:mockito/mockito.dart';
-import 'package:mockito/annotations.dart';
 import 'package:soteria/features/dashboard/presentation/providers/dashboard_providers.dart';
 import 'package:soteria/features/dashboard/domain/repositories/home_repository.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';

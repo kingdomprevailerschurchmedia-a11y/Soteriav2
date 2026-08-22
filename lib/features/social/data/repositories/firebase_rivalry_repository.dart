@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../player/domain/models/competitive_result.dart';
 import '../../../player/domain/repositories/competitive_result_repository.dart';
 import '../../domain/models/player_rivalry.dart';
@@ -35,8 +34,9 @@ class FirebaseRivalryRepository implements RivalryRepository {
     int losses = 0;
     int draws = 0;
     for (final r in results) {
-      if (r.outcome == CompetitiveOutcome.win) wins++;
-      else if (r.outcome == CompetitiveOutcome.loss) losses++;
+      if (r.outcome == CompetitiveOutcome.win) {
+        wins++;
+      } else if (r.outcome == CompetitiveOutcome.loss) losses++;
       else if (r.outcome == CompetitiveOutcome.draw) draws++;
     }
 

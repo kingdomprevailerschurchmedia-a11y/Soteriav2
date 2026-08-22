@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/legacy.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
-import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
 import 'package:soteria/features/gameplay_engine/models/game_configuration.dart';
@@ -15,11 +13,6 @@ import 'package:soteria/features/question_presentation/widgets/question_presente
 import 'package:soteria/features/gameplay_engine/timer/widgets/adaptive_timer_display.dart';
 import 'package:soteria/features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import '../providers/event_providers.dart';
-import '../../domain/models/live_event.dart';
-import '../../domain/models/event_participation.dart';
-import '../widgets/event/event_status_badge.dart';
-import '../widgets/event/event_countdown.dart';
-import '../widgets/event/event_reward_card.dart';
 
 class EventGameplayScreen extends ConsumerWidget {
   final String eventId;
@@ -84,7 +77,7 @@ class EventGameplayScreen extends ConsumerWidget {
       loading: () => const SafeGradientScaffold(
         body: Center(child: CircularProgressIndicator()),
       ),
-      error: (e, __) => Center(child: Text('Error: $e')),
+      error: (e, _) => Center(child: Text('Error: $e')),
     );
   }
 }

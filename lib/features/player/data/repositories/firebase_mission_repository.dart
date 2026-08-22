@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:soteria/features/player/domain/models/competitive_mission.dart';
-import 'package:soteria/features/player/domain/models/reward_grant.dart';
 import 'package:soteria/features/player/domain/models/season_reward_definition.dart';
 import 'package:soteria/features/player/domain/repositories/mission_repository.dart';
 

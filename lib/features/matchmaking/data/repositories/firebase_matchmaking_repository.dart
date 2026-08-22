@@ -9,10 +9,9 @@ class FirebaseMatchmakingRepository implements MatchmakingRepository {
   final FirebaseAuth _auth;
 
   FirebaseMatchmakingRepository({
-    required FirebaseFirestore firestore,
-    required FirebaseAuth auth,
-  })  : _firestore = firestore,
-        _auth = auth;
+    required this._firestore,
+    required this._auth,
+  });
 
   CollectionReference<Map<String, dynamic>> get _pool =>
       _firestore.collection('matchmaking_pool');

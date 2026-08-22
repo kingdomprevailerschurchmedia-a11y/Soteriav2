@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
@@ -99,7 +98,7 @@ class RivalryScreen extends ConsumerWidget {
             ],
           ),
           loading: () => const CircularProgressIndicator(),
-          error: (_, __) => const Icon(Icons.error, size: 50),
+          error: (_, _) => const Icon(Icons.error, size: 50),
         ),
       ],
     );
@@ -188,7 +187,7 @@ class RivalryScreen extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (_, __) => const Text('Error loading activity'),
+          error: (_, _) => const Text('Error loading activity'),
         ),
       ],
     );

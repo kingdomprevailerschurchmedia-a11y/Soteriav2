@@ -26,12 +26,12 @@ class SeasonRewardSummary extends StatelessWidget {
         color: SoteriaColors.elevatedSurface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: SoteriaColors.gold.withOpacity(0.3),
+          color: SoteriaColors.gold.withValues(alpha: 0.3),
           width: 1.5,
         ),
         boxShadow: [
           BoxShadow(
-            color: SoteriaColors.goldGlow.withOpacity(0.05),
+            color: SoteriaColors.goldGlow.withValues(alpha: 0.05),
             blurRadius: 40,
             spreadRadius: 5,
           ),

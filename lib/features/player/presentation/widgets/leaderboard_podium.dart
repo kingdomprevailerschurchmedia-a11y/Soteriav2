@@ -19,7 +19,7 @@ class LeaderboardPodium extends StatelessWidget {
 
     // Reorder for Podium: [2, 1, 3]
     final podiumEntries = List<LeaderboardEntry?>.filled(3, null);
-    if (topEntries.length >= 1) podiumEntries[1] = topEntries[0];
+    if (topEntries.isNotEmpty) podiumEntries[1] = topEntries[0];
     if (topEntries.length >= 2) podiumEntries[0] = topEntries[1];
     if (topEntries.length >= 3) podiumEntries[2] = topEntries[2];
 

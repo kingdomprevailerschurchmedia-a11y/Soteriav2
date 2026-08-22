@@ -38,7 +38,7 @@ class FirestorePracticeRepository implements PracticeRepository {
         .limit(limit)
         .get();
 
-    return snapshot.docs.map((doc) => _fromJson(doc.data() as Map<String, dynamic>)).toList();
+    return snapshot.docs.map((doc) => _fromJson(doc.data())).toList();
   }
 
   PracticeSession _fromJson(Map<String, dynamic> json) {

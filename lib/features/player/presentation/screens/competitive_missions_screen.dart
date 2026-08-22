@@ -140,7 +140,7 @@ class _MissionList extends ConsumerWidget {
           Icon(
             Icons.task_alt,
             size: 64,
-            color: SoteriaColors.muted.withOpacity(0.5),
+            color: SoteriaColors.muted.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           const Text(

@@ -10,7 +10,6 @@ import 'package:soteria/core/errors/error_handler.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import 'package:soteria/core/services/diagnostics_service.dart';
 import 'package:soteria/core/services/performance_service.dart';
-import 'package:soteria/core/firebase/initializer/firebase_initializer.dart';
 
 void main() {
   runZonedGuarded(

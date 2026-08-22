@@ -59,7 +59,7 @@ final seasonCountdownProvider = StreamProvider<SeasonCountdown>((ref) {
       return controller.stream;
     },
     loading: () => Stream.value(SeasonCountdown.unavailable()),
-    error: (_, __) => Stream.value(SeasonCountdown.unavailable()),
+    error: (_, _) => Stream.value(SeasonCountdown.unavailable()),
   );
 });
 

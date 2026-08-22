@@ -18,9 +18,8 @@ abstract interface class AuthDataSource {
 class FirebaseAuthDataSource implements AuthDataSource {
   FirebaseAuthDataSource({
     auth.FirebaseAuth? firebaseAuth,
-    gsi.GoogleSignIn? googleSignIn,
-  }) : _auth = firebaseAuth ?? auth.FirebaseAuth.instance,
-       _googleSignIn = googleSignIn;
+    this._googleSignIn,
+  }) : _auth = firebaseAuth ?? auth.FirebaseAuth.instance;
 
   final auth.FirebaseAuth _auth;
   final gsi.GoogleSignIn? _googleSignIn;
@@ -61,18 +60,11 @@ class FirebaseAuthDataSource implements AuthDataSource {
             '464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com',
       );
 
-      final gsi.GoogleSignInAccount? googleUser = await googleSignIn
+      final gsi.GoogleSignInAccount googleUser = await googleSignIn
           .authenticate();
 
-      if (googleUser == null) {
-        throw auth.FirebaseAuthException(
-          code: 'google-sign-in-cancelled',
-          message: 'User cancelled Google Sign In.',
-        );
-      }
-
       final gsi.GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+          googleUser.authentication;
       final String? idToken = googleAuth.idToken;
 
       // In v7.x+, accessToken is retrieved via the authorizationClient.
@@ -80,7 +72,7 @@ class FirebaseAuthDataSource implements AuthDataSource {
       final gsi.GoogleSignInClientAuthorization authz = await googleUser
           .authorizationClient
           .authorizeScopes(['email', 'profile']);
-      final String? accessToken = authz.accessToken;
+      final String accessToken = authz.accessToken;
 
       if (idToken == null && accessToken == null) {
         throw auth.FirebaseAuthException(

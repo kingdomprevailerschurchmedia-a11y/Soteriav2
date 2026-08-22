@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../presentation/screens/achievement_list_screen.dart';
 import '../presentation/providers/achievement_providers.dart';
 import '../domain/models/achievement.dart';
-import '../domain/services/achievement_registry.dart';
 
 class AchievementPreviews extends StatelessWidget {
   const AchievementPreviews({super.key});

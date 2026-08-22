@@ -21,8 +21,9 @@ class FirebaseBootstrapper {
 
   Future<void> init(SecurityCoordinator securityCoordinator) async {
     if (_status == BootstrapperStatus.initializing ||
-        _status == BootstrapperStatus.success)
+        _status == BootstrapperStatus.success) {
       return;
+    }
 
     _status = BootstrapperStatus.initializing;
     final config = FirebaseConfig.fromEnvironment();

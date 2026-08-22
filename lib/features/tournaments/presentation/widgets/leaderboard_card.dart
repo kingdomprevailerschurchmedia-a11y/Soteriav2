@@ -6,7 +6,6 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
-import 'package:soteria/core/avatar/data/avatar_catalog.dart';
 import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import '../../domain/models/tournament_ranking.dart';
 import 'rank_badge.dart';

@@ -1,6 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:soteria/features/player/domain/models/competitive_profile.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
 import 'package:soteria/features/player/domain/models/season_result.dart';

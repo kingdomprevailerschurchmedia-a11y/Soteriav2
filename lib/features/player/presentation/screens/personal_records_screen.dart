@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/design_system/components/soteria_page_wrapper.dart';
 import '../../../../core/design_system/components/soteria_text.dart';
-import '../../../../core/design_system/components/soteria_state_views.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/widgets/feedback/soteria_empty_state.dart';
 import '../providers/personal_record_providers.dart';
 import '../widgets/personal_record_card.dart';
 import '../widgets/personal_record_details_sheet.dart';
-import '../../domain/models/competitive_personal_record.dart';
 
 class PersonalRecordsScreen extends ConsumerWidget {
   const PersonalRecordsScreen({super.key});

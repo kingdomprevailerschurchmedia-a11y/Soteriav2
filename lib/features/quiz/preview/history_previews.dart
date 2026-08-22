@@ -6,7 +6,6 @@ import '../domain/models/question_result.dart';
 import '../presentation/screens/quiz_history_screen.dart';
 import '../presentation/screens/quiz_history_detail_screen.dart';
 import '../presentation/providers/history_providers.dart';
-import '../data/repository/quiz_repository_provider.dart';
 import '../../../core/identity/providers/identity_providers.dart';
 import '../../../core/identity/models/user_session.dart' as identity;
 

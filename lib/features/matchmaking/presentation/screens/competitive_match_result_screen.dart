@@ -8,7 +8,6 @@ import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
-import '../../../../core/avatar/data/avatar_catalog.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../../player/presentation/providers/public_profile_providers.dart';
 import 'package:soteria/features/matchmaking/presentation/providers/match_result_providers.dart';
@@ -94,7 +93,7 @@ class CompetitiveMatchResultScreen extends ConsumerWidget {
             );
           },
           loading: () => const Center(child: CircularProgressIndicator()),
-          error: (e, __) => Center(child: Text('Error: $e')),
+          error: (e, _) => Center(child: Text('Error: $e')),
         ),
       ),
     );
@@ -182,7 +181,7 @@ class _ScoreComparison extends ConsumerWidget {
               photoUrl: opp?.photoUrl,
             ),
             loading: () => const CircularProgressIndicator(),
-            error: (_, __) => _ScoreItem(label: '???', score: opponentScore, isWinner: false),
+            error: (_, _) => _ScoreItem(label: '???', score: opponentScore, isWinner: false),
           ),
         ],
       ),

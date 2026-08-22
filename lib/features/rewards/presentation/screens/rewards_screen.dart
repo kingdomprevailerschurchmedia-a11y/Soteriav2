@@ -1,16 +1,12 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
-import '../../../../core/design_system/components/soteria_card.dart';
-import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/rewards_providers.dart';
 import '../widgets/wallet_balance_header.dart';
-import '../widgets/reward_card.dart';
 import '../../domain/models/store_product.dart';
 import '../../domain/models/reward_transaction.dart';
 import '../../domain/models/reward.dart';
@@ -115,9 +111,9 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
         return Container(
           padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.3),
+            color: Colors.black.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(20.r),
-            border: Border.all(color: SoteriaColors.gold.withOpacity(0.3)),
+            border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.3)),
           ),
           child: Row(
             children: [
@@ -158,7 +154,7 @@ class _RewardsScreenState extends ConsumerState<RewardsScreen> with SingleTicker
         ),
         indicatorSize: TabBarIndicatorSize.label,
         labelColor: Colors.white,
-        unselectedLabelColor: Colors.white.withOpacity(0.4),
+        unselectedLabelColor: Colors.white.withValues(alpha: 0.4),
         labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.bold),
         dividerColor: Colors.transparent,
         tabs: const [
@@ -234,14 +230,14 @@ class _EarnItemCard extends ConsumerWidget {
       margin: EdgeInsets.only(bottom: 12.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
-        color: const Color(0xFF0D0628).withOpacity(0.6),
+        color: const Color(0xFF0D0628).withValues(alpha: 0.6),
         border: Border.all(
-          color: isClaimable ? color.withOpacity(0.4) : color.withOpacity(0.1),
+          color: isClaimable ? color.withValues(alpha: 0.4) : color.withValues(alpha: 0.1),
           width: isClaimable ? 1.5 : 1,
         ),
         boxShadow: isClaimable ? [
           BoxShadow(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -262,8 +258,8 @@ class _EarnItemCard extends ConsumerWidget {
                     shape: BoxShape.circle,
                     gradient: RadialGradient(
                       colors: [
-                        color.withOpacity(0.1),
-                        color.withOpacity(0),
+                        color.withValues(alpha: 0.1),
+                        color.withValues(alpha: 0),
                       ],
                     ),
                   ),
@@ -276,7 +272,7 @@ class _EarnItemCard extends ConsumerWidget {
                   Container(
                     padding: EdgeInsets.all(SoteriaSpacing.sm),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: reward.source == RewardSource.dailyLogin
@@ -295,7 +291,7 @@ class _EarnItemCard extends ConsumerWidget {
                         Text(
                           reward.title.toUpperCase(),
                           style: TextStyle(
-                            color: isLocked ? Colors.white.withOpacity(0.3) : Colors.white,
+                            color: isLocked ? Colors.white.withValues(alpha: 0.3) : Colors.white,
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 0.5,
@@ -306,7 +302,7 @@ class _EarnItemCard extends ConsumerWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.5),
+                            color: Colors.white.withValues(alpha: 0.5),
                             fontSize: 10.sp,
                           ),
                         ),
@@ -315,7 +311,7 @@ class _EarnItemCard extends ConsumerWidget {
                           Text(
                             'CLAIMED ON ${reward.claimedAt!.day}/${reward.claimedAt!.month}/${reward.claimedAt!.year}',
                             style: TextStyle(
-                              color: SoteriaColors.success.withOpacity(0.7),
+                              color: SoteriaColors.success.withValues(alpha: 0.7),
                               fontSize: 8.sp,
                               fontWeight: FontWeight.w900,
                               letterSpacing: 0.5,
@@ -364,7 +360,7 @@ class _EarnItemCard extends ConsumerWidget {
             borderRadius: BorderRadius.circular(12.r),
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF7C4DFF).withOpacity(0.3),
+                color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
                 blurRadius: 8,
                 offset: const Offset(0, 4),
               ),
@@ -387,7 +383,7 @@ class _EarnItemCard extends ConsumerWidget {
       return Container(
         padding: EdgeInsets.all(8.r),
         decoration: BoxDecoration(
-          color: SoteriaColors.success.withOpacity(0.1),
+          color: SoteriaColors.success.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: Icon(Icons.check_circle_rounded, color: SoteriaColors.success, size: 24.r),
@@ -395,7 +391,7 @@ class _EarnItemCard extends ConsumerWidget {
     }
 
     if (reward.status == RewardStatus.locked) {
-      return Icon(Icons.lock_outline_rounded, color: Colors.white.withOpacity(0.2), size: 24.r);
+      return Icon(Icons.lock_outline_rounded, color: Colors.white.withValues(alpha: 0.2), size: 24.r);
     }
 
     return Column(
@@ -412,7 +408,7 @@ class _EarnItemCard extends ConsumerWidget {
         Text(
           reward.type.name.toUpperCase(),
           style: TextStyle(
-            color: Colors.white.withOpacity(0.4),
+            color: Colors.white.withValues(alpha: 0.4),
             fontSize: 7.sp,
             fontWeight: FontWeight.bold,
           ),
@@ -509,14 +505,14 @@ class _StoreTab extends ConsumerWidget {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            const Color(0xFF1E1045).withOpacity(0.8),
-            const Color(0xFF0D0628).withOpacity(0.9),
+            const Color(0xFF1E1045).withValues(alpha: 0.8),
+            const Color(0xFF0D0628).withValues(alpha: 0.9),
           ],
         ),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF7C4DFF).withOpacity(0.1),
+            color: const Color(0xFF7C4DFF).withValues(alpha: 0.1),
             blurRadius: 15,
             spreadRadius: 1,
           ),
@@ -536,8 +532,8 @@ class _StoreTab extends ConsumerWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.blue.withOpacity(0.2),
-                      Colors.purple.withOpacity(0.2),
+                      Colors.blue.withValues(alpha: 0.2),
+                      Colors.purple.withValues(alpha: 0.2),
                     ],
                   ),
                   borderRadius: BorderRadius.circular(16.r),
@@ -582,7 +578,7 @@ class _StoreTab extends ConsumerWidget {
                     Text(
                       'Premium competitive learning experience',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.5),
+                        color: Colors.white.withValues(alpha: 0.5),
                         fontSize: 10.sp,
                       ),
                       maxLines: 2,
@@ -603,7 +599,7 @@ class _StoreTab extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12.r),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF7C4DFF).withOpacity(0.3),
+                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 4),
                       ),
@@ -622,7 +618,7 @@ class _StoreTab extends ConsumerWidget {
                       Text(
                         '/ month',
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.7),
+                          color: Colors.white.withValues(alpha: 0.7),
                           fontSize: 9.sp,
                         ),
                       ),
@@ -650,9 +646,9 @@ class _StoreTab extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.05),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(8.r),
-        border: Border.all(color: Colors.white.withOpacity(0.05)),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
       ),
       child: Row(
         children: [
@@ -661,7 +657,7 @@ class _StoreTab extends ConsumerWidget {
           Text(
             label,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.8),
+              color: Colors.white.withValues(alpha: 0.8),
               fontSize: 9.sp,
               fontWeight: FontWeight.w600,
             ),
@@ -695,14 +691,14 @@ class _ProductCard extends ConsumerWidget {
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.white.withOpacity(0.06),
-                  Colors.white.withOpacity(0.02),
+                  Colors.white.withValues(alpha: 0.06),
+                  Colors.white.withValues(alpha: 0.02),
                 ],
               ),
               border: Border.all(
                 color: product.isPopular 
-                  ? SoteriaColors.gold.withOpacity(0.5) 
-                  : Colors.white.withOpacity(0.05),
+                  ? SoteriaColors.gold.withValues(alpha: 0.5) 
+                  : Colors.white.withValues(alpha: 0.05),
                 width: product.isPopular ? 1.5 : 1,
               ),
             ),
@@ -739,7 +735,7 @@ class _ProductCard extends ConsumerWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.4),
+                          color: Colors.white.withValues(alpha: 0.4),
                           fontSize: 11.sp,
                         ),
                       ),
@@ -748,7 +744,7 @@ class _ProductCard extends ConsumerWidget {
                         Container(
                           padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF4CAF50).withOpacity(0.1),
+                            color: const Color(0xFF4CAF50).withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(4.r),
                           ),
                           child: Text(
@@ -779,7 +775,7 @@ class _ProductCard extends ConsumerWidget {
                       borderRadius: BorderRadius.circular(10.r),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF7C4DFF).withOpacity(0.3),
+                          color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
                           blurRadius: 8,
                           offset: const Offset(0, 4),
                         ),
@@ -809,7 +805,7 @@ class _ProductCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(6.r),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
+                      color: Colors.black.withValues(alpha: 0.3),
                       blurRadius: 4,
                       offset: const Offset(0, 2),
                     ),
@@ -875,11 +871,11 @@ class _HistoryItemCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28.r),
-        color: const Color(0xFF0D0628).withOpacity(0.6),
-        border: Border.all(color: color.withOpacity(0.2), width: 1),
+        color: const Color(0xFF0D0628).withValues(alpha: 0.6),
+        border: Border.all(color: color.withValues(alpha: 0.2), width: 1),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.05),
+            color: color.withValues(alpha: 0.05),
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -899,8 +895,8 @@ class _HistoryItemCard extends StatelessWidget {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: [
-                      color.withOpacity(0.1),
-                      color.withOpacity(0),
+                      color.withValues(alpha: 0.1),
+                      color.withValues(alpha: 0),
                     ],
                   ),
                 ),
@@ -913,7 +909,7 @@ class _HistoryItemCard extends StatelessWidget {
                   Container(
                     padding: EdgeInsets.all(SoteriaSpacing.sm),
                     decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
+                      color: color.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: tx.source == RewardSource.dailyLogin
@@ -941,7 +937,7 @@ class _HistoryItemCard extends StatelessWidget {
                         Text(
                           _getDescription(tx),
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.5),
+                            color: Colors.white.withValues(alpha: 0.5),
                             fontSize: 10.sp,
                           ),
                           maxLines: 1,
@@ -951,12 +947,12 @@ class _HistoryItemCard extends StatelessWidget {
                         Row(
                           children: [
                             Icon(Icons.calendar_today_rounded, 
-                                 color: Colors.white.withOpacity(0.3), size: 10.sp),
+                                 color: Colors.white.withValues(alpha: 0.3), size: 10.sp),
                             SizedBox(width: 4.w),
                             Text(
                               '${tx.createdAt.day}/${tx.createdAt.month}/${tx.createdAt.year}',
                               style: TextStyle(
-                                color: Colors.white.withOpacity(0.3),
+                                color: Colors.white.withValues(alpha: 0.3),
                                 fontSize: 10.sp,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -980,7 +976,7 @@ class _HistoryItemCard extends StatelessWidget {
                       Text(
                         tx.currency.toUpperCase(),
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.4),
+                          color: Colors.white.withValues(alpha: 0.4),
                           fontSize: 10.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -1005,7 +1001,7 @@ class _HistoryItemCard extends StatelessWidget {
           Text(
             title,
             style: TextStyle(
-              color: Colors.white.withOpacity(0.5),
+              color: Colors.white.withValues(alpha: 0.5),
               fontSize: 11.sp,
               fontWeight: FontWeight.w900,
               letterSpacing: 1.2,

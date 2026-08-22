@@ -27,7 +27,7 @@ class FakeProgressionRepository extends Fake implements FirebasePlayerProgressio
   final List<XpTransaction> processedTransactions = [];
 
   @override
-  Future<void> processXpTransaction(Transaction tx, XpTransaction transaction) async {
+  Future<void> processXpTransaction(dynamic tx, XpTransaction transaction) async {
     processedTransactions.add(transaction);
   }
 
