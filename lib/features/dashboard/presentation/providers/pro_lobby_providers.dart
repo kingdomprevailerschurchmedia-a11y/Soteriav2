@@ -18,6 +18,7 @@ import '../../../../features/gameplay_engine/data/repositories/firestore_pro_mod
 import '../../../question_content/domain/repositories/category_repository.dart';
 import '../../../question_content/presentation/providers/category_providers.dart';
 
+import '../../../../core/logging/logger_service.dart';
 import '../../../../features/gameplay_engine/domain/config/competitive_reward_config.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
 import '../../../../core/network/providers/connectivity_providers.dart';
@@ -38,6 +39,7 @@ final proModeRepositoryProvider = Provider<ProModeRepository>((ref) {
 abstract class ProLobbyState with _$ProLobbyState {
   const factory ProLobbyState({
     @Default(false) bool isLoading,
+    @Default(false) bool isStarting,
     String? error,
     @Default(ProSessionConfig()) ProSessionConfig config,
     @Default(false) bool isOffline,
@@ -289,56 +291,47 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
 
     final isFree = state.isFreeEntry;
     final fee = isFree ? 0 : state.config.entryFee;
+    final difficulty = state.config.difficulty.toBaseDifficulty();
 
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, isStarting: true, error: null);
+    
+    String? createdSessionId;
+
     try {
       // 1. Select Questions first (Fail-fast content check)
-      List<String> categories = [];
-      if (state.config.useInterests) {
-        final profile = ref.read(currentPlayerProvider);
-        categories = profile?.favoriteCategories ?? [];
-      } else {
-        categories = state.config.categoryIds;
-      }
-
       final selectionResult = await ref
           .read(questionSelectionServiceProvider)
           .selectQuestions(
             QuestionSelectionRequest(
-              categoryIds: categories,
-              difficulty: state.config.difficulty.toBaseDifficulty(),
+              categoryIds: state.config.useInterests 
+                  ? (player.favoriteCategories ?? []) 
+                  : state.config.categoryIds,
+              difficulty: difficulty,
               questionCount: state.config.questionCount,
               mode: GameMode.pro,
             ),
           )
-          .timeout(const Duration(seconds: 15), onTimeout: () {
-            throw Exception('Content selection timed out. Check your connection.');
-          });
+          .timeout(const Duration(seconds: 15));
 
       if (selectionResult.status != SelectionStatus.success) {
-        state = state.copyWith(
-          isLoading: false,
-          access: selectionResult.status == SelectionStatus.error
-              ? const ProModeAccessResult(state: ProModeAccessState.error, message: 'ERROR LOADING QUESTIONS')
-              : const ProModeAccessResult(state: ProModeAccessState.insufficientContent),
-        );
-        return null;
+        throw Exception(selectionResult.status == SelectionStatus.error 
+            ? 'Failed to load competitive content.' 
+            : 'Insufficient questions for this configuration.');
       }
 
       final sessionId = const Uuid().v4();
+      createdSessionId = sessionId;
 
-      // 2. Reserve Fee (Authoritative atomic check)
+      // 2. Reserve Fee (Authoritative atomic check & stale cleanup)
       await ref
           .read(proModeRepositoryProvider)
           .reserveEntryFee(
             player.uid, 
             sessionId, 
-            state.config.difficulty.toBaseDifficulty(), 
+            difficulty, 
             isFree: isFree
           )
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-            throw Exception('Secure fee reservation timed out.');
-          });
+          .timeout(const Duration(seconds: 10));
 
       final session = CompetitiveSession(
         sessionId: sessionId,
@@ -346,6 +339,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         config: state.config,
         questions: selectionResult.questions,
         startTime: DateTime.now(),
+        createdAt: DateTime.now(),
         reservedFee: fee,
       );
 
@@ -353,16 +347,48 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       await ref
           .read(proModeRepositoryProvider)
           .createCompetitiveSession(session)
-          .timeout(const Duration(seconds: 10), onTimeout: () {
-            throw Exception('Session creation timed out.');
-          });
+          .timeout(const Duration(seconds: 10));
 
-      state = state.copyWith(isLoading: false);
       return session;
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      LoggerService.e('Pro Mode Session Start failed', error: e);
+      
+      // Authoritative Auto-Refund if fee was reserved but session creation failed
+      if (createdSessionId != null && !isFree) {
+        try {
+          await ref.read(proModeRepositoryProvider).refundEntryFee(
+            player.uid, 
+            createdSessionId, 
+            difficulty,
+          );
+        } catch (refundError) {
+          LoggerService.e('Fail-safe refund failed', error: refundError);
+        }
+      }
+
+      state = state.copyWith(
+        error: _mapStartError(e),
+      );
       return null;
+    } finally {
+      if (_mounted) {
+        state = state.copyWith(isLoading: false, isStarting: false);
+      }
     }
+  }
+
+  String _mapStartError(dynamic e) {
+    final msg = e.toString().toLowerCase();
+    if (msg.contains('active competitive session already exists')) {
+      return 'A session is already in progress. If you were disconnected, please wait 2 minutes for it to expire.';
+    }
+    if (msg.contains('insufficient coins')) {
+      return 'Insufficient coins for Pro Mode entry.';
+    }
+    if (msg.contains('timeout')) {
+      return 'Connection timed out. Please check your internet and try again.';
+    }
+    return 'Failed to initialize Pro match. Secure settlement error: ${e.toString()}';
   }
 }
 

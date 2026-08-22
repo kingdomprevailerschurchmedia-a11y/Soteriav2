@@ -122,13 +122,14 @@ class FakePlayerProgressionRepository extends Fake implements PlayerProgressionR
       changeId: 'id',
       userId: result.userId,
       seasonId: result.seasonId,
-      resultId: result.resultId,
+      referenceResultId: result.resultId,
       previousRankPoints: 1000,
       changeAmount: 10,
       newRankPoints: 1010,
       previousRank: 'Gold',
       newRank: 'Gold',
-      timestamp: DateTime.now(),
+      type: RankChangeType.increase,
+      createdAt: DateTime.now(),
     );
   }
 }
@@ -139,9 +140,10 @@ class FakePlayerRepository extends Fake implements PlayerRepository {
     return PlayerProfile(
       uid: uid,
       displayName: 'Test',
-      photoUrl: null,
+      email: 'test@example.com',
       registrationOrder: 1,
       createdAt: DateTime.now(),
+      lastLogin: DateTime.now(),
       updatedAt: DateTime.now(),
       coins: 1000,
       xp: 100,

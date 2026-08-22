@@ -5,6 +5,7 @@ import 'package:soteria/features/dashboard/presentation/providers/practice_lobby
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/preview_gallery/models/mock_data_factory.dart';
 import 'package:soteria/features/gameplay_engine/models/practice_session_config.dart';
+import 'package:soteria/features/gameplay_engine/services/reward_estimator.dart';
 import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 class PracticeLobbyRedesignPreview extends StatefulWidget {
@@ -50,7 +51,7 @@ class _MockPracticeLobbyNotifier extends PracticeLobbyNotifier {
       estimatedRewards: const EstimatedRewards(
         xp: 150,
         coins: 50,
-        potentialMultiplier: 1.5,
+        estimatedDuration: Duration(minutes: 5),
       ),
     );
   }
@@ -75,16 +76,4 @@ class _MockPracticeLobbyNotifier extends PracticeLobbyNotifier {
       config: state.config.copyWith(useInterests: value),
     );
   }
-}
-
-class EstimatedRewards {
-  final int xp;
-  final int coins;
-  final double potentialMultiplier;
-
-  const EstimatedRewards({
-    required this.xp,
-    required this.coins,
-    required this.potentialMultiplier,
-  });
 }

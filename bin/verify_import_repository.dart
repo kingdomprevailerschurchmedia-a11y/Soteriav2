@@ -32,7 +32,7 @@ void main() async {
 
   final snapshot = await Firestore.instance
       .collection('questions')
-      .where('status', '==', 'published')
+      .where('status', 'published')
       .get();
 
   print('Published Questions Found: ${snapshot.length}');

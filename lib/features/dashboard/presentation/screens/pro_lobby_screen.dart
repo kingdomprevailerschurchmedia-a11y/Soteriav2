@@ -118,11 +118,14 @@ class ProLobbyScreen extends ConsumerWidget {
                         ),
                       ),
                       LobbyStartAction(
-                        enabled: state.access.isAllowed,
+                        enabled: state.access.isAllowed && !state.isStarting,
                         error: _getErrorMessage(state.access),
-                        label: 'INITIALIZE SESSION',
-                        helperText:
-                            'Authoritative Validation • Secure Settlement',
+                        label: state.isStarting
+                            ? 'INITIALIZING...'
+                            : 'INITIALIZE SESSION',
+                        helperText: state.isStarting
+                            ? 'Authorizing secure entry...'
+                            : 'Authoritative Validation • Secure Settlement',
                         onStart: () {
                           showDialog(
                             context: context,

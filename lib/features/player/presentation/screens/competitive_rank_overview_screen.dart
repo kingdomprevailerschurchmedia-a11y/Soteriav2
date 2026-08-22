@@ -9,6 +9,7 @@ import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/rank_providers.dart';
 import '../providers/leaderboard_providers.dart';
 import '../providers/personal_record_providers.dart';
+import '../providers/progression_providers.dart';
 import '../../domain/models/competitive_personal_record.dart';
 import '../../domain/models/rank_progress.dart';
 import '../widgets/competitive_rank_badge.dart';

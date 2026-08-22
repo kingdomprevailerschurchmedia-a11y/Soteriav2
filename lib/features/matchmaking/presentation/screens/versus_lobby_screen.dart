@@ -129,7 +129,6 @@ class VersusLobbyScreen extends ConsumerWidget {
                 ),
               ],
             ),
-          ),
         ),
       ),
     );

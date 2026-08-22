@@ -12,6 +12,7 @@ import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dar
 import 'package:soteria/features/gameplay_engine/answer/models/answer_decision.dart';
 import 'package:soteria/features/gameplay_engine/models/answer_review.dart';
 
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/features/player/presentation/providers/progression_providers.dart';
 
 final postGameRepositoryProvider = Provider<PostGameRepository>((ref) {

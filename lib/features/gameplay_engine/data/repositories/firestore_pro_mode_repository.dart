@@ -9,6 +9,7 @@ import '../../models/game_result.dart';
 import '../../domain/config/competitive_reward_config.dart';
 import '../../domain/services/reward_settlement_service.dart';
 import '../../models/competitive_settlement.dart';
+import '../../models/pro_session_config.dart';
 import '../../progression/models/reward_summary.dart';
 import '../../../question_content/domain/entities/difficulty.dart';
 import '../../../quiz/domain/services/quiz_scoring_engine.dart';
@@ -52,56 +53,80 @@ class FirestoreProModeRepository implements ProModeRepository {
     final int fee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
     final now = DateTime.now();
 
-    // 1. Pre-transaction check: Check for existing active sessions to prevent parallel play.
-    // We use a timeout to prevent hanging on flaky connections.
+    // 1. Pre-transaction check: Identify stale sessions for atomic cleanup
     final existingSessions = await _database
         .collection('competitive_sessions')
         .where('uid', isEqualTo: uid)
         .where('status', whereIn: ['initialized', 'active'])
         .get()
-        .timeout(const Duration(seconds: 5), onTimeout: () {
-          LoggerService.e('Pro Mode Entry: Active session check timed out', feature: 'GameplayEngine');
-          throw Exception('Connection timeout checking for active sessions. Please try again.');
-        });
+        .timeout(const Duration(seconds: 5));
 
-    final activeSessions = existingSessions.docs.where((doc) {
-      final data = doc.data();
+    final staleSessionIds = <String>[];
+    final activeSessions = <DocumentSnapshot>[];
+
+    for (var doc in existingSessions.docs) {
+      final data = doc.data() as Map<String, dynamic>;
+      final status = data['status'] ?? 'initialized';
       final updatedAt = data['updatedAt'];
-      final startTime = data['startTime'];
+      final lastHeartbeat = data['lastHeartbeatAt'];
+      final createdAt = data['createdAt'];
 
       DateTime? lastActivity;
-      if (updatedAt is String) {
+      if (lastHeartbeat is String) {
+        lastActivity = DateTime.tryParse(lastHeartbeat);
+      } else if (updatedAt is String) {
         lastActivity = DateTime.tryParse(updatedAt);
+      } else if (createdAt is String) {
+        lastActivity = DateTime.tryParse(createdAt);
       } else if (updatedAt is Timestamp) {
         lastActivity = updatedAt.toDate();
-      } else if (startTime is String) {
-        lastActivity = DateTime.tryParse(startTime);
       }
 
-      if (lastActivity == null) return true;
-      return now.difference(lastActivity).inMinutes < 20;
-    }).toList();
+      if (lastActivity == null) {
+        staleSessionIds.add(doc.id);
+        continue;
+      }
+
+      final duration = now.difference(lastActivity);
+      final isStale = (status == 'active' && duration.inMinutes >= 2) || 
+                      (status == 'initialized' && duration.inMinutes >= 2);
+
+      if (isStale) {
+        staleSessionIds.add(doc.id);
+      } else {
+        activeSessions.add(doc);
+      }
+    }
 
     if (activeSessions.isNotEmpty) {
-      LoggerService.w(
-        'Pro Mode Entry Blocked: Active session exists',
-        feature: 'GameplayEngine',
-        metadata: {'uid': uid, 'sessionId': activeSessions.first.id},
-      );
       throw Exception('An active competitive session already exists.');
     }
 
-    // 2. Authoritative Atomic Transaction for Fee & Stats
+    // 2. Authoritative Atomic Transaction for Fee, Cleanup & Stats
     await _database.instance.runTransaction<void>((transaction) async {
       final playerRef = _database.collection('users').doc(uid);
-      final playerDoc = await transaction.get(playerRef);
+      final walletRef = _database.collection('wallets').doc(uid);
+      final gameProfileRef = _database.collection('user_game_profiles').doc(uid);
+      final reservationRef = _database.collection('pro_reservations').doc(sessionId);
 
-      if (!playerDoc.exists) {
-        throw Exception('Player profile not found.');
-      }
+      // BATCH READ ALL NECESSARY DOCUMENTS FIRST
+      final staleResRefs = staleSessionIds.map((id) => _database.collection('pro_reservations').doc(id)).toList();
+      
+      final playerDocFuture = transaction.get(playerRef);
+      final existingResFuture = transaction.get(reservationRef);
+      final staleDocsFutures = staleResRefs.map((ref) => transaction.get(ref)).toList();
+
+      final playerDoc = await playerDocFuture;
+      final existingRes = await existingResFuture;
+      final staleResDocs = await Future.wait(staleDocsFutures);
+
+      // Idempotency: If this sessionId already has a reservation, do nothing
+      if (existingRes.exists) return;
+
+      if (!playerDoc.exists) throw Exception('Player profile not found.');
 
       final data = playerDoc.data() ?? {};
-      final int currentCoins = data['coins'] ?? 0;
+      int currentCoins = data['coins'] ?? 0;
 
       // Authoritative daily reset check
       final lastSessionDate = data['lastProSessionDate'] != null
@@ -115,11 +140,53 @@ class FirestoreProModeRepository implements ProModeRepository {
           lastSessionDate.month != now.month ||
           lastSessionDate.day != now.day;
 
+      // 3. ATOMIC STALE CLEANUP: Refund any stale sessions found
+      int totalRefund = 0;
+      for (var i = 0; i < staleResDocs.length; i++) {
+        final staleResDoc = staleResDocs[i];
+        final staleId = staleSessionIds[i];
+        final staleResRef = staleResRefs[i];
+        
+        if (staleResDoc.exists) {
+          final resData = staleResDoc.data() ?? {};
+          if (resData['status'] == 'reserved') {
+            final int reservedFee = (resData['fee'] as num?)?.toInt() ?? 0;
+            if (reservedFee > 0) {
+              totalRefund += reservedFee;
+              
+              // Log refund for auditing
+              final txId = _database.collection('wallet_transactions').doc().id;
+              transaction.set(_database.collection('wallet_transactions').doc(txId), {
+                'userId': uid,
+                'type': 'coins',
+                'currency': 'coins',
+                'direction': 'credit',
+                'amount': reservedFee,
+                'transactionType': 'refund',
+                'source': 'staleSessionCleanup',
+                'referenceId': staleId,
+                'status': 'completed',
+                'createdAt': FieldValue.serverTimestamp(),
+              });
+            }
+            transaction.update(staleResRef, {'status': 'refunded', 'cleanedAt': FieldValue.serverTimestamp()});
+            transaction.update(_database.collection('competitive_sessions').doc(staleId), {'status': 'stale_refunded'});
+          }
+        }
+      }
+
+      if (totalRefund > 0) {
+        currentCoins += totalRefund;
+        transaction.update(playerRef, {'coins': FieldValue.increment(totalRefund)});
+        transaction.set(walletRef, {'coins': FieldValue.increment(totalRefund)}, SetOptions(merge: true));
+        transaction.set(gameProfileRef, {'coins': FieldValue.increment(totalRefund)}, SetOptions(merge: true));
+      }
+
+      // 4. RESERVE NEW FEE
       if (!isFree && currentCoins < fee) {
         throw Exception('Insufficient coins for Pro Mode entry.');
       }
 
-      // 1. Update player stats
       final updates = <String, dynamic>{
         'proSessions': FieldValue.increment(1),
         'dailyProSessionsPlayed': isNewDay ? 1 : FieldValue.increment(1),
@@ -132,12 +199,12 @@ class FirestoreProModeRepository implements ProModeRepository {
       }
       
       transaction.update(playerRef, updates);
+      transaction.set(walletRef, {'coins': FieldValue.increment(isFree ? 0 : -fee)}, SetOptions(merge: true));
+      transaction.set(gameProfileRef, {'coins': FieldValue.increment(isFree ? 0 : -fee)}, SetOptions(merge: true));
 
-      // 2. Log coin transaction (only if fee was paid)
       if (!isFree) {
         final txId = _database.collection('wallet_transactions').doc().id;
-        
-        final txData = {
+        transaction.set(_database.collection('wallet_transactions').doc(txId), {
           'userId': uid,
           'type': 'coins',
           'currency': 'coins',
@@ -148,23 +215,14 @@ class FirestoreProModeRepository implements ProModeRepository {
           'referenceId': sessionId,
           'status': 'completed',
           'createdAt': FieldValue.serverTimestamp(),
-          'metadata': {'sessionId': sessionId, 'action': 'entry_fee'},
-        };
-
-        transaction.set(_database.collection('wallet_transactions').doc(txId), txData);
-        
-        // Sync to legacy if needed
-        final coinTxRef = _database.collection('coin_transactions').doc(txId);
-        transaction.set(coinTxRef, txData);
+        });
       }
 
-      // 3. Create a reservation record
-      final reservationRef = _database.collection('pro_reservations').doc(sessionId);
       transaction.set(reservationRef, {
         'uid': uid,
         'fee': isFree ? 0 : fee,
         'isFree': isFree,
-        'timestamp': DateTime.now().toIso8601String(),
+        'timestamp': now.toIso8601String(),
         'status': 'reserved',
       });
     });
@@ -309,7 +367,7 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       final sessionData = sessionDoc.data() as Map<String, dynamic>;
       final configData = sessionData['config'] as Map<String, dynamic>;
-      final difficulty = Difficulty.values.byName(configData['difficulty']);
+      final difficulty = ProDifficulty.values.byName(configData['difficulty']).toBaseDifficulty();
       final questionCount = (configData['questionCount'] as num).toInt();
       final reservedFee = (sessionData['reservedFee'] as num?)?.toInt();
 
@@ -517,6 +575,20 @@ class FirestoreProModeRepository implements ProModeRepository {
           'coins': FieldValue.increment(reservedFee),
           'updatedAt': FieldValue.serverTimestamp(),
         });
+
+        // Sync authoritative Wallet & Game Profile
+        final walletRef = _database.collection('wallets').doc(uid);
+        final gameProfileRef = _database.collection('user_game_profiles').doc(uid);
+        
+        transaction.set(walletRef, {
+          'coins': FieldValue.increment(reservedFee),
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
+
+        transaction.set(gameProfileRef, {
+          'coins': FieldValue.increment(reservedFee),
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
 
         // 2. Log refund transaction
         final txId = _database.collection('wallet_transactions').doc().id;

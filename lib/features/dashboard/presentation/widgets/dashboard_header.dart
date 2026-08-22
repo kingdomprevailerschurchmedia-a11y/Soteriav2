@@ -248,7 +248,9 @@ class _CompactStat extends StatelessWidget {
     this.assetPath,
     required this.value,
     required this.label,
-  }) : icon = null : color = null;
+    this.icon,
+    this.color,
+  });
 
   final IconData? icon;
   final String? assetPath;

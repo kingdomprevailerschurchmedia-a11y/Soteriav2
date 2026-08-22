@@ -4,13 +4,14 @@ import 'package:soteria/features/player/data/repositories/firebase_mission_repos
 import 'package:soteria/features/player/domain/models/competitive_mission.dart';
 import 'package:soteria/features/player/domain/repositories/mission_repository.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
 
 final missionRepositoryProvider = Provider<MissionRepository>((ref) {
   return FirebaseMissionRepository(FirebaseFirestore.instance);
 });
 
 final activeMissionsProvider = StreamProvider<List<CompetitiveMission>>((ref) {
-  final user = ref.watch(currentUserProvider).value;
+  final user = ref.watch(currentPlayerStreamProvider).value;
   if (user == null) return Stream.value([]);
   
   return ref.watch(missionRepositoryProvider).watchActiveMissions(user.uid);
@@ -35,7 +36,7 @@ final seasonalMissionsProvider = Provider<AsyncValue<List<CompetitiveMission>>>(
 });
 
 final missionHistoryProvider = FutureProvider<List<CompetitiveMission>>((ref) async {
-  final user = ref.watch(currentUserProvider).value;
+  final user = ref.watch(currentPlayerStreamProvider).value;
   if (user == null) return [];
   
   return ref.read(missionRepositoryProvider).getMissionHistory(user.uid);

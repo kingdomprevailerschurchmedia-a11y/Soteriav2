@@ -9,6 +9,8 @@ class CompetitiveSession {
   final ProSessionConfig config;
   final List<Question> questions;
   final DateTime startTime;
+  final DateTime createdAt;
+  final DateTime? lastHeartbeatAt;
   final String status;
   final int reservedFee;
 
@@ -18,6 +20,8 @@ class CompetitiveSession {
     required this.config,
     required this.questions,
     required this.startTime,
+    required this.createdAt,
+    this.lastHeartbeatAt,
     this.status = 'initialized',
     required this.reservedFee,
   });
@@ -39,7 +43,9 @@ class CompetitiveSession {
       return json;
     }).toList(),
     'startTime': startTime.toIso8601String(),
-    'updatedAt': startTime.toIso8601String(),
+    'createdAt': createdAt.toIso8601String(),
+    'lastHeartbeatAt': lastHeartbeatAt?.toIso8601String(),
+    'updatedAt': lastHeartbeatAt?.toIso8601String() ?? startTime.toIso8601String(),
     'status': status,
     'reservedFee': reservedFee,
   };

@@ -29,6 +29,7 @@ void main() {
       when(() => mockRepo.completeSession(any(), any()))
           .thenAnswer((_) async => ProModeResult(
                 sessionId: 'test-session',
+                playerId: 'test-player',
                 mode: GameMode.pro,
                 finalScore: 1000,
                 totalXP: 200,

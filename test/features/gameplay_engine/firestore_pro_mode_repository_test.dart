@@ -99,9 +99,10 @@ void main() {
       final mockProfile = PlayerProfile(
         uid: 'test-player',
         displayName: 'Test',
-        photoUrl: null,
+        email: 'test@example.com',
         registrationOrder: 1,
         createdAt: DateTime.now(),
+        lastLogin: DateTime.now(),
         updatedAt: DateTime.now(),
         coins: 1000,
         xp: 100,

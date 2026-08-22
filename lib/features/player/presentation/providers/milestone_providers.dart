@@ -10,6 +10,7 @@ import 'progression_providers.dart';
 import 'history_providers.dart';
 import 'season_providers.dart';
 import 'reward_providers.dart';
+import '../../../../core/identity/providers/identity_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 import 'package:uuid/uuid.dart';
 import '../../domain/models/reward_grant.dart';

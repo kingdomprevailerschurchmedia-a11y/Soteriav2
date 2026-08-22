@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/achievement.dart';
 import '../../domain/services/achievement_registry.dart';
+import '../../../../core/identity/providers/identity_providers.dart';
 import '../../providers/player_providers.dart';
 import '../../../auth/providers/auth_providers.dart';
 

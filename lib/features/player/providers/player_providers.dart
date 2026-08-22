@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../core/firebase/providers/firebase_providers.dart';
 import '../../../core/identity/providers/identity_providers.dart';
 import '../../auth/providers/auth_providers.dart';
+import '../../../core/identity/models/user_profile.dart';
 import '../domain/models/player_profile.dart';
 import '../domain/repositories/player_repository.dart';
 import '../data/repositories/firestore_player_repository.dart';
@@ -195,7 +196,7 @@ final playerAvatarSyncProvider = Provider<void>((ref) {
 
       final updatedPlayer = player.copyWith(
         selectedAvatarId: next.selectedAvatarId,
-        photoUrl: next.avatarUrl,
+        photoUrl: next.avatarUrl ?? '',
         updatedAt: now,
       );
 

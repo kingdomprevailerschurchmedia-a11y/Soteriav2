@@ -22,6 +22,7 @@ void main() {
         ),
         questions: const [],
         startTime: DateTime.now(),
+        createdAt: DateTime.now(),
         reservedFee: 100,
       );
     });

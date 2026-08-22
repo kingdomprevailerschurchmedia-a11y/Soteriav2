@@ -81,6 +81,9 @@ class NextGoalSection extends ConsumerWidget {
       case GoalCategory.streak: iconData = Icons.local_fire_department_rounded; break;
       case GoalCategory.achievement: iconData = Icons.stars_rounded; break;
       case GoalCategory.personalBest: iconData = Icons.auto_awesome_rounded; break;
+      case GoalCategory.correctAnswers: iconData = Icons.check_circle_outline_rounded; break;
+      case GoalCategory.xpEarned: iconData = Icons.bolt_rounded; break;
+      case GoalCategory.practiceCount: iconData = Icons.psychology_rounded; break;
     }
 
     return Container(

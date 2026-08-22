@@ -259,6 +259,7 @@ class MockDataFactory {
       ),
       questions: createMockQuestions(10),
       startTime: DateTime.now().subtract(const Duration(minutes: 10)),
+      createdAt: DateTime.now().subtract(const Duration(minutes: 11)),
       reservedFee: fee ?? 100,
       status: status ?? 'initialized',
     );

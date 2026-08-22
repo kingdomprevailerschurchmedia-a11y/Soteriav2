@@ -153,6 +153,8 @@ class CompetitiveCareerPreviews {
       totalRewards: 12,
       completedMilestones: [],
       totalMilestones: 50,
+      earnedAchievements: [],
+      totalAchievements: 10,
       personalRecords: records,
       careerSummary: summary,
     );

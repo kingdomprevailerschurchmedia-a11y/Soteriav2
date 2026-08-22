@@ -16,7 +16,7 @@ subprojects {
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
 
-// Force all subprojects (including flutter_native_splash) to compile against SDK 35
+// Force all subprojects (including flutter_native_splash) to compile against SDK 36
 subprojects {
     afterEvaluate {
         if (project.hasProperty("android")) {
@@ -24,9 +24,9 @@ subprojects {
                 try {
                     val compileSdkProp = android.javaClass.getMethod("getCompileSdk")
                     val currentSdk = compileSdkProp.invoke(android) as? Int
-                    if (currentSdk == null || currentSdk < 35) {
+                    if (currentSdk == null || currentSdk < 36) {
                         val setCompileSdkMethod = android.javaClass.getMethod("compileSdk", Int::class.java)
-                        setCompileSdkMethod.invoke(android, 35)
+                        setCompileSdkMethod.invoke(android, 36)
                     }
                 } catch (e: Exception) {
                     // Ignore if extension doesn't match

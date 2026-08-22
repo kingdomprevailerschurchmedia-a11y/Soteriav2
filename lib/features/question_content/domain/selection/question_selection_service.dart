@@ -1,3 +1,4 @@
+import '../../../../core/logging/logger_service.dart';
 import '../repositories/question_repository.dart';
 import '../entities/question.dart';
 import 'selection_models.dart';
@@ -48,6 +49,7 @@ class QuestionSelectionService {
              return _finalizeSelection(fallbackPool, request.questionCount, SelectionStatus.success);
            }
         }
+        LoggerService.w('Insufficient questions for Pro Mode session pool.', feature: 'QuestionSelection');
         return const QuestionSelectionResult(
           questions: [],
           status: SelectionStatus.insufficientContent,
@@ -62,6 +64,7 @@ class QuestionSelectionService {
       final selected = strategy.select(filteredPool, request.questionCount);
 
       if (selected.length < request.questionCount) {
+        LoggerService.w('Strategy selected too few questions: ${selected.length} < ${request.questionCount}', feature: 'QuestionSelection');
         return QuestionSelectionResult(
           questions: selected,
           status: SelectionStatus.insufficientContent,
@@ -70,6 +73,7 @@ class QuestionSelectionService {
 
       return _finalizeSelection(selected, request.questionCount, SelectionStatus.success);
     } catch (e) {
+      LoggerService.e('Question selection failed', error: e, feature: 'QuestionSelection');
       return const QuestionSelectionResult(
         questions: [],
         status: SelectionStatus.error,
