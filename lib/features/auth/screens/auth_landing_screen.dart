@@ -8,6 +8,7 @@ import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
 import '../providers/auth_landing_notifier.dart';
 import '../widgets/auth_hero_section.dart';
+import '../widgets/email_login_dialog.dart';
 
 class AuthLandingScreen extends ConsumerWidget {
   const AuthLandingScreen({super.key});
