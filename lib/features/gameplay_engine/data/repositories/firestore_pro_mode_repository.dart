@@ -109,16 +109,16 @@ class FirestoreProModeRepository implements ProModeRepository {
       final gameProfileRef = _database.collection('user_game_profiles').doc(uid);
       final reservationRef = _database.collection('pro_reservations').doc(sessionId);
 
-      // BATCH READ ALL NECESSARY DOCUMENTS FIRST
       final staleResRefs = staleSessionIds.map((id) => _database.collection('pro_reservations').doc(id)).toList();
-      
-      final playerDocFuture = transaction.get(playerRef);
-      final existingResFuture = transaction.get(reservationRef);
-      final staleDocsFutures = staleResRefs.map((ref) => transaction.get(ref)).toList();
 
-      final playerDoc = await playerDocFuture;
-      final existingRes = await existingResFuture;
-      final staleResDocs = await Future.wait(staleDocsFutures);
+      // ATOMIC READS: Ensure all reads happen before any writes
+      final playerDoc = await transaction.get(playerRef);
+      final existingRes = await transaction.get(reservationRef);
+      
+      final staleResDocs = <DocumentSnapshot>[];
+      for (final ref in staleResRefs) {
+        staleResDocs.add(await transaction.get(ref));
+      }
 
       // Idempotency: If this sessionId already has a reservation, do nothing
       if (existingRes.exists) return;

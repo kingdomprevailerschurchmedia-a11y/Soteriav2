@@ -168,6 +168,8 @@ service cloud.firestore {
                     (
                       (request.resource.data.transactionType == 'spend' &&
                        existsAfter(/databases/$(database)/documents/users/$(request.auth.uid))) ||
+                      (request.resource.data.transactionType == 'refund' &&
+                       existsAfter(/databases/$(database)/documents/users/$(request.auth.uid))) ||
                       (request.resource.data.transactionType == 'reward' &&
                        (
                          (request.resource.data.source == 'dailyLogin') ||

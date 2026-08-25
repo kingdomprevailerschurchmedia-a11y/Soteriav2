@@ -43,9 +43,16 @@ class FirebaseBootstrapper {
         onTimeout: () => LoggerService.w('Crashlytics initialization timed out, continuing...', feature: 'Firebase'),
       );
 
+      // CRITICAL: Await App Check activation before potentially starting Firestore operations
+      // to avoid native race conditions and NullPointerExceptions in the Firestore SDK.
+      LoggerService.i('Firebase Bootstrap: Initializing App Check...', feature: 'Firebase');
+      await FirebaseInitializer.initializeAppCheck(securityCoordinator).timeout(
+        const Duration(seconds: 10),
+        onTimeout: () => LoggerService.w('App Check initialization timed out, continuing...', feature: 'Firebase'),
+      );
+
       // 3. Defer non-critical services (don't await them here)
       LoggerService.i('Firebase Bootstrap: Initializing background services...', feature: 'Firebase');
-      unawaited(FirebaseInitializer.initializeAppCheck(securityCoordinator));
       unawaited(FirebaseInitializer.initializeGoogleSignIn());
       unawaited(FirebaseInitializer.initializeAnalytics());
       unawaited(FirebaseInitializer.initializePerformance());

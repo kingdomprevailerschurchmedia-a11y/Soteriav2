@@ -34,12 +34,19 @@ class FirestoreDatabaseService implements IDatabaseService {
 
   @override
   Future<void> enablePersistence() async {
-    // Persistence is enabled by default on Android/iOS in newer SDKs,
-    // but we can explicitly set settings if needed.
-    instance.settings = const firestore.Settings(
-      persistenceEnabled: true,
-      cacheSizeBytes: firestore.Settings.CACHE_SIZE_UNLIMITED,
-    );
+    try {
+      // Persistence is enabled by default on Android/iOS in newer SDKs,
+      // but we can explicitly set settings if needed.
+      // Settings can ONLY be set once and before any other Firestore usage.
+      instance.settings = const firestore.Settings(
+        persistenceEnabled: true,
+        cacheSizeBytes: firestore.Settings.CACHE_SIZE_UNLIMITED,
+      );
+    } catch (e) {
+      // If settings were already set or Firestore was already accessed,
+      // we log it and continue.
+      LoggerService.w('Firestore settings already configured or failed to set: $e');
+    }
   }
 }
 

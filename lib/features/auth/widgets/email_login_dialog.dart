@@ -6,6 +6,7 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
+import '../models/login_state.dart';
 import '../providers/login_notifier.dart';
 
 class EmailLoginDialog extends ConsumerStatefulWidget {
