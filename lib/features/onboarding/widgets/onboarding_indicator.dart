@@ -34,19 +34,19 @@ class _IndicatorDot extends StatelessWidget {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 400),
       curve: Curves.easeOutQuint,
-      margin: EdgeInsets.symmetric(horizontal: 6.w),
-      height: 6.h,
-      width: isActive ? 32.w : 8.w,
+      margin: EdgeInsets.symmetric(horizontal: 4.w),
+      height: 5.h,
+      width: isActive ? 24.w : 6.w,
       decoration: BoxDecoration(
         color: isActive
-            ? const Color(0xFFB456FF)
-            : Colors.white.withValues(alpha: 0.1),
+            ? const Color(0xFF8A55FD)
+            : Colors.white.withValues(alpha: 0.15),
         borderRadius: SoteriaRadius.brFull,
         boxShadow: isActive
             ? [
                 BoxShadow(
-                  color: const Color(0xFFB456FF).withValues(alpha: 0.5),
-                  blurRadius: 12,
+                  color: const Color(0xFF8A55FD).withValues(alpha: 0.4),
+                  blurRadius: 8,
                   spreadRadius: 1,
                 ),
               ]

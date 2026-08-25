@@ -255,7 +255,7 @@ service cloud.firestore {
 
     // PUBLIC PROFILES: Source for other players
     match /public_profiles/{userId} {
-      allow read: if isAuthenticated();
+      allow read: if isAuthenticated() || resource == null;
       allow update: if isOwner(userId) &&
                     isNotModifying([
                       'currentRank', 'rankTier', 'rankPoints', 'division',
@@ -338,12 +338,12 @@ service cloud.firestore {
 
     // GAMEPLAY SESSIONS
     match /practice_sessions/{sessionId} {
-      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
       allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
     }
 
     match /competitive_sessions/{sessionId} {
-      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
       allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
 
       match /answers/{docId} {
@@ -356,12 +356,12 @@ service cloud.firestore {
     }
 
     match /pro_reservations/{sessionId} {
-      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
       allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
     }
 
     match /pro_results/{sessionId} {
-      allow read: if isAuthenticated() && (resource.data.playerId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (resource == null || resource.data.playerId == request.auth.uid || isAdmin());
       allow write: if isAuthenticated() && (request.resource.data.playerId == request.auth.uid || isAdmin());
     }
 

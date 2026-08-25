@@ -32,12 +32,12 @@ class SoteriaBrandingConfig {
   }
 
   /// Vertical gap between logo and wordmark.
-  /// Target visible gap: ~18–24dp.
-  static double getLogoToWordmarkGap() => 20.h;
+  /// Target visible gap: ~1dp.
+  static double getLogoToWordmarkGap() => 1.h;
 
   /// Vertical gap between wordmark and tagline.
-  /// Target: ~2–4dp.
-  static double getWordmarkToTaglineGap() => 3.h;
+  /// Target: ~4–6dp.
+  static double getWordmarkToTaglineGap() => 5.h;
 
   /// Wordmark font weight.
   /// Target: 400–500.
@@ -48,8 +48,8 @@ class SoteriaBrandingConfig {
   static FontWeight getTaglineFontWeight() => FontWeight.w500;
 
   /// Wordmark letter spacing.
-  /// Target: ~5.0.
-  static double getWordmarkLetterSpacing() => 5.0;
+  /// Target: ~8.0.
+  static double getWordmarkLetterSpacing() => 8.0;
 
   /// Tagline letter spacing.
   /// Target: ~2.2.

@@ -142,6 +142,8 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       // 3. ATOMIC STALE CLEANUP: Refund any stale sessions found
       int totalRefund = 0;
+      String? lastStaleTxId;
+
       for (var i = 0; i < staleResDocs.length; i++) {
         final staleResDoc = staleResDocs[i];
         final staleId = staleSessionIds[i];
@@ -156,6 +158,7 @@ class FirestoreProModeRepository implements ProModeRepository {
               
               // Log refund for auditing
               final txId = _database.collection('wallet_transactions').doc().id;
+              lastStaleTxId = txId;
               transaction.set(_database.collection('wallet_transactions').doc(txId), {
                 'userId': uid,
                 'type': 'coins',
@@ -175,15 +178,8 @@ class FirestoreProModeRepository implements ProModeRepository {
         }
       }
 
-      if (totalRefund > 0) {
-        currentCoins += totalRefund;
-        transaction.update(playerRef, {'coins': FieldValue.increment(totalRefund)});
-        transaction.set(walletRef, {'coins': FieldValue.increment(totalRefund)}, SetOptions(merge: true));
-        transaction.set(gameProfileRef, {'coins': FieldValue.increment(totalRefund)}, SetOptions(merge: true));
-      }
-
       // 4. RESERVE NEW FEE
-      if (!isFree && currentCoins < fee) {
+      if (!isFree && (currentCoins + totalRefund) < fee) {
         throw Exception('Insufficient coins for Pro Mode entry.');
       }
 
@@ -194,17 +190,36 @@ class FirestoreProModeRepository implements ProModeRepository {
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
+      String? spendTxId;
       if (!isFree) {
-        updates['coins'] = FieldValue.increment(-fee);
+        spendTxId = _database.collection('wallet_transactions').doc().id;
+        updates['coins'] = FieldValue.increment(totalRefund - fee);
+        updates['lastCoinTransactionId'] = spendTxId;
+      } else if (totalRefund > 0) {
+        updates['coins'] = FieldValue.increment(totalRefund);
+        updates['lastCoinTransactionId'] = lastStaleTxId;
       }
       
       transaction.update(playerRef, updates);
-      transaction.set(walletRef, {'coins': FieldValue.increment(isFree ? 0 : -fee)}, SetOptions(merge: true));
-      transaction.set(gameProfileRef, {'coins': FieldValue.increment(isFree ? 0 : -fee)}, SetOptions(merge: true));
 
-      if (!isFree) {
-        final txId = _database.collection('wallet_transactions').doc().id;
-        transaction.set(_database.collection('wallet_transactions').doc(txId), {
+      final walletUpdates = <String, dynamic>{
+        'coins': FieldValue.increment(isFree ? totalRefund : totalRefund - fee),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+      if (spendTxId != null) {
+        walletUpdates['lastTransactionId'] = spendTxId;
+      } else if (lastStaleTxId != null) {
+        walletUpdates['lastTransactionId'] = lastStaleTxId;
+      }
+
+      transaction.set(walletRef, walletUpdates, SetOptions(merge: true));
+      transaction.set(gameProfileRef, {
+        'coins': FieldValue.increment(isFree ? totalRefund : totalRefund - fee),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      if (spendTxId != null) {
+        transaction.set(_database.collection('wallet_transactions').doc(spendTxId), {
           'userId': uid,
           'type': 'coins',
           'currency': 'coins',
@@ -449,21 +464,31 @@ class FirestoreProModeRepository implements ProModeRepository {
         
         final txId = _database.collection('wallet_transactions').doc().id;
 
-        transaction.update(playerRef, {
-          'coins': FieldValue.increment(amount),
+        final playerUpdates = <String, dynamic>{
           'proSessions': FieldValue.increment(1),
           'totalQuestionsAnswered': FieldValue.increment(totalQuestions),
           'correctAnswers': FieldValue.increment(correctCount),
           'updatedAt': FieldValue.serverTimestamp(),
-        });
+        };
+
+        if (amount > 0) {
+          playerUpdates['coins'] = FieldValue.increment(amount);
+          playerUpdates['lastCoinTransactionId'] = txId;
+        }
+
+        transaction.update(playerRef, playerUpdates);
 
         // 1. Sync Wallet & Game Profile
-        transaction.set(walletRef, {
+        final walletUpdates = <String, dynamic>{
           'coins': FieldValue.increment(amount),
           'lifetimeCoinsEarned': FieldValue.increment(amount),
-          'lastTransactionId': txId,
           'updatedAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
+        };
+        if (amount > 0) {
+          walletUpdates['lastTransactionId'] = txId;
+        }
+
+        transaction.set(walletRef, walletUpdates, SetOptions(merge: true));
 
         transaction.set(gameProfileRef, {
           'coins': FieldValue.increment(amount),
@@ -494,11 +519,6 @@ class FirestoreProModeRepository implements ProModeRepository {
 
           transaction.set(walletTxRef, txData);
           
-          // Update last transaction ID for security rule verification
-          transaction.update(playerRef, {
-            'lastCoinTransactionId': txId,
-          });
-
           // Sync to legacy if needed
           final coinTxRef = _database.collection('coin_transactions').doc(txId);
           transaction.set(coinTxRef, txData);
@@ -571,8 +591,11 @@ class FirestoreProModeRepository implements ProModeRepository {
       // 1. Restore coins (if a fee was actually paid)
       final int reservedFee = (resData['fee'] as num?)?.toInt() ?? fee;
       if (reservedFee > 0) {
+        final txId = _database.collection('wallet_transactions').doc().id;
+        
         transaction.update(playerRef, {
           'coins': FieldValue.increment(reservedFee),
+          'lastCoinTransactionId': txId,
           'updatedAt': FieldValue.serverTimestamp(),
         });
 
@@ -582,6 +605,7 @@ class FirestoreProModeRepository implements ProModeRepository {
         
         transaction.set(walletRef, {
           'coins': FieldValue.increment(reservedFee),
+          'lastTransactionId': txId,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 
@@ -591,7 +615,6 @@ class FirestoreProModeRepository implements ProModeRepository {
         }, SetOptions(merge: true));
 
         // 2. Log refund transaction
-        final txId = _database.collection('wallet_transactions').doc().id;
         final txData = {
           'userId': uid,
           'type': 'coins',

@@ -74,29 +74,21 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final isTablet = SoteriaResponsive.isTablet(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0B012A),
+      backgroundColor: SoteriaColors.backgroundBottomRight,
       body: Stack(
         children: [
-          // Premium Background Gradient & Blur
+          // Premium Background Gradient
           Positioned.fill(
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                   colors: [
-                    const Color(0xFF2E1A8A).withValues(alpha: 0.6),
-                    const Color(0xFF0B012A).withValues(alpha: 0.9),
+                    Color(0xFF1E1045), // Lighter top
+                    Color(0xFF090514), // Darker bottom
                   ],
                 ),
-              ),
-            ),
-          ),
-          Positioned.fill(
-            child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-              child: Container(
-                color: Colors.transparent,
               ),
             ),
           ),
@@ -106,6 +98,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             onPageChanged: (index) => notifier.setPage(index),
             children: [
               OnboardingPage(
+                badgeLabel: 'PLATFORM',
                 title: 'Compete. Learn. Rise.',
                 titleWidget: _buildRichHeadline(context),
                 description:
@@ -118,36 +111,36 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 ),
               ),
               OnboardingPage(
+                badgeLabel: 'CHALLENGE',
                 title: 'Challenge Yourself',
                 description:
                     'Practice daily, compete with peers, and grow your knowledge faster.',
                 offset: _currentPage - 1,
                 backgroundGlowColor: SoteriaColors.secondary,
-                illustrationScale: 2,
                 illustration: Image.asset(
                   'assets/images/challenge.png',
                   fit: BoxFit.contain,
                 ),
               ),
               OnboardingPage(
+                badgeLabel: 'RECOGNITION',
                 title: 'Earn Recognition',
                 description:
                     'Climb the leaderboards, earn exclusive badges, and build your reputation.',
                 offset: _currentPage - 2,
                 backgroundGlowColor: SoteriaColors.gold,
-                illustrationScale: 2,
                 illustration: Image.asset(
                   'assets/images/recognition.png',
                   fit: BoxFit.contain,
                 ),
               ),
               OnboardingPage(
+                badgeLabel: 'COMMUNITY',
                 title: 'Ready to Begin?',
                 description:
                     'Join the community of innovators and start your journey today.',
                 offset: _currentPage - 3,
                 backgroundGlowColor: SoteriaColors.success,
-                illustrationScale: 2,
                 illustration: Image.asset(
                   'assets/images/ready.png',
                   fit: BoxFit.contain,
@@ -179,7 +172,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         currentIndex: state.currentPage,
                         itemCount: 4,
                       ),
-                      SizedBox(height: 40.h),
+                      SizedBox(height: 56.h),
                       Row(
                         mainAxisAlignment: state.currentPage == 3
                             ? MainAxisAlignment.center
@@ -209,19 +202,22 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             },
                             child: Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 32.w,
-                                vertical: 16.h,
+                                horizontal: 36.w,
+                                vertical: 18.h,
                               ),
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(16.r),
-                                gradient: const LinearGradient(
-                                  colors: [Color(0xFF8A55FD), Color(0xFFE58C3D)],
+                                borderRadius: BorderRadius.circular(20.r),
+                                gradient: LinearGradient(
+                                  colors: [
+                                    SoteriaColors.gold.withValues(alpha: 0.9),
+                                    SoteriaColors.gold.withValues(alpha: 0.7),
+                                  ],
                                 ),
                                 boxShadow: [
                                   BoxShadow(
-                                    color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
+                                    color: SoteriaColors.gold.withValues(alpha: 0.3),
                                     blurRadius: 20,
-                                    offset: const Offset(0, 10),
+                                    offset: const Offset(0, 8),
                                   ),
                                 ],
                               ),
@@ -231,15 +227,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                   Text(
                                     state.currentPage == 3 ? 'Get Started' : 'Continue',
                                     style: context.titleMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
+                                      color: const Color(0xFF090514),
+                                      fontWeight: FontWeight.w800,
                                     ),
                                   ),
-                                  SizedBox(width: 8.w),
+                                  SizedBox(width: 12.w),
                                   const Icon(
                                     Icons.arrow_forward_rounded,
-                                    color: Colors.white,
-                                    size: 20,
+                                    color: Color(0xFF090514),
+                                    size: 22,
                                   ),
                                 ],
                               ),

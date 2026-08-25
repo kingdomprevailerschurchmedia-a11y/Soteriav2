@@ -46,11 +46,6 @@ dependencies:
   freezed_annotation: ^3.1.0
   json_annotation: ^4.9.0
 
-  # ---------------------------------------------------------------------------
-  # Native Splash
-  # ---------------------------------------------------------------------------
-
-  flutter_native_splash: ^2.4.4
 
   # ---------------------------------------------------------------------------
   # Firebase
@@ -127,36 +122,6 @@ flutter_launcher_icons:
   remove_alpha_ios: true
   min_sdk_android: 24
 
-# =============================================================================
-# FLUTTER NATIVE SPLASH
-# =============================================================================
-#
-# IMPORTANT:
-# The native splash is intentionally minimal.
-#
-# It is NOT the actual Soteria splash design.
-#
-# It exists only as a seamless launch bridge while Flutter initializes.
-#
-# Native:
-#     #090514 (Blank - as requested)
-#
-# Flutter:
-#     splash_bg.png + logo_icon.png + Soteria branding
-#
-# =============================================================================
-
-flutter_native_splash:
-  color: "#090514"
-  image: "assets/images/logo_icon.png"
-  android: true
-  ios: true
-  fullscreen: true
-
-  android_12:
-    color: "#090514"
-    icon_background_color: "#090514"
-    image: "assets/images/logo_icon.png"
 
 # =============================================================================
 # FLUTTER
@@ -171,7 +136,7 @@ flutter:
   #
   # This includes:
   #
-  # assets/images/splash_bg.png
+  # assets/images/splash_bg.webp
   # assets/images/logo_icon.png
   #
   # along with other images stored inside this directory.

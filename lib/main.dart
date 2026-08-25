@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soteria/features/gameplay_engine/providers/gameplay_providers.dart';
 import 'package:soteria/core/app/app.dart';
@@ -14,7 +13,7 @@ import 'package:soteria/core/services/performance_service.dart';
 void main() {
   runZonedGuarded(
     () async {
-      WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+      WidgetsFlutterBinding.ensureInitialized();
       final sharedPrefs = await SharedPreferences.getInstance();
 
       // Enable Edge-to-Edge mode
@@ -27,8 +26,6 @@ void main() {
           statusBarIconBrightness: Brightness.light,
         ),
       );
-
-      FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
       // We no longer await Firebase.initializeApp here to get to runApp faster.
       // The initialization is now handled by the FirebaseBootstrapper.

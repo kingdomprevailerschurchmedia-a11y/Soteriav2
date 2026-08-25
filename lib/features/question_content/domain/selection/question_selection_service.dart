@@ -1,6 +1,7 @@
 import '../../../../core/logging/logger_service.dart';
 import '../repositories/question_repository.dart';
 import '../entities/question.dart';
+import '../entities/difficulty.dart';
 import 'selection_models.dart';
 import 'selection_strategy.dart';
 

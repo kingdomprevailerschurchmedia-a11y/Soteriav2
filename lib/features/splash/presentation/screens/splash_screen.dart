@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,7 +37,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   bool _minimumSplashDurationComplete = false;
   bool _startupReady = false;
-  bool _nativeSplashRemoved = false;
   bool _hasNavigated = false;
 
   // ===========================================================================
@@ -58,7 +56,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Precache assets to ensure they are ready before native splash removal
-    precacheImage(const AssetImage('assets/images/splash_bg.png'), context);
+    precacheImage(const AssetImage('assets/images/splash_bg.webp'), context);
     precacheImage(const AssetImage('assets/images/logo_icon.png'), context);
   }
 
@@ -139,21 +137,16 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     /*
      * CRITICAL:
      *
-     * The native splash is removed only after Flutter has rendered
-     * the custom splash screen's first frame.
+     * The custom splash screen's first frame is rendered.
      *
      * Native splash:
      *     #090514
      *
      * Flutter splash:
-     *     splash_bg.png
-     *
-     * This makes the native → Flutter handoff visually seamless.
+     *     splash_bg.webp
      */
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-
-      _removeNativeSplash();
 
       /*
        * Minimum branded display time.
@@ -189,17 +182,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     );
   }
 
-  // ===========================================================================
-  // NATIVE SPLASH
-  // ===========================================================================
-
-  void _removeNativeSplash() {
-    if (_nativeSplashRemoved) return;
-
-    _nativeSplashRemoved = true;
-
-    FlutterNativeSplash.remove();
-  }
 
   // ===========================================================================
   // NAVIGATION GATE
@@ -311,7 +293,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           // =================================================================
           // COMPLETE SPLASH BACKGROUND
           //
-          // splash_bg.png already contains:
+          // splash_bg.webp already contains:
           //
           // • Deep Soteria background
           // • Pattern artwork
@@ -357,7 +339,7 @@ class _SplashBackground extends StatelessWidget {
     return Container(
       color: SoteriaColors.backgroundBottomRight,
       child: Image.asset(
-        'assets/images/splash_bg.png',
+        'assets/images/splash_bg.webp',
         fit: BoxFit.cover,
         alignment: Alignment.center,
         filterQuality: FilterQuality.high,

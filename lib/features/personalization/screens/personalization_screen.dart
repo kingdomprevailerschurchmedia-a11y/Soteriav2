@@ -164,7 +164,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                             child: Container(
                               decoration: BoxDecoration(
                                 gradient: const LinearGradient(
-                                  colors: [Color(0xFF8A55FD), Color(0xFFFF4081)],
+                                  colors: [Color(0xFF8A55FD), SoteriaColors.gold],
                                 ),
                                 borderRadius: BorderRadius.circular(100),
                                 boxShadow: [
@@ -257,15 +257,18 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16.r),
                           gradient: isValid
-                              ? const LinearGradient(
-                                  colors: [Color(0xFF8A55FD), Color(0xFFE58C3D)],
+                              ? LinearGradient(
+                                  colors: [
+                                    SoteriaColors.gold.withValues(alpha: 0.9),
+                                    SoteriaColors.gold.withValues(alpha: 0.7),
+                                  ],
                                 )
                               : null,
                           color: isValid ? null : Colors.white.withValues(alpha: 0.05),
                           boxShadow: isValid
                               ? [
                                   BoxShadow(
-                                    color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
+                                    color: SoteriaColors.gold.withValues(alpha: 0.2),
                                     blurRadius: 15,
                                     offset: const Offset(0, 8),
                                   ),
@@ -281,7 +284,9 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                     ? 'COMPLETE PROFILE'
                                     : 'CONTINUE',
                                 style: context.titleMedium.copyWith(
-                                  color: isValid ? Colors.white : SoteriaColors.muted,
+                                  color: isValid
+                                      ? SoteriaColors.backgroundBottomRight
+                                      : SoteriaColors.muted,
                                   fontWeight: FontWeight.w900,
                                   letterSpacing: 0.5,
                                   fontSize: 16.sp,
@@ -290,7 +295,9 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                               SizedBox(width: 8.w),
                               Icon(
                                 Icons.arrow_forward_rounded,
-                                color: isValid ? Colors.white : SoteriaColors.muted,
+                                color: isValid
+                                    ? SoteriaColors.backgroundBottomRight
+                                    : SoteriaColors.muted,
                                 size: 18,
                               ),
                             ],

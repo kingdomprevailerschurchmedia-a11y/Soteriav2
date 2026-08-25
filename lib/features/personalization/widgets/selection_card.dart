@@ -122,8 +122,11 @@ class SelectionCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     gradient: isSelected
-                        ? const LinearGradient(
-                            colors: [Color(0xFF8A55FD), Color(0xFFFF4081)],
+                        ? LinearGradient(
+                            colors: [
+                              SoteriaColors.gold.withValues(alpha: 0.9),
+                              SoteriaColors.gold.withValues(alpha: 0.7),
+                            ],
                           )
                         : null,
                     color: isSelected ? null : Colors.white.withValues(alpha: 0.05),
@@ -133,7 +136,9 @@ class SelectionCard extends StatelessWidget {
                   ),
                   child: Icon(
                     isSelected ? Icons.check : Icons.chevron_right_rounded,
-                    color: Colors.white,
+                    color: isSelected
+                        ? SoteriaColors.backgroundBottomRight
+                        : Colors.white,
                     size: 18.w,
                   ),
                 ),

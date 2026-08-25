@@ -79,7 +79,7 @@ class _PremiumBackgroundState extends State<PremiumBackground>
           child: Opacity(
             opacity: 0.015,
             child: Image.asset(
-              'assets/images/splash_bg.png', // Reusing splash bg if it has texture
+              'assets/images/splash_bg.webp', // Reusing splash bg if it has texture
               fit: BoxFit.cover,
             ),
           ),

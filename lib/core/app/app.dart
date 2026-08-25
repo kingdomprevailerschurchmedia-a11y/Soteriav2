@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
@@ -33,8 +32,6 @@ class SoteriaApp extends ConsumerWidget {
       builder: (context, child) {
         return firebaseInit.when(
           data: (_) {
-            // Remove native splash only after we have data and are ready to build the app
-            FlutterNativeSplash.remove();
             return _buildApp(context, ref);
           },
           loading: () {
@@ -94,9 +91,6 @@ class SoteriaApp extends ConsumerWidget {
   }
 
   Widget _buildErrorApp(BuildContext context, WidgetRef ref, Object error) {
-    // Ensure native splash is removed if we hit a fatal error
-    FlutterNativeSplash.remove();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: SoteriaTheme.darkTheme,

@@ -31,6 +31,8 @@ import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/presentation/providers/progression_providers.dart' as player_prog;
 import 'package:soteria/core/identity/providers/identity_providers.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
+import 'package:soteria/features/dashboard/presentation/providers/pro_lobby_providers.dart';
 
 /// Central engine managing the lifecycle and state of a gameplay session.
 class GameEngine extends StateNotifier<GameState> {
@@ -131,9 +133,12 @@ class GameEngine extends StateNotifier<GameState> {
 
       // Authoritative remote start for competitive modes
       if (config.mode == GameMode.pro) {
-        await ref
-            ?.read(competitiveRepositoryProvider)
-            .startCompetitiveSession(state.sessionId)
+        final uid = ref?.read(sessionProvider).uid;
+        if (uid == null) throw Exception('User authentication required for Pro Mode');
+
+        await ref!
+            .read(competitiveRepositoryProvider)
+            .startCompetitiveSession(state.sessionId, uid)
             .timeout(const Duration(seconds: 10), onTimeout: () {
               throw Exception('Match activation timed out. Check your connection.');
             });
