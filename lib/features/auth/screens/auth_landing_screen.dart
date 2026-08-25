@@ -7,7 +7,6 @@ import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
 import '../providers/auth_landing_notifier.dart';
-import '../widgets/auth_hero_section.dart';
 import '../widgets/email_login_dialog.dart';
 
 class AuthLandingScreen extends ConsumerWidget {
@@ -197,9 +196,7 @@ class AuthLandingScreen extends ConsumerWidget {
 
                                   // Email Login Link
                                   GestureDetector(
-                                    onTap: () => ref
-                                        .read(navigationServiceProvider)
-                                        .push('${SoteriaRoutes.auth}/login'),
+                                    onTap: () => EmailLoginDialog.show(context),
                                     child: Text(
                                       'Login with Email',
                                       style: context.bodyMedium.copyWith(
