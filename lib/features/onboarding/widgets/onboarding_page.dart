@@ -13,20 +13,22 @@ class OnboardingPage extends StatelessWidget {
     required this.title,
     required this.description,
     required this.illustration,
+    required this.pageController,
+    required this.index,
     this.badgeLabel,
     this.titleWidget,
     this.backgroundGlowColor,
-    this.offset = 0.0,
     this.illustrationScale = 1.0,
   });
 
   final String title;
   final String description;
   final Widget illustration;
+  final PageController pageController;
+  final int index;
   final String? badgeLabel;
   final Widget? titleWidget;
   final Color? backgroundGlowColor;
-  final double offset;
   final double illustrationScale;
 
   @override
@@ -34,107 +36,117 @@ class OnboardingPage extends StatelessWidget {
     final isShort = SoteriaResponsive.isShortScreen(context);
     final isTablet = SoteriaResponsive.isTablet(context);
 
-    return Stack(
-      children: [
-        if (backgroundGlowColor != null)
-          Positioned(
-            top: -100.h,
-            right: -100.w,
-            child: AmbientGlow(
-              color: backgroundGlowColor!.withValues(alpha: 0.1),
-              size: 500.w,
-              blur: 120,
-            ),
-          ),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            final maxHeight = constraints.maxHeight;
-            final maxWidth = constraints.maxWidth;
-            final isLandscape = maxWidth > maxHeight;
+    return AnimatedBuilder(
+      animation: pageController,
+      builder: (context, child) {
+        double offset = 0.0;
+        if (pageController.hasClients) {
+          offset = (pageController.page ?? 0.0) - index;
+        }
 
-            // Content width constraint for tablets
-            final contentWidth = isTablet ? 500.0 : maxWidth;
+        final double opacity = (1.0 - offset.abs()).clamp(0.0, 1.0);
+        final double scale = (1.0 - (offset.abs() * 0.05)).clamp(0.9, 1.0);
 
-            return Center(
-              child: SizedBox(
-                width: contentWidth,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: SoteriaSpacing.containerPadding(context),
+        return Stack(
+          children: [
+            if (backgroundGlowColor != null)
+              Positioned(
+                top: -100.h,
+                right: -100.w,
+                child: Opacity(
+                  opacity: opacity,
+                  child: AmbientGlow(
+                    color: backgroundGlowColor!.withValues(alpha: 0.1),
+                    size: 500.w,
+                    blur: 120,
                   ),
-                  child: Column(
-                    children: [
-                      // Top Spacing
-                      if (isLandscape)
-                        SizedBox(height: 16.h)
-                      else
-                        const Spacer(flex: 4),
+                ),
+              ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final maxHeight = constraints.maxHeight;
+                final maxWidth = constraints.maxWidth;
+                final isLandscape = maxWidth > maxHeight;
 
-                      // Illustration Area
-                      Flexible(
-                        flex: isLandscape ? 4 : 6,
-                        child: Transform.translate(
-                          offset: Offset(offset * 100, 0),
-                          child: AnimatedScale(
-                            scale: 1.0 - (offset.abs() * 0.15),
-                            duration: const Duration(milliseconds: 400),
-                            child: AnimatedOpacity(
-                              opacity: 1.0 - (offset.abs() * 0.6),
-                              duration: const Duration(milliseconds: 400),
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxHeight: isLandscape
-                                      ? maxHeight * 0.3
-                                      : maxHeight * 0.35,
-                                  maxWidth: isLandscape
-                                      ? contentWidth * 0.4
-                                      : contentWidth * 0.85,
-                                ),
-                                child: AspectRatio(
-                                  aspectRatio: 1,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(24.r),
-                                    child: Transform.scale(
-                                      scale: illustrationScale,
-                                      child: illustration,
+                // Content width constraint for tablets
+                final contentWidth = isTablet ? 500.0 : maxWidth;
+
+                return Center(
+                  child: SizedBox(
+                    width: contentWidth,
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: SoteriaSpacing.containerPadding(context),
+                      ),
+                      child: Column(
+                        children: [
+                          // Top Spacing
+                          if (isLandscape)
+                            SizedBox(height: 16.h)
+                          else
+                            const Spacer(flex: 4),
+
+                          // Illustration Area
+                          Flexible(
+                            flex: isLandscape ? 4 : 6,
+                            child: Opacity(
+                              opacity: opacity,
+                              child: Transform.scale(
+                                scale: scale,
+                                child: ConstrainedBox(
+                                  constraints: BoxConstraints(
+                                    maxHeight: isLandscape
+                                        ? maxHeight * 0.3
+                                        : maxHeight * 0.35,
+                                    maxWidth: isLandscape
+                                        ? contentWidth * 0.4
+                                        : contentWidth * 0.85,
+                                  ),
+                                  child: AspectRatio(
+                                    aspectRatio: 1,
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(24.r),
+                                      child: Transform.scale(
+                                        scale: illustrationScale,
+                                        child: illustration,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
 
-                      // Spacing between Illustration and Text
-                      if (isLandscape)
-                        SizedBox(height: 12.h)
-                      else
-                        SizedBox(height: 16.h),
+                          // Spacing between Illustration and Text
+                          if (isLandscape)
+                            SizedBox(height: 12.h)
+                          else
+                            SizedBox(height: 16.h),
 
-                      // Content Area
-                      Transform.translate(
-                        offset: Offset(offset * 60, 0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (badgeLabel != null) ...[
-                              _buildBadge(context, badgeLabel!),
-                              SizedBox(height: 24.h),
-                            ],
-                            if (titleWidget != null)
-                              titleWidget!
-                            else
-                              _buildDefaultTitle(context, title),
-                            SizedBox(
-                              height: isLandscape ? 12.h : SoteriaSpacing.lg,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 24.w),
-                              child: Text(
-                                description,
-                                style:
-                                    (isShort || isLandscape
+                          // Content Area
+                          Opacity(
+                            opacity: opacity,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                if (badgeLabel != null) ...[
+                                  _buildBadge(context, badgeLabel!),
+                                  SizedBox(height: 24.h),
+                                ],
+                                if (titleWidget != null)
+                                  titleWidget!
+                                else
+                                  _buildDefaultTitle(context, title),
+                                SizedBox(
+                                  height:
+                                      isLandscape ? 12.h : SoteriaSpacing.lg,
+                                ),
+                                Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 24.w),
+                                  child: Text(
+                                    description,
+                                    style: (isShort || isLandscape
                                             ? context.bodyMedium
                                             : context.bodyLarge)
                                         .copyWith(
@@ -142,30 +154,32 @@ class OnboardingPage extends StatelessWidget {
                                           height: 1.6,
                                           fontSize: 16.sp,
                                         ),
-                                textAlign: TextAlign.center,
-                                maxLines: isLandscape ? 2 : 3,
-                                overflow: TextOverflow.ellipsis,
-                              ),
+                                    textAlign: TextAlign.center,
+                                    maxLines: isLandscape ? 2 : 3,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
+                          ),
 
-                      // Bottom Spacing for Controls
-                      if (isLandscape)
-                        SizedBox(height: 16.h)
-                      else if (isShort)
-                        SizedBox(height: 140.h)
-                      else
-                        SizedBox(height: 200.h),
-                    ],
+                          // Bottom Spacing for Controls
+                          if (isLandscape)
+                            SizedBox(height: 16.h)
+                          else if (isShort)
+                            SizedBox(height: 140.h)
+                          else
+                            SizedBox(height: 200.h),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              ),
-            );
-          },
-        ),
-      ],
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 

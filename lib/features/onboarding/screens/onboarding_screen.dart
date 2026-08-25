@@ -20,17 +20,11 @@ class OnboardingScreen extends ConsumerStatefulWidget {
 
 class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   late PageController _pageController;
-  double _currentPage = 0.0;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
-    _pageController.addListener(() {
-      setState(() {
-        _currentPage = _pageController.page ?? 0.0;
-      });
-    });
   }
 
   @override
@@ -105,7 +99,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 titleWidget: _buildRichHeadline(context),
                 description:
                     "Africa's premium competitive learning platform.",
-                offset: _currentPage - 0,
+                pageController: _pageController,
+                index: 0,
                 backgroundGlowColor: SoteriaColors.primary,
                 illustration: Image.asset(
                   'assets/images/rise.png',
@@ -117,7 +112,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 title: 'Challenge Yourself',
                 description:
                     'Practice daily, compete with peers, and grow your knowledge faster.',
-                offset: _currentPage - 1,
+                pageController: _pageController,
+                index: 1,
                 backgroundGlowColor: SoteriaColors.secondary,
                 illustration: Image.asset(
                   'assets/images/challenge.png',
@@ -129,7 +125,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 title: 'Earn Recognition',
                 description:
                     'Climb the leaderboards, earn exclusive badges, and build your reputation.',
-                offset: _currentPage - 2,
+                pageController: _pageController,
+                index: 2,
                 backgroundGlowColor: SoteriaColors.gold,
                 illustration: Image.asset(
                   'assets/images/recognition.png',
@@ -141,7 +138,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 title: 'Ready to Begin?',
                 description:
                     'Join the community of innovators and start your journey today.',
-                offset: _currentPage - 3,
+                pageController: _pageController,
+                index: 3,
                 backgroundGlowColor: SoteriaColors.success,
                 illustration: Image.asset(
                   'assets/images/ready.png',

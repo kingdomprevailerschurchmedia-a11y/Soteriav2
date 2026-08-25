@@ -73,44 +73,26 @@ class AuthLandingScreen extends ConsumerWidget {
                               // Content Area (Pushed to bottom)
                               Column(
                                 children: [
-                                  // Badge
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 12.w,
-                                      vertical: 4.h,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Colors.white.withValues(alpha: 0.05),
-                                      borderRadius: BorderRadius.circular(100),
-                                      border: Border.all(
-                                        color:
-                                            Colors.white.withValues(alpha: 0.1),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      'SOTERIA',
-                                      style: context.labelSmall.copyWith(
-                                        color: Colors.white
-                                            .withValues(alpha: 0.4),
-                                        fontWeight: FontWeight.w800,
-                                        letterSpacing: 2.0,
-                                        fontSize: 10.sp,
-                                      ),
-                                    ),
-                                  ),
-
-                                  SizedBox(height: 16.h),
-
-                                  Text(
-                                    'Welcome to\nSoteria',
-                                    style: context.displayMedium.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w900,
-                                      height: 1.1,
-                                      fontSize: 36.sp,
-                                    ),
+                                  RichText(
                                     textAlign: TextAlign.center,
+                                    text: TextSpan(
+                                      style: context.displayMedium.copyWith(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.1,
+                                        fontSize: 36.sp,
+                                      ),
+                                      children: [
+                                        const TextSpan(text: 'Welcome to\n'),
+                                        TextSpan(
+                                          text: 'Soteria',
+                                          style: TextStyle(
+                                            color: SoteriaColors.gold,
+                                            fontWeight: FontWeight.w900,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
 
                                   SizedBox(height: 12.h),
