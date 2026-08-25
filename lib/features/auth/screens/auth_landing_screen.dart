@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
-import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
-import 'package:soteria/shared/widgets/soteria_divider.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
-import '../models/identity_provider.dart';
 import '../providers/auth_landing_notifier.dart';
 import '../widgets/auth_hero_section.dart';
-import '../widgets/auth_provider_button.dart';
-import '../widgets/feature_carousel.dart';
 
 class AuthLandingScreen extends ConsumerWidget {
   const AuthLandingScreen({super.key});
@@ -33,162 +28,239 @@ class AuthLandingScreen extends ConsumerWidget {
     return SoteriaPage(
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: SafeArea(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return SingleChildScrollView(
-                physics: const BouncingScrollPhysics(),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: SoteriaSpacing.adaptive(
-                        context,
-                        SoteriaSpacing.xlStatic,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            const AuthHeroSection(),
-
-                            // Primary Login Actions
-                            AuthProviderButton(
-                              provider: const IdentityProvider(
-                                id: 'google',
-                                name: 'Continue with Google',
-                                icon: Icons.g_mobiledata_rounded,
-                                type: IdentityProviderType.google,
-                              ),
-                              onTap: () => notifier.signInWithGoogle(),
-                              isLoading: state.isLoading,
-                            ),
-
-                            const SoteriaDivider(),
-
-                            SizedBox(height: 4.h),
-
-                            AuthProviderButton(
-                              provider: const IdentityProvider(
-                                id: 'email',
-                                name: 'Continue with Email',
-                                icon: Icons.mail_outline_rounded,
-                                type: IdentityProviderType.email,
-                              ),
-                              onTap: () => ref
-                                  .read(navigationServiceProvider)
-                                  .push('${SoteriaRoutes.auth}/login'),
-                            ),
-
-                            SizedBox(height: 12.h),
-
-                            // Feature Highlights
-                            const FeatureCarousel(),
-
-                            SizedBox(height: 16.h),
-
-                            // Secondary Navigation
-                            Column(
-                              children: [
-                                Text(
-                                  "Don't have an account?",
-                                  style: context.bodyMedium.copyWith(
-                                    color: Colors.white.withValues(alpha: 0.4),
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 16.sp,
-                                  ),
-                                ),
-                                SizedBox(height: 16.h),
-                                GestureDetector(
-                                  onTap: () => ref
-                                      .read(navigationServiceProvider)
-                                      .push('${SoteriaRoutes.auth}/register'),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        'CREATE ONE',
-                                        style: context.titleMedium.copyWith(
-                                          color: SoteriaColors.secondary,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18.sp,
-                                          letterSpacing: 1.2,
-                                        ),
-                                      ),
-                                      SizedBox(width: 4.w),
-                                      Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: SoteriaColors.secondary,
-                                        size: 20.sp,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-
-                            SizedBox(height: 20.h),
-
-                            // Guest Access
-                            _GuestAction(),
-                          ],
-                        ),
-
-                        // Legal Footer (Pushed to bottom)
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 12.h, top: 12.h),
-                          child: Column(
-                            children: [
-                              Text(
-                                'By continuing, you agree to our',
-                                style: context.bodySmall.copyWith(
-                                  fontSize: 13.sp,
-                                  color: Colors.white.withValues(alpha: 0.4),
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                              SizedBox(height: 8.h),
-                              Wrap(
-                                alignment: WrapAlignment.center,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: 4.w,
-                                children: [
-                                  _LegalButton(label: 'Terms', onTap: () {}),
-                                  const _LegalDot(),
-                                  _LegalButton(label: 'Privacy', onTap: () {}),
-                                  const _LegalDot(),
-                                  _LegalButton(label: 'Guidelines', onTap: () {}),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
+        body: Stack(
+          children: [
+            // Ambient Background Glow
+            Positioned(
+              top: 150.h,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: Container(
+                  width: 300.w,
+                  height: 300.w,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: RadialGradient(
+                      colors: [
+                        SoteriaColors.primary.withValues(alpha: 0.15),
+                        Colors.transparent,
                       ],
                     ),
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
+              ),
+            ),
 
-class _GuestAction extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      'CONTINUE AS GUEST (COMING SOON)',
-      style: context.labelLarge.copyWith(
-        color: Colors.white.withValues(alpha: 0.4),
-        fontWeight: FontWeight.bold,
-        fontSize: 14.sp,
-        letterSpacing: 1.2,
+            SafeArea(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints:
+                          BoxConstraints(minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              const Spacer(),
+
+                              const Spacer(flex: 2),
+
+                              // Content Area (Pushed to bottom)
+                              Column(
+                                children: [
+                                  // Badge
+                                  Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w,
+                                      vertical: 4.h,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.white.withValues(alpha: 0.05),
+                                      borderRadius: BorderRadius.circular(100),
+                                      border: Border.all(
+                                        color:
+                                            Colors.white.withValues(alpha: 0.1),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      'SOTERIA',
+                                      style: context.labelSmall.copyWith(
+                                        color: Colors.white
+                                            .withValues(alpha: 0.4),
+                                        fontWeight: FontWeight.w800,
+                                        letterSpacing: 2.0,
+                                        fontSize: 10.sp,
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 16.h),
+
+                                  Text(
+                                    'Welcome to\nSoteria',
+                                    style: context.displayMedium.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w900,
+                                      height: 1.1,
+                                      fontSize: 36.sp,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+
+                                  SizedBox(height: 12.h),
+
+                                  Text(
+                                    'Rise through knowledge and\ncompete with the best.',
+                                    style: context.bodyLarge.copyWith(
+                                      color: Colors.white.withValues(alpha: 0.5),
+                                      height: 1.5,
+                                      fontSize: 16.sp,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+
+                                  SizedBox(height: 48.h),
+
+                                  // Primary Login Action (Google)
+                                  GestureDetector(
+                                    onTap: () => notifier.signInWithGoogle(),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 56.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(16.r),
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            SoteriaColors.gold
+                                                .withValues(alpha: 0.95),
+                                            SoteriaColors.gold
+                                                .withValues(alpha: 0.8),
+                                          ],
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: SoteriaColors.gold
+                                                .withValues(alpha: 0.2),
+                                            blurRadius: 20,
+                                            offset: const Offset(0, 8),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: state.isLoading
+                                            ? SizedBox(
+                                                width: 20.w,
+                                                height: 20.w,
+                                                child:
+                                                    const CircularProgressIndicator(
+                                                  color: Color(0xFF090514),
+                                                  strokeWidth: 2,
+                                                ),
+                                              )
+                                            : Text(
+                                                'Continue with Google',
+                                                style: context.titleMedium
+                                                    .copyWith(
+                                                  color:
+                                                      const Color(0xFF090514),
+                                                  fontWeight: FontWeight.w900,
+                                                  letterSpacing: 0.2,
+                                                ),
+                                              ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 12.h),
+
+                                  // Secondary Action (Register)
+                                  GestureDetector(
+                                    onTap: () => ref
+                                        .read(navigationServiceProvider)
+                                        .push('${SoteriaRoutes.auth}/register'),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 56.h,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(16.r),
+                                        color: Colors.white
+                                            .withValues(alpha: 0.05),
+                                        border: Border.all(
+                                          color: Colors.white
+                                              .withValues(alpha: 0.08),
+                                        ),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          'Create Account',
+                                          style: context.titleMedium.copyWith(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 24.h),
+
+                                  // Email Login Link
+                                  GestureDetector(
+                                    onTap: () => ref
+                                        .read(navigationServiceProvider)
+                                        .push('${SoteriaRoutes.auth}/login'),
+                                    child: Text(
+                                      'Login with Email',
+                                      style: context.bodyMedium.copyWith(
+                                        color:
+                                            Colors.white.withValues(alpha: 0.4),
+                                        fontWeight: FontWeight.w600,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+
+                                  SizedBox(height: 32.h),
+                                ],
+                              ),
+
+                              // Legal Footer
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 12.h),
+                                child: Wrap(
+                                  alignment: WrapAlignment.center,
+                                  crossAxisAlignment: WrapCrossAlignment.center,
+                                  spacing: 4.w,
+                                  children: [
+                                    _LegalButton(label: 'Terms', onTap: () {}),
+                                    const _LegalDot(),
+                                    _LegalButton(
+                                        label: 'Privacy', onTap: () {}),
+                                    const _LegalDot(),
+                                    _LegalButton(
+                                        label: 'Guidelines', onTap: () {}),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

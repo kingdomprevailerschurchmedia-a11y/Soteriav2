@@ -76,6 +76,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
     });
 
     return SafeGradientScaffold(
+      applySafeArea: false,
       body: PopScope(
         canPop: state.currentStep == 0,
         onPopInvokedWithResult: (didPop, result) {
@@ -84,21 +85,12 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
             _onBack();
           }
         },
-        child: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                const Color(0xFF2E1A8A).withValues(alpha: 0.4),
-                const Color(0xFF0B012A).withValues(alpha: 0.8),
-              ],
-            ),
-          ),
-          child: Column(
-            children: [
-              // Header Section
-              Padding(
+        child: Column(
+          children: [
+            // Header Section
+            SafeArea(
+              bottom: false,
+              child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: SoteriaSpacing.lg,
                   vertical: 8.h,
@@ -221,6 +213,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                   ],
                 ),
               ),
+            ),
 
               // Content
               Expanded(
@@ -238,14 +231,16 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
               ),
 
               // Footer Redesign
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: SoteriaSpacing.lg,
-                  vertical: 12.h,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
+              SafeArea(
+                top: false,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SoteriaSpacing.lg,
+                    vertical: 12.h,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
                     GestureDetector(
                       onTap: isValid
                           ? () => _onContinue(state.currentStep, isValid)
@@ -328,8 +323,8 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

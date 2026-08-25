@@ -75,6 +75,8 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     return Scaffold(
       backgroundColor: SoteriaColors.backgroundBottomRight,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
       body: Stack(
         children: [
           // Premium Background Gradient

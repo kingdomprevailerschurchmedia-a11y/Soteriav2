@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/animations/soteria_animation_widgets.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
@@ -71,41 +70,6 @@ class AuthHeroSection extends StatelessWidget {
                     height: SoteriaBrandingConfig.getLogoSize(MediaQuery.sizeOf(context)),
                     fit: BoxFit.contain,
                   ),
-            ],
-          ),
-        ),
-
-        // Welcome Text with Gradient
-        SoteriaFadeIn(
-          delay: const Duration(milliseconds: 400),
-          child: Column(
-            children: [
-              Text(
-                'Welcome to Soteria',
-                style: context.headlineLarge.copyWith(
-                  fontWeight: FontWeight.w600,
-                  fontSize: isShort ? 24.sp : 32.sp,
-                  color: Colors.white,
-                  letterSpacing: -0.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-
-              SizedBox(height: 4.h),
-
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 40.w),
-                child: Text(
-                  'Rise through knowledge.',
-                  style: context.bodyLarge.copyWith(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    height: 1.2,
-                    fontSize: isShort ? 14.sp : 16.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
             ],
           ),
         ),
