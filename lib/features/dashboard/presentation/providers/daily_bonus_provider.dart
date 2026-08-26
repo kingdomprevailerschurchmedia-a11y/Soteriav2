@@ -109,8 +109,15 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
           final data = userSnap.data()!;
           final lastClaim = data['lastDailyRewardClaim'];
           if (lastClaim != null) {
-            final lastClaimDate = (lastClaim as Timestamp).toDate();
-            if (DailyBonusState._isSameDay(lastClaimDate, now)) {
+            DateTime? lastClaimDate;
+            if (lastClaim is Timestamp) {
+              lastClaimDate = lastClaim.toDate();
+            } else if (lastClaim is String) {
+              lastClaimDate = DateTime.tryParse(lastClaim);
+            }
+
+            if (lastClaimDate != null &&
+                DailyBonusState._isSameDay(lastClaimDate, now)) {
               throw Exception('Reward already claimed today');
             }
           }
@@ -132,18 +139,21 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
         transaction.set(walletRef, {
           'coins': FieldValue.increment(100),
           'lifetimeCoinsEarned': FieldValue.increment(100),
+          'lastTransactionId': txRef.id,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 
         // 3. Sync User Game Profile (Identity)
         transaction.set(gameProfileRef, {
           'coins': FieldValue.increment(100),
+          'lastTransactionId': txRef.id,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 
         // 4. Log transaction
         transaction.set(txRef, {
           'userId': session.uid,
+          'type': 'coins',
           'currency': 'coins',
           'direction': 'credit',
           'amount': 100,
