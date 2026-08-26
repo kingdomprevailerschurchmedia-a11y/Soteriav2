@@ -598,6 +598,7 @@ class FirestoreProModeRepository implements ProModeRepository {
           mode: 'pro',
           score: result.finalScore.toInt(),
           completedAt: DateTime.now(),
+          maxStreak: result.maxStreak,
         );
         
         await _progressionRepository.applyCompetitiveResultInTransaction(

@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 
 part 'rank_transaction.freezed.dart';
 part 'rank_transaction.g.dart';
@@ -13,7 +14,7 @@ abstract class RankTransaction with _$RankTransaction {
     required int previousRankPoints,
     required int changeAmount,
     required int newRankPoints,
-    required DateTime timestamp,
+    @TimestampConverter() required DateTime timestamp,
     @Default(1) int schemaVersion,
   }) = _RankTransaction;
 

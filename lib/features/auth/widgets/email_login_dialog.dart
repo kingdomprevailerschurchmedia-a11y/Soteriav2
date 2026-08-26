@@ -253,7 +253,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
   }) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.1),
+        color: Colors.black.withValues(alpha: 0.3),
         borderRadius: BorderRadius.circular(16.r),
       ),
       child: SoteriaTextField(

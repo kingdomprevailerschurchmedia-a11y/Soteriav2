@@ -184,7 +184,7 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow create: if isOwner(userId);
       allow update: if isOwner(userId) &&
-                    isNotModifying(['email', 'country', 'timezone', 'language']);
+                    isNotModifying(['email']);
       allow delete: if isAdmin();
     }
 
@@ -308,7 +308,10 @@ service cloud.firestore {
       allow create: if isAuthenticated() &&
                     request.resource.data.userId == request.auth.uid &&
                     request.resource.data.username.lower() == username;
-      allow update: if false; // Usernames are changed by delete + create in transaction
+      allow update: if isAuthenticated() &&
+                    resource.data.userId == request.auth.uid &&
+                    request.resource.data.userId == request.auth.uid &&
+                    request.resource.data.username.lower() == username;
       allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
 

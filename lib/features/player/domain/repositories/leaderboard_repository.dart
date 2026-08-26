@@ -21,8 +21,20 @@ abstract class LeaderboardRepository {
     dynamic lastCursor,
   });
 
+  /// Watches the first page of the leaderboard for real-time updates.
+  Stream<List<LeaderboardEntry>> watchLeaderboard({
+    String? seasonId,
+    int limit = 50,
+  });
+
   /// Retrieves the specific position and entry for a user.
   Future<LeaderboardEntry?> getPlayerEntry({
+    required String userId,
+    String? seasonId,
+  });
+
+  /// Watches a specific player's entry for real-time updates.
+  Stream<LeaderboardEntry?> watchPlayerEntry({
     required String userId,
     String? seasonId,
   });
@@ -52,4 +64,7 @@ abstract class LeaderboardRepository {
 
   /// Fetches entries for a specific list of user IDs.
   Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId});
+
+  /// Watches entries for a specific list of user IDs.
+  Stream<List<LeaderboardEntry>> watchEntriesByUserIds(List<String> userIds, {String? seasonId});
 }

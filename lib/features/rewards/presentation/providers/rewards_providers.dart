@@ -67,26 +67,33 @@ final availableRewardsProvider = FutureProvider<List<Reward>>((ref) async {
   }
   
   final userId = session.uid!;
-  final rewards = await ref.watch(rewardsRepositoryProvider).getAvailableRewards(userId);
+  // Fetch rewards from repository (Milestones, Goals, etc.)
+  final repoRewards = await ref.watch(rewardsRepositoryProvider).getAvailableRewards(userId);
   
   final dailyBonus = ref.watch(dailyBonusProvider);
   
-  return rewards.map((r) {
-    if (r.id == 'reward_daily_1') {
-      final isAlreadyClaimedToday = dailyBonus.isAlreadyClaimedToday;
-      return r.copyWith(
-        amount: 100,
-        status: isAlreadyClaimedToday
-            ? RewardStatus.claimed
-            : (dailyBonus.isClaiming
-                ? RewardStatus.available // Use available for loading state
-                : RewardStatus.claimable),
-        claimedAt: isAlreadyClaimedToday ? dailyBonus.lastClaimTime : null,
-        metadata: {...r.metadata, 'isClaiming': dailyBonus.isClaiming},
-      );
-    }
-    return r;
-  }).toList();
+  // Explicitly inject the Daily Login Reward at the beginning of the list
+  // as it is managed by a separate local notifier/provider logic.
+  final dailyReward = Reward(
+    id: 'reward_daily_1',
+    title: 'Daily Reward',
+    description: 'Claim your daily login bonus!',
+    type: RewardType.coins,
+    amount: 100,
+    source: RewardSource.dailyLogin,
+    status: dailyBonus.isAlreadyClaimedToday
+        ? RewardStatus.claimed
+        : (dailyBonus.isClaiming
+            ? RewardStatus.available // Use available for loading state
+            : RewardStatus.claimable),
+    claimedAt: dailyBonus.isAlreadyClaimedToday ? dailyBonus.lastClaimTime : null,
+    metadata: {'isClaiming': dailyBonus.isClaiming},
+  );
+
+  return [
+    dailyReward,
+    ...repoRewards.where((r) => r.id != 'reward_daily_1'),
+  ];
 });
 
 /// Transaction history for the user

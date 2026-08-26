@@ -118,6 +118,20 @@ class AchievementRegistry {
       displayOrder: 31,
     ),
 
+    // Engagement
+    AchievementDefinition(
+      id: 'daily_streak_7',
+      title: 'Loyal Scholar',
+      description: 'Log in for 7 consecutive days.',
+      category: AchievementCategory.streak,
+      icon: 'calendar_today_rounded',
+      requirementType: AchievementRequirementType.dailyLoginStreak,
+      threshold: 7,
+      rarity: AchievementRarity.uncommon,
+      xpReward: 100,
+      displayOrder: 35,
+    ),
+
     // Wins
     AchievementDefinition(
       id: 'first_win',

@@ -39,7 +39,7 @@ class SocialPreviews extends StatelessWidget {
                 SocialFixtures.friendship(otherUserId: 'rival_1'),
                 SocialFixtures.friendship(otherUserId: 'rival_2'),
               ])),
-              friendsLeaderboardProvider.overrideWith((ref) => Future.value([
+              friendsLeaderboardProvider.overrideWith((ref) => Stream.value([
                 _mockEntry('rival_1', 'Alex', 2850, 1),
                 _mockEntry('current_user', 'You', 2450, 2),
                 _mockEntry('rival_2', 'Jordan', 2310, 3),

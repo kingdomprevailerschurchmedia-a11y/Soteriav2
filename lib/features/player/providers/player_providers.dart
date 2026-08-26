@@ -27,6 +27,8 @@ import '../domain/repositories/achievement_repository.dart';
 import '../data/repositories/firebase_achievement_repository.dart';
 
 
+import '../presentation/providers/achievement_providers.dart';
+
 // --- Repositories ---
 final playerRepositoryProvider = Provider<PlayerRepository>((ref) {
   return FirestorePlayerRepository(
@@ -81,6 +83,7 @@ final playerBootstrapServiceProvider = Provider(
     categoryRepository: ref.watch(categoryRepositoryProvider),
     goalRepository: ref.watch(goalRepositoryProvider),
     leaderboardRepository: ref.watch(leaderboardRepositoryProvider),
+    achievementService: ref.watch(achievementServiceProvider),
   ),
 );
 

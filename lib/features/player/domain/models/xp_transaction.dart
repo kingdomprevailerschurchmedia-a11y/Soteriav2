@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 
 part 'xp_transaction.freezed.dart';
 part 'xp_transaction.g.dart';
@@ -23,7 +24,7 @@ abstract class XpTransaction with _$XpTransaction {
     required int amount,
     required XpSource source,
     required String referenceId,
-    required DateTime createdAt,
+    @TimestampConverter() required DateTime createdAt,
     @Default(1) int schemaVersion,
   }) = _XpTransaction;
 

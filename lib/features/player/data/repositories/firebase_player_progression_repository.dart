@@ -184,6 +184,9 @@ class FirebasePlayerProgressionRepository
       seasonRankPoints: current.seasonId == result.seasonId
           ? rankChange.newRankPoints
           : current.seasonRankPoints,
+      maxQuestionStreak: result.maxStreak > current.maxQuestionStreak 
+          ? result.maxStreak 
+          : current.maxQuestionStreak,
       lastRankTransactionId: '${result.resultId}_tx',
       lastUpdated: DateTime.now(),
     );

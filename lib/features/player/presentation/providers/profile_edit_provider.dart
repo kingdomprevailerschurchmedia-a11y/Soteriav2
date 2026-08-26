@@ -277,6 +277,12 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
         oldUsername: state.originalUserProfile?.username ?? state.originalPlayerProfile?.username,
       );
 
+      // 0. Sync Display Name to Firebase Auth Profile
+      final authUser = ref.read(firebaseAuthProvider).currentUser;
+      if (authUser != null && authUser.displayName != state.editedUserProfile!.displayName) {
+        await authUser.updateDisplayName(state.editedUserProfile!.displayName);
+      }
+
       // 1. Manually update UserProfile provider for immediate UI feedback
       final profileNotifier = ref.read(profileProvider.notifier);
       profileNotifier.state = state.editedUserProfile;

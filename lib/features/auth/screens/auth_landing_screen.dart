@@ -84,7 +84,7 @@ class _AuthLandingContent extends ConsumerWidget {
                   style: context.bodyLarge.copyWith(
                     color: Colors.white.withValues(alpha: 0.5),
                     height: 1.4,
-                    fontSize: 14.sp,
+                    fontSize: 16.sp,
                   ),
                   textAlign: TextAlign.center,
                 ),

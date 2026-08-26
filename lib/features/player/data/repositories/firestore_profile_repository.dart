@@ -71,9 +71,10 @@ class FirestoreProfileRepository implements ProfileRepository {
       // 3. ALL WRITES AFTER
 
       // Username reservation
-      if (oldUsername?.toLowerCase() != newUsername) {
-        // If we are changing username or setting it for the first time
-        if (oldUsername != null && oldUsername.isNotEmpty) {
+      if (oldUsername != newUsername) {
+        // If we are changing username (even if just casing)
+        if (oldUsername != null && oldUsername.isNotEmpty && oldUsername.toLowerCase() != newUsername) {
+          // If the actual identifier changed, delete the old one
           transaction.delete(
             _firestore.collection('usernames').doc(oldUsername.toLowerCase()),
           );
@@ -83,23 +84,12 @@ class FirestoreProfileRepository implements ProfileRepository {
           'userId': userId,
           'username': userProfile.username,
           'createdAt': FieldValue.serverTimestamp(),
-        });
-      } else {
-        // Just ensure it exists if it's the same (handles casing updates or safety sync)
-        transaction.set(
-          usernameDoc,
-          {'userId': userId, 'username': userProfile.username},
-          SetOptions(merge: true),
-        );
+        }, SetOptions(merge: true));
       }
 
       // User Profile
       final userProfileMap = userProfile.toMap();
-      final restrictedUserProfileFields = [
-        'email', 'country', 'timezone', 'language',
-        'academicLevel', 'institution', 'faculty', 'department',
-        'interests'
-      ];
+      final restrictedUserProfileFields = ['email'];
       for (final field in restrictedUserProfileFields) {
         userProfileMap.remove(field);
       }

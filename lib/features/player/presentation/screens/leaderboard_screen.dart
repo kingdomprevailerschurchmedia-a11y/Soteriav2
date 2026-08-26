@@ -20,6 +20,7 @@ import '../widgets/leaderboard/leaderboard_insight_card.dart';
 import '../widgets/leaderboard/rank_progress_card.dart';
 import '../widgets/season_header.dart';
 import 'player_search_screen.dart';
+import '../../../social/presentation/providers/social_providers.dart';
 import '../../../social/presentation/providers/social_leaderboard_providers.dart';
 
 import '../../../../shared/widgets/soteria_page.dart';
@@ -316,27 +317,34 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
         if (entries.isEmpty) {
           return _buildFriendsEmptyState(context);
         }
-        return ListView.builder(
-          padding: EdgeInsets.only(
-            left: SoteriaSpacing.md,
-            right: SoteriaSpacing.md,
-            top: SoteriaSpacing.md,
-            bottom: 100.h,
-          ),
-          itemCount: entries.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _buildSectionDivider('YOUR COMPETITIVE CIRCLE'),
-              );
-            }
-            final entry = entries[index - 1];
-            return LeaderboardRow(
-              entry: entry,
-              isCurrentUser: entry.userId == currentUserId,
-            );
+        return RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(friendsProvider);
+            ref.invalidate(friendsLeaderboardProvider);
           },
+          color: SoteriaColors.primary,
+          child: ListView.builder(
+            padding: EdgeInsets.only(
+              left: SoteriaSpacing.md,
+              right: SoteriaSpacing.md,
+              top: SoteriaSpacing.md,
+              bottom: 100.h,
+            ),
+            itemCount: entries.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: _buildSectionDivider('YOUR COMPETITIVE CIRCLE'),
+                );
+              }
+              final entry = entries[index - 1];
+              return LeaderboardRow(
+                entry: entry,
+                isCurrentUser: entry.userId == currentUserId,
+              );
+            },
+          ),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),

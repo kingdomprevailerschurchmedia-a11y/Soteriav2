@@ -24,3 +24,22 @@ class TimestampConverter implements JsonConverter<DateTime?, dynamic> {
   @override
   dynamic toJson(DateTime? object) => object?.toIso8601String();
 }
+
+/// Converter for engagement dates (YYYY-MM-DD) that can handle Firestore [Timestamp].
+class EngagementDateConverter implements JsonConverter<String?, dynamic> {
+  const EngagementDateConverter();
+
+  @override
+  String? fromJson(dynamic json) {
+    if (json == null) return null;
+    if (json is String) return json;
+    if (json is Timestamp) {
+      final date = json.toDate();
+      return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+    }
+    return null;
+  }
+
+  @override
+  dynamic toJson(String? object) => object;
+}

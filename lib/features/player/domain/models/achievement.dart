@@ -36,6 +36,7 @@ enum AchievementRequirementType {
   tournamentWin,
   proWin,
   categoryMastery,
+  dailyLoginStreak,
 }
 
 @freezed

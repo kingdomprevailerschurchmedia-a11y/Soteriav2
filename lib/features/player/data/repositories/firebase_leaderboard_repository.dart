@@ -109,6 +109,21 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
   }
 
   @override
+  Stream<List<LeaderboardEntry>> watchLeaderboard({
+    String? seasonId,
+    int limit = 50,
+  }) {
+    return _getBaseQuery(seasonId)
+        .orderBy('rankPoints', descending: true)
+        .orderBy('registrationOrder', descending: false)
+        .limit(limit)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => LeaderboardEntry.fromJson(doc.data()))
+            .toList());
+  }
+
+  @override
   Future<LeaderboardEntry?> getPlayerEntry({
     required String userId,
     String? seasonId,
@@ -121,6 +136,22 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
     final doc = await _firestore.collection(collection).doc(docId).get();
     if (!doc.exists) return null;
     return LeaderboardEntry.fromJson(doc.data()!);
+  }
+
+  @override
+  Stream<LeaderboardEntry?> watchPlayerEntry({
+    required String userId,
+    String? seasonId,
+  }) {
+    final docId = seasonId == null ? userId : '${seasonId}_$userId';
+    final collection = seasonId == null
+        ? LeaderboardConfig.globalLeaderboardCollection
+        : LeaderboardConfig.seasonLeaderboardCollection;
+
+    return _firestore.collection(collection).doc(docId).snapshots().map((doc) {
+      if (!doc.exists) return null;
+      return LeaderboardEntry.fromJson(doc.data()!);
+    });
   }
 
   @override
@@ -243,5 +274,25 @@ class FirebaseLeaderboardRepository implements LeaderboardRepository {
     return results.expand((snapshot) => snapshot.docs)
         .map((doc) => LeaderboardEntry.fromJson(doc.data()))
         .toList();
+  }
+
+  @override
+  Stream<List<LeaderboardEntry>> watchEntriesByUserIds(List<String> userIds, {String? seasonId}) {
+    if (userIds.isEmpty) return Stream.value([]);
+
+    final collection = seasonId == null
+        ? LeaderboardConfig.globalLeaderboardCollection
+        : LeaderboardConfig.seasonLeaderboardCollection;
+
+    // We only support watching up to 30 users in a single stream for now due to Firestore whereIn limits.
+    // If more are needed, we'd need to merge multiple streams.
+    final limitedIds = userIds.take(30).toList();
+
+    return _firestore.collection(collection)
+        .where('userId', whereIn: limitedIds)
+        .snapshots()
+        .map((snapshot) => snapshot.docs
+            .map((doc) => LeaderboardEntry.fromJson(doc.data()))
+            .toList());
   }
 }

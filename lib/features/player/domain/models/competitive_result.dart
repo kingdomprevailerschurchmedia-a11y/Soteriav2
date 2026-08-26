@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 
 part 'competitive_result.freezed.dart';
 part 'competitive_result.g.dart';
@@ -14,7 +15,8 @@ abstract class CompetitiveResult with _$CompetitiveResult {
     required CompetitiveOutcome outcome,
     required String mode,
     required int score,
-    required DateTime completedAt,
+    @TimestampConverter() required DateTime completedAt,
+    @Default(0) int maxStreak,
     String? opponentId,
     Map<String, dynamic>? performanceModifiers,
     @Default(1) int version,

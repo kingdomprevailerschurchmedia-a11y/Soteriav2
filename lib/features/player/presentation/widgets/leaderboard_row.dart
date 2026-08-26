@@ -103,8 +103,8 @@ class LeaderboardRow extends ConsumerWidget {
                 ],
               ),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
                   '${entry.rankPoints} RP',
@@ -113,6 +113,7 @@ class LeaderboardRow extends ConsumerWidget {
                     fontWeight: FontWeight.w900,
                   ),
                 ),
+                SizedBox(width: 8.w),
                 CompetitiveRankBadge(
                   rankName: '', // Label hidden for compact row
                   tierId: entry.rankTier.toLowerCase(),

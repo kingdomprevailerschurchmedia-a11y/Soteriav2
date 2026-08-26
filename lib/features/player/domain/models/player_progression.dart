@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 import '../config/progression_config.dart';
 
 part 'player_progression.freezed.dart';
@@ -21,10 +22,11 @@ abstract class PlayerProgression with _$PlayerProgression {
     required String seasonId,
     required int seasonXp,
     required int seasonRankPoints,
-    required DateTime lastUpdated,
+    @TimestampConverter() required DateTime lastUpdated,
     @Default(0) int dailyStreak,
-    @Default(0) int longestStreak,
-    String? lastEngagementDate, // YYYY-MM-DD
+    @Default(0) int longestStreak, // Daily Login Record
+    @Default(0) int maxQuestionStreak, // Gameplay Record
+    @EngagementDateConverter() String? lastEngagementDate, // YYYY-MM-DD
     String? lastXpTransactionId,
     String? lastRankTransactionId,
     @Default(1) int schemaVersion,

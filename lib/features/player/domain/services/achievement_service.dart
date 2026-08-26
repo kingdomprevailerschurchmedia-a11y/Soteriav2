@@ -57,6 +57,8 @@ class AchievementService {
       case AchievementRequirementType.gamesWon:
         return profile.gamesWon.toDouble();
       case AchievementRequirementType.streak:
+        return progression.maxQuestionStreak.toDouble();
+      case AchievementRequirementType.dailyLoginStreak:
         return progression.longestStreak.toDouble();
       case AchievementRequirementType.accuracy:
         return profile.accuracy * 100;

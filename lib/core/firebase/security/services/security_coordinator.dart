@@ -37,15 +37,22 @@ class SecurityCoordinator {
 
       // Log the current token for easy access during development
       if (_env != FirebaseEnvironment.production) {
+        // Wait a few seconds to ensure App Check provider is fully registered on the device
+        await Future.delayed(const Duration(seconds: 3));
+        
         final token = await FirebaseAppCheck.instance.getToken();
         
         // TEMPORARY: Copy to clipboard if on a physical device without ADB
         if (token != null) {
           await Clipboard.setData(ClipboardData(text: token));
+          LoggerService.i(
+            'App Check Debug Token copied to clipboard automatically.',
+            feature: 'Security',
+          );
         }
 
         LoggerService.i(
-          'App Check Debug Token: $token (Copied to Clipboard)',
+          'App Check Debug Token: $token',
           feature: 'Security',
         );
       }

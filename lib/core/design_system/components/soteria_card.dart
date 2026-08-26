@@ -43,7 +43,7 @@ class SoteriaCard extends StatelessWidget {
       padding:
           padding ?? EdgeInsets.all(SoteriaSpacing.containerPadding(context)),
       opacity: opacity ?? (isElevated ? 0.2 : 0.08),
-      blur: blur ?? 15.0,
+      blur: blur ?? 8.0, // Reduced from 15.0 for 60fps scrolling
       useBlur: useBlur,
       border: Border.all(
         color: borderColor ?? Colors.white.withValues(alpha: 0.1),

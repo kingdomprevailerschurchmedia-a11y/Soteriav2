@@ -72,7 +72,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           onRefresh: () async => ref.read(dashboardProvider.notifier).refresh(),
           color: SoteriaColors.primary,
           child: CustomScrollView(
-                cacheExtent: 1000.0, physics: const AlwaysScrollableScrollPhysics(
+                physics: const AlwaysScrollableScrollPhysics(
                   parent: BouncingScrollPhysics(),
                 ),
                 slivers: [
@@ -82,46 +82,44 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                   // Header
                   SliverToBoxAdapter(
-                    child: RepaintBoundary(
-                      child: Consumer(
-                        builder: (context, ref, _) {
-                          final progressionAsync = ref.watch(competitiveProgressionProvider);
-                          final player = ref.watch(dashboardProvider.select((s) => s.player));
-                          final greeting = ref.watch(dashboardProvider.select((s) => s.greeting));
-                          final isOnline = ref.watch(isOnlineProvider);
-                          
-                          return progressionAsync.when(
-                            data: (progression) => DashboardHeader(
-                              greeting: greeting,
-                              playerName: player?.displayName ?? 'Scholar',
-                              level: progression.currentLevel,
-                              streak: player?.currentStreak ?? 0,
-                              coins: player?.coins ?? 0,
-                              profileCompletion: 1.0,
-                              avatarUrl: player?.photoUrl,
-                              isOnline: isOnline,
-                            ),
-                            loading: () => DashboardHeader(
-                              greeting: greeting,
-                              playerName: player?.displayName ?? 'Scholar',
-                              level: 1, // Fallback, could be improved with a secondary level provider
-                              streak: player?.currentStreak ?? 0,
-                              coins: player?.coins ?? 0,
-                              profileCompletion: 1.0,
-                              isOnline: isOnline,
-                            ),
-                            error: (err, st) => DashboardHeader(
-                              greeting: 'Error loading level',
-                              playerName: player?.displayName ?? 'Scholar',
-                              level: 1,
-                              streak: player?.currentStreak ?? 0,
-                              coins: player?.coins ?? 0,
-                              profileCompletion: 1.0,
-                              isOnline: isOnline,
-                            ),
-                          );
-                        }
-                      ),
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final progressionAsync = ref.watch(competitiveProgressionProvider);
+                        final player = ref.watch(dashboardProvider.select((s) => s.player));
+                        final greeting = ref.watch(dashboardProvider.select((s) => s.greeting));
+                        final isOnline = ref.watch(isOnlineProvider);
+                        
+                        return progressionAsync.when(
+                          data: (progression) => DashboardHeader(
+                            greeting: greeting,
+                            playerName: player?.displayName ?? 'Scholar',
+                            level: progression.currentLevel,
+                            streak: player?.currentStreak ?? 0,
+                            coins: player?.coins ?? 0,
+                            profileCompletion: 1.0,
+                            avatarUrl: player?.photoUrl,
+                            isOnline: isOnline,
+                          ),
+                          loading: () => DashboardHeader(
+                            greeting: greeting,
+                            playerName: player?.displayName ?? 'Scholar',
+                            level: 1, // Fallback, could be improved with a secondary level provider
+                            streak: player?.currentStreak ?? 0,
+                            coins: player?.coins ?? 0,
+                            profileCompletion: 1.0,
+                            isOnline: isOnline,
+                          ),
+                          error: (err, st) => DashboardHeader(
+                            greeting: 'Error loading level',
+                            playerName: player?.displayName ?? 'Scholar',
+                            level: 1,
+                            streak: player?.currentStreak ?? 0,
+                            coins: player?.coins ?? 0,
+                            profileCompletion: 1.0,
+                            isOnline: isOnline,
+                          ),
+                        );
+                      }
                     ),
                   ),
 
@@ -129,45 +127,43 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                   // Unified Profile & Rank Hero Card
                   SliverToBoxAdapter(
-                    child: RepaintBoundary(
-                      child: Consumer(
-                        builder: (context, ref, _) {
-                          final progressionAsync = ref.watch(competitiveProgressionProvider);
-                          final rankProgressAsync = ref.watch(rankProgressProvider);
-                          final player = ref.watch(dashboardProvider.select((s) => s.player));
-                          final hasDoubleXp = ref.watch(dashboardProvider.select((s) => 
-                            s.announcements.any((a) => a.toLowerCase().contains('double xp'))
-                          ));
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        final progressionAsync = ref.watch(competitiveProgressionProvider);
+                        final rankProgressAsync = ref.watch(rankProgressProvider);
+                        final player = ref.watch(dashboardProvider.select((s) => s.player));
+                        final hasDoubleXp = ref.watch(dashboardProvider.select((s) => 
+                          s.announcements.any((a) => a.toLowerCase().contains('double xp'))
+                        ));
 
-                          return progressionAsync.when(
-                            data: (progression) => rankProgressAsync.when(
-                              data: (rankProgress) => HeroCard(
-                                level: progression.currentLevel,
-                                xpInCurrentLevel: progression.currentXp,
-                                xpThreshold: progression.xpRequiredForNextLevel -
-                                    progression.xpRequiredForCurrentLevel,
-                                streak: player?.currentStreak ?? 0,
-                                rankProgress: rankProgress,
-                                xpProgress: progression.xpProgress,
-                                xpRemaining: progression.xpRequiredForNextLevel -
-                                    (progression.xpRequiredForCurrentLevel +
-                                        progression.currentXp),
-                                isDoubleXp: hasDoubleXp,
-                                onTap: () => Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) =>
-                                        const CompetitiveRankOverviewScreen(),
-                                  ),
+                        return progressionAsync.when(
+                          data: (progression) => rankProgressAsync.when(
+                            data: (rankProgress) => HeroCard(
+                              level: progression.currentLevel,
+                              xpInCurrentLevel: progression.currentXp,
+                              xpThreshold: progression.xpRequiredForNextLevel -
+                                  progression.xpRequiredForCurrentLevel,
+                              streak: player?.currentStreak ?? 0,
+                              rankProgress: rankProgress,
+                              xpProgress: progression.xpProgress,
+                              xpRemaining: progression.xpRequiredForNextLevel -
+                                  (progression.xpRequiredForCurrentLevel +
+                                      progression.currentXp),
+                              isDoubleXp: hasDoubleXp,
+                              onTap: () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const CompetitiveRankOverviewScreen(),
                                 ),
                               ),
-                              loading: () => const HeroCardLoading(),
-                              error: (err, st) => const HeroCardLoading(),
                             ),
                             loading: () => const HeroCardLoading(),
                             error: (err, st) => const HeroCardLoading(),
-                          );
-                        }
-                      ),
+                          ),
+                          loading: () => const HeroCardLoading(),
+                          error: (err, st) => const HeroCardLoading(),
+                        );
+                      }
                     ),
                   ),
 
@@ -175,13 +171,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                   // Daily Bonus
                   const SliverToBoxAdapter(
-                    child: RepaintBoundary(child: DailyBonusCard()),
+                    child: DailyBonusCard(),
                   ),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
 
                   // Quick Actions
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: QuickActionsGrid())),
+                  const SliverToBoxAdapter(child: QuickActionsGrid()),
 
                   // Season Status
                   SliverToBoxAdapter(
@@ -192,7 +188,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                         return const Column(
                           children: [
                             SoteriaSpacing.gapMD,
-                            RepaintBoundary(child: SeasonHeader()),
+                            SeasonHeader(),
                           ],
                         );
                       }
@@ -201,50 +197,48 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                   // Milestone Section
                   SliverToBoxAdapter(
-                    child: RepaintBoundary(
-                      child: Consumer(
-                        builder: (context, ref, _) {
-                          return ref.watch(nextCompetitiveMilestoneProvider).when(
-                            data: (next) => next != null
-                                ? Column(
-                                    children: [
-                                      SoteriaSpacing.gapMD,
-                                      MilestoneSection(progress: next),
-                                    ],
-                                  )
-                                : const SizedBox.shrink(),
-                            loading: () => const SizedBox.shrink(),
-                            error: (err, st) => const SizedBox.shrink(),
-                          );
-                        }
-                      ),
+                    child: Consumer(
+                      builder: (context, ref, _) {
+                        return ref.watch(nextCompetitiveMilestoneProvider).when(
+                          data: (next) => next != null
+                              ? Column(
+                                  children: [
+                                    SoteriaSpacing.gapMD,
+                                    MilestoneSection(progress: next),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
+                          loading: () => const SizedBox.shrink(),
+                          error: (err, st) => const SizedBox.shrink(),
+                        );
+                      }
                     ),
                   ),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapMD),
 
                   // Daily Goals
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: DailyGoalsSection())),
+                  const SliverToBoxAdapter(child: DailyGoalsSection()),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
                   // Recent Achievements
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: RecentAchievementsSection())),
+                  const SliverToBoxAdapter(child: RecentAchievementsSection()),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
                   // Top Scholars
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: TopScholarsSection())),
+                  const SliverToBoxAdapter(child: TopScholarsSection()),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
                   // Recent Opponents
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: RecentOpponentsSection())),
+                  const SliverToBoxAdapter(child: RecentOpponentsSection()),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
                   // Performance
-                  const SliverToBoxAdapter(child: RepaintBoundary(child: PerformanceSection())),
+                  const SliverToBoxAdapter(child: PerformanceSection()),
 
                   // Announcements
                   if (announcementsCount > 0) ...[

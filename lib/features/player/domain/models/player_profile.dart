@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import '../../../../core/utils/json_converters.dart';
 
 part 'player_profile.freezed.dart';
 part 'player_profile.g.dart';
@@ -34,10 +35,10 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default(0) int gamesWon,
     @Default(0) int practiceSessions,
     @Default(0) int dailyPracticeSessionsPlayed,
-    DateTime? lastPracticeSessionDate,
+    @TimestampConverter() DateTime? lastPracticeSessionDate,
     @Default(0) int proSessions,
     @Default(0) int dailyProSessionsPlayed,
-    DateTime? lastProSessionDate,
+    @TimestampConverter() DateTime? lastProSessionDate,
     @Default(0) int versusMatches,
     @Default(0) int tournamentMatches,
 
@@ -52,11 +53,11 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default('user') String role, // user, moderator, admin
     @Default('active') String accountStatus, // active, suspended, deleted
 
-    DateTime? lastDailyRewardClaim,
+    @TimestampConverter() DateTime? lastDailyRewardClaim,
     @Default(0) int registrationOrder,
-    required DateTime createdAt,
-    required DateTime lastLogin,
-    required DateTime updatedAt,
+    @TimestampConverter() required DateTime createdAt,
+    @TimestampConverter() required DateTime lastLogin,
+    @TimestampConverter() required DateTime updatedAt,
     @Default({}) Map<String, dynamic> settings,
     @Default(1) int version,
   }) = _PlayerProfile;

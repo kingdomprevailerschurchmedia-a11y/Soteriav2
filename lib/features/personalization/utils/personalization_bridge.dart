@@ -61,4 +61,9 @@ class PersonalizationBridge {
     if (id == 'general-knowledge') return 'general_knowledge';
     return id;
   }
+
+  /// Formats a DateTime as YYYY-MM-DD for engagement tracking.
+  static String formatEngagementDate(DateTime date) {
+    return "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+  }
 }

@@ -58,8 +58,8 @@ class HeroCard extends ConsumerWidget {
             onTap: onTap,
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             borderRadius: 28,
-            blur: 4.0, // Match Email Login Dialog
-            opacity: 0.12, // Match Email Login Dialog
+            blur: 0.0, // Pre-optimize Hero Card blur as it's the largest surface
+            opacity: 0.1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -286,7 +286,8 @@ class _HexagonPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(covariant _HexagonPainter oldDelegate) => 
+      oldDelegate.color != color || oldDelegate.glowColor != glowColor;
 }
 
 class _GlowingProgressBar extends StatelessWidget {

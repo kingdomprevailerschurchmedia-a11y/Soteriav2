@@ -41,16 +41,16 @@ final leaderboardTotalPlayersProvider = FutureProvider<int>((ref) async {
 });
 
 // --- Player Rank State ---
-final playerLeaderboardEntryProvider = FutureProvider<LeaderboardEntry?>((
+final playerLeaderboardEntryProvider = StreamProvider<LeaderboardEntry?>((
   ref,
-) async {
+) {
   final session = ref.watch(sessionProvider);
-  if (!session.isAuthenticated || session.uid == null) return null;
+  if (!session.isAuthenticated || session.uid == null) return Stream.value(null);
 
   final seasonId = ref.watch(currentSeasonIdProvider);
   return ref
       .watch(leaderboardRepositoryProvider)
-      .getPlayerEntry(userId: session.uid!, seasonId: seasonId);
+      .watchPlayerEntry(userId: session.uid!, seasonId: seasonId);
 });
 
 final playerRankPositionProvider = FutureProvider<int>((ref) async {
@@ -187,6 +187,35 @@ class LeaderboardController
     }
   }
 
+  /// Updates only the first page results while preserving subsequent pages if they exist.
+  /// Used for real-time updates from Firestore stream.
+  void updateFirstPage(List<LeaderboardEntry> entries) {
+    if (state.value == null || _lastEntry == null) {
+      // If we don't have data yet or haven't paged, just set the state
+      state = AsyncValue.data(entries);
+      if (entries.isNotEmpty) {
+        _lastEntry = entries.last;
+      }
+      return;
+    }
+
+    final currentList = state.value!;
+    if (currentList.length <= LeaderboardConfig.defaultPageSize) {
+      // We only have the first page anyway
+      state = AsyncValue.data(entries);
+      if (entries.isNotEmpty) {
+        _lastEntry = entries.last;
+      }
+    } else {
+      // Merge: Keep the new first page and append the rest of the existing list
+      // This is a bit naive for real-time pagination but works for the top 50
+      final rest = currentList.sublist(LeaderboardConfig.defaultPageSize);
+      state = AsyncValue.data([...entries, ...rest]);
+      // We don't update _lastEntry here because it's used for fetching page 3+ 
+      // and we only updated page 1.
+    }
+  }
+
   Future<void> loadMore() async {
     if (state.value == null || state.isLoading || _hasReachedMax) return;
 
@@ -219,8 +248,19 @@ final leaderboardControllerProvider =
       AsyncValue<List<LeaderboardEntry>>,
       String?
     >((ref, seasonId) {
-      return LeaderboardController(
+      final controller = LeaderboardController(
         ref.watch(leaderboardRepositoryProvider),
         seasonId,
       );
+
+      // Listen to real-time updates for the first page (top 50)
+      final sub = ref.watch(leaderboardRepositoryProvider)
+          .watchLeaderboard(seasonId: seasonId, limit: LeaderboardConfig.defaultPageSize)
+          .listen((entries) {
+            controller.updateFirstPage(entries);
+          });
+      
+      ref.onDispose(() => sub.cancel());
+
+      return controller;
     });

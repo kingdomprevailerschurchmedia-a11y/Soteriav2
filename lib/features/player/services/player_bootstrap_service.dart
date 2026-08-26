@@ -13,8 +13,10 @@ import '../domain/services/progression_service.dart';
 import '../domain/repositories/goal_repository.dart';
 import '../../question_content/domain/repositories/category_repository.dart';
 import '../domain/repositories/leaderboard_repository.dart';
+import '../domain/services/achievement_service.dart';
 import '../../../core/logging/logger_service.dart';
 import '../../../core/identity/repositories/identity_repository.dart';
+import '../../../core/identity/models/user_profile.dart';
 
 class PlayerBootstrapService {
   final LoadPlayerProfileUseCase _loadProfile;
@@ -27,6 +29,7 @@ class PlayerBootstrapService {
   final CategoryRepository? _categoryRepository;
   final GoalRepository? _goalRepository;
   final LeaderboardRepository? _leaderboardRepository;
+  final AchievementService? _achievementService;
 
   static const _kPersonalizationKey = 'user_personalization';
 
@@ -41,6 +44,7 @@ class PlayerBootstrapService {
     this._categoryRepository,
     this._goalRepository,
     this._leaderboardRepository,
+    this._achievementService,
   });
 
   Future<PlayerProfile> bootstrap(auth.User user) async {
@@ -51,7 +55,7 @@ class PlayerBootstrapService {
 
     try {
       // Ensure required authoritative documents exist (Remediation for legacy users)
-      await _ensureAuthoritativeDocuments(user.uid);
+      await _ensureAuthoritativeDocuments(user);
 
       final existingProfile = await _loadProfile.execute(user.uid);
       final localInterests = await _getInterestsFromLocal();
@@ -110,6 +114,11 @@ class PlayerBootstrapService {
               : existingProfile.highestStreak,
         };
 
+        // Populate photo from Google if missing
+        if (existingProfile.photoUrl.isEmpty && user.photoURL != null) {
+          patchData['photoUrl'] = user.photoURL!;
+        }
+
         if (shouldReward) {
           await _firestore.runTransaction((transaction) async {
             final txRef = _firestore.collection('wallet_transactions').doc();
@@ -141,11 +150,34 @@ class PlayerBootstrapService {
               'lastTransactionId': txRef.id,
               'updatedAt': nowTimestamp,
             }, SetOptions(merge: true));
+
+            // 4. Update Player Progression (Daily Login Streak Record)
+            final progressionRef = _firestore.collection('player_progression').doc(user.uid);
+            transaction.update(progressionRef, {
+              'dailyStreak': newStreak,
+              'longestStreak': newStreak > existingProfile.highestStreak 
+                  ? newStreak 
+                  : existingProfile.highestStreak,
+              'lastEngagementDate': PersonalizationBridge.formatEngagementDate(now),
+              'lastUpdated': nowTimestamp,
+            });
           });
           
           LoggerService.i('7-day streak reached! Granted 500 bonus coins via atomic transaction.', feature: 'Player');
         } else {
-          await _firestore.collection('users').doc(user.uid).update(patchData);
+          await _firestore.runTransaction((transaction) async {
+            transaction.update(_firestore.collection('users').doc(user.uid), patchData);
+            
+            final progressionRef = _firestore.collection('player_progression').doc(user.uid);
+            transaction.update(progressionRef, {
+              'dailyStreak': newStreak,
+              'longestStreak': newStreak > existingProfile.highestStreak 
+                  ? newStreak 
+                  : existingProfile.highestStreak,
+              'lastEngagementDate': PersonalizationBridge.formatEngagementDate(now),
+              'lastUpdated': FieldValue.serverTimestamp(),
+            });
+          });
         }
 
         final updatedProfile = existingProfile.copyWith(
@@ -157,6 +189,9 @@ class PlayerBootstrapService {
               ? newStreak 
               : existingProfile.highestStreak,
           coins: shouldReward ? existingProfile.coins + 500 : existingProfile.coins,
+          photoUrl: (existingProfile.photoUrl.isEmpty && user.photoURL != null) 
+              ? user.photoURL! 
+              : existingProfile.photoUrl,
         );
 
         // Lazy Progression Migration
@@ -164,6 +199,9 @@ class PlayerBootstrapService {
 
         // Authoritative Leaderboard Sync (Ensures user appears in Top Scholars)
         await _syncLeaderboard(updatedProfile);
+
+        // Authoritative Achievement Evaluation (e.g. for login streaks)
+        await _achievementService?.evaluateAchievements(user.uid);
 
         return updatedProfile;
       } else {
@@ -196,6 +234,21 @@ class PlayerBootstrapService {
         // Initialize new progression record
         await _initializeNewProgression(user.uid);
 
+        // Initialize User Profile if identity repository is available
+        if (_identityRepository != null) {
+          final names = (user.displayName ?? 'Scholar').split(' ');
+          final initialUserProfile = UserProfile(
+            firstName: names.first,
+            lastName: names.length > 1 ? names.last : '',
+            displayName: user.displayName ?? 'Scholar',
+            username: user.email?.split('@').first ?? 'scholar',
+            email: user.email ?? '',
+            avatarUrl: user.photoURL,
+            selectedAvatarId: user.photoURL != null ? '' : 'socrates',
+          );
+          await _identityRepository!.updateUserProfile(user.uid, initialUserProfile);
+        }
+
         // Authoritative Leaderboard Sync (Ensures user appears in Top Scholars)
         await _syncLeaderboard(newProfile);
 
@@ -212,9 +265,11 @@ class PlayerBootstrapService {
     }
   }
 
-  Future<void> _ensureAuthoritativeDocuments(String userId) async {
+  Future<void> _ensureAuthoritativeDocuments(auth.User user) async {
+    final userId = user.uid;
     final walletRef = _firestore.collection('wallets').doc(userId);
     final gameProfileRef = _firestore.collection('user_game_profiles').doc(userId);
+    final userProfileRef = _firestore.collection('user_profiles').doc(userId);
     
     final walletSnap = await walletRef.get();
     if (!walletSnap.exists) {
@@ -245,6 +300,22 @@ class PlayerBootstrapService {
         'updatedAt': FieldValue.serverTimestamp(),
         'schemaVersion': 1,
       });
+    }
+
+    final userProfileSnap = await userProfileRef.get();
+    if (!userProfileSnap.exists && _identityRepository != null) {
+      LoggerService.i('Remediating missing user profile for user: $userId', feature: 'Player');
+      final names = (user.displayName ?? 'Scholar').split(' ');
+      final initialUserProfile = UserProfile(
+        firstName: names.first,
+        lastName: names.length > 1 ? names.last : '',
+        displayName: user.displayName ?? 'Scholar',
+        username: user.email?.split('@').first ?? 'scholar',
+        email: user.email ?? '',
+        avatarUrl: user.photoURL,
+        selectedAvatarId: user.photoURL != null ? '' : 'socrates',
+      );
+      await _identityRepository!.updateUserProfile(userId, initialUserProfile);
     }
   }
 

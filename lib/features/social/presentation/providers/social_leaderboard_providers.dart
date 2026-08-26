@@ -4,24 +4,31 @@ import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
 import 'package:soteria/features/player/presentation/providers/leaderboard_providers.dart';
 import 'package:soteria/features/social/presentation/providers/social_providers.dart';
 
-final friendsLeaderboardProvider = FutureProvider<List<LeaderboardEntry>>((ref) async {
-  final friends = await ref.watch(friendsProvider.future);
-  if (friends.isEmpty) return [];
+final friendsLeaderboardProvider = StreamProvider<List<LeaderboardEntry>>((ref) {
+  final friendsAsync = ref.watch(friendsProvider);
+  
+  return friendsAsync.when(
+    data: (friends) {
+      if (friends.isEmpty) return Stream.value([]);
 
-  final currentUserId = ref.watch(authRepositoryProvider).currentUserId;
-  final friendIds = friends.expand((f) => f.userIds).where((id) => id != currentUserId).toList();
-  
-  if (currentUserId != null) {
-    friendIds.add(currentUserId);
-  }
+      final currentUserId = ref.watch(authRepositoryProvider).currentUserId;
+      final friendIds = friends.expand((f) => f.userIds).where((id) => id != currentUserId).toList();
+      
+      if (currentUserId != null) {
+        friendIds.add(currentUserId);
+      }
 
-  final seasonId = ref.watch(currentSeasonIdProvider);
-  final repository = ref.watch(leaderboardRepositoryProvider);
-  
-  final entries = await repository.getEntriesByUserIds(friendIds, seasonId: seasonId);
-  
-  // Authoritative sorting by RP
-  return entries..sort((a, b) => b.rankPoints.compareTo(a.rankPoints));
+      final seasonId = ref.watch(currentSeasonIdProvider);
+      final repository = ref.watch(leaderboardRepositoryProvider);
+      
+      return repository.watchEntriesByUserIds(friendIds, seasonId: seasonId).map((entries) {
+        // Authoritative sorting by RP
+        return entries..sort((a, b) => b.rankPoints.compareTo(a.rankPoints));
+      });
+    },
+    loading: () => const Stream.empty(),
+    error: (e, st) => Stream.error(e, st),
+  );
 });
 
 final friendRankPositionProvider = Provider.family<int, String>((ref, userId) {

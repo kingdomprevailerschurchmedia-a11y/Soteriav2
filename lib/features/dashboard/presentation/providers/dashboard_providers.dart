@@ -29,11 +29,8 @@ class DashboardNotifier extends Notifier<DashboardState> {
     final announcementsAsync = ref.watch(announcementsProvider);
     final challengeAsync = ref.watch(dailyChallengeProvider);
     
-    // Ensure daily goals are populated
-    ref.watch(goalRefreshProvider);
-    
-    // Track goal progress in real-time
-    ref.watch(goalEvaluationProvider);
+    // NOTE: Goal providers are removed from build() to prevent full dashboard rebuilds 
+    // when goal progress updates. Goals are handled by dedicated widgets in the scroll view.
 
     if (kDebugMode) {
       LoggerService.d(
