@@ -22,6 +22,8 @@ class ProEntryConfirmationDialog extends StatelessWidget {
     return Dialog(
       backgroundColor: Colors.transparent,
       child: GlassSurface(
+        blur: 8.0,
+        opacity: 0.08,
         padding: EdgeInsets.all(SoteriaSpacing.xl),
         child: Column(
           mainAxisSize: MainAxisSize.min,

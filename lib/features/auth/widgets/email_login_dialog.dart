@@ -27,7 +27,7 @@ class EmailLoginDialog extends ConsumerStatefulWidget {
           const EmailLoginDialog(),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+          filter: ImageFilter.blur(sigmaX: 4, sigmaY: 4), // Reduced from 8
           child: SlideTransition(
             position: Tween<Offset>(
               begin: const Offset(0, 1),
@@ -106,6 +106,8 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
       alignment: Alignment.bottomCenter,
       insetPadding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 32.h),
       child: GlassSurface(
+        blur: 1.0,
+        opacity: 0.05,
         borderRadius: BorderRadius.circular(28.r),
         padding: EdgeInsets.all(24.w),
         child: Column(
@@ -249,11 +251,17 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     bool obscureText = false,
     TextInputType? keyboardType,
   }) {
-    return SoteriaTextField(
-      controller: controller,
-      hintText: hintText,
-      obscureText: obscureText,
-      keyboardType: keyboardType ?? TextInputType.text,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16.r),
+      ),
+      child: SoteriaTextField(
+        controller: controller,
+        hintText: hintText,
+        obscureText: obscureText,
+        keyboardType: keyboardType ?? TextInputType.text,
+      ),
     );
   }
 

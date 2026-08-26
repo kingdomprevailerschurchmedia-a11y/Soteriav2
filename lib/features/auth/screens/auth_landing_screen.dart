@@ -84,7 +84,7 @@ class _AuthLandingContent extends ConsumerWidget {
                   style: context.bodyLarge.copyWith(
                     color: Colors.white.withValues(alpha: 0.5),
                     height: 1.4,
-                    fontSize: 16.sp,
+                    fontSize: 14.sp,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -198,13 +198,23 @@ class _PrimaryButton extends StatelessWidget {
                     strokeWidth: 2.5,
                   ),
                 )
-              : Text(
-                  label,
-                  style: context.titleMedium.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0.2,
-                  ),
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/icons/icons8-google-48.png',
+                      height: 24.h,
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      label,
+                      style: context.titleMedium.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 0.2,
+                      ),
+                    ),
+                  ],
                 ),
         ),
       ),

@@ -145,6 +145,7 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/welcome_illustration.png
     - assets/avatars/
     - assets/icons/
     - assets/ranks/

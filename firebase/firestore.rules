@@ -252,7 +252,7 @@ service cloud.firestore {
 
     // TOURNAMENTS & EVENTS
     match /tournaments/{tournamentId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
-    match /competitive_events/{docId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
+    match /competitive_events/{docId} { allow read: if true; allow write: if isAdmin(); }
     match /daily_challenges/{docId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
 
     // SEASONS

@@ -84,12 +84,12 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
         AnimatedContainer(
           duration: SoteriaAnimations.fast,
           decoration: BoxDecoration(
-            color: Colors.white.withValues(alpha: 0.04),
+            color: Colors.white.withValues(alpha: 0.08), // Increased from 0.04
             borderRadius: SoteriaRadius.brMd,
             border: Border.all(
               color: _isFocused
                   ? SoteriaColors.secondary
-                  : SoteriaColors.secondary.withValues(alpha: 0.1),
+                  : SoteriaColors.secondary.withValues(alpha: 0.2), // Increased from 0.1
               width: 1.5,
             ),
             boxShadow: _isFocused
