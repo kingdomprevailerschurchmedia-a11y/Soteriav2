@@ -8,6 +8,7 @@ import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/design_system/gradients/soteria_gradients.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import '../../../../core/widgets/glass_surface.dart';
 import '../../../player/domain/models/rank_progress.dart';
 
 class HeroCard extends ConsumerWidget {
@@ -57,6 +58,8 @@ class HeroCard extends ConsumerWidget {
             onTap: onTap,
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
             borderRadius: 28,
+            blur: 4.0, // Match Email Login Dialog
+            opacity: 0.12, // Match Email Login Dialog
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
@@ -70,7 +73,7 @@ class HeroCard extends ConsumerWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'CURRENT RANK',
+                            'CURRENT RANK:',
                             style: context.labelSmall.copyWith(
                               color: Colors.white,
                               letterSpacing: 1.0,
@@ -78,19 +81,18 @@ class HeroCard extends ConsumerWidget {
                               fontSize: 10.sp,
                             ),
                           ),
-                          SizedBox(height: 2.h),
                           AutoSizeText(
                             rankProgress != null 
                                 ? rankProgress!.currentRank 
                                 : 'Unranked',
                             maxLines: 1,
-                            minFontSize: 20,
+                            minFontSize: 14,
                             style: context.displaySmall.copyWith(
                               foreground: Paint()..shader = const LinearGradient(
                                 colors: [Color(0xFF8A55FD), Color(0xFFE58C3D)],
                               ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
                               fontWeight: FontWeight.bold,
-                              fontSize: 36.sp,
+                              fontSize: 24.sp,
                               letterSpacing: -0.5,
                             ),
                           ),
@@ -98,18 +100,18 @@ class HeroCard extends ConsumerWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 8.h),
+                      padding: EdgeInsets.only(top: 4.h),
                       child: _StreakSummary(streak: streak),
                     ),
                   ],
                 ),
                 
-                SizedBox(height: 16.h),
+                SizedBox(height: 12.h),
                 
                 // --- XP Section: Career Level ---
                 _SectionLabel(
                   label: 'CAREER EXPERIENCE (XP)',
-                  color: SoteriaColors.xpColor,
+                  color: SoteriaColors.gold,
                 ),
                 SizedBox(height: 8.h),
                 Row(
@@ -135,7 +137,7 @@ class HeroCard extends ConsumerWidget {
                               Text(
                                 '${(xpProgress * 100).toInt()}%',
                                 style: context.labelSmall.copyWith(
-                                  color: SoteriaColors.xpColor,
+                                  color: SoteriaColors.gold,
                                   fontWeight: FontWeight.w900,
                                   fontSize: 10.sp,
                                 ),
@@ -214,8 +216,8 @@ class _HexagonLevelIndicator extends StatelessWidget {
       height: size,
       child: CustomPaint(
         painter: _HexagonPainter(
-          color: SoteriaColors.xpColor,
-          glowColor: SoteriaColors.xpColor.withValues(alpha: 0.4),
+          color: SoteriaColors.gold,
+          glowColor: SoteriaColors.gold.withValues(alpha: 0.2),
         ),
         child: Center(
           child: Column(
@@ -264,7 +266,7 @@ class _HexagonPainter extends CustomPainter {
 
     final glowPaint = Paint()
       ..color = glowColor
-      ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 8);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 4);
 
     final path = Path();
     final w = size.width;
@@ -333,39 +335,34 @@ class _StreakSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(30.r),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.1),
-          width: 1.0,
-        ),
-      ),
+    return GlassSurface(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+      borderRadius: BorderRadius.circular(20.r),
+      blur: 0.01, // Glassy effect
+      opacity: 0.09, // Increased visibility
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
             'assets/icons/streak_icon.png',
-            width: 24.sp,
-            height: 24.sp,
+            width: 18.sp,
+            height: 18.sp,
             fit: BoxFit.contain,
           ),
-          SizedBox(width: 8.w),
+          SizedBox(width: 6.w),
           Container(
             width: 1.w,
-            height: 16.h,
+            height: 12.h,
             color: Colors.white.withValues(alpha: 0.1),
           ),
-          SizedBox(width: 10.w),
+          SizedBox(width: 8.w),
           Text(
             streak.toString(),
             style: context.titleMedium.copyWith(
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontSize: 18.sp,
+              fontSize: 14.sp,
             ),
           ),
           SizedBox(width: 4.w),
@@ -373,7 +370,7 @@ class _StreakSummary extends StatelessWidget {
             'Streak',
             style: context.labelSmall.copyWith(
               color: Colors.white.withValues(alpha: 0.5),
-              fontSize: 11.sp,
+              fontSize: 10.sp,
               fontWeight: FontWeight.w500,
             ),
           ),

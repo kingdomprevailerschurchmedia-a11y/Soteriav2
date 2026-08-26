@@ -51,7 +51,9 @@ class CompetitiveEventObserver {
 
   void _observeFriendships() {
     _ref.listen<AsyncValue<List<Friendship>>>(friendsProvider, (previous, next) {
-      final oldList = previous?.value ?? [];
+      if (previous == null || previous.isLoading) return;
+
+      final oldList = previous.value ?? [];
       final newList = next.value ?? [];
 
       if (newList.length > oldList.length) {
@@ -75,7 +77,10 @@ class CompetitiveEventObserver {
               type: CompetitiveEventType.friendshipEstablished,
               title: 'New Connection!',
               body: 'You are now friends with another player.',
-              metadata: {'friendId': otherUserId},
+              metadata: {
+                'friendId': otherUserId,
+                'friendshipId': friendship.id,
+              },
               createdAt: DateTime.now(),
               priority: 1,
               deduplicationKey: 'friendship_${friendship.id}',
@@ -91,7 +96,9 @@ class CompetitiveEventObserver {
       previous,
       next,
     ) {
-      final oldList = previous?.value ?? [];
+      if (previous == null || previous.isLoading) return;
+
+      final oldList = previous.value ?? [];
       final newList = next.value ?? [];
 
       if (newList.length > oldList.length) {
@@ -125,7 +132,7 @@ class CompetitiveEventObserver {
       final oldData = previous?.value;
       final newData = next.value;
 
-      if (oldData != null && newData != null) {
+      if (oldData != null && newData != null && oldData.uid == newData.uid) {
         // 1. Badges
         if (newData.badges.length > oldData.badges.length) {
           final newBadgeIds = newData.badges.where(
@@ -223,7 +230,7 @@ class CompetitiveEventObserver {
       final oldData = previous?.value;
       final newData = next.value;
 
-      if (oldData != null && newData != null) {
+      if (oldData != null && newData != null && oldData.userId == newData.userId) {
         // 1. Rank Change (Tier or Division)
         if (oldData.currentRank != newData.currentRank) {
           final oldOrder = _getTierOrder(oldData.currentRankTier);
@@ -254,6 +261,8 @@ class CompetitiveEventObserver {
                 'rank': newData.currentRank,
                 'previousRank': oldData.currentRank,
                 'isTierChange': isTierChange,
+                if (isPromotion && newData.lastRankTransactionId != null)
+                  'transactionId': newData.lastRankTransactionId,
               },
               createdAt: DateTime.now(),
               priority: isTierChange ? 3 : 2, // Milestone for Tier change
@@ -273,7 +282,11 @@ class CompetitiveEventObserver {
               title: 'Level Up!',
               body:
                   'Congratulations! You reached Level ${newData.currentLevel}.',
-              metadata: {'level': newData.currentLevel},
+              metadata: {
+                'level': newData.currentLevel,
+                if (newData.lastXpTransactionId != null)
+                  'transactionId': newData.lastXpTransactionId,
+              },
               createdAt: DateTime.now(),
               priority: 1, // Normal
               deduplicationKey:
@@ -338,7 +351,9 @@ class CompetitiveEventObserver {
       previous,
       next,
     ) {
-      final oldList = previous?.value ?? [];
+      if (previous == null || previous.isLoading) return;
+
+      final oldList = previous.value ?? [];
       final newList = next.value ?? [];
 
       if (newList.length > oldList.length) {
@@ -369,7 +384,9 @@ class CompetitiveEventObserver {
       previous,
       next,
     ) {
-      final oldList = previous?.value ?? [];
+      if (previous == null || previous.isLoading) return;
+
+      final oldList = previous.value ?? [];
       final newList = next.value ?? [];
 
       final newlyCompleted = newList.where(
@@ -393,6 +410,7 @@ class CompetitiveEventObserver {
             title: 'Achievement Unlocked',
             body: 'You completed a competitive milestone!',
             createdAt: DateTime.now(),
+            metadata: {'milestoneId': milestone.milestoneId},
             priority: 1,
             deduplicationKey:
                 'milestone_${milestone.milestoneId}_${milestone.userId}',
@@ -584,7 +602,9 @@ class CompetitiveEventObserver {
     _ref.listen<AsyncValue<List<CompetitivePersonalRecord>>>(
       currentUserPersonalRecordsProvider,
       (previous, next) {
-        final oldList = previous?.value ?? [];
+        if (previous == null || previous.isLoading) return;
+
+        final oldList = previous.value ?? [];
         final newList = next.value ?? [];
 
         if (newList.length > oldList.length) {

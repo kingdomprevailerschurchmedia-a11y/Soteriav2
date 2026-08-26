@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:firebase_app_check/firebase_app_check.dart';
+import 'package:flutter/services.dart';
 import '../../config/firebase_config.dart';
 import '../models/security_status.dart';
 import '../../../logging/logger_service.dart';
@@ -37,8 +38,14 @@ class SecurityCoordinator {
       // Log the current token for easy access during development
       if (_env != FirebaseEnvironment.production) {
         final token = await FirebaseAppCheck.instance.getToken();
+        
+        // TEMPORARY: Copy to clipboard if on a physical device without ADB
+        if (token != null) {
+          await Clipboard.setData(ClipboardData(text: token));
+        }
+
         LoggerService.i(
-          'App Check Debug Token: $token',
+          'App Check Debug Token: $token (Copied to Clipboard)',
           feature: 'Security',
         );
       }

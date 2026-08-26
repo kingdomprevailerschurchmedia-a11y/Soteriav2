@@ -162,10 +162,22 @@ class _ChallengesAction extends ConsumerWidget {
       children: [
         IconButton(
           onPressed: nav.playChallenges,
-          icon: Image.asset(
-            'assets/icons/flash_icon.png',
-            width: 24.sp,
-            height: 24.sp,
+          icon: Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.1),
+                  blurRadius: 4,
+                  spreadRadius: 0,
+                ),
+              ],
+            ),
+            child: Image.asset(
+              'assets/icons/flash_icon.png',
+              width: 24.sp,
+              height: 24.sp,
+            ),
           ),
           style: IconButton.styleFrom(
             backgroundColor: Colors.white.withValues(alpha: 0.05),
