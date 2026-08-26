@@ -61,7 +61,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
     return SoteriaPage(
       useSafeArea: false,
-      showBackground: false,
+      showBackground: true,
       child: Scaffold(
         extendBody: true,
         backgroundColor: Colors.transparent,
@@ -90,9 +90,20 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           ],
           bottom: TabBar(
             controller: _tabController,
-            indicatorColor: SoteriaColors.primary,
-            labelColor: SoteriaColors.textPrimary,
-            unselectedLabelColor: SoteriaColors.muted,
+            indicatorColor: const Color(0xFF6B4EEA),
+            indicatorWeight: 3,
+            indicatorSize: TabBarIndicatorSize.tab,
+            dividerColor: Colors.transparent,
+            labelColor: Colors.white,
+            unselectedLabelColor: const Color(0xFF77728A),
+            labelStyle: context.labelLarge.copyWith(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+            unselectedLabelStyle: context.labelLarge.copyWith(
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
             tabs: const [
               Tab(text: 'FRIENDS'),
               Tab(text: 'SEASON'),
@@ -177,13 +188,44 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
               return true;
             },
             child: ListView.builder(
-              cacheExtent: 500.0, padding: EdgeInsets.only(
+              cacheExtent: 500.0,
+              padding: EdgeInsets.only(
                 left: SoteriaSpacing.md,
                 right: SoteriaSpacing.md,
                 bottom: 100.h,
               ),
-              itemCount: entries.length + 6,
+              itemCount: seasonId == null ? entries.length + 1 : entries.length + 6,
               itemBuilder: (context, index) {
+                final bool isGlobal = seasonId == null;
+
+                if (isGlobal) {
+                  // Clean Global layout to match image
+                  if (index == 0) {
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 16, bottom: 8),
+                      child: RepaintBoundary(
+                        child: LeaderboardPodium(
+                          topEntries: entries.take(3).toList(),
+                        ),
+                      ),
+                    );
+                  }
+                  
+                  final entryIndex = index - 1;
+                  if (entryIndex < entries.length) {
+                    final entry = entries[entryIndex];
+                    return RepaintBoundary(
+                      child: LeaderboardRow(
+                        entry: entry,
+                        isCurrentUser: entry.userId == currentUserId,
+                        calculatedPosition: entryIndex + 1,
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                }
+
+                // Original complex layout for Season
                 if (index == 0) {
                   return const Padding(
                     padding: EdgeInsets.only(top: 8, bottom: 16),
@@ -266,12 +308,13 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
                 }
 
                 if (index == 5) {
-                  return Column(
-                    children: [
-                      _buildSectionDivider('TOP PERFORMERS'),
-                      const SizedBox(height: 16),
-                      RepaintBoundary(child: LeaderboardPodium(topEntries: entries.take(3).toList())),
-                    ],
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: RepaintBoundary(
+                      child: LeaderboardPodium(
+                        topEntries: entries.take(3).toList(),
+                      ),
+                    ),
                   );
                 }
 

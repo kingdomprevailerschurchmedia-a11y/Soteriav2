@@ -122,9 +122,26 @@ class GameEngine extends StateNotifier<GameState> {
   /// Starts the game session.
   Future<void> startSession(List<Question> questions, {String? sessionId}) async {
     try {
+      // Randomize options for each question to avoid predictable correct answer positions (e.g., always "A")
+      final randomizedQuestions = questions.map((q) {
+        final shuffleTypes = [
+          QuestionType.multipleChoice,
+          QuestionType.multipleSelect,
+          QuestionType.image,
+          QuestionType.audio,
+          QuestionType.video,
+        ];
+
+        if (shuffleTypes.contains(q.type) && q.options.isNotEmpty) {
+          final shuffledOptions = List<Answer>.from(q.options)..shuffle();
+          return q.copyWith(options: shuffledOptions);
+        }
+        return q;
+      }).toList();
+
       state = state.copyWith(
         lifecycle: GameLifecycle.loading,
-        questions: questions,
+        questions: randomizedQuestions,
         sessionId: sessionId,
       );
 

@@ -24,38 +24,56 @@ class LeaderboardPodium extends StatelessWidget {
     if (topEntries.length >= 3) podiumEntries[2] = topEntries[2];
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.md),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
+      width: double.infinity,
+      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      decoration: BoxDecoration(
+        color: const Color(0xFF1E1638).withValues(alpha: 0.3),
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: Colors.white.withValues(alpha: 0.05),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (podiumEntries[0] != null)
-            Flexible(
-              child: _PodiumItem(
-                entry: podiumEntries[0]!,
-                rank: 2,
-                height: 120.h,
-              ),
+          Text(
+            'TOP PERFORMERS',
+            style: context.labelMedium.copyWith(
+              color: const Color(0xFF6B4EEA),
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
             ),
-          SizedBox(width: SoteriaSpacing.md),
-          if (podiumEntries[1] != null)
-            Flexible(
-              child: _PodiumItem(
-                entry: podiumEntries[1]!,
-                rank: 1,
-                height: 150.h,
-                isWinner: true,
-              ),
-            ),
-          SizedBox(width: SoteriaSpacing.md),
-          if (podiumEntries[2] != null)
-            Flexible(
-              child: _PodiumItem(
-                entry: podiumEntries[2]!,
-                rank: 3,
-                height: 100.h,
-              ),
-            ),
+          ),
+          SizedBox(height: 24.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              if (podiumEntries[0] != null)
+                Expanded(
+                  child: _PodiumItem(
+                    entry: podiumEntries[0]!,
+                    rank: 2,
+                  ),
+                ),
+              if (podiumEntries[1] != null)
+                Expanded(
+                  child: _PodiumItem(
+                    entry: podiumEntries[1]!,
+                    rank: 1,
+                    isWinner: true,
+                  ),
+                ),
+              if (podiumEntries[2] != null)
+                Expanded(
+                  child: _PodiumItem(
+                    entry: podiumEntries[2]!,
+                    rank: 3,
+                  ),
+                ),
+            ],
+          ),
         ],
       ),
     );
@@ -65,13 +83,11 @@ class LeaderboardPodium extends StatelessWidget {
 class _PodiumItem extends StatelessWidget {
   final LeaderboardEntry entry;
   final int rank;
-  final double height;
   final bool isWinner;
 
   const _PodiumItem({
     required this.entry,
     required this.rank,
-    required this.height,
     this.isWinner = false,
   });
 
@@ -80,66 +96,125 @@ class _PodiumItem extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            SoteriaAvatar(
-              avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
-              imageUrl: entry.avatarUrl,
-              size: isWinner ? 64 : 52,
-              rank: entry.position,
+        if (isWinner)
+          Padding(
+            padding: EdgeInsets.only(bottom: 4.h),
+            child: Icon(
+              Icons.workspace_premium_rounded,
+              color: SoteriaColors.gold,
+              size: 24.sp,
             ),
-            if (isWinner)
-              Positioned(
-                top: -8.h,
-                child: Icon(
-                  Icons.workspace_premium_rounded,
-                  color: SoteriaColors.gold,
-                  size: 20.sp,
+          ),
+        Stack(
+          alignment: Alignment.center,
+          clipBehavior: Clip.none,
+          children: [
+            Container(
+              padding: EdgeInsets.all(isWinner ? 3.r : 2.r),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: isWinner
+                    ? const LinearGradient(
+                        colors: [SoteriaColors.gold, Colors.transparent],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      )
+                    : LinearGradient(
+                        colors: [
+                          const Color(0xFF6B4EEA).withValues(alpha: 0.5),
+                          Colors.transparent
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: isWinner
+                      ? [
+                          BoxShadow(
+                            color: SoteriaColors.gold.withValues(alpha: 0.2),
+                            blurRadius: 15,
+                            spreadRadius: 2,
+                          )
+                        ]
+                      : [],
+                ),
+                child: SoteriaAvatar(
+                  avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+                  imageUrl: entry.avatarUrl,
+                  size: isWinner ? 80 : 64,
                 ),
               ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 2.h),
-              decoration: BoxDecoration(
-                color: isWinner ? SoteriaColors.gold : SoteriaColors.primary,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Text(
-                '#$rank',
-                style: context.labelSmall.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 10.sp,
+            ),
+            Positioned(
+              bottom: -4.h,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+                decoration: BoxDecoration(
+                  color: isWinner ? SoteriaColors.gold : const Color(0xFF6B4EEA),
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(color: Colors.white24, width: 1),
+                ),
+                child: Text(
+                  '#$rank',
+                  style: context.labelSmall.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 12.sp,
+                  ),
                 ),
               ),
             ),
           ],
         ),
-        SizedBox(height: SoteriaSpacing.sm),
+        SizedBox(height: 16.h),
         Text(
           entry.displayName,
-          style: context.labelLarge.copyWith(
+          style: context.titleSmall.copyWith(
             fontWeight: FontWeight.bold,
-            color: isWinner
-                ? SoteriaColors.textPrimary
-                : SoteriaColors.textSecondary,
+            color: Colors.white,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
+        SizedBox(height: 4.h),
         Text(
           '${entry.rankPoints} RP',
-          style: context.bodySmall.copyWith(
+          style: context.bodyMedium.copyWith(
             color: SoteriaColors.gold,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(height: SoteriaSpacing.sm),
-        RankBadge(
-          rankName: '${entry.rankTier} ${entry.division}',
-          tierId: entry.rankTier.toLowerCase(),
+        SizedBox(height: 8.h),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          decoration: BoxDecoration(
+            color: Colors.black26,
+            borderRadius: BorderRadius.circular(6.r),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.diamond_outlined,
+                color: const Color(0xFF9D5BFF),
+                size: 14.sp,
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                'NONE 0',
+                style: context.labelSmall.copyWith(
+                  color: const Color(0xFF77728A),
+                  fontSize: 10.sp,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );
   }
 }
+

@@ -102,6 +102,13 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
     // Trigger lifecycle update
     ref.read(appLifecycleProvider.notifier).refresh();
   }
+
+  Future<void> reset() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kStorageKey);
+    state = const PersonalizationState();
+    ref.read(appLifecycleProvider.notifier).refresh();
+  }
 }
 
 final personalizationProvider =

@@ -26,13 +26,6 @@ class LeaderboardRow extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final titleDefinitionsAsync = ref.watch(titleDefinitionsProvider);
-    final title = entry.titleId != null
-        ? titleDefinitionsAsync.value
-            ?.where((t) => t.id == entry.titleId)
-            .firstOrNull
-        : null;
-
     final position = calculatedPosition ?? entry.position;
 
     return InkWell(
@@ -44,87 +37,99 @@ class LeaderboardRow extends ConsumerWidget {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.md,
-          vertical: SoteriaSpacing.sm,
+          vertical: 12.h,
         ),
         decoration: BoxDecoration(
-          color: isCurrentUser
-              ? SoteriaColors.primary.withValues(alpha: 0.1)
-              : Colors.transparent,
+          gradient: isCurrentUser
+              ? LinearGradient(
+                  colors: [
+                    const Color(0xFF6B4EEA).withValues(alpha: 0.2),
+                    const Color(0xFF6B4EEA).withValues(alpha: 0.05),
+                    Colors.transparent,
+                  ],
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )
+              : null,
           border: isCurrentUser
-              ? Border.symmetric(
-                  vertical: BorderSide(color: SoteriaColors.primary, width: 2.w),
+              ? Border(
+                  left: BorderSide(color: const Color(0xFF6B4EEA), width: 3.w),
                 )
               : null,
         ),
         child: Row(
           children: [
             SizedBox(
-              width: 32.w,
+              width: 40.w,
               child: _LeaderboardPositionBadge(rank: position),
             ),
-            SizedBox(width: 8.w),
-            SoteriaAvatar(
-              avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
-              imageUrl: entry.avatarUrl,
-              size: 40,
-              rank: position,
+            Container(
+              padding: EdgeInsets.all(2.r),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: _getRankRingColor(position),
+                  width: 1.5,
+                ),
+              ),
+              child: SoteriaAvatar(
+                avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
+                imageUrl: entry.avatarUrl,
+                size: 48,
+              ),
             ),
             SizedBox(width: SoteriaSpacing.md),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Flexible(
-                        child: Text(
-                          entry.displayName,
-                          style: context.bodyLarge.copyWith(
-                            fontWeight:
-                                isCurrentUser ? FontWeight.bold : FontWeight.normal,
-                            color: isCurrentUser
-                                ? SoteriaColors.gold
-                                : SoteriaColors.textPrimary,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      if (title != null) ...[
-                        SizedBox(width: 6.w),
-                        CompetitiveTitleWidget(title: title),
-                      ],
-                    ],
+                  Text(
+                    entry.displayName,
+                    style: context.titleSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: isCurrentUser ? SoteriaColors.gold : Colors.white,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '${entry.rankTier} ${entry.division}',
-                    style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                    style: context.bodySmall.copyWith(
+                      color: const Color(0xFF77728A),
+                    ),
                   ),
                 ],
               ),
             ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   '${entry.rankPoints} RP',
                   style: context.titleSmall.copyWith(
                     color: SoteriaColors.gold,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: 8.w),
-                CompetitiveRankBadge(
-                  rankName: '', // Label hidden for compact row
-                  tierId: entry.rankTier.toLowerCase(),
-                  size: RankBadgeSize.small,
-                ),
               ],
+            ),
+            SizedBox(width: 12.w),
+            CompetitiveRankBadge(
+              rankName: '', 
+              tierId: entry.rankTier.toLowerCase(),
+              size: RankBadgeSize.small,
             ),
           ],
         ),
       ),
     );
+  }
+
+  Color _getRankRingColor(int rank) {
+    if (rank == 1) return SoteriaColors.gold;
+    if (rank == 2) return const Color(0xFFB9B6C9);
+    if (rank == 3) return const Color(0xFFCD7F32);
+    return Colors.transparent;
   }
 }
 
@@ -134,22 +139,27 @@ class _LeaderboardPositionBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? assetPath;
-    if (rank == 1) {
-      assetPath = 'assets/icons/first_position_badge_transparent.png';
-    } else if (rank == 2) {
-      assetPath = 'assets/icons/second_position_badge_transparent_clean.png';
-    } else if (rank == 3) {
-      assetPath = 'assets/icons/third_position_badge_transparent_clean.png';
-    }
-
-    if (assetPath != null) {
+    if (rank <= 3) {
       return Center(
-        child: Image.asset(
-          assetPath,
+        child: Container(
           width: 24.w,
           height: 24.w,
-          fit: BoxFit.contain,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: _getRankColor(rank).withValues(alpha: 0.5),
+              width: 1,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              rank.toString(),
+              style: context.labelMedium.copyWith(
+                color: _getRankColor(rank),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
         ),
       );
     }
@@ -158,10 +168,18 @@ class _LeaderboardPositionBadge extends StatelessWidget {
       child: Text(
         rank.toString(),
         style: context.labelLarge.copyWith(
-          color: SoteriaColors.muted,
-          fontWeight: FontWeight.bold,
+          color: const Color(0xFF5F5A73),
+          fontWeight: FontWeight.normal,
         ),
       ),
     );
   }
+
+  Color _getRankColor(int rank) {
+    if (rank == 1) return SoteriaColors.gold;
+    if (rank == 2) return const Color(0xFFB9B6C9);
+    if (rank == 3) return const Color(0xFFCD7F32);
+    return const Color(0xFF5F5A73);
+  }
 }
+

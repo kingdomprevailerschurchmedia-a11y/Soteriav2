@@ -76,6 +76,13 @@ class OnboardingNotifier extends Notifier<OnboardingState> {
     ref.read(appLifecycleProvider.notifier).bypassToAuth();
     ref.read(navigationServiceProvider).go(SoteriaRoutes.register);
   }
+
+  Future<void> reset() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_kOnboardingCompletedKey);
+    state = const OnboardingState();
+    ref.read(appLifecycleProvider.notifier).refresh();
+  }
 }
 
 final onboardingProvider =
