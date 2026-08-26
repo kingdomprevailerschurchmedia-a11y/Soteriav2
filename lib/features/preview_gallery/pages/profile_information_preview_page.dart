@@ -65,4 +65,9 @@ class FakeProfileRepository implements ProfileRepository {
       throw Exception('Network timeout');
     }
   }
+
+  @override
+  Future<void> syncPublicProfile(String userId) async {
+    // No-op for mock
+  }
 }

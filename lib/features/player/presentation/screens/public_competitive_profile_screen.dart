@@ -367,7 +367,31 @@ class PublicCompetitiveProfileScreen extends ConsumerWidget {
 
   Widget _buildNotFound(BuildContext context) {
     return Center(
-      child: Text('Competitor not found.', style: context.bodyMedium),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.person_off_rounded,
+            size: 64.w,
+            color: SoteriaColors.muted.withValues(alpha: 0.2),
+          ),
+          SoteriaSpacing.gapMD,
+          Text(
+            'Competitor profile not found.',
+            style: context.titleMedium.copyWith(color: SoteriaColors.muted),
+          ),
+          SoteriaSpacing.gapSM,
+          Text(
+            'This user may not have a competitive profile yet.',
+            style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+          ),
+          SoteriaSpacing.gapLG,
+          SoteriaButton.secondary(
+            label: 'GO BACK',
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
     );
   }
 

@@ -9,4 +9,8 @@ abstract interface class ProfileRepository {
     required PlayerProfile playerProfile,
     String? oldUsername,
   });
+
+  /// Synchronizes the public competitive profile for a user.
+  /// This ensures that the user is discoverable and their stats are visible to others.
+  Future<void> syncPublicProfile(String userId);
 }

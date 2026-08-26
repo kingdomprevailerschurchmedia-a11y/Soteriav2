@@ -67,22 +67,7 @@ class FirebaseIdentityRepository implements IdentityRepository {
     if (!doc.exists) return null;
 
     final data = doc.data()!;
-    return UserProfile(
-      firstName: data['firstName'],
-      lastName: data['lastName'],
-      displayName: data['displayName'],
-      username: data['username'],
-      email: data['email'],
-      avatarUrl: data['avatarUrl'],
-      selectedAvatarId: data['selectedAvatarId'] ?? 'socrates',
-      academicLevel: data['academicLevel'],
-      institution: data['institution'],
-      faculty: data['faculty'],
-      department: data['department'],
-      country: data['country'] ?? 'Nigeria',
-      interests: List<String>.from(data['interests'] ?? []),
-      bio: data['bio'] as String? ?? '',
-    );
+    return UserProfile.fromMap(data);
   }
 
   @override

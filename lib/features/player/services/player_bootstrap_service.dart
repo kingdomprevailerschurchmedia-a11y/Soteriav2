@@ -13,6 +13,7 @@ import '../domain/services/progression_service.dart';
 import '../domain/repositories/goal_repository.dart';
 import '../../question_content/domain/repositories/category_repository.dart';
 import '../domain/repositories/leaderboard_repository.dart';
+import '../domain/repositories/profile_repository.dart';
 import '../domain/services/achievement_service.dart';
 import '../../../core/logging/logger_service.dart';
 import '../../../core/identity/repositories/identity_repository.dart';
@@ -30,6 +31,7 @@ class PlayerBootstrapService {
   final GoalRepository? _goalRepository;
   final LeaderboardRepository? _leaderboardRepository;
   final AchievementService? _achievementService;
+  final ProfileRepository? _profileRepository;
 
   static const _kPersonalizationKey = 'user_personalization';
 
@@ -45,6 +47,7 @@ class PlayerBootstrapService {
     this._goalRepository,
     this._leaderboardRepository,
     this._achievementService,
+    this._profileRepository,
   });
 
   Future<PlayerProfile> bootstrap(auth.User user) async {
@@ -388,10 +391,14 @@ class PlayerBootstrapService {
           progression: progression,
           seasonId: null, // Global
         );
-        LoggerService.d('Leaderboard synced during bootstrap', feature: 'Player');
+
+        // Also sync Public Profile to ensure competitor visibility
+        await _profileRepository?.syncPublicProfile(profile.uid);
+        
+        LoggerService.d('Leaderboard and Public Profile synced during bootstrap', feature: 'Player');
       }
     } catch (e) {
-      LoggerService.w('Leaderboard sync failed during bootstrap: $e', feature: 'Player');
+      LoggerService.w('Sync failed during bootstrap: $e', feature: 'Player');
     }
   }
 

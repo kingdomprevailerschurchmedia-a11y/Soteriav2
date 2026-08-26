@@ -13,12 +13,11 @@ import '../../domain/models/competitive_statistics.dart';
 class FirestoreProfileRepository implements ProfileRepository {
   final FirebaseFirestore _firestore;
   final LeaderboardRepository _leaderboardRepository;
-  final PlayerProgressionRepository _progressionRepository;
 
   FirestoreProfileRepository(
     this._firestore,
     this._leaderboardRepository,
-    this._progressionRepository,
+    PlayerProgressionRepository progressionRepository,
   );
 
   @override
@@ -28,15 +27,7 @@ class FirestoreProfileRepository implements ProfileRepository {
     
     if (!doc.exists) return true;
     
-    // If it exists, check if it belongs to the current user (case insensitive comparison)
-    // We get the current user ID from the reservation document
-    final data = doc.data();
-    final userId = data?['userId'] as String?;
-    
-    // Note: We don't have the current UID here directly, so we rely on the caller 
-    // or assume if it exists it's taken, but the rules allow the owner to overwrite it.
-    // However, for availability UI, we should probably know if it's "taken by ME".
-    // For now, let's keep it simple: if doc exists, it's not "available" for a NEW reservation.
+    // If it exists, it's not "available" for a NEW reservation.
     return !doc.exists;
   }
 
@@ -191,5 +182,56 @@ class FirestoreProfileRepository implements ProfileRepository {
       case 'III': return 3;
       default: return 0;
     }
+  }
+
+  @override
+  Future<void> syncPublicProfile(String userId) async {
+    final userDoc = await _firestore.collection('users').doc(userId).get();
+    final userProfileDoc =
+        await _firestore.collection('user_profiles').doc(userId).get();
+    final progressionDoc =
+        await _firestore.collection('player_progression').doc(userId).get();
+
+    if (!userDoc.exists || !userProfileDoc.exists || !progressionDoc.exists) {
+      return;
+    }
+
+    final playerProfile = PlayerProfileDto.fromFirestore(userDoc);
+    final userProfile = UserProfile.fromMap(userProfileDoc.data()!);
+    final progression = PlayerProgression.fromJson(progressionDoc.data()!);
+
+    final publicProfile = PublicCompetitiveProfile(
+      userId: userId,
+      displayName: userProfile.displayName,
+      username: userProfile.username,
+      avatarId: userProfile.selectedAvatarId,
+      photoUrl: userProfile.avatarUrl,
+      currentRank: progression.currentRank,
+      rankTier: progression.currentRankTier,
+      rankPoints: progression.rankPoints,
+      division: _parseDivision(progression.currentRank),
+      careerHighlights: CareerStatistics(
+        gamesPlayed: playerProfile.gamesPlayed,
+        gamesWon: playerProfile.gamesWon,
+        gamesLost: playerProfile.gamesPlayed - playerProfile.gamesWon,
+        winRate: playerProfile.gamesPlayed > 0
+            ? playerProfile.gamesWon / playerProfile.gamesPlayed
+            : 0.0,
+        totalQuestionsAnswered: playerProfile.totalQuestionsAnswered,
+        correctAnswers: playerProfile.correctAnswers,
+        accuracy: playerProfile.accuracy,
+        currentStreak: playerProfile.currentStreak,
+        highestStreak: playerProfile.highestStreak,
+        bestRank: 'Unranked',
+        peakPosition: 0,
+        seasonsPlayed: 0,
+      ),
+      updatedAt: DateTime.now(),
+    );
+
+    await _firestore
+        .collection('public_profiles')
+        .doc(userId)
+        .set(PublicProfileDto.toFirestore(publicProfile), SetOptions(merge: true));
   }
 }

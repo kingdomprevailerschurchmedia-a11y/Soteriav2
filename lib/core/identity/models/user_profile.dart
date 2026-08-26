@@ -98,4 +98,25 @@ class UserProfile {
       'bio': bio,
     };
   }
+
+  factory UserProfile.fromMap(Map<String, dynamic> map) {
+    return UserProfile(
+      firstName: map['firstName'] ?? '',
+      lastName: map['lastName'] ?? '',
+      displayName: map['displayName'] ?? '',
+      username: map['username'] ?? '',
+      email: map['email'] ?? '',
+      avatarUrl: map['avatarUrl'],
+      selectedAvatarId: map['selectedAvatarId'] ?? 'socrates',
+      academicLevel: map['academicLevel'],
+      institution: map['institution'],
+      faculty: map['faculty'],
+      department: map['department'],
+      country: map['country'] ?? 'Nigeria',
+      timezone: map['timezone'] ?? 'Africa/Lagos',
+      language: map['language'] ?? 'en',
+      interests: List<String>.from(map['interests'] ?? []),
+      bio: map['bio'] ?? '',
+    );
+  }
 }

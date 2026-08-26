@@ -84,6 +84,7 @@ final playerBootstrapServiceProvider = Provider(
     goalRepository: ref.watch(goalRepositoryProvider),
     leaderboardRepository: ref.watch(leaderboardRepositoryProvider),
     achievementService: ref.watch(achievementServiceProvider),
+    profileRepository: ref.watch(profileRepositoryProvider),
   ),
 );
 
