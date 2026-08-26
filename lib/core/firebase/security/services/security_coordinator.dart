@@ -34,6 +34,15 @@ class SecurityCoordinator {
         appleProvider: AppleProvider.debug,
       );
 
+      // Log the current token for easy access during development
+      if (_env != FirebaseEnvironment.production) {
+        final token = await FirebaseAppCheck.instance.getToken();
+        LoggerService.i(
+          'App Check Debug Token: $token',
+          feature: 'Security',
+        );
+      }
+
       _updateStatus(
         _currentStatus.copyWith(
           isInitialized: true,

@@ -24,8 +24,10 @@ void main() {
   late MockFirebaseFirestore mockFirestore;
   late MockCollectionReference mockProgressionCollection;
   late MockCollectionReference mockXpTransactionCollection;
+  late MockCollectionReference mockUsersCollection;
   late MockDocumentReference mockProgressionDoc;
   late MockDocumentReference mockXpTxDoc;
+  late MockDocumentReference mockUserDoc;
   late MockDocumentSnapshot mockProgressionSnapshot;
   late MockDocumentSnapshot mockXpTxSnapshot;
   late MockTransaction mockTransaction;
@@ -42,8 +44,10 @@ void main() {
     mockFirestore = MockFirebaseFirestore();
     mockProgressionCollection = MockCollectionReference();
     mockXpTransactionCollection = MockCollectionReference();
+    mockUsersCollection = MockCollectionReference();
     mockProgressionDoc = MockDocumentReference();
     mockXpTxDoc = MockDocumentReference();
+    mockUserDoc = MockDocumentReference();
     mockProgressionSnapshot = MockDocumentSnapshot();
     mockXpTxSnapshot = MockDocumentSnapshot();
     mockTransaction = MockTransaction();
@@ -61,12 +65,16 @@ void main() {
 
     when(() => mockFirestore.collection('player_progression')).thenReturn(mockProgressionCollection);
     when(() => mockFirestore.collection('xp_transactions')).thenReturn(mockXpTransactionCollection);
+    when(() => mockFirestore.collection('users')).thenReturn(mockUsersCollection);
+    
     when(() => mockProgressionCollection.doc(any())).thenReturn(mockProgressionDoc);
     when(() => mockXpTransactionCollection.doc(any())).thenReturn(mockXpTxDoc);
+    when(() => mockUsersCollection.doc(any())).thenReturn(mockUserDoc);
 
     // Setup for both 2 and 3 arguments as Firestore might call it either way depending on platform interface
     when(() => mockTransaction.set<Map<String, dynamic>>(any(), any())).thenReturn(mockTransaction);
     when(() => mockTransaction.set<Map<String, dynamic>>(any(), any(), any())).thenReturn(mockTransaction);
+    when(() => mockTransaction.update(any(), any())).thenReturn(mockTransaction);
   });
 
   group('FirebasePlayerProgressionRepository - Idempotency', () {
@@ -145,6 +153,7 @@ void main() {
       // Verify either 2 or 3 arg version was called
       verify(() => mockTransaction.set<Map<String, dynamic>>(mockProgressionDoc, any(), any())).called(1);
       verify(() => mockTransaction.set<Map<String, dynamic>>(mockXpTxDoc, any(), any())).called(1);
+      verify(() => mockTransaction.update(mockUserDoc, any())).called(1);
     });
   });
 }

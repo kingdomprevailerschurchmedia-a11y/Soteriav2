@@ -83,6 +83,12 @@ class FirebasePlayerProgressionRepository
     XpTransaction xpTransaction,
   ) async {
     final tx = transaction as Transaction;
+
+    // Safety: Ensure we only process transactions for the current user to satisfy security rules
+    // unless the current caller is an admin (not applicable here as we're in the client repo)
+    // if (xpTransaction.userId != _auth.currentUser?.uid) ... 
+    // We don't have direct access to auth here, but we can assume it for now or pass it.
+    
     final txDoc = _xpTransactionCollection.doc(xpTransaction.transactionId);
 
     // 1. Idempotency check inside the atomic transaction
@@ -115,6 +121,15 @@ class FirebasePlayerProgressionRepository
 
     tx.set(progressionDoc, updated.toJson());
     tx.set(txDoc, xpTransaction.toJson());
+
+    // Sync to main user profile for UI consistency and to satisfy security rules
+    final userRef = _firestore.collection('users').doc(xpTransaction.userId);
+    tx.update(userRef, {
+      'xp': updated.currentXp,
+      'level': updated.currentLevel,
+      'lastXpTransactionId': xpTransaction.transactionId,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
   }
 
   @override

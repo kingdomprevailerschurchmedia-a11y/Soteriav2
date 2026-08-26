@@ -114,41 +114,56 @@ final goalEvaluationProvider = Provider<void>((ref) {
       final walletRepo = ref.read(walletRepositoryProvider);
       final applyXp = ref.read(applyXpTransactionProvider);
 
-      for (var goal in updated) {
-        // Check if newly completed for automated rewards
-        if (goal.status == GoalStatus.completed) {
-          // Process XP rewards
-          final xpTx = rewardService.processGoalReward(
-            userId: userId,
-            goalId: goal.goalId,
-            goalState: goal,
-          );
-          if (xpTx != null) {
-            applyXp(xpTx);
-          }
-
-          // Process Coin rewards
-          final coinAmount = rewardService.getGoalCoinReward(goal.goalId);
-          if (coinAmount != null && coinAmount > 0) {
-            walletRepo.creditCurrency(
+      // We use a future here to ensure we don't block the provider state update,
+      // but we should ideally process these sequentially or handle the concurrency.
+      Future<void> processRewards() async {
+        for (var goal in updated) {
+          // Check if newly completed for automated rewards
+          if (goal.status == GoalStatus.completed) {
+            // Process XP rewards
+            final xpTx = rewardService.processGoalReward(
               userId: userId,
-              amount: coinAmount,
-              currency: 'coins',
-              source: 'goal_completion',
-              referenceId: goal.goalId,
-              description: 'Reward for completing goal',
+              goalId: goal.goalId,
+              goalState: goal,
+            );
+            if (xpTx != null) {
+              try {
+                await applyXp(xpTx);
+              } catch (e) {
+                // Log error but continue with other goals
+                print('Failed to apply XP for goal ${goal.goalId}: $e');
+              }
+            }
+
+            // Process Coin rewards
+            final coinAmount = rewardService.getGoalCoinReward(goal.goalId);
+            if (coinAmount != null && coinAmount > 0) {
+              try {
+                await walletRepo.creditCurrency(
+                  userId: userId,
+                  amount: coinAmount,
+                  currency: 'coins',
+                  source: 'goal_completion',
+                  referenceId: goal.goalId,
+                  description: 'Reward for completing goal',
+                );
+              } catch (e) {
+                print('Failed to apply Coins for goal ${goal.goalId}: $e');
+              }
+            }
+
+            // Mark as claimed to prevent re-processing
+            goal = goal.copyWith(
+              status: GoalStatus.claimed,
+              claimedAt: DateTime.now(),
             );
           }
 
-          // Mark as claimed to prevent re-processing
-          goal = goal.copyWith(
-            status: GoalStatus.claimed,
-            claimedAt: DateTime.now(),
-          );
+          await repository.updateGoalProgress(goal);
         }
-
-        repository.updateGoalProgress(goal);
       }
+
+      processRewards();
     }
   }
 });

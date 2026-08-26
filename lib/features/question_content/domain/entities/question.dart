@@ -27,6 +27,14 @@ enum QuestionStatus {
   rejected,
 }
 
+class DurationConverter implements JsonConverter<Duration, int> {
+  const DurationConverter();
+  @override
+  Duration fromJson(int json) => Duration(microseconds: json);
+  @override
+  int toJson(Duration object) => object.inMicroseconds;
+}
+
 @freezed
 abstract class Question with _$Question {
   @JsonSerializable(explicitToJson: true)
@@ -45,7 +53,7 @@ abstract class Question with _$Question {
     required List<String> correctOptionIds,
     @Default([]) List<String> tags,
     @Default('en') String language,
-    @Default(Duration(seconds: 30)) Duration estimatedTime,
+    @DurationConverter() @Default(Duration(seconds: 30)) Duration estimatedTime,
     @Default(10) int xpValue,
     @Default(5) int coinValue,
     @Default(QuestionStatus.draft) QuestionStatus status,

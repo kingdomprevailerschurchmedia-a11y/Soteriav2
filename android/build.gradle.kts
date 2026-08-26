@@ -26,6 +26,9 @@ subprojects {
                 method?.invoke(android, 36)
             } catch (e: Exception) {
             }
+            
+            // Fix for "Type annotation class 'org.checkerframework.checker.initialization.qual.UnknownInitialization' is inaccessible"
+            project.dependencies.add("compileOnly", "org.checkerframework:checker-qual:3.49.0")
         }
     }
 }

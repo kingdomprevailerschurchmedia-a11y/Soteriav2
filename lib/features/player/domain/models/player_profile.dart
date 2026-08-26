@@ -17,6 +17,9 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default(1) int level,
     @Default(0) int xp,
     @Default(0) int coins,
+    String? lastCoinTransactionId,
+    String? lastXpTransactionId,
+    String? lastRankTransactionId,
 
     // Stats
     @Default(0) int currentStreak,

@@ -37,10 +37,26 @@ class CompetitiveSession {
       'timerEnabled': config.timerEnabled,
     },
     'questions': questions.map((q) {
-      final json = q.toJson();
-      // Hardening: Ensure nested options are serialized to prevent Firestore "Invalid argument" errors
-      json['options'] = q.options.map((a) => a.toJson()).toList();
-      return json;
+      // Optimization: Only save fields required for gameplay to save document space (1MB limit)
+      return {
+        'id': q.id,
+        'text': q.text,
+        'explanation': q.explanation,
+        'difficulty': q.difficulty.name,
+        'categoryId': q.categoryId,
+        'type': q.type.name,
+        'options': q.options.map((a) => {
+          'id': a.id,
+          'text': a.text,
+          'mediaUrl': a.mediaUrl,
+          'displayOrder': a.displayOrder,
+        }).toList(),
+        'correctOptionIds': q.correctOptionIds,
+        'estimatedTime': q.estimatedTime.inMicroseconds,
+        'xpValue': q.xpValue,
+        'coinValue': q.coinValue,
+        'status': q.status.name,
+      };
     }).toList(),
     'startTime': startTime.toIso8601String(),
     'createdAt': createdAt.toIso8601String(),

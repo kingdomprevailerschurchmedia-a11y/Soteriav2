@@ -9,6 +9,8 @@ import 'package:soteria/features/question_content/domain/entities/difficulty.dar
 import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
 import 'package:soteria/features/player/domain/models/xp_transaction.dart';
 import 'package:soteria/features/player/domain/models/player_progression.dart';
+import 'package:soteria/features/player/domain/models/competitive_result.dart';
+import 'package:soteria/features/player/domain/models/rank_change.dart';
 import 'package:soteria/features/player/domain/repositories/player_repository.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

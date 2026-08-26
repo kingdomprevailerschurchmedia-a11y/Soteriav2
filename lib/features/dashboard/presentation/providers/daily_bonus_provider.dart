@@ -147,7 +147,7 @@ class DailyBonusNotifier extends Notifier<DailyBonusState> {
           'currency': 'coins',
           'direction': 'credit',
           'amount': 100,
-          'transactionType': 'dailyReward',
+          'transactionType': 'reward',
           'source': 'dailyLogin',
           'status': 'completed',
           'createdAt': FieldValue.serverTimestamp(),

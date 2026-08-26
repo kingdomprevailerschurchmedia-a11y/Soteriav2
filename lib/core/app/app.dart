@@ -59,16 +59,18 @@ class SoteriaApp extends ConsumerWidget {
 
     // Initialize background services with a staggered delay to ensure splash animation is smooth
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 1. Critical but can wait a bit
-      Future.delayed(const Duration(milliseconds: 800), () {
-        if (!ref.exists(notificationCoordinatorProvider)) return;
-        ref.read(notificationCoordinatorProvider).initialize();
+      // 1. Critical configuration and notifications
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (ref.exists(configurationCoordinatorProvider)) {
+          ref.read(configurationCoordinatorProvider.notifier).initialize();
+        }
+        if (ref.exists(notificationCoordinatorProvider)) {
+          ref.read(notificationCoordinatorProvider).initialize();
+        }
       });
 
       // 2. Non-critical background observers
       Future.delayed(const Duration(milliseconds: 2000), () {
-        if (!ref.exists(configurationCoordinatorProvider)) return;
-        ref.read(configurationCoordinatorProvider).initialize();
         ref.read(competitiveEventObserverProvider);
       });
     });

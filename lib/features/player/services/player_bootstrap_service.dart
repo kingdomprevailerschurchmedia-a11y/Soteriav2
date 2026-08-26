@@ -50,6 +50,9 @@ class PlayerBootstrapService {
     );
 
     try {
+      // Ensure required authoritative documents exist (Remediation for legacy users)
+      await _ensureAuthoritativeDocuments(user.uid);
+
       final existingProfile = await _loadProfile.execute(user.uid);
       final localInterests = await _getInterestsFromLocal();
 
@@ -206,6 +209,42 @@ class PlayerBootstrapService {
         feature: 'Player',
       );
       rethrow;
+    }
+  }
+
+  Future<void> _ensureAuthoritativeDocuments(String userId) async {
+    final walletRef = _firestore.collection('wallets').doc(userId);
+    final gameProfileRef = _firestore.collection('user_game_profiles').doc(userId);
+    
+    final walletSnap = await walletRef.get();
+    if (!walletSnap.exists) {
+      LoggerService.i('Remediating missing wallet for user: $userId', feature: 'Player');
+      await walletRef.set({
+        'uid': userId,
+        'coins': 0,
+        'tokens': 0,
+        'lifetimeCoinsEarned': 0,
+        'lifetimeTokensEarned': 0,
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+        'schemaVersion': 1,
+      });
+    }
+
+    final gameProfileSnap = await gameProfileRef.get();
+    if (!gameProfileSnap.exists) {
+      LoggerService.i('Remediating missing game profile for user: $userId', feature: 'Player');
+      await gameProfileRef.set({
+        'xp': 0,
+        'level': 1,
+        'coins': 0,
+        'tokens': 0,
+        'lives': 5,
+        'rank': 'Novice',
+        'createdAt': FieldValue.serverTimestamp(),
+        'updatedAt': FieldValue.serverTimestamp(),
+        'schemaVersion': 1,
+      });
     }
   }
 

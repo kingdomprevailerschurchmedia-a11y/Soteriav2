@@ -7,11 +7,13 @@ import '../../../../../../core/widgets/glass_surface.dart';
 
 class ProEntryConfirmationDialog extends StatelessWidget {
   final int fee;
+  final bool isFree;
   final VoidCallback onConfirm;
 
   const ProEntryConfirmationDialog({
     super.key,
     required this.fee,
+    this.isFree = false,
     required this.onConfirm,
   });
 
@@ -36,7 +38,9 @@ class ProEntryConfirmationDialog extends StatelessWidget {
             ),
             SizedBox(height: SoteriaSpacing.md),
             Text(
-              'You are about to spend $fee coins to enter this competitive session. No refunds will be issued once the session begins.',
+              isFree 
+                  ? 'You are about to use one of your daily free entries. No refunds will be issued once the session begins.'
+                  : 'You are about to spend $fee coins to enter this competitive session. No refunds will be issued once the session begins.',
               style: context.bodyMedium.copyWith(
                 color: SoteriaColors.textSecondary,
               ),

@@ -127,8 +127,9 @@ class ProLobbyScreen extends ConsumerWidget {
                           showDialog(
                             context: context,
                             builder:
-                                (context) => ProEntryConfirmationDialog(
+                                (dialogContext) => ProEntryConfirmationDialog(
                                   fee: state.config.entryFee,
+                                  isFree: state.isFreeEntry,
                                   onConfirm: () async {
                                     final session = await ref
                                         .read(proLobbyProvider.notifier)
@@ -139,6 +140,10 @@ class ProLobbyScreen extends ConsumerWidget {
                                         SoteriaRoutes.proGameplay,
                                         extra: session,
                                       );
+                                    } else if (session == null) {
+                                      debugPrint('PRO LOBBY: Session initialization failed (returned null).');
+                                    } else if (!context.mounted) {
+                                      debugPrint('PRO LOBBY: Session initialized but context not mounted.');
                                     }
                                   },
                                 ),

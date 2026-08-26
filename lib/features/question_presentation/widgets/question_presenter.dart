@@ -136,49 +136,52 @@ class QuestionPresenter extends ConsumerWidget {
                 SizedBox(height: SoteriaSpacing.md),
                 // Question Card & Answers
                 Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      if (lifelineResults.audienceVotes != null) ...[
-                        AudienceChart(votes: lifelineResults.audienceVotes!),
-                        SizedBox(height: SoteriaSpacing.md),
-                      ],
-                      AnimatedSwitcher(
-                        duration: SoteriaAnimations.normal,
-                        child: QuestionContentCard(
-                          key: ValueKey(question.id),
-                          text: question.text,
-                          category: question.categoryId,
-                          difficulty: question.difficulty.name,
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        if (lifelineResults.audienceVotes != null) ...[
+                          AudienceChart(votes: lifelineResults.audienceVotes!),
+                          SizedBox(height: SoteriaSpacing.md),
+                        ],
+                        AnimatedSwitcher(
+                          duration: SoteriaAnimations.normal,
+                          child: QuestionContentCard(
+                            key: ValueKey(question.id),
+                            text: question.text,
+                            category: question.categoryId,
+                            difficulty: question.difficulty.name,
+                          ),
                         ),
-                      ),
-                      SizedBox(height: SoteriaSpacing.md),
-                      renderer.buildAnswerArea(
-                        question: question,
-                        selectedAnswerId: selectedId,
-                        isRevealed: isRevealed,
-                        onAnswerSelected: isRevealed
-                            ? (id) {}
-                            : (id) async {
-                                ref.read(answerSelectionProvider.notifier).select(id);
-                                ref.read(isResultRevealedProvider.notifier).state =
-                                    true;
-                                
-                                if (gameConfig != null) {
-                                  ref
-                                      .read(gameEngineProvider(gameConfig!).notifier)
-                                      .submitAnswer([id]);
-                                }
+                        SizedBox(height: SoteriaSpacing.md),
+                        renderer.buildAnswerArea(
+                          question: question,
+                          selectedAnswerId: selectedId,
+                          isRevealed: isRevealed,
+                          onAnswerSelected: isRevealed
+                              ? (id) {}
+                              : (id) async {
+                                  ref.read(answerSelectionProvider.notifier).select(id);
+                                  ref.read(isResultRevealedProvider.notifier).state =
+                                      true;
+                                  
+                                  if (gameConfig != null) {
+                                    ref
+                                        .read(gameEngineProvider(gameConfig!).notifier)
+                                        .submitAnswer([id]);
+                                  }
 
-                                // Delay the explanation to allow user to see the result
-                                await Future.delayed(const Duration(milliseconds: 1500));
-                                if (context.mounted) {
-                                  ref.read(showExplanationProvider.notifier).state = true;
-                                }
-                              },
-                        hiddenOptionIds: lifelineResults.hiddenOptionIds,
-                      ),
-                    ],
+                                  // Delay the explanation to allow user to see the result
+                                  await Future.delayed(const Duration(milliseconds: 1500));
+                                  if (context.mounted) {
+                                    ref.read(showExplanationProvider.notifier).state = true;
+                                  }
+                                },
+                          hiddenOptionIds: lifelineResults.hiddenOptionIds,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: SoteriaSpacing.sm),

@@ -90,6 +90,18 @@ class FirebaseRegistrationRepository implements RegistrationRepository {
           'schemaVersion': schemaVersion,
         });
 
+        // wallets/uid (Authoritative Wallet)
+        transaction.set(_firestore.collection('wallets').doc(uid), {
+          'uid': uid,
+          'coins': 0,
+          'tokens': 0,
+          'lifetimeCoinsEarned': 0,
+          'lifetimeTokensEarned': 0,
+          'createdAt': now,
+          'updatedAt': now,
+          'schemaVersion': schemaVersion,
+        });
+
         // welcome_bonus milestone (New User Reward)
         transaction.set(
           _firestore.collection('users').doc(uid).collection('milestones').doc('welcome_bonus'),

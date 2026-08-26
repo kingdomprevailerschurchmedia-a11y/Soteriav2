@@ -4,6 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart' as storage;
 import 'package:firebase_messaging/firebase_messaging.dart' as messaging;
 import 'package:firebase_remote_config/firebase_remote_config.dart' as rc;
 import 'firebase_interfaces.dart';
+import 'package:soteria/core/logging/logger_service.dart';
 
 class FirebaseAuthService implements IAuthService {
   @override

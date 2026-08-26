@@ -6,17 +6,26 @@ import '../models/app_configuration.dart';
 import '../repositories/configuration_repository.dart';
 import '../../../logging/logger_service.dart';
 
-class ConfigurationCoordinator {
-  final ConfigurationRepository _repository;
-  final IRemoteConfigService _remoteConfigService;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-  ConfigurationCoordinator(this._repository, this._remoteConfigService);
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/configuration_providers.dart';
+import '../../providers/firebase_providers.dart';
+
+class ConfigurationCoordinator extends Notifier<AppConfiguration> {
+  @override
+  AppConfiguration build() {
+    return AppConfiguration.defaults();
+  }
 
   Future<void> initialize() async {
+    final repository = ref.read(configurationRepositoryProvider);
+    final remoteConfigService = ref.read(remoteConfigServiceProvider);
+    
     LoggerService.i('Initializing ConfigurationCoordinator', feature: 'Config');
 
     // 1. Set default values
-    await _remoteConfigService.setDefaults({
+    await remoteConfigService.setDefaults({
       RemoteConfigKeys.defaultQuestionTimer: 15,
       RemoteConfigKeys.minTimer: 5,
       RemoteConfigKeys.maxTimer: 60,
@@ -40,8 +49,10 @@ class ConfigurationCoordinator {
       RemoteConfigKeys.forceUpgrade: false,
     });
 
+    state = repository.getConfiguration();
+
     // 2. Configure fetch settings
-    await _remoteConfigService.instance.setConfigSettings(
+    await remoteConfigService.instance.setConfigSettings(
       rc.RemoteConfigSettings(
         fetchTimeout: const Duration(minutes: 1),
         minimumFetchInterval: kDebugMode
@@ -55,8 +66,10 @@ class ConfigurationCoordinator {
   }
 
   Future<void> _fetchAndActivate() async {
+    final repository = ref.read(configurationRepositoryProvider);
     try {
-      await _repository.fetchAndActivate();
+      await repository.fetchAndActivate();
+      state = repository.getConfiguration();
       LoggerService.i(
         'Remote Config fetched and activated successfully',
         feature: 'Config',
@@ -70,8 +83,11 @@ class ConfigurationCoordinator {
       );
     }
   }
-
-  AppConfiguration getConfiguration() {
-    return _repository.getConfiguration();
-  }
 }
+
+// Removing the old class since it's now a Notifier
+/*
+class ConfigurationCoordinator extends StateNotifier<AppConfiguration> {
+...
+*/
+

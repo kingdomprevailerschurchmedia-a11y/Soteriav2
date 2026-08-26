@@ -212,16 +212,8 @@ class LoggerService {
 
   static Map<String, dynamic> _redactMetadata(Map<String, dynamic> data) {
     const sensitiveKeys = {'password', 'otp', 'token', 'secret', 'cvv', 'pin'};
-    final result = Map<String, dynamic>.from(data);
 
-    result.forEach((key, value) {
-      final lowerKey = key.toLowerCase();
-      if (sensitiveKeys.any((sk) => lowerKey.contains(lowerKey))) {
-        // Wait, the logic above contains a bug (lowerKey.contains(lowerKey))
-      }
-    });
-    // Let me rewrite this more cleanly
-    return result.map((key, value) {
+    return data.map((key, value) {
       final isSensitive = sensitiveKeys.any(
         (sk) => key.toLowerCase().contains(sk),
       );

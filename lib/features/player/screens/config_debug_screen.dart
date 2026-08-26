@@ -77,7 +77,7 @@ class ConfigDebugScreen extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () =>
-            ref.read(configurationCoordinatorProvider).initialize(),
+            ref.read(configurationCoordinatorProvider.notifier).initialize(),
         backgroundColor: SoteriaColors.primary,
         child: const Icon(Icons.refresh_rounded),
       ),

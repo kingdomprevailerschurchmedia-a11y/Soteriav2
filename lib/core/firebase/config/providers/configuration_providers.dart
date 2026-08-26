@@ -13,20 +13,12 @@ final configurationRepositoryProvider = Provider<ConfigurationRepository>((
   );
 });
 
-final configurationCoordinatorProvider = Provider<ConfigurationCoordinator>((
-  ref,
-) {
-  return ConfigurationCoordinator(
-    ref.watch(configurationRepositoryProvider),
-    ref.watch(remoteConfigServiceProvider),
-  );
-});
+final configurationCoordinatorProvider = NotifierProvider<ConfigurationCoordinator, AppConfiguration>(
+  ConfigurationCoordinator.new,
+);
 
 final configurationProvider = Provider<AppConfiguration>((ref) {
-  // We don't want to rebuild every time a fetch happens if we are just using defaults.
-  // But we want to reflect the updated config once activated.
-  // For now, let's keep it simple.
-  return ref.watch(configurationCoordinatorProvider).getConfiguration();
+  return ref.watch(configurationCoordinatorProvider);
 });
 
 final featureFlagsProvider = Provider<FeatureConfig>((ref) {

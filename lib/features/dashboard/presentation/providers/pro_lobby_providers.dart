@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../core/firebase/config/providers/configuration_providers.dart';
@@ -63,6 +64,14 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   ProLobbyState build() {
     _mounted = true;
     ref.onDispose(() => _mounted = false);
+
+    // React to configuration changes (e.g. Remote Config activation)
+    ref.listen(configurationProvider, (previous, next) {
+      if (_mounted) {
+        _updateValidation();
+      }
+    });
+
     // Trigger initial validation and category fetch
     Future.microtask(() => _init());
     return _getInitialState();
@@ -101,8 +110,18 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   Future<void> _init() async {
-    await _fetchCategories();
-    _updateValidation();
+    state = state.copyWith(isLoading: true);
+    try {
+      // Ensure authoritative documents (wallet/profile) are ready via bootstrap
+      await ref.read(playerBootstrapStatusProvider.future);
+      
+      await _fetchCategories();
+      _updateValidation();
+    } catch (e) {
+      if (_mounted) {
+        state = state.copyWith(isLoading: false, error: e.toString());
+      }
+    }
   }
 
   Future<void> _fetchCategories() async {
@@ -322,6 +341,8 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       final sessionId = const Uuid().v4();
       createdSessionId = sessionId;
 
+      LoggerService.d('Pro Mode: Content selected, reserving fee...', feature: 'GameplayEngine');
+
       // 2. Reserve Fee (Authoritative atomic check & stale cleanup)
       await ref
           .read(proModeRepositoryProvider)
@@ -332,6 +353,8 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
             isFree: isFree
           )
           .timeout(const Duration(seconds: 10));
+
+      LoggerService.d('Pro Mode: Fee reserved, creating session record...', feature: 'GameplayEngine');
 
       final session = CompetitiveSession(
         sessionId: sessionId,
@@ -347,28 +370,33 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       await ref
           .read(proModeRepositoryProvider)
           .createCompetitiveSession(session)
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 15));
 
       return session;
-    } catch (e) {
-      LoggerService.e('Pro Mode Session Start failed', error: e);
+    } catch (e, stack) {
+      LoggerService.e('Pro Mode Session Start failed: $e', error: e, stackTrace: stack, feature: 'GameplayEngine');
+      debugPrint('START_SESSION_ERROR: $e');
+      debugPrint('STACK_TRACE: $stack');
       
       // Authoritative Auto-Refund if fee was reserved but session creation failed
       if (createdSessionId != null && !isFree) {
         try {
+          debugPrint('START_SESSION: Attempting fail-safe refund for $createdSessionId');
           await ref.read(proModeRepositoryProvider).refundEntryFee(
             player.uid, 
             createdSessionId, 
             difficulty,
           );
         } catch (refundError) {
-          LoggerService.e('Fail-safe refund failed', error: refundError);
+          LoggerService.e('Fail-safe refund failed: $refundError', error: refundError, feature: 'GameplayEngine');
         }
       }
 
-      state = state.copyWith(
-        error: _mapStartError(e),
-      );
+      if (_mounted) {
+        state = state.copyWith(
+          error: _mapStartError(e),
+        );
+      }
       return null;
     } finally {
       if (_mounted) {
@@ -388,7 +416,12 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     if (msg.contains('timeout')) {
       return 'Connection timed out. Please check your internet and try again.';
     }
-    return 'Failed to initialize Pro match. Secure settlement error: ${e.toString()}';
+
+    if (kDebugMode) {
+      return 'Initialization failed: ${e.toString()}';
+    }
+    
+    return 'Failed to initialize Pro match. Secure settlement error (Code: 7507-PX).';
   }
 }
 

@@ -110,11 +110,16 @@ void main() {
         'fee': 500,
       });
 
-      var existsCount = 0;
-      when(() => mockDoc.exists).thenAnswer((_) {
-        existsCount++;
-        if (existsCount == 1) return false;
-        return true;
+      when(() => mockDoc.exists).thenReturn(true);
+      // For idempotency check, existingRes should not exist
+      final mockResDoc = MockDocumentSnapshot();
+      when(() => mockResDoc.exists).thenReturn(false);
+
+      var getCallCount = 0;
+      when(() => mockTransaction.get<Map<String, dynamic>>(any())).thenAnswer((_) async {
+        getCallCount++;
+        if (getCallCount == 2) return mockResDoc; // existingRes
+        return mockDoc; // playerDoc, staleResDoc, etc.
       });
 
       when(() => mockTransaction.update(any(), any())).thenReturn(mockTransaction);

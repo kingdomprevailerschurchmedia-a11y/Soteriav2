@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,9 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
+import 'package:soteria/core/widgets/glass_surface.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import '../models/login_state.dart';
 import '../providers/login_notifier.dart';
 
@@ -13,10 +17,29 @@ class EmailLoginDialog extends ConsumerStatefulWidget {
   const EmailLoginDialog({super.key});
 
   static Future<void> show(BuildContext context) {
-    return showDialog(
+    return showGeneralDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.8),
-      builder: (context) => const EmailLoginDialog(),
+      barrierDismissible: true,
+      barrierLabel: 'Dismiss',
+      barrierColor: Colors.black.withValues(alpha: 0.5),
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) =>
+          const EmailLoginDialog(),
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+          child: SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(0, 1),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+            )),
+            child: child,
+          ),
+        );
+      },
     );
   }
 
@@ -79,10 +102,11 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     });
 
     return Dialog(
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28.r)),
-      insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: Padding(
+      backgroundColor: Colors.transparent,
+      alignment: Alignment.bottomCenter,
+      insetPadding: EdgeInsets.only(left: 24.w, right: 24.w, bottom: 32.h),
+      child: GlassSurface(
+        borderRadius: BorderRadius.circular(28.r),
         padding: EdgeInsets.all(24.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -94,13 +118,13 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
                 Text(
                   _step == 1 ? 'Email Address' : 'Password',
                   style: context.titleLarge.copyWith(
-                    color: const Color(0xFF1A1A1A),
+                    color: SoteriaColors.textPrimary,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
-                  child: Icon(Icons.close, color: Colors.grey[400], size: 24.sp),
+                  child: Icon(Icons.close, color: SoteriaColors.muted, size: 24.sp),
                 ),
               ],
             ),
@@ -125,7 +149,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
         Text(
           'Enter your email address. We\'ll ask for your password next.',
           style: context.bodySmall.copyWith(
-            color: Colors.grey[600],
+            color: SoteriaColors.textSecondary,
             fontSize: 13.sp,
             height: 1.4,
           ),
@@ -167,7 +191,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
             Text(
               'Show Password',
               style: context.bodySmall.copyWith(
-                color: Colors.grey[700],
+                color: SoteriaColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -209,7 +233,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
             child: Text(
               'Change Email',
               style: context.bodySmall.copyWith(
-                color: Colors.grey[500],
+                color: SoteriaColors.muted,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -225,25 +249,11 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     bool obscureText = false,
     TextInputType? keyboardType,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(color: Colors.grey[200]!),
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: TextField(
-        controller: controller,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        style: context.bodyLarge.copyWith(color: const Color(0xFF1A1A1A)),
-        decoration: InputDecoration(
-          hintText: hintText,
-          hintStyle: context.bodyLarge.copyWith(color: Colors.grey[400]),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 16.h),
-        ),
-      ),
+    return SoteriaTextField(
+      controller: controller,
+      hintText: hintText,
+      obscureText: obscureText,
+      keyboardType: keyboardType ?? TextInputType.text,
     );
   }
 
@@ -252,36 +262,11 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     required VoidCallback? onPressed,
     bool isLoading = false,
   }) {
-    return SizedBox(
-      width: double.infinity,
-      height: 54.h,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFFF5F5F5),
-          foregroundColor: const Color(0xFF1A1A1A),
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(100),
-          ),
-        ),
-        child: isLoading
-            ? SizedBox(
-                width: 20.w,
-                height: 20.w,
-                child: const CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Color(0xFF1A1A1A),
-                ),
-              )
-            : Text(
-                label,
-                style: context.titleSmall.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: const Color(0xFF1A1A1A),
-                ),
-              ),
-      ),
+    return SoteriaButton.primary(
+      label: label,
+      onPressed: onPressed,
+      isLoading: isLoading,
+      uppercase: false,
     );
   }
 }
