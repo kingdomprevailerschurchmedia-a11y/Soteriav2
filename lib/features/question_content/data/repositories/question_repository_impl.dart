@@ -33,6 +33,7 @@ class QuestionRepositoryImpl implements QuestionRepository {
         difficulty: difficulty?.name,
         limit: limit,
         startAfterId: startAfterId,
+        tags: tags,
       );
 
       final validQuestions = <Question>[];

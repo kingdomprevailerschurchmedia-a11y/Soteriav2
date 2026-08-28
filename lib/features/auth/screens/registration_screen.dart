@@ -59,6 +59,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   }
 
   void _onBack(RegistrationDraft state) {
+    if (state.isLoading) return;
     if (state.step.index > 0) {
       final prevStep = RegistrationStep.values[state.step.index - 1];
       ref.read(registrationProvider.notifier).setStep(prevStep);
@@ -71,6 +72,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
   }
 
   void _jumpToStep(RegistrationStep step) {
+    if (ref.read(registrationProvider).isLoading) return;
     ref.read(registrationProvider.notifier).setStep(step);
     _pageController.jumpToPage(step.index);
   }
@@ -97,6 +99,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
           canPop: false,
           onPopInvokedWithResult: (didPop, result) {
             if (didPop) return;
+            if (state.isLoading) return;
             if (state.step.index > 0 &&
                 state.step != RegistrationStep.success) {
               _onBack(state);
@@ -108,10 +111,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
             child: Column(
               children: [
                 // Header & Progress
-                Stack(
-                  clipBehavior: Clip.none,
-                  alignment: Alignment.topCenter,
-                  children: [
+                RepaintBoundary(
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    alignment: Alignment.topCenter,
+                    children: [
                     // Top Glow Arc (Refined)
                     Positioned(
                       top: -240.h,
@@ -155,7 +159,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: GestureDetector(
-                                      onTap: () => _onBack(state),
+                                      onTap: state.isLoading ? null : () => _onBack(state),
                                       child: Container(
                                         padding: EdgeInsets.all(8.w),
                                         color: Colors.transparent,
@@ -224,16 +228,18 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
 
                 // Content
                 Expanded(
-                  child: PageView(
-                    controller: _pageController,
-                    physics: const NeverScrollableScrollPhysics(),
-                    children: [
-                      const StepPersonalIdentity(),
-                      const StepAccountIdentity(),
-                      const StepSecurity(),
-                      StepReview(onEdit: _jumpToStep),
-                      const StepRegistrationSuccess(),
-                    ],
+                  child: RepaintBoundary(
+                    child: PageView(
+                      controller: _pageController,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        const StepPersonalIdentity(),
+                        const StepAccountIdentity(),
+                        const StepSecurity(),
+                        StepReview(onEdit: _jumpToStep),
+                        const StepRegistrationSuccess(),
+                      ],
+                    ),
                   ),
                 ),
 
@@ -260,8 +266,11 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                   Padding(
                     padding: EdgeInsets.all(SoteriaSpacing.lg),
                     child: SoteriaButton.primary(
-                      label: 'Check Email',
-                      onPressed: () {},
+                      label: 'Back to Login',
+                      onPressed: () =>
+                          ref
+                              .read(navigationServiceProvider)
+                              .go(SoteriaRoutes.login),
                       size: SoteriaButtonSize.lg,
                     ),
                   ),

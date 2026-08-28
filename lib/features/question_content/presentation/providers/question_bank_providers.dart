@@ -5,6 +5,7 @@ import '../../domain/entities/difficulty.dart';
 import '../../domain/repositories/question_repository.dart';
 import '../../data/repositories/question_repository_impl.dart';
 import '../../data/data_sources/firestore_data_source.dart';
+import '../../data/data_sources/local_question_data_source.dart';
 import '../../domain/selection/selection_strategy.dart';
 
 /// Provider for the remote Firestore data source.
@@ -12,6 +13,11 @@ final firestoreQuestionDataSourceProvider = Provider<FirestoreQuestionDataSource
   return FirestoreQuestionDataSource(
     ref.watch(firestoreDatabaseServiceProvider),
   );
+});
+
+/// Provider for the local question data source.
+final localQuestionDataSourceProvider = Provider<LocalQuestionDataSource>((ref) {
+  return LocalQuestionDataSource();
 });
 
 /// The canonical provider for the Question Repository.

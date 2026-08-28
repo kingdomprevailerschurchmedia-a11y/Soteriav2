@@ -17,48 +17,6 @@ import 'package:soteria/features/player/domain/models/leaderboard_entry.dart';
 class TopScholarsSection extends ConsumerWidget {
   const TopScholarsSection({super.key});
 
-  static final List<LeaderboardEntry> _seedScholars = [
-    LeaderboardEntry(
-      userId: 'seed_segun',
-      displayName: 'Segun',
-      avatarId: 'athena',
-      rankPoints: 1200,
-      xp: 24500,
-      rankTier: 'Master',
-      division: 1,
-      position: 1,
-      registrationOrder: 1,
-      lastUpdated: DateTime.now(),
-      createdAt: DateTime(2026, 1, 1),
-    ),
-    LeaderboardEntry(
-      userId: 'seed_peter',
-      displayName: 'Peter',
-      avatarId: 'isaac',
-      rankPoints: 1100,
-      xp: 22100,
-      rankTier: 'Master',
-      division: 2,
-      position: 2,
-      registrationOrder: 2,
-      lastUpdated: DateTime.now(),
-      createdAt: DateTime(2026, 1, 2),
-    ),
-    LeaderboardEntry(
-      userId: 'seed_micheal',
-      displayName: 'Micheal',
-      avatarId: 'elias',
-      rankPoints: 950,
-      xp: 19800,
-      rankTier: 'Expert',
-      division: 3,
-      position: 3,
-      registrationOrder: 3,
-      lastUpdated: DateTime.now(),
-      createdAt: DateTime(2026, 1, 3),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final leaderboardState = ref.watch(leaderboardControllerProvider(null));
@@ -130,19 +88,24 @@ class TopScholarsSection extends ConsumerWidget {
               children: [
                 leaderboardState.when(
                   data: (entries) {
-                    final merged = [...entries, ..._seedScholars];
-                    
-                    // Sort by Points (desc) then Registration Order (asc)
-                    merged.sort((a, b) {
-                      if (b.rankPoints != a.rankPoints) {
-                        return b.rankPoints.compareTo(a.rankPoints);
-                      }
-                      return a.registrationOrder.compareTo(b.registrationOrder);
-                    });
-
-                    final top3 = merged.take(3).toList();
+                    final top3 = entries.take(3).toList();
                     final currentUid = ref.watch(sessionProvider).uid;
                     
+                    if (top3.isEmpty) {
+                      return Padding(
+                        padding: EdgeInsets.all(24.w),
+                        child: Center(
+                          child: Text(
+                            'Be the first to join the leaderboard!',
+                            style: context.bodyMedium.copyWith(
+                              color: SoteriaColors.muted,
+                              fontStyle: FontStyle.italic,
+                            ),
+                          ),
+                        ),
+                      );
+                    }
+
                     return Column(
                       children: top3.asMap().entries.map((entry) {
                         final index = entry.key;
@@ -173,25 +136,14 @@ class TopScholarsSection extends ConsumerWidget {
                       child: CircularProgressIndicator(color: SoteriaColors.primary),
                     ),
                   ),
-                  error: (err, _) => Column(
-                    children: _seedScholars.asMap().entries.map((entry) {
-                      final index = entry.key;
-                      final scholar = entry.value;
-                      return Column(
-                        children: [
-                          _ScholarRow(
-                            rank: index + 1,
-                            name: scholar.displayName,
-                            role: scholar.rankTier,
-                            xp: scholar.rankPoints,
-                            color: _getRankColor(index + 1),
-                            avatarId: scholar.avatarId ?? 'athena',
-                            imageUrl: scholar.avatarUrl,
-                          ),
-                          if (index < 2) _Divider(),
-                        ],
-                      );
-                    }).toList(),
+                  error: (err, _) => Padding(
+                    padding: EdgeInsets.all(24.w),
+                    child: Center(
+                      child: Text(
+                        'Failed to load scholars',
+                        style: context.bodyMedium.copyWith(color: SoteriaColors.error),
+                      ),
+                    ),
                   ),
                 ),
                 
@@ -200,36 +152,18 @@ class TopScholarsSection extends ConsumerWidget {
                     final currentUid = ref.watch(sessionProvider).uid;
                     final player = ref.watch(currentPlayerProvider);
                     final playerEntry = playerEntryAsync.value;
-                    final rawRank = playerRankAsync.value ?? -1;
+                    final uiRank = playerRankAsync.value ?? -1;
 
                     if (currentUid == null || player == null) return const SizedBox.shrink();
 
-                    // Calculate actual UI rank considering seeds
-                    int uiRank = rawRank;
-                    if (rawRank == -1) {
-                      // Fallback: If not in leaderboard doc, estimate rank
-                      // 3 (seeds) + total_real_players? No, just use registration order.
-                      uiRank = player.registrationOrder;
-                    } else {
-                      // Add seeds that are ranked higher than the player
-                      final betterSeeds = _seedScholars.where((seed) {
-                        if (seed.rankPoints > player.xp) return true;
-                        if (seed.rankPoints == player.xp) {
-                          return seed.registrationOrder < player.registrationOrder;
-                        }
-                        return false;
-                      }).length;
-                      uiRank += betterSeeds;
-                    }
-
                     // Only show highlight row if user is NOT in top 3
-                    if (uiRank <= 3) return const SizedBox.shrink();
+                    if (uiRank != -1 && uiRank <= 3) return const SizedBox.shrink();
                     
                     return Column(
                       children: [
                         _Divider(),
                         _UserHighlightRow(
-                          rank: uiRank,
+                          rank: uiRank == -1 ? player.registrationOrder : uiRank,
                           name: 'You',
                           role: playerEntry?.rankTier ?? 'Novice',
                           xp: player.xp,

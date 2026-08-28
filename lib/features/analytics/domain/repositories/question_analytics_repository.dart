@@ -6,6 +6,12 @@ abstract class QuestionAnalyticsRepository {
   /// Secure and idempotent via deterministic ID.
   Future<void> recordEvent(String sessionId, String userId, QuestionResult result);
 
+  /// Client-side: Records multiple question attempts in a batch.
+  Future<void> recordEvents(String sessionId, String userId, List<QuestionResult> results);
+
+  /// Client-side: Fetches IDs of questions answered by a user within a specific timeframe.
+  Future<Set<String>> getRecentlyAnsweredIds(String userId, {Duration? within});
+
   /// Admin-side: Fetches aggregates for a specific question version.
   Future<QuestionAnalytics?> getQuestionAnalytics(String questionId, String version);
   

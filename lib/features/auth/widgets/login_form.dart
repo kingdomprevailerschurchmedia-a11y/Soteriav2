@@ -41,9 +41,10 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       _emailController.text = state.email;
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+    return RepaintBoundary(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
         _buildLabel(context, 'EMAIL ADDRESS'),
         SizedBox(height: 8.h),
         _buildTextField(

@@ -160,13 +160,13 @@ class _VerificationOrchestratorState
                     children: [
                       Expanded(
                         child: SoteriaLinearProgress(
-                          progress: (_getPageIndex(state.step) + 1) / 3.0,
+                          progress: (_getPageIndex(state.step) + 1) / 5.0,
                           color: SoteriaColors.gold,
                         ),
                       ),
                       SizedBox(width: SoteriaSpacing.md),
                       Text(
-                        'Step ${_getPageIndex(state.step) + 1} of 3',
+                        'Step ${_getPageIndex(state.step) + 1} of 5',
                         style: context.bodySmall.copyWith(
                           color: SoteriaColors.textSecondary,
                         ),
@@ -179,16 +179,18 @@ class _VerificationOrchestratorState
 
             // Content
             Expanded(
-              child: PageView(
-                controller: _pageController,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  VerificationStepRequest(type: widget.type),
-                  VerificationStepSent(type: widget.type),
-                  VerificationStepOtp(type: widget.type),
-                  const VerificationStepSuccess(),
-                  VerificationStepResetPassword(type: widget.type),
-                ],
+              child: RepaintBoundary(
+                child: PageView(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    VerificationStepRequest(type: widget.type),
+                    VerificationStepSent(type: widget.type),
+                    VerificationStepOtp(type: widget.type),
+                    const VerificationStepSuccess(),
+                    VerificationStepResetPassword(type: widget.type),
+                  ],
+                ),
               ),
             ),
 

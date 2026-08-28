@@ -18,6 +18,8 @@ import '../../../../features/gameplay_engine/domain/repositories/pro_mode_reposi
 import '../../../../features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart';
 import '../../../question_content/domain/repositories/category_repository.dart';
 import '../../../question_content/presentation/providers/category_providers.dart';
+import '../../../analytics/domain/repositories/question_analytics_repository.dart';
+import '../../../analytics/presentation/providers/analytics_providers.dart';
 
 import '../../../../core/logging/logger_service.dart';
 import '../../../../features/gameplay_engine/domain/config/competitive_reward_config.dart';
@@ -317,7 +319,13 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     String? createdSessionId;
 
     try {
-      // 1. Select Questions first (Fail-fast content check)
+      // 1. Fetch Recently Answered Questions to ensure freshness
+      final recentlyAnswered = await ref
+          .read(questionAnalyticsRepositoryProvider)
+          .getRecentlyAnsweredIds(player.uid)
+          .timeout(const Duration(seconds: 5), onTimeout: () => <String>{});
+
+      // 2. Select Questions (Fail-fast content check)
       final selectionResult = await ref
           .read(questionSelectionServiceProvider)
           .selectQuestions(
@@ -328,6 +336,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
               difficulty: difficulty,
               questionCount: state.config.questionCount,
               mode: GameMode.pro,
+              excludedQuestionIds: recentlyAnswered,
             ),
           )
           .timeout(const Duration(seconds: 15));

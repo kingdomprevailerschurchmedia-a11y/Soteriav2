@@ -112,6 +112,10 @@ class FirebaseIdentityRepository implements IdentityRepository {
     map.remove('email');
     map['updatedAt'] = FieldValue.serverTimestamp();
     
+    // Ensure lists are properly handled for Firestore
+    map['interests'] = profile.interests;
+    map['goals'] = profile.goals;
+    
     await _database
         .collection('user_profiles')
         .doc(uid)

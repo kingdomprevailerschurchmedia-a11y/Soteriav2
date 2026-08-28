@@ -26,6 +26,43 @@ class FirestoreQuestionAnalyticsRepository implements QuestionAnalyticsRepositor
   }
 
   @override
+  Future<void> recordEvents(String sessionId, String userId, List<QuestionResult> results) async {
+    if (results.isEmpty) return;
+
+    final batch = _database.instance.batch();
+    final collection = _database.collection('question_analytics_events');
+
+    for (final result in results) {
+      final event = QuestionAnalyticsEvent.fromResult(
+        sessionId: sessionId,
+        userId: userId,
+        result: result,
+      );
+      final docRef = collection.doc(event.eventId);
+      batch.set(docRef.instance, event.toJson());
+    }
+
+    await batch.commit();
+  }
+
+  @override
+  Future<Set<String>> getRecentlyAnsweredIds(String userId, {Duration? within}) async {
+    final cutoff = DateTime.now().subtract(within ?? const Duration(days: 14));
+    
+    try {
+      final snapshot = await _database.collection('question_analytics_events')
+          .where('userId', isEqualTo: userId)
+          .where('timestamp', isGreaterThan: cutoff)
+          .get();
+
+      return snapshot.docs.map((doc) => doc.data()['questionId'] as String).toSet();
+    } catch (e) {
+      LoggerService.e('Failed to fetch recently answered IDs', error: e, feature: 'Analytics');
+      return {};
+    }
+  }
+
+  @override
   Future<QuestionAnalytics?> getQuestionAnalytics(String questionId, String version) async {
     final docId = _getDocId(questionId, version);
     final snapshot = await _database.collection('question_performance').doc(docId).get();

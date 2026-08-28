@@ -54,33 +54,39 @@ class PracticeLobbyScreen extends ConsumerWidget {
                           ),
                           sliver: SliverList(
                             delegate: SliverChildListDelegate([
-                              LobbyHeroHeader(
-                                part1: 'READY',
-                                part2: 'TO',
-                                part3: 'TRAIN?',
-                                subtitle:
-                                    "Let's build your knowledge and climb the ranks 🚀",
+                              const RepaintBoundary(
+                                child: LobbyHeroHeader(
+                                  part1: 'READY',
+                                  part2: 'TO',
+                                  part3: 'TRAIN?',
+                                  subtitle:
+                                      "Let's build your knowledge and climb the ranks 🚀",
+                                ),
                               ),
                               SizedBox(height: SoteriaSpacing.md),
-                              LobbyInterestsCard(
-                                value: state.config.useInterests,
-                                onChanged:
-                                    (val) => ref
-                                        .read(practiceLobbyProvider.notifier)
-                                        .setUseInterests(val),
+                              RepaintBoundary(
+                                child: LobbyInterestsCard(
+                                  value: state.config.useInterests,
+                                  onChanged:
+                                      (val) => ref
+                                          .read(practiceLobbyProvider.notifier)
+                                          .setUseInterests(val),
+                                ),
                               ),
                               SizedBox(height: SoteriaSpacing.md),
                               if (!state.config.useInterests) ...[
-                                const CategorySelector(),
+                                const RepaintBoundary(child: CategorySelector()),
                                 SizedBox(height: SoteriaSpacing.lg),
                               ],
-                              const DifficultySelector(),
+                              const RepaintBoundary(child: DifficultySelector()),
                               SizedBox(height: SoteriaSpacing.md),
-                              const QuestionCountSelector(),
+                              const RepaintBoundary(child: QuestionCountSelector()),
                               SizedBox(height: SoteriaSpacing.lg),
                               if (state.estimatedRewards != null)
-                                SessionSummaryCard(
-                                  rewards: state.estimatedRewards!,
+                                RepaintBoundary(
+                                  child: SessionSummaryCard(
+                                    rewards: state.estimatedRewards!,
+                                  ),
                                 ),
                               SizedBox(height: SoteriaSpacing.lg),
                             ]),

@@ -15,9 +15,10 @@ class StepSummary extends ConsumerWidget {
     final state = ref.watch(personalizationProvider);
     final notifier = ref.read(personalizationProvider.notifier);
 
-    return ListView(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-      children: [
+    return RepaintBoundary(
+      child: ListView(
+        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        children: [
         SizedBox(height: 16.h),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -59,7 +59,7 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
           categoryId: config.categoryIds.isNotEmpty ? config.categoryIds.first : null,
           allowLifelines: true,
           initialLives: 999,
-          questionTimer: const Duration(seconds: 30), // Added timer for practice
+          questionTimer: config.timerEnabled ? const Duration(seconds: 30) : null,
           autoAdvance: false, // Don't auto-advance so user can read explanation
         );
 
@@ -87,18 +87,22 @@ class _PracticeGameplayScreenState extends ConsumerState<PracticeGameplayScreen>
               if (didPop) return;
               _confirmExit(context);
             },
-            child: QuestionPresenter(
-              question: engineState.currentQuestion!,
-              currentQuestionIndex: engineState.currentQuestionIndex,
-              totalQuestions: engineState.questions.length,
-              sessionId: engineState.sessionId,
-              gameConfig: gameConfig,
-              onClose: () => _confirmExit(context),
-              timerChild: Consumer(
-                builder: (context, ref, _) {
-                  final timerState = ref.watch(timerEngineProvider);
-                  return AdaptiveTimerDisplay(state: timerState);
-                },
+            child: RepaintBoundary(
+              child: QuestionPresenter(
+                question: engineState.currentQuestion!,
+                currentQuestionIndex: engineState.currentQuestionIndex,
+                totalQuestions: engineState.questions.length,
+                sessionId: engineState.sessionId,
+                gameConfig: gameConfig,
+                onClose: () => _confirmExit(context),
+                timerChild: config.timerEnabled 
+                  ? Consumer(
+                      builder: (context, ref, _) {
+                        final timerState = ref.watch(timerEngineProvider);
+                        return AdaptiveTimerDisplay(state: timerState);
+                      },
+                    )
+                  : const SizedBox.shrink(),
               ),
             ),
           ),

@@ -19,6 +19,7 @@ class FirestoreQuestionDataSource {
     String? status,
     int limit = 10,
     String? startAfterId,
+    List<String>? tags,
   }) async {
     Query query = _database.collection(_collectionPath);
 
@@ -40,6 +41,11 @@ class FirestoreQuestionDataSource {
     }
     if (difficulty != null) {
       query = query.where('difficulty', isEqualTo: difficulty);
+    }
+    if (tags != null && tags.isNotEmpty) {
+      // Use array-contains for the first tag. Firestore currently supports 
+      // only one array-contains per query.
+      query = query.where('tags', arrayContains: tags.first);
     }
 
     // Ordering for pagination

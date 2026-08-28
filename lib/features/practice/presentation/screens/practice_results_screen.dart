@@ -69,7 +69,9 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
               delegate: SliverChildListDelegate([
                 SizedBox(height: SoteriaSpacing.md),
                 SoteriaFadeIn(
-                  child: _buildScoreHeader(context, result),
+                  child: RepaintBoundary(
+                    child: _buildScoreHeader(context, result),
+                  ),
                 ),
                 SizedBox(height: SoteriaSpacing.xl),
                 
@@ -79,7 +81,9 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
                 ),
                 SoteriaSlideUp(
                   delay: const Duration(milliseconds: 300),
-                  child: _buildInsightsList(context, result),
+                  child: RepaintBoundary(
+                    child: _buildInsightsList(context, result),
+                  ),
                 ),
                 SizedBox(height: SoteriaSpacing.xl),
 
@@ -90,7 +94,9 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
                   ),
                   SoteriaSlideUp(
                     delay: const Duration(milliseconds: 500),
-                    child: _buildRecommendationCard(context, result.recommendation!),
+                    child: RepaintBoundary(
+                      child: _buildRecommendationCard(context, result.recommendation!),
+                    ),
                   ),
                   SizedBox(height: SoteriaSpacing.xl),
                 ],
@@ -101,7 +107,9 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
                 ),
                 ...result.categoryPerformance.values.map((p) => SoteriaSlideUp(
                   delay: const Duration(milliseconds: 700),
-                  child: _buildCategoryRow(context, p),
+                  child: RepaintBoundary(
+                    child: _buildCategoryRow(context, p),
+                  ),
                 )),
                 
                 SoteriaSlideUp(
@@ -522,8 +530,9 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
   }
 
   Widget _buildReviewCard(BuildContext context, int number, QuestionReviewItem item) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+    return RepaintBoundary(
+      child: Container(
+        margin: EdgeInsets.only(bottom: 12.h),
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
         color: const Color(0xFF1E1638).withValues(alpha: 0.4),

@@ -112,6 +112,8 @@ class PracticeResultNotifier extends StateNotifier<PracticeResultState> {
 
       // Trigger global question analytics updates (Secure individual events)
       final analyticsRepo = ref.read(questionAnalyticsRepositoryProvider);
+      final questionResults = <QuestionResult>[];
+      
       for (final item in result.reviewItems) {
         final outcome =
             item.isCorrect
@@ -120,7 +122,7 @@ class PracticeResultNotifier extends StateNotifier<PracticeResultState> {
                     ? qr_models.QuestionOutcome.skipped
                     : qr_models.QuestionOutcome.incorrect);
 
-        final qr = QuestionResult(
+        questionResults.add(QuestionResult(
           questionId: item.questionId,
           questionNumber: 0,
           questionText: item.questionText,
@@ -137,8 +139,11 @@ class PracticeResultNotifier extends StateNotifier<PracticeResultState> {
           mode: quiz_enums.GameMode.practice,
           difficulty: item.difficulty,
           questionVersion: item.questionVersion,
-        );
-        analyticsRepo.recordEvent(result.sessionId, userId, qr).catchError((_) {});
+        ));
+      }
+
+      if (questionResults.isNotEmpty) {
+        await analyticsRepo.recordEvents(result.sessionId, userId, questionResults);
       }
 
       state = PracticeResultState.success(result);

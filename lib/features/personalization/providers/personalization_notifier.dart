@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soteria/features/personalization/models/personalization_state.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
+import 'package:soteria/core/identity/models/user_profile.dart';
+import 'package:soteria/core/logging/logger_service.dart';
 
 class PersonalizationNotifier extends Notifier<PersonalizationState> {
   static const _kStorageKey = 'user_personalization';
@@ -98,7 +100,48 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
     }
   }
 
-  void complete() {
+  Future<void> syncToFirebase() async {
+    final session = ref.read(sessionProvider);
+    if (!session.isAuthenticated || session.uid == null) return;
+
+    state = state.copyWith(isLoading: true);
+    try {
+      final repository = ref.read(identityRepositoryProvider);
+      final currentProfile = await repository.getUserProfile(session.uid!);
+
+      final updatedProfile =
+          (currentProfile ??
+                  const UserProfile(
+                    firstName: '',
+                    lastName: '',
+                    displayName: '',
+                    username: '',
+                    email: '',
+                  ))
+              .copyWith(
+                academicLevel: state.academicLevel,
+                interests: state.interests.toList(),
+                goals: state.goals.toList(),
+              );
+
+      await repository.updateUserProfile(session.uid!, updatedProfile);
+      LoggerService.i('Personalization synced to Firebase', feature: 'Auth');
+    } catch (e, st) {
+      LoggerService.e(
+        'Failed to sync personalization',
+        error: e,
+        stackTrace: st,
+        feature: 'Auth',
+      );
+    } finally {
+      if (_mounted) {
+        state = state.copyWith(isLoading: false);
+      }
+    }
+  }
+
+  Future<void> complete() async {
+    await syncToFirebase();
     // Trigger lifecycle update
     ref.read(appLifecycleProvider.notifier).refresh();
   }

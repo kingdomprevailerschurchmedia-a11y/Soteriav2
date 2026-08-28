@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/auto_direction.dart';
+import 'package:intl/intl.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/navigation/soteria_routes.dart';
+import '../../../player/providers/player_providers.dart';
 
-class PerformanceSection extends StatelessWidget {
+class PerformanceSection extends ConsumerWidget {
   const PerformanceSection({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(currentPlayerProvider);
+    final numberFormat = NumberFormat('#,###');
+
+    if (player == null) return const SizedBox.shrink();
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
       child: Column(
@@ -75,28 +84,28 @@ class PerformanceSection extends StatelessWidget {
             children: [
               _PerformanceCard(
                 title: 'Answered',
-                value: '1,250',
+                value: numberFormat.format(player.totalQuestionsAnswered),
                 icon: Icons.quiz_rounded,
                 color: const Color(0xFF9155FD),
                 data: [0.2, 0.4, 0.3, 0.7, 0.5, 0.8, 0.6, 0.9],
               ),
               _PerformanceCard(
                 title: 'Accuracy',
-                value: '85%',
+                value: '${(player.accuracy * 100).toInt()}%',
                 icon: Icons.track_changes_rounded,
                 color: const Color(0xFF4CAF50),
                 data: [0.6, 0.5, 0.8, 0.7, 0.9, 0.85, 0.95, 0.8],
               ),
               _PerformanceCard(
                 title: 'Matches',
-                value: '142',
+                value: numberFormat.format(player.gamesPlayed),
                 icon: Icons.sports_esports_rounded,
                 color: const Color(0xFF2196F3),
                 data: [0.1, 0.3, 0.2, 0.5, 0.4, 0.6, 0.5, 0.7],
               ),
               _PerformanceCard(
                 title: 'Best Streak',
-                value: '21',
+                value: numberFormat.format(player.highestStreak),
                 icon: Icons.local_fire_department_rounded,
                 color: const Color(0xFFFF9F43),
                 data: [0.2, 0.3, 0.5, 0.4, 0.7, 0.8, 0.6, 1.0],

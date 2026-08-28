@@ -7,7 +7,10 @@ import '../../../player/providers/player_providers.dart';
 
 /// Provider for the Question Selection Service.
 final questionSelectionServiceProvider = Provider<QuestionSelectionService>((ref) {
-  return QuestionSelectionService(ref.watch(questionRepositoryProvider));
+  return QuestionSelectionService(
+    ref.watch(questionRepositoryProvider),
+    ref.watch(localQuestionDataSourceProvider),
+  );
 });
 
 /// Provider for personalized question selection.

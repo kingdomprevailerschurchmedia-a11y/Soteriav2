@@ -1,0 +1,1218 @@
+[
+  {
+    "text": "What is the primary gas found in Earth's atmosphere?",
+    "explanation": "Nitrogen makes up approximately 78% of the Earth's atmosphere.",
+    "difficulty": "easy",
+    "categoryId": "science",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Oxygen" },
+      { "id": "2", "text": "Nitrogen" },
+      { "id": "3", "text": "Carbon Dioxide" },
+      { "id": "4", "text": "Hydrogen" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the process by which plants convert sunlight into chemical energy?",
+    "explanation": "Photosynthesis is the process used by plants, algae and certain bacteria to harness energy from sunlight and turn it into chemical energy.",
+    "difficulty": "medium",
+    "categoryId": "science",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Respiration" },
+      { "id": "2", "text": "Fermentation" },
+      { "id": "3", "text": "Photosynthesis" },
+      { "id": "4", "text": "Oxidation" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In physics, what does the 'c' represent in the equation E=mc^2?",
+    "explanation": "The 'c' stands for the speed of light in a vacuum, which is approximately 299,792,458 meters per second.",
+    "difficulty": "hard",
+    "categoryId": "science",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Speed of sound" },
+      { "id": "2", "text": "Gravitational constant" },
+      { "id": "3", "text": "Speed of light" },
+      { "id": "4", "text": "Charge of an electron" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the specific heat capacity of water at room temperature?",
+    "explanation": "The specific heat capacity of water is approximately 4,184 Joules per kilogram per Kelvin (J/kg·K).",
+    "difficulty": "expert",
+    "categoryId": "science",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "2,100 J/kg·K" },
+      { "id": "2", "text": "4,184 J/kg·K" },
+      { "id": "3", "text": "3,500 J/kg·K" },
+      { "id": "4", "text": "5,200 J/kg·K" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What does PDF stand for in technology?",
+    "explanation": "PDF stands for Portable Document Format, a file format developed by Adobe.",
+    "difficulty": "easy",
+    "categoryId": "technology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Printable Document File" },
+      { "id": "2", "text": "Portable Digital Format" },
+      { "id": "3", "text": "Portable Document Format" },
+      { "id": "4", "text": "Personal Data File" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which company developed the React library?",
+    "explanation": "React was created by Meta (formerly Facebook).",
+    "difficulty": "medium",
+    "categoryId": "technology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Google" },
+      { "id": "2", "text": "Microsoft" },
+      { "id": "3", "text": "Meta" },
+      { "id": "4", "text": "Amazon" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the primary function of a 'Subnet Mask' in networking?",
+    "explanation": "A subnet mask is used to divide an IP address into two parts: one identifying the network and the other identifying the host.",
+    "difficulty": "hard",
+    "categoryId": "technology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Encrypt data packets" },
+      { "id": "2", "text": "Determine the network portion of an IP address" },
+      { "id": "3", "text": "Assign dynamic IP addresses" },
+      { "id": "4", "text": "Monitor bandwidth usage" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In a modern CPU, what is the role of the Branch Predictor?",
+    "explanation": "A branch predictor is a digital circuit that tries to guess which way a branch (e.g., an if-then-else structure) will go before this is known definitely, to improve execution pipeline efficiency.",
+    "difficulty": "expert",
+    "categoryId": "technology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Managing RAM access" },
+      { "id": "2", "text": "Handling floating point calculations" },
+      { "id": "3", "text": "Guessing the outcome of conditional operations" },
+      { "id": "4", "text": "Regulating voltage to the core" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In a SWOT analysis, what does the 'O' stand for?",
+    "explanation": "SWOT stands for Strengths, Weaknesses, Opportunities, and Threats.",
+    "difficulty": "easy",
+    "categoryId": "business",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Operations" },
+      { "id": "2", "text": "Organization" },
+      { "id": "3", "text": "Opportunities" },
+      { "id": "4", "text": "Outsourcing" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the term for a market structure dominated by a small number of large firms?",
+    "explanation": "An oligopoly is a market state where a few large companies dominate the industry.",
+    "difficulty": "medium",
+    "categoryId": "business",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Monopoly" },
+      { "id": "2", "text": "Perfect Competition" },
+      { "id": "3", "text": "Oligopoly" },
+      { "id": "4", "text": "Monopsony" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which financial statement reports a company's financial position at a specific point in time?",
+    "explanation": "The Balance Sheet lists assets, liabilities, and equity at a specific date.",
+    "difficulty": "hard",
+    "categoryId": "business",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Income Statement" },
+      { "id": "2", "text": "Cash Flow Statement" },
+      { "id": "3", "text": "Balance Sheet" },
+      { "id": "4", "text": "Retained Earnings Statement" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the primary difference between a 'Vertical Merger' and a 'Horizontal Merger'?",
+    "explanation": "A horizontal merger occurs between firms that operate in the same industry, while a vertical merger involves firms at different stages of the production process in the same industry.",
+    "difficulty": "expert",
+    "categoryId": "business",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Size of the companies" },
+      { "id": "2", "text": "Relationship between the merging firms' supply chains" },
+      { "id": "3", "text": "Country of origin" },
+      { "id": "4", "text": "Type of currency used" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which tag is used to create a hyperlink in HTML?",
+    "explanation": "The <a> (anchor) tag is used to define a link from one page to another.",
+    "difficulty": "easy",
+    "categoryId": "programming",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "<link>" },
+      { "id": "2", "text": "<a>" },
+      { "id": "3", "text": "<href>" },
+      { "id": "4", "text": "<url>" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In Object-Oriented Programming, what is the concept of a class inheriting properties from another class called?",
+    "explanation": "Inheritance allows a new class to adopt the fields and methods of an existing class.",
+    "difficulty": "medium",
+    "categoryId": "programming",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Encapsulation" },
+      { "id": "2", "text": "Polymorphism" },
+      { "id": "3", "text": "Inheritance" },
+      { "id": "4", "text": "Abstraction" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the time complexity of searching for an element in a balanced Binary Search Tree (BST)?",
+    "explanation": "A balanced BST allows for O(log n) search time as each comparison eliminates half of the remaining nodes.",
+    "difficulty": "hard",
+    "categoryId": "programming",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "O(1)" },
+      { "id": "2", "text": "O(n)" },
+      { "id": "3", "text": "O(log n)" },
+      { "id": "4", "text": "O(n log n)" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the difference between 'Shallow Copy' and 'Deep Copy' in programming?",
+    "explanation": "A shallow copy creates a new object but points to the same memory addresses as the original for its members, while a deep copy recursively copies all objects, creating completely independent data.",
+    "difficulty": "expert",
+    "categoryId": "programming",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Only deep copy can copy primitive types" },
+      { "id": "2", "text": "Shallow copy creates independent object references" },
+      { "id": "3", "text": "Deep copy creates a fully independent replica including all nested objects" },
+      { "id": "4", "text": "There is no difference in modern languages" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Who was the first woman to win a Nobel Prize?",
+    "explanation": "Marie Curie was the first woman to win a Nobel Prize (Physics, 1903). She later won a second in Chemistry.",
+    "difficulty": "easy",
+    "categoryId": "history",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Florence Nightingale" },
+      { "id": "2", "text": "Marie Curie" },
+      { "id": "3", "text": "Amelia Earhart" },
+      { "id": "4", "text": "Rosa Parks" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In what year did the French Revolution begin?",
+    "explanation": "The French Revolution began in 1789 with the storming of the Bastille.",
+    "difficulty": "medium",
+    "categoryId": "history",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "1776" },
+      { "id": "2", "text": "1789" },
+      { "id": "3", "text": "1812" },
+      { "id": "4", "text": "1848" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which ancient civilization built the city of Machu Picchu?",
+    "explanation": "Machu Picchu is a 15th-century Inca citadel located in the Eastern Cordillera of southern Peru.",
+    "difficulty": "hard",
+    "categoryId": "history",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Aztecs" },
+      { "id": "2", "text": "Mayans" },
+      { "id": "3", "text": "Incas" },
+      { "id": "4", "text": "Olmecs" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "The Treaty of Westphalia (1648) is significant primarily because it:",
+    "explanation": "The peace of Westphalia established the principle of state sovereignty, which remains a foundation of modern international law.",
+    "difficulty": "expert",
+    "categoryId": "history",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Ended the Napoleonic Wars" },
+      { "id": "2", "text": "Formed the European Union" },
+      { "id": "3", "text": "Recognized the sovereignty of states" },
+      { "id": "4", "text": "Divided Africa among colonial powers" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the value of Pi (π) to two decimal places?",
+    "explanation": "Pi is a mathematical constant approximately equal to 3.14159...",
+    "difficulty": "easy",
+    "categoryId": "mathematics",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "3.12" },
+      { "id": "2", "text": "3.14" },
+      { "id": "3", "text": "3.16" },
+      { "id": "4", "text": "3.18" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Solve for x: 2x + 10 = 22",
+    "explanation": "Subtract 10 from both sides: 2x = 12. Divide by 2: x = 6.",
+    "difficulty": "medium",
+    "categoryId": "mathematics",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "4" },
+      { "id": "2", "text": "6" },
+      { "id": "3", "text": "8" },
+      { "id": "4", "text": "10" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In geometry, what is the sum of the interior angles of a pentagon?",
+    "explanation": "The formula is (n-2) * 180. For a pentagon (5 sides): (5-2) * 180 = 540 degrees.",
+    "difficulty": "hard",
+    "categoryId": "mathematics",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "360°" },
+      { "id": "2", "text": "540°" },
+      { "id": "3", "text": "720°" },
+      { "id": "4", "text": "900°" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the value of the integral of 1/x dx?",
+    "explanation": "The antiderivative of 1/x is the natural logarithm of the absolute value of x (ln|x| + C).",
+    "difficulty": "expert",
+    "categoryId": "mathematics",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "e^x" },
+      { "id": "2", "text": "ln|x| + C" },
+      { "id": "3", "text": "x^2 / 2" },
+      { "id": "4", "text": "-1/x^2" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which country is home to the Great Barrier Reef?",
+    "explanation": "The Great Barrier Reef is the world's largest coral reef system, located off the coast of Queensland, Australia.",
+    "difficulty": "easy",
+    "categoryId": "general_knowledge",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Brazil" },
+      { "id": "2", "text": "Australia" },
+      { "id": "3", "text": "Indonesia" },
+      { "id": "4", "text": "South Africa" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the rarest blood type in humans?",
+    "explanation": "AB Negative is considered the rarest blood type, occurring in less than 1% of the world's population.",
+    "difficulty": "medium",
+    "categoryId": "general_knowledge",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "O Negative" },
+      { "id": "2", "text": "A Positive" },
+      { "id": "3", "text": "AB Negative" },
+      { "id": "4", "text": "B Positive" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which language has the most native speakers in the world?",
+    "explanation": "Mandarin Chinese has the largest number of native speakers, followed by Spanish and English.",
+    "difficulty": "hard",
+    "categoryId": "general_knowledge",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "English" },
+      { "id": "2", "text": "Spanish" },
+      { "id": "3", "text": "Mandarin" },
+      { "id": "4", "text": "Hindi" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the world's smallest sovereign state by both area and population?",
+    "explanation": "Vatican City is an independent city-state enclaved within Rome, Italy, with an area of roughly 44 hectares.",
+    "difficulty": "expert",
+    "categoryId": "general_knowledge",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Monaco" },
+      { "id": "2", "text": "Nauru" },
+      { "id": "3", "text": "Vatican City" },
+      { "id": "4", "text": "San Marino" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which artist painted the 'Mona Lisa'?",
+    "explanation": "The Mona Lisa was painted by the Italian Renaissance artist Leonardo da Vinci.",
+    "difficulty": "easy",
+    "categoryId": "arts",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Vincent van Gogh" },
+      { "id": "2", "text": "Leonardo da Vinci" },
+      { "id": "3", "text": "Pablo Picasso" },
+      { "id": "4", "text": "Michelangelo" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In music, how many beats are in a whole note (in 4/4 time)?",
+    "explanation": "A whole note (semibreve) lasts for four beats in common (4/4) time.",
+    "difficulty": "medium",
+    "categoryId": "arts",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "1" },
+      { "id": "2", "text": "2" },
+      { "id": "3", "text": "4" },
+      { "id": "4", "text": "8" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which artistic movement is characterized by small, thin, yet visible brush strokes and an emphasis on the accurate depiction of light?",
+    "explanation": "Impressionism was a 19th-century art movement that originated with a group of Paris-based artists.",
+    "difficulty": "hard",
+    "categoryId": "arts",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Surrealism" },
+      { "id": "2", "text": "Impressionism" },
+      { "id": "3", "text": "Cubism" },
+      { "id": "4", "text": "Baroque" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In Greek mythology, who is the muse of epic poetry?",
+    "explanation": "Calliope is the muse who presides over eloquence and epic poetry; she is the 'one with the beautiful voice'.",
+    "difficulty": "expert",
+    "categoryId": "arts",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Clio" },
+      { "id": "2", "text": "Thalia" },
+      { "id": "3", "text": "Calliope" },
+      { "id": "4", "text": "Euterpe" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "How many players are on a standard soccer team on the field at once?",
+    "explanation": "A standard soccer match consists of two teams of 11 players each.",
+    "difficulty": "easy",
+    "categoryId": "sports",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "9" },
+      { "id": "2", "text": "11" },
+      { "id": "3", "text": "13" },
+      { "id": "4", "text": "15" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In tennis, what is the score of 40-40 called?",
+    "explanation": "When both players have won three points each, the score is called deuce.",
+    "difficulty": "medium",
+    "categoryId": "sports",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Set" },
+      { "id": "2", "text": "Match Point" },
+      { "id": "3", "text": "Deuce" },
+      { "id": "4", "text": "Advantage" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which city hosted the first modern Olympic Games in 1896?",
+    "explanation": "The 1896 Summer Olympics were held in Athens, Greece.",
+    "difficulty": "hard",
+    "categoryId": "sports",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Paris" },
+      { "id": "2", "text": "Athens" },
+      { "id": "3", "text": "London" },
+      { "id": "4", "text": "Rome" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In cricket, what is the term for a batsman who is out on the first ball he faces?",
+    "explanation": "A batsman dismissed on the first ball of their innings is said to have made a 'golden duck'.",
+    "difficulty": "expert",
+    "categoryId": "sports",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Diamond Duck" },
+      { "id": "2", "text": "Golden Duck" },
+      { "id": "3", "text": "Royal Duck" },
+      { "id": "4", "text": "Silver Duck" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the supreme law of Nigeria?",
+    "explanation": "The Constitution of the Federal Republic of Nigeria is the supreme law of the land.",
+    "difficulty": "easy",
+    "categoryId": "law",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Criminal Code" },
+      { "id": "2", "text": "The Constitution" },
+      { "id": "3", "text": "Evidence Act" },
+      { "id": "4", "text": "Magna Carta" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the legal term for a written statement confirmed by oath or affirmation, for use as evidence in court?",
+    "explanation": "An affidavit is a written sworn statement of fact.",
+    "difficulty": "medium",
+    "categoryId": "law",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Summons" },
+      { "id": "2", "text": "Affidavit" },
+      { "id": "3", "text": "Subpoena" },
+      { "id": "4", "text": "Writ" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In criminal law, the principle 'Mens Rea' refers to:",
+    "explanation": "Mens Rea is the mental element of a person's intention to commit a crime; 'guilty mind'.",
+    "difficulty": "hard",
+    "categoryId": "law",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "The physical act of a crime" },
+      { "id": "2", "text": "A previous legal decision" },
+      { "id": "3", "text": "The mental intent to commit a crime" },
+      { "id": "4", "text": "The standard of proof required" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "The rule of 'Stare Decisis' refers to:",
+    "explanation": "Stare decisis is a legal doctrine that obligates courts to follow historical cases when making a ruling on a similar case.",
+    "difficulty": "expert",
+    "categoryId": "law",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "The right to a speedy trial" },
+      { "id": "2", "text": "The burden of proof in civil cases" },
+      { "id": "3", "text": "Following legal precedents set by higher courts" },
+      { "id": "4", "text": "The separation of powers" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In design, what does RGB stand for?",
+    "explanation": "RGB stands for Red, Green, and Blue, the primary colors of light used in digital screens.",
+    "difficulty": "easy",
+    "categoryId": "design",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Radial, Gradient, Blur" },
+      { "id": "2", "text": "Red, Green, Blue" },
+      { "id": "3", "text": "Retro, Graphic, Bold" },
+      { "id": "4", "text": "Round, Glossy, Bright" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is 'White Space' in graphic design?",
+    "explanation": "White space (negative space) is the area between design elements, used to provide focus and improve readability.",
+    "difficulty": "medium",
+    "categoryId": "design",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Areas painted white" },
+      { "id": "2", "text": "Empty areas used to balance a layout" },
+      { "id": "3", "text": "The background of a canvas" },
+      { "id": "4", "text": "Low-resolution images" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What does 'Kerning' refer to in typography?",
+    "explanation": "Kerning is the process of adjusting the spacing between individual characters in a word.",
+    "difficulty": "hard",
+    "categoryId": "design",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "The vertical space between lines of text" },
+      { "id": "2", "text": "The overall weight of a font" },
+      { "id": "3", "text": "The adjustment of space between individual characters" },
+      { "id": "4", "text": "The style of a font's serif" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "The 'Golden Ratio' (roughly 1:1.618) is primarily used in design to:",
+    "explanation": "The golden ratio is a mathematical ratio found in nature that is used in design to create aesthetically pleasing and balanced proportions.",
+    "difficulty": "expert",
+    "categoryId": "design",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Save on printing costs" },
+      { "id": "2", "text": "Create perfectly circular logos" },
+      { "id": "3", "text": "Achieve natural, balanced proportions" },
+      { "id": "4", "text": "Optimize websites for mobile devices" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the primary goal of Diversification in investment?",
+    "explanation": "Diversification is a risk management strategy that mixes a wide variety of investments within a portfolio.",
+    "difficulty": "easy",
+    "categoryId": "finance",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Increase complexity" },
+      { "id": "2", "text": "Reduce risk" },
+      { "id": "3", "text": "Avoid taxes" },
+      { "id": "4", "text": "Eliminate losses" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which term describes a sustained increase in the general price level of goods and services in an economy?",
+    "explanation": "Inflation is the rate at which the general level of prices for goods and services is rising.",
+    "difficulty": "medium",
+    "categoryId": "finance",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Deflation" },
+      { "id": "2", "text": "Inflation" },
+      { "id": "3", "text": "Stagnation" },
+      { "id": "4", "text": "Recession" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the 'PE Ratio' used to evaluate in the stock market?",
+    "explanation": "The Price-to-Earnings ratio is used for valuing companies and to find out whether they are overvalued or undervalued.",
+    "difficulty": "hard",
+    "categoryId": "finance",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Profit to Equity" },
+      { "id": "2", "text": "Portfolio to Expense" },
+      { "id": "3", "text": "Price to Earnings" },
+      { "id": "4", "text": "Preferred to External" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What does 'Quantitative Easing' primarily involve?",
+    "explanation": "Quantitative easing (QE) is a form of monetary policy in which a central bank, like the US Federal Reserve, purchases securities from the open market to increase the money supply and encourage lending and investment.",
+    "difficulty": "expert",
+    "categoryId": "finance",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Cutting personal income taxes" },
+      { "id": "2", "text": "Central banks buying long-term securities to pump money into the economy" },
+      { "id": "3", "text": "Increasing government regulation of private banks" },
+      { "id": "4", "text": "A mathematical method for calculating credit scores" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the normal body temperature of a healthy human in Celsius?",
+    "explanation": "The average normal body temperature is generally accepted as 37°C.",
+    "difficulty": "easy",
+    "categoryId": "medicine",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "35°C" },
+      { "id": "2", "text": "37°C" },
+      { "id": "3", "text": "39°C" },
+      { "id": "4", "text": "41°C" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which organ in the human body is responsible for pumping blood?",
+    "explanation": "The heart is a muscular organ which pumps blood through the blood vessels of the circulatory system.",
+    "difficulty": "medium",
+    "categoryId": "medicine",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Lungs" },
+      { "id": "2", "text": "Heart" },
+      { "id": "3", "text": "Kidney" },
+      { "id": "4", "text": "Liver" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which type of blood cells are responsible for carrying oxygen throughout the body?",
+    "explanation": "Red blood cells (erythrocytes) contain hemoglobin, which binds to oxygen and carries it to tissues.",
+    "difficulty": "hard",
+    "categoryId": "medicine",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "White blood cells" },
+      { "id": "2", "text": "Platelets" },
+      { "id": "3", "text": "Red blood cells" },
+      { "id": "4", "text": "Plasma" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "The 'Islets of Langerhans' are found in which organ?",
+    "explanation": "The islets of Langerhans are the regions of the pancreas that contain its endocrine (hormone-producing) cells.",
+    "difficulty": "expert",
+    "categoryId": "medicine",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Spleen" },
+      { "id": "2", "text": "Pancreas" },
+      { "id": "3", "text": "Thyroid" },
+      { "id": "4", "text": "Adrenal gland" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which continent is known as the 'Dark Continent'?",
+    "explanation": "Africa was historically referred to as the Dark Continent, primarily because of the lack of European exploration in the interior until the 19th century.",
+    "difficulty": "easy",
+    "categoryId": "geography",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Asia" },
+      { "id": "2", "text": "Africa" },
+      { "id": "3", "text": "South America" },
+      { "id": "4", "text": "Antarctica" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the longest river in the world?",
+    "explanation": "The Nile is widely considered the longest river in the world, followed closely by the Amazon.",
+    "difficulty": "medium",
+    "categoryId": "geography",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Amazon" },
+      { "id": "2", "text": "Nile" },
+      { "id": "3", "text": "Mississippi" },
+      { "id": "4", "text": "Yangtze" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which country has the most natural lakes in the world?",
+    "explanation": "Canada has the most lakes in the world, with over 2 million lakes of all sizes.",
+    "difficulty": "hard",
+    "categoryId": "geography",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Russia" },
+      { "id": "2", "text": "USA" },
+      { "id": "3", "text": "Canada" },
+      { "id": "4", "text": "Finland" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the deepest point in the world's oceans?",
+    "explanation": "Challenger Deep, in the Mariana Trench, is the deepest known point in Earth's hydrosphere.",
+    "difficulty": "expert",
+    "categoryId": "geography",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Java Trench" },
+      { "id": "2", "text": "Puerto Rico Trench" },
+      { "id": "3", "text": "Challenger Deep" },
+      { "id": "4", "text": "Milwaukee Deep" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the most widely spoken language in the world by number of countries?",
+    "explanation": "English is an official language in roughly 67 sovereign states and 27 non-sovereign entities.",
+    "difficulty": "easy",
+    "categoryId": "languages",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Spanish" },
+      { "id": "2", "text": "English" },
+      { "id": "3", "text": "French" },
+      { "id": "4", "text": "Arabic" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "How many letters are in the standard English alphabet?",
+    "explanation": "The modern English alphabet contains 26 letters.",
+    "difficulty": "medium",
+    "categoryId": "languages",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "24" },
+      { "id": "2", "text": "26" },
+      { "id": "3", "text": "28" },
+      { "id": "4", "text": "30" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which of these languages belongs to the 'Romance' language family?",
+    "explanation": "Italian is a Romance language, derived from Latin, along with French, Spanish, Portuguese, and Romanian.",
+    "difficulty": "hard",
+    "categoryId": "languages",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "German" },
+      { "id": "2", "text": "Russian" },
+      { "id": "3", "text": "Italian" },
+      { "id": "4", "text": "Greek" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "The term 'Agglutinative' refers to languages that:",
+    "explanation": "Agglutinative languages form words by stringing together morphemes, each of which has a single meaning (e.g., Turkish or Japanese).",
+    "difficulty": "expert",
+    "categoryId": "languages",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Have no written form" },
+      { "id": "2", "text": "Use tonal changes to distinguish meaning" },
+      { "id": "3", "text": "Create words by joining distinct morphemes together" },
+      { "id": "4", "text": "Are derived purely from ancient Sanskrit" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Who wrote 'Romeo and Juliet'?",
+    "explanation": "The tragedy Romeo and Juliet was written by William Shakespeare early in his career.",
+    "difficulty": "easy",
+    "categoryId": "literature",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Charles Dickens" },
+      { "id": "2", "text": "William Shakespeare" },
+      { "id": "3", "text": "Mark Twain" },
+      { "id": "4", "text": "Jane Austen" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In George Orwell's '1984', what is the name of the omnipresent leader of Oceania?",
+    "explanation": "Big Brother is the fictional character and symbol in George Orwell's novel 1984.",
+    "difficulty": "medium",
+    "categoryId": "literature",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Napoleon" },
+      { "id": "2", "text": "Snowball" },
+      { "id": "3", "text": "Big Brother" },
+      { "id": "4", "text": "O'Brien" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Who is the author of 'To Kill a Mockingbird'?",
+    "explanation": "To Kill a Mockingbird is a novel by Harper Lee published in 1960.",
+    "difficulty": "hard",
+    "categoryId": "literature",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Ernest Hemingway" },
+      { "id": "2", "text": "Harper Lee" },
+      { "id": "3", "text": "F. Scott Fitzgerald" },
+      { "id": "4", "text": "Maya Angelou" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In John Milton's 'Paradise Lost', which character famously states, 'Better to reign in Hell, than serve in Heav'n'?",
+    "explanation": "This famous line is spoken by Satan in Book I of Paradise Lost.",
+    "difficulty": "expert",
+    "categoryId": "literature",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Adam" },
+      { "id": "2", "text": "Beelzebub" },
+      { "id": "3", "text": "Satan" },
+      { "id": "4", "text": "Michael" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Who is considered the 'Father of Modern Psychology'?",
+    "explanation": "Wilhelm Wundt is credited with establishing the first laboratory for psychological research in 1879.",
+    "difficulty": "easy",
+    "categoryId": "psychology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Sigmund Freud" },
+      { "id": "2", "text": "Wilhelm Wundt" },
+      { "id": "3", "text": "B.F. Skinner" },
+      { "id": "4", "text": "Carl Jung" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the psychological term for an individual's unique and relatively stable patterns of thinking, feeling, and behaving?",
+    "explanation": "Personality refers to individual differences in characteristic patterns of thinking, feeling and behaving.",
+    "difficulty": "medium",
+    "categoryId": "psychology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Cognition" },
+      { "id": "2", "text": "Personality" },
+      { "id": "3", "text": "Temperament" },
+      { "id": "4", "text": "Ego" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In Pavlov's experiment with dogs, the bell was originally a:",
+    "explanation": "Before conditioning, the bell was a neutral stimulus because it did not elicit the salivation response.",
+    "difficulty": "hard",
+    "categoryId": "psychology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Conditioned Stimulus" },
+      { "id": "2", "text": "Neutral Stimulus" },
+      { "id": "3", "text": "Unconditioned Stimulus" },
+      { "id": "4", "text": "Conditioned Response" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "The 'Bystander Effect' suggests that as the number of witnesses to an emergency increases, the likelihood of any one individual helping:",
+    "explanation": "The bystander effect occurs when the presence of others discourages an individual from intervening in an emergency situation.",
+    "difficulty": "expert",
+    "categoryId": "psychology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Increases significantly" },
+      { "id": "2", "text": "Remains constant" },
+      { "id": "3", "text": "Decreases" },
+      { "id": "4", "text": "Is unpredictable" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the primary alloy of steel?",
+    "explanation": "Steel is an alloy of iron and carbon, often with other elements.",
+    "difficulty": "easy",
+    "categoryId": "engineering",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Iron and Copper" },
+      { "id": "2", "text": "Iron and Carbon" },
+      { "id": "3", "text": "Aluminum and Zinc" },
+      { "id": "4", "text": "Copper and Tin" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which law states that for every action, there is an equal and opposite reaction?",
+    "explanation": "Newton's Third Law of Motion states this fundamental principle of mechanics.",
+    "difficulty": "medium",
+    "categoryId": "engineering",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Newton's First Law" },
+      { "id": "2", "text": "Newton's Second Law" },
+      { "id": "3", "text": "Newton's Third Law" },
+      { "id": "4", "text": "Law of Thermodynamics" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "What is the primary unit of measure for electrical resistance?",
+    "explanation": "The ohm is the SI derived unit of electrical resistance.",
+    "difficulty": "hard",
+    "categoryId": "engineering",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Watt" },
+      { "id": "2", "text": "Volt" },
+      { "id": "3", "text": "Ohm" },
+      { "id": "4", "text": "Ampere" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "In structural engineering, 'Young's Modulus' measures a material's:",
+    "explanation": "Young's modulus (E) is a mechanical property that measures the tensile stiffness of a solid material.",
+    "difficulty": "expert",
+    "categoryId": "engineering",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Density" },
+      { "id": "2", "text": "Thermal conductivity" },
+      { "id": "3", "text": "Stiffness/Elasticity" },
+      { "id": "4", "text": "Magnetic permeability" }
+    ],
+    "correctOptionIds": ["3"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Who is the current Secretary-General of the United Nations (as of 2024)?",
+    "explanation": "António Guterres of Portugal began his first term as UN Secretary-General on January 1, 2017.",
+    "difficulty": "easy",
+    "categoryId": "current_affairs",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Ban Ki-moon" },
+      { "id": "2", "text": "António Guterres" },
+      { "id": "3", "text": "Kofi Annan" },
+      { "id": "4", "text": "Tedros Adhanom" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which country hosted the 2022 FIFA World Cup?",
+    "explanation": "The 2022 FIFA World Cup was held in Qatar.",
+    "difficulty": "medium",
+    "categoryId": "current_affairs",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Brazil" },
+      { "id": "2", "text": "Qatar" },
+      { "id": "3", "text": "Russia" },
+      { "id": "4", "text": "France" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "Which city is the administrative capital of Nigeria?",
+    "explanation": "Abuja became the capital city of Nigeria in 1991, replacing Lagos.",
+    "difficulty": "hard",
+    "categoryId": "current_affairs",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Lagos" },
+      { "id": "2", "text": "Abuja" },
+      { "id": "3", "text": "Kano" },
+      { "id": "4", "text": "Ibadan" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  },
+  {
+    "text": "As of early 2024, which country has the largest population in the world?",
+    "explanation": "India surpassed China as the world's most populous country in 2023.",
+    "difficulty": "expert",
+    "categoryId": "current_affairs",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "China" },
+      { "id": "2", "text": "India" },
+      { "id": "3", "text": "USA" },
+      { "id": "4", "text": "Indonesia" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["practice"],
+    "status": "published"
+  }
+]

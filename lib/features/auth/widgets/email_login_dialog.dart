@@ -110,29 +110,35 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
         opacity: 0.05,
         borderRadius: BorderRadius.circular(28.r),
         padding: EdgeInsets.all(24.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  _step == 1 ? 'Email Address' : 'Password',
-                  style: context.titleLarge.copyWith(
-                    color: SoteriaColors.textPrimary,
-                    fontWeight: FontWeight.w700,
+        child: RepaintBoundary(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _step == 1 ? 'Email Address' : 'Password',
+                    style: context.titleLarge.copyWith(
+                      color: SoteriaColors.textPrimary,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pop(),
-                  child: Icon(Icons.close, color: SoteriaColors.muted, size: 24.sp),
-                ),
-              ],
-            ),
-            SizedBox(height: 24.h),
-            if (_step == 1) _buildEmailStep(state) else _buildPasswordStep(state),
-          ],
+                  GestureDetector(
+                    onTap: state.isLoading ? null : () => Navigator.of(context).pop(),
+                    child: Icon(
+                      Icons.close, 
+                      color: state.isLoading ? SoteriaColors.muted.withValues(alpha: 0.3) : SoteriaColors.muted, 
+                      size: 24.sp,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 24.h),
+              if (_step == 1) _buildEmailStep(state) else _buildPasswordStep(state),
+            ],
+          ),
         ),
       ),
     );
@@ -146,6 +152,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
           controller: _emailController,
           hintText: 'Email Address',
           keyboardType: TextInputType.emailAddress,
+          enabled: !state.isLoading,
         ),
         SizedBox(height: 16.h),
         Text(
@@ -173,6 +180,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
           controller: _passwordController,
           hintText: 'Password',
           obscureText: _obscurePassword,
+          enabled: !state.isLoading,
         ),
         SizedBox(height: 12.h),
         Row(
@@ -182,7 +190,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
               height: 24.w,
               child: Checkbox(
                 value: !_obscurePassword,
-                onChanged: (val) => setState(() => _obscurePassword = !val!),
+                onChanged: state.isLoading ? null : (val) => setState(() => _obscurePassword = !val!),
                 activeColor: SoteriaColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4.r),
@@ -193,22 +201,28 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
             Text(
               'Show Password',
               style: context.bodySmall.copyWith(
-                color: SoteriaColors.textSecondary,
+                color: state.isLoading 
+                    ? SoteriaColors.textSecondary.withValues(alpha: 0.3) 
+                    : SoteriaColors.textSecondary,
                 fontWeight: FontWeight.w500,
               ),
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                ref
-                    .read(navigationServiceProvider)
-                    .push('${SoteriaRoutes.auth}/verify/passwordRecovery');
-              },
+              onTap: state.isLoading
+                  ? null
+                  : () {
+                      Navigator.of(context).pop();
+                      ref
+                          .read(navigationServiceProvider)
+                          .push('${SoteriaRoutes.auth}/verify/passwordRecovery');
+                    },
               child: Text(
                 'Forgot Password?',
                 style: context.bodySmall.copyWith(
-                  color: SoteriaColors.primary,
+                  color: state.isLoading 
+                      ? SoteriaColors.primary.withValues(alpha: 0.3) 
+                      : SoteriaColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -231,11 +245,13 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
         SizedBox(height: 12.h),
         Center(
           child: TextButton(
-            onPressed: () => setState(() => _step = 1),
+            onPressed: state.isLoading ? null : () => setState(() => _step = 1),
             child: Text(
               'Change Email',
               style: context.bodySmall.copyWith(
-                color: SoteriaColors.muted,
+                color: state.isLoading 
+                    ? SoteriaColors.muted.withValues(alpha: 0.3) 
+                    : SoteriaColors.muted,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -250,6 +266,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     required String hintText,
     bool obscureText = false,
     TextInputType? keyboardType,
+    bool enabled = true,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -261,6 +278,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
         hintText: hintText,
         obscureText: obscureText,
         keyboardType: keyboardType ?? TextInputType.text,
+        enabled: enabled,
       ),
     );
   }

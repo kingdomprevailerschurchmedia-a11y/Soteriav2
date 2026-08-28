@@ -35,10 +35,11 @@ class LoginScreen extends ConsumerWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xl),
-            child: Column(
-              children: [
-                LoginHeroSection(userName: state.userName),
-                const LoginForm(),
+            child: RepaintBoundary(
+              child: Column(
+                children: [
+                  LoginHeroSection(userName: state.userName),
+                  const LoginForm(),
                 SizedBox(height: 8.h),
                 const SoteriaDivider(text: 'OR'),
                 SizedBox(height: 8.h),

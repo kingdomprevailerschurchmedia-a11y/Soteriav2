@@ -35,8 +35,8 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
     super.dispose();
   }
 
-  void _onContinue(int currentStep, bool isValid) {
-    if (isValid) {
+  void _onContinue(int currentStep, bool isValid, bool isLoading) {
+    if (isValid && !isLoading) {
       if (currentStep < 4) {
         ref.read(personalizationProvider.notifier).nextStep();
         _pageController.nextPage(
@@ -49,18 +49,21 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
     }
   }
 
-  void _onBack() {
-    ref.read(personalizationProvider.notifier).previousStep();
-    _pageController.previousPage(
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeInOut,
-    );
+  void _onBack(bool isLoading) {
+    if (!isLoading) {
+      ref.read(personalizationProvider.notifier).previousStep();
+      _pageController.previousPage(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(personalizationProvider);
     final isValid = state.isStepValid(state.currentStep);
+    final isLoading = state.isLoading;
 
     ref.listen(personalizationProvider.select((s) => s.currentStep), (
       previous,
@@ -81,8 +84,8 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
         canPop: state.currentStep == 0,
         onPopInvokedWithResult: (didPop, result) {
           if (didPop) return;
-          if (state.currentStep > 0) {
-            _onBack();
+          if (state.currentStep > 0 && !isLoading) {
+            _onBack(isLoading);
           }
         },
         child: Column(
@@ -107,7 +110,9 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                           child: Opacity(
                             opacity: state.currentStep > 0 ? 1.0 : 0.0,
                             child: GestureDetector(
-                              onTap: state.currentStep > 0 ? _onBack : null,
+                              onTap: (state.currentStep > 0 && !isLoading)
+                                  ? () => _onBack(isLoading)
+                                  : null,
                               child: Container(
                                 width: 36.w,
                                 height: 36.w,
@@ -217,16 +222,18 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
 
               // Content
               Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: const [
-                    StepAcademicLevel(),
-                    StepInterests(),
-                    StepGoals(),
-                    StepNotifications(),
-                    StepSummary(),
-                  ],
+                child: RepaintBoundary(
+                  child: PageView(
+                    controller: _pageController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: const [
+                      StepAcademicLevel(),
+                      StepInterests(),
+                      StepGoals(),
+                      StepNotifications(),
+                      StepSummary(),
+                    ],
+                  ),
                 ),
               ),
 
@@ -242,8 +249,8 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                     GestureDetector(
-                      onTap: isValid
-                          ? () => _onContinue(state.currentStep, isValid)
+                      onTap: (isValid && !isLoading)
+                          ? () => _onContinue(state.currentStep, isValid, isLoading)
                           : null,
                       child: AnimatedContainer(
                         duration: const Duration(milliseconds: 200),
@@ -251,7 +258,7 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                         height: 52.h,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16.r),
-                          gradient: isValid
+                          gradient: (isValid && !isLoading)
                               ? LinearGradient(
                                   colors: [
                                     SoteriaColors.gold.withValues(alpha: 0.9),
@@ -259,8 +266,10 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                                   ],
                                 )
                               : null,
-                          color: isValid ? null : Colors.white.withValues(alpha: 0.05),
-                          boxShadow: isValid
+                          color: (isValid && !isLoading)
+                              ? null
+                              : Colors.white.withValues(alpha: 0.05),
+                          boxShadow: (isValid && !isLoading)
                               ? [
                                   BoxShadow(
                                     color: SoteriaColors.gold.withValues(alpha: 0.2),
@@ -271,32 +280,41 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                               : null,
                         ),
                         child: Center(
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                state.currentStep == 4
-                                    ? 'COMPLETE PROFILE'
-                                    : 'CONTINUE',
-                                style: context.titleMedium.copyWith(
-                                  color: isValid
-                                      ? SoteriaColors.backgroundBottomRight
-                                      : SoteriaColors.muted,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 0.5,
-                                  fontSize: 16.sp,
+                          child: isLoading
+                              ? SizedBox(
+                                  width: 20.w,
+                                  height: 20.w,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: SoteriaColors.backgroundBottomRight,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      state.currentStep == 4
+                                          ? 'COMPLETE PROFILE'
+                                          : 'CONTINUE',
+                                      style: context.titleMedium.copyWith(
+                                        color: (isValid && !isLoading)
+                                            ? SoteriaColors.backgroundBottomRight
+                                            : SoteriaColors.muted,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 0.5,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Icon(
+                                      Icons.arrow_forward_rounded,
+                                      color: (isValid && !isLoading)
+                                          ? SoteriaColors.backgroundBottomRight
+                                          : SoteriaColors.muted,
+                                      size: 18,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              SizedBox(width: 8.w),
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                color: isValid
-                                    ? SoteriaColors.backgroundBottomRight
-                                    : SoteriaColors.muted,
-                                size: 18,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
                     ),

@@ -67,6 +67,63 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final notifier = ref.read(onboardingProvider.notifier);
     final isTablet = SoteriaResponsive.isTablet(context);
 
+    final pages = [
+      OnboardingPage(
+        badgeLabel: 'PLATFORM',
+        title: 'Compete. Learn. Rise.',
+        titleWidget: _buildRichHeadline(context),
+        description: "Africa's premium competitive learning platform.",
+        pageController: _pageController,
+        index: 0,
+        backgroundGlowColor: SoteriaColors.primary,
+        illustration: Image.asset(
+          'assets/images/rise.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+      OnboardingPage(
+        badgeLabel: 'CHALLENGE',
+        title: 'Challenge Yourself',
+        description:
+            'Practice daily, compete with peers, and grow your knowledge faster.',
+        pageController: _pageController,
+        index: 1,
+        backgroundGlowColor: SoteriaColors.secondary,
+        illustration: Image.asset(
+          'assets/images/challenge.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+      OnboardingPage(
+        badgeLabel: 'RECOGNITION',
+        title: 'Earn Recognition',
+        description:
+            'Climb the leaderboards, earn exclusive badges, and build your reputation.',
+        pageController: _pageController,
+        index: 2,
+        backgroundGlowColor: SoteriaColors.gold,
+        illustration: Image.asset(
+          'assets/images/recognition.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+      OnboardingPage(
+        badgeLabel: 'COMMUNITY',
+        title: 'Ready to Begin?',
+        description:
+            'Join the community of innovators and start your journey today.',
+        pageController: _pageController,
+        index: 3,
+        backgroundGlowColor: SoteriaColors.success,
+        illustration: Image.asset(
+          'assets/images/ready.png',
+          fit: BoxFit.contain,
+        ),
+      ),
+    ];
+
+    final isLastPage = state.currentPage == pages.length - 1;
+
     return Scaffold(
       backgroundColor: SoteriaColors.backgroundBottomRight,
       extendBody: true,
@@ -92,61 +149,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           PageView(
             controller: _pageController,
             onPageChanged: (index) => notifier.setPage(index),
-            children: [
-              OnboardingPage(
-                badgeLabel: 'PLATFORM',
-                title: 'Compete. Learn. Rise.',
-                titleWidget: _buildRichHeadline(context),
-                description:
-                    "Africa's premium competitive learning platform.",
-                pageController: _pageController,
-                index: 0,
-                backgroundGlowColor: SoteriaColors.primary,
-                illustration: Image.asset(
-                  'assets/images/rise.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              OnboardingPage(
-                badgeLabel: 'CHALLENGE',
-                title: 'Challenge Yourself',
-                description:
-                    'Practice daily, compete with peers, and grow your knowledge faster.',
-                pageController: _pageController,
-                index: 1,
-                backgroundGlowColor: SoteriaColors.secondary,
-                illustration: Image.asset(
-                  'assets/images/challenge.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              OnboardingPage(
-                badgeLabel: 'RECOGNITION',
-                title: 'Earn Recognition',
-                description:
-                    'Climb the leaderboards, earn exclusive badges, and build your reputation.',
-                pageController: _pageController,
-                index: 2,
-                backgroundGlowColor: SoteriaColors.gold,
-                illustration: Image.asset(
-                  'assets/images/recognition.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-              OnboardingPage(
-                badgeLabel: 'COMMUNITY',
-                title: 'Ready to Begin?',
-                description:
-                    'Join the community of innovators and start your journey today.',
-                pageController: _pageController,
-                index: 3,
-                backgroundGlowColor: SoteriaColors.success,
-                illustration: Image.asset(
-                  'assets/images/ready.png',
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ],
+            children: pages,
           ),
 
           // Navigation Controls
@@ -170,15 +173,15 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     children: [
                       OnboardingIndicator(
                         currentIndex: state.currentPage,
-                        itemCount: 4,
+                        itemCount: pages.length,
                       ),
                       SizedBox(height: 56.h),
                       Row(
-                        mainAxisAlignment: state.currentPage == 3
+                        mainAxisAlignment: isLastPage
                             ? MainAxisAlignment.center
                             : MainAxisAlignment.spaceBetween,
                         children: [
-                          if (state.currentPage < 3)
+                          if (!isLastPage)
                             TextButton(
                               onPressed: () => notifier.skip(),
                               child: Text(
@@ -191,7 +194,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                             ),
                           GestureDetector(
                             onTap: () {
-                              if (state.currentPage < 3) {
+                              if (!isLastPage) {
                                 _pageController.nextPage(
                                   duration: const Duration(milliseconds: 600),
                                   curve: Curves.easeOutQuint,
@@ -225,7 +228,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    state.currentPage == 3 ? 'Get Started' : 'Continue',
+                                    isLastPage ? 'Get Started' : 'Continue',
                                     style: context.titleMedium.copyWith(
                                       color: const Color(0xFF090514),
                                       fontWeight: FontWeight.w800,

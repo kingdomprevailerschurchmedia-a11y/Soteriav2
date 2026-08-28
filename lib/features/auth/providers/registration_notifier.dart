@@ -5,6 +5,8 @@ import '../../personalization/providers/personalization_notifier.dart';
 import '../models/registration_draft.dart';
 import '../models/identity_exception.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
+import 'package:soteria/core/identity/models/user_profile.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import 'auth_providers.dart';
@@ -135,6 +137,26 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
 
       if (_mounted) {
         if (result.isSuccess) {
+          final uid = result.userId;
+          if (uid != null) {
+            // Initialize Firestore Profile
+            final profile = UserProfile(
+              firstName: state.firstName,
+              lastName: state.lastName,
+              displayName:
+                  state.displayName ?? '${state.firstName} ${state.lastName}',
+              username: state.username,
+              email: state.email,
+              academicLevel: state.academicLevel,
+              interests: state.interests.toList(),
+              goals: state.goals.toList(),
+            );
+
+            await ref
+                .read(identityRepositoryProvider)
+                .updateUserProfile(uid, profile);
+          }
+
           ref.read(analyticsProvider).logSignUp(signUpMethod: 'email');
           LoggerService.i('Registration successful', feature: 'Auth');
         } else {

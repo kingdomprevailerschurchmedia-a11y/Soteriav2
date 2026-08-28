@@ -1,0 +1,122 @@
+[
+  {
+    "text": "Which Nigerian academic was the first African to be awarded the Nobel Prize in Literature?",
+    "difficulty": "easy",
+    "categoryId": "literature",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Chinua Achebe" },
+      { "id": "2", "text": "Wole Soyinka" },
+      { "id": "3", "text": "Ben Okri" },
+      { "id": "4", "text": "Cyprian Ekwensi" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "In the context of the Nigerian legal system, which court has original jurisdiction over disputes arising from the operation of the Companies and Allied Matters Act?",
+    "difficulty": "medium",
+    "categoryId": "law",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "High Court of a State" },
+      { "id": "2", "text": "Federal High Court" },
+      { "id": "3", "text": "National Industrial Court" },
+      { "id": "4", "text": "Investment and Securities Tribunal" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "What is the primary mechanism of action for 'Metformin' in the treatment of Type 2 Diabetes?",
+    "difficulty": "hard",
+    "categoryId": "medicine",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Stimulating insulin secretion from beta cells" },
+      { "id": "2", "text": "Inhibition of hepatic gluconeogenesis" },
+      { "id": "3", "text": "Increasing glucose excretion via kidneys" },
+      { "id": "4", "text": "Slowing carbohydrate absorption in the gut" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "In quantum mechanics, the Heisenberg Uncertainty Principle states that it is impossible to simultaneously measure which two properties of a particle with absolute precision?",
+    "difficulty": "expert",
+    "categoryId": "science",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Mass and Charge" },
+      { "id": "2", "text": "Position and Momentum" },
+      { "id": "3", "text": "Energy and Time" },
+      { "id": "4", "text": "Spin and Velocity" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "What is the main objective of the African Continental Free Trade Area (AfCFTA)?",
+    "difficulty": "easy",
+    "categoryId": "business",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Establishing a single military force for Africa" },
+      { "id": "2", "text": "Creating a single market for goods and services across Africa" },
+      { "id": "3", "text": "Implementing a common currency for all African nations" },
+      { "id": "4", "text": "Regulating social media usage in Africa" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "In computer architecture, what does 'Cache Coherency' ensure?",
+    "difficulty": "hard",
+    "categoryId": "technology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "That all caches are the same size" },
+      { "id": "2", "text": "Consistency of data stored in local caches of a shared resource" },
+      { "id": "3", "text": "The speed of the L1 cache matches the CPU clock" },
+      { "id": "4", "text": "That the cache is cleared every time the system reboots" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "Identify the psychological phenomenon where individuals perceive a clear correlation between two variables even when no such relationship exists.",
+    "difficulty": "medium",
+    "categoryId": "psychology",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Confirmation Bias" },
+      { "id": "2", "text": "Illusory Correlation" },
+      { "id": "3", "text": "Hindsight Bias" },
+      { "id": "4", "text": "Cognitive Dissonance" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  },
+  {
+    "text": "Which engineering principle involves using a secondary system to take over if the primary system fails?",
+    "difficulty": "easy",
+    "categoryId": "engineering",
+    "type": "multipleChoice",
+    "options": [
+      { "id": "1", "text": "Efficiency" },
+      { "id": "2", "text": "Redundancy" },
+      { "id": "3", "text": "Scalability" },
+      { "id": "4", "text": "Sustainability" }
+    ],
+    "correctOptionIds": ["2"],
+    "tags": ["competitive"],
+    "status": "published"
+  }
+]

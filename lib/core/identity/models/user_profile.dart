@@ -17,6 +17,7 @@ class UserProfile {
   final String timezone;
   final String language;
   final List<String> interests;
+  final List<String> goals;
   final String bio;
 
   const UserProfile({
@@ -35,6 +36,7 @@ class UserProfile {
     this.timezone = 'Africa/Lagos',
     this.language = 'en',
     this.interests = const [],
+    this.goals = const [],
     this.bio = '',
   });
 
@@ -56,6 +58,7 @@ class UserProfile {
     String? timezone,
     String? language,
     List<String>? interests,
+    List<String>? goals,
     String? bio,
   }) {
     return UserProfile(
@@ -74,6 +77,7 @@ class UserProfile {
       timezone: timezone ?? this.timezone,
       language: language ?? this.language,
       interests: interests ?? this.interests,
+      goals: goals ?? this.goals,
       bio: bio ?? this.bio,
     );
   }
@@ -95,6 +99,7 @@ class UserProfile {
       'timezone': timezone,
       'language': language,
       'interests': interests,
+      'goals': goals,
       'bio': bio,
     };
   }
@@ -116,6 +121,7 @@ class UserProfile {
       timezone: map['timezone'] ?? 'Africa/Lagos',
       language: map['language'] ?? 'en',
       interests: List<String>.from(map['interests'] ?? []),
+      goals: List<String>.from(map['goals'] ?? []),
       bio: map['bio'] ?? '',
     );
   }

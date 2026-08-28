@@ -34,9 +34,10 @@ class StepInterests extends ConsumerWidget {
       {'label': 'Design', 'icon': Icons.brush_rounded},
     ];
 
-    return SingleChildScrollView(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-      child: Column(
+    return RepaintBoundary(
+      child: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 16.h),

@@ -14,12 +14,12 @@ final homeRepositoryProvider = Provider<HomeRepository>((ref) {
   );
 });
 
-final announcementsProvider = FutureProvider<List<String>>((ref) {
-  return ref.watch(homeRepositoryProvider).getAnnouncements();
+final announcementsProvider = StreamProvider<List<String>>((ref) {
+  return ref.watch(homeRepositoryProvider).getAnnouncementsStream();
 });
 
-final dailyChallengeProvider = FutureProvider<DailyChallenge?>((ref) {
-  return ref.watch(homeRepositoryProvider).getDailyChallenge();
+final dailyChallengeProvider = StreamProvider<DailyChallenge?>((ref) {
+  return ref.watch(homeRepositoryProvider).getDailyChallengeStream();
 });
 
 class DashboardNotifier extends Notifier<DashboardState> {

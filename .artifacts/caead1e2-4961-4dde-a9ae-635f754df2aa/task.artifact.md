@@ -1,0 +1,5 @@
+- [x] Add `getRecentlyAnsweredIds` to `QuestionAnalyticsRepository`
+- [x] Implement Firestore query for recently answered questions
+- [x] Inject `recentlyAnsweredIds` into Pro Mode session start
+- [x] Enhance `QuestionSelectionService` pool fetch limits
+- [x] Verify content freshness in Pro Mode

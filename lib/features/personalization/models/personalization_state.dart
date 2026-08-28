@@ -7,6 +7,7 @@ class PersonalizationState {
   final Set<String> goals;
   final Map<String, bool> notificationPrefs;
   final int currentStep;
+  final bool isLoading;
 
   const PersonalizationState({
     this.academicLevel,
@@ -20,6 +21,7 @@ class PersonalizationState {
       'new_content': true,
     },
     this.currentStep = 0,
+    this.isLoading = false,
   });
 
   bool get isLevelValid => academicLevel != null;
@@ -49,6 +51,7 @@ class PersonalizationState {
     Set<String>? goals,
     Map<String, bool>? notificationPrefs,
     int? currentStep,
+    bool? isLoading,
   }) {
     return PersonalizationState(
       academicLevel: academicLevel ?? this.academicLevel,
@@ -56,6 +59,7 @@ class PersonalizationState {
       goals: goals ?? this.goals,
       notificationPrefs: notificationPrefs ?? this.notificationPrefs,
       currentStep: currentStep ?? this.currentStep,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 
@@ -68,7 +72,8 @@ class PersonalizationState {
           setEquals(interests, other.interests) &&
           setEquals(goals, other.goals) &&
           mapEquals(notificationPrefs, other.notificationPrefs) &&
-          currentStep == other.currentStep;
+          currentStep == other.currentStep &&
+          isLoading == other.isLoading;
 
   @override
   int get hashCode =>
@@ -76,5 +81,6 @@ class PersonalizationState {
       interests.hashCode ^
       goals.hashCode ^
       notificationPrefs.hashCode ^
-      currentStep.hashCode;
+      currentStep.hashCode ^
+      isLoading.hashCode;
 }

@@ -41,113 +41,129 @@ class _AuthLandingContent extends ConsumerWidget {
     });
 
     return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 32.w),
-        child: Column(
-          children: [
-            const Spacer(flex: 2),
-            
-            // Welcome Illustration
-            Center(
-              child: Image.asset(
-                'assets/images/welcome_illustration.png',
-                width: 320.w,
-                fit: BoxFit.contain,
-              ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 32.w),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: MediaQuery.sizeOf(context).height - 
+                         MediaQuery.paddingOf(context).vertical,
             ),
-
-            const Spacer(flex: 1),
-
-            // Welcome Text
-            Column(
-              children: [
-                Text(
-                  'Welcome to',
-                  style: context.displaySmall.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 28.sp,
-                  ),
-                ),
-                Text(
-                  'Soteria',
-                  style: context.displayLarge.copyWith(
-                    color: SoteriaColors.gold,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 48.sp,
-                    letterSpacing: -0.5,
-                  ),
-                ),
-                SizedBox(height: 12.h),
-                Text(
-                  'Rise through knowledge and\ncompete with the best.',
-                  style: context.bodyLarge.copyWith(
-                    color: Colors.white.withValues(alpha: 0.5),
-                    height: 1.4,
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ],
-            ),
-
-            const Spacer(flex: 2),
-
-            // Action Buttons
-            Column(
-              children: [
-                // Continue with Google
-                _PrimaryButton(
-                  label: 'Continue with Google',
-                  onTap: () => notifier.signInWithGoogle(),
-                  isLoading: state.isLoading,
-                ),
-                
-                SizedBox(height: 16.h),
-
-                // Create Account
-                _SecondaryButton(
-                  label: 'Create Account',
-                  onTap: () => ref
-                      .read(navigationServiceProvider)
-                      .push('${SoteriaRoutes.auth}/register'),
-                ),
-
-                SizedBox(height: 24.h),
-
-                // Login with Email
-                GestureDetector(
-                  onTap: () => EmailLoginDialog.show(context),
-                  child: Text(
-                    'Login with Email',
-                    style: context.bodyMedium.copyWith(
-                      color: Colors.white.withValues(alpha: 0.4),
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Colors.white.withValues(alpha: 0.3),
+            child: IntrinsicHeight(
+              child: Column(
+                children: [
+                  const Spacer(flex: 2),
+                  
+                  // Welcome Illustration
+                  Center(
+                    child: Image.asset(
+                      'assets/images/welcome_illustration.png',
+                      width: 320.w,
+                      fit: BoxFit.contain,
                     ),
                   ),
-                ),
-              ],
-            ),
 
-            const Spacer(flex: 1),
+                  const Spacer(flex: 1),
 
-            // Footer Links
-            Padding(
-              padding: EdgeInsets.only(bottom: 16.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _LegalLink(label: 'Terms', onTap: () {}),
-                  const _LegalDot(),
-                  _LegalLink(label: 'Privacy', onTap: () {}),
-                  const _LegalDot(),
-                  _LegalLink(label: 'Guidelines', onTap: () {}),
+                  // Welcome Text
+                  Column(
+                    children: [
+                      Text(
+                        'Welcome to',
+                        style: context.displaySmall.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 28.sp,
+                        ),
+                      ),
+                      Text(
+                        'Soteria',
+                        style: context.displayLarge.copyWith(
+                          color: SoteriaColors.gold,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 48.sp,
+                          letterSpacing: -0.5,
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Rise through knowledge and\ncompete with the best.',
+                        style: context.bodyLarge.copyWith(
+                          color: Colors.white.withValues(alpha: 0.5),
+                          height: 1.4,
+                          fontSize: 16.sp,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+
+                  const Spacer(flex: 2),
+
+                  // Action Buttons
+                  Column(
+                    children: [
+                      // Continue with Google
+                      _PrimaryButton(
+                        label: 'Continue with Google',
+                        onTap: () => notifier.signInWithGoogle(),
+                        isLoading: state.isLoading,
+                      ),
+                      
+                      SizedBox(height: 16.h),
+
+                      // Create Account
+                      _SecondaryButton(
+                        label: 'Create Account',
+                        onTap: state.isLoading 
+                            ? null 
+                            : () => ref
+                                .read(navigationServiceProvider)
+                                .push('${SoteriaRoutes.auth}/register'),
+                      ),
+
+                      SizedBox(height: 24.h),
+
+                      // Login with Email
+                      GestureDetector(
+                        onTap: state.isLoading 
+                            ? null 
+                            : () => EmailLoginDialog.show(context),
+                        child: Text(
+                          'Login with Email',
+                          style: context.bodyMedium.copyWith(
+                            color: state.isLoading 
+                                ? Colors.white.withValues(alpha: 0.2)
+                                : Colors.white.withValues(alpha: 0.4),
+                            fontWeight: FontWeight.w600,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.white.withValues(alpha: 0.3),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const Spacer(flex: 1),
+
+                  // Footer Links
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 16.h),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _LegalLink(label: 'Terms', onTap: () {}),
+                        const _LegalDot(),
+                        _LegalLink(label: 'Privacy', onTap: () {}),
+                        const _LegalDot(),
+                        _LegalLink(label: 'Guidelines', onTap: () {}),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -169,53 +185,57 @@ class _PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: isLoading ? null : onTap,
-      child: Container(
-        width: double.infinity,
-        height: 60.h,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18.r),
-          gradient: const LinearGradient(
-            colors: [
-              Color(0xFFD8B24A),
-              Color(0xFFB8860B),
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isLoading ? 0.6 : 1.0,
+        child: Container(
+          width: double.infinity,
+          height: 60.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18.r),
+            gradient: const LinearGradient(
+              colors: [
+                Color(0xFFD8B24A),
+                Color(0xFFB8860B),
+              ],
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFFD8B24A).withValues(alpha: 0.15),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
             ],
           ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFFD8B24A).withValues(alpha: 0.15),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Center(
-          child: isLoading
-              ? SizedBox(
-                  width: 24.w,
-                  height: 24.w,
-                  child: const CircularProgressIndicator(
-                    color: Colors.black,
-                    strokeWidth: 2.5,
-                  ),
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/icons/icons8-google-48.png',
-                      height: 24.h,
+          child: Center(
+            child: isLoading
+                ? SizedBox(
+                    width: 24.w,
+                    height: 24.w,
+                    child: const CircularProgressIndicator(
+                      color: Colors.black,
+                      strokeWidth: 2.5,
                     ),
-                    SizedBox(width: 12.w),
-                    Text(
-                      label,
-                      style: context.titleMedium.copyWith(
-                        color: Colors.black,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 0.2,
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/icons/icons8-google-48.png',
+                        height: 24.h,
                       ),
-                    ),
-                  ],
-                ),
+                      SizedBox(width: 12.w),
+                      Text(
+                        label,
+                        style: context.titleMedium.copyWith(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 0.2,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
         ),
       ),
     );
@@ -224,31 +244,36 @@ class _PrimaryButton extends StatelessWidget {
 
 class _SecondaryButton extends StatelessWidget {
   final String label;
-  final VoidCallback onTap;
+  final VoidCallback? onTap;
 
   const _SecondaryButton({required this.label, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final isDisabled = onTap == null;
     return GestureDetector(
       onTap: onTap,
-      child: Container(
-        width: double.infinity,
-        height: 60.h,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18.r),
-          color: Colors.white.withValues(alpha: 0.04),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.08),
-            width: 1.5,
+      child: AnimatedOpacity(
+        duration: const Duration(milliseconds: 200),
+        opacity: isDisabled ? 0.4 : 1.0,
+        child: Container(
+          width: double.infinity,
+          height: 60.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18.r),
+            color: Colors.white.withValues(alpha: 0.04),
+            border: Border.all(
+              color: Colors.white.withValues(alpha: 0.08),
+              width: 1.5,
+            ),
           ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: context.titleMedium.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.w700,
+          child: Center(
+            child: Text(
+              label,
+              style: context.titleMedium.copyWith(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+              ),
             ),
           ),
         ),
