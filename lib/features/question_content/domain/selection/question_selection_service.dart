@@ -1,7 +1,8 @@
 import '../../../../core/logging/logger_service.dart';
+import '../../../gameplay_engine/models/game_mode.dart';
 import '../repositories/question_repository.dart';
-import '../data_sources/local_question_data_source.dart';
-import '../mappers/question_mapper.dart';
+import '../../data/data_sources/local_question_data_source.dart';
+import '../../data/mappers/question_mapper.dart';
 import '../entities/question.dart';
 import '../entities/difficulty.dart';
 import 'selection_models.dart';
@@ -90,7 +91,7 @@ class QuestionSelectionService {
       // LOCAL STARTER BANK FALLBACK: If Practice mode is still empty, load from local asset
       if (filteredPool.isEmpty && request.mode == GameMode.practice && _localDataSource != null) {
         LoggerService.i('Falling back to local Starter Bank for Practice Mode', feature: 'QuestionSelection');
-        final dtos = await _localDataSource!.fetchStarterQuestions();
+        final dtos = await _localDataSource.fetchStarterQuestions();
         final localQuestions = dtos.map((dto) => QuestionMapper.fromDto(dto)).toList();
         
         filteredPool = localQuestions.where((q) => 

@@ -49,6 +49,10 @@ class MockLeaderboardRepository implements LeaderboardRepository {
   @override Future<List<RankMovementEvent>> getPositionHistory({required String userId, String? seasonId, int limit = 50}) async => [];
   @override Future<void> recordMovement(RankMovementEvent event) async {}
   @override Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId}) async => [];
+
+  @override Stream<List<LeaderboardEntry>> watchLeaderboard({String? seasonId, int limit = 50}) => Stream.value([]);
+  @override Stream<LeaderboardEntry?> watchPlayerEntry({required String userId, String? seasonId}) => Stream.value(null);
+  @override Stream<List<LeaderboardEntry>> watchEntriesByUserIds(List<String> userIds, {String? seasonId}) => Stream.value([]);
 }
 
 class _MockActivityRepository implements ActivityRepository {

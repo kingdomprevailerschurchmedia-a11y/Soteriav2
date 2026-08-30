@@ -40,7 +40,7 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
           (ref) => LeaderboardControllerMock(mockEntries),
         ),
         playerLeaderboardEntryProvider.overrideWith(
-          (ref) => Future.value(playerEntry),
+          (ref) => Stream.value(playerEntry),
         ),
         leaderboardTotalPlayersProvider.overrideWith(
           (ref) => Future.value(mockEntries.length + 100),
@@ -93,7 +93,7 @@ class LeaderboardPreviewWrapper extends StatelessWidget {
         ),
         timeServiceProvider.overrideWithValue(_MockTimeService(now)),
         leaderboardRepositoryProvider.overrideWithValue(_MockLeaderboardRepository()),
-        friendsLeaderboardProvider.overrideWith((ref) => Future.value(mockEntries)),
+        friendsLeaderboardProvider.overrideWith((ref) => Stream.value(mockEntries)),
       ],
       child: const LeaderboardScreen(),
     );
@@ -190,6 +190,15 @@ class _MockLeaderboardRepository implements LeaderboardRepository {
 
   @override
   Future<List<LeaderboardEntry>> getEntriesByUserIds(List<String> userIds, {String? seasonId}) async => [];
+
+  @override
+  Stream<List<LeaderboardEntry>> watchLeaderboard({String? seasonId, int limit = 50}) => Stream.value([]);
+
+  @override
+  Stream<LeaderboardEntry?> watchPlayerEntry({required String userId, String? seasonId}) => Stream.value(null);
+
+  @override
+  Stream<List<LeaderboardEntry>> watchEntriesByUserIds(List<String> userIds, {String? seasonId}) => Stream.value([]);
 }
 
 class LeaderboardPreviews {

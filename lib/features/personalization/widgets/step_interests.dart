@@ -38,190 +38,106 @@ class StepInterests extends ConsumerWidget {
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
         child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: 16.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Select your ',
-                        style: context.headlineMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'interests',
-                        style: context.headlineMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.sp,
-                          color: const Color(0xFF7C4DFF),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                child: const Icon(
-                  Icons.auto_awesome_rounded,
-                  color: Color(0xFF7C4DFF),
-                  size: 20,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            'Choose at least one to personalize your feed.',
-            style: context.bodySmall.copyWith(
-              color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-              fontSize: 13.sp,
-            ),
-          ),
-          SizedBox(height: SoteriaSpacing.lg),
-          Wrap(
-            spacing: 8.w,
-            runSpacing: 8.h,
-            children: interests.map((item) {
-              final label = item['label'] as String;
-              final icon = item['icon'] as IconData;
-              final isSelected = state.interests.contains(label);
-
-              return GestureDetector(
-                onTap: () => notifier.toggleInterest(label),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 14.w,
-                    vertical: 10.h,
-                  ),
-                  decoration: BoxDecoration(
-                    color: isSelected
-                        ? const Color(0xFF5B3FD9)
-                        : Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(12.r),
-                    border: Border.all(
-                      color: isSelected
-                          ? const Color(0xFF7C4DFF)
-                          : Colors.white.withValues(alpha: 0.1),
-                    ),
-                    boxShadow: isSelected
-                        ? [
-                            BoxShadow(
-                              color: const Color(
-                                0xFF5B3FD9,
-                              ).withValues(alpha: 0.4),
-                              blurRadius: 8,
-                              spreadRadius: 1,
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        icon,
-                        size: 16.w,
-                        color: isSelected ? Colors.white : SoteriaColors.muted,
-                      ),
-                      SizedBox(width: 8.w),
-                      Text(
-                        label,
-                        style: context.labelLarge.copyWith(
-                          color: Colors.white,
-                          fontSize: 13.sp,
-                          fontWeight: isSelected
-                              ? FontWeight.w600
-                              : FontWeight.normal,
-                        ),
-                      ),
-                      if (isSelected) ...[
-                        SizedBox(width: 8.w),
-                        Container(
-                          padding: const EdgeInsets.all(2),
-                          decoration: const BoxDecoration(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 16.h),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Select your ',
+                          style: context.headlineMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.sp,
                             color: Colors.white,
-                            shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            Icons.check,
-                            size: 10,
-                            color: Color(0xFF5B3FD9),
+                        ),
+                        TextSpan(
+                          text: 'interests',
+                          style: context.headlineMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24.sp,
+                            color: const Color(0xFF7C4DFF),
                           ),
                         ),
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              );
-            }).toList(),
-          ),
-          SizedBox(height: 24.h),
-          // Great choices! Banner
-          if (state.interests.isNotEmpty)
-            GlassSurface(
-              borderRadius: BorderRadius.circular(20.r),
-              opacity: 0.05,
-              child: Padding(
-                padding: EdgeInsets.all(16.w),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 44.w,
-                      height: 44.w,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF2E1A8A), Color(0xFF5B3FD9)],
-                        ),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.auto_awesome_rounded,
-                        color: SoteriaColors.gold,
-                        size: 20,
-                      ),
-                    ),
-                    SizedBox(width: 14.w),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Great choices!',
-                            style: context.titleMedium.copyWith(
-                              color: SoteriaColors.gold,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                          SizedBox(height: 2.h),
-                          Text(
-                            'We\'ll show you the best content based on your interests.',
-                            style: context.bodySmall.copyWith(
-                              color: SoteriaColors.textSecondary.withValues(
-                                alpha: 0.7,
-                              ),
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                Padding(
+                  padding: EdgeInsets.only(left: 8.w, top: 4.h),
+                  child: const Icon(
+                    Icons.auto_awesome_rounded,
+                    color: Color(0xFF7C4DFF),
+                    size: 20,
+                  ),
                 ),
+              ],
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              'Tell us about yourself so we can personalize your experience.',
+              style: context.bodySmall.copyWith(
+                color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
+                fontSize: 13.sp,
               ),
             ),
-          SizedBox(height: SoteriaSpacing.lg),
-        ],
+            SizedBox(height: SoteriaSpacing.lg),
+            Wrap(
+              spacing: 12.w,
+              runSpacing: 12.h,
+              children: interests.map((interest) {
+                final label = interest['label'] as String;
+                final icon = interest['icon'] as IconData;
+                final isSelected = state.interests.contains(label);
+
+                return GestureDetector(
+                  onTap: () => notifier.toggleInterest(label),
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+                    decoration: BoxDecoration(
+                      color: isSelected
+                          ? const Color(0xFF5B3FD9).withValues(alpha: 0.3)
+                          : Colors.white.withValues(alpha: 0.05),
+                      borderRadius: BorderRadius.circular(16.r),
+                      border: Border.all(
+                        color: isSelected
+                            ? const Color(0xFF7C4DFF)
+                            : Colors.white.withValues(alpha: 0.1),
+                        width: 1.5,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          icon,
+                          size: 20.w,
+                          color: isSelected ? Colors.white : Colors.white60,
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          label,
+                          style: context.bodyMedium.copyWith(
+                            color: isSelected ? Colors.white : Colors.white60,
+                            fontWeight:
+                                isSelected ? FontWeight.w600 : FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: 32.h),
+          ],
+        ),
       ),
     );
   }

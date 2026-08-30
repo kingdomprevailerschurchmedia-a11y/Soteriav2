@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,7 +15,6 @@ import '../providers/practice_providers.dart';
 import '../states/practice_result_state.dart';
 import '../../domain/models/practice_result.dart';
 import '../../../../core/navigation/soteria_routes.dart';
-import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../core/design_system/gradients/soteria_gradients.dart';
 
@@ -533,95 +531,96 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
     return RepaintBoundary(
       child: Container(
         margin: EdgeInsets.only(bottom: 12.h),
-      padding: EdgeInsets.all(12.w),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E1638).withValues(alpha: 0.4),
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(
-          color: const Color(0xFF6B4EEA).withValues(alpha: 0.2),
-          width: 1,
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: const Color(0xFF1E1638).withValues(alpha: 0.4),
+          borderRadius: BorderRadius.circular(16.r),
+          border: Border.all(
+            color: const Color(0xFF6B4EEA).withValues(alpha: 0.2),
+            width: 1,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF6B4EEA).withValues(alpha: 0.05),
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xFF6B4EEA).withValues(alpha: 0.05),
-            blurRadius: 10,
-            spreadRadius: 2,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: EdgeInsets.all(4.r),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: item.isCorrect ? SoteriaColors.success : SoteriaColors.error,
-                width: 1,
-              ),
-            ),
-            child: Icon(
-              item.isCorrect ? Icons.check_rounded : Icons.close_rounded,
-              color: item.isCorrect ? SoteriaColors.success : SoteriaColors.error,
-              size: 16.sp,
-            ),
-          ),
-          SizedBox(width: 12.w),
-          Container(
-            width: 36.r,
-            height: 36.r,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xFF6B4EEA).withValues(alpha: 0.6),
-                  const Color(0xFF2E1A8A).withValues(alpha: 0.8),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                '$number',
-                style: context.titleSmall.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+        child: Row(
+          children: [
+            Container(
+              padding: EdgeInsets.all(4.r),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: item.isCorrect ? SoteriaColors.success : SoteriaColors.error,
+                  width: 1,
                 ),
               ),
+              child: Icon(
+                item.isCorrect ? Icons.check_rounded : Icons.close_rounded,
+                color: item.isCorrect ? SoteriaColors.success : SoteriaColors.error,
+                size: 16.sp,
+              ),
             ),
-          ),
-          SizedBox(width: 16.w),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Question $number',
-                  style: context.labelSmall.copyWith(
-                    color: item.isCorrect ? SoteriaColors.success : SoteriaColors.error,
+            SizedBox(width: 12.w),
+            Container(
+              width: 36.r,
+              height: 36.r,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    const Color(0xFF6B4EEA).withValues(alpha: 0.6),
+                    const Color(0xFF2E1A8A).withValues(alpha: 0.8),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Text(
+                  '$number',
+                  style: context.titleSmall.copyWith(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 2.h),
-                Text(
-                  item.questionText,
-                  style: context.bodySmall.copyWith(color: Colors.white),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+              ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.all(4.r),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.05),
-              shape: BoxShape.circle,
+            SizedBox(width: 16.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Question $number',
+                    style: context.labelSmall.copyWith(
+                      color: item.isCorrect ? SoteriaColors.success : SoteriaColors.error,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    item.questionText,
+                    style: context.bodySmall.copyWith(color: Colors.white),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-            child: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 20.sp),
-          ),
-        ],
+            Container(
+              padding: EdgeInsets.all(4.r),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.05),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.keyboard_arrow_down_rounded, color: Colors.white, size: 20.sp),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -980,4 +979,3 @@ class _FilterChip extends StatelessWidget {
     );
   }
 }
-

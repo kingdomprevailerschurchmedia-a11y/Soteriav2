@@ -37,8 +37,8 @@ void main() {
           notificationCoordinatorProvider.overrideWithValue(
             MockNotificationCoordinator(),
           ),
-          configurationCoordinatorProvider.overrideWithValue(
-            MockConfigurationCoordinator(),
+          configurationCoordinatorProvider.overrideWith(
+            MockConfigurationCoordinator.new,
           ),
           appLifecycleProvider.overrideWith(MockLoadingLifecycleNotifier.new),
         ],

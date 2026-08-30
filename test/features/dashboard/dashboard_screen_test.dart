@@ -26,8 +26,8 @@ void main() {
       wrap(
         const DashboardScreen(),
         overrides: [
-          announcementsProvider.overrideWith((ref) => Future.value([])),
-          dailyChallengeProvider.overrideWith((ref) => Future.value(null)),
+          announcementsProvider.overrideWith((ref) => Stream.value([])),
+          dailyChallengeProvider.overrideWith((ref) => Stream.value(null)),
           currentPlayerStreamProvider.overrideWith(
             (ref) => const Stream.empty(),
           ),

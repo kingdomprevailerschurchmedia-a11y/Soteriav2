@@ -19,88 +19,89 @@ class StepSummary extends ConsumerWidget {
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
         children: [
-        SizedBox(height: 16.h),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Review ',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.sp,
-                        color: Colors.white,
+          SizedBox(height: 16.h),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Review ',
+                        style: context.headlineMedium.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.sp,
+                          color: Colors.white,
+                        ),
                       ),
-                    ),
-                    TextSpan(
-                      text: 'your profile',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.sp,
-                        color: const Color(0xFF7C4DFF),
+                      TextSpan(
+                        text: 'your profile',
+                        style: context.headlineMedium.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24.sp,
+                          color: const Color(0xFF7C4DFF),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 8.w, top: 4.h),
-              child: const Icon(
-                Icons.auto_awesome_rounded,
-                color: Color(0xFF7C4DFF),
-                size: 20,
+              Padding(
+                padding: EdgeInsets.only(left: 8.w, top: 4.h),
+                child: const Icon(
+                  Icons.auto_awesome_rounded,
+                  color: Color(0xFF7C4DFF),
+                  size: 20,
+                ),
               ),
+            ],
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            'Tell us about yourself so we can personalize your experience.',
+            style: context.bodySmall.copyWith(
+              color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
+              fontSize: 13.sp,
             ),
-          ],
-        ),
-        SizedBox(height: 4.h),
-        Text(
-          'Tell us about yourself so we can personalize your experience.',
-          style: context.bodySmall.copyWith(
-            color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-            fontSize: 13.sp,
           ),
-        ),
-        SizedBox(height: SoteriaSpacing.lg),
+          SizedBox(height: SoteriaSpacing.lg),
 
-        // Academic Level Section
-        _SummarySection(
-          title: 'Academic Level',
-          icon: Icons.school_outlined,
-          onEdit: () => notifier.setStep(0),
-          child: _buildAcademicLevel(context, state.academicLevel),
-        ),
-
-        SizedBox(height: 16.h),
-
-        // Interests Section
-        _SummarySection(
-          title: 'Interests',
-          icon: Icons.star_outline_rounded,
-          onEdit: () => notifier.setStep(1),
-          child: _buildInterests(
-            context,
-            state.interests,
-            (i) => notifier.toggleInterest(i),
+          // Academic Level Section
+          _SummarySection(
+            title: 'Academic Level',
+            icon: Icons.school_outlined,
+            onEdit: () => notifier.setStep(0),
+            child: _buildAcademicLevel(context, state.academicLevel),
           ),
-        ),
 
-        SizedBox(height: 16.h),
+          SizedBox(height: 16.h),
 
-        // Goals Section
-        _SummarySection(
-          title: 'Your Goals',
-          icon: Icons.track_changes_rounded,
-          onEdit: () => notifier.setStep(2),
-          child: _buildGoals(context, state.goals),
-        ),
+          // Interests Section
+          _SummarySection(
+            title: 'Interests',
+            icon: Icons.star_outline_rounded,
+            onEdit: () => notifier.setStep(1),
+            child: _buildInterests(
+              context,
+              state.interests,
+              (i) => notifier.toggleInterest(i),
+            ),
+          ),
 
-        SizedBox(height: 24.h),
-      ],
+          SizedBox(height: 16.h),
+
+          // Goals Section
+          _SummarySection(
+            title: 'Your Goals',
+            icon: Icons.track_changes_rounded,
+            onEdit: () => notifier.setStep(2),
+            child: _buildGoals(context, state.goals),
+          ),
+
+          SizedBox(height: 24.h),
+        ],
+      ),
     );
   }
 

@@ -45,104 +45,105 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-        _buildLabel(context, 'EMAIL ADDRESS'),
-        SizedBox(height: 8.h),
-        _buildTextField(
-          context: context,
-          controller: _emailController,
-          hintText: 'name@example.com',
-          prefixIcon: Icons.mail_rounded,
-          onChanged: notifier.updateEmail,
-          keyboardType: TextInputType.emailAddress,
-          enabled: !state.isLoading,
-        ),
-        SizedBox(height: 16.h),
-        _buildLabel(context, 'PASSWORD'),
-        SizedBox(height: 8.h),
-        _buildTextField(
-          context: context,
-          hintText: 'Enter your password',
-          prefixIcon: Icons.lock_rounded,
-          obscureText: _obscurePassword,
-          onChanged: notifier.updatePassword,
-          enabled: !state.isLoading,
-          isPassword: true,
-          onToggleVisibility: () =>
-              setState(() => _obscurePassword = !_obscurePassword),
-        ),
-        SizedBox(height: 12.h),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            GestureDetector(
-              onTap: state.isLoading
-                  ? null
-                  : () => notifier.toggleRememberMe(!state.rememberMe),
-              child: Row(
-                children: [
-                  Container(
-                    width: 22.w,
-                    height: 22.w,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(4.r),
-                      border: Border.all(
-                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.8),
-                        width: 1.5,
+          _buildLabel(context, 'EMAIL ADDRESS'),
+          SizedBox(height: 8.h),
+          _buildTextField(
+            context: context,
+            controller: _emailController,
+            hintText: 'name@example.com',
+            prefixIcon: Icons.mail_rounded,
+            onChanged: notifier.updateEmail,
+            keyboardType: TextInputType.emailAddress,
+            enabled: !state.isLoading,
+          ),
+          SizedBox(height: 16.h),
+          _buildLabel(context, 'PASSWORD'),
+          SizedBox(height: 8.h),
+          _buildTextField(
+            context: context,
+            hintText: 'Enter your password',
+            prefixIcon: Icons.lock_rounded,
+            obscureText: _obscurePassword,
+            onChanged: notifier.updatePassword,
+            enabled: !state.isLoading,
+            isPassword: true,
+            onToggleVisibility: () =>
+                setState(() => _obscurePassword = !_obscurePassword),
+          ),
+          SizedBox(height: 12.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              GestureDetector(
+                onTap: state.isLoading
+                    ? null
+                    : () => notifier.toggleRememberMe(!state.rememberMe),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 22.w,
+                      height: 22.w,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4.r),
+                        border: Border.all(
+                          color: const Color(0xFF7C4DFF).withValues(alpha: 0.8),
+                          width: 1.5,
+                        ),
+                        color: state.rememberMe
+                            ? const Color(0xFF7C4DFF)
+                            : Colors.transparent,
                       ),
-                      color: state.rememberMe
-                          ? const Color(0xFF7C4DFF)
-                          : Colors.transparent,
+                      child: state.rememberMe
+                          ? const Icon(Icons.check, size: 16, color: Colors.white)
+                          : null,
                     ),
-                    child: state.rememberMe
-                        ? const Icon(Icons.check, size: 16, color: Colors.white)
-                        : null,
-                  ),
-                  SizedBox(width: 12.w),
-                  Text(
-                    'Remember Me',
-                    style: context.bodyMedium.copyWith(
-                      color: Colors.white.withValues(alpha: 0.8),
-                      fontSize: 14.sp,
+                    SizedBox(width: 12.w),
+                    Text(
+                      'Remember Me',
+                      style: context.bodyMedium.copyWith(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        fontSize: 14.sp,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            GestureDetector(
-              onTap: state.isLoading
-                  ? null
-                  : () => ref
-                        .read(navigationServiceProvider)
-                        .push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
-              child: Row(
-                children: [
-                  Text(
-                    'Forgot Password?',
-                    style: context.labelSmall.copyWith(
+              GestureDetector(
+                onTap: state.isLoading
+                    ? null
+                    : () => ref
+                          .read(navigationServiceProvider)
+                          .push('${SoteriaRoutes.auth}/verify/passwordRecovery'),
+                child: Row(
+                  children: [
+                    Text(
+                      'Forgot Password?',
+                      style: context.labelSmall.copyWith(
+                        color: const Color(0xFFD4AF37),
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.chevron_right_rounded,
                       color: const Color(0xFFD4AF37),
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
+                      size: 18.sp,
                     ),
-                  ),
-                  SizedBox(width: 4.w),
-                  Icon(
-                    Icons.chevron_right_rounded,
-                    color: const Color(0xFFD4AF37),
-                    size: 18.sp,
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
-        SizedBox(height: 24.h),
-        SoteriaButton.primary(
-          label: 'SIGN IN',
-          onPressed: state.isLoading ? null : () => notifier.login(),
-          isLoading: state.isLoading,
-          size: SoteriaButtonSize.lg,
-        ),
-      ],
+            ],
+          ),
+          SizedBox(height: 24.h),
+          SoteriaButton.primary(
+            label: 'SIGN IN',
+            onPressed: state.isLoading ? null : () => notifier.login(),
+            isLoading: state.isLoading,
+            size: SoteriaButtonSize.lg,
+          ),
+        ],
+      ),
     );
   }
 

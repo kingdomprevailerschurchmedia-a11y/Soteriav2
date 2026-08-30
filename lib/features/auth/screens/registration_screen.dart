@@ -116,114 +116,115 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                     clipBehavior: Clip.none,
                     alignment: Alignment.topCenter,
                     children: [
-                    // Top Glow Arc (Refined)
-                    Positioned(
-                      top: -240.h,
-                      child: Container(
-                        width: 500.w,
-                        height: 500.w,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          gradient: RadialGradient(
-                            colors: [
-                              const Color(0xFF7C4DFF).withValues(alpha: 0.25),
-                              const Color(0xFF7C4DFF).withValues(alpha: 0.1),
-                              Colors.transparent,
-                            ],
-                            stops: const [0.0, 0.5, 1.0],
-                          ),
-                          border: Border.all(
-                            color: const Color(
-                              0xFF7C4DFF,
-                            ).withValues(alpha: 0.4),
-                            width: 1.5,
+                      // Top Glow Arc (Refined)
+                      Positioned(
+                        top: -240.h,
+                        child: Container(
+                          width: 500.w,
+                          height: 500.w,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            gradient: RadialGradient(
+                              colors: [
+                                const Color(0xFF7C4DFF).withValues(alpha: 0.25),
+                                const Color(0xFF7C4DFF).withValues(alpha: 0.1),
+                                Colors.transparent,
+                              ],
+                              stops: const [0.0, 0.5, 1.0],
+                            ),
+                            border: Border.all(
+                              color: const Color(
+                                0xFF7C4DFF,
+                              ).withValues(alpha: 0.4),
+                              width: 1.5,
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: SoteriaSpacing.lg,
-                        vertical: SoteriaSpacing.md,
-                      ),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            height: 48.h,
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                if (state.step.index > 0 &&
-                                    state.step != RegistrationStep.success)
-                                  Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: GestureDetector(
-                                      onTap: state.isLoading ? null : () => _onBack(state),
-                                      child: Container(
-                                        padding: EdgeInsets.all(8.w),
-                                        color: Colors.transparent,
-                                        child: const Icon(
-                                          Icons.chevron_left_rounded,
-                                          color: Colors.white,
-                                          size: 28,
+                      Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: SoteriaSpacing.lg,
+                          vertical: SoteriaSpacing.md,
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 48.h,
+                              child: Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  if (state.step.index > 0 &&
+                                      state.step != RegistrationStep.success)
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: GestureDetector(
+                                        onTap: state.isLoading ? null : () => _onBack(state),
+                                        child: Container(
+                                          padding: EdgeInsets.all(8.w),
+                                          color: Colors.transparent,
+                                          child: const Icon(
+                                            Icons.chevron_left_rounded,
+                                            color: Colors.white,
+                                            size: 28,
+                                          ),
                                         ),
                                       ),
                                     ),
+                                  Text(
+                                    'Create Identity',
+                                    style: context.titleLarge.copyWith(
+                                      color: const Color(0xFFD4AF37),
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w600,
+                                      letterSpacing: 1.0,
+                                    ),
                                   ),
-                                Text(
-                                  'Create Identity',
-                                  style: context.titleLarge.copyWith(
-                                    color: const Color(0xFFD4AF37),
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    letterSpacing: 1.0,
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 16.h),
-                          // Progress Bar Redesign
-                          Container(
-                            height: 6.h,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.1),
-                              borderRadius: BorderRadius.circular(3.r),
-                            ),
-                            child: FractionallySizedBox(
-                              alignment: Alignment.centerLeft,
-                              widthFactor:
-                                  (state.step.index + 1) /
-                                  RegistrationStep.values.length,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color(0xFFF0D670),
-                                      Color(0xFFD4AF37),
-                                      Color(0xFFB8860B),
+                            SizedBox(height: 16.h),
+                            // Progress Bar Redesign
+                            Container(
+                              height: 6.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(3.r),
+                              ),
+                              child: FractionallySizedBox(
+                                alignment: Alignment.centerLeft,
+                                widthFactor:
+                                    (state.step.index + 1) /
+                                    RegistrationStep.values.length,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        Color(0xFFF0D670),
+                                        Color(0xFFD4AF37),
+                                        Color(0xFFB8860B),
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(3.r),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(
+                                          0xFFD4AF37,
+                                        ).withValues(alpha: 0.5),
+                                        blurRadius: 12,
+                                        spreadRadius: 2,
+                                      ),
                                     ],
                                   ),
-                                  borderRadius: BorderRadius.circular(3.r),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(
-                                        0xFFD4AF37,
-                                      ).withValues(alpha: 0.5),
-                                      blurRadius: 12,
-                                      spreadRadius: 2,
-                                    ),
-                                  ],
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
 
                 // Content

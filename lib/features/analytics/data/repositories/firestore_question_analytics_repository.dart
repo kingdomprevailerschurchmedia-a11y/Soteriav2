@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../../../../core/firebase/services/firebase_interfaces.dart';
+import '../../../../core/logging/logger_service.dart';
+import '../../../quiz/domain/models/quiz_enums.dart';
 import '../../domain/models/question_analytics.dart';
 import '../../domain/models/question_analytics_event.dart';
 import '../../domain/repositories/question_analytics_repository.dart';
 import '../../../quiz/domain/models/question_result.dart';
-import '../../../quiz/domain/models/quiz_enums.dart';
 
 class FirestoreQuestionAnalyticsRepository implements QuestionAnalyticsRepository {
   final IDatabaseService _database;
@@ -39,7 +40,7 @@ class FirestoreQuestionAnalyticsRepository implements QuestionAnalyticsRepositor
         result: result,
       );
       final docRef = collection.doc(event.eventId);
-      batch.set(docRef.instance, event.toJson());
+      batch.set(docRef, event.toJson());
     }
 
     await batch.commit();
