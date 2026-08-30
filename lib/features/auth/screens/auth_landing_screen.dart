@@ -52,13 +52,13 @@ class _AuthLandingContent extends ConsumerWidget {
             child: IntrinsicHeight(
               child: Column(
                 children: [
-                  const Spacer(flex: 2),
+                  const Spacer(flex: 1),
                   
                   // Welcome Illustration
                   Center(
                     child: Image.asset(
                       'assets/images/welcome_illustration.png',
-                      width: 320.w,
+                      width: 280.w, // Slightly smaller to fit more devices
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -73,7 +73,7 @@ class _AuthLandingContent extends ConsumerWidget {
                         style: context.displaySmall.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w400,
-                          fontSize: 28.sp,
+                          fontSize: 24.sp,
                         ),
                       ),
                       Text(
@@ -81,7 +81,7 @@ class _AuthLandingContent extends ConsumerWidget {
                         style: context.displayLarge.copyWith(
                           color: SoteriaColors.gold,
                           fontWeight: FontWeight.w900,
-                          fontSize: 48.sp,
+                          fontSize: 42.sp,
                           letterSpacing: -0.5,
                         ),
                       ),
@@ -91,14 +91,14 @@ class _AuthLandingContent extends ConsumerWidget {
                         style: context.bodyLarge.copyWith(
                           color: Colors.white.withValues(alpha: 0.5),
                           height: 1.4,
-                          fontSize: 16.sp,
+                          fontSize: 15.sp,
                         ),
                         textAlign: TextAlign.center,
                       ),
                     ],
                   ),
 
-                  const Spacer(flex: 2),
+                  const Spacer(flex: 1),
 
                   // Action Buttons
                   Column(
@@ -122,22 +122,40 @@ class _AuthLandingContent extends ConsumerWidget {
                                 .push('${SoteriaRoutes.auth}/register'),
                       ),
 
-                      SizedBox(height: 24.h),
+                      SizedBox(height: 32.h),
 
                       // Login with Email
                       GestureDetector(
                         onTap: state.isLoading 
                             ? null 
                             : () => EmailLoginDialog.show(context),
-                        child: Text(
-                          'Login with Email',
-                          style: context.bodyMedium.copyWith(
-                            color: state.isLoading 
-                                ? Colors.white.withValues(alpha: 0.2)
-                                : Colors.white.withValues(alpha: 0.4),
-                            fontWeight: FontWeight.w600,
-                            decoration: TextDecoration.underline,
-                            decorationColor: Colors.white.withValues(alpha: 0.3),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.05),
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.mail_outline_rounded,
+                                size: 18.sp,
+                                color: SoteriaColors.gold.withValues(alpha: 0.8),
+                              ),
+                              SizedBox(width: 10.w),
+                              Text(
+                                'Login with Email',
+                                style: context.bodyMedium.copyWith(
+                                  color: state.isLoading 
+                                      ? Colors.white.withValues(alpha: 0.2)
+                                      : Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.5,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
