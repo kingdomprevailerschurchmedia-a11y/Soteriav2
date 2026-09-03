@@ -33,21 +33,9 @@ class EngagementSummarySection extends StatelessWidget {
           ),
         ),
         SizedBox(height: SoteriaSpacing.md),
-        Row(
-          children: [
-            Expanded(
-              child: _DailyStreakCard(
-                current: progression.dailyStreak,
-                best: progression.longestStreak,
-              ),
-            ),
-            if (winStreak != null) ...[
-              SizedBox(width: SoteriaSpacing.md),
-              Expanded(
-                child: CompetitiveStreakCard(streak: winStreak!),
-              ),
-            ],
-          ],
+        _DailyStreakCard(
+          current: progression.dailyStreak,
+          best: progression.longestStreak,
         ),
       ],
     );
@@ -63,56 +51,90 @@ class _DailyStreakCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SoteriaCard(
-      padding: EdgeInsets.all(SoteriaSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      padding: EdgeInsets.all(20.r),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Icon(
-                Icons.calendar_today_rounded,
-                color: SoteriaColors.primary,
-                size: 16.sp,
+          Container(
+            width: 64.w,
+            height: 64.w,
+            decoration: BoxDecoration(
+              color: SoteriaColors.secondary.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16.r),
+              border: Border.all(
+                color: SoteriaColors.secondary.withValues(alpha: 0.2),
               ),
-              SizedBox(width: SoteriaSpacing.xs),
-              Text(
-                'DAILY STREAK',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  fontSize: 8.sp,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: SoteriaSpacing.sm),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.baseline,
-            textBaseline: TextBaseline.alphabetic,
-            children: [
-              Text(
-                '$current',
-                style: context.headlineSmall.copyWith(
-                  fontWeight: FontWeight.w900,
-                  color: SoteriaColors.primary,
-                ),
-              ),
-              SizedBox(width: 4.w),
-              Text(
-                'DAYS',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            'BEST: $best',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.muted,
-              fontSize: 9.sp,
             ),
+            child: Center(
+              child: Icon(
+                Icons.calendar_month_rounded,
+                color: SoteriaColors.secondary,
+                size: 32.sp,
+              ),
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'DAILY STREAK',
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.muted,
+                    letterSpacing: 1.2,
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  '$current DAYS',
+                  style: context.headlineSmall.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    fontSize: 22.sp,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'Best: $best',
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.muted,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Column(
+            children: [
+              ShaderMask(
+                shaderCallback: (bounds) => const LinearGradient(
+                  colors: [Color(0xFF7C4DFF), Color(0xFFFF4DFF)],
+                ).createShader(bounds),
+                child: Icon(
+                  Icons.local_fire_department_rounded,
+                  size: 44.sp,
+                  color: Colors.white,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  for (int i = 0; i < 5; i++)
+                    Container(
+                      width: 6.w,
+                      height: 6.w,
+                      margin: EdgeInsets.symmetric(horizontal: 2.w),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: i == 0 ? SoteriaColors.secondary : Colors.white10,
+                      ),
+                    ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

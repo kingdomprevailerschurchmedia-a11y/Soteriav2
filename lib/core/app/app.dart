@@ -51,6 +51,7 @@ class SoteriaApp extends ConsumerWidget {
     ref.watch(authCoordinatorProvider);
     ref.watch(presenceCoordinatorProvider);
     ref.watch(playerAvatarSyncProvider);
+    ref.watch(playerDiscoverySyncProvider);
     ref.watch(playerLeaderboardSyncProvider);
 
     // Ensure real-time goal and milestone evaluation across the entire app

@@ -27,6 +27,7 @@ class VersusLobbyScreen extends ConsumerWidget {
     final state = ref.watch(versusLobbyProvider);
     final player = ref.watch(currentPlayerProvider);
     final isOnline = ref.watch(isOnlineProvider);
+    final matchmakingState = ref.watch(matchmakingControllerProvider);
 
     final fromDashboard =
         GoRouterState.of(context).uri.queryParameters['fromDashboard'] == 'true';
@@ -71,6 +72,18 @@ class VersusLobbyScreen extends ConsumerWidget {
                               error: (_, __) => const SizedBox.shrink(),
                             ),
                             SizedBox(height: SoteriaSpacing.lg),
+                            _DiscoveryStatusCard(
+                              isSearchable: player?.allowVersusChallenges ?? true,
+                              onToggle: (val) async {
+                                if (player != null) {
+                                  await ref.read(playerRepositoryProvider).patchPlayerProfile(
+                                    player.uid,
+                                    {'allowVersusChallenges': val},
+                                  );
+                                }
+                              },
+                            ),
+                            SizedBox(height: SoteriaSpacing.lg),
                             LobbyInterestsCard(
                               value: state.useInterests,
                               onChanged: (val) => ref
@@ -96,7 +109,8 @@ class VersusLobbyScreen extends ConsumerWidget {
                 ),
                 LobbyStartAction(
                   enabled: state.validationError == null,
-                  error: state.validationError,
+                  isLoading: matchmakingState.isLoading,
+                  error: state.validationError ?? matchmakingState.error?.toString(),
                   label: 'FIND OPPONENT',
                   helperText: 'Competitive Integrity • Professional Matchmaking',
                   onStart: () async {
@@ -122,7 +136,8 @@ class VersusLobbyScreen extends ConsumerWidget {
                         'useInterests': state.useInterests,
                       },
                     );
-                    if (context.mounted) {
+                    
+                    if (context.mounted && !ref.read(matchmakingControllerProvider).hasError) {
                       context.push('/app/matchmaking');
                     }
                   },
@@ -130,6 +145,86 @@ class VersusLobbyScreen extends ConsumerWidget {
               ],
             ),
         ),
+      ),
+    );
+  }
+}
+
+class _DiscoveryStatusCard extends StatelessWidget {
+  final bool isSearchable;
+  final ValueChanged<bool> onToggle;
+
+  const _DiscoveryStatusCard({
+    required this.isSearchable,
+    required this.onToggle,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.r),
+      decoration: BoxDecoration(
+        color: isSearchable 
+            ? SoteriaColors.success.withValues(alpha: 0.05)
+            : SoteriaColors.warning.withValues(alpha: 0.05),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(
+          color: isSearchable 
+              ? SoteriaColors.success.withValues(alpha: 0.2)
+              : SoteriaColors.warning.withValues(alpha: 0.2),
+        ),
+      ),
+      child: Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(10.r),
+            decoration: BoxDecoration(
+              color: isSearchable 
+                  ? SoteriaColors.success.withValues(alpha: 0.1)
+                  : SoteriaColors.warning.withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              isSearchable ? Icons.visibility_rounded : Icons.visibility_off_rounded,
+              color: isSearchable ? SoteriaColors.success : SoteriaColors.warning,
+              size: 20.sp,
+            ),
+          ),
+          SizedBox(width: 16.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  isSearchable ? 'OPEN FOR CHALLENGES' : 'PRIVATE MODE',
+                  style: context.labelSmall.copyWith(
+                    color: isSearchable ? SoteriaColors.success : SoteriaColors.warning,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                Text(
+                  isSearchable 
+                      ? 'Other players can find and invite you'
+                      : 'You won\'t appear in search results',
+                  style: context.bodySmall.copyWith(
+                    color: Colors.white60,
+                    fontSize: 10.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Transform.scale(
+            scale: 0.8,
+            child: Switch(
+              value: isSearchable,
+              onChanged: onToggle,
+              activeTrackColor: SoteriaColors.success.withValues(alpha: 0.5),
+              activeColor: SoteriaColors.success,
+            ),
+          ),
+        ],
       ),
     );
   }

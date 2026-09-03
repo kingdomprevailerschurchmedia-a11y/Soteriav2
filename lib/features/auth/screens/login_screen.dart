@@ -35,57 +35,55 @@ class LoginScreen extends ConsumerWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.xl),
-            child: RepaintBoundary(
-              child: Column(
-                children: [
-                  LoginHeroSection(userName: state.userName),
-                  const LoginForm(),
-                  SizedBox(height: 8.h),
-                  const SoteriaDivider(text: 'OR'),
-                  SizedBox(height: 8.h),
-                  Column(
-                    children: [
-                      Text(
-                        "Don't have an account?",
-                        style: context.bodyMedium.copyWith(
-                          color: Colors.white.withValues(alpha: 0.4),
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16.sp,
-                        ),
+            child: Column(
+              children: [
+                LoginHeroSection(userName: state.userName),
+                const LoginForm(),
+                SizedBox(height: 8.h),
+                const SoteriaDivider(text: 'OR'),
+                SizedBox(height: 8.h),
+                Column(
+                  children: [
+                    Text(
+                      "Don't have an account?",
+                      style: context.bodyMedium.copyWith(
+                        color: Colors.white.withValues(alpha: 0.4),
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.sp,
                       ),
-                      SizedBox(height: 12.h),
-                      GestureDetector(
-                        onTap: state.isLoading
-                            ? null
-                            : () => ref
-                                  .read(navigationServiceProvider)
-                                  .push('${SoteriaRoutes.auth}/register'),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'CREATE ONE',
-                              style: context.titleMedium.copyWith(
-                                color: const Color(0xFF7C4DFF),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18.sp,
-                                letterSpacing: 1.2,
-                              ),
-                            ),
-                            SizedBox(width: 4.w),
-                            Icon(
-                              Icons.chevron_right_rounded,
+                    ),
+                    SizedBox(height: 12.h),
+                    GestureDetector(
+                      onTap: state.isLoading
+                          ? null
+                          : () => ref
+                                .read(navigationServiceProvider)
+                                .push('${SoteriaRoutes.auth}/register'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'CREATE ONE',
+                            style: context.titleMedium.copyWith(
                               color: const Color(0xFF7C4DFF),
-                              size: 20.sp,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18.sp,
+                              letterSpacing: 1.2,
                             ),
-                          ],
-                        ),
+                          ),
+                          SizedBox(width: 4.w),
+                          Icon(
+                            Icons.chevron_right_rounded,
+                            color: const Color(0xFF7C4DFF),
+                            size: 20.sp,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                ],
-              ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 16.h),
+              ],
             ),
           ),
         ),

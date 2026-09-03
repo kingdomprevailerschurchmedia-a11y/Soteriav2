@@ -7,6 +7,8 @@ class GameResult {
   final String sessionId;
   final String playerId;
   final GameMode mode;
+  final String? category;
+  final String? difficulty;
   final int finalScore;
   final int totalXP;
   final int totalQuestions;
@@ -28,6 +30,8 @@ class GameResult {
     required this.sessionId,
     required this.playerId,
     required this.mode,
+    this.category,
+    this.difficulty,
     required this.finalScore,
     required this.totalXP,
     required this.totalQuestions,
@@ -50,6 +54,8 @@ class GameResult {
     'sessionId': sessionId,
     'playerId': playerId,
     'mode': mode.name,
+    if (category != null) 'category': category,
+    if (difficulty != null) 'difficulty': difficulty,
     'finalScore': finalScore,
     'totalXP': totalXP,
     'totalQuestions': totalQuestions,
@@ -72,6 +78,8 @@ class GameResult {
     sessionId: json['sessionId'],
     playerId: json['playerId'] ?? '',
     mode: GameMode.values.byName(json['mode'] ?? 'practice'),
+    category: json['category'],
+    difficulty: json['difficulty'],
     finalScore: (json['finalScore'] as num).toInt(),
     totalXP: (json['totalXP'] as num).toInt(),
     totalQuestions: (json['totalQuestions'] as num).toInt(),
@@ -99,6 +107,8 @@ class GameResult {
     String? sessionId,
     String? playerId,
     GameMode? mode,
+    String? category,
+    String? difficulty,
     int? finalScore,
     int? totalXP,
     int? totalQuestions,
@@ -120,6 +130,8 @@ class GameResult {
       sessionId: sessionId ?? this.sessionId,
       playerId: playerId ?? this.playerId,
       mode: mode ?? this.mode,
+      category: category ?? this.category,
+      difficulty: difficulty ?? this.difficulty,
       finalScore: finalScore ?? this.finalScore,
       totalXP: totalXP ?? this.totalXP,
       totalQuestions: totalQuestions ?? this.totalQuestions,

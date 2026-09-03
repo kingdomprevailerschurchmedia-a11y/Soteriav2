@@ -6,8 +6,9 @@ abstract class PerformanceAnalyticsRepository {
   Future<PersonalPerformanceAnalytics> getAnalytics({
     required String playerId,
     required TimePeriod period,
+    required PerformanceMode performanceMode,
     String? category,
-    GameMode? mode,
+    GameMode? gameMode,
   });
 
   Future<void> clearCache();

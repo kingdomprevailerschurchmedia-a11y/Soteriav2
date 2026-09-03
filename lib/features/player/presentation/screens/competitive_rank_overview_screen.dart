@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/rank_providers.dart';
 import '../providers/leaderboard_providers.dart';
@@ -25,7 +26,7 @@ import '../../../../core/widgets/glass_surface.dart';
 import '../../../../core/design_system/components/soteria_stats_widgets.dart';
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../features/player/providers/player_providers.dart';
-import 'milestones_screen.dart';
+// Removed milestones_screen.dart import as it's merged into AchievementListScreen
 
 class CompetitiveRankOverviewScreen extends ConsumerWidget {
   const CompetitiveRankOverviewScreen({super.key});
@@ -455,9 +456,7 @@ class _MilestonesSection extends ConsumerWidget {
               ),
             ),
             GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const MilestonesScreen()),
-              ),
+              onTap: () => context.push('${SoteriaRoutes.achievements}?tab=1'),
               child: Text(
                 'VIEW ALL',
                 style: context.labelSmall.copyWith(
@@ -474,9 +473,7 @@ class _MilestonesSection extends ConsumerWidget {
           data: (next) => next != null
               ? MilestoneCard(
                   progress: next,
-                  onTap: () => Navigator.of(context).push(
-                    MaterialPageRoute(builder: (_) => const MilestonesScreen()),
-                  ),
+                  onTap: () => context.push('${SoteriaRoutes.achievements}?tab=1'),
                 )
               : const SizedBox.shrink(),
           loading: () => const Center(child: CircularProgressIndicator(color: SoteriaColors.secondary)),

@@ -122,6 +122,16 @@ final playerBootstrapStatusProvider = FutureProvider<void>((ref) async {
   }
 });
 
+/// A provider that synchronizes the Versus discovery setting between [PlayerProfile] and [PublicCompetitiveProfile].
+final playerDiscoverySyncProvider = Provider<void>((ref) {
+  ref.listen<PlayerProfile?>(currentPlayerProvider, (previous, next) async {
+    if (next == null) return;
+    if (previous?.allowVersusChallenges != next.allowVersusChallenges) {
+      await ref.read(profileRepositoryProvider).syncPublicProfile(next.uid);
+    }
+  });
+});
+
 final playerLeaderboardSyncProvider = Provider<void>((ref) {
   // Listen to profile changes
   ref.listen<PlayerProfile?>(currentPlayerProvider, (previous, next) {

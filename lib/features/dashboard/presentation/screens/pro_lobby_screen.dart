@@ -39,7 +39,7 @@ class ProLobbyScreen extends ConsumerWidget {
         GoRouterState.of(context).uri.queryParameters['fromDashboard'] == 'true';
 
     return SoteriaPage(
-      isLoading: state.isLoading,
+      isLoading: false, // Use local loaders instead of full-screen to keep lobby interactive
       error: state.error,
       onRetry: () => ref.read(proLobbyProvider.notifier).checkConnection(),
       useSafeArea: false,

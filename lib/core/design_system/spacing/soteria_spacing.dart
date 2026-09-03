@@ -45,4 +45,6 @@ class SoteriaSpacing {
   static const gapMD = SizedBox(height: 16.0, width: 16.0);
   static const gapLG = SizedBox(height: 24.0, width: 24.0);
   static const gapXL = SizedBox(height: 32.0, width: 32.0);
+  static const gapXXL = SizedBox(height: 48.0, width: 48.0);
+  static const gapXXXL = SizedBox(height: 64.0, width: 64.0);
 }

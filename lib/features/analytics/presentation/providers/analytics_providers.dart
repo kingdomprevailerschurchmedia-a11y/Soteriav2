@@ -30,6 +30,10 @@ final questionAnalyticsRepositoryProvider =
 final selectedTimePeriodProvider = StateProvider<TimePeriod>(
   (ref) => TimePeriod.last30Days,
 );
+
+final selectedPerformanceModeProvider = StateProvider<PerformanceMode>(
+  (ref) => PerformanceMode.overall,
+);
 final selectedAnalyticsCategoryProvider = StateProvider<String?>((ref) => null);
 final selectedAnalyticsModeProvider = StateProvider<quiz_enums.GameMode?>(
   (ref) => null,
@@ -47,6 +51,7 @@ final personalPerformanceAnalyticsProvider =
       ref.watch(practiceHistoryListProvider);
 
       final period = ref.watch(selectedTimePeriodProvider);
+      final performanceMode = ref.watch(selectedPerformanceModeProvider);
       final category = ref.watch(selectedAnalyticsCategoryProvider);
       final mode = ref.watch(selectedAnalyticsModeProvider);
 
@@ -55,8 +60,9 @@ final personalPerformanceAnalyticsProvider =
       return repository.getAnalytics(
         playerId: playerId,
         period: period,
+        performanceMode: performanceMode,
         category: category,
-        mode: mode,
+        gameMode: mode,
       );
     });
 

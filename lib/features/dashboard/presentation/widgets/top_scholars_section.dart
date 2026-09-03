@@ -20,8 +20,9 @@ class TopScholarsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final leaderboardState = ref.watch(leaderboardControllerProvider(null));
-    final playerEntryAsync = ref.watch(playerLeaderboardEntryProvider);
-    final playerRankAsync = ref.watch(playerRankPositionProvider);
+    // Explicitly watch Global player data for this section
+    final playerEntryAsync = ref.watch(playerLeaderboardEntryFamily(null));
+    final playerRankAsync = ref.watch(playerRankPositionFamily(null));
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
@@ -84,95 +85,81 @@ class TopScholarsSection extends ConsumerWidget {
               ),
               color: const Color(0xFF0B012A).withValues(alpha: 0.4),
             ),
-            child: Column(
-              children: [
-                leaderboardState.when(
-                  data: (entries) {
-                    final top3 = entries.take(3).toList();
-                    final currentUid = ref.watch(sessionProvider).uid;
-                    
-                    if (top3.isEmpty) {
-                      return Padding(
-                        padding: EdgeInsets.all(24.w),
-                        child: Center(
-                          child: Text(
-                            'Be the first to join the leaderboard!',
-                            style: context.bodyMedium.copyWith(
-                              color: SoteriaColors.muted,
-                              fontStyle: FontStyle.italic,
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    return Column(
-                      children: top3.asMap().entries.map((entry) {
-                        final index = entry.key;
-                        final scholar = entry.value;
-                        final isMe = scholar.userId == currentUid;
-                        
-                        return Column(
-                          children: [
-                            _ScholarRow(
-                              rank: index + 1,
-                              name: isMe ? 'You' : scholar.displayName,
-                              role: scholar.rankTier,
-                              xp: scholar.rankPoints,
-                              color: _getRankColor(index + 1),
-                              avatarId: scholar.avatarId ?? 'athena',
-                              imageUrl: scholar.avatarUrl,
-                              isMe: isMe,
-                            ),
-                            if (index < top3.length - 1) _Divider(),
-                          ],
-                        );
-                      }).toList(),
-                    );
-                  },
-                  loading: () => const Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Center(
-                      child: CircularProgressIndicator(color: SoteriaColors.primary),
-                    ),
-                  ),
-                  error: (err, _) => Padding(
+            child: leaderboardState.when(
+              data: (entries) {
+                final top3 = entries.take(3).toList();
+                final currentUid = ref.watch(sessionProvider).uid;
+                
+                if (top3.isEmpty) {
+                  return Padding(
                     padding: EdgeInsets.all(24.w),
                     child: Center(
                       child: Text(
-                        'Failed to load scholars',
-                        style: context.bodyMedium.copyWith(color: SoteriaColors.error),
+                        'Be the first to join the leaderboard!',
+                        style: context.bodyMedium.copyWith(
+                          color: SoteriaColors.muted,
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
+                  );
+                }
+
+                final bool isMeInTop3 = top3.any((e) => e.userId == currentUid);
+                final player = ref.watch(currentPlayerProvider);
+                final playerEntry = playerEntryAsync.value;
+                final uiRank = playerRankAsync.value ?? -1;
+
+                return Column(
+                  children: [
+                    ...top3.asMap().entries.map((entry) {
+                      final index = entry.key;
+                      final scholar = entry.value;
+                      final isMe = scholar.userId == currentUid;
+                      
+                      return Column(
+                        children: [
+                          _ScholarRow(
+                            rank: index + 1,
+                            name: isMe ? 'You' : scholar.displayName,
+                            role: scholar.rankTier,
+                            xp: scholar.rankPoints,
+                            color: _getRankColor(index + 1),
+                            avatarId: scholar.avatarId ?? 'athena',
+                            imageUrl: scholar.avatarUrl,
+                            isMe: isMe,
+                          ),
+                          if (index < top3.length - 1) _Divider(),
+                        ],
+                      );
+                    }),
+                    if (!isMeInTop3 && currentUid != null && player != null) ...[
+                      _Divider(),
+                      _UserHighlightRow(
+                        rank: uiRank == -1 ? player.registrationOrder : uiRank,
+                        name: 'You',
+                        role: playerEntry?.rankTier ?? 'Novice',
+                        xp: playerEntry?.rankPoints ?? player.xp,
+                      ),
+                    ],
+                  ],
+                );
+              },
+              loading: () => const Padding(
+                padding: EdgeInsets.all(20.0),
+                child: Center(
+                  child: CircularProgressIndicator(color: SoteriaColors.primary),
+                ),
+              ),
+              error: (err, _) => Padding(
+                padding: EdgeInsets.all(24.w),
+                child: Center(
+                  child: Text(
+                    'Failed to load scholars',
+                    style: context.bodyMedium.copyWith(color: SoteriaColors.error),
                   ),
                 ),
-                
-                Consumer(
-                  builder: (context, ref, child) {
-                    final currentUid = ref.watch(sessionProvider).uid;
-                    final player = ref.watch(currentPlayerProvider);
-                    final playerEntry = playerEntryAsync.value;
-                    final uiRank = playerRankAsync.value ?? -1;
-
-                    if (currentUid == null || player == null) return const SizedBox.shrink();
-
-                    // Only show highlight row if user is NOT in top 3
-                    if (uiRank != -1 && uiRank <= 3) return const SizedBox.shrink();
-                    
-                    return Column(
-                      children: [
-                        _Divider(),
-                        _UserHighlightRow(
-                          rank: uiRank == -1 ? player.registrationOrder : uiRank,
-                          name: 'You',
-                          role: playerEntry?.rankTier ?? 'Novice',
-                          xp: player.xp,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ],
+              ),
             ),
           ),
         ],

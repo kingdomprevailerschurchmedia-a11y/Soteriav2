@@ -41,16 +41,25 @@ class FirestorePostGameRepository implements PostGameRepository {
       if (!userDoc.exists) return;
 
       // 1. Update Identity stats and non-progression rewards (coins)
-      final currentCoins = userDoc.data()?['coins'] ?? 0;
+      final userData = userDoc.data() ?? {};
+      final currentCoins = userData['coins'] ?? 0;
+      final currentHighestStreak = userData['highestStreak'] ?? 0;
 
-      transaction.update(userRef, {
+      final Map<String, dynamic> updates = {
         'coins': currentCoins + result.rewards.totalCoins,
         'totalQuestionsAnswered': FieldValue.increment(
           result.correctAnswers + result.wrongAnswers,
         ),
         'correctAnswers': FieldValue.increment(result.correctAnswers),
+        'gamesPlayed': FieldValue.increment(1),
         'lastActive': FieldValue.serverTimestamp(),
-      });
+      };
+
+      if (result.maxStreak > currentHighestStreak) {
+        updates['highestStreak'] = result.maxStreak;
+      }
+
+      transaction.update(userRef, updates);
 
       // Also save the session result as a record
       final sessionRef = userRef.collection('game_results').doc(

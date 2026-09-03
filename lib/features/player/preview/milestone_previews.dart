@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../domain/models/milestone.dart';
 import '../domain/config/milestone_registry.dart';
 import '../presentation/providers/milestone_providers.dart';
-import '../presentation/screens/milestones_screen.dart';
+import '../presentation/screens/achievement_list_screen.dart';
 
 class MilestonePreviewWrapper extends StatelessWidget {
   final List<MilestoneProgress> progress;
@@ -24,7 +24,7 @@ class MilestonePreviewWrapper extends StatelessWidget {
         ),
         milestoneEvaluationProvider.overrideWithValue(null),
       ],
-      child: const MilestonesScreen(),
+      child: const AchievementListScreen(initialIndex: 1),
     );
   }
 }

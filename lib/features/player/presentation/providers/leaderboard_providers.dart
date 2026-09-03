@@ -41,26 +41,35 @@ final leaderboardTotalPlayersProvider = FutureProvider<int>((ref) async {
 });
 
 // --- Player Rank State ---
-final playerLeaderboardEntryProvider = StreamProvider<LeaderboardEntry?>((
+final playerLeaderboardEntryFamily = StreamProvider.family<LeaderboardEntry?, String?>((
   ref,
+  seasonId,
 ) {
   final session = ref.watch(sessionProvider);
   if (!session.isAuthenticated || session.uid == null) return Stream.value(null);
 
-  final seasonId = ref.watch(currentSeasonIdProvider);
   return ref
       .watch(leaderboardRepositoryProvider)
       .watchPlayerEntry(userId: session.uid!, seasonId: seasonId);
 });
 
-final playerRankPositionProvider = FutureProvider<int>((ref) async {
+final playerLeaderboardEntryProvider = Provider<AsyncValue<LeaderboardEntry?>>((ref) {
+  final seasonId = ref.watch(currentSeasonIdProvider);
+  return ref.watch(playerLeaderboardEntryFamily(seasonId));
+});
+
+final playerRankPositionFamily = FutureProvider.family<int, String?>((ref, seasonId) async {
   final session = ref.watch(sessionProvider);
   if (!session.isAuthenticated || session.uid == null) return -1;
 
-  final seasonId = ref.watch(currentSeasonIdProvider);
   return ref
       .watch(leaderboardRepositoryProvider)
       .getPlayerRankPosition(userId: session.uid!, seasonId: seasonId);
+});
+
+final playerRankPositionProvider = Provider<AsyncValue<int>>((ref) {
+  final seasonId = ref.watch(currentSeasonIdProvider);
+  return ref.watch(playerRankPositionFamily(seasonId));
 });
 
 // --- Rank Movement History ---

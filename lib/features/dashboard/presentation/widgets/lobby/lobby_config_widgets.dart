@@ -446,6 +446,7 @@ class LobbyCountCircle extends StatelessWidget {
 
 class LobbyStartAction extends StatelessWidget {
   final bool enabled;
+  final bool isLoading;
   final String? error;
   final String label;
   final String helperText;
@@ -454,6 +455,7 @@ class LobbyStartAction extends StatelessWidget {
   const LobbyStartAction({
     super.key,
     required this.enabled,
+    this.isLoading = false,
     this.error,
     required this.label,
     required this.helperText,
@@ -490,10 +492,10 @@ class LobbyStartAction extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           GestureDetector(
-            onTap: enabled ? onStart : null,
+            onTap: (enabled && !isLoading) ? onStart : null,
             child: AnimatedOpacity(
               duration: const Duration(milliseconds: 200),
-              opacity: enabled ? 1.0 : 0.5,
+              opacity: (enabled && !isLoading) ? 1.0 : 0.5,
               child: Container(
                 height: 64.h,
                 decoration: BoxDecoration(
@@ -512,23 +514,25 @@ class LobbyStartAction extends StatelessWidget {
                   ],
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Row(
-                  children: [
-                    const Icon(Icons.bolt_rounded, color: SoteriaColors.gold, size: 28),
-                    const Spacer(),
-                    Text(
-                      label.toUpperCase(),
-                      style: context.titleSmall.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 1.5,
-                        fontSize: 16.sp,
+                child: isLoading
+                    ? const Center(child: CircularProgressIndicator(color: Colors.white))
+                    : Row(
+                        children: [
+                          const Icon(Icons.bolt_rounded, color: SoteriaColors.gold, size: 28),
+                          const Spacer(),
+                          Text(
+                            label.toUpperCase(),
+                            style: context.titleSmall.copyWith(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 1.5,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                          const Spacer(),
+                          const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 28),
+                        ],
                       ),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 28),
-                  ],
-                ),
               ),
             ),
           ),

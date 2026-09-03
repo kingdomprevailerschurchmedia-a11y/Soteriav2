@@ -24,10 +24,11 @@ class PerformanceAnalyticsRepositoryImpl
   Future<PersonalPerformanceAnalytics> getAnalytics({
     required String playerId,
     required TimePeriod period,
+    required PerformanceMode performanceMode,
     String? category,
-    GameMode? mode,
+    GameMode? gameMode,
   }) async {
-    final cacheKey = _getCacheKey(playerId, period, category, mode);
+    final cacheKey = _getCacheKey(playerId, period, performanceMode, category, gameMode);
     if (_cache.containsKey(cacheKey)) {
       return _cache[cacheKey]!;
     }
@@ -52,13 +53,24 @@ class PerformanceAnalyticsRepositoryImpl
       ...practiceResults.map(AnalyticsAggregator.mapPracticeToQuiz),
     ];
 
-    // Apply filters
+    // Apply Performance Mode Filters
+    if (performanceMode == PerformanceMode.practice) {
+      currentResults = currentResults.where((r) => r.gameMode == GameMode.practice).toList();
+    } else if (performanceMode == PerformanceMode.competitive) {
+      currentResults = currentResults.where((r) => 
+        r.gameMode == GameMode.pro || 
+        r.gameMode == GameMode.tournament || 
+        r.gameMode == GameMode.versus
+      ).toList();
+    }
+
+    // Apply specific filters
     if (category != null) {
       currentResults =
           currentResults.where((r) => r.category == category).toList();
     }
-    if (mode != null) {
-      currentResults = currentResults.where((r) => r.gameMode == mode).toList();
+    if (gameMode != null) {
+      currentResults = currentResults.where((r) => r.gameMode == gameMode).toList();
     }
 
     // Get previous period results for comparison
@@ -79,13 +91,23 @@ class PerformanceAnalyticsRepositoryImpl
       ...prevPracticeResults.map(AnalyticsAggregator.mapPracticeToQuiz),
     ];
 
+    if (performanceMode == PerformanceMode.practice) {
+      previousResults = previousResults.where((r) => r.gameMode == GameMode.practice).toList();
+    } else if (performanceMode == PerformanceMode.competitive) {
+      previousResults = previousResults.where((r) => 
+        r.gameMode == GameMode.pro || 
+        r.gameMode == GameMode.tournament || 
+        r.gameMode == GameMode.versus
+      ).toList();
+    }
+
     if (category != null) {
       previousResults =
           previousResults.where((r) => r.category == category).toList();
     }
-    if (mode != null) {
+    if (gameMode != null) {
       previousResults =
-          previousResults.where((r) => r.gameMode == mode).toList();
+          previousResults.where((r) => r.gameMode == gameMode).toList();
     }
 
     final analytics = AnalyticsAggregator.aggregate(
@@ -107,10 +129,11 @@ class PerformanceAnalyticsRepositoryImpl
   String _getCacheKey(
     String playerId,
     TimePeriod period,
+    PerformanceMode performanceMode,
     String? category,
     GameMode? mode,
   ) {
-    return '$playerId-$period-${category ?? "all"}-${mode ?? "all"}';
+    return '$playerId-$period-${performanceMode.name}-${category ?? "all"}-${mode ?? "all"}';
   }
 
   DateTime _getStartDate(TimePeriod period, DateTime now) {

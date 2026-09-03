@@ -115,13 +115,22 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     state = state.copyWith(isLoading: true);
     try {
       // Ensure authoritative documents (wallet/profile) are ready via bootstrap
-      await ref.read(playerBootstrapStatusProvider.future);
-      
+      // Added timeout to prevent infinite loading if Firestore hangs
+      await ref.read(playerBootstrapStatusProvider.future).timeout(
+            const Duration(seconds: 10),
+            onTimeout: () => LoggerService.w('Player bootstrap timed out', feature: 'Player'),
+          );
+
       await _fetchCategories();
       _updateValidation();
     } catch (e) {
+      LoggerService.e('Pro Lobby Init failed: $e', error: e, feature: 'Player');
       if (_mounted) {
         state = state.copyWith(isLoading: false, error: e.toString());
+      }
+    } finally {
+      if (_mounted) {
+        state = state.copyWith(isLoading: false);
       }
     }
   }
@@ -129,7 +138,11 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   Future<void> _fetchCategories() async {
     state = state.copyWith(isLoading: true);
     try {
-      final categories = await ref.read(categoryRepositoryProvider).getCategories();
+      final categories = await ref
+          .read(categoryRepositoryProvider)
+          .getCategories()
+          .timeout(const Duration(seconds: 8));
+      
       if (_mounted) {
         state = state.copyWith(
           isLoading: false,
@@ -141,8 +154,9 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         );
       }
     } catch (e) {
+      LoggerService.e('Failed to fetch categories: $e', error: e, feature: 'QuestionContent');
       if (_mounted) {
-        state = state.copyWith(isLoading: false, error: e.toString());
+        state = state.copyWith(isLoading: false);
       }
     }
   }

@@ -22,7 +22,7 @@ class LoginNotifier extends Notifier<LoginState> {
   Future<void> _loadUserGreeting() async {
     final prefs = await SharedPreferences.getInstance();
     final name = prefs.getString(_kFirstNameKey);
-    if (name != null) {
+    if (name != null && state.userName == 'Recruit') {
       state = state.copyWith(userName: name);
     }
   }
@@ -32,10 +32,15 @@ class LoginNotifier extends Notifier<LoginState> {
     final remember = prefs.getBool(_kRememberMeKey) ?? false;
     final savedEmail = prefs.getString(_kSavedEmailKey) ?? '';
 
-    state = state.copyWith(
-      rememberMe: remember,
-      email: remember ? savedEmail : '',
-    );
+    // Only apply if user hasn't started typing
+    if (remember && state.email.isEmpty) {
+      state = state.copyWith(
+        rememberMe: remember,
+        email: savedEmail,
+      );
+    } else {
+      state = state.copyWith(rememberMe: remember);
+    }
   }
 
   void updateEmail(String email) {
@@ -76,7 +81,6 @@ class LoginNotifier extends Notifier<LoginState> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_kSavedEmailKey, state.email);
     }
-    final stopwatch = Stopwatch()..start();
 
     try {
       final useCase = ref.read(signInUseCaseProvider);
@@ -115,7 +119,6 @@ class LoginNotifier extends Notifier<LoginState> {
           .read(crashlyticsProvider)
           .recordError(e, st, reason: 'Unexpected Auth Crash');
     } finally {
-      stopwatch.stop();
       state = state.copyWith(isLoading: false);
     }
   }

@@ -8,7 +8,6 @@ import '../../models/game_mode.dart';
 import '../../models/game_result.dart';
 import '../../domain/config/competitive_reward_config.dart';
 import '../../domain/services/reward_settlement_service.dart';
-import '../../models/competitive_settlement.dart';
 import '../../models/pro_session_config.dart';
 import '../../progression/models/reward_summary.dart';
 import '../../../question_content/domain/entities/difficulty.dart';
@@ -18,8 +17,6 @@ import '../../../quiz/domain/models/player_answer.dart';
 
 import 'package:soteria/features/player/domain/repositories/player_progression_repository.dart';
 import 'package:soteria/features/player/domain/repositories/player_repository.dart';
-import 'package:soteria/features/player/domain/models/player_profile.dart';
-import 'package:soteria/features/player/data/repositories/firebase_player_progression_repository.dart';
 import 'package:soteria/features/player/domain/models/xp_transaction.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
 import '../../../../core/logging/logger_service.dart';
@@ -353,7 +350,7 @@ class FirestoreProModeRepository implements ProModeRepository {
     final scoringEngine = QuizScoringEngine(config: ScoringConfiguration.pro());
     
     int authoritativeScore = 0;
-    int authoritativeXP = 0;
+    int totalXpAccumulated = 0;
     int currentStreak = 0;
     int maxStreak = 0;
     int correctCount = 0;
@@ -382,7 +379,7 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       final scoreResult = scoringEngine.calculate(question, playerAnswer, currentStreak);
       authoritativeScore += scoreResult.totalScore.toInt();
-      authoritativeXP += scoreResult.xpEarned.toInt();
+      totalXpAccumulated += scoreResult.xpEarned.toInt();
       
       currentStreak = scoringEngine.calculateNewStreak(currentStreak, playerAnswer);
       if (currentStreak > maxStreak) maxStreak = currentStreak;
@@ -424,39 +421,37 @@ class FirestoreProModeRepository implements ProModeRepository {
       final sessionRef = _database.collection('competitive_sessions').doc(sessionId);
       final resultRef = _database.collection('pro_results').doc(sessionId);
       
-      // BATCH READ: Start all necessary transaction reads sequentially
+      // 1. ATOMIC BATCH READ: All reads MUST happen before any writes in Firestore transactions
       final sessionDoc = await transaction.get(sessionRef);
       if (!sessionDoc.exists) throw Exception('Session not found');
       
       final resultDoc = await transaction.get(resultRef);
-      if (resultDoc.exists) return; // Idempotency
+      if (resultDoc.exists) return; // Idempotency check
 
       final sessionData = sessionDoc.data() as Map<String, dynamic>;
       final configData = sessionData['config'] as Map<String, dynamic>;
       final difficulty = ProDifficulty.values.byName(configData['difficulty']).toBaseDifficulty();
       final questionCount = (configData['questionCount'] as num).toInt();
       final reservedFee = (sessionData['reservedFee'] as num?)?.toInt();
+      final uid = sessionData['uid'] as String?;
 
-      // ... logic continues ...
+      if (uid == null) throw Exception('Invalid session: User ID missing');
 
       // VITAL SECURITY: Verify that the fee paid matches the difficulty config
       final expectedFee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
       if (reservedFee != null && reservedFee < expectedFee) {
         throw Exception('Security violation: Entry fee mismatch. Expected $expectedFee, found $reservedFee.');
       }
-      // If reservedFee is null, we treat it as a legacy session for backward compatibility 
-      // during the remediation rollout.
 
-      // Authoritative Reward Calculation via Service
+      // 2. Authoritative Reward Calculation
       final settlementService = RewardSettlementService();
       
-      // Temporary GameResult for calculation
       final tempResult = GameResult(
         sessionId: sessionId,
         playerId: finalState.playerId,
         mode: GameMode.pro,
         finalScore: authoritativeScore,
-        totalXP: 0, // Will be calculated
+        totalXP: totalXpAccumulated, 
         totalQuestions: totalQuestions,
         correctAnswers: correctCount,
         wrongAnswers: wrongCount,
@@ -470,7 +465,7 @@ class FirestoreProModeRepository implements ProModeRepository {
       );
 
       final settlement = settlementService.calculateProSettlement(
-        settlementId: sessionId, // Using sessionId as settlementId for Pro Mode
+        settlementId: sessionId,
         result: tempResult,
         difficulty: difficulty,
         questionCount: questionCount,
@@ -503,114 +498,103 @@ class FirestoreProModeRepository implements ProModeRepository {
         answers: finalState.answerHistory,
       );
 
+      // 3. AUTHORITATIVE PROGRESSION SYNC (Atomic Rank & XP)
+      // IMPORTANT: This method performs its own transaction.get calls.
+      // It MUST be executed BEFORE any other transaction.set/update/delete calls in this transaction.
+      final xpTx = XpTransaction(
+        transactionId: '${sessionId}_xp',
+        userId: uid,
+        amount: settlement.xpEarned,
+        source: XpSource.quizCompletion,
+        referenceId: sessionId,
+        createdAt: DateTime.now(),
+      );
+
+      final compResult = CompetitiveResult(
+        resultId: sessionId,
+        userId: uid,
+        seasonId: 'current_season',
+        outcome: result.accuracy >= 0.7 ? CompetitiveOutcome.win : CompetitiveOutcome.loss,
+        mode: 'pro',
+        score: result.finalScore.toInt(),
+        completedAt: DateTime.now(),
+        maxStreak: result.maxStreak,
+      );
+
+      await _progressionRepository.applyCompetitiveResultsWithXpInTransaction(
+        transaction, 
+        compResult,
+        xpTx,
+        profile: playerProfile,
+      );
+
+      // 4. ATOMIC WRITES: Perform all state updates after all calculations and progression sync reads
+      
       transaction.update(sessionRef, {'status': 'completed'});
       transaction.set(resultRef, result.toJson());
       
-      final uid = sessionDoc.data()?['uid'];
-      if (uid != null) {
-        final playerRef = _database.collection('users').doc(uid);
-        final walletRef = _database.collection('wallets').doc(uid);
-        final gameProfileRef = _database.collection('user_game_profiles').doc(uid);
-        final amount = settlement.coinsWon;
-        
-        final txId = _database.collection('wallet_transactions').doc().id;
+      final playerRef = _database.collection('users').doc(uid);
+      final walletRef = _database.collection('wallets').doc(uid);
+      final gameProfileRef = _database.collection('user_game_profiles').doc(uid);
+      final amount = settlement.coinsWon;
+      
+      final txId = _database.collection('wallet_transactions').doc().id;
 
-        final playerUpdates = <String, dynamic>{
-          'proSessions': FieldValue.increment(1),
-          'totalQuestionsAnswered': FieldValue.increment(totalQuestions),
-          'correctAnswers': FieldValue.increment(correctCount),
-          'updatedAt': FieldValue.serverTimestamp(),
-        };
+      final playerUpdates = <String, dynamic>{
+        'proSessions': FieldValue.increment(1),
+        'totalQuestionsAnswered': FieldValue.increment(totalQuestions),
+        'correctAnswers': FieldValue.increment(correctCount),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
 
-        if (amount > 0) {
-          playerUpdates['coins'] = FieldValue.increment(amount);
-          playerUpdates['lastCoinTransactionId'] = txId;
-        }
-
-        transaction.update(playerRef, playerUpdates);
-
-        // 1. Sync Wallet & Game Profile
-        final walletUpdates = <String, dynamic>{
-          'coins': FieldValue.increment(amount),
-          'lifetimeCoinsEarned': FieldValue.increment(amount),
-          'updatedAt': FieldValue.serverTimestamp(),
-        };
-        if (amount > 0) {
-          walletUpdates['lastTransactionId'] = txId;
-        }
-
-        transaction.set(walletRef, walletUpdates, SetOptions(merge: true));
-
-        transaction.set(gameProfileRef, {
-          'coins': FieldValue.increment(amount),
-          'updatedAt': FieldValue.serverTimestamp(),
-        }, SetOptions(merge: true));
-
-        // 2. Log coin transaction if there are rewards
-        if (amount > 0) {
-          final walletTxRef = _database.collection('wallet_transactions').doc(txId);
-          
-          final txData = {
-            'userId': uid,
-            'type': 'coins',
-            'currency': 'coins',
-            'direction': 'credit',
-            'amount': amount,
-            'transactionType': 'reward',
-            'source': 'proReward',
-            'referenceId': sessionId,
-            'status': 'completed',
-            'createdAt': FieldValue.serverTimestamp(),
-            'metadata': {
-              'sessionId': sessionId,
-              'accuracy': accuracy,
-              'difficulty': difficulty.name,
-            },
-          };
-
-          transaction.set(walletTxRef, txData);
-          
-          // Sync to legacy if needed
-          final coinTxRef = _database.collection('coin_transactions').doc(txId);
-          transaction.set(coinTxRef, txData);
-        }
-
-        // 3. Authoritative Progression Update
-        if (settlement.xpEarned > 0) {
-          final xpTx = XpTransaction(
-            transactionId: '${sessionId}_xp',
-            userId: uid,
-            amount: settlement.xpEarned,
-            source: XpSource.quizCompletion,
-            referenceId: sessionId,
-            createdAt: DateTime.now(),
-          );
-          
-          await _progressionRepository.processXpTransaction(transaction, xpTx);
-        }
-
-        // 4. Authoritative Rank Point (RP) Update - USING TRANSACTION-AWARE METHOD
-        final compResult = CompetitiveResult(
-          resultId: sessionId,
-          userId: uid,
-          seasonId: 'current_season',
-          outcome: result.accuracy >= 0.7 ? CompetitiveOutcome.win : CompetitiveOutcome.loss,
-          mode: 'pro',
-          score: result.finalScore.toInt(),
-          completedAt: DateTime.now(),
-          maxStreak: result.maxStreak,
-        );
-        
-        await _progressionRepository.applyCompetitiveResultInTransaction(
-          transaction, 
-          compResult,
-          profile: playerProfile,
-        );
-
-        // 5. Store Settlement Record for auditing
-        final settlementRef = _database.collection('settlements').doc(sessionId);
-        transaction.set(settlementRef, settlement.toJson());
+      if (amount > 0) {
+        playerUpdates['coins'] = FieldValue.increment(amount);
+        playerUpdates['lastCoinTransactionId'] = txId;
       }
+
+      transaction.update(playerRef, playerUpdates);
+
+      final walletUpdates = <String, dynamic>{
+        'coins': FieldValue.increment(amount),
+        'lifetimeCoinsEarned': FieldValue.increment(amount),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
+      if (amount > 0) {
+        walletUpdates['lastTransactionId'] = txId;
+      }
+
+      transaction.set(walletRef, walletUpdates, SetOptions(merge: true));
+
+      transaction.set(gameProfileRef, {
+        'coins': FieldValue.increment(amount),
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+
+      if (amount > 0) {
+        final txData = {
+          'userId': uid,
+          'type': 'coins',
+          'currency': 'coins',
+          'direction': 'credit',
+          'amount': amount,
+          'transactionType': 'reward',
+          'source': 'proReward',
+          'referenceId': sessionId,
+          'status': 'completed',
+          'createdAt': FieldValue.serverTimestamp(),
+          'metadata': {
+            'sessionId': sessionId,
+            'accuracy': accuracy,
+            'difficulty': difficulty.name,
+          },
+        };
+        transaction.set(_database.collection('wallet_transactions').doc(txId), txData);
+        transaction.set(_database.collection('coin_transactions').doc(txId), txData);
+      }
+
+      // Store Settlement Record for auditing
+      final settlementRef = _database.collection('settlements').doc(sessionId);
+      transaction.set(settlementRef, settlement.toJson());
     });
 
     // Return the result (though caller might not use it as much as the DB state)

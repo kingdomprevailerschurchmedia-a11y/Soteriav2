@@ -22,6 +22,7 @@ abstract class PublicCompetitiveProfile with _$PublicCompetitiveProfile {
     required int division,
     CompetitiveTitle? equippedTitle,
     @Default([]) List<CompetitiveBadge> featuredBadges,
+    @Default(true) bool isSearchable,
     
     // Career Highlights
     required CareerStatistics careerHighlights,

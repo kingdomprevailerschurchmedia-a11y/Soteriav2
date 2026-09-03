@@ -718,11 +718,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                   GoRoute(
                     path: 'achievements',
-                    pageBuilder: (context, state) =>
-                        SoteriaPageTransitions.slideUp(
-                          child: const AchievementListScreen(),
-                          key: state.pageKey,
-                        ),
+                    pageBuilder: (context, state) {
+                      final tab = int.tryParse(state.uri.queryParameters['tab'] ?? '0') ?? 0;
+                      return SoteriaPageTransitions.slideUp(
+                        child: AchievementListScreen(initialIndex: tab),
+                        key: state.pageKey,
+                      );
+                    },
                   ),
                   GoRoute(
                     path: 'search',

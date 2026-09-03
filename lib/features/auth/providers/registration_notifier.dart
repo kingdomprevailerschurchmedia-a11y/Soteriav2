@@ -126,7 +126,6 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
 
   Future<void> completeRegistration() async {
     state = state.copyWith(isLoading: true, error: null);
-    final stopwatch = Stopwatch()..start();
 
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -183,7 +182,6 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
         feature: 'Auth',
       );
     } finally {
-      stopwatch.stop();
       if (_mounted) {
         state = state.copyWith(isLoading: false);
       }

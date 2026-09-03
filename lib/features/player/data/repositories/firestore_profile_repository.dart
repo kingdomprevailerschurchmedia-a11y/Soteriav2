@@ -130,6 +130,7 @@ class FirestoreProfileRepository implements ProfileRepository {
           rankTier: progression.currentRankTier,
           rankPoints: progression.rankPoints,
           division: _parseDivision(progression.currentRank),
+          isSearchable: playerProfile.allowVersusChallenges,
           careerHighlights: CareerStatistics(
             gamesPlayed: playerProfile.gamesPlayed,
             gamesWon: playerProfile.gamesWon,
@@ -210,6 +211,7 @@ class FirestoreProfileRepository implements ProfileRepository {
       rankTier: progression.currentRankTier,
       rankPoints: progression.rankPoints,
       division: _parseDivision(progression.currentRank),
+      isSearchable: playerProfile.allowVersusChallenges,
       careerHighlights: CareerStatistics(
         gamesPlayed: playerProfile.gamesPlayed,
         gamesWon: playerProfile.gamesWon,

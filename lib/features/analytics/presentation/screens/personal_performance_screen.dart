@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,10 +9,10 @@ import '../widgets/insight_card.dart';
 import '../widgets/recommendation_card.dart';
 import '../widgets/category_performance_item.dart';
 import '../widgets/period_selector.dart';
+import '../widgets/mode_selector.dart';
 import '../charts/soteria_line_chart.dart';
 import '../charts/soteria_progress_chart.dart';
 import '../../domain/models/performance_analytics.dart';
-import '../../domain/models/analytics_enums.dart';
 
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/utils/soteria_responsive.dart';
@@ -28,6 +27,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final analyticsAsync = ref.watch(personalPerformanceAnalyticsProvider);
     final selectedPeriod = ref.watch(selectedTimePeriodProvider);
+    final selectedMode = ref.watch(selectedPerformanceModeProvider);
 
     return SoteriaPage(
       useSafeArea: false,
@@ -57,6 +57,13 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                       onPeriodChanged: (period) => ref
                           .read(selectedTimePeriodProvider.notifier)
                           .state = period,
+                    ),
+                    SizedBox(height: 12.h),
+                    ModeSelector(
+                      selectedMode: selectedMode,
+                      onModeChanged: (mode) => ref
+                          .read(selectedPerformanceModeProvider.notifier)
+                          .state = mode,
                     ),
                     SizedBox(
                       height: SoteriaSpacing.adaptive(

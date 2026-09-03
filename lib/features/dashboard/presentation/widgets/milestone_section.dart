@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../../core/navigation/soteria_routes.dart';
 import '../../../player/domain/models/milestone.dart';
-import '../../../player/presentation/screens/milestones_screen.dart';
 
 class MilestoneSection extends StatelessWidget {
   final MilestoneProgress progress;
@@ -45,9 +46,7 @@ class MilestoneSection extends StatelessWidget {
                 ],
               ),
               GestureDetector(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const MilestonesScreen()),
-                ),
+                onTap: () => context.push('${SoteriaRoutes.achievements}?tab=1'),
                 child: Row(
                   children: [
                     Text(
@@ -77,9 +76,7 @@ class MilestoneSection extends StatelessWidget {
           ),
           child: _DashboardMilestoneCard(
             progress: progress,
-            onTap: () => Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const MilestonesScreen()),
-            ),
+            onTap: () => context.push('${SoteriaRoutes.achievements}?tab=1'),
           ),
         ),
       ],

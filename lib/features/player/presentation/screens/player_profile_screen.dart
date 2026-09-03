@@ -85,7 +85,6 @@ class PlayerProfileScreen extends ConsumerWidget {
                 child: CareerStatisticsSection(summary: profile.careerSummary!),
               ),
             SoteriaSpacing.gapLG,
-            RepaintBoundary(child: _buildAccountSection(context)),
             SizedBox(height: 40.h + MediaQuery.paddingOf(context).bottom),
           ],
         ),
@@ -125,9 +124,10 @@ class PlayerProfileScreen extends ConsumerWidget {
             Text(
               'COMPETITIVE IDENTITY',
               style: context.labelSmall.copyWith(
-                color: SoteriaColors.primary,
+                color: SoteriaColors.secondary,
                 letterSpacing: 2.0,
                 fontWeight: FontWeight.w900,
+                fontSize: 11.sp,
               ),
             ),
             SoteriaSpacing.gapXS,
@@ -136,99 +136,20 @@ class PlayerProfileScreen extends ConsumerWidget {
               style: context.headlineLarge.copyWith(
                 fontWeight: FontWeight.w900,
                 color: Colors.white,
-                fontSize: 28.sp,
+                fontSize: 32.sp,
               ),
             ),
             SoteriaSpacing.gapXS,
             Text(
               'Learn. Compete. Become Legendary.',
               style: context.bodySmall.copyWith(
-                color: SoteriaColors.muted,
+                color: Colors.white60,
                 fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
         _SettingsButton(onTap: () => context.push('/app/settings')),
-      ],
-    );
-  }
-
-  Widget _buildAccountSection(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 4, bottom: 12),
-          child: Text(
-            'ACCOUNT',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
-              letterSpacing: 2.0,
-              fontWeight: FontWeight.w800,
-              fontSize: 13.sp,
-            ),
-          ),
-        ),
-        GlassSurface(
-          borderRadius: BorderRadius.circular(24),
-          opacity: 0.05,
-          padding: EdgeInsets.zero,
-          child: Material(
-            type: MaterialType.transparency,
-            child: Column(
-              children: [
-                _AccountTile(
-                  icon: Icons.person_rounded,
-                  iconColor: const Color(0xFF7C4DFF),
-                  title: 'Profile Information',
-                  subtitle: 'View and edit your personal details',
-                  onTap: () => context.push(SoteriaRoutes.profileInformation),
-                ),
-                _AccountDivider(),
-                _AccountTile(
-                  icon: Icons.account_balance_wallet_rounded,
-                  iconColor: SoteriaColors.xpColor,
-                  title: 'Wallet & Billing',
-                  subtitle: 'Manage your coins and transactions',
-                  onTap: () => context.push(SoteriaRoutes.rewards),
-                ),
-                _AccountDivider(),
-                _AccountTile(
-                  icon: Icons.history_rounded,
-                  iconColor: const Color(0xFF00E5FF),
-                  title: 'Competitive History',
-                  subtitle: 'Your past matches and performance',
-                  onTap: () => context.push(SoteriaRoutes.competitiveHistory),
-                ),
-                _AccountDivider(),
-                _AccountTile(
-                  icon: Icons.emoji_events_rounded,
-                  iconColor: SoteriaColors.gold,
-                  title: 'Achievements',
-                  subtitle: 'Your badges and milestones',
-                  onTap: () => context.push(SoteriaRoutes.achievements),
-                ),
-                _AccountDivider(),
-                _AccountTile(
-                  icon: Icons.people_rounded,
-                  iconColor: SoteriaColors.primary,
-                  title: 'Friends',
-                  subtitle: 'Manage your competitive connections',
-                  onTap: () => context.push(SoteriaRoutes.friends),
-                ),
-                _AccountDivider(),
-                _AccountTile(
-                  icon: Icons.settings_rounded,
-                  iconColor: const Color(0xFFA1887F),
-                  title: 'Settings',
-                  subtitle: 'Preferences and app settings',
-                  onTap: () => context.push('/app/settings'),
-                ),
-              ],
-            ),
-          ),
-        ),
       ],
     );
   }
@@ -250,71 +171,9 @@ class _SettingsButton extends StatelessWidget {
       ),
       child: IconButton(
         padding: EdgeInsets.zero,
-        icon: const Icon(Icons.settings_outlined, color: Colors.white, size: 16),
+        icon: const Icon(Icons.settings_outlined, color: Colors.white, size: 20),
         onPressed: onTap,
       ),
-    );
-  }
-}
-
-class _AccountTile extends StatelessWidget {
-  final IconData icon;
-  final Color iconColor;
-  final String title;
-  final String? subtitle;
-  final VoidCallback onTap;
-
-  const _AccountTile({
-    required this.icon,
-    required this.iconColor,
-    required this.title,
-    this.subtitle,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-      leading: Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: iconColor.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(icon, color: iconColor, size: 20),
-      ),
-      title: Text(
-        title,
-        style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
-      ),
-      subtitle: subtitle != null
-          ? Text(
-              subtitle!,
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.muted,
-                fontWeight: FontWeight.w500,
-              ),
-            )
-          : null,
-      trailing: const Icon(
-        Icons.chevron_right_rounded,
-        color: Colors.white24,
-        size: 24,
-      ),
-    );
-  }
-}
-
-class _AccountDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Divider(
-      height: 1,
-      thickness: 1,
-      color: Colors.white.withValues(alpha: 0.03),
-      indent: 72,
     );
   }
 }

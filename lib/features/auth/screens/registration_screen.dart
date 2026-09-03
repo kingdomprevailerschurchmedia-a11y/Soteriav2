@@ -119,24 +119,26 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       // Top Glow Arc (Refined)
                       Positioned(
                         top: -240.h,
-                        child: Container(
-                          width: 500.w,
-                          height: 500.w,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            gradient: RadialGradient(
-                              colors: [
-                                const Color(0xFF7C4DFF).withValues(alpha: 0.25),
-                                const Color(0xFF7C4DFF).withValues(alpha: 0.1),
-                                Colors.transparent,
-                              ],
-                              stops: const [0.0, 0.5, 1.0],
-                            ),
-                            border: Border.all(
-                              color: const Color(
-                                0xFF7C4DFF,
-                              ).withValues(alpha: 0.4),
-                              width: 1.5,
+                        child: RepaintBoundary(
+                          child: Container(
+                            width: 500.w,
+                            height: 500.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: RadialGradient(
+                                colors: [
+                                  const Color(0xFF7C4DFF).withValues(alpha: 0.25),
+                                  const Color(0xFF7C4DFF).withValues(alpha: 0.1),
+                                  Colors.transparent,
+                                ],
+                                stops: const [0.0, 0.5, 1.0],
+                              ),
+                              border: Border.all(
+                                color: const Color(
+                                  0xFF7C4DFF,
+                                ).withValues(alpha: 0.4),
+                                width: 1.5,
+                              ),
                             ),
                           ),
                         ),

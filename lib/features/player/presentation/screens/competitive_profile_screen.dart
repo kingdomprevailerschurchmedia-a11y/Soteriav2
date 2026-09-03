@@ -14,7 +14,6 @@ import 'package:soteria/features/player/presentation/providers/rank_providers.da
 import 'package:soteria/features/player/presentation/providers/goal_providers.dart';
 import 'package:soteria/features/player/presentation/providers/streak_providers.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_goals_screen.dart';
-import 'package:soteria/features/player/presentation/screens/milestones_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_match_history_screen.dart';
 import 'package:soteria/features/player/presentation/screens/competitive_rank_overview_screen.dart';
 import 'package:soteria/features/player/presentation/widgets/competitive_rank_card.dart';
@@ -183,11 +182,9 @@ class CompetitiveProfileScreen extends ConsumerWidget {
             child: SoteriaSlideUp(
               delay: const Duration(milliseconds: 350),
               child: AchievementSummarySection(
-                earned: const [], // TODO: Link to achievements subcollection in next story
-                total: profile.totalMilestones,
-                onViewAll: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const MilestonesScreen()),
-                ),
+                earned: profile.earnedAchievements,
+                total: profile.totalAchievements,
+                onViewAll: () => context.push('${SoteriaRoutes.achievements}?tab=1'),
               ),
             ),
           ),

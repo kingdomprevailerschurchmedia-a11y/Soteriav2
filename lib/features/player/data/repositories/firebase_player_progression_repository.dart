@@ -235,6 +235,126 @@ class FirebasePlayerProgressionRepository
   }
 
   @override
+  Future<void> applyCompetitiveResultsWithXpInTransaction(
+    dynamic transaction,
+    CompetitiveResult result,
+    XpTransaction xpTransaction, {
+    PlayerProfile? profile,
+  }) async {
+    final tx = transaction as Transaction;
+
+    // 1. ALL READS AT THE START (Mandatory for Firestore Transactions)
+    final rankTxDocRef = _rankTransactionCollection.doc('${result.resultId}_tx');
+    final xpTxDocRef = _xpTransactionCollection.doc(xpTransaction.transactionId);
+    final progressionDocRef = _progressionCollection.doc(result.userId);
+    final userRef = _firestore.collection('users').doc(result.userId);
+
+    // Fetch all snapshots sequentially (or use Future.wait)
+    final snapshots = await Future.wait([
+      tx.get(rankTxDocRef),
+      tx.get(xpTxDocRef),
+      tx.get(progressionDocRef),
+    ]);
+
+    final rankTxSnapshot = snapshots[0];
+    final xpTxSnapshot = snapshots[1];
+    final progressionSnapshot = snapshots[2];
+
+    // 2. Idempotency Checks
+    if (rankTxSnapshot.exists || xpTxSnapshot.exists) {
+      return; // Already processed
+    }
+
+    // 3. Resolve Current Progression
+    PlayerProgression current;
+    if (!progressionSnapshot.exists) {
+      current = PlayerProgression.initial(result.userId, result.seasonId);
+    } else {
+      current = PlayerProgression.fromJson(progressionSnapshot.data()!);
+    }
+
+    // 4. Calculate XP Update
+    final xpUpdated = _progressionService
+        .addXp(current, xpTransaction.amount)
+        .copyWith(lastXpTransactionId: xpTransaction.transactionId);
+
+    // 5. Calculate Rank Update (using the XP-updated state to ensure consistency)
+    final rankChange = _rankingEngine.calculateRankChange(
+      currentProgression: xpUpdated,
+      result: result,
+    );
+
+    final progress = _rankingEngine.calculateRankProgress(rankChange.newRankPoints);
+
+    final finalUpdated = xpUpdated.copyWith(
+      currentRank: rankChange.newRank,
+      currentRankTier: progress.tier.id,
+      rankPoints: rankChange.newRankPoints,
+      rankProgress: progress.progressPercentage,
+      seasonRankPoints: xpUpdated.seasonId == result.seasonId
+          ? rankChange.newRankPoints
+          : xpUpdated.seasonRankPoints,
+      maxQuestionStreak: result.maxStreak > xpUpdated.maxQuestionStreak 
+          ? result.maxStreak 
+          : xpUpdated.maxQuestionStreak,
+      lastRankTransactionId: '${result.resultId}_tx',
+      lastUpdated: DateTime.now(),
+    );
+
+    // 6. ALL WRITES AT THE END
+    
+    // Update Progression
+    tx.set(progressionDocRef, finalUpdated.toJson());
+
+    // Create Rank Transaction
+    final rankTx = RankTransaction(
+      transactionId: '${result.resultId}_tx',
+      userId: result.userId,
+      seasonId: result.seasonId,
+      resultId: result.resultId,
+      previousRankPoints: rankChange.previousRankPoints,
+      changeAmount: rankChange.changeAmount,
+      newRankPoints: rankChange.newRankPoints,
+      timestamp: DateTime.now(),
+    );
+    tx.set(rankTxDocRef, rankTx.toJson());
+
+    // Create XP Transaction
+    tx.set(xpTxDocRef, xpTransaction.toJson());
+
+    // Add to Rank History
+    tx.set(
+      _rankHistoryCollection.doc(rankChange.changeId),
+      rankChange.toJson(),
+    );
+
+    // Update User Profile (XP & Level)
+    tx.update(userRef, {
+      'xp': finalUpdated.currentXp,
+      'level': finalUpdated.currentLevel,
+      'lastXpTransactionId': xpTransaction.transactionId,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+
+    // 7. Update Leaderboard
+    final playerProfile = profile ?? await _playerRepository.getPlayerProfile(result.userId);
+    if (playerProfile != null) {
+      await _leaderboardRepository.syncLeaderboardEntry(
+        profile: playerProfile,
+        progression: finalUpdated,
+        seasonId: result.seasonId,
+        transaction: tx,
+      );
+      await _leaderboardRepository.syncLeaderboardEntry(
+        profile: playerProfile,
+        progression: finalUpdated,
+        seasonId: null,
+        transaction: tx,
+      );
+    }
+  }
+
+  @override
   Future<List<XpTransaction>> getXpTransactions(
     String userId, {
     int limit = 20,

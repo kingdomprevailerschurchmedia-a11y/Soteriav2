@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/features/auth/presentation/widgets/logout_confirmation_dialog.dart';
+import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
 import '../../../core/design_system/colors/soteria_colors.dart';
 import '../../../core/design_system/spacing/soteria_spacing.dart';
@@ -10,11 +12,13 @@ import '../../../core/design_system/typography/soteria_typography.dart';
 import '../../../core/design_system/components/soteria_back_button.dart';
 import '../../../core/widgets/glass_surface.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final player = ref.watch(currentPlayerProvider);
+
     return SoteriaPage(
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -86,6 +90,31 @@ class SettingsScreen extends StatelessWidget {
                     subtitle: 'Dark Mode',
                     isThemeItem: true,
                     onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            SoteriaSpacing.gapMD,
+            RepaintBoundary(
+              child: _SettingsSection(
+                title: 'SOCIAL & PRIVACY',
+                items: [
+                  _SettingsToggleItem(
+                    icon: Icons.search_rounded,
+                    iconColor: SoteriaColors.primary,
+                    title: 'Versus Discovery',
+                    subtitle: 'Allow others to find and challenge you',
+                    value: player?.allowVersusChallenges ?? true,
+                    onChanged: (val) async {
+                      if (player != null) {
+                        await ref.read(playerRepositoryProvider).patchPlayerProfile(
+                          player.uid,
+                          {'allowVersusChallenges': val},
+                        );
+                        // Also trigger a public profile sync if needed, 
+                        // though a listener usually handles this.
+                      }
+                    },
                   ),
                 ],
               ),
@@ -244,6 +273,66 @@ class _SettingsItem extends StatelessWidget {
           Icons.chevron_right_rounded,
           color: Colors.white24,
           size: 24,
+        ),
+      ),
+    );
+  }
+}
+
+class _SettingsToggleItem extends StatelessWidget {
+  const _SettingsToggleItem({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    this.subtitle,
+    required this.value,
+    required this.onChanged,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String? subtitle;
+  final bool value;
+  final ValueChanged<bool> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+        leading: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        title: Text(
+          title,
+          style: context.bodyLarge.copyWith(fontWeight: FontWeight.bold),
+        ),
+        subtitle: subtitle != null
+            ? Text(
+                subtitle!,
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.muted,
+                  fontWeight: FontWeight.w500,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              )
+            : null,
+        trailing: Transform.scale(
+          scale: 0.8,
+          child: Switch(
+            value: value,
+            onChanged: onChanged,
+            activeTrackColor: SoteriaColors.primary.withValues(alpha: 0.5),
+            activeColor: SoteriaColors.primary,
+          ),
         ),
       ),
     );

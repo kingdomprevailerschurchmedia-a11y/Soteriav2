@@ -60,8 +60,9 @@ class LeaderboardPreview extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final topPlayersAsync = ref.watch(leaderboardControllerProvider(null));
-    final playerEntryAsync = ref.watch(playerLeaderboardEntryProvider);
-    final playerRankAsync = ref.watch(playerRankPositionProvider);
+    // Explicitly watch Global player data for this preview
+    final playerEntryAsync = ref.watch(playerLeaderboardEntryFamily(null));
+    final playerRankAsync = ref.watch(playerRankPositionFamily(null));
     final currentUserId = ref.watch(sessionProvider).uid;
     final currentPlayer = ref.watch(currentPlayerProvider);
 
@@ -151,7 +152,7 @@ class LeaderboardPreview extends ConsumerWidget {
                           return _LeaderboardRow(
                             rank: uiRank,
                             name: 'You',
-                            xp: currentPlayer.xp,
+                            xp: playerEntry?.rankPoints ?? currentPlayer.xp,
                             isMe: true,
                             avatarId: playerEntry?.avatarId,
                             imageUrl: playerEntry?.avatarUrl,

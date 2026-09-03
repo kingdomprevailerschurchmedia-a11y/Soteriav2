@@ -117,17 +117,44 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     // Combine all startup dependencies:
     // 1. Minimum animation time (2s)
-    // 2. Asset precaching for next screens
-    // 3. App initialization logic
+    // 2. App initialization logic
     
-    await Future.wait([
+    final startupTasks = [
       Future.delayed(const Duration(milliseconds: 2000)),
-      AssetPrecacheService.precacheAllCriticalAssets(context),
       _waitForAppStartup(),
-    ]);
+    ];
+
+    await Future.wait(startupTasks);
 
     if (!mounted) return;
+
+    // 3. Targeted asset precaching for next screen
+    final nextState = ref.read(appLifecycleProvider);
+    await _precacheForState(nextState);
+
     _navigateToDestination();
+  }
+
+  Future<void> _precacheForState(AppStartupState state) async {
+    if (!mounted) return;
+    
+    switch (state) {
+      case AppStartupState.onboarding:
+        await AssetPrecacheService.precacheAssets(
+          context,
+          AssetPrecacheService.onboardingImages,
+        );
+        break;
+      case AppStartupState.auth:
+        await AssetPrecacheService.precacheAssets(
+          context,
+          AssetPrecacheService.authImages,
+        );
+        break;
+      default:
+        // No specific assets for other states yet
+        break;
+    }
   }
 
   Future<void> _waitForAppStartup() async {
@@ -211,11 +238,13 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         fit: StackFit.expand,
         children: [
           const _SplashBackground(),
-          SplashBranding(
-            logoOpacity: _logoOpacity,
-            logoScale: _logoScale,
-            wordmarkOpacity: _wordmarkOpacity,
-            taglineOpacity: _taglineOpacity,
+          RepaintBoundary(
+            child: SplashBranding(
+              logoOpacity: _logoOpacity,
+              logoScale: _logoScale,
+              wordmarkOpacity: _wordmarkOpacity,
+              taglineOpacity: _taglineOpacity,
+            ),
           ),
         ],
       ),

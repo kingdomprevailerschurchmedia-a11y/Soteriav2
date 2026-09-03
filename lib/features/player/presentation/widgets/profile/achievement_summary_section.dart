@@ -11,7 +11,8 @@ import '../../../domain/models/milestone.dart';
 import '../../../domain/models/achievement.dart';
 
 import 'package:go_router/go_router.dart';
-import '../../../../../core/navigation/soteria_routes.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
+import 'package:soteria/features/player/domain/services/achievement_registry.dart';
 
 class AchievementSummarySection extends ConsumerWidget {
   final List<PlayerAchievement> earned;
@@ -49,8 +50,9 @@ class AchievementSummarySection extends ConsumerWidget {
               child: Text(
                 '${earned.length} / $total EARNED',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.primary,
-                  fontWeight: FontWeight.bold,
+                  color: SoteriaColors.secondary,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 12.sp,
                 ),
               ),
             ),
@@ -58,23 +60,6 @@ class AchievementSummarySection extends ConsumerWidget {
         ),
         SizedBox(height: SoteriaSpacing.md),
         
-        // Horizontal list of earned achievements
-        if (earned.isNotEmpty) ...[
-          SizedBox(
-            height: 64.h,
-            child: ListView.separated(
-              scrollDirection: Axis.horizontal,
-              itemCount: earned.length,
-              separatorBuilder: (_, _) => SizedBox(width: SoteriaSpacing.md),
-              itemBuilder: (context, index) {
-                final achievement = earned[index];
-                return _AchievementBadge(achievement: achievement);
-              },
-            ),
-          ),
-          SizedBox(height: SoteriaSpacing.lg),
-        ],
-
         // Next Milestone Card
         nextMilestoneAsync.when(
           data: (next) => next != null 
@@ -109,22 +94,25 @@ class _NextMilestoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SoteriaCard(
       onTap: onTap,
-      padding: EdgeInsets.all(SoteriaSpacing.md),
+      padding: EdgeInsets.all(20.r),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(SoteriaSpacing.sm),
+            width: 56.w,
+            height: 56.w,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.03),
+              color: SoteriaColors.secondary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.flag_rounded,
-              color: SoteriaColors.primary,
-              size: 20.sp,
+            child: Center(
+              child: Icon(
+                Icons.flag_rounded,
+                color: SoteriaColors.secondary,
+                size: 28.sp,
+              ),
             ),
           ),
-          SizedBox(width: SoteriaSpacing.md),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,33 +121,53 @@ class _NextMilestoneCard extends StatelessWidget {
                   'NEXT MILESTONE',
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.muted,
-                    fontSize: 8.sp,
+                    letterSpacing: 1.2,
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w900,
                   ),
-                ),
-                Text(
-                  progress.definition.name,
-                  style: context.bodyMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4.h),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(2),
-                  child: LinearProgressIndicator(
-                    value: progress.progressPercentage,
-                    backgroundColor: Colors.white10,
-                    valueColor: const AlwaysStoppedAnimation(SoteriaColors.primary),
-                    minHeight: 2,
+                Text(
+                  progress.definition.name,
+                  style: context.titleMedium.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
                   ),
+                ),
+                SizedBox(height: 12.h),
+                Row(
+                  children: [
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4.r),
+                        child: LinearProgressIndicator(
+                          value: progress.progressPercentage,
+                          backgroundColor: Colors.white.withValues(alpha: 0.05),
+                          valueColor: const AlwaysStoppedAnimation(SoteriaColors.secondary),
+                          minHeight: 6.h,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 12.w),
+                    Text(
+                      '${(progress.progressPercentage * 100).toInt()}%',
+                      style: context.labelSmall.copyWith(
+                        color: SoteriaColors.secondary,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 12.sp,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           ),
-          SizedBox(width: SoteriaSpacing.md),
-          Text(
-            '${(progress.progressPercentage * 100).toInt()}%',
-            style: context.labelSmall.copyWith(
-              color: SoteriaColors.primary,
-              fontWeight: FontWeight.bold,
-            ),
+          SizedBox(width: 16.w),
+          Image.asset(
+            'assets/icons/next_milestone.png',
+            width: 56.w,
+            height: 56.w,
+            fit: BoxFit.contain,
           ),
         ],
       ),
@@ -174,6 +182,8 @@ class _AchievementBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final definition = AchievementRegistry.getById(achievement.achievementId);
+    
     return Container(
       width: 64.w,
       height: 64.w,
@@ -182,11 +192,40 @@ class _AchievementBadge extends StatelessWidget {
         borderRadius: SoteriaRadius.brMd,
         border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.2)),
       ),
-      child: Icon(
-        Icons.emoji_events_rounded,
-        color: SoteriaColors.gold,
-        size: 24.sp,
+      child: Center(
+        child: definition != null && (definition.id == 'first_game' || definition.id == 'welcome_bonus')
+            ? Image.asset(
+                definition.id == 'first_game' 
+                    ? 'assets/icons/first_step_icon.png'
+                    : 'assets/icons/star_icon.png',
+                width: 32.w,
+                height: 32.w,
+              )
+            : Icon(
+                _getIcon(definition?.icon),
+                color: SoteriaColors.gold,
+                size: 28.sp,
+              ),
       ),
     );
+  }
+
+  IconData _getIcon(String? iconName) {
+    switch (iconName) {
+      case 'stars_rounded': return Icons.stars_rounded;
+      case 'military_tech_rounded': return Icons.military_tech_rounded;
+      case 'workspace_premium_rounded': return Icons.workspace_premium_rounded;
+      case 'local_fire_department_rounded': return Icons.local_fire_department_rounded;
+      case 'bolt_rounded': return Icons.bolt_rounded;
+      case 'trending_up_rounded': return Icons.trending_up_rounded;
+      case 'shield_rounded': return Icons.shield_rounded;
+      case 'play_arrow_rounded': return Icons.play_arrow_rounded;
+      case 'sports_esports_rounded': return Icons.sports_esports_rounded;
+      case 'emoji_events_rounded': return Icons.emoji_events_rounded;
+      case 'psychology_rounded': return Icons.psychology_rounded;
+      case 'auto_awesome_rounded': return Icons.auto_awesome_rounded;
+      case 'calendar_today_rounded': return Icons.calendar_today_rounded;
+      default: return Icons.emoji_events_rounded;
+    }
   }
 }

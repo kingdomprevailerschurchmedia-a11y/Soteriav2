@@ -50,6 +50,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     @Default([]) List<String> achievements,
     String? equippedTitleId,
     @Default([]) List<String> featuredBadgeIds,
+    @Default(true) bool allowVersusChallenges,
     @Default('user') String role, // user, moderator, admin
     @Default('active') String accountStatus, // active, suspended, deleted
 

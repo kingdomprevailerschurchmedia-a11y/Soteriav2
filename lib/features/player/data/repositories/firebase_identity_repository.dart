@@ -142,14 +142,17 @@ class FirebaseIdentityRepository implements IdentityRepository {
     final snapshot = await _firestore
         .collection('public_profiles')
         .where(
-          Filter.or(
-            Filter.and(
-              Filter('displayNameNormalized', isGreaterThanOrEqualTo: normalizedQuery),
-              Filter('displayNameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff'),
-            ),
-            Filter.and(
-              Filter('usernameNormalized', isGreaterThanOrEqualTo: normalizedQuery),
-              Filter('usernameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff'),
+          Filter.and(
+            Filter('isSearchable', isEqualTo: true),
+            Filter.or(
+              Filter.and(
+                Filter('displayNameNormalized', isGreaterThanOrEqualTo: normalizedQuery),
+                Filter('displayNameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff'),
+              ),
+              Filter.and(
+                Filter('usernameNormalized', isGreaterThanOrEqualTo: normalizedQuery),
+                Filter('usernameNormalized', isLessThanOrEqualTo: '$normalizedQuery\uf8ff'),
+              ),
             ),
           ),
         )

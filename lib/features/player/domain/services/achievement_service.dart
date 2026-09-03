@@ -42,6 +42,11 @@ class AchievementService {
     }
   }
 
+  /// Claims rewards for an achievement.
+  Future<void> claimAchievement(String userId, String achievementId) async {
+    await _achievementRepository.claimAchievementReward(userId, achievementId);
+  }
+
   double _calculateProgress({
     required AchievementDefinition definition,
     required PlayerProfile profile,

@@ -73,6 +73,10 @@ class ResultsNotifier extends StateNotifier<AsyncValue<GameResult?>> {
       sessionId: gameState.sessionId,
       playerId: _ref.read(sessionProvider).uid ?? '',
       mode: config.mode,
+      category: config.categoryId,
+      difficulty: gameState.questions.isNotEmpty 
+          ? gameState.questions.first.difficulty.name 
+          : null,
       finalScore: gameState.score,
       totalXP: gameState.xp + rewards.totalXP,
       totalQuestions: gameState.questions.length,

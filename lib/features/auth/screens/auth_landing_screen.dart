@@ -40,151 +40,131 @@ class _AuthLandingContent extends ConsumerWidget {
       }
     });
 
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 32.w),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              minHeight: MediaQuery.sizeOf(context).height - 
-                         MediaQuery.paddingOf(context).vertical,
-            ),
-            child: IntrinsicHeight(
-              child: Column(
-                children: [
-                  const Spacer(flex: 1),
-                  
-                  // Welcome Illustration
-                  Center(
-                    child: Image.asset(
-                      'assets/images/welcome_illustration.png',
-                      width: 280.w, // Slightly smaller to fit more devices
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 24.w),
+      child: Column(
+        children: [
+          SizedBox(height: 16.h),
 
-                  const Spacer(flex: 1),
-
-                  // Welcome Text
-                  Column(
-                    children: [
-                      Text(
-                        'Welcome to',
-                        style: context.displaySmall.copyWith(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 24.sp,
-                        ),
-                      ),
-                      Text(
-                        'Soteria',
-                        style: context.displayLarge.copyWith(
-                          color: SoteriaColors.gold,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 42.sp,
-                          letterSpacing: -0.5,
-                        ),
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'Rise through knowledge and\ncompete with the best.',
-                        style: context.bodyLarge.copyWith(
-                          color: Colors.white.withValues(alpha: 0.5),
-                          height: 1.4,
-                          fontSize: 15.sp,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ],
-                  ),
-
-                  const Spacer(flex: 1),
-
-                  // Action Buttons
-                  Column(
-                    children: [
-                      // Continue with Google
-                      _PrimaryButton(
-                        label: 'Continue with Google',
-                        onTap: () => notifier.signInWithGoogle(),
-                        isLoading: state.isLoading,
-                      ),
-                      
-                      SizedBox(height: 16.h),
-
-                      // Create Account
-                      _SecondaryButton(
-                        label: 'Create Account',
-                        onTap: state.isLoading 
-                            ? null 
-                            : () => ref
-                                .read(navigationServiceProvider)
-                                .push('${SoteriaRoutes.auth}/register'),
-                      ),
-
-                      SizedBox(height: 32.h),
-
-                      // Login with Email
-                      GestureDetector(
-                        onTap: state.isLoading 
-                            ? null 
-                            : () => EmailLoginDialog.show(context),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 16.w),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.05),
-                            borderRadius: BorderRadius.circular(12.r),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.mail_outline_rounded,
-                                size: 18.sp,
-                                color: SoteriaColors.gold.withValues(alpha: 0.8),
-                              ),
-                              SizedBox(width: 10.w),
-                              Text(
-                                'Login with Email',
-                                style: context.bodyMedium.copyWith(
-                                  color: state.isLoading 
-                                      ? Colors.white.withValues(alpha: 0.2)
-                                      : Colors.white,
-                                  fontWeight: FontWeight.w700,
-                                  letterSpacing: 0.5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const Spacer(flex: 1),
-
-                  // Footer Links
-                  Padding(
-                    padding: EdgeInsets.only(bottom: 16.h),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _LegalLink(label: 'Terms', onTap: () {}),
-                        const _LegalDot(),
-                        _LegalLink(label: 'Privacy', onTap: () {}),
-                        const _LegalDot(),
-                        _LegalLink(label: 'Guidelines', onTap: () {}),
-                      ],
-                    ),
-                  ),
-                ],
+          // Welcome Illustration
+          Expanded(
+            flex: 7,
+            child: Center(
+              child: Image.asset(
+                'assets/images/welcome_illustration.png',
+                fit: BoxFit.contain,
               ),
             ),
           ),
-        ),
+
+          SizedBox(height: 20.h),
+
+          // Welcome Text
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Welcome to',
+                style: context.displaySmall.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 32.sp,
+                  letterSpacing: -0.5,
+                ),
+              ),
+              Text(
+                'Soteria',
+                style: context.displayLarge.copyWith(
+                  color: SoteriaColors.gold,
+                  fontWeight: FontWeight.w900,
+                  fontSize: 48.sp,
+                  letterSpacing: -1.0,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              Text(
+                'Rise through knowledge and\ncompete with the best.',
+                style: context.bodyLarge.copyWith(
+                  color: Colors.white.withValues(alpha: 0.5),
+                  height: 1.3,
+                  fontSize: 15.sp,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+
+          const Spacer(flex: 1),
+
+          // Action Buttons
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Continue with Google
+              _PrimaryButton(
+                label: 'Continue with Google',
+                onTap: () => notifier.signInWithGoogle(),
+                isLoading: state.isLoading,
+              ),
+
+              SizedBox(height: 12.h),
+
+              // Create Account
+              _SecondaryButton(
+                label: 'Create Account',
+                onTap: state.isLoading
+                    ? null
+                    : () => ref
+                        .read(navigationServiceProvider)
+                        .push('${SoteriaRoutes.auth}/register'),
+              ),
+
+              SizedBox(height: 24.h),
+
+              // Login with Email
+              TextButton(
+                onPressed: state.isLoading
+                    ? null
+                    : () => EmailLoginDialog.show(context),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.zero,
+                  minimumSize: Size.zero,
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+                child: Text(
+                  'Login with Email',
+                  style: context.bodyMedium.copyWith(
+                    color: Colors.white.withValues(alpha: 0.6),
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14.sp,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          const Spacer(flex: 1),
+
+          // Footer Links
+          Padding(
+            padding: EdgeInsets.only(bottom: 12.h),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _LegalLink(label: 'Terms', onTap: () {}),
+                const _LegalDot(),
+                _LegalLink(label: 'Privacy', onTap: () {}),
+                const _LegalDot(),
+                _LegalLink(label: 'Guidelines', onTap: () {}),
+              ],
+            ),
+          ),
+        ],
       ),
     );
+
   }
 }
 
@@ -208,18 +188,13 @@ class _PrimaryButton extends StatelessWidget {
         opacity: isLoading ? 0.6 : 1.0,
         child: Container(
           width: double.infinity,
-          height: 60.h,
+          height: 56.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18.r),
-            gradient: const LinearGradient(
-              colors: [
-                Color(0xFFD8B24A),
-                Color(0xFFB8860B),
-              ],
-            ),
+            color: SoteriaColors.gold,
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFFD8B24A).withValues(alpha: 0.15),
+                color: SoteriaColors.gold.withValues(alpha: 0.15),
                 blurRadius: 20,
                 offset: const Offset(0, 8),
               ),
@@ -276,7 +251,7 @@ class _SecondaryButton extends StatelessWidget {
         opacity: isDisabled ? 0.4 : 1.0,
         child: Container(
           width: double.infinity,
-          height: 60.h,
+          height: 56.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(18.r),
             color: Colors.white.withValues(alpha: 0.04),
@@ -312,11 +287,11 @@ class _LegalLink extends StatelessWidget {
       child: Text(
         label,
         style: TextStyle(
-          color: const Color(0xFFD8B24A),
-          fontSize: 14.sp,
+          color: SoteriaColors.gold,
+          fontSize: 13.sp,
           fontWeight: FontWeight.w500,
           decoration: TextDecoration.underline,
-          decorationColor: const Color(0xFFD8B24A).withValues(alpha: 0.5),
+          decorationColor: SoteriaColors.gold.withValues(alpha: 0.5),
         ),
       ),
     );
@@ -329,12 +304,12 @@ class _LegalDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.w),
+      padding: EdgeInsets.symmetric(horizontal: 6.w),
       child: Text(
         '•',
         style: TextStyle(
-          color: Colors.white.withValues(alpha: 0.2),
-          fontSize: 16.sp,
+          color: Colors.white.withValues(alpha: 0.3),
+          fontSize: 14.sp,
         ),
       ),
     );

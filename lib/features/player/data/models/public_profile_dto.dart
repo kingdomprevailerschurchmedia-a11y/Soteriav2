@@ -24,6 +24,7 @@ class PublicProfileDto {
       featuredBadges: (data['featuredBadges'] as List? ?? [])
           .map((e) => CompetitiveBadge.fromJson(e as Map<String, dynamic>))
           .toList(),
+      isSearchable: data['isSearchable'] as bool? ?? true,
       careerHighlights: data['careerHighlights'] != null
           ? CareerStatistics.fromJson(data['careerHighlights'])
           : CareerStatistics(
@@ -65,6 +66,7 @@ class PublicProfileDto {
       'division': profile.division,
       'equippedTitle': profile.equippedTitle?.toJson(),
       'featuredBadges': profile.featuredBadges.map((e) => e.toJson()).toList(),
+      'isSearchable': profile.isSearchable,
       'careerHighlights': profile.careerHighlights.toJson(),
       'updatedAt': Timestamp.fromDate(profile.updatedAt),
       'schemaVersion': profile.schemaVersion,

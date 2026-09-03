@@ -22,6 +22,31 @@ final achievementServiceProvider = Provider<AchievementService>((ref) {
   );
 });
 
+final achievementClaimControllerProvider =
+    NotifierProvider<AchievementClaimNotifier, AsyncValue<void>>(
+      AchievementClaimNotifier.new,
+    );
+
+class AchievementClaimNotifier extends Notifier<AsyncValue<void>> {
+  @override
+  AsyncValue<void> build() {
+    return const AsyncValue.data(null);
+  }
+
+  Future<void> claim({
+    required String userId,
+    required String achievementId,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      await ref.read(achievementServiceProvider).claimAchievement(userId, achievementId);
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+}
+
 /// Stream provider for the current player's earned achievements.
 final playerAchievementsStreamProvider =
     StreamProvider<List<PlayerAchievement>>((ref) {
@@ -40,6 +65,47 @@ final playerAchievementMapProvider = Provider<Map<String, PlayerAchievement>>((r
   final achievements = ref.watch(playerAchievementsStreamProvider).value ?? [];
   return {for (final a in achievements) a.achievementId: a};
 });
+
+/// Provider for Achievement progress, combined with definitions.
+final achievementProgressProvider = Provider<AsyncValue<List<AchievementProgress>>>((ref) {
+  final playerStatesAsync = ref.watch(playerAchievementsStreamProvider);
+  final definitions = ref.watch(achievementDefinitionsProvider);
+
+  if (playerStatesAsync.isLoading) return const AsyncValue.loading();
+  if (playerStatesAsync.hasError) return AsyncValue.error(playerStatesAsync.error!, playerStatesAsync.stackTrace!);
+
+  final playerStates = playerStatesAsync.value ?? [];
+  final progress = definitions.map((def) {
+    final state = playerStates.firstWhere(
+      (s) => s.achievementId == def.id,
+      orElse: () => PlayerAchievement(
+        userId: '',
+        achievementId: def.id,
+        status: AchievementStatus.inProgress,
+        currentValue: 0.0,
+        targetValue: def.threshold,
+      ),
+    );
+    return AchievementProgress(definition: def, playerState: state);
+  }).toList();
+
+  return AsyncValue.data(progress);
+});
+
+class AchievementProgress {
+  final AchievementDefinition definition;
+  final PlayerAchievement playerState;
+
+  AchievementProgress({required this.definition, required this.playerState});
+
+  bool get isCompleted =>
+      playerState.status == AchievementStatus.unlocked ||
+      playerState.status == AchievementStatus.claimed;
+  
+  bool get isClaimed => playerState.status == AchievementStatus.claimed;
+
+  double get progressPercentage => (playerState.currentValue / definition.threshold).clamp(0.0, 1.0);
+}
 
 /// Provider for recently earned achievements, sorted by unlock time.
 final recentAchievementsProvider = Provider<List<PlayerAchievement>>((ref) {

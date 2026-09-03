@@ -18,6 +18,23 @@ enum TimePeriod {
   }
 }
 
+enum PerformanceMode {
+  overall,
+  practice,
+  competitive;
+
+  String get label {
+    switch (this) {
+      case PerformanceMode.overall:
+        return 'Overall';
+      case PerformanceMode.practice:
+        return 'Practice';
+      case PerformanceMode.competitive:
+        return 'Competitive';
+    }
+  }
+}
+
 enum TrendDirection { improving, stable, declining, insufficientData }
 
 enum InsightType {

@@ -37,8 +37,8 @@ class CompetitiveProfileHeader extends ConsumerWidget {
 
     return SoteriaCard(
       hasGlow: true,
-      glowColor: SoteriaColors.primary.withValues(alpha: 0.3),
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      glowColor: SoteriaColors.primary.withValues(alpha: 0.1),
+      padding: EdgeInsets.all(24.r),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -49,68 +49,79 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                 child: Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    SoteriaAvatar(
-                      imageUrl: identity.photoUrl,
-                      size: 80.w,
-                      hasBorder: true,
-                      isOnline: isOnline,
-                      showStatus: true,
-                    ),
                     Container(
-                      padding: const EdgeInsets.all(4),
+                      padding: EdgeInsets.all(4.r),
                       decoration: BoxDecoration(
-                        color: SoteriaColors.background,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: SoteriaColors.primary.withValues(alpha: 0.5),
-                          width: 2,
+                          color: SoteriaColors.secondary.withValues(alpha: 0.4),
+                          width: 2.w,
+                        ),
+                      ),
+                      child: SoteriaAvatar(
+                        imageUrl: identity.photoUrl,
+                        size: 90.w,
+                        hasBorder: false,
+                        isOnline: isOnline,
+                        showStatus: false,
+                      ),
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(6.r),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1E1638),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: SoteriaColors.secondary.withValues(alpha: 0.5),
+                          width: 1.5.w,
                         ),
                       ),
                       child: Icon(
                         Icons.camera_alt_rounded,
-                        size: 14.w,
-                        color: SoteriaColors.primary,
+                        size: 16.w,
+                        color: SoteriaColors.secondary,
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(width: SoteriaSpacing.lg),
+              SizedBox(width: 20.w),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AutoSizeText(
                       identity.displayName,
-                      style: context.headlineSmall.copyWith(
+                      style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.w900,
+                        color: Colors.white,
                         letterSpacing: -0.5,
                       ),
                       maxLines: 1,
-                      minFontSize: 16,
+                      minFontSize: 20,
                       overflow: TextOverflow.ellipsis,
                     ),
                     AutoSizeText(
                       '@${identity.username}',
                       maxLines: 1,
-                      minFontSize: 10,
+                      minFontSize: 12,
                       style: context.bodyMedium.copyWith(
                         color: SoteriaColors.muted,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    SizedBox(height: SoteriaSpacing.md),
+                    SizedBox(height: 12.h),
                     Row(
                       children: [
                         _IdentityBadge(
                           label: 'Lvl ${progression.currentLevel}',
-                          color: SoteriaColors.primary,
+                          color: const Color(0xFF7C4DFF),
                           icon: Icons.bolt_rounded,
                         ),
-                        SizedBox(width: SoteriaSpacing.sm),
+                        SizedBox(width: 8.w),
                         _IdentityBadge(
                           label: progression.currentRank.toUpperCase(),
-                          color: SoteriaColors.secondary,
+                          color: const Color(0xFF7C4DFF),
                           icon: Icons.emoji_events_rounded,
                         ),
                       ],
@@ -129,6 +140,7 @@ class CompetitiveProfileHeader extends ConsumerWidget {
             value: 'Lvl ${progression.currentLevel}',
             progress: progression.xpProgress,
             color: SoteriaColors.xpColor,
+            fractionText: '${progression.currentXp} / ${progression.xpRequiredForNextLevel - progression.xpRequiredForCurrentLevel} XP',
           ),
           
           SoteriaSpacing.gapMD,
@@ -139,12 +151,12 @@ class CompetitiveProfileHeader extends ConsumerWidget {
             label: 'RANK PROGRESS',
             value: rankInfo.isMaxRank ? 'ELITE' : '${(rankInfo.progressPercentage * 100).toInt()}%',
             progress: rankInfo.progressPercentage,
-            color: SoteriaColors.gold,
+            color: const Color(0xFF322A4D), // Darker bar color for Rank Progress as in image
+            isDarkBar: true,
           ),
 
-          SoteriaSpacing.gapMD,
-          const Divider(color: Colors.white10),
-          SoteriaSpacing.gapMD,
+          SoteriaSpacing.gapLG,
+          
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -156,48 +168,35 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                     style: context.labelSmall.copyWith(
                       color: SoteriaColors.muted,
                       letterSpacing: 1.2,
+                      fontSize: 10.sp,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
+                  SizedBox(height: 4.h),
                   Text(
                     '${progression.rankPoints} RP',
-                    style: context.titleMedium.copyWith(
+                    style: context.headlineMedium.copyWith(
                       color: SoteriaColors.textPrimary,
                       fontWeight: FontWeight.w900,
+                      fontSize: 24.sp,
                     ),
                   ),
                 ],
               ),
-              if (globalPosition > 0)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(
-                      'GLOBAL RANK',
-                      style: context.labelSmall.copyWith(
-                        color: SoteriaColors.muted,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                    Text(
-                      '#$globalPosition',
-                      style: context.titleMedium.copyWith(
-                        color: SoteriaColors.gold,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
+              Container(
+                padding: EdgeInsets.all(12.r),
+                decoration: BoxDecoration(
+                  color: SoteriaColors.gold.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12.r),
+                  border: Border.all(color: SoteriaColors.gold.withValues(alpha: 0.2)),
                 ),
+                child: Icon(
+                  Icons.stars_rounded,
+                  color: SoteriaColors.gold,
+                  size: 28.sp,
+                ),
+              ),
             ],
-          ),
-          momentumAsync.when(
-            data: (momentum) => momentum != null
-                ? Padding(
-                    padding: EdgeInsets.only(top: SoteriaSpacing.md),
-                    child: MomentumIndicator(momentum: momentum),
-                  )
-                : const SizedBox.shrink(),
-            loading: () => const SizedBox.shrink(),
-            error: (_, _) => const SizedBox.shrink(),
           ),
         ],
       ),
@@ -210,6 +209,8 @@ class CompetitiveProfileHeader extends ConsumerWidget {
     required String value,
     required double progress,
     required Color color,
+    String? fractionText,
+    bool isDarkBar = false,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,20 +218,15 @@ class CompetitiveProfileHeader extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: Text(
-                label,
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  letterSpacing: 1.2,
-                  fontSize: 9.sp,
-                  fontWeight: FontWeight.w900,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              label,
+              style: context.labelSmall.copyWith(
+                color: SoteriaColors.muted,
+                letterSpacing: 1.2,
+                fontSize: 10.sp,
+                fontWeight: FontWeight.w900,
               ),
             ),
-            SizedBox(width: 8.w),
             Text(
               value,
               style: context.labelSmall.copyWith(
@@ -241,12 +237,29 @@ class CompetitiveProfileHeader extends ConsumerWidget {
             ),
           ],
         ),
-        SizedBox(height: 6.h),
-        SoteriaProgressBar(
-          progress: progress,
-          color: color,
-          height: 6,
-          hasGlow: true,
+        SizedBox(height: 8.h),
+        Stack(
+          alignment: Alignment.centerRight,
+          children: [
+            SoteriaProgressBar(
+              progress: progress,
+              color: isDarkBar ? Colors.white.withValues(alpha: 0.05) : color,
+              height: 8,
+              hasGlow: !isDarkBar,
+            ),
+            if (fractionText != null)
+              Padding(
+                padding: EdgeInsets.only(top: 24.h),
+                child: Text(
+                  fractionText,
+                  style: context.labelSmall.copyWith(
+                    color: color,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 10.sp,
+                  ),
+                ),
+              ),
+          ],
         ),
       ],
     );

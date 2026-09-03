@@ -40,6 +40,13 @@ class CompetitiveQuickActions extends ConsumerWidget {
       return const SizedBox.shrink();
     }
 
+    if (!profile.isSearchable && relationship != RelationshipStatus.friends) {
+      return SoteriaButton.outline(
+        label: 'NOT ACCEPTING CHALLENGES',
+        onPressed: null,
+      );
+    }
+
     return presenceAsync.when(
       data: (presence) {
         if (presence?.status == PresenceStatus.offline && !isRecent) {

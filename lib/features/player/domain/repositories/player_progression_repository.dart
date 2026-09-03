@@ -25,6 +25,16 @@ abstract class PlayerProgressionRepository {
     XpTransaction xpTransaction,
   );
 
+  /// Authoritatively applies competitive results and XP rewards in a single atomic transaction.
+  /// This method is optimized to perform all necessary reads before any writes, 
+  /// satisfying Firestore transaction requirements.
+  Future<void> applyCompetitiveResultsWithXpInTransaction(
+    dynamic transaction,
+    CompetitiveResult result,
+    XpTransaction xpTransaction, {
+    PlayerProfile? profile,
+  });
+
   Future<List<XpTransaction>> getXpTransactions(
     String userId, {
     int limit = 20,
