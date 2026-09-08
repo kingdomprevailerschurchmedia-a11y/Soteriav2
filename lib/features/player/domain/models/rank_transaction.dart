@@ -14,7 +14,7 @@ abstract class RankTransaction with _$RankTransaction {
     required int previousRankPoints,
     required int changeAmount,
     required int newRankPoints,
-    @TimestampConverter() required DateTime timestamp,
+    @RequiredTimestampConverter() required DateTime timestamp,
     @Default(1) int schemaVersion,
   }) = _RankTransaction;
 

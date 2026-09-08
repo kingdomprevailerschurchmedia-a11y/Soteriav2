@@ -22,7 +22,7 @@ abstract class PlayerProgression with _$PlayerProgression {
     required String seasonId,
     required int seasonXp,
     required int seasonRankPoints,
-    @TimestampConverter() required DateTime lastUpdated,
+    @RequiredTimestampConverter() required DateTime lastUpdated,
     @Default(0) int dailyStreak,
     @Default(0) int longestStreak, // Daily Login Record
     @Default(0) int maxQuestionStreak, // Gameplay Record

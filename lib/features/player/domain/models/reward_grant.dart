@@ -20,8 +20,8 @@ abstract class RewardGrant with _$RewardGrant {
     String? transactionId,
     @TimestampConverter() DateTime? grantedAt,
     @TimestampConverter() DateTime? claimedAt,
-    @TimestampConverter() required DateTime createdAt,
-    @TimestampConverter() required DateTime updatedAt,
+    @RequiredTimestampConverter() required DateTime createdAt,
+    @RequiredTimestampConverter() required DateTime updatedAt,
   }) = _RewardGrant;
 
   factory RewardGrant.fromJson(Map<String, dynamic> json) =>

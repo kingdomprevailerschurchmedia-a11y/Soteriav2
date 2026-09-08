@@ -12,8 +12,8 @@ abstract class DailyEngagement with _$DailyEngagement {
     @Default(true) bool qualified,
     required String qualifyingActivityType, // e.g., 'practice', 'versus', 'daily_challenge'
     required String qualifyingActivityId,
-    @TimestampConverter() required DateTime firstQualifiedActivityAt,
-    @TimestampConverter() required DateTime createdAt,
+    @RequiredTimestampConverter() required DateTime firstQualifiedActivityAt,
+    @RequiredTimestampConverter() required DateTime createdAt,
   }) = _DailyEngagement;
 
   factory DailyEngagement.fromJson(Map<String, dynamic> json) =>

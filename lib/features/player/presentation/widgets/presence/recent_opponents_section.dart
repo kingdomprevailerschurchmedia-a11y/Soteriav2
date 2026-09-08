@@ -18,6 +18,44 @@ class RecentOpponentsSection extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final recentOpponentsAsync = ref.watch(recentOpponentsProvider);
 
+    return recentOpponentsAsync.when(
+      data: (opponentIds) {
+        if (opponentIds.isEmpty) {
+          return const SizedBox.shrink();
+        }
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
+              child: Text(
+                'RECENT OPPONENTS',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.muted,
+                  letterSpacing: 2,
+                ),
+              ),
+            ),
+            SizedBox(height: SoteriaSpacing.md),
+            SizedBox(
+              height: 100.h,
+              child: ListView.builder(
+                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
+                scrollDirection: Axis.horizontal,
+                itemCount: opponentIds.length,
+                itemBuilder: (context, index) =>
+                    _OpponentItem(userId: opponentIds[index]),
+              ),
+            ),
+          ],
+        );
+      },
+      loading: () => _buildLoadingState(context),
+      error: (_, _) => const SizedBox.shrink(),
+    );
+  }
+
+  Widget _buildLoadingState(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -34,49 +72,20 @@ class RecentOpponentsSection extends ConsumerWidget {
         SizedBox(height: SoteriaSpacing.md),
         SizedBox(
           height: 100.h,
-          child: recentOpponentsAsync.when(
-            data: (opponentIds) {
-              if (opponentIds.isEmpty) {
-                return _buildEmptyState(context);
-              }
-              return ListView.builder(
-                padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
-                scrollDirection: Axis.horizontal,
-                itemCount: opponentIds.length,
-                itemBuilder: (context, index) => _OpponentItem(userId: opponentIds[index]),
-              );
-            },
-            loading: () => _buildLoadingState(),
-            error: (_, _) => _buildErrorState(),
+          child: ListView.builder(
+            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            itemBuilder: (context, index) => Padding(
+              padding: EdgeInsets.only(right: SoteriaSpacing.md),
+              child: CircleAvatar(
+                  radius: 32.r,
+                  backgroundColor: Colors.white.withValues(alpha: 0.05)),
+            ),
           ),
         ),
       ],
     );
-  }
-
-  Widget _buildEmptyState(BuildContext context) {
-    return Center(
-      child: Text(
-        'No recent matches found.',
-        style: context.bodySmall.copyWith(color: SoteriaColors.muted),
-      ),
-    );
-  }
-
-  Widget _buildLoadingState() {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
-      scrollDirection: Axis.horizontal,
-      itemCount: 5,
-      itemBuilder: (context, index) => Padding(
-        padding: EdgeInsets.only(right: SoteriaSpacing.md),
-        child: CircleAvatar(radius: 32.r, backgroundColor: Colors.white.withValues(alpha: 0.05)),
-      ),
-    );
-  }
-
-  Widget _buildErrorState() {
-    return const Center(child: Icon(Icons.error_outline, color: SoteriaColors.error));
   }
 }
 

@@ -56,9 +56,9 @@ abstract class PlayerProfile with _$PlayerProfile {
 
     @TimestampConverter() DateTime? lastDailyRewardClaim,
     @Default(0) int registrationOrder,
-    @TimestampConverter() required DateTime createdAt,
-    @TimestampConverter() required DateTime lastLogin,
-    @TimestampConverter() required DateTime updatedAt,
+    @RequiredTimestampConverter() required DateTime createdAt,
+    @RequiredTimestampConverter() required DateTime lastLogin,
+    @RequiredTimestampConverter() required DateTime updatedAt,
     @Default({}) Map<String, dynamic> settings,
     @Default(1) int version,
   }) = _PlayerProfile;

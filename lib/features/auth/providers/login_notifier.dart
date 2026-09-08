@@ -98,10 +98,17 @@ class LoginNotifier extends Notifier<LoginState> {
           error: 'Please verify your email address before signing in.',
         );
       } else {
-        final errorMessage =
+        String errorMessage =
             result.error?.userMessage ?? 'Sign in failed. Please try again.';
+
+        // Custom tip for users who might have signed up with Google but are trying email login
+        if (result.error?.type == IdentityExceptionType.invalidCredentials) {
+          errorMessage +=
+              '\n\nTip: If you usually sign in with Google, you must use "Forgot Password" first to set an account password.';
+        }
+
         LoggerService.w(
-          'Authentication failed: ${result.error?.message}',
+          'Authentication failed: ${result.error}',
           feature: 'Auth',
           metadata: {'email': state.email, 'type': result.error?.type.name},
         );

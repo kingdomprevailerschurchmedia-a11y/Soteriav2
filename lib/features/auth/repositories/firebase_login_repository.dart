@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart' as gsi;
 import 'login_repository.dart';
 import '../models/authentication_result.dart';
+import '../models/identity_exception.dart';
 import '../../../core/identity/repositories/firebase_error_mapper.dart';
 import '../../../core/logging/logger_service.dart';
 
@@ -31,13 +32,28 @@ class FirebaseLoginRepository implements LoginRepository {
         }
         return AuthenticationResult.success(user.uid);
       }
-      return const AuthenticationResult.failure(null);
+      return const AuthenticationResult.failure(
+        IdentityException(IdentityExceptionType.unknown, 'User data missing after login'),
+      );
     } on FirebaseAuthException catch (e) {
+      LoggerService.e(
+        'Firebase Auth Exception during Email Login',
+        error: e,
+        feature: 'Auth',
+      );
       return AuthenticationResult.failure(
         FirebaseErrorMapper.mapFirebaseAuthException(e),
       );
-    } catch (e) {
-      return const AuthenticationResult.failure(null);
+    } catch (e, st) {
+      LoggerService.e(
+        'Unexpected error during Email Login',
+        error: e,
+        stackTrace: st,
+        feature: 'Auth',
+      );
+      return AuthenticationResult.failure(
+        IdentityException(IdentityExceptionType.unknown, e.toString()),
+      );
     }
   }
 

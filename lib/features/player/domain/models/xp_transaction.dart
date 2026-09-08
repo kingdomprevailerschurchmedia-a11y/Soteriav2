@@ -24,7 +24,7 @@ abstract class XpTransaction with _$XpTransaction {
     required int amount,
     required XpSource source,
     required String referenceId,
-    @TimestampConverter() required DateTime createdAt,
+    @RequiredTimestampConverter() required DateTime createdAt,
     @Default(1) int schemaVersion,
   }) = _XpTransaction;
 

@@ -15,7 +15,7 @@ abstract class CompetitiveResult with _$CompetitiveResult {
     required CompetitiveOutcome outcome,
     required String mode,
     required int score,
-    @TimestampConverter() required DateTime completedAt,
+    @RequiredTimestampConverter() required DateTime completedAt,
     @Default(0) int maxStreak,
     String? opponentId,
     Map<String, dynamic>? performanceModifiers,

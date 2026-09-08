@@ -248,16 +248,16 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
-                  // Recent Opponents
+                  // Performance
                   const SliverToBoxAdapter(
-                    child: RepaintBoundary(child: RecentOpponentsSection()),
+                    child: RepaintBoundary(child: PerformanceSection()),
                   ),
 
                   const SliverToBoxAdapter(child: SoteriaSpacing.gapLG),
 
-                  // Performance
+                  // Recent Opponents
                   const SliverToBoxAdapter(
-                    child: RepaintBoundary(child: PerformanceSection()),
+                    child: RepaintBoundary(child: RecentOpponentsSection()),
                   ),
 
                   // Announcements

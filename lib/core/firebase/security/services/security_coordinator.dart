@@ -74,8 +74,9 @@ class SecurityCoordinator {
         );
       });
     } catch (e, st) {
+      final consoleLink = 'https://console.firebase.google.com/project/${FirebaseConfig.fromEnvironment().options.projectId}/appcheck/apps';
       LoggerService.e(
-        'Failed to activate App Check',
+        'Failed to activate App Check. If you are using an emulator, ensure the debug token is registered in the Firebase Console: $consoleLink',
         error: e,
         stackTrace: st,
         feature: 'Security',
