@@ -108,6 +108,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       config: updatedConfig,
       access: access,
       isOffline: false,
+      isLoading: true, // Show loading state immediately on build
     );
   }
 

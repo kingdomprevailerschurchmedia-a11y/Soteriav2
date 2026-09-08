@@ -116,6 +116,7 @@ class ProLobbyScreen extends ConsumerWidget {
                       ),
                       LobbyStartAction(
                         enabled: state.access.isAllowed && !state.isStarting,
+                        isLoading: state.isStarting,
                         error: _getErrorMessage(state.access),
                         label: state.isStarting
                             ? 'INITIALIZING...'

@@ -101,12 +101,6 @@ class DashboardHeader extends ConsumerWidget {
                         Text('👋', style: TextStyle(fontSize: 14.sp)),
                       ],
                     ),
-                    SizedBox(height: 6.h),
-                    _HeaderBadge(
-                      label: 'LEVEL $level',
-                      icon: Icons.auto_awesome_rounded,
-                      color: SoteriaColors.primary,
-                    ),
                   ],
                 ),
               ),
@@ -204,57 +198,6 @@ class _ChallengesAction extends ConsumerWidget {
             ),
           ),
       ],
-    );
-  }
-}
-
-class _HeaderBadge extends StatelessWidget {
-  const _HeaderBadge({
-    required this.label,
-    required this.icon,
-    required this.color,
-  });
-
-  final String label;
-  final IconData icon;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    final badgeColor = SoteriaColors.primary;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
-      decoration: BoxDecoration(
-        color: badgeColor.withValues(alpha: 0.25),
-        borderRadius: BorderRadius.circular(100),
-        border: Border.all(
-          color: badgeColor.withValues(alpha: 0.4),
-          width: 1.0,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: badgeColor.withValues(alpha: 0.4),
-            blurRadius: 8,
-            spreadRadius: 0,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 8.sp, color: Colors.white),
-          SizedBox(width: 4.w),
-          Text(
-            label,
-            style: TextStyle(
-              color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 7.5.sp,
-              fontWeight: FontWeight.w900,
-              letterSpacing: 1.0,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

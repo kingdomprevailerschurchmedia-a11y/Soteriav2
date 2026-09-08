@@ -419,20 +419,35 @@ class FirestoreProModeRepository implements ProModeRepository {
         ? Duration(milliseconds: totalResponseTime.inMilliseconds ~/ totalAnswered)
         : Duration.zero;
 
-    // PRE-FETCH: Get Player Profile outside the transaction to reduce transaction duration
+    // PRE-FETCH: Get Player Profile outside the transaction
     final playerProfile = await _playerRepository.getPlayerProfile(finalState.playerId);
     if (playerProfile == null) throw Exception('Player profile not found');
+
+    ProModeResult? transactionResult;
 
     await _database.instance.runTransaction<void>((transaction) async {
       final sessionRef = _database.collection('competitive_sessions').doc(sessionId);
       final resultRef = _database.collection('pro_results').doc(sessionId);
+      final playerRef = _database.collection('users').doc(finalState.playerId);
+      final walletRef = _database.collection('wallets').doc(finalState.playerId);
+      final gameProfileRef = _database.collection('user_game_profiles').doc(finalState.playerId);
       
-      // 1. ATOMIC BATCH READ: All reads MUST happen before any writes in Firestore transactions
-      final sessionDoc = await transaction.get(sessionRef);
+      // 1. ATOMIC BATCH READ: All reads MUST happen before any writes
+      final snapshots = await Future.wait([
+        transaction.get(sessionRef),
+        transaction.get(resultRef),
+      ]);
+      
+      final sessionDoc = snapshots[0];
+      final resultDoc = snapshots[1];
+
       if (!sessionDoc.exists) throw Exception('Session not found');
       
-      final resultDoc = await transaction.get(resultRef);
-      if (resultDoc.exists) return; // Idempotency check
+      // Idempotency: If result already exists, we return the existing one (cached in local var or re-read)
+      if (resultDoc.exists) {
+        transactionResult = ProModeResult.fromJson(resultDoc.data()!);
+        return;
+      }
 
       final sessionData = sessionDoc.data() as Map<String, dynamic>;
       final configData = sessionData['config'] as Map<String, dynamic>;
@@ -443,10 +458,10 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       if (uid == null) throw Exception('Invalid session: User ID missing');
 
-      // VITAL SECURITY: Verify that the fee paid matches the difficulty config
+      // VITAL SECURITY: Verify fee
       final expectedFee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
       if (reservedFee != null && reservedFee < expectedFee) {
-        throw Exception('Security violation: Entry fee mismatch. Expected $expectedFee, found $reservedFee.');
+        throw Exception('Security violation: Entry fee mismatch.');
       }
 
       // 2. Authoritative Reward Calculation
@@ -477,11 +492,6 @@ class FirestoreProModeRepository implements ProModeRepository {
         questionCount: questionCount,
       );
 
-      final rewards = RewardSummary(
-        baseXP: settlement.xpEarned,
-        baseCoins: settlement.coinsWon,
-      );
-
       final result = ProModeResult(
         sessionId: sessionId,
         playerId: finalState.playerId,
@@ -495,7 +505,10 @@ class FirestoreProModeRepository implements ProModeRepository {
         totalDuration: tempResult.totalDuration,
         accuracy: accuracy,
         maxStreak: maxStreak,
-        rewards: rewards,
+        rewards: RewardSummary(
+          baseXP: settlement.xpEarned,
+          baseCoins: settlement.coinsWon,
+        ),
         avgResponseTime: avgResponseTime,
         fastestAnswerTime: fastestTime,
         slowestAnswerTime: slowestTime,
@@ -505,8 +518,7 @@ class FirestoreProModeRepository implements ProModeRepository {
       );
 
       // 3. AUTHORITATIVE PROGRESSION SYNC (Atomic Rank & XP)
-      // IMPORTANT: This method performs its own transaction.get calls.
-      // It MUST be executed BEFORE any other transaction.set/update/delete calls in this transaction.
+      // This call handles its own Reads (which we just ensured are valid)
       final xpTx = XpTransaction(
         transactionId: '${sessionId}_xp',
         userId: uid,
@@ -534,17 +546,12 @@ class FirestoreProModeRepository implements ProModeRepository {
         profile: playerProfile,
       );
 
-      // 4. ATOMIC WRITES: Perform all state updates after all calculations and progression sync reads
-      
+      // 4. ATOMIC WRITES
       transaction.update(sessionRef, {'status': 'completed'});
       transaction.set(resultRef, result.toJson());
       
-      final playerRef = _database.collection('users').doc(uid);
-      final walletRef = _database.collection('wallets').doc(uid);
-      final gameProfileRef = _database.collection('user_game_profiles').doc(uid);
-      final amount = settlement.coinsWon;
-      
       final txId = _database.collection('wallet_transactions').doc().id;
+      final settlementAmount = settlement.coinsWon;
 
       final playerUpdates = <String, dynamic>{
         'proSessions': FieldValue.increment(1),
@@ -553,36 +560,34 @@ class FirestoreProModeRepository implements ProModeRepository {
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
-      if (amount > 0) {
-        playerUpdates['coins'] = FieldValue.increment(amount);
+      if (settlementAmount > 0) {
+        playerUpdates['coins'] = FieldValue.increment(settlementAmount);
         playerUpdates['lastCoinTransactionId'] = txId;
       }
 
       transaction.update(playerRef, playerUpdates);
 
       final walletUpdates = <String, dynamic>{
-        'coins': FieldValue.increment(amount),
-        'lifetimeCoinsEarned': FieldValue.increment(amount),
         'updatedAt': FieldValue.serverTimestamp(),
       };
-      if (amount > 0) {
+      if (settlementAmount > 0) {
+        walletUpdates['coins'] = FieldValue.increment(settlementAmount);
         walletUpdates['lastTransactionId'] = txId;
       }
-
       transaction.set(walletRef, walletUpdates, SetOptions(merge: true));
 
       transaction.set(gameProfileRef, {
-        'coins': FieldValue.increment(amount),
+        'coins': FieldValue.increment(settlementAmount),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      if (amount > 0) {
+      if (settlementAmount > 0) {
         final txData = {
           'userId': uid,
           'type': 'coins',
           'currency': 'coins',
           'direction': 'credit',
-          'amount': amount,
+          'amount': settlementAmount,
           'transactionType': 'reward',
           'source': 'proReward',
           'referenceId': sessionId,
@@ -598,16 +603,19 @@ class FirestoreProModeRepository implements ProModeRepository {
         transaction.set(_database.collection('coin_transactions').doc(txId), txData);
       }
 
-      // Store Settlement Record for auditing
       final settlementRef = _database.collection('settlements').doc(sessionId);
       transaction.set(settlementRef, settlement.toJson());
+
+      transactionResult = result;
     });
 
-    // Return the result (though caller might not use it as much as the DB state)
-    final finalResultDoc = await _database.collection('pro_results').doc(sessionId).get();
-    return ProModeResult.fromJson(finalResultDoc.data()!);
-  }
+    if (transactionResult == null) {
+      throw Exception('Session completion failed: Transaction did not produce a result.');
+    }
 
+    return transactionResult!;
+  }
+ Joseph Project/Soteria/lib/features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart
   @override
   Future<ProModeResult?> getResult(String sessionId) async {
     final snapshot = await _database.collection('pro_results').doc(sessionId).get();

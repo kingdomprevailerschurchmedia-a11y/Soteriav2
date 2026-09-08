@@ -125,7 +125,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                   ),
 
-                  SliverToBoxAdapter(child: SizedBox(height: 24.h)),
+                  SliverToBoxAdapter(child: SizedBox(height: 12.h)),
 
                   // Unified Profile & Rank Hero Card
                   SliverToBoxAdapter(

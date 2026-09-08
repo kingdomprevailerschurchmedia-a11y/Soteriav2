@@ -85,7 +85,11 @@ class AnalyticsAggregator {
     Duration slowest = Duration.zero;
 
     for (final r in results) {
-      final acc = _normalizeAccuracy(r.accuracy);
+      // Calculate true accuracy from raw counts to bypass any legacy score-based calculation issues
+      final acc = r.totalQuestions > 0 
+          ? (r.correctAnswers / r.totalQuestions).toDouble() 
+          : 0.0;
+          
       questions += r.totalQuestions.toInt();
       correct += r.correctAnswers.toInt();
       incorrect += r.wrongAnswers.toInt();
@@ -124,31 +128,26 @@ class AnalyticsAggregator {
       return _Averages(accuracy: 0, score: 0, responseTime: Duration.zero);
     }
 
-    double totalAccuracy = 0;
     int totalScore = 0;
     int totalMillis = 0;
 
     for (final r in results) {
-      totalAccuracy += _normalizeAccuracy(r.accuracy);
       totalScore += r.finalScore;
       totalMillis += r.averageResponseTime.inMilliseconds;
     }
 
+    // Calculate accuracy from raw counts for true weighted average and to fix legacy data issues
+    final double aggregateAccuracy = totals.questions > 0 
+        ? totals.correct / totals.questions 
+        : 0.0;
+
     return _Averages(
-      accuracy: totalAccuracy / results.length,
+      accuracy: aggregateAccuracy,
       score: (totalScore / results.length).round(),
       responseTime: Duration(
         milliseconds: (totalMillis / results.length).round(),
       ),
     );
-  }
-
-  static double _normalizeAccuracy(double value) {
-    // Handle both 0.0-1.0 and 0-100 values for backward compatibility
-    if (value > 1.0) {
-      return value / 100.0;
-    }
-    return value;
   }
 
   static List<CategoryPerformance> _calculateCategoryPerformance(
@@ -221,10 +220,15 @@ class AnalyticsAggregator {
 
     final accuracyPoints = sorted
         .map(
-          (r) => PerformanceTrendPoint(date: r.completedAt, value: _normalizeAccuracy(r.accuracy)),
+          (r) => PerformanceTrendPoint(
+            date: r.completedAt,
+            value: r.totalQuestions > 0 
+                ? (r.correctAnswers / r.totalQuestions).toDouble() 
+                : 0.0,
+          ),
         )
         .toList();
-    final scorePoints = sorted
+ Joseph Project/Soteria/lib/features/analytics/data/repositories/analytics_aggregator.dart    final scorePoints = sorted
         .map(
           (r) => PerformanceTrendPoint(
             date: r.completedAt,

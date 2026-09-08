@@ -379,6 +379,12 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /settlements/{settlementId} {
+      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
+      allow create: if isAuthenticated() && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
     // GAMEPLAY SESSIONS
     match /practice_sessions/{sessionId} {
       allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
