@@ -46,45 +46,26 @@ class DashboardHeader extends ConsumerWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Left: Avatar and Level
+            // Left: Avatar
             SoteriaScaleIn(
               duration: const Duration(milliseconds: 700),
               delay: const Duration(milliseconds: 200),
-              child: Stack(
-                clipBehavior: Clip.none,
-                alignment: Alignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () => nav.go('/app/profile'),
-                    child: Hero(
-                      tag: 'player_avatar',
-                      child: SoteriaAvatar(
-                      isOnline: isOnline,
-                      showStatus: true,
-                      size: 64.r,
-                      showGlow: true,
-                      imageUrl: avatarUrl,
-                    ),
-                    ),
+              child: GestureDetector(
+                onTap: () => nav.go('/app/profile'),
+                child: Hero(
+                  tag: 'player_avatar',
+                  child: SoteriaAvatar(
+                    isOnline: isOnline,
+                    showStatus: true,
+                    size: 54.r,
+                    showGlow: true,
+                    imageUrl: avatarUrl,
                   ),
-                  Positioned(
-                    bottom: -28.h,
-                    left: 0,
-                    child: SoteriaScaleIn(
-                      duration: const Duration(milliseconds: 700),
-                      delay: const Duration(milliseconds: 400),
-                      child: _HeaderBadge(
-                        label: 'LEVEL $level',
-                        icon: Icons.auto_awesome_rounded,
-                        color: SoteriaColors.primary,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
-            SizedBox(width: 8.w),
-            // Middle: Greeting and Name
+            SizedBox(width: 16.w),
+            // Middle: Greeting, Name and Level
             Expanded(
               child: SoteriaSlideLeft(
                 duration: const Duration(milliseconds: 600),
@@ -99,7 +80,7 @@ class DashboardHeader extends ConsumerWidget {
                         color: Colors.white.withValues(alpha: 0.8),
                         letterSpacing: 0.5,
                         fontWeight: FontWeight.w500,
-                        fontSize: 14.sp,
+                        fontSize: 11.sp,
                       ),
                     ),
                     Row(
@@ -111,14 +92,20 @@ class DashboardHeader extends ConsumerWidget {
                             style: context.displaySmall.copyWith(
                               fontWeight: FontWeight.w900,
                               letterSpacing: -0.5,
-                              fontSize: 22.sp,
+                              fontSize: 17.sp,
                             ),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        SizedBox(width: 6.w),
-                        Text('👋', style: TextStyle(fontSize: 18.sp)),
+                        SizedBox(width: 4.w),
+                        Text('👋', style: TextStyle(fontSize: 14.sp)),
                       ],
+                    ),
+                    SizedBox(height: 6.h),
+                    _HeaderBadge(
+                      label: 'LEVEL $level',
+                      icon: Icons.auto_awesome_rounded,
+                      color: SoteriaColors.primary,
                     ),
                   ],
                 ),
@@ -139,7 +126,7 @@ class DashboardHeader extends ConsumerWidget {
                       label: 'Coins',
                     ),
                   ),
-                  SizedBox(width: 12.w),
+                  SizedBox(width: 16.w),
                   _ChallengesAction(),
                 ],
               ),
@@ -160,11 +147,14 @@ class _ChallengesAction extends ConsumerWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        IconButton(
-          onPressed: nav.playChallenges,
-          icon: Container(
+        GestureDetector(
+          onTap: nav.playChallenges,
+          child: Container(
+            width: 54.r,
+            height: 54.r,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withValues(alpha: 0.1),
@@ -172,29 +162,43 @@ class _ChallengesAction extends ConsumerWidget {
                   spreadRadius: 0,
                 ),
               ],
+              border: Border.all(
+                color: SoteriaColors.primary.withValues(alpha: 0.2),
+                width: 2.w,
+              ),
             ),
-            child: Image.asset(
-              'assets/icons/flash_icon.png',
-              width: 24.sp,
-              height: 24.sp,
+            child: Center(
+              child: Image.asset(
+                'assets/icons/flash_icon.png',
+                width: 26.r,
+                height: 26.r,
+                fit: BoxFit.contain,
+              ),
             ),
-          ),
-          style: IconButton.styleFrom(
-            backgroundColor: Colors.white.withValues(alpha: 0.05),
           ),
         ),
         if (incomingCount > 0)
           Positioned(
-            top: 2,
-            right: 2,
+            top: 0,
+            right: 0,
             child: Container(
-              padding: const EdgeInsets.all(4),
-              decoration: const BoxDecoration(color: SoteriaColors.error, shape: BoxShape.circle),
-              constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+              padding: EdgeInsets.all(4.r),
+              decoration: const BoxDecoration(
+                color: SoteriaColors.error,
+                shape: BoxShape.circle,
+              ),
+              constraints: BoxConstraints(
+                minWidth: 20.r,
+                minHeight: 20.r,
+              ),
               child: Center(
                 child: Text(
                   incomingCount.toString(),
-                  style: const TextStyle(color: Colors.white, fontSize: 8, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -219,34 +223,34 @@ class _HeaderBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final badgeColor = SoteriaColors.primary;
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
       decoration: BoxDecoration(
         color: badgeColor.withValues(alpha: 0.25),
         borderRadius: BorderRadius.circular(100),
         border: Border.all(
           color: badgeColor.withValues(alpha: 0.4),
-          width: 1.2,
+          width: 1.0,
         ),
         boxShadow: [
           BoxShadow(
             color: badgeColor.withValues(alpha: 0.4),
-            blurRadius: 12,
-            spreadRadius: 1,
+            blurRadius: 8,
+            spreadRadius: 0,
           ),
         ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 10.sp, color: Colors.white),
-          SizedBox(width: 6.w),
+          Icon(icon, size: 8.sp, color: Colors.white),
+          SizedBox(width: 4.w),
           Text(
             label,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.9),
-              fontSize: 9.sp,
+              fontSize: 7.5.sp,
               fontWeight: FontWeight.w900,
-              letterSpacing: 1.2,
+              letterSpacing: 1.0,
             ),
           ),
         ],
@@ -280,7 +284,7 @@ class _CompactStat extends StatelessWidget {
           style: context.headlineMedium.copyWith(
             fontWeight: FontWeight.w900,
             color: SoteriaColors.textPrimary,
-            fontSize: 18.sp,
+            fontSize: 16.sp,
           ),
         ),
         Row(
@@ -289,18 +293,18 @@ class _CompactStat extends StatelessWidget {
             if (assetPath != null)
               Image.asset(
                 assetPath!,
-                width: 20.sp,
-                height: 20.sp,
+                width: 16.sp,
+                height: 16.sp,
                 fit: BoxFit.contain,
               )
             else if (icon != null)
-              Icon(icon, size: 20.sp, color: color),
+              Icon(icon, size: 16.sp, color: color),
             SizedBox(width: 2.w),
             Text(
               label,
               style: context.labelSmall.copyWith(
                 color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
-                fontSize: 11.sp,
+                fontSize: 10.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),

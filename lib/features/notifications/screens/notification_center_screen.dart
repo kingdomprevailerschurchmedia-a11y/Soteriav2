@@ -37,9 +37,8 @@ class NotificationCenterScreen extends ConsumerWidget {
               Icons.done_all_rounded,
               color: SoteriaColors.muted,
             ),
-            onPressed: () {
-              // Mark all as read logic if available
-            },
+            onPressed: () =>
+                ref.read(notificationListProvider.notifier).markAllAsRead(),
           ),
           IconButton(
             icon: const Icon(

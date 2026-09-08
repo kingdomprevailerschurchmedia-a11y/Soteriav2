@@ -60,9 +60,10 @@ class FirebaseAchievementRepository implements AchievementRepository {
     final txId = 'ach_reward_${userId}_$achievementId';
 
     await _firestore.runTransaction((tx) async {
+      // 1. ATOMIC READS (Mandatory at the start of transaction)
       final achievementSnapshot = await tx.get(docRef);
 
-      // 1. Idempotency Check for Achievement Document
+      // 2. LOGIC & IDEMPOTENCY
       if (achievementSnapshot.exists) {
         final current = PlayerAchievement.fromJson(achievementSnapshot.data()!);
         if (current.status == AchievementStatus.unlocked ||
@@ -72,25 +73,10 @@ class FirebaseAchievementRepository implements AchievementRepository {
       }
 
       final now = DateTime.now();
-      final playerAchievement = PlayerAchievement(
-        userId: userId,
-        achievementId: achievementId,
-        status: AchievementStatus.unlocked,
-        currentValue: definition.threshold,
-        targetValue: definition.threshold,
-        unlockedAt: now,
-      );
 
-      // 3. Save Achievement State
-      tx.set(docRef, playerAchievement.toJson());
-
-      // 4. Update User document list (for legacy/easy access)
-      tx.update(userRef, {
-        'achievements': FieldValue.arrayUnion([achievementId]),
-        'updatedAt': now.toIso8601String(),
-      });
-
-      // 5. Grant XP Reward if applicable
+      // 3. ATOMIC WRITES (Including progression update which handles its own reads first)
+      // IMPORTANT: processXpTransaction performs tx.get() calls, so it MUST be called
+      // before ANY writes have been queued in this transaction.
       if (definition.xpReward > 0) {
         final xpTx = XpTransaction(
           transactionId: txId,
@@ -102,19 +88,33 @@ class FirebaseAchievementRepository implements AchievementRepository {
         );
 
         if (_progressionRepository is FirebasePlayerProgressionRepository) {
-          await (_progressionRepository)
+          await (_progressionRepository as FirebasePlayerProgressionRepository)
               .processXpTransaction(tx, xpTx);
         } else {
-          // Fallback for non-firestore implementations (e.g. mocks in some tests)
-          // though usually this repository is used with Firestore.
           LoggerService.w(
             'Progression repository is not FirebasePlayerProgressionRepository. Achievement reward may not be atomic.',
             feature: 'Achievement',
           );
-          // We can't safely proceed here if we want atomicity and don't have the firestore transaction hook.
-          // But for now, we'll just throw or log.
         }
       }
+
+      final playerAchievement = PlayerAchievement(
+        userId: userId,
+        achievementId: achievementId,
+        status: AchievementStatus.unlocked,
+        currentValue: definition.threshold,
+        targetValue: definition.threshold,
+        unlockedAt: now,
+      );
+
+      // 4. QUEUE WRITES
+      tx.set(docRef, playerAchievement.toJson());
+
+      // 5. Update User document list (for legacy/easy access)
+      tx.update(userRef, {
+        'achievements': FieldValue.arrayUnion([achievementId]),
+        'updatedAt': now.toIso8601String(),
+      });
     });
   }
 

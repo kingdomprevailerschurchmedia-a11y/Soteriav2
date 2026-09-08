@@ -9,6 +9,7 @@ import '../../../player/domain/models/goal.dart';
 import '../../../player/presentation/providers/goal_providers.dart';
 import '../../../player/presentation/screens/competitive_goals_screen.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import '../../../../core/widgets/feedback/feedback_components.dart';
 
 class DailyGoalsSection extends ConsumerWidget {
   const DailyGoalsSection({super.key});
@@ -134,12 +135,23 @@ class DailyGoalsSection extends ConsumerWidget {
               return Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _GoalProgressIcon(
-                    icon: _getIconForCategory(goal.definition.category),
-                    current: goal.playerState?.currentProgress.toInt() ?? 0,
-                    total: goal.definition.target.toInt(),
-                    color: _getColorForIndex(index),
-                    isCompleted: goal.isCompleted,
+                  GestureDetector(
+                    onTap: () {
+                      SoteriaFeedback.showSnackbar(
+                        context,
+                        message: goal.definition.description,
+                        type: goal.isCompleted
+                            ? FeedbackType.success
+                            : FeedbackType.info,
+                      );
+                    },
+                    child: _GoalProgressIcon(
+                      icon: _getIconForCategory(goal.definition.category),
+                      current: goal.playerState?.currentProgress.toInt() ?? 0,
+                      total: goal.definition.target.toInt(),
+                      color: _getColorForIndex(index),
+                      isCompleted: goal.isCompleted,
+                    ),
                   ),
                   if (index < displayGoals.length - 1) _VerticalDivider(),
                 ],

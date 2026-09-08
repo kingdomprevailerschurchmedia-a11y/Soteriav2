@@ -56,6 +56,19 @@ class FirestoreNotificationRepository implements NotificationRepository {
   }
 
   @override
+  Future<void> markAllAsRead() async {
+    if (_userId == null) return;
+    final unread = await _notificationsCollection.where('read', isEqualTo: false).get();
+    if (unread.docs.isEmpty) return;
+
+    final batch = _database.instance.batch();
+    for (final doc in unread.docs) {
+      batch.update(doc.reference, {'read': true});
+    }
+    await batch.commit();
+  }
+
+  @override
   Future<void> deleteNotification(String id) async {
     if (_userId == null) return;
     await _notificationsCollection.doc(id).delete();

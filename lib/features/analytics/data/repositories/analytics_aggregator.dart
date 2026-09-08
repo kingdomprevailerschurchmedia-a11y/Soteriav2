@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import '../../../quiz/domain/models/quiz_result.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
 import '../../../practice/domain/models/practice_result.dart' as practice;
@@ -84,6 +85,7 @@ class AnalyticsAggregator {
     Duration slowest = Duration.zero;
 
     for (final r in results) {
+      final acc = _normalizeAccuracy(r.accuracy);
       questions += r.totalQuestions.toInt();
       correct += r.correctAnswers.toInt();
       incorrect += r.wrongAnswers.toInt();
@@ -91,7 +93,7 @@ class AnalyticsAggregator {
       timedOut += r.timedOut.toInt();
       xp += r.xpEarned.toInt();
       if (r.finalScore > bestScore) bestScore = r.finalScore.toInt();
-      if (r.accuracy > bestAccuracy) bestAccuracy = r.accuracy.toDouble();
+      if (acc > bestAccuracy) bestAccuracy = acc;
       if (r.longestStreak > bestStreak) bestStreak = r.longestStreak.toInt();
       if (r.averageResponseTime < fastest) fastest = r.averageResponseTime;
       if (r.averageResponseTime > slowest) slowest = r.averageResponseTime;
@@ -127,7 +129,7 @@ class AnalyticsAggregator {
     int totalMillis = 0;
 
     for (final r in results) {
-      totalAccuracy += r.accuracy;
+      totalAccuracy += _normalizeAccuracy(r.accuracy);
       totalScore += r.finalScore;
       totalMillis += r.averageResponseTime.inMilliseconds;
     }
@@ -139,6 +141,14 @@ class AnalyticsAggregator {
         milliseconds: (totalMillis / results.length).round(),
       ),
     );
+  }
+
+  static double _normalizeAccuracy(double value) {
+    // Handle both 0.0-1.0 and 0-100 values for backward compatibility
+    if (value > 1.0) {
+      return value / 100.0;
+    }
+    return value;
   }
 
   static List<CategoryPerformance> _calculateCategoryPerformance(
@@ -211,7 +221,7 @@ class AnalyticsAggregator {
 
     final accuracyPoints = sorted
         .map(
-          (r) => PerformanceTrendPoint(date: r.completedAt, value: r.accuracy),
+          (r) => PerformanceTrendPoint(date: r.completedAt, value: _normalizeAccuracy(r.accuracy)),
         )
         .toList();
     final scorePoints = sorted

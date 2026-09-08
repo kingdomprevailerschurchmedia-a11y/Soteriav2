@@ -56,8 +56,9 @@ class SoteriaLineChart extends StatelessWidget {
               reservedSize: 32.w,
               interval: (trend.maxValue - trend.minValue) / 2,
               getTitlesWidget: (value, meta) {
+                final displayValue = trend.label == 'Accuracy' ? (value * 100).toInt() : value.toInt();
                 return Text(
-                  value.toInt().toString(),
+                  displayValue.toString(),
                   style: SoteriaTypography.bodySmall.copyWith(
                     color: SoteriaColors.muted.withValues(alpha: 0.5),
                   ),
@@ -110,8 +111,11 @@ class SoteriaLineChart extends StatelessWidget {
             getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
               return touchedBarSpots.map((barSpot) {
                 final flSpot = barSpot;
+                final displayValue = trend.label == 'Accuracy' 
+                    ? '${(flSpot.y * 100).toStringAsFixed(1)}%' 
+                    : flSpot.y.toStringAsFixed(1);
                 return LineTooltipItem(
-                  flSpot.y.toStringAsFixed(1),
+                  displayValue,
                   SoteriaTypography.labelLarge.copyWith(
                     color: SoteriaColors.textPrimary,
                   ),

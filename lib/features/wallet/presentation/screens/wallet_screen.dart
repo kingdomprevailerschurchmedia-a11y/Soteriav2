@@ -7,7 +7,7 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../domain/models/coin_bundle.dart';
-import '../../../player/providers/player_providers.dart';
+import '../../providers/wallet_providers.dart';
 
 class WalletScreen extends ConsumerWidget {
   const WalletScreen({super.key});
@@ -87,8 +87,7 @@ class WalletScreen extends ConsumerWidget {
   }
 
   Widget _buildBalanceCard(BuildContext context, WidgetRef ref) {
-    final player = ref.watch(currentPlayerProvider);
-    final balance = player?.coins ?? 0;
+    final balance = ref.watch(currentWalletBalanceProvider);
 
     return GlassSurface(
       padding: EdgeInsets.all(24.r),

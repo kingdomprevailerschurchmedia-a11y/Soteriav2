@@ -25,10 +25,10 @@ class LeaderboardPodium extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.all(SoteriaSpacing.md),
       decoration: BoxDecoration(
         color: const Color(0xFF1E1638).withValues(alpha: 0.3),
-        borderRadius: BorderRadius.circular(24.r),
+        borderRadius: BorderRadius.circular(20.r),
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.05),
           width: 1,
@@ -39,13 +39,14 @@ class LeaderboardPodium extends StatelessWidget {
         children: [
           Text(
             'TOP PERFORMERS',
-            style: context.labelMedium.copyWith(
+            style: context.labelSmall.copyWith(
               color: const Color(0xFF6B4EEA),
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
+              fontSize: 10.sp,
             ),
           ),
-          SizedBox(height: 24.h),
+          SizedBox(height: 16.h),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -98,11 +99,11 @@ class _PodiumItem extends StatelessWidget {
       children: [
         if (isWinner)
           Padding(
-            padding: EdgeInsets.only(bottom: 4.h),
+            padding: EdgeInsets.only(bottom: 2.h),
             child: Icon(
               Icons.workspace_premium_rounded,
               color: SoteriaColors.gold,
-              size: 24.sp,
+              size: 20.sp,
             ),
           ),
         Stack(
@@ -135,8 +136,8 @@ class _PodiumItem extends StatelessWidget {
                       ? [
                           BoxShadow(
                             color: SoteriaColors.gold.withValues(alpha: 0.2),
-                            blurRadius: 15,
-                            spreadRadius: 2,
+                            blurRadius: 10,
+                            spreadRadius: 1,
                           )
                         ]
                       : [],
@@ -144,14 +145,14 @@ class _PodiumItem extends StatelessWidget {
                 child: SoteriaAvatar(
                   avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
                   imageUrl: entry.avatarUrl,
-                  size: isWinner ? 80 : 64,
+                  size: isWinner ? 64 : 52,
                 ),
               ),
             ),
             Positioned(
               bottom: -4.h,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 2.h),
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
                 decoration: BoxDecoration(
                   color: isWinner ? SoteriaColors.gold : const Color(0xFF6B4EEA),
                   borderRadius: BorderRadius.circular(8.r),
@@ -162,34 +163,36 @@ class _PodiumItem extends StatelessWidget {
                   style: context.labelSmall.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.w900,
-                    fontSize: 12.sp,
+                    fontSize: 10.sp,
                   ),
                 ),
               ),
             ),
           ],
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         Text(
           entry.displayName,
-          style: context.titleSmall.copyWith(
+          style: context.bodyLarge.copyWith(
             fontWeight: FontWeight.bold,
             color: Colors.white,
+            fontSize: 13.sp,
           ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
-        SizedBox(height: 4.h),
+        SizedBox(height: 2.h),
         Text(
           '${entry.rankPoints} RP',
           style: context.bodyMedium.copyWith(
             color: SoteriaColors.gold,
             fontWeight: FontWeight.bold,
+            fontSize: 12.sp,
           ),
         ),
-        SizedBox(height: 8.h),
+        SizedBox(height: 6.h),
         Container(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 3.h),
           decoration: BoxDecoration(
             color: Colors.black26,
             borderRadius: BorderRadius.circular(6.r),
@@ -200,14 +203,14 @@ class _PodiumItem extends StatelessWidget {
               Icon(
                 Icons.diamond_outlined,
                 color: const Color(0xFF9D5BFF),
-                size: 14.sp,
+                size: 11.sp,
               ),
               SizedBox(width: 4.w),
               Text(
                 'NONE 0',
                 style: context.labelSmall.copyWith(
                   color: const Color(0xFF77728A),
-                  fontSize: 10.sp,
+                  fontSize: 8.sp,
                 ),
               ),
             ],

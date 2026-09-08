@@ -19,6 +19,7 @@ import 'package:soteria/features/player/domain/repositories/player_progression_r
 import 'package:soteria/features/player/domain/repositories/player_repository.dart';
 import 'package:soteria/features/player/domain/models/xp_transaction.dart';
 import 'package:soteria/features/player/domain/models/competitive_result.dart';
+import '../../../wallet/domain/models/wallet_transaction_type.dart';
 import '../../../../core/logging/logger_service.dart';
 
 class FirestoreProModeRepository implements ProModeRepository {
@@ -175,21 +176,24 @@ class FirestoreProModeRepository implements ProModeRepository {
             if (reservedFee > 0) {
               totalRefund += reservedFee;
               
-              // Log refund for auditing
-              final txId = _database.collection('wallet_transactions').doc().id;
+              // Log refund for auditing (Rule #4)
+              final txId = 'REFUND_$staleId'; // Idempotent ID for this specific refund
               lastStaleTxId = txId;
               transaction.set(_database.collection('wallet_transactions').doc(txId), {
+                'id': txId,
                 'userId': uid,
-                'type': 'coins',
-                'currency': 'coins',
                 'direction': 'credit',
                 'amount': reservedFee,
-                'transactionType': 'refund',
-                'source': 'staleSessionCleanup',
+                'type': WalletTransactionType.refund.name,
                 'referenceId': staleId,
+                'idempotencyKey': txId,
                 'status': 'completed',
+                'balanceBefore': currentCoins,
+                'balanceAfter': currentCoins + reservedFee,
                 'createdAt': FieldValue.serverTimestamp(),
+                'processedAt': FieldValue.serverTimestamp(),
               });
+              currentCoins += reservedFee;
             }
             transaction.update(staleResRef, {'status': 'refunded', 'cleanedAt': FieldValue.serverTimestamp()});
             transaction.update(_database.collection('competitive_sessions').doc(staleId), {'status': 'stale_refunded'});
@@ -249,16 +253,18 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       if (spendTxId != null) {
         transaction.set(_database.collection('wallet_transactions').doc(spendTxId), {
+          'id': spendTxId,
           'userId': uid,
-          'type': 'coins',
-          'currency': 'coins',
           'direction': 'debit',
           'amount': fee,
-          'transactionType': 'spend',
-          'source': 'proModeEntry',
+          'type': WalletTransactionType.proModeEntry.name,
           'referenceId': sessionId,
+          'idempotencyKey': spendTxId,
           'status': 'completed',
+          'balanceBefore': currentCoins,
+          'balanceAfter': currentCoins - fee,
           'createdAt': FieldValue.serverTimestamp(),
+          'processedAt': FieldValue.serverTimestamp(),
         });
       }
 

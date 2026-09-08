@@ -13,6 +13,7 @@ import '../widgets/profile/competitive_profile_header.dart';
 import '../widgets/profile/achievement_summary_section.dart';
 import '../widgets/profile/engagement_summary_section.dart';
 import '../widgets/profile/career_statistics_section.dart';
+import '../../../notifications/widgets/notification_icon_button.dart';
 
 import '../../../../shared/widgets/soteria_page.dart';
 
@@ -149,7 +150,13 @@ class PlayerProfileScreen extends ConsumerWidget {
             ),
           ],
         ),
-        _SettingsButton(onTap: () => context.push('/app/settings')),
+        Row(
+          children: [
+            const NotificationIconButton(),
+            SizedBox(width: 12.w),
+            _SettingsButton(onTap: () => context.push('/app/settings')),
+          ],
+        ),
       ],
     );
   }

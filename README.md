@@ -38,6 +38,7 @@ lib/
 - **GoRouter**: Declarative routing.
 - **Offline-first**: Ready for local persistence.
 - **Responsive**: Utilizing `flutter_screenutil` for multi-device support.
+- **Financial-Grade Economy**: The wallet and coin system follow strict authoritative backend and atomic transaction rules. See [Financial Architecture](docs/financial_architecture.md) for details.
 
 ## Design System (V2)
 

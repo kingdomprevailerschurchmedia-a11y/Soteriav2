@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 import '../../../../core/firebase/services/firebase_interfaces.dart';
 import '../../../../core/logging/logger_service.dart';
 import '../../../quiz/domain/models/quiz_enums.dart';
@@ -96,7 +97,7 @@ class FirestoreQuestionAnalyticsRepository implements QuestionAnalyticsRepositor
     final isSkipped = result.outcome == QuestionOutcome.skipped;
     
     final responseTimeMs = result.responseTime.inMilliseconds;
-    final modeKey = result.mode?.name ?? GameMode.practice.name;
+    final modeKey = result.mode?.toString().split('.').last ?? GameMode.practice.toString().split('.').last;
 
     await _database.instance.runTransaction((transaction) async {
       final snapshot = await transaction.get(ref);
@@ -106,7 +107,7 @@ class FirestoreQuestionAnalyticsRepository implements QuestionAnalyticsRepositor
           'questionId': result.questionId,
           'version': version,
           'categoryId': result.categoryId ?? 'unknown',
-          'difficulty': result.difficulty?.name ?? Difficulty.medium.name,
+          'difficulty': result.difficulty?.toString().split('.').last ?? Difficulty.medium.toString().split('.').last,
           'totalAttempts': 1,
           'correctAttempts': isCorrect ? 1 : 0,
           'incorrectAttempts': isIncorrect ? 1 : 0,
@@ -142,7 +143,7 @@ class FirestoreQuestionAnalyticsRepository implements QuestionAnalyticsRepositor
           'lastAttemptAt': FieldValue.serverTimestamp(),
           'modeBreakdown.$modeKey': FieldValue.increment(1),
           'categoryId': result.categoryId ?? data['categoryId'],
-          'difficulty': result.difficulty?.name ?? data['difficulty'],
+          'difficulty': result.difficulty?.toString().split('.').last ?? data['difficulty'],
         };
         
         transaction.update(ref, updates);

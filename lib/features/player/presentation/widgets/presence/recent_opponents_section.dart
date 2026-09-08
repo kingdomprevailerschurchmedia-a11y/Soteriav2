@@ -31,8 +31,10 @@ class RecentOpponentsSection extends ConsumerWidget {
               child: Text(
                 'RECENT OPPONENTS',
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  letterSpacing: 2,
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
                 ),
               ),
             ),
@@ -64,8 +66,10 @@ class RecentOpponentsSection extends ConsumerWidget {
           child: Text(
             'RECENT OPPONENTS',
             style: context.labelSmall.copyWith(
-              color: SoteriaColors.muted,
-              letterSpacing: 2,
+              color: SoteriaColors.gold,
+              letterSpacing: 2.0,
+              fontWeight: FontWeight.w800,
+              fontSize: 13.sp,
             ),
           ),
         ),

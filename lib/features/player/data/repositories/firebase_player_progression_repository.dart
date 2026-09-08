@@ -83,31 +83,32 @@ class FirebasePlayerProgressionRepository
     XpTransaction xpTransaction,
   ) async {
     final tx = transaction as Transaction;
-
-    // Safety: Ensure we only process transactions for the current user to satisfy security rules
-    // unless the current caller is an admin (not applicable here as we're in the client repo)
-    // if (xpTransaction.userId != _auth.currentUser?.uid) ... 
-    // We don't have direct access to auth here, but we can assume it for now or pass it.
     
     final txDoc = _xpTransactionCollection.doc(xpTransaction.transactionId);
+    final progressionDoc = _progressionCollection.doc(xpTransaction.userId);
+    final userRef = _firestore.collection('users').doc(xpTransaction.userId);
 
-    // 1. Idempotency check inside the atomic transaction
-    final txSnapshot = await tx.get(txDoc);
+    // 1. ATOMIC READS (Must happen before any writes in the transaction)
+    final snapshots = await Future.wait([
+      tx.get(txDoc),
+      tx.get(progressionDoc),
+    ]);
+
+    final txSnapshot = snapshots[0];
+    final progressionSnapshot = snapshots[1];
+
     if (txSnapshot.exists) {
       return; // Already applied
     }
 
-    final progressionDoc = _progressionCollection.doc(xpTransaction.userId);
-    final snapshot = await tx.get(progressionDoc);
-
     PlayerProgression current;
-    if (!snapshot.exists) {
+    if (!progressionSnapshot.exists) {
       current = PlayerProgression.initial(
         xpTransaction.userId,
         'current_season',
       );
     } else {
-      current = PlayerProgression.fromJson(snapshot.data()!);
+      current = PlayerProgression.fromJson(progressionSnapshot.data()!);
     }
 
     // 2. Extra safety: Check if this specific transaction ID was the last one processed
@@ -115,6 +116,7 @@ class FirebasePlayerProgressionRepository
       return;
     }
 
+    // 3. ATOMIC WRITES
     final updated = _progressionService
         .addXp(current, xpTransaction.amount)
         .copyWith(lastXpTransactionId: xpTransaction.transactionId);
@@ -123,7 +125,6 @@ class FirebasePlayerProgressionRepository
     tx.set(txDoc, xpTransaction.toJson());
 
     // Sync to main user profile for UI consistency and to satisfy security rules
-    final userRef = _firestore.collection('users').doc(xpTransaction.userId);
     tx.update(userRef, {
       'xp': updated.currentXp,
       'level': updated.currentLevel,

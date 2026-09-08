@@ -37,7 +37,7 @@ class MilestoneSection extends StatelessWidget {
                   Text(
                     'NEXT MILESTONE',
                     style: context.labelSmall.copyWith(
-                      color: const Color(0xFFB456FF),
+                      color: SoteriaColors.gold,
                       letterSpacing: 2.0,
                       fontWeight: FontWeight.w800,
                       fontSize: 13.sp,

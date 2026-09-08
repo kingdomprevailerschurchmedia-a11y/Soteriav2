@@ -37,7 +37,7 @@ class LeaderboardRow extends ConsumerWidget {
       child: Container(
         padding: EdgeInsets.symmetric(
           horizontal: SoteriaSpacing.md,
-          vertical: 12.h,
+          vertical: 8.h,
         ),
         decoration: BoxDecoration(
           gradient: isCurrentUser
@@ -60,7 +60,7 @@ class LeaderboardRow extends ConsumerWidget {
         child: Row(
           children: [
             SizedBox(
-              width: 40.w,
+              width: 32.w,
               child: _LeaderboardPositionBadge(rank: position),
             ),
             Container(
@@ -69,33 +69,35 @@ class LeaderboardRow extends ConsumerWidget {
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: _getRankRingColor(position),
-                  width: 1.5,
+                  width: 1.2,
                 ),
               ),
               child: SoteriaAvatar(
                 avatar: AvatarCatalog().getById(entry.avatarId ?? ''),
                 imageUrl: entry.avatarUrl,
-                size: 48,
+                size: 34,
               ),
             ),
-            SizedBox(width: SoteriaSpacing.md),
+            SizedBox(width: 10.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     entry.displayName,
-                    style: context.titleSmall.copyWith(
+                    style: context.bodyLarge.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isCurrentUser ? SoteriaColors.gold : Colors.white,
+                      fontSize: 11.sp,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
                     '${entry.rankTier} ${entry.division}',
-                    style: context.bodySmall.copyWith(
+                    style: context.labelSmall.copyWith(
                       color: const Color(0xFF77728A),
+                      fontSize: 9.sp,
                     ),
                   ),
                 ],
@@ -106,14 +108,15 @@ class LeaderboardRow extends ConsumerWidget {
               children: [
                 Text(
                   '${entry.rankPoints} RP',
-                  style: context.titleSmall.copyWith(
+                  style: context.bodyMedium.copyWith(
                     color: SoteriaColors.gold,
                     fontWeight: FontWeight.bold,
+                    fontSize: 12.sp,
                   ),
                 ),
               ],
             ),
-            SizedBox(width: 12.w),
+            SizedBox(width: 10.w),
             CompetitiveRankBadge(
               rankName: '', 
               tierId: entry.rankTier.toLowerCase(),
@@ -142,8 +145,8 @@ class _LeaderboardPositionBadge extends StatelessWidget {
     if (rank <= 3) {
       return Center(
         child: Container(
-          width: 24.w,
-          height: 24.w,
+          width: 20.w,
+          height: 20.w,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(
@@ -154,9 +157,10 @@ class _LeaderboardPositionBadge extends StatelessWidget {
           child: Center(
             child: Text(
               rank.toString(),
-              style: context.labelMedium.copyWith(
+              style: context.labelSmall.copyWith(
                 color: _getRankColor(rank),
                 fontWeight: FontWeight.bold,
+                fontSize: 9.sp,
               ),
             ),
           ),
@@ -167,9 +171,10 @@ class _LeaderboardPositionBadge extends StatelessWidget {
     return Center(
       child: Text(
         rank.toString(),
-        style: context.labelLarge.copyWith(
+        style: context.labelMedium.copyWith(
           color: const Color(0xFF5F5A73),
           fontWeight: FontWeight.normal,
+          fontSize: 11.sp,
         ),
       ),
     );

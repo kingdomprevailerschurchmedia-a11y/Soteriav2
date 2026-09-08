@@ -23,6 +23,12 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
     final tournamentsAsync = ref.watch(tournamentDiscoveryProvider);
 
     return SafeGradientScaffold(
+      appBar: tournamentsAsync.maybeWhen(
+        data: (tournaments) => tournaments.isEmpty ? _buildSimpleAppBar() : null,
+        error: (_, __) => _buildSimpleAppBar(),
+        loading: () => _buildSimpleAppBar(),
+        orElse: () => null,
+      ),
       body: tournamentsAsync.when(
         data: (tournaments) {
           if (tournaments.isEmpty) {
@@ -42,6 +48,19 @@ class TournamentDiscoveryScreen extends ConsumerWidget {
           actionLabel: 'RETRY',
           onAction: () => ref.invalidate(tournamentDiscoveryProvider),
         ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildSimpleAppBar() {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      leadingWidth: 60,
+      leading: const Padding(
+        padding: EdgeInsets.only(left: 16),
+        child: Center(child: SoteriaBackButton()),
       ),
     );
   }

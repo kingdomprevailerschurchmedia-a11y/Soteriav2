@@ -79,6 +79,11 @@ class NotificationListNotifier
     _load();
   }
 
+  Future<void> markAllAsRead() async {
+    await ref.read(notificationRepositoryProvider).markAllAsRead();
+    _load();
+  }
+
   Future<void> delete(String id) async {
     await ref.read(notificationRepositoryProvider).deleteNotification(id);
     _load();

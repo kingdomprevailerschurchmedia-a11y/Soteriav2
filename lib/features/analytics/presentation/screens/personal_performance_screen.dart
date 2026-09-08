@@ -13,6 +13,7 @@ import '../widgets/mode_selector.dart';
 import '../charts/soteria_line_chart.dart';
 import '../charts/soteria_progress_chart.dart';
 import '../../domain/models/performance_analytics.dart';
+import 'package:soteria/features/question_content/domain/entities/difficulty.dart';
 
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/utils/soteria_responsive.dart';
@@ -371,7 +372,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 4.w),
                     child: MetricCard(
-                      title: dp.difficulty.name.toUpperCase(),
+                      title: dp.difficulty.toString().split('.').last.toUpperCase(),
                       value: '${(dp.accuracy * 100).toInt()}%',
                       subValue: '${dp.totalQuizzes} Quizzes',
                       color: _getDifficultyColor(dp.difficulty),
@@ -417,15 +418,15 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     );
   }
 
-  Color _getDifficultyColor(dynamic difficulty) {
-    switch (difficulty.name) {
-      case 'easy':
+  Color _getDifficultyColor(Difficulty difficulty) {
+    switch (difficulty) {
+      case Difficulty.easy:
         return SoteriaColors.success;
-      case 'medium':
+      case Difficulty.medium:
         return SoteriaColors.info;
-      case 'hard':
+      case Difficulty.hard:
         return SoteriaColors.warning;
-      case 'expert':
+      case Difficulty.expert:
         return SoteriaColors.error;
       default:
         return SoteriaColors.primary;

@@ -44,7 +44,7 @@ class InsightCard extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      insight.type.name.toUpperCase(),
+                      insight.type.toString().split('.').last.toUpperCase(),
                       style: SoteriaTypography.labelSmall.copyWith(
                         color: SoteriaColors.primary.withValues(alpha: 0.8),
                         letterSpacing: 1.2,

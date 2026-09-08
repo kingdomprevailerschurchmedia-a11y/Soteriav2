@@ -133,7 +133,7 @@ class PerformanceAnalyticsRepositoryImpl
     String? category,
     GameMode? mode,
   ) {
-    return '$playerId-$period-${performanceMode.name}-${category ?? "all"}-${mode ?? "all"}';
+    return '$playerId-$period-${performanceMode.toString().split('.').last}-${category ?? "all"}-${mode?.toString().split('.').last ?? "all"}';
   }
 
   DateTime _getStartDate(TimePeriod period, DateTime now) {

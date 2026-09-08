@@ -88,7 +88,7 @@ class _ProgressPainter extends CustomPainter {
 
     canvas.drawCircle(center, radius, bgPaint);
 
-    final sweepAngle = 2 * pi * value;
+    final sweepAngle = 2 * pi * min(1.0, max(0.0, value));
     canvas.drawArc(
       Rect.fromCircle(center: center, radius: radius),
       -pi / 2,

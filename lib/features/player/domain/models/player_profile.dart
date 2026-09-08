@@ -17,6 +17,11 @@ abstract class PlayerProfile with _$PlayerProfile {
     // Progression
     @Default(1) int level,
     @Default(0) int xp,
+
+    /// Authoritative balance has moved to the [Wallet] model.
+    /// Use [currentWalletProvider] or [walletServiceProvider] instead.
+    /// This field is kept for backward compatibility during migration.
+    @Deprecated('Use Wallet model instead for authoritative coin balance')
     @Default(0) int coins,
     String? lastCoinTransactionId,
     String? lastXpTransactionId,

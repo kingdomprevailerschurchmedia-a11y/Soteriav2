@@ -91,7 +91,7 @@ abstract class QuestionAnalytics with _$QuestionAnalytics {
     return QualitySignalLevel.healthy;
   }
 
-  int getAttemptsForMode(GameMode mode) => modeBreakdown[mode.name] ?? 0;
+  int getAttemptsForMode(GameMode mode) => modeBreakdown[mode.toString().split('.').last] ?? 0;
 
   factory QuestionAnalytics.fromJson(Map<String, dynamic> json) =>
       _$QuestionAnalyticsFromJson(json);

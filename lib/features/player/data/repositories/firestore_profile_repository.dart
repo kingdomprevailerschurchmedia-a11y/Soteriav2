@@ -231,9 +231,28 @@ class FirestoreProfileRepository implements ProfileRepository {
       updatedAt: DateTime.now(),
     );
 
+    final publicProfileMap = PublicProfileDto.toFirestore(publicProfile);
+
+    // Remove restricted fields that are only updated via the backend/controlled sync
+    // These must NOT be modified by the client to satisfy security rules
+    final restrictedPublicFields = [
+      'currentRank',
+      'rankTier',
+      'rankPoints',
+      'division',
+      'careerHighlights',
+      'schemaVersion'
+    ];
+    for (final field in restrictedPublicFields) {
+      publicProfileMap.remove(field);
+    }
+
+    // Ensure we don't send nulls for mandatory fields if any
+    publicProfileMap.removeWhere((key, value) => value == null);
+
     await _firestore
         .collection('public_profiles')
         .doc(userId)
-        .set(PublicProfileDto.toFirestore(publicProfile), SetOptions(merge: true));
+        .set(publicProfileMap, SetOptions(merge: true));
   }
 }

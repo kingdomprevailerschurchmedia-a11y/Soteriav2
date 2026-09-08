@@ -404,10 +404,12 @@ class GameEngine extends StateNotifier<GameState> {
       finalScore: state.score,
       totalXP: _progression?.state.totalXP ?? state.xp,
       totalQuestions: state.questions.length,
-      correctAnswers: state.score ~/ 100, // Simplistic mapping for now
-      wrongAnswers: state.questions.length - (state.score ~/ 100),
+      correctAnswers: state.answerHistory.where((a) => a.isCorrect).length,
+      wrongAnswers: state.answerHistory.where((a) => a.isWrong || a.isTimedOut || a.isSkipped).length,
       totalDuration: DateTime.now().difference(state.startTime!),
-      accuracy: (state.score / (state.questions.length * 100)) * 100,
+      accuracy: state.questions.isEmpty 
+          ? 0.0 
+          : (state.answerHistory.where((a) => a.isCorrect).length / state.questions.length),
       maxStreak: _progression?.state.maxStreak ?? state.streak,
       answers: state.answerHistory,
       timestamp: DateTime.now(),

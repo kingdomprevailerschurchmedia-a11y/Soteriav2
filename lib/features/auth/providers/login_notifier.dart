@@ -5,6 +5,7 @@ import 'package:soteria/core/firebase/providers/firebase_providers.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import '../models/authentication_result.dart';
+import '../models/identity_exception.dart';
 import 'auth_providers.dart';
 
 class LoginNotifier extends Notifier<LoginState> {
