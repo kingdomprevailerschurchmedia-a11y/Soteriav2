@@ -47,7 +47,7 @@ class SoteriaBottomNavBar extends StatelessWidget {
           child: GlassSurface(
             borderRadius: BorderRadius.circular(SoteriaRadius.full),
             padding: EdgeInsets.symmetric(
-              vertical: isShort ? 6.h : 8.h,
+              vertical: isShort ? 6.h : 10.h,
               horizontal: 8.w,
             ),
             border: Border.all(
@@ -139,7 +139,7 @@ class _NavButton extends StatelessWidget {
               duration: SoteriaAnimations.fast,
               padding: EdgeInsets.symmetric(
                 horizontal: isShort ? 10.w : 12.w,
-                vertical: isShort ? 2.h : 4.h,
+                vertical: isShort ? 3.h : 6.h,
               ),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -150,14 +150,14 @@ class _NavButton extends StatelessWidget {
                   Icon(
                     icon,
                     color: isSelected ? Colors.white : SoteriaColors.muted,
-                    size: isShort ? 18.sp : 20.sp,
+                    size: isShort ? 20.sp : 24.sp,
                   ),
-                  SizedBox(height: 2.h),
+                  SizedBox(height: 4.h),
                   Text(
                     label,
                     style: TextStyle(
                       color: isSelected ? Colors.white : SoteriaColors.muted,
-                      fontSize: 9.sp,
+                      fontSize: 10.sp,
                       fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
                     ),
                   ),

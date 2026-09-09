@@ -47,23 +47,23 @@ class PracticeProgressionPolicy implements ProgressionPolicy {
   GameMode get mode => GameMode.practice;
 
   @override
-  int get pointsPerCorrect => 50;
+  int get pointsPerCorrect => 25; // Reduced from 50
   @override
   int get pointsPerWrong => 0;
   @override
   int get pointsPerTimeout => 0;
 
   @override
-  double get xpMultiplier => 1.0;
+  double get xpMultiplier => 0.5; // Reduced from 1.0 to prioritize competitive modes
   @override
-  int get xpPerCorrect => 10;
+  int get xpPerCorrect => 2; // Significant reduction (was 10)
   @override
-  int get completionBonusXP => 10;
+  int get completionBonusXP => 5; // Was 10
   @override
-  int get perfectRoundBonusXP => 25;
+  int get perfectRoundBonusXP => 10; // Was 25
 
   @override
-  double get streakBonusMultiplier => 0.05; // +5% per streak
+  double get streakBonusMultiplier => 0.02; // Reduced from 0.05
   @override
   bool get allowSpeedBonus => false;
 }

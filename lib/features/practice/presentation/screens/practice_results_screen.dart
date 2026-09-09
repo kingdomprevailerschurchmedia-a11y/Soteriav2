@@ -78,85 +78,96 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
         ),
         _buildAppBar(context),
         SliverPadding(
-            padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
-            sliver: SliverList(
-              delegate: SliverChildListDelegate([
-                SizedBox(height: SoteriaSpacing.md),
-                SoteriaFadeIn(
-                  child: RepaintBoundary(
-                    child: _buildScoreHeader(context, result),
-                  ),
+          padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+          sliver: SliverList(
+            delegate: SliverChildListDelegate([
+              SizedBox(height: SoteriaSpacing.md),
+              SoteriaFadeIn(
+                child: RepaintBoundary(
+                  child: _buildScoreHeader(context, result),
                 ),
-                SizedBox(height: SoteriaSpacing.xl),
-                
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 200),
-                  child: _buildSectionHeader(context, 'Learning Insights'),
+              ),
+              SizedBox(height: SoteriaSpacing.xl),
+              
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 200),
+                child: _buildSectionHeader(context, 'Learning Insights'),
+              ),
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 300),
+                child: RepaintBoundary(
+                  child: _buildInsightsList(context, result),
                 ),
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 300),
-                  child: RepaintBoundary(
-                    child: _buildInsightsList(context, result),
-                  ),
-                ),
-                SizedBox(height: SoteriaSpacing.xl),
+              ),
+              SizedBox(height: SoteriaSpacing.xl),
 
-                if (result.recommendation != null) ...[
-                  SoteriaSlideUp(
-                    delay: const Duration(milliseconds: 400),
-                    child: _buildSectionHeader(context, 'Next Recommended Step'),
+              if (result.recommendation != null) ...[
+                SoteriaSlideUp(
+                  delay: const Duration(milliseconds: 400),
+                  child: _buildSectionHeader(context, 'Next Recommended Step'),
+                ),
+                SoteriaSlideUp(
+                  delay: const Duration(milliseconds: 500),
+                  child: RepaintBoundary(
+                    child: _buildRecommendationCard(context, result.recommendation!),
                   ),
-                  SoteriaSlideUp(
-                    delay: const Duration(milliseconds: 500),
-                    child: RepaintBoundary(
-                      child: _buildRecommendationCard(context, result.recommendation!),
+                ),
+                SizedBox(height: SoteriaSpacing.xl),
+              ],
+
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 600),
+                child: _buildSectionHeader(context, 'Category Performance'),
+              ),
+              ...result.categoryPerformance.values.map((p) => SoteriaSlideUp(
+                delay: const Duration(milliseconds: 700),
+                child: RepaintBoundary(
+                  child: _buildCategoryRow(context, p),
+                ),
+              )),
+              
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 750),
+                child: _buildDetailedBreakdownRow(context),
+              ),
+              
+              SizedBox(height: SoteriaSpacing.xl),
+
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 800),
+                child: _buildReviewSection(context, result),
+              ),
+
+              SizedBox(height: SoteriaSpacing.xl),
+
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 900),
+                child: _buildFinalSummaryCard(context, result),
+              ),
+
+              SizedBox(height: SoteriaSpacing.xl),
+
+              SoteriaSlideUp(
+                delay: const Duration(milliseconds: 1000),
+                child: _buildActions(context, result),
+              ),
+              if (result.xpEarned == 0 && result.correctAnswers > 0)
+                SoteriaSlideUp(
+                  delay: const Duration(milliseconds: 1100),
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 16.h),
+                    child: Text(
+                      'Daily reward limit reached. No additional XP or Coins were earned for this session.',
+                      textAlign: TextAlign.center,
+                      style: context.bodySmall.copyWith(color: SoteriaColors.warning, fontSize: 10.sp),
                     ),
                   ),
-                  SizedBox(height: SoteriaSpacing.xl),
-                ],
-
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 600),
-                  child: _buildSectionHeader(context, 'Category Performance'),
                 ),
-                ...result.categoryPerformance.values.map((p) => SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 700),
-                  child: RepaintBoundary(
-                    child: _buildCategoryRow(context, p),
-                  ),
-                )),
-                
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 750),
-                  child: _buildDetailedBreakdownRow(context),
-                ),
-                
-                SizedBox(height: SoteriaSpacing.xl),
-
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 800),
-                  child: _buildReviewSection(context, result),
-                ),
-
-                SizedBox(height: SoteriaSpacing.xl),
-
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 900),
-                  child: _buildFinalSummaryCard(context, result),
-                ),
-
-                SizedBox(height: SoteriaSpacing.xl),
-
-                SoteriaSlideUp(
-                  delay: const Duration(milliseconds: 1000),
-                  child: _buildActions(context, result),
-                ),
-                SizedBox(height: SoteriaSpacing.xxl),
-              ]),
-            ),
+              SizedBox(height: SoteriaSpacing.xxl),
+            ]),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

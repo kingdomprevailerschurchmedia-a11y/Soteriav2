@@ -61,6 +61,8 @@ abstract class ProLobbyState with _$ProLobbyState {
 // --- Notifiers ---
 class ProLobbyNotifier extends Notifier<ProLobbyState> {
   bool _mounted = true;
+  String? _lastCheckKey;
+  bool _isChecking = false;
 
   @override
   ProLobbyState build() {
@@ -118,7 +120,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       // Ensure authoritative documents (wallet/profile) are ready via bootstrap
       // Added timeout to prevent infinite loading if Firestore hangs
       await ref.read(playerBootstrapStatusProvider.future).timeout(
-            const Duration(seconds: 10),
+            const Duration(seconds: 20),
             onTimeout: () => LoggerService.w('Player bootstrap timed out', feature: 'Player'),
           );
 
@@ -271,8 +273,9 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   Future<void> _checkAvailability() async {
-    List<String>? categoryIds;
+    if (_isChecking) return;
     
+    List<String> categoryIds;
     if (state.config.useInterests) {
       final player = ref.read(currentPlayerProvider);
       categoryIds = player?.favoriteCategories ?? [];
@@ -298,19 +301,35 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       }
     }
 
-    final count = await ref.read(proModeRepositoryProvider).getAvailableQuestionCount(
-      categoryIds: categoryIds,
-      difficulty: state.config.difficulty.toBaseDifficulty(),
-    );
+    final diff = state.config.difficulty.toBaseDifficulty();
+    final checkKey = '${categoryIds.join(',')}_${diff.name}_${state.config.questionCount}';
+    if (checkKey == _lastCheckKey) return;
 
-    if (count < state.config.questionCount) {
-      state = state.copyWith(
-        access: ProModeAccessResult(
-          state: ProModeAccessState.insufficientContent,
-          message: 'ONLY $count QUESTIONS AVAILABLE (${state.config.questionCount} REQUIRED)',
-          metadata: {'available': count, 'required': state.config.questionCount},
-        ),
-      );
+    _isChecking = true;
+    _lastCheckKey = checkKey;
+
+    try {
+      final count = await ref.read(proModeRepositoryProvider).getAvailableQuestionCount(
+        categoryIds: categoryIds,
+        difficulty: diff,
+      ).timeout(const Duration(seconds: 10), onTimeout: () => 999); // Optimistic fallback on timeout
+
+      if (!_mounted) return;
+
+      if (count < state.config.questionCount) {
+        state = state.copyWith(
+          access: ProModeAccessResult(
+            state: ProModeAccessState.insufficientContent,
+            message: 'ONLY $count QUESTIONS AVAILABLE (${state.config.questionCount} REQUIRED)',
+            metadata: {'available': count, 'required': state.config.questionCount},
+          ),
+        );
+      }
+    } catch (e) {
+      LoggerService.w('Pro Mode Availability check failed: $e', feature: 'GameplayEngine');
+      // If check fails, we don't necessarily want to block the user if it was just a timeout
+    } finally {
+      _isChecking = false;
     }
   }
 
@@ -338,7 +357,10 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       final recentlyAnswered = await ref
           .read(questionAnalyticsRepositoryProvider)
           .getRecentlyAnsweredIds(player.uid)
-          .timeout(const Duration(seconds: 5), onTimeout: () => <String>{});
+          .timeout(const Duration(seconds: 10), onTimeout: () {
+            LoggerService.w('Analytics fetch timed out, continuing without history filtering', feature: 'GameplayEngine');
+            return <String>{};
+          });
 
       // 2. Select Questions (Fail-fast content check)
       final selectionResult = await ref
@@ -354,11 +376,11 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
               excludedQuestionIds: recentlyAnswered,
             ),
           )
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 25));
 
       if (selectionResult.status != SelectionStatus.success) {
         throw Exception(selectionResult.status == SelectionStatus.error 
-            ? 'Failed to load competitive content.' 
+            ? 'Failed to load competitive content. Please check your connection.' 
             : 'Insufficient questions for this configuration.');
       }
 
@@ -376,7 +398,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
             difficulty, 
             isFree: isFree
           )
-          .timeout(const Duration(seconds: 10));
+          .timeout(const Duration(seconds: 15));
 
       LoggerService.d('Pro Mode: Fee reserved, creating session record...', feature: 'GameplayEngine');
 
@@ -395,7 +417,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       await ref
           .read(proModeRepositoryProvider)
           .createCompetitiveSession(session)
-          .timeout(const Duration(seconds: 15));
+          .timeout(const Duration(seconds: 20));
 
       return session;
     } catch (e, stack) {

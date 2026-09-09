@@ -20,7 +20,7 @@ class RewardEstimator {
     : _multipliers =
           multipliers ??
           {
-            'xp_base': 10,
+            'xp_base': 2, // Matches PracticeProgressionPolicy
             'coin_base': 2,
             'mult_easy': 1.0,
             'mult_medium': 1.25,
@@ -29,8 +29,16 @@ class RewardEstimator {
             'mult_adaptive': 1.3,
           };
 
-  EstimatedRewards estimate(PracticeSessionConfig config) {
-    final int baseXP = _multipliers['xp_base'] ?? 10;
+  EstimatedRewards estimate(PracticeSessionConfig config, {bool isEligible = true}) {
+    if (!isEligible) {
+      return EstimatedRewards(
+        xp: 0,
+        coins: 0,
+        estimatedDuration: Duration(seconds: config.questionCount * 30),
+      );
+    }
+
+    final int baseXP = _multipliers['xp_base'] ?? 2;
     final int baseCoins = _multipliers['coin_base'] ?? 2;
 
     final double diffMult = _getDifficultyMultiplier(config.difficulty);

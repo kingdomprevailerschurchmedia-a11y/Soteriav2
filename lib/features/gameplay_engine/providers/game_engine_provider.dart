@@ -156,7 +156,7 @@ class GameEngine extends StateNotifier<GameState> {
         await ref!
             .read(competitiveRepositoryProvider)
             .startCompetitiveSession(state.sessionId, uid)
-            .timeout(const Duration(seconds: 10), onTimeout: () {
+            .timeout(const Duration(seconds: 30), onTimeout: () {
               throw Exception('Match activation timed out. Check your connection.');
             });
       }

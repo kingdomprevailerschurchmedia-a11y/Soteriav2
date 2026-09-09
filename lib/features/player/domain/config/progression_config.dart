@@ -5,9 +5,9 @@ class ProgressionConfig {
   static const int maxLevel = 100;
 
   // Authoritative Level Curve Constants
-  static const int baseLevelXP = 100;
+  static const int baseLevelXP = 200;
   static const double levelExponent = 1.5;
-  static const int linearFactor = 50;
+  static const int linearFactor = 100;
 
   static final List<RankTier> rankTiers = [
     const RankTier(

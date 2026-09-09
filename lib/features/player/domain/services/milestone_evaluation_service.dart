@@ -77,6 +77,8 @@ class MilestoneEvaluationService {
         return statistics.career.gamesWon.toDouble();
       case MilestoneType.streak:
         return statistics.career.highestStreak.toDouble();
+      case MilestoneType.level:
+        return progression.currentLevel.toDouble();
       case MilestoneType.rank:
         return _evaluateRankTier(
           progression.currentRankTier,

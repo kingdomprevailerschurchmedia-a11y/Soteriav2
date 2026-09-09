@@ -139,12 +139,26 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
     final player = ref.read(currentPlayerProvider);
     final level = ref.read(currentCompetitiveLevelProvider);
     final estimator = ref.read(rewardEstimatorProvider);
+    
+    bool isEligible = true;
+    if (player != null) {
+      final now = DateTime.now();
+      final lastDate = player.lastPracticeSessionDate;
+      final isNewDay = lastDate == null || 
+          lastDate.year != now.year || 
+          lastDate.month != now.month || 
+          lastDate.day != now.day;
+      
+      final dailyPlays = isNewDay ? 0 : player.dailyPracticeSessionsPlayed;
+      isEligible = dailyPlays < 5;
+    }
+
     final validationError = _validator.validate(
       config: state.config,
       player: player,
       level: level,
     );
-    final estimatedRewards = estimator.estimate(state.config);
+    final estimatedRewards = estimator.estimate(state.config, isEligible: isEligible);
 
     state = state.copyWith(
       validationError: validationError,

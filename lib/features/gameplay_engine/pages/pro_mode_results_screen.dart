@@ -8,14 +8,15 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
-import '../../../../core/widgets/safe_gradient_scaffold.dart';
-import '../../../../core/widgets/feedback/soteria_loader.dart';
 import '../../../../core/widgets/feedback/soteria_error_widget.dart';
+import '../../../../core/widgets/feedback/soteria_loader.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
 import '../../../../core/navigation/soteria_routes.dart';
 import '../models/game_state.dart';
 import '../models/pro_mode_result.dart';
 import '../providers/pro_mode_results_provider.dart';
+
+import '../../../../shared/widgets/soteria_page.dart';
 
 class ProModeResultsScreen extends ConsumerStatefulWidget {
   final GameState? gameState;
@@ -48,44 +49,49 @@ class _ProModeResultsScreenState extends ConsumerState<ProModeResultsScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(proModeResultsProvider);
 
-    return SafeGradientScaffold(
-      body: state.result.when(
-        loading: () => const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SoteriaLoader(),
-              SizedBox(height: 24),
-              Text(
-                'VERIFYING PERFORMANCE...',
-                style: TextStyle(
-                  color: SoteriaColors.gold,
-                  letterSpacing: 2,
-                  fontWeight: FontWeight.bold,
+    return SoteriaPage(
+      showBackground: false,
+      useSafeArea: false,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: state.result.when(
+          loading: () => const Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SoteriaLoader(),
+                SizedBox(height: 24),
+                Text(
+                  'VERIFYING PERFORMANCE...',
+                  style: TextStyle(
+                    color: SoteriaColors.gold,
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        error: (err, st) => Center(
-          child: SoteriaErrorWidget(
-            message: kDebugMode 
-                ? 'AUTHORITATIVE VALIDATION FAILED\n$err' 
-                : 'AUTHORITATIVE VALIDATION FAILED',
-            onRetry: () {
-              if (widget.gameState != null) {
-                ref
-                    .read(proModeResultsProvider.notifier)
-                    .completeSession(widget.gameState!);
-              } else if (widget.sessionId != null) {
-                ref
-                    .read(proModeResultsProvider.notifier)
-                    .loadResult(widget.sessionId!);
-              }
-            },
+          error: (err, st) => Center(
+            child: SoteriaErrorWidget(
+              message: kDebugMode 
+                  ? 'AUTHORITATIVE VALIDATION FAILED\n$err' 
+                  : 'AUTHORITATIVE VALIDATION FAILED',
+              onRetry: () {
+                if (widget.gameState != null) {
+                  ref
+                      .read(proModeResultsProvider.notifier)
+                      .completeSession(widget.gameState!);
+                } else if (widget.sessionId != null) {
+                  ref
+                      .read(proModeResultsProvider.notifier)
+                      .loadResult(widget.sessionId!);
+                }
+              },
+            ),
           ),
+          data: (result) => _buildContent(context, result),
         ),
-        data: (result) => _buildContent(context, result),
       ),
     );
   }
@@ -94,6 +100,9 @@ class _ProModeResultsScreenState extends ConsumerState<ProModeResultsScreen> {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
+        SliverToBoxAdapter(
+          child: SizedBox(height: MediaQuery.paddingOf(context).top + 8.h),
+        ),
         SliverAppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
@@ -108,9 +117,9 @@ class _ProModeResultsScreenState extends ConsumerState<ProModeResultsScreen> {
           ),
           centerTitle: true,
           title: Text(
-            'PRO MODE COMPLETE',
+            result.accuracy >= 0.7 ? 'PRO MODE COMPLETE' : 'PRO MATCH FAILED',
             style: context.labelSmall.copyWith(
-              color: SoteriaColors.gold,
+              color: result.accuracy >= 0.7 ? SoteriaColors.gold : SoteriaColors.error,
               letterSpacing: 2,
               fontWeight: FontWeight.bold,
             ),

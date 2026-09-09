@@ -1,4 +1,5 @@
 import 'package:soteria/features/gameplay_engine/answer/models/answer_result.dart';
+import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progress_snapshot.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_event.dart';
 import 'package:soteria/features/gameplay_engine/progression/models/progression_policy.dart';
@@ -44,7 +45,13 @@ class ProgressionEngine {
     }
 
     // 2. Calculate XP Delta
-    final xpDelta = XPManager.calculateXPDelta(result: answer, policy: policy);
+    bool isLimitReached = false;
+    if (policy.mode == GameMode.practice) {
+      final dailyPlays = (careerContext['dailyPracticeSessionsPlayed'] as num?)?.toInt() ?? 0;
+      if (dailyPlays >= 5) isLimitReached = true;
+    }
+
+    final xpDelta = isLimitReached ? 0 : XPManager.calculateXPDelta(result: answer, policy: policy);
 
     // 3. Update Streak
     final newCurrentStreak = StreakEngine.updateCurrentStreak(
@@ -145,11 +152,19 @@ class ProgressionEngine {
   }) {
     final List<ProgressionEvent> events = [];
 
-    final xpBonus = XPManager.calculateRoundBonus(
-      totalQuestions: totalQuestions,
-      correctAnswers: correctAnswers,
-      policy: policy,
-    );
+    bool isLimitReached = false;
+    if (policy.mode == GameMode.practice) {
+      final dailyPlays = (careerContext['dailyPracticeSessionsPlayed'] as num?)?.toInt() ?? 0;
+      if (dailyPlays >= 5) isLimitReached = true;
+    }
+
+    final xpBonus = isLimitReached 
+        ? 0 
+        : XPManager.calculateRoundBonus(
+            totalQuestions: totalQuestions,
+            correctAnswers: correctAnswers,
+            policy: policy,
+          );
 
     final newTotalXP = current.totalXP + xpBonus;
     final newLevel = _levelEngine.calculateLevel(newTotalXP);

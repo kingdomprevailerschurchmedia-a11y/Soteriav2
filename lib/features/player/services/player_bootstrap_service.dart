@@ -95,6 +95,15 @@ class PlayerBootstrapService {
         final now = DateTime.now();
         int newStreak = existingProfile.currentStreak;
         bool shouldReward = false;
+        
+        // Reset daily limits if it's a new day
+        int newDailyPractice = existingProfile.dailyPracticeSessionsPlayed;
+        int newDailyPro = existingProfile.dailyProSessionsPlayed;
+        
+        if (!_isSameDay(existingProfile.lastLogin, now)) {
+          newDailyPractice = 0;
+          newDailyPro = 0;
+        }
 
         // Calculate Streak
         if (_isYesterday(existingProfile.lastLogin, now)) {
@@ -118,6 +127,8 @@ class PlayerBootstrapService {
           'highestStreak': newStreak > existingProfile.highestStreak 
               ? newStreak 
               : existingProfile.highestStreak,
+          'dailyPracticeSessionsPlayed': newDailyPractice,
+          'dailyProSessionsPlayed': newDailyPro,
         };
 
         // Populate photo from Google if missing

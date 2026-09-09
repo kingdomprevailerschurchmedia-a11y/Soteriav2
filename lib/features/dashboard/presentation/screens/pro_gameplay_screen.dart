@@ -5,7 +5,6 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
-import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/feedback/soteria_loader.dart';
 import '../../../../core/widgets/overlays/soteria_dialog.dart';
 import '../../../../features/gameplay_engine/models/game_configuration.dart';
@@ -18,6 +17,8 @@ import '../../../../features/question_presentation/widgets/question_presenter.da
 import '../../../../features/gameplay_engine/timer/widgets/adaptive_timer_display.dart';
 import '../../../../features/gameplay_engine/timer/providers/timer_engine_provider.dart';
 import '../../../../core/navigation/soteria_routes.dart';
+
+import '../../../../shared/widgets/soteria_page.dart';
 
 class ProGameplayScreen extends ConsumerStatefulWidget {
   final CompetitiveSession session;
@@ -79,8 +80,10 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
               );
         });
       }
-      return const SafeGradientScaffold(
-        body: Center(
+      return const SoteriaPage(
+        showBackground: false,
+        useSafeArea: false,
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -94,8 +97,10 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
     }
 
     if (engineState.lifecycle == GameLifecycle.loading) {
-      return const SafeGradientScaffold(
-        body: Center(
+      return const SoteriaPage(
+        showBackground: false,
+        useSafeArea: false,
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -110,12 +115,25 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
 
     if (engineState.lifecycle == GameLifecycle.completed) {
       Future.microtask(() => context.go(SoteriaRoutes.proResults, extra: engineState));
-      return const SafeGradientScaffold(body: Center(child: SoteriaLoader()));
+      return const SoteriaPage(showBackground: false, child: Center(child: SoteriaLoader()));
     }
 
     if (engineState.lifecycle == GameLifecycle.failed) {
-      return SafeGradientScaffold(
-        body: Center(
+      final wasPlaying =
+          engineState.answerHistory.isNotEmpty ||
+          engineState.currentQuestionIndex > 0;
+
+      if (wasPlaying) {
+        Future.microtask(
+          () => context.go(SoteriaRoutes.proResults, extra: engineState),
+        );
+        return const SoteriaPage(showBackground: false, child: Center(child: SoteriaLoader()));
+      }
+
+      return SoteriaPage(
+        showBackground: false,
+        useSafeArea: false,
+        child: Center(
           child: Padding(
             padding: EdgeInsets.all(SoteriaSpacing.xl),
             child: Column(
@@ -165,8 +183,10 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
         if (didPop) return;
         _handleExit(context);
       },
-      child: SafeGradientScaffold(
-        body: QuestionPresenter(
+      child: SoteriaPage(
+        showBackground: false,
+        useSafeArea: false,
+        child: QuestionPresenter(
           question: engineState.currentQuestion!,
           currentQuestionIndex: engineState.currentQuestionIndex,
           totalQuestions: engineState.questions.length,

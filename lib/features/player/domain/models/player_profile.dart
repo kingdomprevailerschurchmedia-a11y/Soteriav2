@@ -88,6 +88,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     'gamesPlayed': gamesPlayed,
     'gamesWon': gamesWon,
     'practiceSessions': practiceSessions,
+    'dailyPracticeSessionsPlayed': dailyPracticeSessionsPlayed,
     'proSessions': proSessions,
     'versusMatches': versusMatches,
     'tournamentMatches': tournamentMatches,

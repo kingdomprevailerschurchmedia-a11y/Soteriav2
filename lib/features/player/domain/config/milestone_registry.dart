@@ -68,7 +68,7 @@ class MilestoneRegistry {
       id: 'level_10',
       name: 'Rising Star',
       description: 'Reach Level 10.',
-      type: MilestoneType.count, // Using count for level here as proxy
+      type: MilestoneType.level,
       category: MilestoneCategory.general,
       threshold: 10,
       icon: 'auto_awesome_rounded',

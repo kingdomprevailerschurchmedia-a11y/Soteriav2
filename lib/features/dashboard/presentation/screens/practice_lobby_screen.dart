@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
@@ -64,6 +65,32 @@ class PracticeLobbyScreen extends ConsumerWidget {
                                 ),
                               ),
                               SizedBox(height: SoteriaSpacing.md),
+                              if (player != null && player.dailyPracticeSessionsPlayed >= 5)
+                                Padding(
+                                  padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
+                                  child: Container(
+                                    padding: EdgeInsets.all(12.r),
+                                    decoration: BoxDecoration(
+                                      color: SoteriaColors.warning.withValues(alpha: 0.1),
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      border: Border.all(
+                                        color: SoteriaColors.warning.withValues(alpha: 0.3),
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.info_outline_rounded, color: SoteriaColors.warning),
+                                        SizedBox(width: 12.w),
+                                        Expanded(
+                                          child: Text(
+                                            'Daily reward limit reached. You can still practice, but no additional XP or Coins will be earned today.',
+                                            style: context.bodySmall.copyWith(color: Colors.white70),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               RepaintBoundary(
                                 child: LobbyInterestsCard(
                                   value: state.config.useInterests,

@@ -12,6 +12,7 @@ enum MilestoneType {
   rank,
   position,
   season,
+  level,
   statistic,
   careerBest,
   promotion,
