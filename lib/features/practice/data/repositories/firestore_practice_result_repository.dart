@@ -37,12 +37,20 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
       final walletRef = _firestore.collection('wallets').doc(uid);
       final gameProfileRef = _firestore.collection('user_game_profiles').doc(uid);
       final resultRef = _resultsCollection(uid).doc(sessionId);
+      final progressionDoc = _firestore.collection('player_progression').doc(uid);
 
       // 1. ALL READS FIRST
-      final playerDoc = await transaction.get(playerRef);
+      final snapshots = await Future.wait([
+        transaction.get(playerRef),
+        transaction.get(resultRef),
+        transaction.get(progressionDoc),
+      ]);
+
+      final playerDoc = snapshots[0];
+      final resultDoc = snapshots[1];
+      final progressionSnapshot = snapshots[2];
+
       if (!playerDoc.exists) throw Exception('Player not found');
-      
-      final resultDoc = await transaction.get(resultRef);
       if (resultDoc.exists) return; // Idempotency
 
       final data = playerDoc.data() ?? {};
@@ -64,6 +72,7 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
       // 2. LOGIC & WRITES
       final actualXp = isEligible ? result.xpEarned : 0;
       final actualCoins = isEligible ? result.coinsEarned : 0;
+      final txId = _firestore.collection('wallet_transactions').doc().id;
 
       // Update Result with actual rewards
       final finalResult = result.copyWith(
@@ -94,8 +103,7 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
       settings['categoryMastery'] = mastery;
 
       // Update Player Stats
-      transaction.update(playerRef, {
-        'coins': FieldValue.increment(actualCoins),
+      final playerUpdates = <String, dynamic>{
         'practiceSessions': FieldValue.increment(1),
         'gamesPlayed': FieldValue.increment(1),
         'dailyPracticeSessionsPlayed': isNewDay ? 1 : FieldValue.increment(1),
@@ -105,13 +113,21 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
         'accuracy': newAccuracy,
         'settings': settings,
         'updatedAt': FieldValue.serverTimestamp(),
-      });
+      };
+
+      if (actualCoins > 0) {
+        playerUpdates['coins'] = FieldValue.increment(actualCoins);
+        playerUpdates['lastCoinTransactionId'] = txId;
+      }
+
+      transaction.update(playerRef, playerUpdates);
 
       // Update Wallet & Game Profile
       if (actualCoins > 0) {
         transaction.set(walletRef, {
           'coins': FieldValue.increment(actualCoins),
           'lifetimeCoinsEarned': FieldValue.increment(actualCoins),
+          'lastTransactionId': txId,
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 
@@ -121,8 +137,9 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
         }, SetOptions(merge: true));
 
         // Log Transaction
-        final txRef = _firestore.collection('wallet_transactions').doc();
+        final txRef = _firestore.collection('wallet_transactions').doc(txId);
         transaction.set(txRef, {
+          'id': txId,
           'userId': uid,
           'type': 'coins',
           'currency': 'coins',
@@ -139,9 +156,6 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
 
       // Progression Update (XP)
       if (actualXp > 0) {
-        final progressionDoc = _firestore.collection('player_progression').doc(uid);
-        final progressionSnapshot = await transaction.get(progressionDoc);
-
         PlayerProgression currentProg;
         if (!progressionSnapshot.exists) {
           currentProg = PlayerProgression.initial(uid, 'current_season');

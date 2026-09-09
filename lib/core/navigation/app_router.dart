@@ -132,21 +132,16 @@ import 'package:soteria/features/matchmaking/presentation/screens/competitive_in
 
 import 'package:soteria/features/social/preview/social_previews.dart';
 
+final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
+final dashboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'dashboard');
+final playNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'play');
+final leaderboardNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'leaderboard');
+final rewardsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rewards');
+final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
+
 final routerProvider = Provider<GoRouter>((ref) {
   final listenable = _RiverpodRefreshListenable(ref);
   ref.onDispose(listenable.dispose);
-
-  // Navigator Keys for stateful shells
-  final rootNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'root');
-  final dashboardNavigatorKey = GlobalKey<NavigatorState>(
-    debugLabel: 'dashboard',
-  );
-  final playNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'play');
-  final leaderboardNavigatorKey = GlobalKey<NavigatorState>(
-    debugLabel: 'leaderboard',
-  );
-  final rewardsNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'rewards');
-  final profileNavigatorKey = GlobalKey<NavigatorState>(debugLabel: 'profile');
 
   return GoRouter(
     initialLocation: SoteriaRoutes.splash,

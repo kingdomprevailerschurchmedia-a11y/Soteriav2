@@ -19,4 +19,7 @@ abstract interface class AchievementRepository {
 
   /// Updates the progress of an in-progress achievement.
   Future<void> updateAchievementProgress(String userId, String achievementId, double progress);
+
+  /// Seeds default achievement definitions to Firestore.
+  Future<void> seedDefinitions();
 }

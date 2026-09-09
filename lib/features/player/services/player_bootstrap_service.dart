@@ -66,6 +66,9 @@ class PlayerBootstrapService {
       // Ensure categories are seeded in background
       _categoryRepository?.seedDefaultCategories();
       
+      // Ensure achievement definitions are seeded in background
+      _achievementService?.seedDefinitions();
+      
       // Ensure goals are populated for the day
       _goalRepository?.refreshGoals(user.uid);
 
@@ -156,14 +159,14 @@ class PlayerBootstrapService {
 
             // 4. Update Player Progression (Daily Login Streak Record)
             final progressionRef = _firestore.collection('player_progression').doc(user.uid);
-            transaction.update(progressionRef, {
+            transaction.set(progressionRef, {
               'dailyStreak': newStreak,
               'longestStreak': newStreak > existingProfile.highestStreak 
                   ? newStreak 
                   : existingProfile.highestStreak,
               'lastEngagementDate': PersonalizationBridge.formatEngagementDate(now),
               'lastUpdated': nowTimestamp,
-            });
+            }, SetOptions(merge: true));
           });
           
           LoggerService.i('7-day streak reached! Granted 500 bonus coins via atomic transaction.', feature: 'Player');
@@ -172,14 +175,14 @@ class PlayerBootstrapService {
             transaction.update(_firestore.collection('users').doc(user.uid), patchData);
             
             final progressionRef = _firestore.collection('player_progression').doc(user.uid);
-            transaction.update(progressionRef, {
+            transaction.set(progressionRef, {
               'dailyStreak': newStreak,
               'longestStreak': newStreak > existingProfile.highestStreak 
                   ? newStreak 
                   : existingProfile.highestStreak,
               'lastEngagementDate': PersonalizationBridge.formatEngagementDate(now),
               'lastUpdated': FieldValue.serverTimestamp(),
-            });
+            }, SetOptions(merge: true));
           });
         }
 

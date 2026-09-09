@@ -5,6 +5,7 @@ import '../repositories/achievement_repository.dart';
 import '../repositories/player_progression_repository.dart';
 import '../repositories/player_repository.dart';
 import 'achievement_registry.dart';
+import '../../../../core/logging/logger_service.dart';
 
 class AchievementService {
   final AchievementRepository _achievementRepository;
@@ -30,24 +31,29 @@ class AchievementService {
     for (final definition in AchievementRegistry.definitions) {
       if (!definition.isActive) continue;
       
-      final currentState = achievementStates[definition.id];
-      if (currentState != null && 
-          (currentState.status == AchievementStatus.unlocked || 
-           currentState.status == AchievementStatus.claimed)) {
-        continue;
-      }
+      try {
+        final currentState = achievementStates[definition.id];
+        if (currentState != null && 
+            (currentState.status == AchievementStatus.unlocked || 
+             currentState.status == AchievementStatus.claimed)) {
+          continue;
+        }
 
-      final double progress = _calculateProgress(
-        definition: definition,
-        profile: profile,
-        progression: progression,
-      );
+        final double progress = _calculateProgress(
+          definition: definition,
+          profile: profile,
+          progression: progression,
+        );
 
-      if (progress >= definition.threshold) {
-        await _achievementRepository.unlockAchievement(userId, definition.id);
-      } else {
-        // Sync real-time progress to Firestore
-        await _achievementRepository.updateAchievementProgress(userId, definition.id, progress);
+        if (progress >= definition.threshold) {
+          await _achievementRepository.unlockAchievement(userId, definition.id);
+        } else {
+          // Sync real-time progress to Firestore
+          await _achievementRepository.updateAchievementProgress(userId, definition.id, progress);
+        }
+      } catch (e) {
+        LoggerService.w('Failed to evaluate/unlock achievement ${definition.id}: $e', feature: 'Achievement');
+        // Continue to other achievements
       }
     }
   }
@@ -55,6 +61,11 @@ class AchievementService {
   /// Claims rewards for an achievement.
   Future<void> claimAchievement(String userId, String achievementId) async {
     await _achievementRepository.claimAchievementReward(userId, achievementId);
+  }
+
+  /// Seeds default achievement definitions.
+  Future<void> seedDefinitions() async {
+    await _achievementRepository.seedDefinitions();
   }
 
   double _calculateProgress({

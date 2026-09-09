@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/navigation/app_router.dart';
 import '../providers/rank_providers.dart';
 import '../../domain/models/rank_change.dart';
 import '../screens/rank_promotion_screen.dart';
@@ -21,14 +22,17 @@ class RankCelebrationListener extends ConsumerWidget {
       if (changes != null && changes.isNotEmpty) {
         // Show the most recent unacknowledged change
         final change = changes.first;
-        _showCelebration(context, ref, change);
+        _showCelebration(ref, change);
       }
     });
 
     return child;
   }
 
-  void _showCelebration(BuildContext context, WidgetRef ref, RankChange change) {
+  void _showCelebration(WidgetRef ref, RankChange change) {
+    final context = rootNavigatorKey.currentContext;
+    if (context == null) return;
+
     showGeneralDialog(
       context: context,
       barrierDismissible: false,

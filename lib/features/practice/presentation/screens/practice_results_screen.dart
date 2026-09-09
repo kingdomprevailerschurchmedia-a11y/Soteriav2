@@ -7,7 +7,6 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
-import '../../../../core/widgets/safe_gradient_scaffold.dart';
 import '../../../../core/widgets/feedback/soteria_loader.dart';
 import '../../../gameplay_engine/models/game_state.dart';
 import '../../../../core/design_system/animations/soteria_animation_widgets.dart';
@@ -16,7 +15,7 @@ import '../states/practice_result_state.dart';
 import '../../domain/models/practice_result.dart';
 import '../../../../core/navigation/soteria_routes.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
-import '../../../../core/design_system/gradients/soteria_gradients.dart';
+import '../../../../shared/widgets/soteria_page.dart';
 
 class PracticeResultsScreen extends ConsumerStatefulWidget {
   const PracticeResultsScreen({super.key, required this.gameState});
@@ -42,26 +41,43 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
   Widget build(BuildContext context) {
     final state = ref.watch(practiceResultProvider);
 
-    return SafeGradientScaffold(
-      body: state.when(
-        initial: () => const Center(child: SoteriaLoader()),
-        calculating: () => const Center(child: SoteriaLoader()),
-        error: (msg) => Center(child: Text('Error: $msg', style: const TextStyle(color: Colors.white))),
-        success: (result) => _buildContent(context, result),
+    final isLoading = state.maybeWhen(
+      initial: () => true,
+      calculating: () => true,
+      orElse: () => false,
+    );
+    final error = state.maybeWhen(
+      error: (msg) => msg,
+      orElse: () => null,
+    );
+
+    return SoteriaPage(
+      isLoading: isLoading,
+      error: error,
+      showBackground: false,
+      useSafeArea: false,
+      onRetry: () {
+        ref.read(practiceResultProvider.notifier).finalize(widget.gameState);
+      },
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: state.maybeWhen(
+          success: (result) => _buildContent(context, result),
+          orElse: () => const SizedBox.shrink(),
+        ),
       ),
     );
   }
 
   Widget _buildContent(BuildContext context, PracticeResult result) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: SoteriaGradients.primaryBackground,
-      ),
-      child: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          _buildAppBar(context),
-          SliverPadding(
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(
+          child: SizedBox(height: MediaQuery.paddingOf(context).top + 8.h),
+        ),
+        _buildAppBar(context),
+        SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
@@ -438,43 +454,59 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
   }
 
   Widget _buildActions(BuildContext context, PracticeResult result) {
-    return GestureDetector(
-      onTap: () => context.go(SoteriaRoutes.practice),
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 16.h),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF6B4EEA), Color(0xFF2E1A8A)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(16.r),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF6B4EEA).withValues(alpha: 0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(Icons.bolt_rounded, color: SoteriaColors.gold, size: 24.sp),
-            SizedBox(width: 12.w),
-            Text(
-              'PRACTICE AGAIN',
-              style: context.titleMedium.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
+    return Column(
+      children: [
+        GestureDetector(
+          onTap: () => context.go(SoteriaRoutes.practice),
+          child: Container(
+            padding: EdgeInsets.symmetric(vertical: 16.h),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF6B4EEA), Color(0xFF2E1A8A)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
+              borderRadius: BorderRadius.circular(16.r),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF6B4EEA).withValues(alpha: 0.3),
+                  blurRadius: 20,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-            SizedBox(width: 12.w),
-            Icon(Icons.chevron_right_rounded, color: Colors.white, size: 20.sp),
-          ],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.bolt_rounded, color: SoteriaColors.gold, size: 24.sp),
+                SizedBox(width: 12.w),
+                Text(
+                  'PRACTICE AGAIN',
+                  style: context.titleMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+                SizedBox(width: 12.w),
+                Icon(Icons.chevron_right_rounded, color: Colors.white, size: 20.sp),
+              ],
+            ),
+          ),
         ),
-      ),
+        SoteriaSpacing.gapMD,
+        TextButton(
+          onPressed: () => context.go(SoteriaRoutes.main),
+          child: Text(
+            'RETURN HOME',
+            style: context.titleSmall.copyWith(
+              color: Colors.white70,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

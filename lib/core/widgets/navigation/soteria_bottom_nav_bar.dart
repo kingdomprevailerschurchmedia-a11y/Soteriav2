@@ -55,38 +55,47 @@ class SoteriaBottomNavBar extends StatelessWidget {
               width: 1,
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _NavButton(
-                  icon: Icons.home_rounded,
-                  label: 'Home',
-                  isSelected: currentIndex == 0,
-                  onTap: () => onTap(0),
+                Expanded(
+                  child: _NavButton(
+                    icon: Icons.home_rounded,
+                    label: 'Home',
+                    isSelected: currentIndex == 0,
+                    onTap: () => onTap(0),
+                  ),
                 ),
-                _NavButton(
-                  icon: Icons.play_arrow_rounded,
-                  label: 'Practice',
-                  isSelected: currentIndex == 1,
-                  onTap: () => onTap(1),
+                Expanded(
+                  child: _NavButton(
+                    icon: Icons.play_arrow_rounded,
+                    label: 'Practice',
+                    isSelected: currentIndex == 1,
+                    onTap: () => onTap(1),
+                  ),
                 ),
-                _NavButton(
-                  icon: Icons.bar_chart_rounded,
-                  label: 'Stats',
-                  isSelected: currentIndex == 2,
-                  onTap: () => onTap(2),
+                Expanded(
+                  child: _NavButton(
+                    icon: Icons.bar_chart_rounded,
+                    label: 'Stats',
+                    isSelected: currentIndex == 2,
+                    onTap: () => onTap(2),
+                  ),
                 ),
-                _NavButton(
-                  icon: Icons.stars_rounded,
-                  label: 'Rewards',
-                  isSelected: currentIndex == 3,
-                  onTap: () => onTap(3),
+                Expanded(
+                  child: _NavButton(
+                    icon: Icons.stars_rounded,
+                    label: 'Rewards',
+                    isSelected: currentIndex == 3,
+                    onTap: () => onTap(3),
+                  ),
                 ),
-                _NavButton(
-                  icon: Icons.person_rounded,
-                  label: 'Profile',
-                  isSelected: currentIndex == 4,
-                  badgeCount: unreadCount,
-                  onTap: () => onTap(4),
+                Expanded(
+                  child: _NavButton(
+                    icon: Icons.person_rounded,
+                    label: 'Profile',
+                    isSelected: currentIndex == 4,
+                    badgeCount: unreadCount,
+                    onTap: () => onTap(4),
+                  ),
                 ),
               ],
             ),

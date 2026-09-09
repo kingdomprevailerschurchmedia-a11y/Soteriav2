@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/navigation/app_router.dart';
 import 'package:soteria/features/player/providers/player_providers.dart';
 import 'package:soteria/features/player/domain/models/player_profile.dart';
 import 'streak_celebration_dialog.dart';
@@ -19,14 +20,17 @@ class StreakCelebrationListener extends ConsumerWidget {
           next.currentStreak % 7 == 0 && 
           next.lastStreakMilestoneCelebrated < next.currentStreak) {
         
-        _showCelebration(context, ref, next.currentStreak);
+        _showCelebration(ref, next.currentStreak);
       }
     });
 
     return child;
   }
 
-  void _showCelebration(BuildContext context, WidgetRef ref, int streak) {
+  void _showCelebration(WidgetRef ref, int streak) {
+    final context = rootNavigatorKey.currentContext;
+    if (context == null) return;
+
     showDialog(
       context: context,
       barrierDismissible: false,

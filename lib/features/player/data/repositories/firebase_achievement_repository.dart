@@ -171,4 +171,20 @@ class FirebaseAchievementRepository implements AchievementRepository {
       }
     });
   }
+
+  @override
+  Future<void> seedDefinitions() async {
+    try {
+      final definitions = AchievementRegistry.definitions;
+      for (final def in definitions) {
+        final doc = await _firestore.collection('achievement_definitions').doc(def.id).get();
+        if (doc.exists) continue;
+
+        await _firestore.collection('achievement_definitions').doc(def.id).set(def.toJson());
+      }
+      LoggerService.i('Achievement definitions seeded successfully', feature: 'Achievement');
+    } catch (e) {
+      LoggerService.w('Achievement seeding skipped or failed: $e', feature: 'Achievement');
+    }
+  }
 }

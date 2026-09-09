@@ -201,6 +201,10 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "categoryId",
           "order": "ASCENDING"
         },
@@ -209,8 +213,8 @@
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "status",
-          "order": "ASCENDING"
+          "fieldPath": "tags",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "createdAt",
@@ -227,12 +231,16 @@
       "queryScope": "COLLECTION",
       "fields": [
         {
+          "fieldPath": "status",
+          "order": "ASCENDING"
+        },
+        {
           "fieldPath": "difficulty",
           "order": "ASCENDING"
         },
         {
-          "fieldPath": "status",
-          "order": "ASCENDING"
+          "fieldPath": "tags",
+          "arrayConfig": "CONTAINS"
         },
         {
           "fieldPath": "createdAt",

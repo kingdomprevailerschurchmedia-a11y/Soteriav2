@@ -8,6 +8,7 @@ import 'package:soteria/features/gameplay_engine/data/repositories/firebase_game
 import 'package:soteria/features/gameplay_engine/models/game_state.dart';
 import 'package:soteria/features/gameplay_engine/models/game_result.dart';
 import 'package:soteria/features/gameplay_engine/models/game_mode.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 
 final sharedPreferencesProvider = Provider<SharedPreferences>((ref) {
   throw UnimplementedError('Initialize this in main.dart and override it');
@@ -28,6 +29,10 @@ final firebaseAuthProvider = Provider<FirebaseAuth>(
 final firebaseGameplayRepositoryProvider = Provider<GameplayRepository>((ref) {
   final firestore = ref.watch(firebaseFirestoreProvider);
   final auth = ref.watch(firebaseAuthProvider);
+  
+  // Watch session changes to ensure repository is re-created when user changes
+  ref.watch(sessionProvider);
+  
   return FirebaseGameplayRepository(firestore, auth);
 });
 
