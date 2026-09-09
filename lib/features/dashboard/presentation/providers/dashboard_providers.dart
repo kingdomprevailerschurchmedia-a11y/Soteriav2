@@ -71,6 +71,7 @@ class DashboardNotifier extends Notifier<DashboardState> {
   void refresh() {
     ref.invalidate(announcementsProvider);
     ref.invalidate(dailyChallengeProvider);
+    ref.invalidate(goalRefreshProvider);
   }
 }
 

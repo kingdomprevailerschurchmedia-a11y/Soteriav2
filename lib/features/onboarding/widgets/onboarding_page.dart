@@ -17,7 +17,6 @@ class OnboardingPage extends StatelessWidget {
     required this.index,
     this.badgeLabel,
     this.titleWidget,
-    this.backgroundGlowColor,
     this.illustrationScale = 1.0,
   });
 
@@ -28,7 +27,6 @@ class OnboardingPage extends StatelessWidget {
   final int index;
   final String? badgeLabel;
   final Widget? titleWidget;
-  final Color? backgroundGlowColor;
   final double illustrationScale;
 
   @override
@@ -38,30 +36,6 @@ class OnboardingPage extends StatelessWidget {
 
     return Stack(
       children: [
-        if (backgroundGlowColor != null)
-          Positioned(
-            top: -100.h,
-            right: -100.w,
-            child: AnimatedBuilder(
-              animation: pageController,
-              builder: (context, child) {
-                double offset = 0.0;
-                if (pageController.hasClients) {
-                  offset = (pageController.page ?? 0.0) - index;
-                }
-                final double opacity = (1.0 - offset.abs()).clamp(0.0, 1.0);
-                return Opacity(
-                  opacity: opacity,
-                  child: child,
-                );
-              },
-              child: AmbientGlow(
-                color: backgroundGlowColor!.withValues(alpha: 0.1),
-                size: 500.w,
-                blur: 120,
-              ),
-            ),
-          ),
         LayoutBuilder(
           builder: (context, constraints) {
             final maxHeight = constraints.maxHeight;

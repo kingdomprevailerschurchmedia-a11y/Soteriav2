@@ -17,6 +17,7 @@ class DailyGoalsSection extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final dailyGoalsAsync = ref.watch(dailyGoalsProvider);
+    final refreshAsync = ref.watch(goalRefreshProvider);
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
@@ -26,25 +27,14 @@ class DailyGoalsSection extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/daily_goals_icon_transparent.png',
-                    width: 24.w,
-                    height: 24.w,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'DAILY GOALS',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
+              Text(
+                'DAILY GOALS',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
+                ),
               ),
               GestureDetector(
                 onTap: () => Navigator.of(context).push(
@@ -73,7 +63,12 @@ class DailyGoalsSection extends ConsumerWidget {
           ),
           SizedBox(height: SoteriaSpacing.md),
           dailyGoalsAsync.when(
-            data: (goals) => _buildGoalsRow(context, goals),
+            data: (goals) {
+              if (goals.isEmpty && refreshAsync.isLoading) {
+                return const _LoadingGoalsCard();
+              }
+              return _buildGoalsRow(context, goals);
+            },
             loading: () => const _LoadingGoalsCard(),
             error: (_, _) => const SizedBox.shrink(),
           ),

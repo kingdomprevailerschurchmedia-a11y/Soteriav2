@@ -41,11 +41,12 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/blocks/$(blocker + '_' + blocked));
     }
 
+    // Standard profile fields safe for user to update directly
     function isSafeProfileUpdate() {
       return isNotModifying([
         'xp', 'level', 'coins', 'badges', 'achievements', 'role',
         'accountStatus', 'createdAt', 'email', 'registrationOrder',
-        'lastRankTransactionId', 'lastXpTransactionId',
+        'lastRankTransactionId', 'lastXpTransactionId', 'lastCoinTransactionId',
         'proSessions', 'dailyProSessionsPlayed', 'lastProSessionDate'
       ]);
     }
@@ -65,44 +66,39 @@ service cloud.firestore {
     // USERS: Profile and Progression (Game Identity)
     match /users/{userId} {
       allow read: if isAuthenticated();
-
-      // Allow creation for new users (Bootstrap)
       allow create: if isOwner(userId);
 
-      // Restrict updates to safe fields only
-      // Allows updating profile fields (avatar, bio, favoriteCategories) but protects progression stats
-      // XP and Coins can only be updated if a corresponding transaction/settlement exists
+      // Complex update logic for authoritative progression sync
       allow update: if isOwner(userId) &&
                     (
+                      // Path 1: Simple profile updates (avatar, bio, etc.)
                       isSafeProfileUpdate() ||
-                      (
-                        request.resource.data.diff(resource.data).affectedKeys().hasAny(['coins', 'proSessions', 'dailyProSessionsPlayed']) &&
-                        (
-                          // Authoritative Pro Mode Entry or Refund validation
-                          // Allow progression updates (proSessions) without a transaction if coins are not modified (Free entry)
-                          (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['coins']) ||
-                           (request.resource.data.lastCoinTransactionId != null &&
-                            existsAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)) &&
-                            getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)).data.userId == request.auth.uid)) ||
 
-                          // Legacy/Direct coin validation
-                          (request.resource.data.lastCoinTransactionId != null &&
-                           ((getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)).data.direction == 'credit' &&
-                             request.resource.data.coins == resource.data.coins + getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)).data.amount) ||
-                            (getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)).data.direction == 'debit' &&
-                             request.resource.data.coins == resource.data.coins - getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)).data.amount)))
-                        )
-                      ) ||
+                      // Path 2: Bootstrap updates (streak, last login) - Often concurrent with rewards
                       (
-                        // XP and Level updates require a valid XP transaction
+                        isNotModifying(['role', 'accountStatus', 'email', 'registrationOrder', 'createdAt', 'xp', 'level', 'coins'])
+                      ) ||
+
+                      // Path 3: XP / Level reward sync
+                      (
                         request.resource.data.diff(resource.data).affectedKeys().hasAny(['xp']) &&
                         existsAfter(/databases/$(database)/documents/xp_transactions/$(request.resource.data.lastXpTransactionId)) &&
                         isNotModifying(['role', 'accountStatus', 'email', 'registrationOrder', 'createdAt'])
                       ) ||
+
+                      // Path 4: Coin reward sync
                       (
-                        // Achievement list updates
-                        request.resource.data.diff(resource.data).affectedKeys().hasAny(['achievements']) &&
-                        isNotModifying(['role', 'accountStatus', 'email', 'xp', 'level', 'coins'])
+                        request.resource.data.diff(resource.data).affectedKeys().hasAny(['coins']) &&
+                        request.resource.data.lastCoinTransactionId != null &&
+                        existsAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)) &&
+                        getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastCoinTransactionId)).data.userId == request.auth.uid &&
+                        isNotModifying(['role', 'accountStatus', 'email', 'registrationOrder', 'createdAt'])
+                      ) ||
+
+                      // Path 5: Pro Mode sessions counter
+                      (
+                        request.resource.data.diff(resource.data).affectedKeys().hasAny(['proSessions', 'dailyProSessionsPlayed']) &&
+                        isNotModifying(['role', 'accountStatus', 'email', 'registrationOrder', 'createdAt'])
                       )
                     );
 
@@ -154,7 +150,7 @@ service cloud.firestore {
                       request.resource.data.achievementId == docId &&
                       request.resource.data.userId == userId &&
                       request.resource.data.status == 'unlocked';
-        allow update: if false; // Unlocks are final
+        allow update: if false;
       }
 
       match /season_results/{docId} {
@@ -190,8 +186,7 @@ service cloud.firestore {
     match /user_profiles/{userId} {
       allow read: if isAuthenticated();
       allow create: if isOwner(userId);
-      allow update: if isOwner(userId) &&
-                    isNotModifying(['email']);
+      allow update: if isOwner(userId) && isNotModifying(['email']);
       allow delete: if isAdmin();
     }
 
@@ -222,8 +217,10 @@ service cloud.firestore {
       allow write: if isOwner(userId) || isAdmin();
     }
 
+    // TRANSACTION LEDGERS (Allow read for idempotency check)
     match /xp_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow get: if isAuthenticated();
+      allow list: if isAuthenticated() && (isAdmin() || (resource.data.userId == request.auth.uid));
       allow create: if isOwner(request.resource.data.userId) &&
                     request.resource.data.amount >= 0 &&
                     (
@@ -236,25 +233,37 @@ service cloud.firestore {
     }
 
     match /rank_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow get: if isAuthenticated();
+      allow list: if isAuthenticated() && (isAdmin() || (resource.data.userId == request.auth.uid));
       allow create: if isOwner(request.resource.data.userId);
     }
 
     match /coin_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow get: if isAuthenticated();
+      allow list: if isAuthenticated() && (isAdmin() || (resource.data.userId == request.auth.uid));
       allow create: if isOwner(request.resource.data.userId);
     }
 
+    match /wallet_transactions/{txId} {
+      allow get: if isAuthenticated();
+      allow list: if isAuthenticated() && (isAdmin() || (resource.data.userId == request.auth.uid));
+      allow create: if isOwner(request.resource.data.userId);
+      allow update, delete: if false;
+    }
+
+    // HISTORY
     match /rank_history/{docId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
+      allow read: if isAuthenticated() && (isAdmin() || (resource == null) || (resource.data.userId == request.auth.uid));
       allow create: if isOwner(request.resource.data.userId) &&
                     existsAfter(/databases/$(database)/documents/rank_transactions/$(request.resource.data.referenceResultId + '_tx'));
       allow update: if isOwner(resource.data.userId) && isNotModifying(['changeId', 'userId', 'newRankPoints']);
     }
 
-    match /rank_movement_history/{docId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
-      allow write: if isAdmin();
+    match /rank_movement_history/{eventId} {
+      allow get: if isAuthenticated();
+      allow list: if isAuthenticated() && (isAdmin() || (resource.data.userId == request.auth.uid));
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if isAdmin();
     }
 
     // TOURNAMENTS & EVENTS
@@ -265,10 +274,10 @@ service cloud.firestore {
     // SEASONS
     match /seasons/{seasonId} { allow read: if true; allow write: if isAdmin(); }
 
-    // ANNOUNCEMENTS: Publicly readable
+    // ANNOUNCEMENTS
     match /announcements/{announcementId} { allow read: if true; allow write: if isModerator(); }
 
-    // SYSTEM CONFIG: App settings and feature flags
+    // SYSTEM CONFIG
     match /system_config/{configId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
 
     match /achievement_definitions/{achId} {
@@ -291,18 +300,17 @@ service cloud.firestore {
     // QUESTION PACKS
     match /question_packs/{packId} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
 
-    // SEASON REWARD GRANTS
+    // REWARD GRANTS
     match /season_reward_grants/{grantId} {
       allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow write: if isAdmin() || (isAuthenticated() && request.resource.data.userId == request.auth.uid);
     }
 
-    // PUBLIC PROFILES: Source for other players
+    // PUBLIC PROFILES
     match /public_profiles/{userId} {
       allow read: if isAuthenticated();
       allow update: if isOwner(userId) &&
                     (
-                      // Allow updates to profile fields, but protect authoritative rank stats
                       isNotModifying(['rankPoints', 'currentRank', 'rankTier', 'division']) ||
                       isAdmin()
                     );
@@ -310,7 +318,7 @@ service cloud.firestore {
       allow delete: if isAdmin();
     }
 
-    // USERNAME RESERVATION
+    // USERNAMES
     match /usernames/{username} {
       allow read: if true;
       allow create: if isAuthenticated() &&
@@ -323,7 +331,7 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
     }
 
-    // SOCIAL & CHALLENGES
+    // SOCIAL
     match /friendships/{docId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated() && request.auth.uid in request.resource.data.userIds;
@@ -385,7 +393,7 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
-    // GAMEPLAY SESSIONS
+    // SESSIONS
     match /practice_sessions/{sessionId} {
       allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
       allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
@@ -414,7 +422,6 @@ service cloud.firestore {
       allow write: if isAuthenticated() && (request.resource.data.playerId == request.auth.uid || isAdmin());
     }
 
-    // MATCHMAKING POOL
     match /matchmaking_pool/{sessionId} {
       allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
@@ -445,13 +452,7 @@ service cloud.firestore {
       allow write: if isAuthenticated() && (docId.matches('.*_' + request.auth.uid) || isOwner(docId));
     }
 
-    match /rank_movement_history/{eventId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
-      allow update, delete: if isAdmin();
-    }
-
-    // ECONOMY & STORE
+    // ECONOMY
     match /wallets/{userId} {
       allow read: if isOwner(userId) || isAdmin();
       allow update: if isOwner(userId) &&
@@ -461,12 +462,10 @@ service cloud.firestore {
                         request.resource.data.diff(resource.data).affectedKeys().hasAny(['coins', 'tokens']) &&
                         request.resource.data.lastTransactionId != null &&
                         (
-                          // Primary: Strict transaction matching
                           (getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastTransactionId)).data.direction == 'credit' &&
                            request.resource.data.coins == resource.data.coins + getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastTransactionId)).data.amount) ||
                           (getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastTransactionId)).data.direction == 'debit' &&
                            request.resource.data.coins == resource.data.coins - getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastTransactionId)).data.amount) ||
-                          // Fallback: Allow composite updates (e.g. Pro Mode refund + spend) if a valid transaction is logged
                           (existsAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastTransactionId)) &&
                            getAfter(/databases/$(database)/documents/wallet_transactions/$(request.resource.data.lastTransactionId)).data.userId == request.auth.uid)
                         )
@@ -475,18 +474,12 @@ service cloud.firestore {
       allow create: if isOwner(userId) || isAdmin();
     }
 
-    match /wallet_transactions/{txId} {
-      allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
-      allow create: if isOwner(request.resource.data.userId);
-      allow update, delete: if false; // Immutable ledger
-    }
-
     match /purchases/{purchaseId} {
       allow read: if isAuthenticated() && (resource == null || resource.data.userId == request.auth.uid || isAdmin());
       allow create: if isOwner(request.resource.data.userId) &&
                     request.resource.data.status == 'pending' &&
                     request.resource.data.createdAt == request.time;
-      allow update: if isAdmin(); // Authoritative fulfillment
+      allow update: if isAdmin();
       allow delete: if false;
     }
 
@@ -495,13 +488,10 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // SYSTEM METADATA
+    // METADATA
     match /metadata/{docId} {
       allow read: if isAuthenticated();
       allow write: if isAdmin() || (isAuthenticated() && docId == 'system');
-      // Note: In production, you'd want a more secure way to increment counters,
-      // like a Cloud Function or a more specific rule for the transaction.
-      // For now, allowing authenticated users to write to 'system' to enable the registration counter.
     }
   }
 }

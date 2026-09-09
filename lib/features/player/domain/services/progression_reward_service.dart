@@ -25,7 +25,7 @@ class ProgressionRewardService {
 
     // 3. Create XP Transaction
     return XpTransaction(
-      transactionId: _uuid.v4(),
+      transactionId: 'ml_${userId}_$milestoneId',
       userId: userId,
       amount: definition.rewardAmount ?? 0,
       source: XpSource.milestone,
@@ -51,13 +51,13 @@ class ProgressionRewardService {
       return null;
     }
 
-    // 3. Create XP Transaction
+    // 3. Create XP Transaction (Deterministic ID based on goal instance)
     return XpTransaction(
-      transactionId: _uuid.v4(),
+      transactionId: 'goal_xp_${userId}_${goalState.instanceId}',
       userId: userId,
       amount: definitionObj.rewardAmount ?? 0,
       source: XpSource.goal,
-      referenceId: goalId,
+      referenceId: goalState.instanceId,
       createdAt: DateTime.now(),
     );
   }

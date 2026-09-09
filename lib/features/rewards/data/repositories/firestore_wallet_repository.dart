@@ -385,35 +385,49 @@ class FirestoreWalletRepository implements WalletRepository {
     final walletRef = _firestore.collection('wallets').doc(userId);
     final userRef = _firestore.collection('users').doc(userId);
     final gameProfileRef = _firestore.collection('user_game_profiles').doc(userId);
-    final txRef = _firestore.collection('wallet_transactions').doc();
+    
+    // Deterministic transaction ID for idempotency (Rule #5)
+    final txId = 'tx_${userId}_${source}_$referenceId';
+    final txRef = _firestore.collection('wallet_transactions').doc(txId);
 
     await _firestore.runTransaction((transaction) async {
+      // 1. ATOMIC READS
+      final txSnapshot = await transaction.get(txRef);
+      
+      // 2. IDEMPOTENCY CHECK
+      if (txSnapshot.exists) {
+        return; // Already applied
+      }
+
       final balanceField = (currency == 'coins') ? 'coins' : 'tokens';
       final earnedField = (currency == 'coins') ? 'lifetimeCoinsEarned' : 'lifetimeTokensEarned';
 
-      // 1. Update Wallet
+      // 3. ATOMIC WRITES
+      
+      // Update Wallet
       transaction.set(walletRef, {
         balanceField: FieldValue.increment(amount),
         earnedField: FieldValue.increment(amount),
-        'lastTransactionId': txRef.id,
+        'lastTransactionId': txId,
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      // 2. Update User (Gameplay)
+      // Update User (Gameplay)
       transaction.update(userRef, {
         balanceField: FieldValue.increment(amount),
-        if (balanceField == 'coins') 'lastCoinTransactionId': txRef.id,
+        if (balanceField == 'coins') 'lastCoinTransactionId': txId,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
-      // 3. Update User Game Profile (Identity)
+      // Update User Game Profile (Identity)
       transaction.set(gameProfileRef, {
         balanceField: FieldValue.increment(amount),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
-      // 4. Log Transaction
+      // Log Transaction
       transaction.set(txRef, {
+        'id': txId,
         'userId': userId,
         'type': currency, // Added for model consistency
         'currency': currency,

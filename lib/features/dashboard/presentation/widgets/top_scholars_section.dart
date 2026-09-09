@@ -32,25 +32,14 @@ class TopScholarsSection extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/top_scholars.png',
-                    width: 24.w,
-                    height: 24.w,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'TOP SCHOLARS',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      letterSpacing: 2,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
+              Text(
+                'TOP SCHOLARS',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
+                ),
               ),
               GestureDetector(
                 onTap: () => context.push(SoteriaRoutes.leaderboard),
@@ -77,6 +66,7 @@ class TopScholarsSection extends ConsumerWidget {
           ),
           SizedBox(height: SoteriaSpacing.md),
           Container(
+            clipBehavior: Clip.antiAlias,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(28.r),
               border: Border.all(
@@ -200,11 +190,13 @@ class _ScholarRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final avatar = ref.watch(avatarCatalogProvider).getById(avatarId);
     return Container(
+      margin: isMe ? EdgeInsets.all(4.w) : EdgeInsets.zero,
       decoration: BoxDecoration(
-        color: isMe ? const Color(0xFF9155FD).withValues(alpha: 0.1) : null,
-        borderRadius: BorderRadius.circular(16.r),
+        color: isMe ? const Color(0xFF9155FD).withValues(alpha: 0.15) : null,
+        borderRadius: BorderRadius.circular(20.r),
+        border: isMe ? Border.all(color: const Color(0xFF9155FD).withValues(alpha: 0.1), width: 1) : null,
       ),
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       child: Row(
         children: [
           _PositionBadge(rank: rank),
@@ -280,11 +272,12 @@ class _UserHighlightRow extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     const highlightColor = Color(0xFF9155FD);
     return Container(
-      margin: EdgeInsets.all(6.w),
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 8.h),
+      margin: EdgeInsets.symmetric(horizontal: 4.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
       decoration: BoxDecoration(
         color: highlightColor.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: highlightColor.withValues(alpha: 0.1), width: 1),
       ),
       child: Row(
         children: [

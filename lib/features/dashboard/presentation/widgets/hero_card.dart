@@ -290,14 +290,43 @@ class _HexagonPainter extends CustomPainter {
       oldDelegate.color != color || oldDelegate.glowColor != glowColor;
 }
 
-class _GlowingProgressBar extends StatelessWidget {
+class _GlowingProgressBar extends StatefulWidget {
   const _GlowingProgressBar({required this.progress, this.gradient}) : color = null;
   final double progress;
   final Color? color;
   final Gradient? gradient;
 
   @override
+  State<_GlowingProgressBar> createState() => _GlowingProgressBarState();
+}
+
+class _GlowingProgressBarState extends State<_GlowingProgressBar> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _glowAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
+    
+    _glowAnimation = Tween<double>(begin: 0.4, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final baseGlowColor = widget.color ?? const Color(0xFF7C4DFF);
+
     return Container(
       height: 6.h,
       width: double.infinity,
@@ -307,22 +336,33 @@ class _GlowingProgressBar extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          FractionallySizedBox(
-            widthFactor: progress.clamp(0.0, 1.0),
-            child: Container(
-              height: 6.h,
-              decoration: BoxDecoration(
-                color: color,
-                gradient: gradient,
-                borderRadius: BorderRadius.circular(100),
-                boxShadow: [
-                  BoxShadow(
-                    color: (color ?? Colors.purple).withValues(alpha: 0.4),
-                    blurRadius: 8,
+          AnimatedBuilder(
+            animation: _glowAnimation,
+            builder: (context, child) {
+              return FractionallySizedBox(
+                widthFactor: widget.progress.clamp(0.0, 1.0),
+                child: Container(
+                  height: 6.h,
+                  decoration: BoxDecoration(
+                    color: widget.color,
+                    gradient: widget.gradient,
+                    borderRadius: BorderRadius.circular(100),
+                    boxShadow: [
+                      BoxShadow(
+                        color: baseGlowColor.withValues(alpha: 0.3 * _glowAnimation.value),
+                        blurRadius: 6 * _glowAnimation.value,
+                        spreadRadius: 0,
+                      ),
+                      BoxShadow(
+                        color: baseGlowColor.withValues(alpha: 0.15 * _glowAnimation.value),
+                        blurRadius: 16 * _glowAnimation.value,
+                        spreadRadius: 2 * _glowAnimation.value,
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -337,42 +377,32 @@ class _StreakSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GlassSurface(
-      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-      borderRadius: BorderRadius.circular(20.r),
-      blur: 0.01, // Glassy effect
-      opacity: 0.09, // Increased visibility
+      padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      borderRadius: BorderRadius.circular(12.r),
+      blur: 0.01,
+      opacity: 0.12,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset(
-            'assets/icons/streak_icon.png',
-            width: 18.sp,
-            height: 18.sp,
+            'assets/icons/fire_icon.png',
+            width: 20.sp,
+            height: 20.sp,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) => Icon(
+              Icons.local_fire_department_rounded,
+              color: Colors.orange,
+              size: 20.sp,
+            ),
           ),
           SizedBox(width: 6.w),
-          Container(
-            width: 1.w,
-            height: 12.h,
-            color: Colors.white.withValues(alpha: 0.1),
-          ),
-          SizedBox(width: 8.w),
           Text(
             streak.toString(),
             style: context.titleMedium.copyWith(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.w900,
               color: Colors.white,
               fontSize: 14.sp,
-            ),
-          ),
-          SizedBox(width: 4.w),
-          Text(
-            'Streak',
-            style: context.labelSmall.copyWith(
-              color: Colors.white.withValues(alpha: 0.5),
-              fontSize: 10.sp,
-              fontWeight: FontWeight.w500,
             ),
           ),
         ],

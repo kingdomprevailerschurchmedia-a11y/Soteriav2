@@ -63,6 +63,9 @@ abstract class PlayerGoal with _$PlayerGoal {
   bool get isExpired => status == GoalStatus.expired;
   bool get isActive => status == GoalStatus.active;
 
+  /// Returns a unique identifier for this specific goal instance (e.g. daily goal for a specific day)
+  String get instanceId => '${goalId}_${startedAt.millisecondsSinceEpoch}';
+
   factory PlayerGoal.fromJson(Map<String, dynamic> json) =>
       _$PlayerGoalFromJson(json);
 }

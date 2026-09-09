@@ -55,6 +55,7 @@ class SoteriaApp extends ConsumerWidget {
     ref.watch(playerLeaderboardSyncProvider);
 
     // Ensure real-time goal and milestone evaluation across the entire app
+    ref.watch(goalRefreshProvider);
     ref.watch(goalEvaluationProvider);
     ref.watch(milestoneEvaluationProvider);
 

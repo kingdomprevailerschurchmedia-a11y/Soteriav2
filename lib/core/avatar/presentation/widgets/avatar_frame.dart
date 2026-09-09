@@ -115,6 +115,6 @@ class AvatarFrame extends StatelessWidget {
         glowColor = SoteriaColors.primary.withValues(alpha: 0.4);
     }
 
-    return BoxShadow(color: glowColor, blurRadius: 20.w, spreadRadius: 2.w);
+    return BoxShadow(color: glowColor, blurRadius: 12.w, spreadRadius: 1.w);
   }
 }

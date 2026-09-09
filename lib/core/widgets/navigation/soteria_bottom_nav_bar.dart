@@ -29,7 +29,7 @@ class SoteriaBottomNavBar extends StatelessWidget {
         SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
         0,
         SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
-        (isShort ? 4.h : 8.h) + bottomInset,
+        (isShort ? 4.h : 6.h) + (bottomInset > 0 ? bottomInset * 0.5 : 8.h),
       ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
@@ -38,16 +38,16 @@ class SoteriaBottomNavBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(SoteriaRadius.full),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.4),
-                blurRadius: 30,
-                offset: const Offset(0, 10),
+                color: Colors.black.withValues(alpha: 0.3),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
               ),
             ],
           ),
           child: GlassSurface(
             borderRadius: BorderRadius.circular(SoteriaRadius.full),
             padding: EdgeInsets.symmetric(
-              vertical: isShort ? 10.h : 12.h,
+              vertical: isShort ? 6.h : 8.h,
               horizontal: 8.w,
             ),
             border: Border.all(
@@ -129,8 +129,8 @@ class _NavButton extends StatelessWidget {
             AnimatedContainer(
               duration: SoteriaAnimations.fast,
               padding: EdgeInsets.symmetric(
-                horizontal: isShort ? 12.w : 14.w,
-                vertical: isShort ? 4.h : 6.h,
+                horizontal: isShort ? 10.w : 12.w,
+                vertical: isShort ? 2.h : 4.h,
               ),
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -141,14 +141,14 @@ class _NavButton extends StatelessWidget {
                   Icon(
                     icon,
                     color: isSelected ? Colors.white : SoteriaColors.muted,
-                    size: isShort ? 20.sp : 24.sp,
+                    size: isShort ? 18.sp : 20.sp,
                   ),
-                  SizedBox(height: 4.h),
+                  SizedBox(height: 2.h),
                   Text(
                     label,
                     style: TextStyle(
                       color: isSelected ? Colors.white : SoteriaColors.muted,
-                      fontSize: 10.sp,
+                      fontSize: 9.sp,
                       fontWeight: isSelected ? FontWeight.w900 : FontWeight.bold,
                     ),
                   ),

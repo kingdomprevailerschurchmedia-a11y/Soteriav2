@@ -28,25 +28,14 @@ class PerformanceSection extends ConsumerWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/performance_icon.png',
-                    width: 24.w,
-                    height: 24.w,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'PERFORMANCE',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
+              Text(
+                'PERFORMANCE',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
+                ),
               ),
               GestureDetector(
                 onTap: () => context.push(SoteriaRoutes.performanceAnalytics),

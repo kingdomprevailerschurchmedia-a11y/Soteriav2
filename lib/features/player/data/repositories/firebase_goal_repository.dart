@@ -17,7 +17,7 @@ class FirebaseGoalRepository implements GoalRepository {
   @override
   Stream<List<PlayerGoal>> watchActiveGoals(String userId) {
     return _goalsCollection(userId)
-        .where('status', whereIn: ['active', 'completed'])
+        .where('status', whereIn: ['active', 'completed', 'claimed'])
         .snapshots()
         .map((snapshot) {
           return snapshot.docs

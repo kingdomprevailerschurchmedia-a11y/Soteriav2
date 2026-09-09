@@ -92,10 +92,12 @@ class FirebasePlayerProgressionRepository
     final snapshots = await Future.wait([
       tx.get(txDoc),
       tx.get(progressionDoc),
+      tx.get(userRef),
     ]);
 
     final txSnapshot = snapshots[0];
     final progressionSnapshot = snapshots[1];
+    final userSnapshot = snapshots[2];
 
     if (txSnapshot.exists) {
       return; // Already applied

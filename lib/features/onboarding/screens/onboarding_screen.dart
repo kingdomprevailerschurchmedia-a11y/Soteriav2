@@ -75,7 +75,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         description: "Africa's premium competitive learning platform.",
         pageController: _pageController,
         index: 0,
-        backgroundGlowColor: SoteriaColors.primary,
         illustration: Image.asset(
           'assets/images/rise.png',
           fit: BoxFit.contain,
@@ -88,7 +87,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             'Practice daily, compete with peers, and grow your knowledge faster.',
         pageController: _pageController,
         index: 1,
-        backgroundGlowColor: SoteriaColors.secondary,
         illustration: Image.asset(
           'assets/images/challenge.png',
           fit: BoxFit.contain,
@@ -101,7 +99,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             'Climb the leaderboards, earn exclusive badges, and build your reputation.',
         pageController: _pageController,
         index: 2,
-        backgroundGlowColor: SoteriaColors.gold,
         illustration: Image.asset(
           'assets/images/recognition.png',
           fit: BoxFit.contain,
@@ -114,7 +111,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             'Join the community of innovators and start your journey today.',
         pageController: _pageController,
         index: 3,
-        backgroundGlowColor: SoteriaColors.success,
         illustration: Image.asset(
           'assets/images/ready.png',
           fit: BoxFit.contain,

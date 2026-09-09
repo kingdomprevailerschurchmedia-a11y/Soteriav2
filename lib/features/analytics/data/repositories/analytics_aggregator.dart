@@ -228,7 +228,8 @@ class AnalyticsAggregator {
           ),
         )
         .toList();
- Joseph Project/Soteria/lib/features/analytics/data/repositories/analytics_aggregator.dart    final scorePoints = sorted
+
+    final scorePoints = sorted
         .map(
           (r) => PerformanceTrendPoint(
             date: r.completedAt,

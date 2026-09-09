@@ -86,26 +86,47 @@ final goalHistoryProvider = FutureProvider<List<PlayerGoal>>((ref) async {
 
 /// Orchestrator to trigger goal evaluation.
 final goalEvaluationProvider = Provider<void>((ref) {
-  final goalsAsync = ref.watch(playerGoalsProvider);
-  final resultsAsync = ref.watch(historyListProvider);
-  final practiceAsync = ref.watch(practiceHistoryListProvider);
-  final statsAsync = ref.watch(competitiveStatisticsProvider);
-  final progressionAsync = ref.watch(competitiveProgressionProvider);
+  // This provider now only triggers the evaluation via the controller
+  // to avoid side-effects in a raw provider and handle concurrency.
+  ref.listen(playerGoalsProvider, (prev, next) {
+    if (next.hasValue) {
+       _triggerEvaluation(ref);
+    }
+  });
+  
+  ref.listen(competitiveStatisticsProvider, (prev, next) {
+    if (next.hasValue) {
+      _triggerEvaluation(ref);
+    }
+  });
+});
 
-  if (goalsAsync.hasValue &&
-      resultsAsync.hasValue &&
-      practiceAsync.hasValue &&
-      statsAsync.hasValue &&
-      progressionAsync.hasValue) {
-    final userId = ref.watch(authRepositoryProvider).currentUserId;
+bool _isEvaluating = false;
+
+Future<void> _triggerEvaluation(Ref ref) async {
+  if (_isEvaluating) return;
+  _isEvaluating = true;
+
+  try {
+    final userId = ref.read(authRepositoryProvider).currentUserId;
     if (userId == null) return;
 
+    final goals = ref.read(playerGoalsProvider).value;
+    final results = ref.read(historyListProvider).value;
+    final practice = ref.read(practiceHistoryListProvider).value;
+    final stats = ref.read(competitiveStatisticsProvider).value;
+    final progression = ref.read(competitiveProgressionProvider).value;
+
+    if (goals == null || results == null || practice == null || stats == null || progression == null) {
+      return;
+    }
+
     final updated = ref.read(goalEvaluationServiceProvider).evaluate(
-      playerGoals: goalsAsync.value!,
-      recentResults: resultsAsync.value!,
-      practiceResults: practiceAsync.value!,
-      statistics: statsAsync.value!,
-      progression: progressionAsync.value!,
+      playerGoals: goals,
+      recentResults: results,
+      practiceResults: practice,
+      statistics: stats,
+      progression: progression,
     );
 
     if (updated.isNotEmpty) {
@@ -114,59 +135,55 @@ final goalEvaluationProvider = Provider<void>((ref) {
       final walletRepo = ref.read(walletRepositoryProvider);
       final applyXp = ref.read(applyXpTransactionProvider);
 
-      // We use a future here to ensure we don't block the provider state update,
-      // but we should ideally process these sequentially or handle the concurrency.
-      Future<void> processRewards() async {
-        for (var goal in updated) {
-          // Check if newly completed for automated rewards
-          if (goal.status == GoalStatus.completed) {
-            // Process XP rewards
-            final xpTx = rewardService.processGoalReward(
-              userId: userId,
-              goalId: goal.goalId,
-              goalState: goal,
-            );
-            if (xpTx != null) {
-              try {
-                await applyXp(xpTx);
-              } catch (e) {
-                // Log error but continue with other goals
-                print('Failed to apply XP for goal ${goal.goalId}: $e');
-              }
+      for (var goal in updated) {
+        // Check if newly completed for automated rewards
+        if (goal.status == GoalStatus.completed) {
+          // Process XP rewards
+          final xpTx = rewardService.processGoalReward(
+            userId: userId,
+            goalId: goal.goalId,
+            goalState: goal,
+          );
+          if (xpTx != null) {
+            try {
+              await applyXp(xpTx);
+            } catch (e) {
+              print('Failed to apply XP for goal ${goal.goalId}: $e');
             }
-
-            // Process Coin rewards
-            final coinAmount = rewardService.getGoalCoinReward(goal.goalId);
-            if (coinAmount != null && coinAmount > 0) {
-              try {
-                await walletRepo.creditCurrency(
-                  userId: userId,
-                  amount: coinAmount,
-                  currency: 'coins',
-                  source: 'goal_completion',
-                  referenceId: goal.goalId,
-                  description: 'Reward for completing goal',
-                );
-              } catch (e) {
-                print('Failed to apply Coins for goal ${goal.goalId}: $e');
-              }
-            }
-
-            // Mark as claimed to prevent re-processing
-            goal = goal.copyWith(
-              status: GoalStatus.claimed,
-              claimedAt: DateTime.now(),
-            );
           }
 
-          await repository.updateGoalProgress(goal);
-        }
-      }
+          // Process Coin rewards
+          final coinAmount = rewardService.getGoalCoinReward(goal.goalId);
+          if (coinAmount != null && coinAmount > 0) {
+            try {
+              await walletRepo.creditCurrency(
+                userId: userId,
+                amount: coinAmount,
+                currency: 'coins',
+                source: 'goal_completion',
+                referenceId: goal.instanceId,
+                description: 'Reward for completing goal',
+              );
+            } catch (e) {
+              print('Failed to apply Coins for goal ${goal.goalId}: $e');
+            }
+          }
 
-      processRewards();
+          // Mark as claimed locally before updating DB to prevent re-processing
+          // if evaluation triggers again before DB syncs.
+          goal = goal.copyWith(
+            status: GoalStatus.claimed,
+            claimedAt: DateTime.now(),
+          );
+        }
+
+        await repository.updateGoalProgress(goal);
+      }
     }
+  } finally {
+    _isEvaluating = false;
   }
-});
+}
 
 /// Provider to ensure goals are refreshed/generated for the current period.
 final goalRefreshProvider = FutureProvider<void>((ref) async {

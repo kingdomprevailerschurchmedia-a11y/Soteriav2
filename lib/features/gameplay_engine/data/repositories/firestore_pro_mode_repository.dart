@@ -436,10 +436,12 @@ class FirestoreProModeRepository implements ProModeRepository {
       final snapshots = await Future.wait([
         transaction.get(sessionRef),
         transaction.get(resultRef),
+        transaction.get(playerRef),
       ]);
       
       final sessionDoc = snapshots[0];
       final resultDoc = snapshots[1];
+      final playerDoc = snapshots[2];
 
       if (!sessionDoc.exists) throw Exception('Session not found');
       
@@ -450,6 +452,7 @@ class FirestoreProModeRepository implements ProModeRepository {
       }
 
       final sessionData = sessionDoc.data() as Map<String, dynamic>;
+      final playerData = playerDoc.data() ?? {};
       final configData = sessionData['config'] as Map<String, dynamic>;
       final difficulty = ProDifficulty.values.byName(configData['difficulty']).toBaseDifficulty();
       final questionCount = (configData['questionCount'] as num).toInt();
@@ -555,10 +558,20 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       final playerUpdates = <String, dynamic>{
         'proSessions': FieldValue.increment(1),
+        'gamesPlayed': FieldValue.increment(1),
         'totalQuestionsAnswered': FieldValue.increment(totalQuestions),
         'correctAnswers': FieldValue.increment(correctCount),
         'updatedAt': FieldValue.serverTimestamp(),
       };
+
+      // Calculate and update current accuracy
+      final int oldTotal = playerData['totalQuestionsAnswered'] ?? 0;
+      final int oldCorrect = playerData['correctAnswers'] ?? 0;
+      final int newTotal = oldTotal + totalQuestions;
+      final int newCorrect = oldCorrect + correctCount;
+      if (newTotal > 0) {
+        playerUpdates['accuracy'] = newCorrect / newTotal;
+      }
 
       if (settlementAmount > 0) {
         playerUpdates['coins'] = FieldValue.increment(settlementAmount);
@@ -615,7 +628,7 @@ class FirestoreProModeRepository implements ProModeRepository {
 
     return transactionResult!;
   }
- Joseph Project/Soteria/lib/features/gameplay_engine/data/repositories/firestore_pro_mode_repository.dart
+
   @override
   Future<ProModeResult?> getResult(String sessionId) async {
     final snapshot = await _database.collection('pro_results').doc(sessionId).get();

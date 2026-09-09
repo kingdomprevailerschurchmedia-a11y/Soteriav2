@@ -72,14 +72,26 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
       );
       transaction.set(resultRef, finalResult.toJson());
 
+      // Calculate new accuracy
+      final int oldTotal = data['totalQuestionsAnswered'] ?? 0;
+      final int oldCorrect = data['correctAnswers'] ?? 0;
+      final int newTotal = oldTotal + result.totalQuestions;
+      final int newCorrect = oldCorrect + result.correctAnswers;
+      double newAccuracy = 0.0;
+      if (newTotal > 0) {
+        newAccuracy = newCorrect / newTotal;
+      }
+
       // Update Player Stats
       transaction.update(playerRef, {
         'coins': FieldValue.increment(actualCoins),
         'practiceSessions': FieldValue.increment(1),
+        'gamesPlayed': FieldValue.increment(1),
         'dailyPracticeSessionsPlayed': isNewDay ? 1 : FieldValue.increment(1),
         'lastPracticeSessionDate': Timestamp.fromDate(now),
         'totalQuestionsAnswered': FieldValue.increment(result.totalQuestions),
         'correctAnswers': FieldValue.increment(result.correctAnswers),
+        'accuracy': newAccuracy,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 

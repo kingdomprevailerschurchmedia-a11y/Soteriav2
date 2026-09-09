@@ -224,10 +224,11 @@ class _CompactStat extends StatelessWidget {
       children: [
         Text(
           value,
-          style: context.headlineMedium.copyWith(
+          style: context.displaySmall.copyWith(
             fontWeight: FontWeight.w900,
             color: SoteriaColors.textPrimary,
-            fontSize: 16.sp,
+            letterSpacing: -0.5,
+            fontSize: 17.sp,
           ),
         ),
         Row(
@@ -236,19 +237,19 @@ class _CompactStat extends StatelessWidget {
             if (assetPath != null)
               Image.asset(
                 assetPath!,
-                width: 16.sp,
-                height: 16.sp,
+                width: 18.sp,
+                height: 18.sp,
                 fit: BoxFit.contain,
               )
             else if (icon != null)
-              Icon(icon, size: 16.sp, color: color),
-            SizedBox(width: 2.w),
+              Icon(icon, size: 18.sp, color: color),
+            SizedBox(width: 3.w),
             Text(
               label,
               style: context.labelSmall.copyWith(
                 color: SoteriaColors.textSecondary.withValues(alpha: 0.7),
-                fontSize: 10.sp,
-                fontWeight: FontWeight.w500,
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],

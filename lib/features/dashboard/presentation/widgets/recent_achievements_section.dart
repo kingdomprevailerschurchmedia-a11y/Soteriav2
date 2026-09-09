@@ -31,25 +31,14 @@ class RecentAchievementsSection extends ConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/recent_achievement.png',
-                    width: 24.w,
-                    height: 24.w,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'RECENT ACHIEVEMENTS',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      letterSpacing: 2,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
+              Text(
+                'RECENT ACHIEVEMENTS',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
+                ),
               ),
               GestureDetector(
                 onTap: () => context.push(SoteriaRoutes.achievements),

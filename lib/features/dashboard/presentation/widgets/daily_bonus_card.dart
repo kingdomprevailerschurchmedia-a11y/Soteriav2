@@ -24,22 +24,15 @@ class DailyBonusCard extends ConsumerWidget {
         borderRadius: 20,
         child: Row(
           children: [
-            Container(
-              padding: EdgeInsets.all(10.w),
-              decoration: BoxDecoration(
-                color: SoteriaColors.gold.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(
-                  color: SoteriaColors.gold.withValues(alpha: 0.2),
-                ),
-              ),
-              child: Image.asset(
-                'assets/icons/rewards_icon.png',
-                width: 24.sp,
-                height: 24.sp,
-              ),
+            Image.asset(
+              dailyBonus.isAlreadyClaimedToday
+                  ? 'assets/icons/gift_box_opened.png'
+                  : 'assets/icons/gift_box.png',
+              width: 52.sp,
+              height: 52.sp,
+              fit: BoxFit.contain,
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

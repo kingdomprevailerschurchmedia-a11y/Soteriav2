@@ -48,7 +48,7 @@ class _AuthLandingContent extends ConsumerWidget {
 
           // Welcome Illustration
           Expanded(
-            flex: 7,
+            flex: 5,
             child: Center(
               child: Image.asset(
                 'assets/images/welcome_illustration.png',

@@ -25,25 +25,14 @@ class MilestoneSection extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    'assets/icons/next_milestone.png',
-                    width: 24.w,
-                    height: 24.w,
-                    fit: BoxFit.contain,
-                  ),
-                  SizedBox(width: 10.w),
-                  Text(
-                    'NEXT MILESTONE',
-                    style: context.labelSmall.copyWith(
-                      color: SoteriaColors.gold,
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 13.sp,
-                    ),
-                  ),
-                ],
+              Text(
+                'NEXT MILESTONE',
+                style: context.labelSmall.copyWith(
+                  color: SoteriaColors.gold,
+                  letterSpacing: 2.0,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 13.sp,
+                ),
               ),
               GestureDetector(
                 onTap: () => context.push('${SoteriaRoutes.achievements}?tab=1'),
@@ -107,17 +96,7 @@ class _DashboardMilestoneCard extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.1),
               ),
             ),
-            child: progress.definition.id == 'first_game'
-                ? Image.asset(
-                    'assets/icons/first_step_icon.png',
-                    width: 28.w,
-                    height: 28.w,
-                  )
-                : Icon(
-                    Icons.stars_rounded,
-                    color: const Color(0xFFB456FF),
-                    size: 24.sp,
-                  ),
+            child: _buildMilestoneIcon(progress),
           ),
           SizedBox(width: 16.w),
           Expanded(
@@ -170,6 +149,41 @@ class _DashboardMilestoneCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMilestoneIcon(MilestoneProgress progress) {
+    if (progress.definition.id == 'first_game') {
+      return Image.asset(
+        'assets/icons/first_step_icon.png',
+        width: 28.w,
+        height: 28.w,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          Icons.play_circle_outline_rounded,
+          color: SoteriaColors.gold,
+          size: 24.sp,
+        ),
+      );
+    }
+
+    if (progress.definition.id == 'streak_5') {
+      return Image.asset(
+        'assets/icons/fire_icon.png',
+        width: 32.w,
+        height: 32.w,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => Icon(
+          Icons.local_fire_department_rounded,
+          color: Colors.orange,
+          size: 24.sp,
+        ),
+      );
+    }
+
+    return Icon(
+      Icons.stars_rounded,
+      color: const Color(0xFFB456FF),
+      size: 24.sp,
     );
   }
 }

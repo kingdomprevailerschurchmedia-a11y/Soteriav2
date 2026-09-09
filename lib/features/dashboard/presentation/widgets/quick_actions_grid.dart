@@ -24,25 +24,14 @@ class QuickActionsGrid extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Image.asset(
-                'assets/icons/quick_action_icon_transparent.png',
-                width: 24.w,
-                height: 24.w,
-                fit: BoxFit.contain,
-              ),
-              SizedBox(width: 10.w),
-              Text(
-                'QUICK ACTIONS',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.gold,
-                  letterSpacing: 2.0,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 13.sp,
-                ),
-              ),
-            ],
+          Text(
+            'QUICK ACTIONS',
+            style: context.labelSmall.copyWith(
+              color: SoteriaColors.gold,
+              letterSpacing: 2.0,
+              fontWeight: FontWeight.w800,
+              fontSize: 13.sp,
+            ),
           ),
           SizedBox(height: SoteriaSpacing.md),
           GridView.count(
