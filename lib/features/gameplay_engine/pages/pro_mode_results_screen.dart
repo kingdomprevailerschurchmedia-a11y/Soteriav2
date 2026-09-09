@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -68,7 +69,9 @@ class _ProModeResultsScreenState extends ConsumerState<ProModeResultsScreen> {
         ),
         error: (err, st) => Center(
           child: SoteriaErrorWidget(
-            message: 'AUTHORITATIVE VALIDATION FAILED',
+            message: kDebugMode 
+                ? 'AUTHORITATIVE VALIDATION FAILED\n$err' 
+                : 'AUTHORITATIVE VALIDATION FAILED',
             onRetry: () {
               if (widget.gameState != null) {
                 ref

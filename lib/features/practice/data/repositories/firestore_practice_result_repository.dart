@@ -82,6 +82,17 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
         newAccuracy = newCorrect / newTotal;
       }
 
+      // Update Category Mastery in settings for achievements
+      final Map<String, dynamic> settings = Map<String, dynamic>.from(data['settings'] ?? {});
+      final Map<String, dynamic> mastery = Map<String, dynamic>.from(settings['categoryMastery'] ?? {});
+      for (final catId in result.categoryPerformance.keys) {
+        final catPerf = result.categoryPerformance[catId]!;
+        if (catPerf.correct > 0) {
+          mastery[catId] = (mastery[catId] ?? 0) + catPerf.correct;
+        }
+      }
+      settings['categoryMastery'] = mastery;
+
       // Update Player Stats
       transaction.update(playerRef, {
         'coins': FieldValue.increment(actualCoins),
@@ -92,6 +103,7 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
         'totalQuestionsAnswered': FieldValue.increment(result.totalQuestions),
         'correctAnswers': FieldValue.increment(result.correctAnswers),
         'accuracy': newAccuracy,
+        'settings': settings,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
@@ -137,7 +149,13 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
           currentProg = PlayerProgression.fromJson(progressionSnapshot.data()!);
         }
 
-        final updatedProg = _progressionService.addXp(currentProg, actualXp);
+        final int maxStreak = (result.metadata['maxStreak'] as num?)?.toInt() ?? 0;
+
+        final updatedProg = _progressionService.addXp(currentProg, actualXp).copyWith(
+          maxQuestionStreak: maxStreak > currentProg.maxQuestionStreak 
+              ? maxStreak 
+              : currentProg.maxQuestionStreak,
+        );
         transaction.set(progressionDoc, updatedProg.toJson());
 
         // Sync Leaderboard (Inside Transaction)

@@ -388,6 +388,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
         startTime: DateTime.now(),
         createdAt: DateTime.now(),
         reservedFee: fee,
+        isFree: isFree,
       );
 
       // 3. Create Session Record

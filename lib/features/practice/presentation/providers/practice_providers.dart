@@ -15,6 +15,7 @@ import '../../domain/services/practice_result_service.dart';
 import '../../domain/models/practice_result.dart';
 import '../states/practice_result_state.dart';
 import '../../../analytics/presentation/providers/analytics_providers.dart';
+import '../../../player/presentation/providers/achievement_providers.dart';
 import '../../../quiz/domain/models/question_result.dart';
 import '../../../quiz/domain/models/quiz_enums.dart' as quiz_enums;
 import '../../../quiz/domain/models/question_result.dart' as qr_models;
@@ -145,6 +146,9 @@ class PracticeResultNotifier extends StateNotifier<PracticeResultState> {
       if (questionResults.isNotEmpty) {
         await analyticsRepo.recordEvents(result.sessionId, userId, questionResults);
       }
+
+      // Authoritative Achievement Evaluation (Real-time sync)
+      await ref.read(achievementServiceProvider).evaluateAchievements(userId);
 
       state = PracticeResultState.success(result);
       

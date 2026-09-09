@@ -13,6 +13,7 @@ class CompetitiveSession {
   final DateTime? lastHeartbeatAt;
   final String status;
   final int reservedFee;
+  final bool isFree;
 
   const CompetitiveSession({
     required this.sessionId,
@@ -24,6 +25,7 @@ class CompetitiveSession {
     this.lastHeartbeatAt,
     this.status = 'initialized',
     required this.reservedFee,
+    this.isFree = false,
   });
 
   Map<String, dynamic> toJson() => {
@@ -64,5 +66,6 @@ class CompetitiveSession {
     'updatedAt': lastHeartbeatAt?.toIso8601String() ?? startTime.toIso8601String(),
     'status': status,
     'reservedFee': reservedFee,
+    'isFree': isFree,
   };
 }

@@ -16,4 +16,7 @@ abstract interface class AchievementRepository {
 
   /// Fetches a specific player achievement state.
   Future<PlayerAchievement?> getPlayerAchievement(String userId, String achievementId);
+
+  /// Updates the progress of an in-progress achievement.
+  Future<void> updateAchievementProgress(String userId, String achievementId, double progress);
 }

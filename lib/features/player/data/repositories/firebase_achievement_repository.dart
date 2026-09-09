@@ -132,4 +132,43 @@ class FirebaseAchievementRepository implements AchievementRepository {
     if (!doc.exists) return null;
     return PlayerAchievement.fromJson(doc.data()!);
   }
+
+  @override
+  Future<void> updateAchievementProgress(
+    String userId,
+    String achievementId,
+    double progress,
+  ) async {
+    final definition = AchievementRegistry.getById(achievementId);
+    if (definition == null) return;
+
+    final docRef = _achievementCollection(userId).doc(achievementId);
+
+    await _firestore.runTransaction((tx) async {
+      final snapshot = await tx.get(docRef);
+
+      if (snapshot.exists) {
+        final current = PlayerAchievement.fromJson(snapshot.data()!);
+        if (current.status != AchievementStatus.inProgress) return;
+        
+        // Only update if progress has actually moved forward to save writes
+        if (progress <= current.currentValue) return;
+
+        tx.update(docRef, {
+          'currentValue': progress,
+          'schemaVersion': 1,
+        });
+      } else {
+        // Create initial in-progress record
+        final playerAchievement = PlayerAchievement(
+          userId: userId,
+          achievementId: achievementId,
+          status: AchievementStatus.inProgress,
+          currentValue: progress,
+          targetValue: definition.threshold,
+        );
+        tx.set(docRef, playerAchievement.toJson());
+      }
+    });
+  }
 }

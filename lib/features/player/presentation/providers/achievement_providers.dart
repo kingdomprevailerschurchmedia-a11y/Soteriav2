@@ -3,7 +3,7 @@ import '../../domain/models/achievement.dart';
 import '../../domain/services/achievement_registry.dart';
 import '../../../../core/identity/providers/identity_providers.dart';
 import '../../providers/player_providers.dart';
-import '../../../../core/identity/providers/identity_providers.dart';
+import '../../../auth/providers/auth_providers.dart';
 
 import '../../domain/services/achievement_service.dart';
 import 'progression_providers.dart';
@@ -128,6 +128,23 @@ final achievementSummaryProvider = Provider<AchievementSummary>((ref) {
     totalCount: totalCount,
     progressPercentage: totalCount > 0 ? earnedCount / totalCount : 0,
   );
+});
+
+/// Orchestrator to trigger achievement evaluation when player stats change.
+final achievementEvaluationProvider = Provider<void>((ref) {
+  final playerAsync = ref.watch(currentPlayerStreamProvider);
+  final progressionAsync = ref.watch(competitiveProgressionProvider);
+  
+  // We watch these to trigger re-evaluation when they change
+  if (playerAsync.hasValue && progressionAsync.hasValue) {
+    final userId = ref.read(authRepositoryProvider).currentUserId;
+    if (userId != null) {
+      // Use a microtask to avoid side-effects during build if this is called during a build phase
+      Future.microtask(() {
+        ref.read(achievementServiceProvider).evaluateAchievements(userId);
+      });
+    }
+  }
 });
 
 class AchievementSummary {

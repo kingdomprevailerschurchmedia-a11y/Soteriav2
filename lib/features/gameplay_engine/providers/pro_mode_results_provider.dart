@@ -7,6 +7,8 @@ import '../../analytics/presentation/providers/analytics_providers.dart';
 import '../../analytics/domain/repositories/question_analytics_repository.dart';
 import '../../quiz/domain/models/question_result.dart';
 import '../../quiz/domain/models/quiz_enums.dart';
+import '../../player/presentation/providers/achievement_providers.dart';
+import '../../player/providers/player_providers.dart';
 
 /// State for the Pro Mode results experience.
 class ProModeResultsState {
@@ -61,9 +63,13 @@ class ProModeResultsNotifier extends StateNotifier<ProModeResultsState> {
       final repo = _ref.read(proModeRepositoryProvider);
       final result = await repo.completeSession(finalState.sessionId, finalState);
 
-      // Trigger global question analytics updates (Secure individual events)
+      // 1. Trigger global question analytics updates (Secure individual events)
       final analyticsRepo = _ref.read(questionAnalyticsRepositoryProvider);
       _updateQuestionAnalytics(analyticsRepo, result, finalState);
+
+      // 2. Authoritative Achievement Evaluation (Real-time sync)
+      final achievementService = _ref.read(achievementServiceProvider);
+      await achievementService.evaluateAchievements(finalState.playerId);
 
       state = state.copyWith(result: AsyncValue.data(result), isCompleting: false);
     } catch (e, st) {

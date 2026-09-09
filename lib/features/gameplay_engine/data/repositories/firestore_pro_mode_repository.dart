@@ -457,13 +457,14 @@ class FirestoreProModeRepository implements ProModeRepository {
       final difficulty = ProDifficulty.values.byName(configData['difficulty']).toBaseDifficulty();
       final questionCount = (configData['questionCount'] as num).toInt();
       final reservedFee = (sessionData['reservedFee'] as num?)?.toInt();
+      final isFree = (sessionData['isFree'] as bool?) ?? false;
       final uid = sessionData['uid'] as String?;
 
       if (uid == null) throw Exception('Invalid session: User ID missing');
 
       // VITAL SECURITY: Verify fee
       final expectedFee = CompetitiveRewardConfig.proEntryFees[difficulty] ?? 0;
-      if (reservedFee != null && reservedFee < expectedFee) {
+      if (!isFree && reservedFee != null && reservedFee < expectedFee) {
         throw Exception('Security violation: Entry fee mismatch.');
       }
 
@@ -564,6 +565,10 @@ class FirestoreProModeRepository implements ProModeRepository {
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
+      if (accuracy >= 0.7) {
+        playerUpdates['gamesWon'] = FieldValue.increment(1);
+      }
+
       // Calculate and update current accuracy
       final int oldTotal = playerData['totalQuestionsAnswered'] ?? 0;
       final int oldCorrect = playerData['correctAnswers'] ?? 0;
@@ -572,6 +577,24 @@ class FirestoreProModeRepository implements ProModeRepository {
       if (newTotal > 0) {
         playerUpdates['accuracy'] = newCorrect / newTotal;
       }
+
+      // Update Category Mastery in settings for achievements
+      final Map<String, dynamic> settings = Map<String, dynamic>.from(playerData['settings'] ?? {});
+      final Map<String, dynamic> mastery = Map<String, dynamic>.from(settings['categoryMastery'] ?? {});
+      
+      final Map<String, int> sessionMastery = {};
+      for (final answer in finalState.answerHistory) {
+        if (answer.isCorrect) {
+          final question = questionMap[answer.questionId];
+          if (question != null) {
+            final catId = question.categoryId;
+            sessionMastery[catId] = (sessionMastery[catId] ?? 0) + 1;
+            mastery[catId] = (mastery[catId] ?? 0) + 1;
+          }
+        }
+      }
+      settings['categoryMastery'] = mastery;
+      playerUpdates['settings'] = settings;
 
       if (settlementAmount > 0) {
         playerUpdates['coins'] = FieldValue.increment(settlementAmount);

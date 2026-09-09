@@ -150,8 +150,29 @@ class SoteriaAvatar extends ConsumerWidget {
     String? effectiveImageUrl,
   ) {
     if (effectiveImageUrl != null && effectiveImageUrl.isNotEmpty) {
+      // Add a timestamp as a cache breaker to ensure the image reloads when the URL is updated.
+      // This solves the issue where the UI doesn't update after a new profile picture upload
+      // even if the download URL remains similar.
+      String cacheBreakerUrl = effectiveImageUrl;
+      try {
+        final Uri uri = Uri.parse(effectiveImageUrl);
+        if (uri.hasQuery) {
+          cacheBreakerUrl = uri.replace(
+            queryParameters: {
+              ...uri.queryParameters,
+              'cb': DateTime.now().millisecondsSinceEpoch.toString(),
+            },
+          ).toString();
+        } else {
+          cacheBreakerUrl = '$effectiveImageUrl?cb=${DateTime.now().millisecondsSinceEpoch}';
+        }
+      } catch (e) {
+        // Fallback to original URL if parsing fails
+      }
+
       return Image.network(
-        effectiveImageUrl,
+        cacheBreakerUrl,
+        key: ValueKey(cacheBreakerUrl),
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
       );

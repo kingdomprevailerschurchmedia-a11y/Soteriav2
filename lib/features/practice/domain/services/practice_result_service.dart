@@ -122,6 +122,7 @@ class PracticeResultService {
       metadata: {
         'strengths': _detectStrengths(categoryPerformance),
         'weaknesses': _detectWeaknesses(categoryPerformance),
+        'maxStreak': state.streak,
       },
     );
   }

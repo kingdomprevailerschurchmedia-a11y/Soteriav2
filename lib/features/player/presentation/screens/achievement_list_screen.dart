@@ -135,6 +135,8 @@ class _Header extends ConsumerWidget {
 class _AchievementsTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Trigger evaluation
+    ref.watch(achievementEvaluationProvider);
     final progressAsync = ref.watch(achievementProgressProvider);
 
     return progressAsync.when(

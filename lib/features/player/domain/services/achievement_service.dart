@@ -25,10 +25,17 @@ class AchievementService {
     if (profile == null || progression == null) return;
 
     final earnedAchievements = await _achievementRepository.watchPlayerAchievements(userId).first;
-    final earnedIds = earnedAchievements.map((a) => a.achievementId).toSet();
+    final achievementStates = {for (final a in earnedAchievements) a.achievementId: a};
 
     for (final definition in AchievementRegistry.definitions) {
-      if (!definition.isActive || earnedIds.contains(definition.id)) continue;
+      if (!definition.isActive) continue;
+      
+      final currentState = achievementStates[definition.id];
+      if (currentState != null && 
+          (currentState.status == AchievementStatus.unlocked || 
+           currentState.status == AchievementStatus.claimed)) {
+        continue;
+      }
 
       final double progress = _calculateProgress(
         definition: definition,
@@ -38,6 +45,9 @@ class AchievementService {
 
       if (progress >= definition.threshold) {
         await _achievementRepository.unlockAchievement(userId, definition.id);
+      } else {
+        // Sync real-time progress to Firestore
+        await _achievementRepository.updateAchievementProgress(userId, definition.id, progress);
       }
     }
   }
