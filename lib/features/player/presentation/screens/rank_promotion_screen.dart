@@ -27,10 +27,10 @@ class RankPromotionScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       body: Stack(
         children: [
-          // Background Dim
+          // Dismissible area
           GestureDetector(
             onTap: onContinue,
-            child: Container(color: Colors.black.withValues(alpha: 0.9)),
+            child: Container(color: Colors.transparent),
           ),
 
           // Content

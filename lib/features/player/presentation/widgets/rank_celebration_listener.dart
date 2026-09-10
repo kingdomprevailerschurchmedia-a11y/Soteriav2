@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:soteria/core/navigation/app_router.dart';
@@ -30,6 +31,25 @@ class RankCelebrationListener extends ConsumerWidget {
   }
 
   void _showCelebration(WidgetRef ref, RankChange change) {
+    // Only show dialog for major rank changes (Promotions/Demotions/Placement)
+    final isMajorChange = change.isTierChange ||
+        change.isDivisionChange ||
+        change.type == RankChangeType.promotion ||
+        change.type == RankChangeType.divisionPromotion ||
+        change.type == RankChangeType.demotion ||
+        change.type == RankChangeType.divisionDemotion ||
+        change.type == RankChangeType.placement;
+
+    if (kDebugMode) {
+      print('RANK CELEBRATION: id=${change.changeId}, type=${change.type.name}, major=$isMajorChange');
+    }
+
+    if (!isMajorChange || change.newRank.isEmpty) {
+      // Just acknowledge minor points changes (increase/decrease) or invalid data in the background
+      ref.read(acknowledgeRankChangeActionProvider)(change.changeId);
+      return;
+    }
+
     final context = rootNavigatorKey.currentContext;
     if (context == null) return;
 
@@ -57,8 +77,8 @@ class RankCelebrationListener extends ConsumerWidget {
             },
           );
         }
-        // For other types, just acknowledge it
-        ref.read(acknowledgeRankChangeActionProvider)(change.changeId);
+        
+        // Fallback for unexpected cases (should be handled by isMajorChange check above)
         return const SizedBox.shrink();
       },
     );

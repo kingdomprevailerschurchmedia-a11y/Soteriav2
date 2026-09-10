@@ -2,12 +2,18 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/core/services/asset_precache_service.dart';
+
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
+import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/widgets/feedback/soteria_loader.dart';
 
 import '../widgets/splash_branding.dart';
 
@@ -28,8 +34,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   late final Animation<double> _logoOpacity;
   late final Animation<double> _logoScale;
-  late final Animation<double> _wordmarkOpacity;
-  late final Animation<double> _taglineOpacity;
 
   // ===========================================================================
   // STARTUP STATE
@@ -82,29 +86,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   void _initializeAnimations() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 2000),
+      duration: const Duration(milliseconds: 1200),
     );
 
     _logoOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0.0, 0.20, curve: Curves.easeOut),
+      curve: const Interval(0.0, 0.40, curve: Curves.easeOut),
     );
 
     _logoScale = Tween<double>(begin: 0.94, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 0.20, curve: Curves.easeOutCubic),
+        curve: const Interval(0.0, 0.40, curve: Curves.easeOutCubic),
       ),
-    );
-
-    _wordmarkOpacity = CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.15, 0.35, curve: Curves.easeOut),
-    );
-
-    _taglineOpacity = CurvedAnimation(
-      parent: _controller,
-      curve: const Interval(0.30, 0.50, curve: Curves.easeOut),
     );
   }
 
@@ -116,11 +110,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _controller.forward();
 
     // Combine all startup dependencies:
-    // 1. Minimum animation time (2s)
+    // 1. Minimum animation time (800ms)
     // 2. App initialization logic
     
     final startupTasks = [
-      Future.delayed(const Duration(milliseconds: 2000)),
+      Future.delayed(const Duration(milliseconds: 800)),
       _waitForAppStartup(),
     ];
 
@@ -128,9 +122,19 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     if (!mounted) return;
 
-    // 3. Targeted asset precaching for next screen
     final nextState = ref.read(appLifecycleProvider);
-    await _precacheForState(nextState);
+    
+    if (nextState == AppStartupState.error) {
+      // Stay on splash to show error UI
+      return;
+    }
+
+    // 3. Targeted asset precaching for next screen
+    try {
+      await _precacheForState(nextState).timeout(
+        const Duration(milliseconds: 500),
+      );
+    } catch (_) {}
 
     _navigateToDestination();
   }
@@ -183,9 +187,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   void _navigateToDestination() {
     if (_hasNavigated) return;
-    _hasNavigated = true;
-
+    
     final state = ref.read(appLifecycleProvider);
+    if (state == AppStartupState.loading) return;
+    
+    _hasNavigated = true;
     final String destination;
 
     switch (state) {
@@ -205,8 +211,12 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         destination = SoteriaRoutes.main;
         break;
 
+      case AppStartupState.error:
+        // Handle error state - maybe show a dialog or retry button on splash
+        _hasNavigated = false; 
+        return;
+
       case AppStartupState.loading:
-        // Should not happen due to _waitForAppStartup
         _hasNavigated = false;
         return;
     }
@@ -230,6 +240,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(appLifecycleProvider);
+
     return Scaffold(
       backgroundColor: SoteriaColors.backgroundBottomRight,
       extendBody: true,
@@ -242,10 +254,36 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
             child: SplashBranding(
               logoOpacity: _logoOpacity,
               logoScale: _logoScale,
-              wordmarkOpacity: _wordmarkOpacity,
-              taglineOpacity: _taglineOpacity,
             ),
           ),
+          if (state == AppStartupState.error)
+            Positioned(
+              bottom: 100.h,
+              left: 24.w,
+              right: 24.w,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'INITIALIZATION FAILED',
+                    style: context.titleMedium.copyWith(
+                      color: SoteriaColors.error,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 2,
+                    ),
+                  ),
+                  SizedBox(height: 16.h),
+                  SoteriaButton.secondary(
+                    label: 'RETRY',
+                    onPressed: () {
+                      ref.read(appLifecycleProvider.notifier).refresh();
+                      _startStartupProcess();
+                    },
+                    size: SoteriaButtonSize.sm,
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

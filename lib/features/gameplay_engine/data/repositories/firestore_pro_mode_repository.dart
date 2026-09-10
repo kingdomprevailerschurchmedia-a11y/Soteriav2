@@ -207,7 +207,6 @@ class FirestoreProModeRepository implements ProModeRepository {
       }
 
       final updates = <String, dynamic>{
-        'proSessions': FieldValue.increment(1),
         'dailyProSessionsPlayed': isNewDay ? 1 : FieldValue.increment(1),
         'lastProSessionDate': Timestamp.fromDate(now),
         'updatedAt': FieldValue.serverTimestamp(),

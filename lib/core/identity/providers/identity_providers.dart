@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,7 @@ import '../repositories/identity_repository.dart';
 import '../repositories/firebase_identity_repository.dart';
 import '../../logging/logger_service.dart';
 import '../../firebase/providers/firebase_providers.dart';
+import '../../firebase/providers/bootstrapper_provider.dart';
 
 // --- Repositories ---
 final identityRepositoryProvider = Provider<IdentityRepository>((ref) {
@@ -207,7 +209,7 @@ final permissionsProvider = Provider<UserPermissions>((ref) {
 });
 
 // --- App Lifecycle / Startup ---
-enum AppStartupState { loading, onboarding, personalization, auth, ready }
+enum AppStartupState { loading, onboarding, personalization, auth, ready, error }
 
 class AppLifecycleNotifier extends Notifier<AppStartupState> {
   SharedPreferences? _prefs;
@@ -222,7 +224,7 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
       }
     });
 
-    // Defer initialization to avoid reading 'state' before build() completes.
+    // Defer initialization
     Future.microtask(() => _init());
     return AppStartupState.loading;
   }
@@ -236,7 +238,6 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
   }
 
   Future<void> _init() async {
-    // Prevent overlapping initialization cycles
     if (_isInitializing) return;
     _isInitializing = true;
 
@@ -245,6 +246,24 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
 
       final onboardingCompleted =
           _prefs!.getBool('onboarding_completed') ?? false;
+
+      // SPEED OPTIMIZATION: If onboarding is not completed, we can show it immediately
+      // without waiting for Firebase initialization or session checks.
+      if (!onboardingCompleted) {
+        state = AppStartupState.onboarding;
+        _isInitializing = false;
+        
+        // Start Firebase init in the background so it's ready when they finish onboarding
+        unawaited(ref.read(firebaseInitFutureProvider.future));
+        return;
+      }
+
+      // Otherwise, we need Firebase to check session and personalization
+      await ref.read(firebaseInitFutureProvider.future).timeout(
+        const Duration(seconds: 15),
+        onTimeout: () => throw TimeoutException('Initialization timed out. Please check your connection.'),
+      );
+
       final personalizationCompleted =
           _prefs!.getString('user_personalization') != null;
 
@@ -252,9 +271,7 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
           .read(identityRepositoryProvider)
           .getActiveSession();
 
-      if (!onboardingCompleted) {
-        state = AppStartupState.onboarding;
-      } else if (!personalizationCompleted) {
+      if (!personalizationCompleted) {
         state = AppStartupState.personalization;
       } else if (session == null || !session.isAuthenticated) {
         state = AppStartupState.auth;
@@ -263,17 +280,10 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
         state = AppStartupState.ready;
       }
     } catch (e, st) {
-      LoggerService.e(
-        'Lifecycle initialization failed',
-        error: e,
-        stackTrace: st,
-      );
-      // Fallback to auth on error to avoid being stuck on splash
-      state = AppStartupState.auth;
+      LoggerService.e('Lifecycle initialization failed', error: e, stackTrace: st);
+      state = AppStartupState.error;
     } finally {
       _isInitializing = false;
-      // Always remove splash after first init attempt
-      // FlutterNativeSplash.remove(); // Handled by Custom Splash
     }
   }
 }

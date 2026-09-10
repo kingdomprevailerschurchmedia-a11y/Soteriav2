@@ -18,46 +18,40 @@ import 'package:soteria/features/player/presentation/widgets/streak_celebration_
 import 'package:soteria/features/player/presentation/providers/goal_providers.dart';
 import 'package:soteria/features/player/presentation/providers/milestone_providers.dart';
 
+import 'package:soteria/core/design_system/components/soteria_state_views.dart';
+
 class SoteriaApp extends ConsumerWidget {
   const SoteriaApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firebaseInit = ref.watch(firebaseInitFutureProvider);
-
     return ScreenUtilInit(
       designSize: const Size(390, 844), // iPhone 13/14 size
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return firebaseInit.when(
-          data: (_) {
-            return _buildApp(context, ref);
-          },
-          loading: () {
-            // Native splash remains visible.
-            // We return a minimal themed Container to avoid any white flash
-            // if the system removes the native splash before Flutter is ready.
-            return Container(color: SoteriaColors.backgroundBottomRight);
-          },
-          error: (error, stack) => _buildErrorApp(context, ref, error),
-        );
+        return _buildApp(context, ref);
       },
     );
   }
 
   Widget _buildApp(BuildContext context, WidgetRef ref) {
-    // Ensure auth/session/presence management is active
-    ref.watch(authCoordinatorProvider);
-    ref.watch(presenceCoordinatorProvider);
-    ref.watch(playerAvatarSyncProvider);
-    ref.watch(playerDiscoverySyncProvider);
-    ref.watch(playerLeaderboardSyncProvider);
+    // Guard Firebase-dependent services
+    final firebaseInit = ref.watch(firebaseInitFutureProvider);
 
-    // Ensure real-time goal and milestone evaluation across the entire app
-    ref.watch(goalRefreshProvider);
-    ref.watch(goalEvaluationProvider);
-    ref.watch(milestoneEvaluationProvider);
+    if (firebaseInit.hasValue) {
+      // Ensure auth/session/presence management is active only after Firebase is ready
+      ref.watch(authCoordinatorProvider);
+      ref.watch(presenceCoordinatorProvider);
+      ref.watch(playerAvatarSyncProvider);
+      ref.watch(playerDiscoverySyncProvider);
+      ref.watch(playerLeaderboardSyncProvider);
+
+      // Ensure real-time goal and milestone evaluation across the entire app
+      ref.watch(goalRefreshProvider);
+      ref.watch(goalEvaluationProvider);
+      ref.watch(milestoneEvaluationProvider);
+    }
 
     // Initialize background services with a staggered delay to ensure splash animation is smooth
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -91,6 +85,16 @@ class SoteriaApp extends ConsumerWidget {
           child: RankCelebrationListener(child: child!),
         );
       },
+    );
+  }
+
+  Widget _buildLoadingApp() {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: SoteriaTheme.darkTheme,
+      home: const Scaffold(
+        body: SoteriaLoadingView(message: 'INITIALIZING FIREBASE...'),
+      ),
     );
   }
 

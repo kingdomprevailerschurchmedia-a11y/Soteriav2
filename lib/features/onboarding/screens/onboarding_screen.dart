@@ -7,6 +7,7 @@ import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/features/onboarding/providers/onboarding_notifier.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_indicator.dart';
 import 'package:soteria/features/onboarding/widgets/onboarding_page.dart';
+import 'package:soteria/shared/widgets/soteria_background.dart';
 
 import 'package:soteria/core/utils/soteria_responsive.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
@@ -40,6 +41,13 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
           color: SoteriaColors.textPrimary,
           height: 1.1,
           fontWeight: FontWeight.w900,
+          shadows: [
+            Shadow(
+              offset: const Offset(0, 4),
+              blurRadius: 10.0,
+              color: Colors.black.withValues(alpha: 0.4),
+            ),
+          ],
         );
 
     return RichText(
@@ -69,31 +77,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
     final pages = [
       OnboardingPage(
-        badgeLabel: 'PLATFORM',
         title: 'Compete. Learn. Rise.',
         titleWidget: _buildRichHeadline(context),
         description: "Africa's premium competitive learning platform.",
         pageController: _pageController,
         index: 0,
+        illustrationScale: 2.00,
         illustration: Image.asset(
           'assets/images/rise.png',
           fit: BoxFit.contain,
         ),
       ),
       OnboardingPage(
-        badgeLabel: 'CHALLENGE',
         title: 'Challenge Yourself',
         description:
             'Practice daily, compete with peers, and grow your knowledge faster.',
         pageController: _pageController,
         index: 1,
+        illustrationScale: 2.00,
         illustration: Image.asset(
           'assets/images/challenge.png',
           fit: BoxFit.contain,
         ),
       ),
       OnboardingPage(
-        badgeLabel: 'RECOGNITION',
         title: 'Earn Recognition',
         description:
             'Climb the leaderboards, earn exclusive badges, and build your reputation.',
@@ -105,7 +112,6 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         ),
       ),
       OnboardingPage(
-        badgeLabel: 'COMMUNITY',
         title: 'Ready to Begin?',
         description:
             'Join the community of innovators and start your journey today.',
@@ -126,20 +132,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       extendBodyBehindAppBar: true,
       body: Stack(
         children: [
-          // Premium Background Gradient
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0xFF1E1045), // Lighter top
-                    Color(0xFF090514), // Darker bottom
-                  ],
-                ),
-              ),
-            ),
+          // Premium Background Image
+          const SoteriaBackground(
+            imagePath: 'assets/images/onboarding_bg.webp',
+            showOverlay: false,
           ),
           
           PageView(
@@ -147,6 +143,32 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             onPageChanged: (index) => notifier.setPage(index),
             children: pages,
           ),
+
+          // Skip Button at Top Right
+          if (!isLastPage)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: SafeArea(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: SoteriaSpacing.containerPadding(context),
+                    vertical: 8.h,
+                  ),
+                  child: TextButton(
+                    onPressed: () => notifier.skip(),
+                    child: Text(
+                      'Skip',
+                      style: context.labelLarge.copyWith(
+                        color: Colors.white.withValues(alpha: 0.6),
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.5,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
 
           // Navigation Controls
           Positioned(
@@ -162,7 +184,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     SoteriaSpacing.containerPadding(context),
                     SoteriaSpacing.xl,
                     SoteriaSpacing.containerPadding(context),
-                    SoteriaSpacing.xxl,
+                    SoteriaSpacing.xl,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -171,76 +193,64 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         currentIndex: state.currentPage,
                         itemCount: pages.length,
                       ),
-                      SizedBox(height: 56.h),
-                      Row(
-                        mainAxisAlignment: isLastPage
-                            ? MainAxisAlignment.center
-                            : MainAxisAlignment.spaceBetween,
-                        children: [
-                          if (!isLastPage)
-                            TextButton(
-                              onPressed: () => notifier.skip(),
-                              child: Text(
-                                'Skip',
-                                style: context.labelLarge.copyWith(
-                                  color: Colors.white.withValues(alpha: 0.5),
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
+                      SizedBox(height: 24.h),
+                      GestureDetector(
+                        onTap: () {
+                          if (!isLastPage) {
+                            _pageController.nextPage(
+                              duration: const Duration(milliseconds: 600),
+                              curve: Curves.easeOutQuint,
+                            );
+                          } else {
+                            notifier.complete();
+                          }
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          padding: EdgeInsets.symmetric(
+                            vertical: 20.h,
+                          ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(18.r),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xFFD8B24A),
+                                Color(0xFFB8860B),
+                              ],
+                              begin: Alignment.topCenter,
+                              end: Alignment.bottomCenter,
                             ),
-                          GestureDetector(
-                            onTap: () {
-                              if (!isLastPage) {
-                                _pageController.nextPage(
-                                  duration: const Duration(milliseconds: 600),
-                                  curve: Curves.easeOutQuint,
-                                );
-                              } else {
-                                notifier.complete();
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 36.w,
-                                vertical: 18.h,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: 0.4),
+                                blurRadius: 15,
+                                offset: const Offset(0, 8),
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r),
-                                gradient: LinearGradient(
-                                  colors: [
-                                    SoteriaColors.gold.withValues(alpha: 0.9),
-                                    SoteriaColors.gold.withValues(alpha: 0.7),
-                                  ],
+                            ],
+                          ),
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  isLastPage ? 'GET STARTED' : 'CONTINUE',
+                                  style: context.titleMedium.copyWith(
+                                    color: const Color(0xFF090514),
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 1.5,
+                                    fontSize: 17.sp,
+                                  ),
                                 ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: SoteriaColors.gold.withValues(alpha: 0.3),
-                                    blurRadius: 20,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    isLastPage ? 'Get Started' : 'Continue',
-                                    style: context.titleMedium.copyWith(
-                                      color: const Color(0xFF090514),
-                                      fontWeight: FontWeight.w800,
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  const Icon(
-                                    Icons.arrow_forward_rounded,
-                                    color: Color(0xFF090514),
-                                    size: 22,
-                                  ),
-                                ],
-                              ),
+                                SizedBox(width: 12.w),
+                                const Icon(
+                                  Icons.arrow_forward_rounded,
+                                  color: Color(0xFF090514),
+                                  size: 22,
+                                ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ],
                   ),

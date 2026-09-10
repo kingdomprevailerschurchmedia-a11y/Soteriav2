@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SoteriaBackground extends StatelessWidget {
-  const SoteriaBackground({super.key});
+  final String imagePath;
+  final bool showOverlay;
+
+  const SoteriaBackground({
+    super.key,
+    this.imagePath = 'assets/images/dashboard_bg.png',
+    this.showOverlay = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +18,7 @@ class SoteriaBackground extends StatelessWidget {
           // Background Image
           Positioned.fill(
             child: Image.asset(
-              'assets/images/dashboard_bg.png',
+              imagePath,
               fit: BoxFit.cover,
               errorBuilder: (context, error, stackTrace) {
                 return Container(
@@ -21,20 +28,21 @@ class SoteriaBackground extends StatelessWidget {
             ),
           ),
           // Simplier Darkening Overlay (Blur removed for performance)
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFF1E1045).withValues(alpha: 0.6),
-                    const Color(0xFF0B012A).withValues(alpha: 0.85),
-                  ],
+          if (showOverlay)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      const Color(0xFF1E1045).withValues(alpha: 0.6),
+                      const Color(0xFF0B012A).withValues(alpha: 0.85),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

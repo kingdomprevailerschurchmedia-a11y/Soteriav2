@@ -26,13 +26,11 @@ class AssetPrecacheService {
     BuildContext context,
     List<String> assetPaths,
   ) async {
-    for (final path in assetPaths) {
-      try {
-        await precacheImage(AssetImage(path), context);
-      } catch (e) {
+    await Future.wait(
+      assetPaths.map((path) => precacheImage(AssetImage(path), context).catchError((e) {
         debugPrint('Failed to precache asset: $path. Error: $e');
-      }
-    }
+      })),
+    );
   }
 
   /// Precaches all critical app assets.

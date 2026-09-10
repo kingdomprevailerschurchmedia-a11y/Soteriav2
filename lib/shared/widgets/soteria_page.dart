@@ -15,6 +15,8 @@ class SoteriaPage extends ConsumerWidget {
     this.showOfflineBanner = true,
     this.useSafeArea = true,
     this.showBackground = true,
+    this.backgroundImage,
+    this.showBackgroundOverlay = true,
   });
 
   final Widget child;
@@ -24,6 +26,8 @@ class SoteriaPage extends ConsumerWidget {
   final bool showOfflineBanner;
   final bool useSafeArea;
   final bool showBackground;
+  final String? backgroundImage;
+  final bool showBackgroundOverlay;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -35,7 +39,11 @@ class SoteriaPage extends ConsumerWidget {
       type: MaterialType.transparency,
       child: Stack(
         children: [
-          if (showBackground) const SoteriaBackground(),
+          if (showBackground) 
+            SoteriaBackground(
+              imagePath: backgroundImage ?? 'assets/images/dashboard_bg.png',
+              showOverlay: showBackgroundOverlay,
+            ),
           if (useSafeArea) SafeArea(child: child) else child,
           if (showOfflineBanner && isOffline)
             Positioned(

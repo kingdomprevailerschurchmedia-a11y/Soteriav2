@@ -10,6 +10,8 @@ class SafeGradientScaffold extends StatelessWidget {
     this.floatingActionButton,
     this.extendBodyBehindAppBar = true,
     this.applySafeArea = true,
+    this.backgroundImage,
+    this.showBackgroundOverlay = true,
   });
 
   final Widget body;
@@ -18,6 +20,8 @@ class SafeGradientScaffold extends StatelessWidget {
   final Widget? floatingActionButton;
   final bool extendBodyBehindAppBar;
   final bool applySafeArea;
+  final String? backgroundImage;
+  final bool showBackgroundOverlay;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +34,10 @@ class SafeGradientScaffold extends StatelessWidget {
       floatingActionButton: floatingActionButton,
       body: Stack(
         children: [
-          const SoteriaBackground(),
+          SoteriaBackground(
+            imagePath: backgroundImage ?? 'assets/images/dashboard_bg.png',
+            showOverlay: showBackgroundOverlay,
+          ),
           if (applySafeArea) SafeArea(child: body) else body,
         ],
       ),

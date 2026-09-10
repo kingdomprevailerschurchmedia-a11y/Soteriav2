@@ -23,6 +23,7 @@ class CompetitiveReviewScreen extends StatelessWidget {
     return SoteriaPageWrapper(
       title: title,
       showAppBar: true,
+      isScrollable: false, // ListView.separated is already scrollable
       body: ListView.separated(
         padding: EdgeInsets.all(SoteriaSpacing.xl),
         itemCount: items.length,

@@ -76,6 +76,13 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       }
     });
 
+    // React to player profile changes (e.g. coin updates, free game deduction)
+    ref.listen(currentPlayerProvider, (previous, next) {
+      if (_mounted) {
+        _updateValidation();
+      }
+    });
+
     // Trigger initial validation and category fetch
     Future.microtask(() => _init());
     return _getInitialState();
@@ -248,6 +255,10 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     final usedToday = isNewDay ? 0 : player.dailyProSessionsPlayed;
     final remaining = (rewardConfig.dailyFreeGames - usedToday).clamp(0, rewardConfig.dailyFreeGames);
     final isFree = remaining > 0;
+
+    if (kDebugMode) {
+      print('PRO LOBBY VALIDATION: dailyProSessionsPlayed=${player.dailyProSessionsPlayed}, isNewDay=$isNewDay, usedToday=$usedToday, remaining=$remaining, isFree=$isFree');
+    }
 
     ProModeAccessResult access = const ProModeAccessResult.available();
 
