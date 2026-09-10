@@ -63,7 +63,7 @@ class _OnboardingPageState extends State<OnboardingPage>
     ).animate(
       CurvedAnimation(
         parent: _entranceController,
-        curve: const Interval(0.2, 0.7, curve: Curves.backOut),
+        curve: const Interval(0.2, 0.7, curve: Curves.easeOutBack),
       ),
     );
 
