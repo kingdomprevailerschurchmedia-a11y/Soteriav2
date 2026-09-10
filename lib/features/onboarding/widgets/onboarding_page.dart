@@ -7,7 +7,7 @@ import 'package:soteria/core/widgets/ambient_glow.dart';
 
 import '../../../../core/utils/soteria_responsive.dart';
 
-class OnboardingPage extends StatelessWidget {
+class OnboardingPage extends StatefulWidget {
   const OnboardingPage({
     super.key,
     required this.title,
@@ -26,6 +26,76 @@ class OnboardingPage extends StatelessWidget {
   final int index;
   final Widget? titleWidget;
   final double illustrationScale;
+
+  @override
+  State<OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<OnboardingPage>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _entranceController;
+  late Animation<double> _illustrationFade;
+  late Animation<double> _titleFade;
+  late Animation<Offset> _titleSlide;
+  late Animation<double> _descriptionFade;
+
+  @override
+  void initState() {
+    super.initState();
+    _entranceController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    _illustrationFade = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+    );
+
+    _titleFade = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.2, 0.7, curve: Curves.easeOut),
+    );
+
+    _titleSlide = Tween<Offset>(
+      begin: const Offset(0, 40),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _entranceController,
+        curve: const Interval(0.2, 0.7, curve: Curves.backOut),
+      ),
+    );
+
+    _descriptionFade = CurvedAnimation(
+      parent: _entranceController,
+      curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+    );
+
+    // Trigger animation if this is the first page or when the page is selected
+    if (widget.index == 0) {
+      _entranceController.forward();
+    }
+
+    widget.pageController.addListener(_handlePageScroll);
+  }
+
+  void _handlePageScroll() {
+    if (!mounted) return;
+    if (widget.pageController.page?.round() == widget.index) {
+      if (!_entranceController.isAnimating &&
+          _entranceController.status != AnimationStatus.completed) {
+        _entranceController.forward();
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.pageController.removeListener(_handlePageScroll);
+    _entranceController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,37 +130,45 @@ class OnboardingPage extends StatelessWidget {
                         const Spacer(flex: 7),
 
                       // Illustration Area
-                      Align(
-                        alignment: Alignment.center,
-                        child: AnimatedBuilder(
-                          animation: pageController,
-                          builder: (context, child) {
-                            double offset = 0.0;
-                            if (pageController.hasClients) {
-                              offset = (pageController.page ?? 0.0) - index;
-                            }
-                            final double opacity = (1.0 - offset.abs()).clamp(0.0, 1.0);
-                            final double scale = (1.0 - (offset.abs() * 0.05)).clamp(0.9, 1.0);
-                            return Opacity(
-                              opacity: opacity,
-                              child: Transform.scale(
-                                scale: scale,
-                                child: child,
+                      FadeTransition(
+                        opacity: _illustrationFade,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: AnimatedBuilder(
+                            animation: widget.pageController,
+                            builder: (context, child) {
+                              double offset = 0.0;
+                              if (widget.pageController.hasClients) {
+                                offset = (widget.pageController.page ?? 0.0) -
+                                    widget.index;
+                              }
+                              final double opacity =
+                                  (1.0 - offset.abs()).clamp(0.0, 1.0);
+                              final double scale =
+                                  (1.0 - (offset.abs() * 0.05)).clamp(0.9, 1.0);
+                              return Opacity(
+                                opacity: opacity,
+                                child: Transform.scale(
+                                  scale: scale,
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: RepaintBoundary(
+                              child: ConstrainedBox(
+                                constraints: BoxConstraints(
+                                  maxHeight: isLandscape
+                                      ? maxHeight * 0.45
+                                      : maxHeight * 0.48,
+                                  maxWidth: isLandscape
+                                      ? contentWidth * 0.5
+                                      : contentWidth,
+                                ),
+                                child: Transform.scale(
+                                  scale: widget.illustrationScale,
+                                  child: widget.illustration,
+                                ),
                               ),
-                            );
-                          },
-                          child: ConstrainedBox(
-                            constraints: BoxConstraints(
-                              maxHeight: isLandscape
-                                  ? maxHeight * 0.45
-                                  : maxHeight * 0.48,
-                              maxWidth: isLandscape
-                                  ? contentWidth * 0.5
-                                  : contentWidth,
-                            ),
-                            child: Transform.scale(
-                              scale: illustrationScale,
-                              child: illustration,
                             ),
                           ),
                         ),
@@ -104,13 +182,15 @@ class OnboardingPage extends StatelessWidget {
 
                       // Content Area
                       AnimatedBuilder(
-                        animation: pageController,
+                        animation: widget.pageController,
                         builder: (context, child) {
                           double offset = 0.0;
-                          if (pageController.hasClients) {
-                            offset = (pageController.page ?? 0.0) - index;
+                          if (widget.pageController.hasClients) {
+                            offset = (widget.pageController.page ?? 0.0) -
+                                widget.index;
                           }
-                          final double opacity = (1.0 - offset.abs()).clamp(0.0, 1.0);
+                          final double opacity =
+                              (1.0 - offset.abs()).clamp(0.0, 1.0);
                           return Opacity(
                             opacity: opacity,
                             child: child,
@@ -120,27 +200,43 @@ class OnboardingPage extends StatelessWidget {
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            if (titleWidget != null)
-                              titleWidget!
-                            else
-                              _buildDefaultTitle(context, title),
-                            SizedBox(
-                              height:
-                                  isLandscape ? 12.h : 16.h,
-                            ),
-                            Text(
-                              description,
-                              style: (isShort || isLandscape
-                                      ? context.bodyMedium
-                                      : context.bodyLarge)
-                                  .copyWith(
-                                    color: SoteriaColors.textSecondary,
-                                    height: 1.5,
-                                    fontSize: 16.sp,
+                            AnimatedBuilder(
+                              animation: _entranceController,
+                              builder: (context, child) {
+                                return Opacity(
+                                  opacity: _titleFade.value,
+                                  child: Transform.translate(
+                                    offset: _titleSlide.value,
+                                    child: child,
                                   ),
-                              textAlign: TextAlign.center,
-                              maxLines: isLandscape ? 2 : 4,
-                              overflow: TextOverflow.ellipsis,
+                                );
+                              },
+                              child: RepaintBoundary(
+                                child: widget.titleWidget ??
+                                    _buildDefaultTitle(context, widget.title),
+                              ),
+                            ),
+                            SizedBox(
+                              height: isLandscape ? 12.h : 16.h,
+                            ),
+                            FadeTransition(
+                              opacity: _descriptionFade,
+                              child: RepaintBoundary(
+                                child: Text(
+                                  widget.description,
+                                  style: (isShort || isLandscape
+                                          ? context.bodyMedium
+                                          : context.bodyLarge)
+                                      .copyWith(
+                                        color: SoteriaColors.textSecondary,
+                                        height: 1.5,
+                                        fontSize: 16.sp,
+                                      ),
+                                  textAlign: TextAlign.center,
+                                  maxLines: isLandscape ? 2 : 4,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
                           ],
                         ),
