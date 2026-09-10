@@ -113,146 +113,135 @@ class _OnboardingPageState extends State<OnboardingPage>
             // Content width constraint for tablets
             final contentWidth = isTablet ? 500.0 : maxWidth;
 
-            return Center(
-              child: SizedBox(
-                width: contentWidth,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: SoteriaSpacing.containerPadding(context),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      // Top Spacing
-                      if (isLandscape)
-                        SizedBox(height: 16.h)
-                      else
-                        const Spacer(flex: 7),
+            return AnimatedBuilder(
+              animation: widget.pageController,
+              builder: (context, child) {
+                double position = 0.0;
+                if (widget.pageController.hasClients) {
+                  position = (widget.pageController.page ?? 0.0) - widget.index;
+                }
 
-                      // Illustration Area
-                      FadeTransition(
-                        opacity: _illustrationFade,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: AnimatedBuilder(
-                            animation: widget.pageController,
-                            builder: (context, child) {
-                              double offset = 0.0;
-                              if (widget.pageController.hasClients) {
-                                offset = (widget.pageController.page ?? 0.0) -
-                                    widget.index;
-                              }
-                              final double opacity =
-                                  (1.0 - offset.abs()).clamp(0.0, 1.0);
-                              final double scale =
-                                  (1.0 - (offset.abs() * 0.05)).clamp(0.9, 1.0);
-                              return Opacity(
-                                opacity: opacity,
-                                child: Transform.scale(
-                                  scale: scale,
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: RepaintBoundary(
-                              child: ConstrainedBox(
-                                constraints: BoxConstraints(
-                                  maxHeight: isLandscape
-                                      ? maxHeight * 0.45
-                                      : maxHeight * 0.48,
-                                  maxWidth: isLandscape
-                                      ? contentWidth * 0.5
-                                      : contentWidth,
-                                ),
-                                child: Transform.scale(
-                                  scale: widget.illustrationScale,
-                                  child: widget.illustration,
+                // Calculate fade and a slight horizontal drift for a premium feel
+                final double opacity = (1.0 - position.abs()).clamp(0.0, 1.0);
+                // Negate the PageView translation to keep the page stationary (fade-only)
+                final double translateX = position * constraints.maxWidth;
+
+                return Transform.translate(
+                  offset: Offset(translateX, 0),
+                  child: Opacity(
+                    opacity: opacity,
+                    child: Center(
+                      child: SizedBox(
+                        width: contentWidth,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal:
+                                SoteriaSpacing.containerPadding(context),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // Top Spacing
+                              if (isLandscape)
+                                SizedBox(height: 16.h)
+                              else
+                                const Spacer(flex: 7),
+
+                              // Illustration Area
+                              FadeTransition(
+                                opacity: _illustrationFade,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: RepaintBoundary(
+                                    child: ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: isLandscape
+                                            ? maxHeight * 0.45
+                                            : maxHeight * 0.48,
+                                        maxWidth: isLandscape
+                                            ? contentWidth * 0.5
+                                            : contentWidth,
+                                      ),
+                                      child: Transform.scale(
+                                        scale: widget.illustrationScale,
+                                        child: widget.illustration,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+
+                              // Spacing between Illustration and Text
+                              if (isLandscape)
+                                SizedBox(height: 12.h)
+                              else
+                                const Spacer(flex: 1),
+
+                              // Content Area
+                              Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  AnimatedBuilder(
+                                    animation: _entranceController,
+                                    builder: (context, child) {
+                                      return Opacity(
+                                        opacity: _titleFade.value,
+                                        child: Transform.translate(
+                                          offset: _titleSlide.value,
+                                          child: child,
+                                        ),
+                                      );
+                                    },
+                                    child: RepaintBoundary(
+                                      child: widget.titleWidget ??
+                                          _buildDefaultTitle(
+                                            context,
+                                            widget.title,
+                                          ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: isLandscape ? 12.h : 16.h,
+                                  ),
+                                  FadeTransition(
+                                    opacity: _descriptionFade,
+                                    child: RepaintBoundary(
+                                      child: Text(
+                                        widget.description,
+                                        style: (isShort || isLandscape
+                                                ? context.bodyMedium
+                                                : context.bodyLarge)
+                                            .copyWith(
+                                              color:
+                                                  SoteriaColors.textSecondary,
+                                              height: 1.5,
+                                              fontSize: 16.sp,
+                                            ),
+                                        textAlign: TextAlign.center,
+                                        maxLines: isLandscape ? 2 : 4,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // Bottom Spacing for Controls
+                              if (isLandscape)
+                                SizedBox(height: 16.h)
+                              else if (isShort)
+                                SizedBox(height: 130.h)
+                              else
+                                SizedBox(height: 160.h),
+                            ],
                           ),
                         ),
                       ),
-
-                      // Spacing between Illustration and Text
-                      if (isLandscape)
-                        SizedBox(height: 12.h)
-                      else
-                        const Spacer(flex: 1),
-
-                      // Content Area
-                      AnimatedBuilder(
-                        animation: widget.pageController,
-                        builder: (context, child) {
-                          double offset = 0.0;
-                          if (widget.pageController.hasClients) {
-                            offset = (widget.pageController.page ?? 0.0) -
-                                widget.index;
-                          }
-                          final double opacity =
-                              (1.0 - offset.abs()).clamp(0.0, 1.0);
-                          return Opacity(
-                            opacity: opacity,
-                            child: child,
-                          );
-                        },
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            AnimatedBuilder(
-                              animation: _entranceController,
-                              builder: (context, child) {
-                                return Opacity(
-                                  opacity: _titleFade.value,
-                                  child: Transform.translate(
-                                    offset: _titleSlide.value,
-                                    child: child,
-                                  ),
-                                );
-                              },
-                              child: RepaintBoundary(
-                                child: widget.titleWidget ??
-                                    _buildDefaultTitle(context, widget.title),
-                              ),
-                            ),
-                            SizedBox(
-                              height: isLandscape ? 12.h : 16.h,
-                            ),
-                            FadeTransition(
-                              opacity: _descriptionFade,
-                              child: RepaintBoundary(
-                                child: Text(
-                                  widget.description,
-                                  style: (isShort || isLandscape
-                                          ? context.bodyMedium
-                                          : context.bodyLarge)
-                                      .copyWith(
-                                        color: SoteriaColors.textSecondary,
-                                        height: 1.5,
-                                        fontSize: 16.sp,
-                                      ),
-                                  textAlign: TextAlign.center,
-                                  maxLines: isLandscape ? 2 : 4,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      // Bottom Spacing for Controls
-                      if (isLandscape)
-                        SizedBox(height: 16.h)
-                      else if (isShort)
-                        SizedBox(height: 130.h)
-                      else
-                        SizedBox(height: 160.h),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             );
           },
         ),
