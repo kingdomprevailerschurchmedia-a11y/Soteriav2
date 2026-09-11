@@ -35,21 +35,21 @@ class SelectionCard extends StatelessWidget {
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                   colors: [
-                    const Color(0xFF8A55FD).withValues(alpha: 0.15),
-                    const Color(0xFFFF4081).withValues(alpha: 0.05),
+                    SoteriaColors.gold.withValues(alpha: 0.15),
+                    SoteriaColors.gold.withValues(alpha: 0.05),
                   ],
                 )
               : null,
           border: Border.all(
             color: isSelected
-                ? const Color(0xFF8A55FD).withValues(alpha: 0.6)
+                ? SoteriaColors.gold.withValues(alpha: 0.6)
                 : Colors.white.withValues(alpha: 0.08),
             width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color(0xFF8A55FD).withValues(alpha: 0.1),
+                    color: SoteriaColors.gold.withValues(alpha: 0.1),
                     blurRadius: 15,
                     spreadRadius: 2,
                   ),
@@ -69,12 +69,12 @@ class SelectionCard extends StatelessWidget {
                   height: 44.w,
                   decoration: BoxDecoration(
                     color: isSelected 
-                        ? const Color(0xFF8A55FD).withValues(alpha: 0.2)
+                        ? SoteriaColors.gold.withValues(alpha: 0.2)
                         : Colors.white.withValues(alpha: 0.05),
                     borderRadius: BorderRadius.circular(14.r),
                     border: Border.all(
                       color: isSelected
-                          ? const Color(0xFF8A55FD).withValues(alpha: 0.3)
+                          ? SoteriaColors.gold.withValues(alpha: 0.3)
                           : Colors.white.withValues(alpha: 0.1),
                     ),
                   ),

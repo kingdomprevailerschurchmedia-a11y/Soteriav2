@@ -36,26 +36,34 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Widget _buildRichHeadline(BuildContext context) {
     final isShort = SoteriaResponsive.isShortScreen(context);
-    final style = (isShort ? context.headlineLarge : context.displayMedium)
+    final style = (isShort ? context.headlineSmall : context.headlineLarge)
         .copyWith(
           color: SoteriaColors.textPrimary,
           height: 1.1,
           fontWeight: FontWeight.w900,
-          shadows: [
-            Shadow(
-              offset: const Offset(0, 4),
-              blurRadius: 10.0,
-              color: Colors.black.withValues(alpha: 0.4),
-            ),
-          ],
         );
+
+    final shadowStyle = style.copyWith(
+      shadows: [
+        Shadow(
+          offset: const Offset(0, 2),
+          blurRadius: 1.0,
+          color: Colors.black.withValues(alpha: 0.3),
+        ),
+        Shadow(
+          offset: const Offset(0, 2),
+          blurRadius: 5.0,
+          color: Colors.black.withValues(alpha: 0.3),
+        ),
+      ],
+    );
 
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
         style: style,
         children: [
-          const TextSpan(text: 'Compete.\n'),
+          TextSpan(text: 'Compete.\n', style: shadowStyle),
           TextSpan(
             text: 'Learn. ',
             style: style.copyWith(color: SoteriaColors.secondary),
@@ -79,10 +87,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       OnboardingPage(
         title: 'Compete. Learn. Rise.',
         titleWidget: _buildRichHeadline(context),
-        description: "Africa's premium competitive learning platform.",
+        description: "Africa's premium competitive\nlearning platform.",
         pageController: _pageController,
         index: 0,
-        illustrationScale: 2.00,
+        illustrationScale: 1.75,
         illustration: Image.asset(
           'assets/images/rise.png',
           fit: BoxFit.contain,
@@ -91,10 +99,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       OnboardingPage(
         title: 'Challenge Yourself',
         description:
-            'Practice daily, compete with peers, and grow your knowledge faster.',
+            'Practice daily, compete with peers,\nand grow your knowledge faster.',
         pageController: _pageController,
         index: 1,
-        illustrationScale: 2.00,
+        illustrationScale: 1.75,
         illustration: Image.asset(
           'assets/images/challenge.png',
           fit: BoxFit.contain,
@@ -103,9 +111,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       OnboardingPage(
         title: 'Earn Recognition',
         description:
-            'Climb the leaderboards, earn exclusive badges, and build your reputation.',
+            'Climb the leaderboards, earn exclusive\nbadges, and build your reputation.',
         pageController: _pageController,
         index: 2,
+        illustrationScale: 1.55,
         illustration: Image.asset(
           'assets/images/recognition.png',
           fit: BoxFit.contain,
@@ -114,9 +123,10 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
       OnboardingPage(
         title: 'Ready to Begin?',
         description:
-            'Join the community of innovators and start your journey today.',
+            'Join the community of innovators\nand start your journey today.',
         pageController: _pageController,
         index: 3,
+        illustrationScale: 1.05,
         illustration: Image.asset(
           'assets/images/ready.png',
           fit: BoxFit.contain,
@@ -160,7 +170,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                     child: Text(
                       'Skip',
                       style: context.labelLarge.copyWith(
-                        color: Colors.white.withValues(alpha: 0.6),
+                        color: const Color(0xFF8A55FD),
                         fontWeight: FontWeight.w700,
                         letterSpacing: 0.5,
                       ),
@@ -181,9 +191,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                 child: Container(
                   width: isTablet ? 500 : double.infinity,
                   padding: EdgeInsets.fromLTRB(
-                    SoteriaSpacing.containerPadding(context),
+                    SoteriaSpacing.lg,
                     SoteriaSpacing.xl,
-                    SoteriaSpacing.containerPadding(context),
+                    SoteriaSpacing.lg,
                     SoteriaSpacing.xl,
                   ),
                   child: Column(
@@ -207,11 +217,12 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                         },
                         child: Container(
                           width: double.infinity,
+                          height: 52.h,
                           padding: EdgeInsets.symmetric(
-                            vertical: 20.h,
+                            horizontal: 24.w,
                           ),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18.r),
+                            borderRadius: BorderRadius.circular(16.r),
                             gradient: const LinearGradient(
                               colors: [
                                 Color(0xFFD8B24A),
@@ -228,27 +239,48 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               ),
                             ],
                           ),
-                          child: Center(
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  isLastPage ? 'GET STARTED' : 'CONTINUE',
-                                  style: context.titleMedium.copyWith(
-                                    color: const Color(0xFF090514),
-                                    fontWeight: FontWeight.w900,
-                                    letterSpacing: 1.5,
-                                    fontSize: 17.sp,
-                                  ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                isLastPage ? 'GET STARTED' : 'CONTINUE',
+                                style: context.titleMedium.copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.5,
+                                  fontSize: 17.sp,
                                 ),
-                                SizedBox(width: 12.w),
-                                const Icon(
-                                  Icons.arrow_forward_rounded,
-                                  color: Color(0xFF090514),
-                                  size: 22,
+                              ),
+                              SizedBox(
+                                width: 42.w,
+                                child: Stack(
+                                  alignment: Alignment.centerRight,
+                                  children: [
+                                    Positioned(
+                                      right: 16.w,
+                                      child: Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: Colors.white.withValues(alpha: 0.2),
+                                        size: 26.sp,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 8.w,
+                                      child: Icon(
+                                        Icons.chevron_right_rounded,
+                                        color: Colors.white.withValues(alpha: 0.5),
+                                        size: 26.sp,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.chevron_right_rounded,
+                                      color: Colors.white,
+                                      size: 26.sp,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
                         ),
                       ),

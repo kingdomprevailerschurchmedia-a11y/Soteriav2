@@ -72,7 +72,7 @@ class StepNotifications extends ConsumerWidget {
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 24.sp,
-                        color: const Color(0xFF7C4DFF),
+                        color: SoteriaColors.gold,
                       ),
                     ),
                   ],
@@ -81,9 +81,9 @@ class StepNotifications extends ConsumerWidget {
             ),
             Padding(
               padding: EdgeInsets.only(left: 8.w, top: 4.h),
-              child: const Icon(
+              child: Icon(
                 Icons.auto_awesome_rounded,
-                color: Color(0xFF7C4DFF),
+                color: SoteriaColors.gold,
                 size: 20,
               ),
             ),
@@ -121,10 +121,10 @@ class StepNotifications extends ConsumerWidget {
                       ),
                       child: Center(
                         child: Icon(
-                          pref['icon'] as IconData,
-                          color: const Color(0xFF7C4DFF),
-                          size: 20.w,
-                        ),
+                        pref['icon'] as IconData,
+                        color: SoteriaColors.gold,
+                        size: 20.w,
+                      ),
                       ),
                     ),
                     SizedBox(width: 14.w),
@@ -164,7 +164,7 @@ class StepNotifications extends ConsumerWidget {
                           val,
                         ),
                         activeThumbColor: Colors.white,
-                        activeTrackColor: const Color(0xFF5B3FD9),
+                        activeTrackColor: SoteriaColors.gold,
                         inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
                         inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
                       ),

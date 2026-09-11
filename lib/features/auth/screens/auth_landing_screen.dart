@@ -48,7 +48,7 @@ class _AuthLandingContent extends ConsumerWidget {
 
           // Welcome Illustration
           Expanded(
-            flex: 5,
+            flex: 4,
             child: Center(
               child: Image.asset(
                 'assets/images/welcome_illustration.png',
@@ -57,7 +57,7 @@ class _AuthLandingContent extends ConsumerWidget {
             ),
           ),
 
-          SizedBox(height: 20.h),
+          SizedBox(height: 12.h),
 
           // Welcome Text
           Column(
@@ -94,7 +94,7 @@ class _AuthLandingContent extends ConsumerWidget {
             ],
           ),
 
-          const Spacer(flex: 1),
+          SizedBox(height: 32.h),
 
           // Action Buttons
           Column(

@@ -61,7 +61,7 @@ class StepInterests extends ConsumerWidget {
                           style: context.headlineMedium.copyWith(
                             fontWeight: FontWeight.bold,
                             fontSize: 24.sp,
-                            color: const Color(0xFF7C4DFF),
+                            color: SoteriaColors.gold,
                           ),
                         ),
                       ],
@@ -70,9 +70,9 @@ class StepInterests extends ConsumerWidget {
                 ),
                 Padding(
                   padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                  child: const Icon(
+                  child: Icon(
                     Icons.auto_awesome_rounded,
-                    color: Color(0xFF7C4DFF),
+                    color: SoteriaColors.gold,
                     size: 20,
                   ),
                 ),

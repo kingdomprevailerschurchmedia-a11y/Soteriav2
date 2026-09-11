@@ -40,7 +40,7 @@ class _IndicatorDot extends StatelessWidget {
       decoration: BoxDecoration(
         color: isActive
             ? const Color(0xFF8A55FD)
-            : Colors.white.withValues(alpha: 0.15),
+            : Colors.grey.withValues(alpha: 0.3),
         borderRadius: SoteriaRadius.brFull,
         boxShadow: isActive
             ? [

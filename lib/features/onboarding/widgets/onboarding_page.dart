@@ -251,19 +251,27 @@ class _OnboardingPageState extends State<OnboardingPage>
 
   Widget _buildDefaultTitle(BuildContext context, String text) {
     final isShort = SoteriaResponsive.isShortScreen(context);
-    final style = (isShort ? context.headlineLarge : context.displayMedium)
+    final style = (isShort ? context.headlineSmall : context.headlineLarge)
         .copyWith(
           color: SoteriaColors.textPrimary,
           height: 1.1,
           fontWeight: FontWeight.w900,
-          shadows: [
-            Shadow(
-              offset: const Offset(0, 4),
-              blurRadius: 10.0,
-              color: Colors.black.withValues(alpha: 0.4),
-            ),
-          ],
         );
+
+    final shadowStyle = style.copyWith(
+      shadows: [
+        Shadow(
+          offset: const Offset(0, 2),
+          blurRadius: 1.0,
+          color: Colors.black.withValues(alpha: 0.3),
+        ),
+        Shadow(
+          offset: const Offset(0, 2),
+          blurRadius: 5.0,
+          color: Colors.black.withValues(alpha: 0.3),
+        ),
+      ],
+    );
 
     final words = text.split(' ');
     if (words.length >= 2) {
@@ -275,7 +283,7 @@ class _OnboardingPageState extends State<OnboardingPage>
         text: TextSpan(
           style: style,
           children: [
-            TextSpan(text: '$firstPart\n'),
+            TextSpan(text: '$firstPart\n', style: shadowStyle),
             TextSpan(
               text: lastPart,
               style: style.copyWith(color: SoteriaColors.secondary),

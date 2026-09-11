@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/features/personalization/providers/personalization_notifier.dart';
@@ -66,7 +67,7 @@ class StepAcademicLevel extends ConsumerWidget {
                       style: context.headlineMedium.copyWith(
                         fontWeight: FontWeight.bold,
                         fontSize: 24.sp,
-                        color: const Color(0xFF7C4DFF),
+                        color: SoteriaColors.gold,
                       ),
                     ),
                   ],
@@ -75,9 +76,9 @@ class StepAcademicLevel extends ConsumerWidget {
             ),
             Padding(
               padding: EdgeInsets.only(left: 8.w, top: 4.h),
-              child: const Icon(
+              child: Icon(
                 Icons.auto_awesome_rounded,
-                color: Color(0xFF7C4DFF),
+                color: SoteriaColors.gold,
                 size: 20,
               ),
             ),
