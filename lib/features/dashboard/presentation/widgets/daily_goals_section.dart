@@ -10,6 +10,7 @@ import '../../../player/presentation/providers/goal_providers.dart';
 import '../../../player/presentation/screens/competitive_goals_screen.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import '../../../../core/widgets/feedback/feedback_components.dart';
+import '../../../../core/logging/logger_service.dart';
 
 class DailyGoalsSection extends ConsumerWidget {
   const DailyGoalsSection({super.key});
@@ -64,33 +65,47 @@ class DailyGoalsSection extends ConsumerWidget {
           SizedBox(height: SoteriaSpacing.md),
           dailyGoalsAsync.when(
             data: (goals) {
-              if (goals.isEmpty && refreshAsync.isLoading) {
-                return const _LoadingGoalsCard();
+              if (goals.isEmpty) {
+                if (refreshAsync.isLoading || refreshAsync.isRefreshing) {
+                  return const _LoadingGoalsCard();
+                }
+                return _buildEmptyState(context);
               }
               return _buildGoalsRow(context, goals);
             },
             loading: () => const _LoadingGoalsCard(),
-            error: (_, _) => const SizedBox.shrink(),
+            error: (err, st) {
+               LoggerService.e('Daily Goals Error', error: err, stackTrace: st);
+               return const SizedBox.shrink();
+            },
           ),
         ],
       ),
     );
   }
 
-  Widget _buildGoalsRow(BuildContext context, List<dynamic> goals) {
-    // If no goals, show a placeholder
-    if (goals.isEmpty) {
-      return SoteriaCard(
-        padding: EdgeInsets.all(SoteriaSpacing.md),
-        child: Center(
-          child: Text(
-            'Check back later for new goals!',
-            style: context.bodySmall.copyWith(color: SoteriaColors.muted),
-          ),
+  Widget _buildEmptyState(BuildContext context) {
+    return SoteriaCard(
+      padding: EdgeInsets.all(SoteriaSpacing.md),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              'No goals for today yet.',
+              style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+            ),
+            SizedBox(height: 4.h),
+            Text(
+              'Check back later or try refreshing!',
+              style: context.labelSmall.copyWith(color: SoteriaColors.muted.withValues(alpha: 0.5)),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
+  }
 
+  Widget _buildGoalsRow(BuildContext context, List<dynamic> goals) {
     // Limit to 3 for the dashboard summary
     final displayGoals = goals.take(3).toList();
     final completedCount = goals.where((g) => g.isCompleted).length;

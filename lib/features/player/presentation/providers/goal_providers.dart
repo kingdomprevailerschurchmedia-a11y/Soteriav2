@@ -46,15 +46,13 @@ final goalProgressProvider = Provider<AsyncValue<List<GoalProgress>>>((ref) {
 
 final dailyGoalsProvider = Provider<AsyncValue<List<GoalProgress>>>((ref) {
   final now = DateTime.now();
-  final todayStart = DateTime(now.year, now.month, now.day);
   
   return ref.watch(goalProgressProvider).whenData(
-        (goals) => goals.where((g) => 
-          g.definition.type == GoalType.daily &&
-          g.playerState != null &&
-          g.playerState!.startedAt.isAtSameMomentAs(todayStart) &&
-          !g.isExpired
-        ).toList(),
+        (goals) => goals.where((g) {
+          if (g.definition.type != GoalType.daily || g.playerState == null) return false;
+          final s = g.playerState!.startedAt;
+          return s.year == now.year && s.month == now.month && s.day == now.day && !g.isExpired;
+        }).toList(),
       );
 });
 
@@ -64,12 +62,11 @@ final weeklyGoalsProvider = Provider<AsyncValue<List<GoalProgress>>>((ref) {
   final weekStart = DateTime(now.year, now.month, now.day).subtract(Duration(days: daysToMonday));
 
   return ref.watch(goalProgressProvider).whenData(
-        (goals) => goals.where((g) => 
-          g.definition.type == GoalType.weekly &&
-          g.playerState != null &&
-          g.playerState!.startedAt.isAtSameMomentAs(weekStart) &&
-          !g.isExpired
-        ).toList(),
+        (goals) => goals.where((g) {
+          if (g.definition.type != GoalType.weekly || g.playerState == null) return false;
+          final s = g.playerState!.startedAt;
+          return s.year == weekStart.year && s.month == weekStart.month && s.day == weekStart.day && !g.isExpired;
+        }).toList(),
       );
 });
 

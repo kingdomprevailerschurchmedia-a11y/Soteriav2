@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_profile.dart';
@@ -62,13 +63,15 @@ class ProfileNotifier extends Notifier<UserProfile?> {
 
   Future<void> _loadProfile(String uid) async {
     try {
+      ref.read(profileLoadingProvider.notifier).state = true;
       final profile = await ref
           .read(identityRepositoryProvider)
           .getUserProfile(uid);
       state = profile;
     } catch (e, st) {
       LoggerService.e('Failed to load profile', error: e, stackTrace: st, feature: 'Identity');
-      // Keep state as null or handle error state
+    } finally {
+      ref.read(profileLoadingProvider.notifier).state = false;
     }
   }
 
@@ -102,6 +105,7 @@ class ProfileNotifier extends Notifier<UserProfile?> {
       profile = state!.copyWith(
         selectedAvatarId: avatarId,
         avatarUrl: '', // Clear custom photo if selecting preset avatar
+        updatedAt: DateTime.now(),
       );
     }
 
@@ -150,11 +154,13 @@ class ProfileNotifier extends Notifier<UserProfile?> {
           email: user?.email ?? '',
           avatarUrl: downloadUrl,
           selectedAvatarId: '', 
+          updatedAt: DateTime.now(),
         );
       } else {
         updatedProfile = state!.copyWith(
           avatarUrl: downloadUrl,
           selectedAvatarId: '', // Clear avatar ID if using custom photo
+          updatedAt: DateTime.now(),
         );
       }
 
@@ -183,6 +189,18 @@ class ProfileUploadNotifier extends Notifier<bool> {
 
 final profileUploadProvider = NotifierProvider<ProfileUploadNotifier, bool>(
   ProfileUploadNotifier.new,
+);
+
+class ProfileLoadingNotifier extends Notifier<bool> {
+  @override
+  bool build() => false;
+  
+  @override
+  set state(bool value) => super.state = value;
+}
+
+final profileLoadingProvider = NotifierProvider<ProfileLoadingNotifier, bool>(
+  ProfileLoadingNotifier.new,
 );
 
 final profileProvider = NotifierProvider<ProfileNotifier, UserProfile?>(

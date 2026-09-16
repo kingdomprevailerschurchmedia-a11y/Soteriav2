@@ -164,9 +164,6 @@ class LoggerService {
     // Broadcast
     _logStreamController.add(entry);
 
-    // Console Output
-    final logMessage = '[$feature] $redactedMessage (CID: $correlationId)';
-
     // Forward to Crashlytics if appropriate
     if (level == LogLevel.error || level == LogLevel.critical) {
       _crashlytics?.recordError(
@@ -176,22 +173,27 @@ class LoggerService {
         fatal: level == LogLevel.critical,
       );
     } else {
-      _crashlytics?.log(logMessage);
+      _crashlytics?.log('[$feature] $redactedMessage');
     }
 
-    switch (level) {
-      case LogLevel.trace:
-        _logger.t(logMessage);
-      case LogLevel.debug:
-        _logger.d(logMessage);
-      case LogLevel.info:
-        _logger.i(logMessage);
-      case LogLevel.warning:
-        _logger.w(logMessage);
-      case LogLevel.error:
-        _logger.e(logMessage, error: error, stackTrace: stackTrace);
-      case LogLevel.critical:
-        _logger.f(logMessage, error: error, stackTrace: stackTrace);
+    // Console Output (Only in Debug)
+    if (kDebugMode) {
+      final logMessage = '[$feature] $redactedMessage (CID: $correlationId)';
+
+      switch (level) {
+        case LogLevel.trace:
+          _logger.t(logMessage);
+        case LogLevel.debug:
+          _logger.d(logMessage);
+        case LogLevel.info:
+          _logger.i(logMessage);
+        case LogLevel.warning:
+          _logger.w(logMessage);
+        case LogLevel.error:
+          _logger.e(logMessage, error: error, stackTrace: stackTrace);
+        case LogLevel.critical:
+          _logger.f(logMessage, error: error, stackTrace: stackTrace);
+      }
     }
   }
 

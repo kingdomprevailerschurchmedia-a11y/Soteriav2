@@ -1,3 +1,5 @@
+import '../models/game_mode.dart';
+import '../domain/config/competitive_reward_config.dart';
 import '../models/game_result.dart';
 import '../models/competitive_session.dart';
 import '../progression/models/reward_summary.dart';
@@ -30,22 +32,38 @@ class CompetitiveSettlementEngine {
     );
 
     // Calculate XP using authoritative XPManager
-    final xpFromAnswers = result.correctAnswers * (policy.xpPerCorrect * policy.xpMultiplier).toInt();
-    final roundBonus = XPManager.calculateRoundBonus(
+    int xpFromAnswers = result.correctAnswers * (policy.xpPerCorrect * policy.xpMultiplier).toInt();
+    int roundBonus = XPManager.calculateRoundBonus(
       totalQuestions: result.totalQuestions,
       correctAnswers: result.correctAnswers,
       policy: policy,
     );
 
     // Streak Bonus (placeholder logic maintained but unified if needed)
-    final streakBonus = result.maxStreak * 10;
+    int streakBonus = result.maxStreak * 10;
 
-    // Coins Returned (Return entry fee if accuracy > 70%, for example)
+    // Coins Won (Pro Mode specific logic)
     int coinsWon = 0;
-    if (accuracy >= 0.9) {
+    if (result.mode == GameMode.pro) {
+      final maxRewards = CompetitiveRewardConfig.proMaxRewards[session.config.difficulty.toBaseDifficulty()] ?? {};
+      final baseMaxReward = maxRewards[result.totalQuestions] ?? 0;
+      final payoutPercentage = CompetitiveRewardConfig.getProCoinPayoutPercentage(accuracy);
+      
+      coinsWon = (baseMaxReward * payoutPercentage).round();
+
+      // Free Entry Penalty: Only 10% of the actual reward (Coins and XP)
+      if (session.isFree) {
+        final mult = CompetitiveRewardConfig.freeEntryRewardMultiplier;
+        coinsWon = (coinsWon * mult).round();
+        xpFromAnswers = (xpFromAnswers * mult).round();
+        roundBonus = (roundBonus * mult).round();
+        streakBonus = (streakBonus * mult).round();
+      }
+    } else if (accuracy >= 0.9) {
+      // Legacy/Fallback logic
       coinsWon = (entryFee * 1.5).toInt();
     } else if (accuracy >= 0.7) {
-      coinsWon = entryFee; // Money back
+      coinsWon = entryFee;
     }
 
     return RewardSummary(

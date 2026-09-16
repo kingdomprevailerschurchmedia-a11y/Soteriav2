@@ -17,12 +17,19 @@ enum FirebaseEnvironment {
 
 class FirebaseConfig {
   final FirebaseEnvironment environment;
+  final FirebaseOptions? customOptions;
 
-  FirebaseConfig({required this.environment});
+  FirebaseConfig({
+    required this.environment,
+    this.customOptions,
+  });
 
   FirebaseOptions get options {
-    // In a real multi-project setup, this would return different options
-    // for each environment. For now, we use the default generated options.
+    if (customOptions != null) return customOptions!;
+
+    // In production, you would typically use a separate Firebase project.
+    // Replace DefaultFirebaseOptions.currentPlatform with ProductionFirebaseOptions.currentPlatform
+    // when you have a separate project for production.
     return DefaultFirebaseOptions.currentPlatform;
   }
 

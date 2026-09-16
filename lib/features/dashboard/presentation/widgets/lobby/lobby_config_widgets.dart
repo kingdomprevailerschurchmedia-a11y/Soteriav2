@@ -382,19 +382,21 @@ class LobbyCategoryCard extends StatelessWidget {
 class LobbyCountCircle extends StatelessWidget {
   final int count;
   final bool isSelected;
+  final bool isEnabled;
   final VoidCallback onTap;
 
   const LobbyCountCircle({
     super.key,
     required this.count,
     required this.isSelected,
+    this.isEnabled = true,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: isEnabled ? onTap : null,
       child: Column(
         children: [
           AnimatedContainer(
@@ -405,10 +407,14 @@ class LobbyCountCircle extends StatelessWidget {
               shape: BoxShape.circle,
               color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.04),
               border: Border.all(
-                color: isSelected ? const Color(0xFF7C4DFF) : Colors.white.withValues(alpha: 0.08),
+                color: !isEnabled 
+                    ? Colors.white.withValues(alpha: 0.03)
+                    : isSelected 
+                        ? const Color(0xFF7C4DFF) 
+                        : Colors.white.withValues(alpha: 0.08),
                 width: 2.0,
               ),
-              boxShadow: isSelected
+              boxShadow: (isSelected && isEnabled)
                   ? [
                       BoxShadow(
                         color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
@@ -419,13 +425,23 @@ class LobbyCountCircle extends StatelessWidget {
                   : null,
             ),
             child: Center(
-              child: Text(
-                count.toString(),
-                style: context.titleMedium.copyWith(
-                  color: isSelected ? Colors.white : Colors.white60,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 18.sp,
-                ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Opacity(
+                    opacity: isEnabled ? 1.0 : 0.3,
+                    child: Text(
+                      count.toString(),
+                      style: context.titleMedium.copyWith(
+                        color: isSelected ? Colors.white : Colors.white60,
+                        fontWeight: FontWeight.w900,
+                        fontSize: 18.sp,
+                      ),
+                    ),
+                  ),
+                  if (!isEnabled)
+                    Icon(Icons.lock_rounded, size: 16.sp, color: Colors.white24),
+                ],
               ),
             ),
           ),
@@ -433,7 +449,11 @@ class LobbyCountCircle extends StatelessWidget {
           Text(
             'Qns',
             style: context.labelSmall.copyWith(
-              color: isSelected ? const Color(0xFF7C4DFF) : Colors.white24,
+              color: !isEnabled 
+                  ? Colors.white10
+                  : isSelected 
+                      ? const Color(0xFF7C4DFF) 
+                      : Colors.white24,
               fontSize: 9.sp,
               fontWeight: FontWeight.bold,
             ),

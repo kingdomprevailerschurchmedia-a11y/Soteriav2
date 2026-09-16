@@ -97,6 +97,37 @@ class CompetitiveGoalsScreen extends ConsumerWidget {
           _buildSection(context, 'SEASONAL GOALS', seasonalGoals),
           _buildSection(context, 'CAREER MILESTONES', careerGoals),
 
+          // Global Empty State
+          Consumer(
+            builder: (context, ref, _) {
+              final allGoals = ref.watch(goalProgressProvider).value ?? [];
+              if (allGoals.isEmpty && !ref.watch(goalRefreshProvider).isLoading) {
+                return SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.emoji_events_outlined, size: 64.r, color: Colors.white24),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'No goals available yet.',
+                          style: context.titleMedium.copyWith(color: Colors.white70),
+                        ),
+                        SizedBox(height: 8.h),
+                        Text(
+                          'Syncing with the server...',
+                          style: context.bodySmall.copyWith(color: Colors.white30),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+              return const SliverToBoxAdapter(child: SizedBox.shrink());
+            },
+          ),
+
           const SliverPadding(padding: EdgeInsets.only(bottom: 100)),
         ],
       ),

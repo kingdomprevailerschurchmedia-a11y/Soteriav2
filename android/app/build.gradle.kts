@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.soteria.app"
-    compileSdk = 35
+    compileSdk = 36
     buildToolsVersion = "35.0.0"
     
     compileOptions {
@@ -18,14 +18,27 @@ android {
     defaultConfig {
         applicationId = "com.soteria.app"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
     buildTypes {
         release {
+            // Signing with debug keys for now, but configured for R8
             signingConfig = signingConfigs.getByName("debug")
+            
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        
+        getByName("debug") {
+            isMinifyEnabled = false
+            isShrinkResources = false
         }
     }
 }

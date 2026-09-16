@@ -406,26 +406,52 @@ class QuestionCountSelectorSection extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final current = ref.watch(
-      proLobbyProvider.select((s) => s.config.questionCount),
-    );
+    final state = ref.watch(proLobbyProvider);
+    final current = state.config.questionCount;
+    final isFree = state.isFreeEntry;
     final counts = [10, 20, 30, 50];
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const LobbySectionHeader(
-          label: 'QUESTION COUNT',
-          icon: Icons.list_alt_rounded,
+        Row(
+          children: [
+            const LobbySectionHeader(
+              label: 'QUESTION COUNT',
+              icon: Icons.list_alt_rounded,
+            ),
+            if (isFree) ...[
+              const Spacer(),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 2.h),
+                decoration: BoxDecoration(
+                  color: SoteriaColors.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(4.r),
+                  border: Border.all(color: SoteriaColors.primary.withValues(alpha: 0.2)),
+                ),
+                child: Text(
+                  'LOCKED FOR FREE ENTRY',
+                  style: context.labelSmall.copyWith(
+                    color: SoteriaColors.primary,
+                    fontSize: 8.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
         SizedBox(height: SoteriaSpacing.md),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: counts.map((count) {
             final isSelected = current == count;
+            final isEnabled = !isFree || count == 10;
+            
             return LobbyCountCircle(
               count: count,
               isSelected: isSelected,
+              isEnabled: isEnabled,
               onTap: () => ref.read(proLobbyProvider.notifier).updateQuestionCount(count),
             );
           }).toList(),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -19,6 +20,7 @@ class UserProfile {
   final List<String> interests;
   final List<String> goals;
   final String bio;
+  final DateTime? updatedAt;
 
   const UserProfile({
     required this.firstName,
@@ -38,6 +40,7 @@ class UserProfile {
     this.interests = const [],
     this.goals = const [],
     this.bio = '',
+    this.updatedAt,
   });
 
   String get fullName => '$firstName $lastName';
@@ -60,6 +63,7 @@ class UserProfile {
     List<String>? interests,
     List<String>? goals,
     String? bio,
+    DateTime? updatedAt,
   }) {
     return UserProfile(
       firstName: firstName ?? this.firstName,
@@ -79,6 +83,7 @@ class UserProfile {
       interests: interests ?? this.interests,
       goals: goals ?? this.goals,
       bio: bio ?? this.bio,
+      updatedAt: updatedAt ?? this.updatedAt,
     );
   }
 
@@ -101,6 +106,7 @@ class UserProfile {
       'interests': interests,
       'goals': goals,
       'bio': bio,
+      'updatedAt': updatedAt?.toIso8601String(),
     };
   }
 
@@ -123,6 +129,11 @@ class UserProfile {
       interests: List<String>.from(map['interests'] ?? []),
       goals: List<String>.from(map['goals'] ?? []),
       bio: map['bio'] ?? '',
+      updatedAt: map['updatedAt'] != null 
+          ? (map['updatedAt'] is String 
+              ? DateTime.parse(map['updatedAt']) 
+              : (map['updatedAt'] as Timestamp).toDate()) 
+          : null,
     );
   }
 }

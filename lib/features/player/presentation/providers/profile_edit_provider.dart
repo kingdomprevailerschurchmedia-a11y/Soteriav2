@@ -117,21 +117,31 @@ class ProfileEditNotifier extends Notifier<ProfileEditState> {
         // so that save() doesn't revert them to old values.
         
         final currentState = state;
+        
+        // Only sync if we have a valid user profile to sync FROM
+        final updatedEditedUser = userProfile != null 
+            ? currentState.editedUserProfile?.copyWith(
+                avatarUrl: userProfile.avatarUrl,
+                selectedAvatarId: userProfile.selectedAvatarId,
+              )
+            : currentState.editedUserProfile;
+
+        final updatedEditedPlayer = (userProfile != null || playerProfile != null)
+            ? currentState.editedPlayerProfile?.copyWith(
+                photoUrl: (userProfile?.avatarUrl != null && userProfile!.avatarUrl!.isNotEmpty)
+                    ? userProfile.avatarUrl!
+                    : playerProfile.photoUrl,
+                selectedAvatarId: (userProfile?.selectedAvatarId != null && userProfile!.selectedAvatarId.isNotEmpty)
+                    ? userProfile.selectedAvatarId
+                    : playerProfile.selectedAvatarId,
+              )
+            : currentState.editedPlayerProfile;
+
         return currentState.copyWith(
-          originalUserProfile: userProfile,
-          originalPlayerProfile: playerProfile,
-          editedUserProfile: currentState.editedUserProfile?.copyWith(
-            avatarUrl: userProfile?.avatarUrl,
-            selectedAvatarId: userProfile?.selectedAvatarId ?? currentState.editedUserProfile?.selectedAvatarId ?? 'socrates',
-          ),
-          editedPlayerProfile: currentState.editedPlayerProfile?.copyWith(
-            photoUrl: (userProfile?.avatarUrl != null && userProfile!.avatarUrl!.isNotEmpty)
-                ? userProfile.avatarUrl!
-                : playerProfile.photoUrl,
-            selectedAvatarId: (userProfile?.selectedAvatarId != null && userProfile!.selectedAvatarId.isNotEmpty)
-                ? userProfile.selectedAvatarId
-                : playerProfile.selectedAvatarId,
-          ),
+          originalUserProfile: userProfile ?? currentState.originalUserProfile,
+          originalPlayerProfile: playerProfile ?? currentState.originalPlayerProfile,
+          editedUserProfile: updatedEditedUser,
+          editedPlayerProfile: updatedEditedPlayer,
         );
       }
     }

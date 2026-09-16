@@ -32,9 +32,9 @@ abstract class StoreProduct with _$StoreProduct {
   factory StoreProduct.fromJson(Map<String, dynamic> json) => _$StoreProductFromJson(json);
 
   // Product ID Constants
-  static const String coin100 = 'soteria.coins.100';
-  static const String coin550 = 'soteria.coins.550';
-  static const String coin1200 = 'soteria.coins.1200';
+  static const String coin1000 = 'soteria.coins.1000';
+  static const String coin5500 = 'soteria.coins.5500';
+  static const String coin12000 = 'soteria.coins.12000';
   static const String coin3000 = 'soteria.coins.3000';
   static const String coin7000 = 'soteria.coins.7000';
   static const String coin15000 = 'soteria.coins.15000';

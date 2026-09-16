@@ -223,6 +223,9 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
   }
 
   void updateQuestionCount(int count) {
+    if (state.isFreeEntry && count != 10) {
+      return; // Locked for free entries
+    }
     state = state.copyWith(
       config: state.config.copyWith(questionCount: count),
     );
@@ -276,6 +279,10 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       access: access,
       isFreeEntry: isFree,
       remainingFreeGames: remaining,
+      // Force question count to 10 if it's a free entry
+      config: (isFree && state.config.questionCount != 10)
+          ? state.config.copyWith(questionCount: 10)
+          : state.config,
     );
     
     if (access.isAllowed) {
@@ -489,7 +496,9 @@ final proLobbyProvider = NotifierProvider<ProLobbyNotifier, ProLobbyState>(
 );
 
 final rewardPreviewProvider = Provider((ref) {
-  final config = ref.watch(proLobbyProvider).config;
+  final lobbyState = ref.watch(proLobbyProvider);
+  final config = lobbyState.config;
+  final isFree = lobbyState.isFreeEntry;
   
   final difficulty = config.difficulty.toBaseDifficulty();
   final questionCount = config.questionCount;
@@ -503,10 +512,20 @@ final rewardPreviewProvider = Provider((ref) {
   
   final baseXpPerCorrect = CompetitiveRewardConfig.proBaseXpPerCorrect[difficulty] ?? 0;
 
+  int potentialCoins = (baseMaxReward * perfectCoinMult).round();
+  int potentialXP = (questionCount * baseXpPerCorrect * perfectXpMult).round();
+  
+  if (isFree) {
+    const mult = CompetitiveRewardConfig.freeEntryRewardMultiplier;
+    potentialCoins = (potentialCoins * mult).round();
+    potentialXP = (potentialXP * mult).round();
+  }
+
   return {
-    'potentialCoins': (baseMaxReward * perfectCoinMult).round(),
-    'potentialXP': (questionCount * baseXpPerCorrect * perfectXpMult).round(),
+    'potentialCoins': potentialCoins,
+    'potentialXP': potentialXP,
     'multiplier': perfectCoinMult,
+    'isFree': isFree,
   };
 });
 

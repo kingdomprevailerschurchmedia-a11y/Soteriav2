@@ -98,6 +98,9 @@ class CompetitiveRewardConfig {
   // --- PRACTICE MODE ---
   static const int practiceXpPerCorrect = 10;
   static const int practiceCoinsPerCorrect = 2;
+
+  // --- FREE ENTRY RULES ---
+  static const double freeEntryRewardMultiplier = 0.10;
 }
 
 enum VersusOutcome {

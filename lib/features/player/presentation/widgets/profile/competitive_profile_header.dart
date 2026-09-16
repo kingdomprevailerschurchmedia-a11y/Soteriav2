@@ -59,7 +59,6 @@ class CompetitiveProfileHeader extends ConsumerWidget {
                         ),
                       ),
                       child: SoteriaAvatar(
-                        imageUrl: identity.photoUrl,
                         size: 90.w,
                         hasBorder: false,
                         isOnline: isOnline,

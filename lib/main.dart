@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,20 @@ void main() {
     () async {
       WidgetsFlutterBinding.ensureInitialized();
       final sharedPrefs = await SharedPreferences.getInstance();
+
+      // Configure Production Error UI
+      if (!kDebugMode) {
+        ErrorWidget.builder = (FlutterErrorDetails details) {
+          return const Material(
+            child: Center(
+              child: Text(
+                'Something went wrong. Our team has been notified.',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ),
+          );
+        };
+      }
 
       // Enable Edge-to-Edge mode
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);

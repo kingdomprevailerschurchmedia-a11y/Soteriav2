@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../design_system/colors/soteria_colors.dart';
+import 'package:soteria/core/identity/models/user_profile.dart';
 import '../../domain/avatar.dart';
 import '../../providers/avatar_providers.dart';
 import '../../../identity/providers/identity_providers.dart';
@@ -39,43 +40,68 @@ class SoteriaAvatar extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profile = ref.watch(profileProvider);
+    final isProfileLoading = ref.watch(profileLoadingProvider);
     final player = ref.watch(currentPlayerProvider);
+    final isPlayerLoading = ref.watch(currentPlayerStreamProvider).isLoading;
 
     final bool hasProvidedImageUrl = imageUrl?.isNotEmpty ?? false;
     final bool hasProvidedAvatar = avatar != null;
     final bool hasProvidedInitials = initials?.isNotEmpty ?? false;
 
-    // We only fallback to the current user's profile/player image if NO other source is provided.
-    // This prevents the current user's Google image from overriding other users' preset avatars in lists.
+    // Show loading state if we are waiting for profile/player data and nothing else was provided
+    if ((isProfileLoading || (isPlayerLoading && player == null)) && 
+        !hasProvidedImageUrl && !hasProvidedAvatar && !hasProvidedInitials) {
+      return _buildLoadingState();
+    }
+
     String? effectiveImageUrl;
-    if (hasProvidedImageUrl) {
+    String? effectiveAvatarId;
+
+    // Smart priority: check if provided imageUrl is just a fallback from player data
+    final isProvidedUrlFromPlayer = hasProvidedImageUrl && imageUrl == player?.photoUrl;
+
+    if (hasProvidedImageUrl && (!isProvidedUrlFromPlayer || (profile?.avatarUrl == null || profile!.avatarUrl!.isEmpty))) {
       effectiveImageUrl = imageUrl;
-    } else if (!hasProvidedAvatar && !hasProvidedInitials) {
+    } else if (hasProvidedAvatar) {
+      effectiveAvatarId = avatar!.id;
+    } else if (hasProvidedInitials) {
+      // Initials handled separately below
+    } else {
+      // Dynamic resolution from providers
       final profileUrl = profile?.avatarUrl;
       final profileAvatar = profile?.selectedAvatarId;
       final playerUrl = player?.photoUrl;
+      final playerAvatar = player?.selectedAvatarId;
 
       // Priority logic:
       // 1. If we have a custom profile photo (from identity), show it.
-      // 2. If we have a selected avatar ID in identity, don't show any photo (show the avatar instead).
-      // 3. Fallback to player photo (from gameplay).
       if (profileUrl != null && profileUrl.isNotEmpty) {
         effectiveImageUrl = profileUrl;
-      } else if (profileAvatar != null && profileAvatar.isNotEmpty) {
-        effectiveImageUrl = null;
-      } else if (playerUrl != null && playerUrl.isNotEmpty) {
+      } 
+      // 2. If we have a selected avatar ID in identity (and NOT using a custom photo), show it.
+      else if (profileAvatar != null && profileAvatar.isNotEmpty && profileAvatar != 'socrates') {
+         effectiveAvatarId = profileAvatar;
+      }
+      // 3. Fallback to player photo (from gameplay).
+      else if (playerUrl != null && playerUrl.isNotEmpty) {
         effectiveImageUrl = playerUrl;
+      }
+      // 4. Fallback to player avatar ID.
+      else if (playerAvatar != null && playerAvatar.isNotEmpty) {
+        effectiveAvatarId = playerAvatar;
       }
     }
 
     final hasEffectiveImageUrl =
         effectiveImageUrl != null && effectiveImageUrl.isNotEmpty;
 
-    // Use the provided avatar, or if we don't have an image, get the globally selected one.
-    final effectiveAvatar = avatar ??
-        (hasEffectiveImageUrl || hasProvidedInitials
-            ? null
-            : ref.watch(selectedAvatarProvider));
+    // Use the provided avatar, or resolved avatar ID, or fallback to selected avatar provider.
+    final effectiveAvatar = avatar ?? 
+        (effectiveAvatarId != null 
+            ? ref.watch(avatarCatalogProvider).getById(effectiveAvatarId)
+            : (hasEffectiveImageUrl || hasProvidedInitials
+                ? null
+                : ref.watch(selectedAvatarProvider)));
 
     AvatarFrameStyle effectiveFrameStyle = frameStyle ?? AvatarFrameStyle.none;
     if (frameStyle == null && rank != null) {
@@ -122,7 +148,7 @@ class SoteriaAvatar extends ConsumerWidget {
                   : null,
             ),
             child: ClipOval(
-              child: _buildAvatarContent(context, effectiveAvatar, effectiveImageUrl),
+              child: _buildAvatarContent(context, effectiveAvatar, effectiveImageUrl, profile),
             ),
           ),
         ),
@@ -159,23 +185,24 @@ class SoteriaAvatar extends ConsumerWidget {
     BuildContext context,
     Avatar? avatar,
     String? effectiveImageUrl,
+    UserProfile? profile,
   ) {
     if (effectiveImageUrl != null && effectiveImageUrl.isNotEmpty) {
-      // Add a timestamp as a cache breaker to ensure the image reloads when the URL is updated.
-      // This solves the issue where the UI doesn't update after a new profile picture upload
-      // even if the download URL remains similar.
+      // Use updatedAt as a stable cache breaker
       String cacheBreakerUrl = effectiveImageUrl;
+      final timestamp = profile?.updatedAt?.millisecondsSinceEpoch ?? 0;
+      
       try {
         final Uri uri = Uri.parse(effectiveImageUrl);
         if (uri.hasQuery) {
           cacheBreakerUrl = uri.replace(
             queryParameters: {
               ...uri.queryParameters,
-              'cb': DateTime.now().millisecondsSinceEpoch.toString(),
+              'cb': timestamp.toString(),
             },
           ).toString();
         } else {
-          cacheBreakerUrl = '$effectiveImageUrl?cb=${DateTime.now().millisecondsSinceEpoch}';
+          cacheBreakerUrl = '$effectiveImageUrl?cb=$timestamp';
         }
       } catch (e) {
         // Fallback to original URL if parsing fails
@@ -186,6 +213,10 @@ class SoteriaAvatar extends ConsumerWidget {
         key: ValueKey(cacheBreakerUrl),
         fit: BoxFit.cover,
         errorBuilder: (context, error, stackTrace) => _buildPlaceholder(),
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return _buildLoadingState();
+        },
       );
     }
 
@@ -225,11 +256,37 @@ class SoteriaAvatar extends ConsumerWidget {
 
   Widget _buildPlaceholder() {
     return Container(
-      color: SoteriaColors.surface,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            SoteriaColors.surface,
+            SoteriaColors.primary.withValues(alpha: 0.2),
+          ],
+        ),
+      ),
       child: Icon(
         Icons.person_rounded,
         size: (size * 0.6).r,
-        color: SoteriaColors.muted,
+        color: SoteriaColors.muted.withValues(alpha: 0.5),
+      ),
+    );
+  }
+
+  Widget _buildLoadingState() {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.white.withValues(alpha: 0.05),
+      ),
+      child: const Center(
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          color: SoteriaColors.primary,
+        ),
       ),
     );
   }

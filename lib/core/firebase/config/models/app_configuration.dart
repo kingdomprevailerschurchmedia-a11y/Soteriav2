@@ -167,7 +167,7 @@ class RewardConfig {
   });
 
   const RewardConfig.defaults()
-    : dailyFreeGames = 3,
+    : dailyFreeGames = 1,
       practiceXpMultiplier = 1.0,
       tournamentXpMultiplier = 2.5,
       leaderboardRefreshInterval = 300; // seconds

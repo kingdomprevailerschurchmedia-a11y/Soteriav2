@@ -286,15 +286,13 @@ service cloud.firestore {
 
     match /achievement_definitions/{achId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAdmin();
+      allow write: if isAdmin();
     }
 
     // CONTENT TAXONOMY
     match /categories/{id} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated();
-      allow update, delete: if isAdmin();
+      allow write: if isAdmin();
     }
     match /subcategories/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
     match /topics/{id} { allow read: if isAuthenticated(); allow write: if isAdmin(); }
@@ -405,7 +403,7 @@ service cloud.firestore {
     }
 
     match /competitive_sessions/{sessionId} {
-      allow read: if isAuthenticated();
+      allow read: if isAuthenticated() && (resource == null || resource.data.uid == request.auth.uid || isAdmin());
       allow write: if isAuthenticated() && (request.resource.data.uid == request.auth.uid || isAdmin());
 
       match /answers/{docId} {

@@ -38,7 +38,7 @@ class ConfigurationCoordinator extends Notifier<AppConfiguration> {
       RemoteConfigKeys.enableProMode: false,
       RemoteConfigKeys.enableTournament: false,
       RemoteConfigKeys.enableVersus: false,
-      RemoteConfigKeys.dailyFreeGames: 5,
+      RemoteConfigKeys.dailyFreeGames: 1,
       RemoteConfigKeys.practiceXpMultiplier: 1.0,
       RemoteConfigKeys.tournamentXpMultiplier: 2.5,
       RemoteConfigKeys.leaderboardRefreshInterval: 300,

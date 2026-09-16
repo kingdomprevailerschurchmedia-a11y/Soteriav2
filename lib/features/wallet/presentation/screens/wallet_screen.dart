@@ -6,45 +6,40 @@ import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../shared/widgets/soteria_page.dart';
+import '../../../../core/design_system/typography/soteria_typography.dart';
 import '../../domain/models/coin_bundle.dart';
 import '../../providers/wallet_providers.dart';
 
-class WalletScreen extends ConsumerWidget {
+import 'package:soteria/features/rewards/domain/models/store_product.dart';
+import 'package:soteria/features/rewards/presentation/providers/rewards_providers.dart';
+import 'package:soteria/core/design_system/components/soteria_text_field.dart';
+import 'package:soteria/core/design_system/components/soteria_button.dart';
+import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+
+class WalletScreen extends ConsumerStatefulWidget {
   const WalletScreen({super.key});
 
-  static const List<CoinBundle> bundles = [
-    CoinBundle(
-      id: 'bundle_starter',
-      name: 'Starter',
-      coins: 500,
-      price: 7500.00,
-      icon: '🪙',
-    ),
-    CoinBundle(
-      id: 'bundle_pro',
-      name: 'Pro',
-      coins: 2000,
-      price: 30000.00,
-      icon: '💰',
-    ),
-    CoinBundle(
-      id: 'bundle_elite',
-      name: 'Elite',
-      coins: 5000,
-      price: 75000.00,
-      icon: '💎',
-    ),
-    CoinBundle(
-      id: 'bundle_whale',
-      name: 'Whale',
-      coins: 15000,
-      price: 225000.00,
-      icon: '🐳',
-    ),
-  ];
+  @override
+  ConsumerState<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends ConsumerState<WalletScreen> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return SoteriaPage(
       useSafeArea: true,
       child: Scaffold(
@@ -53,35 +48,158 @@ class WalletScreen extends ConsumerWidget {
           backgroundColor: Colors.transparent,
           elevation: 0,
           title: Text(
-            'Coin Store',
+            'Coin Management',
             style: TextStyle(
               color: SoteriaColors.textPrimary,
-              fontSize: 20.sp,
-              fontWeight: FontWeight.bold,
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
             ),
           ),
           centerTitle: true,
-        ),
-        body: ListView(
-          padding: EdgeInsets.symmetric(
-            horizontal: SoteriaSpacing.containerPadding(context),
-            vertical: 16.h,
+          bottom: TabBar(
+            controller: _tabController,
+            indicatorColor: SoteriaColors.secondary,
+            indicatorSize: TabBarIndicatorSize.label,
+            labelStyle: context.labelSmall.copyWith(fontWeight: FontWeight.w900, letterSpacing: 1.2),
+            unselectedLabelStyle: context.labelSmall.copyWith(fontWeight: FontWeight.w500),
+            tabs: const [
+              Tab(text: 'BUY COINS'),
+              Tab(text: 'WITHDRAW'),
+            ],
           ),
+        ),
+        body: TabBarView(
+          controller: _tabController,
           children: [
-            _buildBalanceCard(context, ref),
-            SoteriaSpacing.gapLG,
-            Text(
-              'Select a Bundle',
-              style: TextStyle(
-                color: SoteriaColors.textSecondary,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            SoteriaSpacing.gapMD,
-            ...bundles.map((bundle) => _buildBundleCard(context, bundle)),
+            _buildBuyTab(context),
+            _buildWithdrawTab(context),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildBuyTab(BuildContext context) {
+    final productsAsync = ref.watch(storeProductsProvider);
+
+    return ListView(
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.containerPadding(context),
+        vertical: 16.h,
+      ),
+      children: [
+        _buildBalanceCard(context, ref),
+        SoteriaSpacing.gapLG,
+        productsAsync.when(
+          data: (products) {
+            final coins = products.where((p) => p.category == StoreProductCategory.coins).toList();
+            final tokens = products.where((p) => p.category == StoreProductCategory.tokens).toList();
+            final pro = products.where((p) => p.category == StoreProductCategory.pro).toList();
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (pro.isNotEmpty) ...[
+                  _buildSectionHeader('SUBSCRIPTION'),
+                  ...pro.map((product) => _buildProductCard(context, product)),
+                  SoteriaSpacing.gapLG,
+                ],
+                if (coins.isNotEmpty) ...[
+                  _buildSectionHeader('COIN BUNDLES'),
+                  ...coins.map((product) => _buildProductCard(context, product)),
+                  SoteriaSpacing.gapLG,
+                ],
+                if (tokens.isNotEmpty) ...[
+                  _buildSectionHeader('TOKEN PACKS'),
+                  ...tokens.map((product) => _buildProductCard(context, product)),
+                ],
+              ],
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(child: Text('Error loading store')),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 12.h, left: 4.w),
+      child: Text(
+        title,
+        style: TextStyle(
+          color: SoteriaColors.gold,
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w900,
+          letterSpacing: 1.5,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildWithdrawTab(BuildContext context) {
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.containerPadding(context),
+        vertical: 16.h,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildBalanceCard(context, ref),
+          SoteriaSpacing.gapLG,
+          Text(
+            'WITHDRAWAL REQUEST',
+            style: TextStyle(
+              color: SoteriaColors.gold,
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.5,
+            ),
+          ),
+          SoteriaSpacing.gapMD,
+          GlassSurface(
+            padding: EdgeInsets.all(24.r),
+            borderRadius: BorderRadius.circular(24.r),
+            child: Column(
+              children: [
+                SoteriaTextField(
+                  label: 'Amount to Withdraw (Coins)',
+                  hintText: 'Minimum 5,000 Coins',
+                  keyboardType: TextInputType.number,
+                ),
+                SoteriaSpacing.gapMD,
+                SoteriaTextField(
+                  label: 'Account Number',
+                  hintText: 'Enter your NGN bank account',
+                ),
+                SoteriaSpacing.gapMD,
+                SoteriaTextField(
+                  label: 'Bank Name',
+                  hintText: 'Select your bank',
+                ),
+                SoteriaSpacing.gapLG,
+                SoteriaButton(
+                  label: 'SUBMIT WITHDRAWAL',
+                  onPressed: () {
+                    // Logic for withdrawal
+                  },
+                ),
+                SoteriaSpacing.gapMD,
+                Text(
+                  'Withdrawals are processed within 24-48 business hours. 10% processing fee applies.',
+                  textAlign: TextAlign.center,
+                  style: context.labelSmall.copyWith(
+                    color: Colors.white24,
+                    fontSize: 10.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -128,12 +246,12 @@ class WalletScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildBundleCard(BuildContext context, CoinBundle bundle) {
+  Widget _buildProductCard(BuildContext context, StoreProduct product) {
     return Padding(
       padding: EdgeInsets.only(bottom: 16.h),
       child: SoteriaCard(
         onTap: () {
-          // TODO: Implement purchase logic
+          ref.read(rewardsNotifierProvider.notifier).initiatePurchase(product.id);
         },
         padding: EdgeInsets.all(20.r),
         child: Row(
@@ -146,10 +264,11 @@ class WalletScreen extends ConsumerWidget {
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Center(
-                child: Text(
-                  bundle.icon,
-                  style: TextStyle(fontSize: 28.sp),
-                ),
+                child: product.id.contains('12000') 
+                  ? Text('💎', style: TextStyle(fontSize: 28.sp))
+                  : product.id.contains('5500')
+                    ? Text('💰', style: TextStyle(fontSize: 28.sp))
+                    : Text('🪙', style: TextStyle(fontSize: 28.sp)),
               ),
             ),
             SoteriaSpacing.gapMD,
@@ -158,7 +277,7 @@ class WalletScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    bundle.name,
+                    product.name,
                     style: TextStyle(
                       color: SoteriaColors.textPrimary,
                       fontSize: 18.sp,
@@ -166,7 +285,7 @@ class WalletScreen extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    '${bundle.coins} Coins',
+                    '${product.quantity} Coins',
                     style: TextStyle(
                       color: SoteriaColors.gold,
                       fontSize: 14.sp,
@@ -190,7 +309,7 @@ class WalletScreen extends ConsumerWidget {
                 ],
               ),
               child: Text(
-                '₦${bundle.price}',
+                product.displayPrice ?? '₦${product.price}',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 14.sp,

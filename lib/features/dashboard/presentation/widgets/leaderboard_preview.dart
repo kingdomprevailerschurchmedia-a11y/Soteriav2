@@ -203,7 +203,14 @@ class _ShimmerRow extends StatelessWidget {
           children: [
             Container(width: 24, height: 12, color: Colors.white),
             SizedBox(width: SoteriaSpacing.sm),
-            CircleAvatar(radius: 12, backgroundColor: Colors.white),
+            Container(
+              width: 24, 
+              height: 24, 
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+            ),
             SizedBox(width: SoteriaSpacing.md),
             Expanded(child: Container(height: 12, color: Colors.white)),
             SizedBox(width: SoteriaSpacing.md),

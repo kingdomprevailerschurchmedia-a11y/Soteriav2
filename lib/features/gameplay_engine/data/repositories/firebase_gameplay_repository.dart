@@ -84,12 +84,7 @@ class FirebaseGameplayRepository implements GameplayRepository {
     var results = snapshot.docs.map((doc) => GameResult.fromJson(doc.data())).toList();
     
     if (mode != null) {
-      results = results.where((r) {
-        // Need to check how mode is stored in GameResult json. 
-        // GameResult doesn't have mode explicitly, but it comes from GameState.
-        // Wait, GameResult should probably have mode.
-        return true; // Placeholder until GameResult is updated or mode is verified
-      }).toList();
+      results = results.where((r) => r.mode == mode).toList();
     }
     
     return results;

@@ -88,7 +88,7 @@ class FirebaseGoalRepository implements GoalRepository {
     for (final def in dailyDefinitions) {
       final exists = existingGoals.any((g) => 
         g.goalId == def.id && 
-        g.startedAt.isAtSameMomentAs(todayStart)
+        _isSameDay(g.startedAt, todayStart)
       );
       
       if (!exists) {
@@ -110,7 +110,7 @@ class FirebaseGoalRepository implements GoalRepository {
     for (final def in weeklyDefinitions) {
       final exists = existingGoals.any((g) => 
         g.goalId == def.id && 
-        g.startedAt.isAtSameMomentAs(weekStart)
+        _isSameDay(g.startedAt, weekStart)
       );
       
       if (!exists) {
@@ -127,6 +127,51 @@ class FirebaseGoalRepository implements GoalRepository {
       }
     }
 
+    // 5. Check & Generate Seasonal Goals
+    final seasonalDefinitions = GoalRegistry.getByType(GoalType.seasonal);
+    for (final def in seasonalDefinitions) {
+      // Seasonal goals would typically use the current season window
+      // For now, we use a simple existence check per user
+      final exists = existingGoals.any((g) => g.goalId == def.id);
+      
+      if (!exists) {
+        final newGoal = PlayerGoal(
+          userId: userId,
+          goalId: def.id,
+          status: GoalStatus.active,
+          currentProgress: 0,
+          startedAt: todayStart,
+          expiresAt: DateTime(now.year, now.month + 1, 1), // End of month for now
+        );
+        await createGoal(newGoal);
+        generatedGoals.add(newGoal);
+      }
+    }
+
+    // 6. Check & Generate Career Goals
+    final careerDefinitions = GoalRegistry.getByType(GoalType.career);
+    for (final def in careerDefinitions) {
+      // Career goals don't care about startedAt for existence check, just the ID
+      final exists = existingGoals.any((g) => g.goalId == def.id);
+      
+      if (!exists) {
+        final newGoal = PlayerGoal(
+          userId: userId,
+          goalId: def.id,
+          status: GoalStatus.active,
+          currentProgress: 0,
+          startedAt: todayStart,
+          expiresAt: DateTime(2099, 1, 1),
+        );
+        await createGoal(newGoal);
+        generatedGoals.add(newGoal);
+      }
+    }
+
     return [...existingGoals, ...generatedGoals];
+  }
+
+  bool _isSameDay(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
   }
 }
