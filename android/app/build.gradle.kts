@@ -9,6 +9,7 @@ android {
     namespace = "com.soteria.app"
     compileSdk = 36
     buildToolsVersion = "35.0.0"
+    ndkVersion = "28.2.13676358"
     
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -21,6 +22,17 @@ android {
         targetSdk = 36
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+    }
+
+    configurations.all {
+        resolutionStrategy {
+            force("androidx.activity:activity:1.9.3")
+            force("androidx.activity:activity-ktx:1.9.3")
+            force("androidx.core:core:1.13.1")
+            force("androidx.core:core-ktx:1.13.1")
+            force("androidx.navigationevent:navigationevent-android:1.0.0")
+            force("org.checkerframework:checker-qual:3.49.0")
+        }
     }
 
     buildTypes {
@@ -51,4 +63,11 @@ kotlin {
 
 flutter {
     source = "../.."
+}
+
+tasks.register("printJavaVersion") {
+    doLast {
+        println("Java version: ${System.getProperty("java.version")}")
+        println("Java home: ${System.getProperty("java.home")}")
+    }
 }
