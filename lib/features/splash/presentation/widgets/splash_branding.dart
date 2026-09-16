@@ -35,14 +35,13 @@ class SplashBranding extends StatelessWidget {
             child: ScaleTransition(
               scale: logoScale,
               child: Image.asset(
-                'assets/images/logo_icon.png',
-                width: logoSize,
-                height: logoSize,
+                'assets/images/app_logo.png',
+                width: logoSize * 0.7,
                 fit: BoxFit.contain,
                 filterQuality: FilterQuality.high,
                 isAntiAlias: true,
                 errorBuilder: (context, error, stackTrace) {
-                  debugPrint('Logo Icon Error: $error');
+                  debugPrint('App Logo Error: $error');
                   return const SizedBox.shrink();
                 },
               ),

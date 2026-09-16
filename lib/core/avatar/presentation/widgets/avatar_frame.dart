@@ -30,12 +30,12 @@ class AvatarFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (style == AvatarFrameStyle.none) {
-      return SizedBox(width: size.w, height: size.w, child: child);
+      return SizedBox(width: size.r, height: size.r, child: child);
     }
 
     return Container(
-      width: size.w,
-      height: size.w,
+      width: size.r,
+      height: size.r,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: _getBorder(),

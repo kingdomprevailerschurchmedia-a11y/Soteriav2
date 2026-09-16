@@ -32,8 +32,8 @@ class FirebaseBootstrapper {
       // 1. Initialize Core with a timeout to prevent hanging the entire app
       LoggerService.i('Firebase Bootstrap: Initializing Core...', feature: 'Firebase');
       await FirebaseInitializer.initializeCore(config).timeout(
-        const Duration(seconds: 15),
-        onTimeout: () => throw TimeoutException('Firebase Core initialization timed out'),
+        const Duration(seconds: 45),
+        onTimeout: () => throw TimeoutException('Firebase Core initialization timed out. Please check your internet connection and try again.'),
       );
 
       // 2. Essential initialization only

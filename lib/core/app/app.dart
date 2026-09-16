@@ -39,6 +39,11 @@ class SoteriaApp extends ConsumerWidget {
     // Guard Firebase-dependent services
     final firebaseInit = ref.watch(firebaseInitFutureProvider);
 
+    // Show error screen if initialization failed
+    if (firebaseInit.hasError) {
+      return _buildErrorApp(context, ref, firebaseInit.error!);
+    }
+
     if (firebaseInit.hasValue) {
       // Ensure auth/session/presence management is active only after Firebase is ready
       ref.watch(authCoordinatorProvider);
@@ -51,25 +56,25 @@ class SoteriaApp extends ConsumerWidget {
       ref.watch(goalRefreshProvider);
       ref.watch(goalEvaluationProvider);
       ref.watch(milestoneEvaluationProvider);
+
+      // Initialize background services only after Firebase is ready
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // 1. Critical configuration and notifications
+        Future.delayed(const Duration(milliseconds: 500), () {
+          if (ref.exists(configurationCoordinatorProvider)) {
+            ref.read(configurationCoordinatorProvider.notifier).initialize();
+          }
+          if (ref.exists(notificationCoordinatorProvider)) {
+            ref.read(notificationCoordinatorProvider).initialize();
+          }
+        });
+
+        // 2. Non-critical background observers
+        Future.delayed(const Duration(milliseconds: 2000), () {
+          ref.read(competitiveEventObserverProvider);
+        });
+      });
     }
-
-    // Initialize background services with a staggered delay to ensure splash animation is smooth
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // 1. Critical configuration and notifications
-      Future.delayed(const Duration(milliseconds: 500), () {
-        if (ref.exists(configurationCoordinatorProvider)) {
-          ref.read(configurationCoordinatorProvider.notifier).initialize();
-        }
-        if (ref.exists(notificationCoordinatorProvider)) {
-          ref.read(notificationCoordinatorProvider).initialize();
-        }
-      });
-
-      // 2. Non-critical background observers
-      Future.delayed(const Duration(milliseconds: 2000), () {
-        ref.read(competitiveEventObserverProvider);
-      });
-    });
 
     final router = ref.watch(routerProvider);
     return MaterialApp.router(

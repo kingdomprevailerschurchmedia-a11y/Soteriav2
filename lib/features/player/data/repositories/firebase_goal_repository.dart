@@ -62,36 +62,71 @@ class FirebaseGoalRepository implements GoalRepository {
   @override
   Future<List<PlayerGoal>> refreshGoals(String userId) async {
     final now = DateTime.now();
+    
+    // 1. Calculate Time Windows
     final todayStart = DateTime(now.year, now.month, now.day);
     final todayEnd = todayStart.add(const Duration(days: 1));
+    
+    // Weekly window (assuming Monday start)
+    final daysToMonday = now.weekday - DateTime.monday;
+    final weekStart = todayStart.subtract(Duration(days: daysToMonday));
+    final weekEnd = weekStart.add(const Duration(days: 7));
 
-    // Simple check for today's daily goals
+    // 2. Fetch all current period goals
     final snapshot = await _goalsCollection(userId)
-        .where('startedAt', isGreaterThanOrEqualTo: Timestamp.fromDate(todayStart))
-        .where('startedAt', isLessThan: Timestamp.fromDate(todayEnd))
+        .where('expiresAt', isGreaterThan: Timestamp.fromDate(now))
         .get();
 
-    if (snapshot.docs.isNotEmpty) {
-      return snapshot.docs
-          .map((doc) => PlayerGoal.fromJson(doc.data()))
-          .toList();
-    }
+    final existingGoals = snapshot.docs
+        .map((doc) => PlayerGoal.fromJson(doc.data()))
+        .toList();
 
-    // Generate daily goals from registry
+    final List<PlayerGoal> generatedGoals = [];
+
+    // 3. Check & Generate Daily Goals
     final dailyDefinitions = GoalRegistry.getByType(GoalType.daily);
-    final newGoals = dailyDefinitions.map((def) => PlayerGoal(
-      userId: userId,
-      goalId: def.id,
-      status: GoalStatus.active,
-      currentProgress: 0,
-      startedAt: todayStart,
-      expiresAt: todayEnd,
-    )).toList();
-
-    for (final goal in newGoals) {
-      await createGoal(goal);
+    for (final def in dailyDefinitions) {
+      final exists = existingGoals.any((g) => 
+        g.goalId == def.id && 
+        g.startedAt.isAtSameMomentAs(todayStart)
+      );
+      
+      if (!exists) {
+        final newGoal = PlayerGoal(
+          userId: userId,
+          goalId: def.id,
+          status: GoalStatus.active,
+          currentProgress: 0,
+          startedAt: todayStart,
+          expiresAt: todayEnd,
+        );
+        await createGoal(newGoal);
+        generatedGoals.add(newGoal);
+      }
     }
 
-    return newGoals;
+    // 4. Check & Generate Weekly Goals
+    final weeklyDefinitions = GoalRegistry.getByType(GoalType.weekly);
+    for (final def in weeklyDefinitions) {
+      final exists = existingGoals.any((g) => 
+        g.goalId == def.id && 
+        g.startedAt.isAtSameMomentAs(weekStart)
+      );
+      
+      if (!exists) {
+        final newGoal = PlayerGoal(
+          userId: userId,
+          goalId: def.id,
+          status: GoalStatus.active,
+          currentProgress: 0,
+          startedAt: weekStart,
+          expiresAt: weekEnd,
+        );
+        await createGoal(newGoal);
+        generatedGoals.add(newGoal);
+      }
+    }
+
+    return [...existingGoals, ...generatedGoals];
   }
 }

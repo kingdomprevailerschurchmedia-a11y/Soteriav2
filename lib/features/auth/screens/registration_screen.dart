@@ -255,26 +255,116 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       SoteriaSpacing.lg,
                       SoteriaSpacing.lg,
                     ),
-                    child: SoteriaButton.primary(
-                      label: state.step == RegistrationStep.review
-                          ? 'CREATE ACCOUNT'
-                          : 'CONTINUE',
-                      onPressed: isValid ? () => _onContinue(state) : null,
-                      isLoading: state.isLoading,
-                      size: SoteriaButtonSize.lg,
-                      trailingIcon: Icons.chevron_right_rounded,
+                    child: GestureDetector(
+                      onTap: (isValid && !state.isLoading)
+                          ? () => _onContinue(state)
+                          : null,
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        width: double.infinity,
+                        height: 52.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          gradient: (isValid && !state.isLoading)
+                              ? const LinearGradient(
+                                  colors: [
+                                    Color(0xFFD8B24A),
+                                    Color(0xFFB8860B),
+                                  ],
+                                )
+                              : null,
+                          color: (isValid && !state.isLoading)
+                              ? null
+                              : Colors.white.withValues(alpha: 0.05),
+                          boxShadow: (isValid && !state.isLoading)
+                              ? [
+                                  BoxShadow(
+                                    color: SoteriaColors.gold.withValues(
+                                      alpha: 0.2,
+                                    ),
+                                    blurRadius: 15,
+                                    offset: const Offset(0, 8),
+                                  ),
+                                ]
+                              : null,
+                        ),
+                        child: Center(
+                          child: state.isLoading
+                              ? SizedBox(
+                                  width: 20.w,
+                                  height: 20.w,
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: SoteriaColors.backgroundBottomRight,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      state.step == RegistrationStep.review
+                                          ? 'Create Account'
+                                          : 'Continue',
+                                      style: context.titleMedium.copyWith(
+                                        color: (isValid && !state.isLoading)
+                                            ? SoteriaColors
+                                                .backgroundBottomRight
+                                            : SoteriaColors.muted,
+                                        fontWeight: FontWeight.w900,
+                                        letterSpacing: 0.2,
+                                        fontSize: 16.sp,
+                                      ),
+                                    ),
+                                    SizedBox(width: 8.w),
+                                    Icon(
+                                      Icons.arrow_forward_rounded,
+                                      color: (isValid && !state.isLoading)
+                                          ? SoteriaColors.backgroundBottomRight
+                                          : SoteriaColors.muted,
+                                      size: 18,
+                                    ),
+                                  ],
+                                ),
+                        ),
+                      ),
                     ),
                   )
                 else
                   Padding(
                     padding: EdgeInsets.all(SoteriaSpacing.lg),
-                    child: SoteriaButton.primary(
-                      label: 'Back to Login',
-                      onPressed: () =>
+                    child: GestureDetector(
+                      onTap: () =>
                           ref
                               .read(navigationServiceProvider)
                               .go(SoteriaRoutes.login),
-                      size: SoteriaButtonSize.lg,
+                      child: Container(
+                        width: double.infinity,
+                        height: 52.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFD8B24A), Color(0xFFB8860B)],
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: SoteriaColors.gold.withValues(alpha: 0.2),
+                              blurRadius: 15,
+                              offset: const Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Back to Login',
+                            style: context.titleMedium.copyWith(
+                              color: SoteriaColors.backgroundBottomRight,
+                              fontWeight: FontWeight.w900,
+                              letterSpacing: 0.2,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
               ],

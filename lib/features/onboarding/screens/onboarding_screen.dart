@@ -36,7 +36,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   Widget _buildRichHeadline(BuildContext context) {
     final isShort = SoteriaResponsive.isShortScreen(context);
-    final style = (isShort ? context.headlineSmall : context.headlineLarge)
+    final style = (isShort ? context.headlineMedium : context.displaySmall)
         .copyWith(
           color: SoteriaColors.textPrimary,
           height: 1.1,
@@ -46,9 +46,9 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
     final shadowStyle = style.copyWith(
       shadows: [
         Shadow(
-          offset: const Offset(0, 2),
-          blurRadius: 1.0,
-          color: Colors.black.withValues(alpha: 0.3),
+          offset: const Offset(0, 1),
+          blurRadius: 5.0,
+          color: Colors.black.withValues(alpha: 0.4),
         ),
         Shadow(
           offset: const Offset(0, 2),
@@ -90,7 +90,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
         description: "Africa's premium competitive\nlearning platform.",
         pageController: _pageController,
         index: 0,
-        illustrationScale: 1.75,
+        illustrationScale: 0.9,
         illustration: Image.asset(
           'assets/images/rise.png',
           fit: BoxFit.contain,
@@ -102,7 +102,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
             'Practice daily, compete with peers,\nand grow your knowledge faster.',
         pageController: _pageController,
         index: 1,
-        illustrationScale: 1.75,
+        illustrationScale: 0.9,
         illustration: Image.asset(
           'assets/images/challenge.png',
           fit: BoxFit.contain,
@@ -239,48 +239,23 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
                               ),
                             ],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                isLastPage ? 'GET STARTED' : 'CONTINUE',
-                                style: context.titleMedium.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.5,
-                                  fontSize: 17.sp,
+                          child: Center(
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  isLastPage ? 'Get Started' : 'Continue',
+                                  style: context.titleMedium.copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w900,
+                                    letterSpacing: 0.2,
+                                    fontSize: 17.sp,
+                                  ),
                                 ),
-                              ),
-                              SizedBox(
-                                width: 42.w,
-                                child: Stack(
-                                  alignment: Alignment.centerRight,
-                                  children: [
-                                    Positioned(
-                                      right: 16.w,
-                                      child: Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.white.withValues(alpha: 0.2),
-                                        size: 26.sp,
-                                      ),
-                                    ),
-                                    Positioned(
-                                      right: 8.w,
-                                      child: Icon(
-                                        Icons.chevron_right_rounded,
-                                        color: Colors.white.withValues(alpha: 0.5),
-                                        size: 26.sp,
-                                      ),
-                                    ),
-                                    Icon(
-                                      Icons.chevron_right_rounded,
-                                      color: Colors.white,
-                                      size: 26.sp,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                                SizedBox(width: 12.w),
+                                const _AnimatedTripleChevron(),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -290,6 +265,76 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
               ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _AnimatedTripleChevron extends StatefulWidget {
+  const _AnimatedTripleChevron();
+
+  @override
+  State<_AnimatedTripleChevron> createState() => _AnimatedTripleChevronState();
+}
+
+class _AnimatedTripleChevronState extends State<_AnimatedTripleChevron>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Widget _buildChevron(double start, double end, double baseOpacity) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final double opacity = CurvedAnimation(
+          parent: _controller,
+          curve: Interval(start, end, curve: Curves.easeInOut),
+        ).value;
+
+        return Opacity(
+          opacity: baseOpacity + (opacity * (1.0 - baseOpacity)),
+          child: child,
+        );
+      },
+      child: Icon(
+        Icons.chevron_right_rounded,
+        color: Colors.white,
+        size: 26.sp,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 42.w,
+      child: Stack(
+        alignment: Alignment.centerRight,
+        children: [
+          Positioned(
+            right: 16.w,
+            child: _buildChevron(0.0, 0.5, 0.2),
+          ),
+          Positioned(
+            right: 8.w,
+            child: _buildChevron(0.25, 0.75, 0.2),
+          ),
+          _buildChevron(0.5, 1.0, 0.2),
         ],
       ),
     );

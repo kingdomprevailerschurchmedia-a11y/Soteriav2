@@ -44,45 +44,46 @@ class _OnboardingPageState extends State<OnboardingPage>
     super.initState();
     _entranceController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 500),
+      value: widget.index == 0 ? 0.0 : 1.0,
     );
 
     _illustrationFade = CurvedAnimation(
       parent: _entranceController,
-      curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
+      curve: Curves.easeOut,
     );
 
     _titleFade = CurvedAnimation(
       parent: _entranceController,
-      curve: const Interval(0.2, 0.7, curve: Curves.easeOut),
+      curve: Curves.easeOut,
     );
 
     _titleSlide = Tween<Offset>(
-      begin: const Offset(0, 40),
+      begin: const Offset(0, 20),
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
         parent: _entranceController,
-        curve: const Interval(0.2, 0.7, curve: Curves.easeOutBack),
+        curve: Curves.easeOutCubic,
       ),
     );
 
     _descriptionFade = CurvedAnimation(
       parent: _entranceController,
-      curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+      curve: Curves.easeOut,
     );
 
-    // Trigger animation if this is the first page or when the page is selected
+    // Trigger entrance animation for the first page immediately
     if (widget.index == 0) {
       _entranceController.forward();
     }
-
-    widget.pageController.addListener(_handlePageScroll);
   }
 
   void _handlePageScroll() {
     if (!mounted) return;
-    if (widget.pageController.page?.round() == widget.index) {
+    final page = widget.pageController.page ?? 0.0;
+    // Trigger animation when the page starts becoming visible (threshold of 0.3)
+    if ((page - widget.index).abs() < 0.7) {
       if (!_entranceController.isAnimating &&
           _entranceController.status != AnimationStatus.completed) {
         _entranceController.forward();
@@ -135,8 +136,7 @@ class _OnboardingPageState extends State<OnboardingPage>
                         width: contentWidth,
                         child: Padding(
                           padding: EdgeInsets.symmetric(
-                            horizontal:
-                                SoteriaSpacing.containerPadding(context),
+                            horizontal: 24.w,
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -251,7 +251,7 @@ class _OnboardingPageState extends State<OnboardingPage>
 
   Widget _buildDefaultTitle(BuildContext context, String text) {
     final isShort = SoteriaResponsive.isShortScreen(context);
-    final style = (isShort ? context.headlineSmall : context.headlineLarge)
+    final style = (isShort ? context.headlineMedium : context.displaySmall)
         .copyWith(
           color: SoteriaColors.textPrimary,
           height: 1.1,
@@ -261,9 +261,9 @@ class _OnboardingPageState extends State<OnboardingPage>
     final shadowStyle = style.copyWith(
       shadows: [
         Shadow(
-          offset: const Offset(0, 2),
-          blurRadius: 1.0,
-          color: Colors.black.withValues(alpha: 0.3),
+          offset: const Offset(0, 1),
+          blurRadius: 5.0,
+          color: Colors.black.withValues(alpha: 0.4),
         ),
         Shadow(
           offset: const Offset(0, 2),

@@ -24,6 +24,7 @@ class LoginState {
     bool? rememberMe,
     bool? isLoading,
     String? error,
+    bool clearError = false,
     String? userName,
   }) {
     return LoginState(
@@ -31,7 +32,7 @@ class LoginState {
       password: password ?? this.password,
       rememberMe: rememberMe ?? this.rememberMe,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: clearError ? null : (error ?? this.error),
       userName: userName ?? this.userName,
     );
   }

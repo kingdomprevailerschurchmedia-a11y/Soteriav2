@@ -31,6 +31,7 @@ class VerificationState {
     String? otp,
     bool? isLoading,
     String? error,
+    bool clearError = false,
     int? countdown,
     String? verificationToken,
   }) {
@@ -40,7 +41,7 @@ class VerificationState {
       target: target ?? this.target,
       otp: otp ?? this.otp,
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: clearError ? null : (error ?? this.error),
       countdown: countdown ?? this.countdown,
       verificationToken: verificationToken ?? this.verificationToken,
     );

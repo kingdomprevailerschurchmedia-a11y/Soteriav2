@@ -84,34 +84,42 @@ class SoteriaLevelBadge extends StatelessWidget {
   final int level;
   final double size;
 
-  const SoteriaLevelBadge({super.key, required this.level, this.size = 40});
+  const SoteriaLevelBadge({super.key, required this.level, this.size = 48}); // Increased from 40
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: size.w,
       height: size.w,
-      decoration: BoxDecoration(
-        color: SoteriaColors.primary.withValues(alpha: 0.1),
-        shape: BoxShape.circle,
-        border: Border.all(
-          color: SoteriaColors.primary.withValues(alpha: 0.3),
-          width: 2,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: SoteriaColors.primary.withValues(alpha: 0.2),
-            blurRadius: 10,
+      child: Image.asset(
+        'assets/ranks/level_$level.png',
+        width: size.w,
+        height: size.w,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => Container(
+          decoration: BoxDecoration(
+            color: SoteriaColors.primary.withValues(alpha: 0.1),
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: SoteriaColors.primary.withValues(alpha: 0.3),
+              width: 2,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: SoteriaColors.primary.withValues(alpha: 0.2),
+                blurRadius: 10,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          level.toString(),
-          style: TextStyle(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-            fontSize: (size * 0.4).sp,
+          child: Center(
+            child: Text(
+              level.toString(),
+              style: TextStyle(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+                fontSize: (size * 0.4).sp,
+              ),
+            ),
           ),
         ),
       ),

@@ -98,8 +98,19 @@ class SoteriaAvatar extends ConsumerWidget {
           child: Container(
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              border:
-                  (isSelected ||
+              color: (hasBorder && effectiveFrameStyle == AvatarFrameStyle.none)
+                  ? Colors.white.withValues(alpha: 0.05)
+                  : null,
+              boxShadow: (hasBorder && effectiveFrameStyle == AvatarFrameStyle.none)
+                  ? [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.1),
+                        blurRadius: 4,
+                        spreadRadius: 0,
+                      ),
+                    ]
+                  : null,
+              border: (isSelected ||
                       (hasBorder &&
                           effectiveFrameStyle == AvatarFrameStyle.none))
                   ? Border.all(
@@ -117,24 +128,24 @@ class SoteriaAvatar extends ConsumerWidget {
         ),
         if (showStatus || isOnline)
           Positioned(
-            right: 2.w,
-            bottom: 2.w,
+            right: 2.r,
+            bottom: 2.r,
             child: Container(
-              width: (size * 0.24).w,
-              height: (size * 0.24).w,
+              width: (size * 0.24).r,
+              height: (size * 0.24).r,
               decoration: BoxDecoration(
                 color: isOnline ? SoteriaColors.success : SoteriaColors.muted,
                 shape: BoxShape.circle,
                 border: Border.all(
                   color: const Color(0xFF0B012A), // Dark separator border
-                  width: 1.5.w,
+                  width: 1.5.r,
                 ),
                 boxShadow: [
                   if (isOnline)
                     BoxShadow(
                       color: SoteriaColors.success.withValues(alpha: 0.4),
-                      blurRadius: 6.w,
-                      spreadRadius: 1.w,
+                      blurRadius: 6.r,
+                      spreadRadius: 1.r,
                     ),
                 ],
               ),
@@ -217,7 +228,7 @@ class SoteriaAvatar extends ConsumerWidget {
       color: SoteriaColors.surface,
       child: Icon(
         Icons.person_rounded,
-        size: (size * 0.6).w,
+        size: (size * 0.6).r,
         color: SoteriaColors.muted,
       ),
     );

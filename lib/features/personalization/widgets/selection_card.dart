@@ -28,123 +28,99 @@ class SelectionCard extends StatelessWidget {
         duration: const Duration(milliseconds: 250),
         curve: Curves.easeInOut,
         margin: EdgeInsets.only(bottom: 8.h),
+        height: 74.h,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20.r),
-          gradient: isSelected
-              ? LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    SoteriaColors.gold.withValues(alpha: 0.15),
-                    SoteriaColors.gold.withValues(alpha: 0.05),
-                  ],
-                )
-              : null,
+          borderRadius: BorderRadius.circular(18.r),
+          color: isSelected
+              ? SoteriaColors.gold.withValues(alpha: 0.1)
+              : Colors.white,
           border: Border.all(
             color: isSelected
-                ? SoteriaColors.gold.withValues(alpha: 0.6)
-                : Colors.white.withValues(alpha: 0.08),
+                ? SoteriaColors.gold
+                : Colors.black.withValues(alpha: 0.05),
             width: isSelected ? 1.5 : 1,
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: SoteriaColors.gold.withValues(alpha: 0.1),
-                    blurRadius: 15,
-                    spreadRadius: 2,
-                  ),
-                ]
-              : null,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
         ),
-        child: GlassSurface(
-          borderRadius: BorderRadius.circular(20.r),
-          opacity: isSelected ? 0.2 : 0.05,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-            child: Row(
-              children: [
-                // Icon Container
-                Container(
-                  width: 44.w,
-                  height: 44.w,
-                  decoration: BoxDecoration(
-                    color: isSelected 
-                        ? SoteriaColors.gold.withValues(alpha: 0.2)
-                        : Colors.white.withValues(alpha: 0.05),
-                    borderRadius: BorderRadius.circular(14.r),
-                    border: Border.all(
-                      color: isSelected
-                          ? SoteriaColors.gold.withValues(alpha: 0.3)
-                          : Colors.white.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  child: Center(
-                    child: Icon(
-                      icon,
-                      color: Colors.white,
-                      size: 22.w,
-                    ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          child: Row(
+            children: [
+              // Icon Container
+              Container(
+                width: 42.w,
+                height: 42.w,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF3EFFF),
+                  borderRadius: BorderRadius.circular(14.r),
+                ),
+                child: Center(
+                  child: Icon(
+                    icon,
+                    color: const Color(0xFF2E1A8A),
+                    size: 20.w,
                   ),
                 ),
-                SizedBox(width: 14.w),
-                // Text Content
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
+              ),
+              SizedBox(width: 12.w),
+              // Text Content
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.titleMedium.copyWith(
+                        fontSize: 14.sp,
+                        color: const Color(0xFF2E1A8A),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    if (subtitle != null) ...[
+                      SizedBox(height: 2.h),
                       Text(
-                        title,
-                        style: context.titleMedium.copyWith(
-                          fontSize: 16.sp,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w900,
+                        subtitle!,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: context.bodySmall.copyWith(
+                          color: const Color(0xFF2E1A8A).withValues(alpha: 0.5),
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                      if (subtitle != null) ...[
-                        SizedBox(height: 2.h),
-                        Text(
-                          subtitle!,
-                          style: context.bodySmall.copyWith(
-                            color: Colors.white.withValues(alpha: 0.5),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
                     ],
-                  ),
+                  ],
                 ),
-                // Trailing Indicator
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 250),
-                  width: 28.w,
-                  height: 28.w,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    gradient: isSelected
-                        ? LinearGradient(
-                            colors: [
-                              SoteriaColors.gold.withValues(alpha: 0.9),
-                              SoteriaColors.gold.withValues(alpha: 0.7),
-                            ],
-                          )
-                        : null,
-                    color: isSelected ? null : Colors.white.withValues(alpha: 0.05),
-                    border: Border.all(
-                      color: Colors.white.withValues(alpha: 0.1),
-                    ),
-                  ),
-                  child: Icon(
-                    isSelected ? Icons.check : Icons.chevron_right_rounded,
-                    color: isSelected
-                        ? SoteriaColors.backgroundBottomRight
-                        : Colors.white,
-                    size: 18.w,
-                  ),
+              ),
+              // Trailing Indicator
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 250),
+                width: 24.w,
+                height: 24.w,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isSelected
+                      ? SoteriaColors.gold
+                      : const Color(0xFFF3EFFF),
                 ),
-              ],
-            ),
+                child: Icon(
+                  isSelected ? Icons.check : Icons.chevron_right_rounded,
+                  color: isSelected
+                      ? Colors.black
+                      : const Color(0xFF2E1A8A),
+                  size: 16.w,
+                ),
+              ),
+            ],
           ),
         ),
       ),

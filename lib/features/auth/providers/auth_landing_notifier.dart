@@ -9,10 +9,14 @@ class AuthLandingState {
 
   const AuthLandingState({this.isLoading = false, this.error});
 
-  AuthLandingState copyWith({bool? isLoading, String? error}) {
+  AuthLandingState copyWith({
+    bool? isLoading,
+    String? error,
+    bool clearError = false,
+  }) {
     return AuthLandingState(
       isLoading: isLoading ?? this.isLoading,
-      error: error,
+      error: clearError ? null : (error ?? this.error),
     );
   }
 }
@@ -24,7 +28,7 @@ class AuthLandingNotifier extends Notifier<AuthLandingState> {
   }
 
   void setLoading(bool loading) {
-    state = state.copyWith(isLoading: loading);
+    state = state.copyWith(isLoading: loading, clearError: loading);
   }
 
   Future<void> signInWithGoogle() async {

@@ -20,6 +20,7 @@ class SoteriaTextField extends StatefulWidget {
   final bool readOnly;
   final Iterable<String>? autofillHints;
   final String? initialValue;
+  final bool showSuffixIcon;
 
   const SoteriaTextField({
     super.key,
@@ -36,6 +37,7 @@ class SoteriaTextField extends StatefulWidget {
     this.readOnly = false,
     this.autofillHints,
     this.initialValue,
+    this.showSuffixIcon = true,
   });
 
   @override
@@ -57,6 +59,14 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
         _isFocused = _focusNode.hasFocus;
       });
     });
+  }
+
+  @override
+  void didUpdateWidget(SoteriaTextField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.obscureText != widget.obscureText) {
+      _isObscured = widget.obscureText;
+    }
   }
 
   @override
@@ -144,7 +154,7 @@ class _SoteriaTextFieldState extends State<SoteriaTextField> {
                       ),
                     )
                   : null,
-              suffixIcon: widget.obscureText
+              suffixIcon: (widget.obscureText && widget.showSuffixIcon)
                   ? IconButton(
                       icon: Icon(
                         _isObscured

@@ -7,6 +7,8 @@ import '../../../../../../core/design_system/typography/soteria_typography.dart'
 import '../../../providers/pro_lobby_providers.dart';
 import '../lobby_config_widgets.dart';
 
+import 'package:soteria/features/question_content/utils/category_icons.dart';
+
 class ProCategorySelector extends ConsumerWidget {
   const ProCategorySelector({super.key});
 
@@ -84,7 +86,7 @@ class ProCategorySelector extends ConsumerWidget {
 
             return LobbyCategoryCard(
               label: category.name,
-              icon: _getIcon(category.icon),
+              icon: CategoryIcons.getIcon(category.icon),
               isSelected: isSelected,
               onTap: () => ref
                   .read(proLobbyProvider.notifier)
@@ -101,52 +103,5 @@ class ProCategorySelector extends ConsumerWidget {
       label: 'SELECT CATEGORY',
       icon: Icons.grid_view_rounded,
     );
-  }
-
-  IconData _getIcon(String iconName) {
-    switch (iconName) {
-      case 'security':
-        return Icons.security_rounded;
-      case 'cloud':
-        return Icons.cloud_rounded;
-      case 'code':
-        return Icons.code_rounded;
-      case 'network':
-        return Icons.router_rounded;
-      case 'science':
-        return Icons.science_rounded;
-      case 'business':
-        return Icons.business_rounded;
-      case 'history':
-        return Icons.history_rounded;
-      case 'calculate':
-        return Icons.calculate_rounded;
-      case 'palette':
-        return Icons.palette_rounded;
-      case 'sports_basketball':
-        return Icons.sports_basketball_rounded;
-      case 'gavel':
-        return Icons.gavel_rounded;
-      case 'brush':
-        return Icons.brush_rounded;
-      case 'payments':
-        return Icons.payments_rounded;
-      case 'medical_services':
-        return Icons.medical_services_rounded;
-      case 'public':
-        return Icons.public_rounded;
-      case 'language':
-        return Icons.language_rounded;
-      case 'menu_book':
-        return Icons.menu_book_rounded;
-      case 'psychology':
-        return Icons.psychology_rounded;
-      case 'engineering':
-        return Icons.engineering_rounded;
-      case 'newspaper':
-        return Icons.newspaper_rounded;
-      default:
-        return Icons.category_rounded;
-    }
   }
 }

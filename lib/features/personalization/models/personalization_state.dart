@@ -1,4 +1,5 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' hide Category;
+import 'package:soteria/features/question_content/domain/entities/category.dart';
 
 @immutable
 class PersonalizationState {
@@ -8,6 +9,8 @@ class PersonalizationState {
   final Map<String, bool> notificationPrefs;
   final int currentStep;
   final bool isLoading;
+  final List<Category> categories;
+  final String? error;
 
   const PersonalizationState({
     this.academicLevel,
@@ -22,6 +25,8 @@ class PersonalizationState {
     },
     this.currentStep = 0,
     this.isLoading = false,
+    this.categories = const [],
+    this.error,
   });
 
   bool get isLevelValid => academicLevel != null;
@@ -52,6 +57,8 @@ class PersonalizationState {
     Map<String, bool>? notificationPrefs,
     int? currentStep,
     bool? isLoading,
+    List<Category>? categories,
+    String? error,
   }) {
     return PersonalizationState(
       academicLevel: academicLevel ?? this.academicLevel,
@@ -60,6 +67,8 @@ class PersonalizationState {
       notificationPrefs: notificationPrefs ?? this.notificationPrefs,
       currentStep: currentStep ?? this.currentStep,
       isLoading: isLoading ?? this.isLoading,
+      categories: categories ?? this.categories,
+      error: error, // Don't use ?? this.error to allow clearing error
     );
   }
 
@@ -73,7 +82,9 @@ class PersonalizationState {
           setEquals(goals, other.goals) &&
           mapEquals(notificationPrefs, other.notificationPrefs) &&
           currentStep == other.currentStep &&
-          isLoading == other.isLoading;
+          isLoading == other.isLoading &&
+          listEquals(categories, other.categories) &&
+          error == other.error;
 
   @override
   int get hashCode =>
@@ -82,5 +93,7 @@ class PersonalizationState {
       goals.hashCode ^
       notificationPrefs.hashCode ^
       currentStep.hashCode ^
-      isLoading.hashCode;
+      isLoading.hashCode ^
+      categories.hashCode ^
+      error.hashCode;
 }

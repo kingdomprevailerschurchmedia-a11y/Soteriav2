@@ -15,21 +15,26 @@ class FirestoreCategoryRepository implements CategoryRepository {
 
   @override
   Future<List<Category>> getCategories() async {
-    final snapshot = await _database
-        .collection('categories')
-        .where('active', isEqualTo: true)
-        .orderBy('displayOrder')
-        .get();
-    
-    if (snapshot.docs.isEmpty) {
-      // Return defaults if database is empty to prevent empty UI
+    try {
+      final snapshot = await _database
+          .collection('categories')
+          .where('active', isEqualTo: true)
+          .orderBy('displayOrder')
+          .get();
+      
+      if (snapshot.docs.isEmpty) {
+        // Return defaults if database is empty to prevent empty UI
+        return _getDefaultCategories();
+      }
+
+      return snapshot.docs
+          .map((doc) => TaxonomyMapper.fromCategoryDto(
+              CategoryDto.fromJson({'id': doc.id, ...doc.data()})))
+          .toList();
+    } catch (e) {
+      // Fallback to defaults on any error (network, missing index, etc.)
       return _getDefaultCategories();
     }
-
-    return snapshot.docs
-        .map((doc) => TaxonomyMapper.fromCategoryDto(
-            CategoryDto.fromJson({'id': doc.id, ...doc.data()})))
-        .toList();
   }
 
   List<Category> _getDefaultCategories() {

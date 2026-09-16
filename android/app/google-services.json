@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "464470460254-rkl61qebbcv8l910c8s7rngjjis0e1mi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.soteria.app",
+            "certificate_hash": "34ec7adbdd7913ded66e0d9a78b5edb13c7a31a7"
+          }
+        },
+        {
           "client_id": "464470460254-iodgceppn2e0vjnpoq0nfo8ll90kpkm7.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -37,13 +37,22 @@ class StreakCelebrationListener extends ConsumerWidget {
       builder: (context) => StreakCelebrationDialog(
         streakDays: streak,
         coinReward: 500,
-        onDismiss: () {
-          // Mark as celebrated in Firestore
-          ref.read(playerRepositoryProvider).patchPlayerProfile(
-            ref.read(currentPlayerProvider)!.uid,
-            {'lastStreakMilestoneCelebrated': streak},
+        onDismiss: () async {
+          final player = ref.read(currentPlayerProvider);
+          if (player == null) return;
+
+          // Reset streak to start the next 7-day cycle and clear milestone
+          await ref.read(playerRepositoryProvider).patchPlayerProfile(
+            player.uid,
+            {
+              'lastStreakMilestoneCelebrated': 0,
+              'currentStreak': 0,
+            },
           );
-          Navigator.of(context).pop();
+          
+          if (context.mounted) {
+            Navigator.of(context).pop();
+          }
         },
       ),
     );

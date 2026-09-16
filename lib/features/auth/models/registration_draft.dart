@@ -63,6 +63,8 @@ class RegistrationDraft {
     bool? isUsernameAvailable,
     String? usernameError,
     String? error,
+    bool clearError = false,
+    bool clearUsernameError = false,
   }) {
     return RegistrationDraft(
       firstName: firstName ?? this.firstName,
@@ -80,8 +82,8 @@ class RegistrationDraft {
       isLoading: isLoading ?? this.isLoading,
       isUsernameChecking: isUsernameChecking ?? this.isUsernameChecking,
       isUsernameAvailable: isUsernameAvailable ?? this.isUsernameAvailable,
-      usernameError: usernameError, // Allow null to clear error
-      error: error,
+      usernameError: clearUsernameError ? null : (usernameError ?? this.usernameError),
+      error: clearError ? null : (error ?? this.error),
     );
   }
 }

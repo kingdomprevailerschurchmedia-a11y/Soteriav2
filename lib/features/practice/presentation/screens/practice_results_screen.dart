@@ -16,6 +16,7 @@ import '../../domain/models/practice_result.dart';
 import '../../../../core/navigation/soteria_routes.dart';
 import '../../../../core/design_system/radius/soteria_radius.dart';
 import '../../../../shared/widgets/soteria_page.dart';
+import 'package:soteria/features/question_content/utils/category_icons.dart';
 
 class PracticeResultsScreen extends ConsumerStatefulWidget {
   const PracticeResultsScreen({super.key, required this.gameState});
@@ -720,16 +721,7 @@ class _PracticeResultsScreenState extends ConsumerState<PracticeResultsScreen> {
   }
 
   IconData _getCategoryIcon(String categoryId) {
-    switch (categoryId.toLowerCase()) {
-      case 'science':
-        return Icons.science_rounded;
-      case 'history':
-        return Icons.history_edu_rounded;
-      case 'math':
-        return Icons.calculate_rounded;
-      default:
-        return Icons.lightbulb_rounded;
-    }
+    return CategoryIcons.getIcon(categoryId);
   }
 }
 

@@ -45,11 +45,11 @@ class LoginNotifier extends Notifier<LoginState> {
   }
 
   void updateEmail(String email) {
-    state = state.copyWith(email: email.trim(), error: null);
+    state = state.copyWith(email: email.trim(), clearError: true);
   }
 
   void updatePassword(String password) {
-    state = state.copyWith(password: password, error: null);
+    state = state.copyWith(password: password, clearError: true);
   }
 
   void toggleRememberMe(bool? value) async {
@@ -75,7 +75,7 @@ class LoginNotifier extends Notifier<LoginState> {
       return;
     }
 
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
 
     // Save email if remember me is on
     if (state.rememberMe) {
@@ -132,7 +132,7 @@ class LoginNotifier extends Notifier<LoginState> {
   }
 
   Future<void> loginWithGoogle() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       final useCase = ref.read(googleSignInUseCaseProvider);
       final result = await useCase.execute();

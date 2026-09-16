@@ -40,15 +40,15 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   }
 
   void updateTarget(String target) {
-    state = state.copyWith(target: target, error: null);
+    state = state.copyWith(target: target, clearError: true);
   }
 
   void updateOtp(String otp) {
-    state = state.copyWith(otp: otp, error: null);
+    state = state.copyWith(otp: otp, clearError: true);
   }
 
   Future<void> submitRequest() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       switch (_type) {
         case VerificationType.emailVerification:
@@ -78,7 +78,7 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   Future<void> resendCode() async {
     if (state.countdown > 0) return;
 
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       if (_type == VerificationType.emailVerification) {
         await _ref.read(sendEmailVerificationUseCaseProvider).execute();
@@ -93,7 +93,7 @@ class VerificationNotifier extends StateNotifier<VerificationState> {
   }
 
   Future<void> checkVerificationStatus() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       final isVerified = await _ref
           .read(checkAuthStateUseCaseProvider)

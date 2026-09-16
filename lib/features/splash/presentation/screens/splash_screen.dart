@@ -59,7 +59,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     super.didChangeDependencies();
     // Precache immediate splash assets
     precacheImage(const AssetImage('assets/images/splash_bg.webp'), context);
-    precacheImage(const AssetImage('assets/images/logo_icon.png'), context);
+    precacheImage(const AssetImage('assets/images/app_logo.png'), context);
   }
 
   // ===========================================================================
@@ -86,18 +86,18 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   void _initializeAnimations() {
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1500),
     );
 
     _logoOpacity = CurvedAnimation(
       parent: _controller,
-      curve: const Interval(0.0, 0.40, curve: Curves.easeOut),
+      curve: const Interval(0.05, 0.60, curve: Curves.easeInCubic),
     );
 
-    _logoScale = Tween<double>(begin: 0.94, end: 1.0).animate(
+    _logoScale = Tween<double>(begin: 0.98, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.0, 0.40, curve: Curves.easeOutCubic),
+        curve: const Interval(0.05, 0.60, curve: Curves.easeOutCubic),
       ),
     );
   }
@@ -110,11 +110,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _controller.forward();
 
     // Combine all startup dependencies:
-    // 1. Minimum animation time (800ms)
+    // 1. Minimum animation time (2000ms for premium feel)
     // 2. App initialization logic
     
     final startupTasks = [
-      Future.delayed(const Duration(milliseconds: 800)),
+      Future.delayed(const Duration(milliseconds: 2000)),
       _waitForAppStartup(),
     ];
 

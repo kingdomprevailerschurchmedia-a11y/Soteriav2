@@ -45,46 +45,49 @@ class StepAcademicLevel extends ConsumerWidget {
 
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       children: [
-        SizedBox(height: 16.h),
-        Row(
+        SizedBox(height: 40.h),
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'What is your current ',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.sp,
-                        color: Colors.white,
-                      ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'What is your current\n',
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 28.sp,
+                      color: const Color(0xFF2E1A8A),
+                      height: 1.1,
                     ),
-                    TextSpan(
-                      text: 'academic level?',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.sp,
-                        color: SoteriaColors.gold,
-                      ),
+                  ),
+                  TextSpan(
+                    text: 'academic level?',
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 28.sp,
+                      color: SoteriaColors.gold,
+                      height: 1.1,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 8.w, top: 4.h),
-              child: Icon(
-                Icons.auto_awesome_rounded,
-                color: SoteriaColors.gold,
-                size: 20,
+            SizedBox(height: 8.h),
+            Text(
+              'This helps us personalise your learning\nexperience and recommendations.',
+              style: context.bodyLarge.copyWith(
+                color: const Color(0xFF2E1A8A).withValues(alpha: 0.6),
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-        SizedBox(height: SoteriaSpacing.lg),
+        SizedBox(height: 16.h),
         ...options.map(
           (opt) => Padding(
             padding: EdgeInsets.only(bottom: 8.h),

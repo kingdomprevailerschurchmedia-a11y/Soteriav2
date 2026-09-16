@@ -57,7 +57,7 @@ class DashboardHeader extends ConsumerWidget {
                   child: SoteriaAvatar(
                     isOnline: isOnline,
                     showStatus: true,
-                    size: 54.r,
+                    size: 54,
                     showGlow: true,
                     imageUrl: avatarUrl,
                   ),

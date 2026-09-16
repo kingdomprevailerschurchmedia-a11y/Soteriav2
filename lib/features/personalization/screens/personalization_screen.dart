@@ -5,6 +5,7 @@ import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
+import 'package:soteria/shared/widgets/soteria_background.dart';
 import 'package:soteria/features/personalization/providers/personalization_notifier.dart';
 import 'package:soteria/features/personalization/widgets/step_academic_level.dart';
 import 'package:soteria/features/personalization/widgets/step_interests.dart';
@@ -78,20 +79,28 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
       }
     });
 
-    return SafeGradientScaffold(
-      applySafeArea: false,
-      body: PopScope(
-        canPop: state.currentStep == 0,
-        onPopInvokedWithResult: (didPop, result) {
-          if (didPop) return;
-          if (state.currentStep > 0 && !isLoading) {
-            _onBack(isLoading);
-          }
-        },
-        child: Column(
-          children: [
-            // Header Section
-            SafeArea(
+    return Scaffold(
+      backgroundColor: SoteriaColors.backgroundBottomRight,
+      extendBody: true,
+      extendBodyBehindAppBar: true,
+      body: Stack(
+        children: [
+          const SoteriaBackground(
+            imagePath: 'assets/images/onboarding_bg.webp',
+            showOverlay: false,
+          ),
+          PopScope(
+            canPop: state.currentStep == 0,
+            onPopInvokedWithResult: (didPop, result) {
+              if (didPop) return;
+              if (state.currentStep > 0 && !isLoading) {
+                _onBack(isLoading);
+              }
+            },
+            child: Column(
+              children: [
+                // Header Section
+                SafeArea(
               bottom: false,
               child: Padding(
                 padding: EdgeInsets.symmetric(
@@ -100,119 +109,49 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 4.h),
-                    Stack(
-                      alignment: Alignment.center,
+                    // Segmented Progress Bar
+                    Row(
+                      children: List.generate(5, (index) {
+                        final isActive = index == state.currentStep;
+                        final isPassed = index < state.currentStep;
+                        return Expanded(
+                          child: Container(
+                            height: 3.h,
+                            margin: EdgeInsets.symmetric(horizontal: 4.w),
+                            decoration: BoxDecoration(
+                              color: (isActive || isPassed)
+                                  ? const Color(0xFF8A55FD)
+                                  : const Color(0xFFE0E0E0),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        );
+                      }),
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
                       children: [
                         // Back Button
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Opacity(
-                            opacity: state.currentStep > 0 ? 1.0 : 0.0,
-                            child: GestureDetector(
-                              onTap: (state.currentStep > 0 && !isLoading)
-                                  ? () => _onBack(isLoading)
-                                  : null,
-                              child: Container(
-                                width: 36.w,
-                                height: 36.w,
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.05),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white.withValues(alpha: 0.1),
-                                  ),
-                                ),
-                                child: const Icon(
-                                  Icons.chevron_left_rounded,
-                                  color: Colors.white,
-                                  size: 24,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        // Title
-                        Text(
-                          'Personalization',
-                          style: context.titleLarge.copyWith(
-                            color: Colors.white,
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.5,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.h),
-                    // Progress Bar Redesign
-                    Column(
-                      children: [
-                        Container(
-                          height: 6.h,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withValues(alpha: 0.05),
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          child: FractionallySizedBox(
-                            alignment: Alignment.centerLeft,
-                            widthFactor: state.progress,
+                        if (state.currentStep > 0)
+                          GestureDetector(
+                            onTap: !isLoading ? () => _onBack(isLoading) : null,
                             child: Container(
+                              width: 28.w,
+                              height: 28.w,
                               decoration: BoxDecoration(
-                                gradient: const LinearGradient(
-                                  colors: [Color(0xFF8A55FD), SoteriaColors.gold],
+                                color: Colors.white.withValues(alpha: 0.5),
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.black.withValues(alpha: 0.1),
                                 ),
-                                borderRadius: BorderRadius.circular(100),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF8A55FD).withValues(
-                                      alpha: 0.4,
-                                    ),
-                                    blurRadius: 8,
-                                    spreadRadius: 1,
-                                  ),
-                                ],
+                              ),
+                              child: const Icon(
+                                Icons.chevron_left_rounded,
+                                color: Color(0xFF2E1A8A),
+                                size: 18,
                               ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'YOUR PROGRESS',
-                              style: context.labelSmall.copyWith(
-                                color: Colors.white.withValues(alpha: 0.4),
-                                letterSpacing: 1.5,
-                                fontWeight: FontWeight.w800,
-                                fontSize: 9.sp,
-                              ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 10.w,
-                                vertical: 2.h,
-                              ),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF8A55FD).withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(100),
-                                border: Border.all(
-                                  color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
-                                ),
-                              ),
-                              child: Text(
-                                'STEP ${state.currentStep + 1}/5',
-                                style: context.bodySmall.copyWith(
-                                  color: Colors.white,
-                                  fontSize: 10.sp,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
                       ],
                     ),
                   ],
@@ -243,107 +182,119 @@ class _PersonalizationScreenState extends ConsumerState<PersonalizationScreen> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: SoteriaSpacing.lg,
-                    vertical: 12.h,
+                    vertical: 16.h,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                    GestureDetector(
-                      onTap: (isValid && !isLoading)
-                          ? () => _onContinue(state.currentStep, isValid, isLoading)
-                          : null,
-                      child: AnimatedContainer(
-                        duration: const Duration(milliseconds: 200),
-                        width: double.infinity,
-                        height: 52.h,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16.r),
-                          gradient: (isValid && !isLoading)
-                              ? LinearGradient(
-                                  colors: [
-                                    SoteriaColors.gold.withValues(alpha: 0.9),
-                                    SoteriaColors.gold.withValues(alpha: 0.7),
-                                  ],
-                                )
-                              : null,
-                          color: (isValid && !isLoading)
-                              ? null
-                              : Colors.white.withValues(alpha: 0.05),
-                          boxShadow: (isValid && !isLoading)
-                              ? [
-                                  BoxShadow(
-                                    color: SoteriaColors.gold.withValues(alpha: 0.2),
-                                    blurRadius: 15,
-                                    offset: const Offset(0, 8),
-                                  ),
-                                ]
-                              : null,
-                        ),
-                        child: Center(
-                          child: isLoading
-                              ? SizedBox(
-                                  width: 20.w,
-                                  height: 20.w,
-                                  child: const CircularProgressIndicator(
-                                    strokeWidth: 2,
-                                    color: SoteriaColors.backgroundBottomRight,
-                                  ),
-                                )
-                              : Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      state.currentStep == 4
-                                          ? 'COMPLETE PROFILE'
-                                          : 'CONTINUE',
-                                      style: context.titleMedium.copyWith(
-                                        color: (isValid && !isLoading)
-                                            ? SoteriaColors.backgroundBottomRight
-                                            : SoteriaColors.muted,
-                                        fontWeight: FontWeight.w900,
-                                        letterSpacing: 0.5,
-                                        fontSize: 16.sp,
+                      GestureDetector(
+                        onTap: (isValid && !isLoading)
+                            ? () =>
+                                _onContinue(state.currentStep, isValid, isLoading)
+                            : null,
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          width: double.infinity,
+                          height: 52.h,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16.r),
+                            gradient: (isValid && !isLoading)
+                                ? const LinearGradient(
+                                    colors: [
+                                      Color(0xFFD8B24A),
+                                      Color(0xFFB8860B),
+                                    ],
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.bottomCenter,
+                                  )
+                                : null,
+                            color: (isValid && !isLoading)
+                                ? null
+                                : const Color(0xFFE0E0E0),
+                            boxShadow: (isValid && !isLoading)
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(
+                                        alpha: 0.2,
                                       ),
+                                      blurRadius: 15,
+                                      offset: const Offset(0, 8),
                                     ),
-                                    SizedBox(width: 8.w),
-                                    Icon(
-                                      Icons.arrow_forward_rounded,
-                                      color: (isValid && !isLoading)
-                                          ? SoteriaColors.backgroundBottomRight
-                                          : SoteriaColors.muted,
-                                      size: 18,
+                                  ]
+                                : null,
+                          ),
+                          child: Center(
+                            child: isLoading
+                                ? SizedBox(
+                                    width: 20.w,
+                                    height: 20.w,
+                                    child: const CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      color: Colors.white,
                                     ),
-                                  ],
-                                ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 12.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.verified_user_rounded,
-                          size: 12.sp,
-                          color: Colors.white.withValues(alpha: 0.3),
-                        ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          'Secure & Private Profile Setup',
-                          style: context.bodySmall.copyWith(
-                            color: Colors.white.withValues(alpha: 0.3),
-                            fontSize: 11.sp,
-                            fontWeight: FontWeight.w500,
+                                  )
+                                : Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        state.currentStep == 4
+                                            ? 'Complete Profile'
+                                            : 'Continue',
+                                        style: context.titleMedium.copyWith(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w900,
+                                          letterSpacing: 0.2,
+                                          fontSize: 17.sp,
+                                        ),
+                                      ),
+                                      SizedBox(width: 12.w),
+                                      const Icon(
+                                        Icons.arrow_forward_rounded,
+                                        color: Colors.white,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                      SizedBox(height: 16.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(2.w),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF8A55FD),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              size: 10.sp,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            'Secure & Private Profile Setup',
+                            style: context.bodySmall.copyWith(
+                              color: const Color(0xFF8A55FD).withValues(
+                                alpha: 0.6,
+                              ),
+                              fontSize: 12.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

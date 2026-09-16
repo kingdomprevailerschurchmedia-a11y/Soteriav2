@@ -69,7 +69,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
 
   void _checkUsernameAvailability(String username) {
     _debounceTimer?.cancel();
-    state = state.copyWith(isUsernameChecking: true, usernameError: null);
+    state = state.copyWith(isUsernameChecking: true, clearUsernameError: true);
 
     _debounceTimer = Timer(const Duration(milliseconds: 500), () async {
       try {
@@ -125,7 +125,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
   }
 
   Future<void> completeRegistration() async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
 
     try {
       final prefs = await SharedPreferences.getInstance();

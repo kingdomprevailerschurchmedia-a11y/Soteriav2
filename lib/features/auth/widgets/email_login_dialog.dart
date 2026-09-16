@@ -88,13 +88,24 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     }
     ref.read(loginProvider.notifier).updatePassword(password);
     await ref.read(loginProvider.notifier).login();
+    
+    // The error will be handled by the ref.listen in the build method
+    if (mounted) {
+      final state = ref.read(loginProvider);
+      if (state.error != null) {
+        // If it's a "user not found" error, we might want to take them back to land
+        if (state.error!.contains('not found') || state.error!.contains('no user')) {
+          Navigator.of(context).pop();
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(loginProvider);
 
-    // Close dialog on success
+    // Close dialog ONLY on success
     ref.listen(loginProvider, (previous, next) {
       if (previous?.isLoading == true && !next.isLoading && next.error == null) {
         Navigator.of(context).pop();
@@ -136,10 +147,41 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
                 ],
               ),
               SizedBox(height: 24.h),
+              if (state.error != null) _buildErrorBanner(state.error!),
               if (_step == 1) _buildEmailStep(state) else _buildPasswordStep(state),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildErrorBanner(String error) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: 24.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: SoteriaColors.error.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(color: SoteriaColors.error.withValues(alpha: 0.2)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline_rounded,
+              color: SoteriaColors.error, size: 20.sp),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              error,
+              style: context.bodySmall.copyWith(
+                color: SoteriaColors.error,
+                fontWeight: FontWeight.w500,
+                height: 1.3,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -191,7 +233,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
               child: Checkbox(
                 value: !_obscurePassword,
                 onChanged: state.isLoading ? null : (val) => setState(() => _obscurePassword = !val!),
-                activeColor: SoteriaColors.primary,
+                activeColor: const Color(0xFFD8B24A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(4.r),
                 ),
@@ -229,13 +271,6 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
             ),
           ],
         ),
-        if (state.error != null) ...[
-          SizedBox(height: 16.h),
-          Text(
-            state.error!,
-            style: context.bodySmall.copyWith(color: Colors.red, fontSize: 12.sp),
-          ),
-        ],
         SizedBox(height: 32.h),
         _buildButton(
           label: 'Sign In',
@@ -277,6 +312,7 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
         controller: controller,
         hintText: hintText,
         obscureText: obscureText,
+        showSuffixIcon: false, // Disable the internal eye icon
         keyboardType: keyboardType ?? TextInputType.text,
         enabled: enabled,
       ),
@@ -288,11 +324,56 @@ class _EmailLoginDialogState extends ConsumerState<EmailLoginDialog> {
     required VoidCallback? onPressed,
     bool isLoading = false,
   }) {
-    return SoteriaButton.primary(
-      label: label,
-      onPressed: onPressed,
-      isLoading: isLoading,
-      uppercase: false,
+    return GestureDetector(
+      onTap: onPressed,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        width: double.infinity,
+        height: 52.h,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.r),
+          gradient: onPressed != null
+              ? const LinearGradient(
+                  colors: [
+                    Color(0xFFD8B24A),
+                    Color(0xFFB8860B),
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                )
+              : null,
+          color: onPressed == null ? Colors.white.withValues(alpha: 0.1) : null,
+          boxShadow: onPressed != null
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.2),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ]
+              : null,
+        ),
+        child: Center(
+          child: isLoading
+              ? SizedBox(
+                  width: 20.w,
+                  height: 20.w,
+                  child: const CircularProgressIndicator(
+                    strokeWidth: 2,
+                    color: Colors.black,
+                  ),
+                )
+              : Text(
+                  label,
+                  style: context.titleMedium.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 16.sp,
+                    letterSpacing: 0.2,
+                  ),
+                ),
+        ),
+      ),
     );
   }
 }

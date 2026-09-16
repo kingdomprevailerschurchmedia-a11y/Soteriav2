@@ -7,33 +7,41 @@ import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 class LevelBadge extends ConsumerWidget {
   final double size;
 
-  const LevelBadge({super.key, this.size = 48});
+  const LevelBadge({super.key, this.size = 56}); // Increased from 48
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final level = ref.watch(levelProvider);
 
-    return Container(
+    return SizedBox(
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: SoteriaColors.surface,
-        border: Border.all(color: SoteriaColors.secondary, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: SoteriaColors.secondary.withValues(alpha: 0.4),
-            blurRadius: 10,
-            spreadRadius: 2,
+      child: Image.asset(
+        'assets/ranks/level_$level.png',
+        width: size,
+        height: size,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) => Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: SoteriaColors.surface,
+            border: Border.all(color: SoteriaColors.secondary, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: SoteriaColors.secondary.withValues(alpha: 0.4),
+                blurRadius: 10,
+                spreadRadius: 2,
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Center(
-        child: Text(
-          level.toString(),
-          style: SoteriaTypography.title.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.bold,
+          child: Center(
+            child: Text(
+              level.toString(),
+              style: SoteriaTypography.title.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ),
       ),

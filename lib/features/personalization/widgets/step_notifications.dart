@@ -50,105 +50,115 @@ class StepNotifications extends ConsumerWidget {
 
     return ListView(
       padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+      physics: const NeverScrollableScrollPhysics(),
+      shrinkWrap: true,
       children: [
-        SizedBox(height: 16.h),
-        Row(
+        SizedBox(height: 40.h),
+        Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: 'Notification ',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.sp,
-                        color: Colors.white,
-                      ),
+            RichText(
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Notification\n',
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 28.sp,
+                      color: const Color(0xFF2E1A8A),
+                      height: 1.1,
                     ),
-                    TextSpan(
-                      text: 'Preferences',
-                      style: context.headlineMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 24.sp,
-                        color: SoteriaColors.gold,
-                      ),
+                  ),
+                  TextSpan(
+                    text: 'Preferences',
+                    style: context.headlineMedium.copyWith(
+                      fontWeight: FontWeight.w900,
+                      fontSize: 28.sp,
+                      color: SoteriaColors.gold,
+                      height: 1.1,
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 8.w, top: 4.h),
-              child: Icon(
-                Icons.auto_awesome_rounded,
-                color: SoteriaColors.gold,
-                size: 20,
+            SizedBox(height: 12.h),
+            Text(
+              'Stay updated with your progress and\ncompetitions. You\'re in control.',
+              style: context.bodyLarge.copyWith(
+                color: const Color(0xFF2E1A8A).withValues(alpha: 0.6),
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
         ),
-        SizedBox(height: 4.h),
-        Text(
-          'Stay updated with your progress and competitions.',
-          style: context.bodySmall.copyWith(
-            color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-            fontSize: 13.sp,
-          ),
-        ),
-        SizedBox(height: SoteriaSpacing.lg),
+        SizedBox(height: 16.h),
         ...prefs.map(
           (pref) => Padding(
             padding: EdgeInsets.only(bottom: 8.h),
-            child: GlassSurface(
-              borderRadius: BorderRadius.circular(16.r),
-              opacity: 0.05,
+            child: Container(
+              height: 66.h,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16.r),
+                color: Colors.white,
+                border: Border.all(
+                  color: Colors.black.withValues(alpha: 0.05),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.03),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 6.h),
                 child: Row(
                   children: [
                     // Icon Container
                     Container(
-                      width: 40.w,
-                      height: 40.w,
+                      width: 38.w,
+                      height: 38.w,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.05),
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: 0.1),
-                        ),
+                        color: const Color(0xFFF3EFFF),
+                        borderRadius: BorderRadius.circular(12.r),
                       ),
                       child: Center(
                         child: Icon(
-                        pref['icon'] as IconData,
-                        color: SoteriaColors.gold,
-                        size: 20.w,
-                      ),
+                          pref['icon'] as IconData,
+                          color: const Color(0xFF2E1A8A),
+                          size: 18.w,
+                        ),
                       ),
                     ),
-                    SizedBox(width: 14.w),
+                    SizedBox(width: 12.w),
                     // Text
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
                             pref['title'] as String,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: context.titleMedium.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 15.sp,
+                              color: const Color(0xFF2E1A8A),
+                              fontWeight: FontWeight.w900,
+                              fontSize: 13.sp,
                             ),
                           ),
-                          SizedBox(height: 2.h),
+                          SizedBox(height: 1.h),
                           Text(
                             pref['subtitle'] as String,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                             style: context.bodySmall.copyWith(
-                              color: SoteriaColors.textSecondary.withValues(
-                                alpha: 0.6,
-                              ),
-                              fontSize: 11.sp,
+                              color:
+                                  const Color(0xFF2E1A8A).withValues(alpha: 0.5),
+                              fontSize: 9.sp,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                         ],
@@ -156,7 +166,7 @@ class StepNotifications extends ConsumerWidget {
                     ),
                     // Switch
                     Transform.scale(
-                      scale: 0.8,
+                      scale: 0.65,
                       child: Switch(
                         value: state.notificationPrefs[pref['key']] ?? true,
                         onChanged: (val) => notifier.updateNotificationPref(
@@ -165,8 +175,11 @@ class StepNotifications extends ConsumerWidget {
                         ),
                         activeThumbColor: Colors.white,
                         activeTrackColor: SoteriaColors.gold,
-                        inactiveThumbColor: Colors.white.withValues(alpha: 0.5),
-                        inactiveTrackColor: Colors.white.withValues(alpha: 0.1),
+                        inactiveThumbColor: Colors.white,
+                        inactiveTrackColor: Colors.black.withValues(alpha: 0.1),
+                        trackOutlineColor: WidgetStateProperty.all(
+                          Colors.transparent,
+                        ),
                       ),
                     ),
                   ],
@@ -175,18 +188,18 @@ class StepNotifications extends ConsumerWidget {
             ),
           ),
         ),
-        SizedBox(height: 16.h),
+        SizedBox(height: 8.h),
         // Banner
         GlassSurface(
-          borderRadius: BorderRadius.circular(20.r),
+          borderRadius: BorderRadius.circular(16.r),
           opacity: 0.05,
           child: Padding(
-            padding: EdgeInsets.all(16.w),
+            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
             child: Row(
               children: [
                 Container(
-                  width: 44.w,
-                  height: 44.w,
+                  width: 32.w,
+                  height: 32.w,
                   decoration: BoxDecoration(
                     color: SoteriaColors.gold.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
@@ -197,10 +210,10 @@ class StepNotifications extends ConsumerWidget {
                   child: const Icon(
                     Icons.shield_outlined,
                     color: SoteriaColors.gold,
-                    size: 20,
+                    size: 16,
                   ),
                 ),
-                SizedBox(width: 14.w),
+                SizedBox(width: 12.w),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -210,17 +223,16 @@ class StepNotifications extends ConsumerWidget {
                         style: context.titleMedium.copyWith(
                           color: SoteriaColors.gold,
                           fontWeight: FontWeight.bold,
-                          fontSize: 16.sp,
+                          fontSize: 13.sp,
                         ),
                       ),
-                      SizedBox(height: 2.h),
                       Text(
                         'You can change these anytime in settings.',
                         style: context.bodySmall.copyWith(
-                          color: SoteriaColors.textSecondary.withValues(
+                          color: const Color(0xFF2E1A8A).withValues(
                             alpha: 0.7,
                           ),
-                          fontSize: 12.sp,
+                          fontSize: 10.sp,
                         ),
                       ),
                     ],

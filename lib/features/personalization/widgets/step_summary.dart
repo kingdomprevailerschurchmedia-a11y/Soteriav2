@@ -18,54 +18,41 @@ class StepSummary extends ConsumerWidget {
     return RepaintBoundary(
       child: ListView(
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
+        physics: const BouncingScrollPhysics(),
         children: [
-          SizedBox(height: 16.h),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Review ',
-                        style: context.headlineMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.sp,
-                          color: Colors.white,
-                        ),
-                      ),
-                      TextSpan(
-                        text: 'your profile',
-                        style: context.headlineMedium.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24.sp,
-                          color: const Color(0xFF7C4DFF),
-                        ),
-                      ),
-                    ],
+          SizedBox(height: 40.h),
+          RichText(
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: 'Review ',
+                  style: context.headlineMedium.copyWith(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 28.sp,
+                    color: const Color(0xFF2E1A8A),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.w, top: 4.h),
-                child: const Icon(
-                  Icons.auto_awesome_rounded,
-                  color: Color(0xFF7C4DFF),
-                  size: 20,
+                TextSpan(
+                  text: 'your profile',
+                  style: context.headlineMedium.copyWith(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 28.sp,
+                    color: SoteriaColors.gold,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 4.h),
-          Text(
-            'Tell us about yourself so we can personalize your experience.',
-            style: context.bodySmall.copyWith(
-              color: SoteriaColors.textSecondary.withValues(alpha: 0.6),
-              fontSize: 13.sp,
+              ],
             ),
           ),
-          SizedBox(height: SoteriaSpacing.lg),
+          SizedBox(height: 8.h),
+          Text(
+            'Tell us about yourself so we can personalize\nyour experience and recommendations.',
+            style: context.bodyLarge.copyWith(
+              color: const Color(0xFF2E1A8A).withValues(alpha: 0.6),
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+          SizedBox(height: 24.h),
 
           // Academic Level Section
           _SummarySection(
@@ -124,51 +111,76 @@ class StepSummary extends ConsumerWidget {
       _ => '',
     };
 
-    return GlassSurface(
-      borderRadius: BorderRadius.circular(20.r),
-      opacity: 0.05,
+    return Container(
+      height: 74.h,
+      decoration: BoxDecoration(
+        color: SoteriaColors.gold.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(
+          color: SoteriaColors.gold.withValues(alpha: 0.3),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: SoteriaColors.gold.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
         child: Row(
           children: [
             Container(
-              width: 48.w,
-              height: 48.w,
+              width: 42.w,
+              height: 42.w,
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.05),
-                borderRadius: BorderRadius.circular(12.r),
+                color: const Color(0xFFF3EFFF),
+                borderRadius: BorderRadius.circular(14.r),
               ),
-              child: Icon(icon, color: const Color(0xFF7C4DFF), size: 24.w),
+              child: Icon(icon, color: const Color(0xFF2E1A8A), size: 20.w),
             ),
-            SizedBox(width: 16.w),
+            SizedBox(width: 14.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     level ?? 'Not selected',
                     style: context.titleMedium.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
+                      color: const Color(0xFF2E1A8A),
+                      fontWeight: FontWeight.w900,
+                      fontSize: 14.sp,
                     ),
                   ),
                   if (subtitle.isNotEmpty)
                     Text(
                       subtitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: context.bodySmall.copyWith(
-                        color: SoteriaColors.textSecondary.withValues(
-                          alpha: 0.6,
-                        ),
-                        fontSize: 12.sp,
+                        color: const Color(0xFF2E1A8A).withValues(alpha: 0.5),
+                        fontSize: 10.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                 ],
               ),
             ),
-            Icon(
-              Icons.chevron_right_rounded,
-              color: const Color(0xFF7C4DFF),
-              size: 24.w,
+            Container(
+              width: 24.w,
+              height: 24.w,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFFF3EFFF),
+              ),
+              child: const Icon(
+                Icons.chevron_right_rounded,
+                color: Color(0xFF2E1A8A),
+                size: 16,
+              ),
             ),
           ],
         ),
@@ -181,14 +193,12 @@ class StepSummary extends ConsumerWidget {
     Set<String> interests,
     Function(String) onRemove,
   ) {
-    return GlassSurface(
-      borderRadius: BorderRadius.circular(20.r),
-      opacity: 0.05,
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Wrap(
-          spacing: 12.w,
-          runSpacing: 12.h,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 10.w,
+          runSpacing: 10.h,
           children: [
             ...interests.map((interest) {
               final icon = switch (interest) {
@@ -214,156 +224,196 @@ class StepSummary extends ConsumerWidget {
               return Container(
                 padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF5B3FD9).withValues(alpha: 0.2),
-                  borderRadius: BorderRadius.circular(12.r),
+                  color: SoteriaColors.gold.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(16.r),
+                  boxShadow: [
+                    BoxShadow(
+                      color: SoteriaColors.gold.withValues(alpha: 0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                   border: Border.all(
-                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
+                    color: SoteriaColors.gold.withValues(alpha: 0.3),
                   ),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(icon, size: 16.w, color: Colors.white),
+                    Icon(icon, size: 16.w, color: const Color(0xFF2E1A8A)),
                     SizedBox(width: 8.w),
                     Text(
                       interest,
-                      style: context.labelMedium.copyWith(color: Colors.white),
+                      style: context.bodyMedium.copyWith(
+                        color: const Color(0xFF2E1A8A),
+                        fontWeight: FontWeight.w800,
+                        fontSize: 14.sp,
+                      ),
                     ),
                     SizedBox(width: 8.w),
                     GestureDetector(
                       onTap: () => onRemove(interest),
-                      child: Icon(
-                        Icons.close,
-                        size: 14.w,
-                        color: Colors.white.withValues(alpha: 0.6),
+                      child: Container(
+                        padding: EdgeInsets.all(2.w),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: const Color(0xFFF3EFFF),
+                        ),
+                        child: Icon(
+                          Icons.close_rounded,
+                          size: 12.w,
+                          color: const Color(0xFF2E1A8A),
+                        ),
                       ),
                     ),
                   ],
                 ),
               );
             }),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(
-                  color: Colors.white.withValues(alpha: 0.2),
-                  style: BorderStyle.solid,
-                ),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.add,
-                    size: 16.w,
-                    color: SoteriaColors.textSecondary,
-                  ),
-                  SizedBox(width: 4.w),
-                  Text(
-                    'Add more',
-                    style: context.labelMedium.copyWith(
-                      color: SoteriaColors.textSecondary,
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
-      ),
+        SizedBox(height: 12.h),
+        GestureDetector(
+          onTap: () {}, // Handled by SummarySection Edit
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(
+                color: const Color(0xFF8A55FD).withValues(alpha: 0.3),
+                style: BorderStyle.solid,
+                width: 1.5,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.add,
+                  size: 16.w,
+                  color: const Color(0xFF8A55FD),
+                ),
+                SizedBox(width: 8.w),
+                Text(
+                  'Add more',
+                  style: context.labelMedium.copyWith(
+                    color: const Color(0xFF8A55FD),
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 
   Widget _buildGoals(BuildContext context, Set<String> goals) {
-    return GlassSurface(
-      borderRadius: BorderRadius.circular(20.r),
-      opacity: 0.05,
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(
-          children: goals.map((goal) {
-            final icon = switch (goal) {
-              'Practice Daily' => Icons.timer_outlined,
-              'Improve GPA' => Icons.trending_up_rounded,
-              'Prepare for Exams' => Icons.assignment_outlined,
-              'Compete Nationally' => Icons.emoji_events_outlined,
-              'Earn Rewards' => Icons.card_giftcard_rounded,
-              'Learn New Things' => Icons.lightbulb_outline_rounded,
-              _ => Icons.track_changes_rounded,
-            };
+    return Column(
+      children: goals.map((goal) {
+        final icon = switch (goal) {
+          'Practice Daily' => Icons.timer_outlined,
+          'Improve GPA' => Icons.trending_up_rounded,
+          'Prepare for Exams' => Icons.assignment_outlined,
+          'Compete Nationally' => Icons.emoji_events_outlined,
+          'Earn Rewards' => Icons.card_giftcard_rounded,
+          'Learn New Things' => Icons.lightbulb_outline_rounded,
+          _ => Icons.track_changes_rounded,
+        };
 
-            final subtitle = switch (goal) {
-              'Practice Daily' => 'Build a consistent learning habit.',
-              'Improve GPA' => 'Achieve better academic results.',
-              'Prepare for Exams' => 'Targeted practice for success.',
-              'Compete Nationally' => 'Rise through the ranks.',
-              'Earn Rewards' => 'Unlock badges, coins, and prizes.',
-              'Learn New Things' => 'Explore topics that inspire you.',
-              _ => '',
-            };
+        final subtitle = switch (goal) {
+          'Practice Daily' => 'Build a consistent learning habit.',
+          'Improve GPA' => 'Achieve better academic results.',
+          'Prepare for Exams' => 'Targeted practice for success.',
+          'Compete Nationally' => 'Rise through the ranks.',
+          'Earn Rewards' => 'Unlock badges, coins, and prizes.',
+          'Learn New Things' => 'Explore topics that inspire you.',
+          _ => '',
+        };
 
-            return Padding(
-              padding: EdgeInsets.only(bottom: 12.h),
-              child: Row(
-                children: [
-                  Container(
-                    width: 40.w,
-                    height: 40.w,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(10.r),
-                    ),
-                    child: Icon(
-                      icon,
-                      color: const Color(0xFF7C4DFF),
-                      size: 20.w,
-                    ),
+        return Container(
+          height: 66.h,
+          margin: EdgeInsets.only(bottom: 8.h),
+          decoration: BoxDecoration(
+            color: SoteriaColors.gold.withValues(alpha: 0.08),
+            borderRadius: BorderRadius.circular(16.r),
+            boxShadow: [
+              BoxShadow(
+                color: SoteriaColors.gold.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+            border: Border.all(
+              color: SoteriaColors.gold.withValues(alpha: 0.3),
+            ),
+          ),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+            child: Row(
+              children: [
+                Container(
+                  width: 38.w,
+                  height: 38.w,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFF3EFFF),
+                    borderRadius: BorderRadius.circular(12.r),
                   ),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                  child: Icon(
+                    icon,
+                    color: const Color(0xFF2E1A8A),
+                    size: 18.w,
+                  ),
+                ),
+                SizedBox(width: 14.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        goal,
+                        style: context.titleMedium.copyWith(
+                          color: const Color(0xFF2E1A8A),
+                          fontWeight: FontWeight.w900,
+                          fontSize: 13.sp,
+                        ),
+                      ),
+                      if (subtitle.isNotEmpty)
                         Text(
-                          goal,
-                          style: context.titleMedium.copyWith(
-                            color: Colors.white,
-                            fontSize: 16.sp,
+                          subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: context.bodySmall.copyWith(
+                            color:
+                                const Color(0xFF2E1A8A).withValues(alpha: 0.5),
+                            fontSize: 9.sp,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        if (subtitle.isNotEmpty)
-                          Text(
-                            subtitle,
-                            style: context.bodySmall.copyWith(
-                              color: SoteriaColors.textSecondary.withValues(
-                                alpha: 0.6,
-                              ),
-                              fontSize: 12.sp,
-                            ),
-                          ),
-                      ],
-                    ),
+                    ],
                   ),
-                  Container(
-                    width: 24.w,
-                    height: 24.w,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: SoteriaColors.gold, width: 1.5),
-                    ),
-                    child: const Icon(
-                      Icons.check,
-                      color: SoteriaColors.gold,
-                      size: 16,
-                    ),
+                ),
+                Container(
+                  width: 22.w,
+                  height: 22.w,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: SoteriaColors.gold,
                   ),
-                ],
-              ),
-            );
-          }).toList(),
-        ),
-      ),
+                  child: const Icon(
+                    Icons.check,
+                    color: Colors.black,
+                    size: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
     );
   }
 }
@@ -386,46 +436,61 @@ class _SummarySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(icon, color: SoteriaColors.gold, size: 18.w),
-                SizedBox(width: 8.w),
-                Text(
-                  title.toUpperCase(),
-                  style: context.labelSmall.copyWith(
-                    color: SoteriaColors.gold,
-                    letterSpacing: 1.5,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.sp,
-                  ),
-                ),
-              ],
-            ),
-            GestureDetector(
-              onTap: onEdit,
-              child: Row(
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(100),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.03),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 children: [
+                  Icon(icon, color: const Color(0xFF2E1A8A), size: 16.w),
+                  SizedBox(width: 10.w),
                   Text(
-                    'Edit',
-                    style: TextStyle(
-                      color: const Color(0xFF7C4DFF),
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
+                    title.toUpperCase(),
+                    style: context.labelSmall.copyWith(
+                      color: const Color(0xFF2E1A8A),
+                      letterSpacing: 1.0,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 12.sp,
                     ),
-                  ),
-                  SizedBox(width: 4.w),
-                  Icon(
-                    Icons.edit_outlined,
-                    color: const Color(0xFF7C4DFF),
-                    size: 16.w,
                   ),
                 ],
               ),
-            ),
-          ],
+              GestureDetector(
+                onTap: onEdit,
+                child: Row(
+                  children: [
+                    Text(
+                      'Edit',
+                      style: TextStyle(
+                        color: const Color(0xFF8A55FD),
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w700,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                    SizedBox(width: 4.w),
+                    Icon(
+                      Icons.edit_outlined,
+                      color: const Color(0xFF8A55FD),
+                      size: 14.w,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         SizedBox(height: 12.h),
         child,

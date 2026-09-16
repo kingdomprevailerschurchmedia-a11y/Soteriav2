@@ -9,11 +9,18 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+android/app/build/
+android/build/
 .dart_tool/
+.artifacts/
+
+# Temporary files
+analysis*.txt
+build_log.txt
+build_output.txt
+final_analysis_output.txt
+analysis_output.txt
+remaining_errors.txt
 
 # Secrets
 secrets/

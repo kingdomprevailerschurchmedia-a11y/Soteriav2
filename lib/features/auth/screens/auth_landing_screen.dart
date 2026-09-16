@@ -16,6 +16,8 @@ class AuthLandingScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return SoteriaPage(
       showBackground: true,
+      backgroundImage: 'assets/images/welcome_screen.png',
+      showBackgroundOverlay: false,
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: const _AuthLandingContent(),
@@ -44,52 +46,36 @@ class _AuthLandingContent extends ConsumerWidget {
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: Column(
         children: [
-          SizedBox(height: 16.h),
+          SizedBox(height: 0.55.sh),
 
-          // Welcome Illustration
-          Expanded(
-            flex: 4,
-            child: Center(
-              child: Image.asset(
-                'assets/images/welcome_illustration.png',
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-
-          SizedBox(height: 12.h),
-
-          // Welcome Text
+          // Welcome Header Redesign
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                'Welcome to',
-                style: context.displaySmall.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 32.sp,
-                  letterSpacing: -0.5,
-                ),
-              ),
-              Text(
-                'Soteria',
-                style: context.displayLarge.copyWith(
-                  color: SoteriaColors.gold,
+                'LEARN. PLAY.\nCOMPETE. GROW',
+                style: context.headlineLarge.copyWith(
+                  color: Colors.amber,
                   fontWeight: FontWeight.w900,
-                  fontSize: 48.sp,
-                  letterSpacing: -1.0,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Rise through knowledge and\ncompete with the best.',
-                style: context.bodyLarge.copyWith(
-                  color: Colors.white.withValues(alpha: 0.5),
-                  height: 1.3,
-                  fontSize: 15.sp,
+                  fontSize: 28.sp,
+                  letterSpacing: 1.2,
+                  height: 1.2,
                 ),
                 textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 12.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                child: Text(
+                  'Sharpen your knowledge, rise through every challenge and compete with the best.',
+                  style: context.bodyMedium.copyWith(
+                    color: Colors.white.withValues(alpha: 0.7),
+                    height: 1.5,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
@@ -119,7 +105,7 @@ class _AuthLandingContent extends ConsumerWidget {
                         .push('${SoteriaRoutes.auth}/register'),
               ),
 
-              SizedBox(height: 24.h),
+              SizedBox(height: 16.h),
 
               // Login with Email
               TextButton(
@@ -142,14 +128,15 @@ class _AuthLandingContent extends ConsumerWidget {
                   ),
                 ),
               ),
+              SizedBox(height: 24.h),
             ],
           ),
 
-          const Spacer(flex: 1),
+          const Spacer(),
 
           // Footer Links
           Padding(
-            padding: EdgeInsets.only(bottom: 12.h),
+            padding: EdgeInsets.only(bottom: 16.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -188,9 +175,9 @@ class _PrimaryButton extends StatelessWidget {
         opacity: isLoading ? 0.6 : 1.0,
         child: Container(
           width: double.infinity,
-          height: 56.h,
+          height: 52.h,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18.r),
+            borderRadius: BorderRadius.circular(16.r),
             color: SoteriaColors.gold,
             boxShadow: [
               BoxShadow(
@@ -251,21 +238,25 @@ class _SecondaryButton extends StatelessWidget {
         opacity: isDisabled ? 0.4 : 1.0,
         child: Container(
           width: double.infinity,
-          height: 56.h,
+          height: 52.h,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(18.r),
-            color: Colors.white.withValues(alpha: 0.04),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: 0.08),
-              width: 1.5,
-            ),
+            borderRadius: BorderRadius.circular(16.r),
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Center(
             child: Text(
               label,
               style: context.titleMedium.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
+                color: Colors.black,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 0.2,
               ),
             ),
           ),
