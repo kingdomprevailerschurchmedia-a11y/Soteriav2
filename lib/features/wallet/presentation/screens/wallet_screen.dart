@@ -7,14 +7,10 @@ import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/widgets/glass_surface.dart';
 import '../../../../shared/widgets/soteria_page.dart';
 import '../../../../core/design_system/typography/soteria_typography.dart';
-import '../../domain/models/coin_bundle.dart';
-import '../../providers/wallet_providers.dart';
-
 import 'package:soteria/features/rewards/domain/models/store_product.dart';
 import 'package:soteria/features/rewards/presentation/providers/rewards_providers.dart';
 import 'package:soteria/core/design_system/components/soteria_text_field.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
-import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 
 class WalletScreen extends ConsumerStatefulWidget {
   const WalletScreen({super.key});
@@ -205,7 +201,8 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with SingleTickerPr
   }
 
   Widget _buildBalanceCard(BuildContext context, WidgetRef ref) {
-    final balance = ref.watch(currentWalletBalanceProvider);
+    final walletAsync = ref.watch(walletProvider);
+    final balance = walletAsync.value?.coins ?? 0;
 
     return GlassSurface(
       padding: EdgeInsets.all(24.r),
@@ -223,10 +220,11 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with SingleTickerPr
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
-                Icons.monetization_on,
-                color: SoteriaColors.gold,
-                size: 32.r,
+              Image.asset(
+                'assets/icons/coin_icon.png',
+                width: 32.r,
+                height: 32.r,
+                fit: BoxFit.contain,
               ),
               SoteriaSpacing.gapXS,
               Text(
@@ -264,11 +262,19 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with SingleTickerPr
                 borderRadius: BorderRadius.circular(16.r),
               ),
               child: Center(
-                child: product.id.contains('12000') 
-                  ? Text('💎', style: TextStyle(fontSize: 28.sp))
-                  : product.id.contains('5500')
-                    ? Text('💰', style: TextStyle(fontSize: 28.sp))
-                    : Text('🪙', style: TextStyle(fontSize: 28.sp)),
+                child: product.category == StoreProductCategory.tokens
+                    ? Icon(Icons.confirmation_number, color: const Color(0xFF7C4DFF), size: 32.r)
+                    : product.category == StoreProductCategory.pro
+                        ? ShaderMask(
+                            shaderCallback: (bounds) => const LinearGradient(
+                              colors: [Color(0xFFB9F2FF), Color(0xFF7C4DFF)],
+                            ).createShader(bounds),
+                            child: Icon(Icons.diamond_rounded, color: Colors.white, size: 32.r),
+                          )
+                        : Image.asset(
+                            'assets/icons/sack_of_coins.png',
+                            fit: BoxFit.contain,
+                          ),
               ),
             ),
             SoteriaSpacing.gapMD,
@@ -285,9 +291,13 @@ class _WalletScreenState extends ConsumerState<WalletScreen> with SingleTickerPr
                     ),
                   ),
                   Text(
-                    '${product.quantity} Coins',
+                    product.category == StoreProductCategory.tokens
+                        ? '${product.quantity} Tokens'
+                        : product.category == StoreProductCategory.pro
+                            ? 'Premium Experience'
+                            : '${product.quantity} Coins',
                     style: TextStyle(
-                      color: SoteriaColors.gold,
+                      color: product.category == StoreProductCategory.tokens ? const Color(0xFF7C4DFF) : SoteriaColors.gold,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w600,
                     ),

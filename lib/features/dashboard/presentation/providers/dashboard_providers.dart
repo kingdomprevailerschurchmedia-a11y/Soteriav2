@@ -29,6 +29,12 @@ class DashboardNotifier extends Notifier<DashboardState> {
     final announcementsAsync = ref.watch(announcementsProvider);
     final challengeAsync = ref.watch(dailyChallengeProvider);
     
+    // Auto-refresh daily goals when dashboard initializes and logs in
+    final userId = playerAsync.value?.uid;
+    if (userId != null) {
+      ref.read(goalRefreshProvider);
+    }
+    
     // NOTE: Goal providers are removed from build() to prevent full dashboard rebuilds 
     // when goal progress updates. Goals are handled by dedicated widgets in the scroll view.
 

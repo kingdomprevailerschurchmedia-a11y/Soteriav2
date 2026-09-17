@@ -90,6 +90,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           final greeting = ref.watch(dashboardProvider.select((s) => s.greeting));
                           final isOnline = ref.watch(isOnlineProvider);
                           
+                          final profile = ref.watch(profileProvider);
+                          
                           return progressionAsync.when(
                             data: (progression) => DashboardHeader(
                               greeting: greeting,
@@ -98,7 +100,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               streak: player?.currentStreak ?? 0,
                               coins: player?.coins ?? 0,
                               profileCompletion: 1.0,
-                              avatarUrl: player?.photoUrl,
+                              avatarUrl: profile?.avatarUrl ?? player?.photoUrl,
                               isOnline: isOnline,
                             ),
                             loading: () => DashboardHeader(
