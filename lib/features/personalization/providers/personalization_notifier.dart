@@ -6,6 +6,8 @@ import 'package:soteria/features/question_content/domain/entities/category.dart'
 import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/identity/models/user_profile.dart';
 import 'package:soteria/core/logging/logger_service.dart';
+import 'package:soteria/core/navigation/navigation_service.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/features/question_content/presentation/providers/category_providers.dart';
 
 class PersonalizationNotifier extends Notifier<PersonalizationState> {
@@ -219,9 +221,13 @@ class PersonalizationNotifier extends Notifier<PersonalizationState> {
   }
 
   Future<void> complete() async {
-    await syncToFirebase();
-    // Trigger lifecycle update
-    ref.read(appLifecycleProvider.notifier).refresh();
+    final session = ref.read(sessionProvider);
+    if (session.isAuthenticated) {
+      await syncToFirebase();
+      ref.read(appLifecycleProvider.notifier).setReady();
+    } else {
+      ref.read(navigationServiceProvider).go('${SoteriaRoutes.auth}/register');
+    }
   }
 
   Future<void> reset() async {

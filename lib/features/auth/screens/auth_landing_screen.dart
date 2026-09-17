@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/navigation/navigation_service.dart';
 import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/shared/widgets/soteria_page.dart';
@@ -100,9 +101,10 @@ class _AuthLandingContent extends ConsumerWidget {
                 label: 'Create Account',
                 onTap: state.isLoading
                     ? null
-                    : () => ref
-                        .read(navigationServiceProvider)
-                        .push('${SoteriaRoutes.auth}/register'),
+                    : () {
+                        ref.read(appLifecycleProvider.notifier).setPersonalization();
+                        ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
+                      },
               ),
 
               SizedBox(height: 16.h),

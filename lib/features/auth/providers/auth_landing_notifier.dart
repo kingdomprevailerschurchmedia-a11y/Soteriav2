@@ -1,6 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/logging/logger_service.dart';
+import 'package:soteria/core/navigation/navigation_service.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:soteria/features/auth/providers/auth_providers.dart';
 
 class AuthLandingState {
@@ -42,6 +46,20 @@ class AuthLandingNotifier extends Notifier<AuthLandingState> {
       if (result.isSuccess) {
         ref.read(analyticsProvider).logLogin(loginMethod: 'google');
         LoggerService.i('Google Authentication successful', feature: 'Auth');
+
+        final uid = result.userId;
+        if (uid != null) {
+          final profile = await ref.read(identityRepositoryProvider).getUserProfile(uid);
+          final prefs = await SharedPreferences.getInstance();
+          
+          if (profile != null) {
+            await prefs.setString('user_personalization', 'completed');
+            ref.read(appLifecycleProvider.notifier).setReady();
+          } else {
+            ref.read(appLifecycleProvider.notifier).setPersonalization();
+            ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
+          }
+        }
       } else {
         final errorMessage =
             result.error?.userMessage ?? 'Google sign in failed.';

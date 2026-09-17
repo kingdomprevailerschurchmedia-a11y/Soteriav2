@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/login_state.dart';
 import 'package:soteria/core/firebase/providers/firebase_providers.dart';
+import 'package:soteria/core/identity/providers/identity_providers.dart';
 import 'package:soteria/core/utils/identity_validator.dart';
 import 'package:soteria/core/logging/logger_service.dart';
 import '../models/authentication_result.dart';
@@ -90,6 +91,7 @@ class LoginNotifier extends Notifier<LoginState> {
       if (result.isSuccess) {
         ref.read(analyticsProvider).logLogin(loginMethod: 'email');
         LoggerService.i('Authentication successful', feature: 'Auth');
+        ref.read(appLifecycleProvider.notifier).setReady();
       } else if (result.status == AuthenticationStatus.unverified) {
         LoggerService.i(
           'Authentication blocked: Email unverified',

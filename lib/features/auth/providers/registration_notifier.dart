@@ -158,6 +158,7 @@ class RegistrationNotifier extends Notifier<RegistrationDraft> {
 
           ref.read(analyticsProvider).logSignUp(signUpMethod: 'email');
           LoggerService.i('Registration successful', feature: 'Auth');
+          ref.read(appLifecycleProvider.notifier).setReady();
         } else {
           state = state.copyWith(
             error: result.error?.userMessage ?? 'Registration failed.',

@@ -236,9 +236,32 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
   @override
   AppStartupState build() {
     // Listen to session changes to automatically progress the lifecycle
-    ref.listen(sessionProvider, (previous, next) {
-      if (next.isAuthenticated && state == AppStartupState.auth) {
-        state = AppStartupState.ready;
+    ref.listen(sessionProvider, (previous, next) async {
+      if (next.isAuthenticated) {
+        if (state == AppStartupState.auth) {
+          final uid = next.uid;
+          if (uid != null) {
+            final profile = await ref.read(identityRepositoryProvider).getUserProfile(uid);
+            if (profile != null) {
+              _prefs ??= await SharedPreferences.getInstance();
+              await _prefs!.setString('user_personalization', 'completed');
+              state = AppStartupState.ready;
+            } else {
+              state = AppStartupState.personalization;
+              ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
+            }
+          }
+        } else if (state == AppStartupState.personalization) {
+          final uid = next.uid;
+          if (uid != null) {
+            final profile = await ref.read(identityRepositoryProvider).getUserProfile(uid);
+            if (profile != null) {
+              _prefs ??= await SharedPreferences.getInstance();
+              await _prefs!.setString('user_personalization', 'completed');
+              state = AppStartupState.ready;
+            }
+          }
+        }
       }
     });
 
@@ -252,6 +275,18 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
   }
 
   void bypassToAuth() {
+    state = AppStartupState.auth;
+  }
+
+  void setReady() {
+    state = AppStartupState.ready;
+  }
+
+  void setPersonalization() {
+    state = AppStartupState.personalization;
+  }
+
+  void setAuth() {
     state = AppStartupState.auth;
   }
 
@@ -282,20 +317,25 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
         onTimeout: () => throw TimeoutException('Initialization timed out. Please check your connection.'),
       );
 
-      final personalizationCompleted =
-          _prefs!.getString('user_personalization') != null;
-
       final session = await ref
           .read(identityRepositoryProvider)
           .getActiveSession();
 
-      if (!personalizationCompleted) {
-        state = AppStartupState.personalization;
-      } else if (session == null || !session.isAuthenticated) {
+      if (session == null || !session.isAuthenticated) {
         state = AppStartupState.auth;
       } else {
         ref.read(sessionProvider.notifier).setSession(session);
-        state = AppStartupState.ready;
+        
+        final profile = await ref
+            .read(identityRepositoryProvider)
+            .getUserProfile(session.uid!);
+            
+        if (profile == null) {
+          state = AppStartupState.personalization;
+        } else {
+          await _prefs!.setString('user_personalization', 'completed');
+          state = AppStartupState.ready;
+        }
       }
     } catch (e, st) {
       LoggerService.e('Lifecycle initialization failed', error: e, stackTrace: st);
