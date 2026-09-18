@@ -15,7 +15,10 @@ class AnnouncementCard extends StatelessWidget {
       padding: EdgeInsets.only(bottom: SoteriaSpacing.md),
       child: GlassSurface(
         padding: EdgeInsets.all(SoteriaSpacing.md),
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(28),
+        blur: 5.0,
+        opacity: 0.02,
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
         child: Row(
           children: [
             Container(

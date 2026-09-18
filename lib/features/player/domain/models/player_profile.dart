@@ -23,6 +23,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     /// This field is kept for backward compatibility during migration.
     @Deprecated('Use Wallet model instead for authoritative coin balance')
     @Default(0) int coins,
+    @Default(0) int withdrawableCoins,
     String? lastCoinTransactionId,
     String? lastXpTransactionId,
     String? lastRankTransactionId,
@@ -79,6 +80,7 @@ abstract class PlayerProfile with _$PlayerProfile {
     'level': level,
     'xp': xp,
     'coins': coins,
+    'withdrawableCoins': withdrawableCoins,
     'currentStreak': currentStreak,
     'highestStreak': highestStreak,
     'lastStreakMilestoneCelebrated': lastStreakMilestoneCelebrated,

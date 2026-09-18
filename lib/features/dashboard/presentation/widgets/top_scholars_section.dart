@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
+import 'package:soteria/core/design_system/components/soteria_card.dart';
 import 'package:soteria/core/avatar/presentation/widgets/soteria_avatar.dart';
 import 'package:soteria/core/avatar/providers/avatar_providers.dart';
 import 'package:soteria/core/avatar/presentation/widgets/avatar_frame.dart';
@@ -65,16 +66,12 @@ class TopScholarsSection extends ConsumerWidget {
             ],
           ),
           SizedBox(height: SoteriaSpacing.md),
-          Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(28.r),
-              border: Border.all(
-                color: const Color(0xFF9155FD).withValues(alpha: 0.15),
-                width: 1.2,
-              ),
-              color: const Color(0xFF0B012A).withValues(alpha: 0.4),
-            ),
+          SoteriaCard(
+            padding: EdgeInsets.zero,
+            borderRadius: 28,
+            blur: 5.0,
+            opacity: 0.02,
+            borderColor: Colors.white.withValues(alpha: 0.1),
             child: leaderboardState.when(
               data: (entries) {
                 final top3 = entries.take(3).toList();

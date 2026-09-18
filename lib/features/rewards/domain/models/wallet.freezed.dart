@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Wallet {
 
- String get userId; int get coins; int get tokens; int get lifetimeCoinsEarned; int get lifetimeCoinsSpent; int get lifetimeTokensEarned; int get lifetimeTokensSpent; bool get isPro; DateTime? get proExpiresAt; String? get lastTransactionId; DateTime? get updatedAt;
+ String get userId; int get coins; int get withdrawableCoins; int get tokens; int get lifetimeCoinsEarned; int get lifetimeCoinsSpent; int get lifetimeTokensEarned; int get lifetimeTokensSpent; bool get isPro; DateTime? get proExpiresAt; String? get lastTransactionId; DateTime? get updatedAt;
 /// Create a copy of Wallet
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $WalletCopyWith<Wallet> get copyWith => _$WalletCopyWithImpl<Wallet>(this as Wal
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Wallet&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.coins, coins) || other.coins == coins)&&(identical(other.tokens, tokens) || other.tokens == tokens)&&(identical(other.lifetimeCoinsEarned, lifetimeCoinsEarned) || other.lifetimeCoinsEarned == lifetimeCoinsEarned)&&(identical(other.lifetimeCoinsSpent, lifetimeCoinsSpent) || other.lifetimeCoinsSpent == lifetimeCoinsSpent)&&(identical(other.lifetimeTokensEarned, lifetimeTokensEarned) || other.lifetimeTokensEarned == lifetimeTokensEarned)&&(identical(other.lifetimeTokensSpent, lifetimeTokensSpent) || other.lifetimeTokensSpent == lifetimeTokensSpent)&&(identical(other.isPro, isPro) || other.isPro == isPro)&&(identical(other.proExpiresAt, proExpiresAt) || other.proExpiresAt == proExpiresAt)&&(identical(other.lastTransactionId, lastTransactionId) || other.lastTransactionId == lastTransactionId)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Wallet&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.coins, coins) || other.coins == coins)&&(identical(other.withdrawableCoins, withdrawableCoins) || other.withdrawableCoins == withdrawableCoins)&&(identical(other.tokens, tokens) || other.tokens == tokens)&&(identical(other.lifetimeCoinsEarned, lifetimeCoinsEarned) || other.lifetimeCoinsEarned == lifetimeCoinsEarned)&&(identical(other.lifetimeCoinsSpent, lifetimeCoinsSpent) || other.lifetimeCoinsSpent == lifetimeCoinsSpent)&&(identical(other.lifetimeTokensEarned, lifetimeTokensEarned) || other.lifetimeTokensEarned == lifetimeTokensEarned)&&(identical(other.lifetimeTokensSpent, lifetimeTokensSpent) || other.lifetimeTokensSpent == lifetimeTokensSpent)&&(identical(other.isPro, isPro) || other.isPro == isPro)&&(identical(other.proExpiresAt, proExpiresAt) || other.proExpiresAt == proExpiresAt)&&(identical(other.lastTransactionId, lastTransactionId) || other.lastTransactionId == lastTransactionId)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,coins,tokens,lifetimeCoinsEarned,lifetimeCoinsSpent,lifetimeTokensEarned,lifetimeTokensSpent,isPro,proExpiresAt,lastTransactionId,updatedAt);
+int get hashCode => Object.hash(runtimeType,userId,coins,withdrawableCoins,tokens,lifetimeCoinsEarned,lifetimeCoinsSpent,lifetimeTokensEarned,lifetimeTokensSpent,isPro,proExpiresAt,lastTransactionId,updatedAt);
 
 @override
 String toString() {
-  return 'Wallet(userId: $userId, coins: $coins, tokens: $tokens, lifetimeCoinsEarned: $lifetimeCoinsEarned, lifetimeCoinsSpent: $lifetimeCoinsSpent, lifetimeTokensEarned: $lifetimeTokensEarned, lifetimeTokensSpent: $lifetimeTokensSpent, isPro: $isPro, proExpiresAt: $proExpiresAt, lastTransactionId: $lastTransactionId, updatedAt: $updatedAt)';
+  return 'Wallet(userId: $userId, coins: $coins, withdrawableCoins: $withdrawableCoins, tokens: $tokens, lifetimeCoinsEarned: $lifetimeCoinsEarned, lifetimeCoinsSpent: $lifetimeCoinsSpent, lifetimeTokensEarned: $lifetimeTokensEarned, lifetimeTokensSpent: $lifetimeTokensSpent, isPro: $isPro, proExpiresAt: $proExpiresAt, lastTransactionId: $lastTransactionId, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $WalletCopyWith<$Res>  {
   factory $WalletCopyWith(Wallet value, $Res Function(Wallet) _then) = _$WalletCopyWithImpl;
 @useResult
 $Res call({
- String userId, int coins, int tokens, int lifetimeCoinsEarned, int lifetimeCoinsSpent, int lifetimeTokensEarned, int lifetimeTokensSpent, bool isPro, DateTime? proExpiresAt, String? lastTransactionId, DateTime? updatedAt
+ String userId, int coins, int withdrawableCoins, int tokens, int lifetimeCoinsEarned, int lifetimeCoinsSpent, int lifetimeTokensEarned, int lifetimeTokensSpent, bool isPro, DateTime? proExpiresAt, String? lastTransactionId, DateTime? updatedAt
 });
 
 
@@ -65,10 +65,11 @@ class _$WalletCopyWithImpl<$Res>
 
 /// Create a copy of Wallet
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? coins = null,Object? tokens = null,Object? lifetimeCoinsEarned = null,Object? lifetimeCoinsSpent = null,Object? lifetimeTokensEarned = null,Object? lifetimeTokensSpent = null,Object? isPro = null,Object? proExpiresAt = freezed,Object? lastTransactionId = freezed,Object? updatedAt = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? userId = null,Object? coins = null,Object? withdrawableCoins = null,Object? tokens = null,Object? lifetimeCoinsEarned = null,Object? lifetimeCoinsSpent = null,Object? lifetimeTokensEarned = null,Object? lifetimeTokensSpent = null,Object? isPro = null,Object? proExpiresAt = freezed,Object? lastTransactionId = freezed,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,coins: null == coins ? _self.coins : coins // ignore: cast_nullable_to_non_nullable
+as int,withdrawableCoins: null == withdrawableCoins ? _self.withdrawableCoins : withdrawableCoins // ignore: cast_nullable_to_non_nullable
 as int,tokens: null == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
 as int,lifetimeCoinsEarned: null == lifetimeCoinsEarned ? _self.lifetimeCoinsEarned : lifetimeCoinsEarned // ignore: cast_nullable_to_non_nullable
 as int,lifetimeCoinsSpent: null == lifetimeCoinsSpent ? _self.lifetimeCoinsSpent : lifetimeCoinsSpent // ignore: cast_nullable_to_non_nullable
@@ -163,10 +164,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  int coins,  int tokens,  int lifetimeCoinsEarned,  int lifetimeCoinsSpent,  int lifetimeTokensEarned,  int lifetimeTokensSpent,  bool isPro,  DateTime? proExpiresAt,  String? lastTransactionId,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String userId,  int coins,  int withdrawableCoins,  int tokens,  int lifetimeCoinsEarned,  int lifetimeCoinsSpent,  int lifetimeTokensEarned,  int lifetimeTokensSpent,  bool isPro,  DateTime? proExpiresAt,  String? lastTransactionId,  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Wallet() when $default != null:
-return $default(_that.userId,_that.coins,_that.tokens,_that.lifetimeCoinsEarned,_that.lifetimeCoinsSpent,_that.lifetimeTokensEarned,_that.lifetimeTokensSpent,_that.isPro,_that.proExpiresAt,_that.lastTransactionId,_that.updatedAt);case _:
+return $default(_that.userId,_that.coins,_that.withdrawableCoins,_that.tokens,_that.lifetimeCoinsEarned,_that.lifetimeCoinsSpent,_that.lifetimeTokensEarned,_that.lifetimeTokensSpent,_that.isPro,_that.proExpiresAt,_that.lastTransactionId,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -184,10 +185,10 @@ return $default(_that.userId,_that.coins,_that.tokens,_that.lifetimeCoinsEarned,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  int coins,  int tokens,  int lifetimeCoinsEarned,  int lifetimeCoinsSpent,  int lifetimeTokensEarned,  int lifetimeTokensSpent,  bool isPro,  DateTime? proExpiresAt,  String? lastTransactionId,  DateTime? updatedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String userId,  int coins,  int withdrawableCoins,  int tokens,  int lifetimeCoinsEarned,  int lifetimeCoinsSpent,  int lifetimeTokensEarned,  int lifetimeTokensSpent,  bool isPro,  DateTime? proExpiresAt,  String? lastTransactionId,  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _Wallet():
-return $default(_that.userId,_that.coins,_that.tokens,_that.lifetimeCoinsEarned,_that.lifetimeCoinsSpent,_that.lifetimeTokensEarned,_that.lifetimeTokensSpent,_that.isPro,_that.proExpiresAt,_that.lastTransactionId,_that.updatedAt);case _:
+return $default(_that.userId,_that.coins,_that.withdrawableCoins,_that.tokens,_that.lifetimeCoinsEarned,_that.lifetimeCoinsSpent,_that.lifetimeTokensEarned,_that.lifetimeTokensSpent,_that.isPro,_that.proExpiresAt,_that.lastTransactionId,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -204,10 +205,10 @@ return $default(_that.userId,_that.coins,_that.tokens,_that.lifetimeCoinsEarned,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  int coins,  int tokens,  int lifetimeCoinsEarned,  int lifetimeCoinsSpent,  int lifetimeTokensEarned,  int lifetimeTokensSpent,  bool isPro,  DateTime? proExpiresAt,  String? lastTransactionId,  DateTime? updatedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String userId,  int coins,  int withdrawableCoins,  int tokens,  int lifetimeCoinsEarned,  int lifetimeCoinsSpent,  int lifetimeTokensEarned,  int lifetimeTokensSpent,  bool isPro,  DateTime? proExpiresAt,  String? lastTransactionId,  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Wallet() when $default != null:
-return $default(_that.userId,_that.coins,_that.tokens,_that.lifetimeCoinsEarned,_that.lifetimeCoinsSpent,_that.lifetimeTokensEarned,_that.lifetimeTokensSpent,_that.isPro,_that.proExpiresAt,_that.lastTransactionId,_that.updatedAt);case _:
+return $default(_that.userId,_that.coins,_that.withdrawableCoins,_that.tokens,_that.lifetimeCoinsEarned,_that.lifetimeCoinsSpent,_that.lifetimeTokensEarned,_that.lifetimeTokensSpent,_that.isPro,_that.proExpiresAt,_that.lastTransactionId,_that.updatedAt);case _:
   return null;
 
 }
@@ -219,11 +220,12 @@ return $default(_that.userId,_that.coins,_that.tokens,_that.lifetimeCoinsEarned,
 @JsonSerializable()
 
 class _Wallet extends Wallet {
-  const _Wallet({required this.userId, this.coins = 0, this.tokens = 0, this.lifetimeCoinsEarned = 0, this.lifetimeCoinsSpent = 0, this.lifetimeTokensEarned = 0, this.lifetimeTokensSpent = 0, this.isPro = false, this.proExpiresAt, this.lastTransactionId, this.updatedAt}): super._();
+  const _Wallet({required this.userId, this.coins = 0, this.withdrawableCoins = 0, this.tokens = 0, this.lifetimeCoinsEarned = 0, this.lifetimeCoinsSpent = 0, this.lifetimeTokensEarned = 0, this.lifetimeTokensSpent = 0, this.isPro = false, this.proExpiresAt, this.lastTransactionId, this.updatedAt}): super._();
   factory _Wallet.fromJson(Map<String, dynamic> json) => _$WalletFromJson(json);
 
 @override final  String userId;
 @override@JsonKey() final  int coins;
+@override@JsonKey() final  int withdrawableCoins;
 @override@JsonKey() final  int tokens;
 @override@JsonKey() final  int lifetimeCoinsEarned;
 @override@JsonKey() final  int lifetimeCoinsSpent;
@@ -247,16 +249,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Wallet&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.coins, coins) || other.coins == coins)&&(identical(other.tokens, tokens) || other.tokens == tokens)&&(identical(other.lifetimeCoinsEarned, lifetimeCoinsEarned) || other.lifetimeCoinsEarned == lifetimeCoinsEarned)&&(identical(other.lifetimeCoinsSpent, lifetimeCoinsSpent) || other.lifetimeCoinsSpent == lifetimeCoinsSpent)&&(identical(other.lifetimeTokensEarned, lifetimeTokensEarned) || other.lifetimeTokensEarned == lifetimeTokensEarned)&&(identical(other.lifetimeTokensSpent, lifetimeTokensSpent) || other.lifetimeTokensSpent == lifetimeTokensSpent)&&(identical(other.isPro, isPro) || other.isPro == isPro)&&(identical(other.proExpiresAt, proExpiresAt) || other.proExpiresAt == proExpiresAt)&&(identical(other.lastTransactionId, lastTransactionId) || other.lastTransactionId == lastTransactionId)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Wallet&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.coins, coins) || other.coins == coins)&&(identical(other.withdrawableCoins, withdrawableCoins) || other.withdrawableCoins == withdrawableCoins)&&(identical(other.tokens, tokens) || other.tokens == tokens)&&(identical(other.lifetimeCoinsEarned, lifetimeCoinsEarned) || other.lifetimeCoinsEarned == lifetimeCoinsEarned)&&(identical(other.lifetimeCoinsSpent, lifetimeCoinsSpent) || other.lifetimeCoinsSpent == lifetimeCoinsSpent)&&(identical(other.lifetimeTokensEarned, lifetimeTokensEarned) || other.lifetimeTokensEarned == lifetimeTokensEarned)&&(identical(other.lifetimeTokensSpent, lifetimeTokensSpent) || other.lifetimeTokensSpent == lifetimeTokensSpent)&&(identical(other.isPro, isPro) || other.isPro == isPro)&&(identical(other.proExpiresAt, proExpiresAt) || other.proExpiresAt == proExpiresAt)&&(identical(other.lastTransactionId, lastTransactionId) || other.lastTransactionId == lastTransactionId)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,userId,coins,tokens,lifetimeCoinsEarned,lifetimeCoinsSpent,lifetimeTokensEarned,lifetimeTokensSpent,isPro,proExpiresAt,lastTransactionId,updatedAt);
+int get hashCode => Object.hash(runtimeType,userId,coins,withdrawableCoins,tokens,lifetimeCoinsEarned,lifetimeCoinsSpent,lifetimeTokensEarned,lifetimeTokensSpent,isPro,proExpiresAt,lastTransactionId,updatedAt);
 
 @override
 String toString() {
-  return 'Wallet(userId: $userId, coins: $coins, tokens: $tokens, lifetimeCoinsEarned: $lifetimeCoinsEarned, lifetimeCoinsSpent: $lifetimeCoinsSpent, lifetimeTokensEarned: $lifetimeTokensEarned, lifetimeTokensSpent: $lifetimeTokensSpent, isPro: $isPro, proExpiresAt: $proExpiresAt, lastTransactionId: $lastTransactionId, updatedAt: $updatedAt)';
+  return 'Wallet(userId: $userId, coins: $coins, withdrawableCoins: $withdrawableCoins, tokens: $tokens, lifetimeCoinsEarned: $lifetimeCoinsEarned, lifetimeCoinsSpent: $lifetimeCoinsSpent, lifetimeTokensEarned: $lifetimeTokensEarned, lifetimeTokensSpent: $lifetimeTokensSpent, isPro: $isPro, proExpiresAt: $proExpiresAt, lastTransactionId: $lastTransactionId, updatedAt: $updatedAt)';
 }
 
 
@@ -267,7 +269,7 @@ abstract mixin class _$WalletCopyWith<$Res> implements $WalletCopyWith<$Res> {
   factory _$WalletCopyWith(_Wallet value, $Res Function(_Wallet) _then) = __$WalletCopyWithImpl;
 @override @useResult
 $Res call({
- String userId, int coins, int tokens, int lifetimeCoinsEarned, int lifetimeCoinsSpent, int lifetimeTokensEarned, int lifetimeTokensSpent, bool isPro, DateTime? proExpiresAt, String? lastTransactionId, DateTime? updatedAt
+ String userId, int coins, int withdrawableCoins, int tokens, int lifetimeCoinsEarned, int lifetimeCoinsSpent, int lifetimeTokensEarned, int lifetimeTokensSpent, bool isPro, DateTime? proExpiresAt, String? lastTransactionId, DateTime? updatedAt
 });
 
 
@@ -284,10 +286,11 @@ class __$WalletCopyWithImpl<$Res>
 
 /// Create a copy of Wallet
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? coins = null,Object? tokens = null,Object? lifetimeCoinsEarned = null,Object? lifetimeCoinsSpent = null,Object? lifetimeTokensEarned = null,Object? lifetimeTokensSpent = null,Object? isPro = null,Object? proExpiresAt = freezed,Object? lastTransactionId = freezed,Object? updatedAt = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? userId = null,Object? coins = null,Object? withdrawableCoins = null,Object? tokens = null,Object? lifetimeCoinsEarned = null,Object? lifetimeCoinsSpent = null,Object? lifetimeTokensEarned = null,Object? lifetimeTokensSpent = null,Object? isPro = null,Object? proExpiresAt = freezed,Object? lastTransactionId = freezed,Object? updatedAt = freezed,}) {
   return _then(_Wallet(
 userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
 as String,coins: null == coins ? _self.coins : coins // ignore: cast_nullable_to_non_nullable
+as int,withdrawableCoins: null == withdrawableCoins ? _self.withdrawableCoins : withdrawableCoins // ignore: cast_nullable_to_non_nullable
 as int,tokens: null == tokens ? _self.tokens : tokens // ignore: cast_nullable_to_non_nullable
 as int,lifetimeCoinsEarned: null == lifetimeCoinsEarned ? _self.lifetimeCoinsEarned : lifetimeCoinsEarned // ignore: cast_nullable_to_non_nullable
 as int,lifetimeCoinsSpent: null == lifetimeCoinsSpent ? _self.lifetimeCoinsSpent : lifetimeCoinsSpent // ignore: cast_nullable_to_non_nullable

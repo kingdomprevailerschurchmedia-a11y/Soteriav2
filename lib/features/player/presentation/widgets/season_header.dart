@@ -30,6 +30,10 @@ class SeasonHeader extends ConsumerWidget {
           margin: EdgeInsets.symmetric(
             horizontal: SoteriaSpacing.containerPadding(context),
           ),
+          borderRadius: 28,
+          blur: 5.0,
+          opacity: 0.02,
+          borderColor: Colors.white.withValues(alpha: 0.1),
           hasGlow: status == SeasonStatus.ending,
           glowColor: status == SeasonStatus.ending
               ? SoteriaColors.error

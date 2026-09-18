@@ -62,12 +62,14 @@ class FirestoreCompetitiveSettlementRepository
 
       transaction.update(userRef, {
         'coins': FieldValue.increment(settlement.coinsWon),
+        'withdrawableCoins': FieldValue.increment(settlement.coinsWon),
         'updatedAt': DateTime.now().toIso8601String(),
       });
 
       // Sync Wallet & Game Profile
       transaction.set(walletRef, {
         'coins': FieldValue.increment(settlement.coinsWon),
+        'withdrawableCoins': FieldValue.increment(settlement.coinsWon),
         'lifetimeCoinsEarned': FieldValue.increment(settlement.coinsWon),
         'lastTransactionId': (settlement.coinsWon > 0) ? txId : null,
         'updatedAt': FieldValue.serverTimestamp(),
@@ -75,6 +77,7 @@ class FirestoreCompetitiveSettlementRepository
 
       transaction.set(gameProfileRef, {
         'coins': FieldValue.increment(settlement.coinsWon),
+        'withdrawableCoins': FieldValue.increment(settlement.coinsWon),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 

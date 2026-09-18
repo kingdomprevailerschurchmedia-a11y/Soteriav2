@@ -245,8 +245,10 @@ class _AchievementCard extends StatelessWidget {
       margin: EdgeInsets.only(right: 12.w),
       child: SoteriaCard(
         padding: EdgeInsets.zero,
-        borderRadius: 24,
-        borderColor: isUnlocked ? color.withValues(alpha: 0.3) : null,
+        borderRadius: 28,
+        blur: 5.0,
+        opacity: 0.02,
+        borderColor: isUnlocked ? color.withValues(alpha: 0.3) : Colors.white.withValues(alpha: 0.1),
         child: Container(
           decoration: BoxDecoration(
             gradient: isUnlocked

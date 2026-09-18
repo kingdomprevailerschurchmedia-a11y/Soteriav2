@@ -58,8 +58,8 @@ class HeroCard extends ConsumerWidget {
             onTap: onTap,
             padding: EdgeInsets.all(20.w),
             borderRadius: 28,
-            blur: 10.0,
-            opacity: 0.08,
+            blur: 5.0,
+            opacity: 0.02,
             borderColor: Colors.white.withValues(alpha: 0.1),
             child: Stack(
               clipBehavior: Clip.none,
@@ -94,7 +94,7 @@ class HeroCard extends ConsumerWidget {
                       ),
                     ),
                     
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 8.h),
                     
                     // --- Section Label ---
                     _SectionLabel(
@@ -210,7 +210,7 @@ class _HexagonLevelIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = 64.w; // Slightly smaller to match refined design
+    final size = 74.w; // Increased from 64.w to make it slightly more prominent
 
     return SizedBox(
       width: size,
@@ -237,7 +237,7 @@ class _HexagonLevelIndicator extends StatelessWidget {
                       'LVL',
                       style: context.labelSmall.copyWith(
                         color: Colors.white.withValues(alpha: 0.8),
-                        fontSize: 8.sp,
+                        fontSize: 9.sp, // Slightly increased
                         fontWeight: FontWeight.w900,
                         height: 1.0,
                       ),
@@ -247,7 +247,7 @@ class _HexagonLevelIndicator extends StatelessWidget {
                       style: context.displaySmall.copyWith(
                         color: Colors.white,
                         fontWeight: FontWeight.w900,
-                        fontSize: 22.sp,
+                        fontSize: 24.sp, // Slightly increased
                         height: 1.0,
                       ),
                     ),

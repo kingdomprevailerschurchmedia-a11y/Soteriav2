@@ -21,6 +21,7 @@ class SoteriaButton extends StatefulWidget {
   final bool isLoading;
   final bool isFullWidth;
   final bool uppercase;
+  final bool isVertical;
 
   const SoteriaButton({
     super.key,
@@ -33,6 +34,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   });
 
   const SoteriaButton.primary({
@@ -45,6 +47,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.primary;
 
   const SoteriaButton.secondary({
@@ -57,6 +60,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.secondary;
 
   const SoteriaButton.outline({
@@ -69,6 +73,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.outline;
 
   const SoteriaButton.danger({
@@ -81,6 +86,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.danger;
 
   const SoteriaButton.ghost({
@@ -93,6 +99,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.ghost;
 
   const SoteriaButton.reward({
@@ -105,6 +112,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.reward;
 
   const SoteriaButton.text({
@@ -117,6 +125,7 @@ class SoteriaButton extends StatefulWidget {
     this.isLoading = false,
     this.isFullWidth = true,
     this.uppercase = true,
+    this.isVertical = false,
   }) : variant = SoteriaButtonVariant.text;
 
   @override
@@ -189,6 +198,7 @@ class _SoteriaButtonState extends State<SoteriaButton>
   }
 
   double _getHeight() {
+    if (widget.isVertical) return 80.h;
     switch (widget.size) {
       case SoteriaButtonSize.sm:
         return 36.h.clamp(32.0, 40.0);
@@ -200,6 +210,7 @@ class _SoteriaButtonState extends State<SoteriaButton>
   }
 
   EdgeInsets _getPadding() {
+    if (widget.isVertical) return EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w);
     switch (widget.size) {
       case SoteriaButtonSize.sm:
         return EdgeInsets.symmetric(horizontal: 16.w);
@@ -272,6 +283,33 @@ class _SoteriaButtonState extends State<SoteriaButton>
   }
 
   Widget _buildContent(BuildContext context) {
+    if (widget.isVertical) {
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          if (widget.icon != null) ...[
+            Icon(widget.icon, size: 24.sp, color: _getTextColor()),
+            SizedBox(height: 8.h),
+          ],
+          Flexible(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                widget.uppercase ? widget.label.toUpperCase() : widget.label,
+                style: context.labelLarge.copyWith(
+                  color: _getTextColor(),
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: widget.uppercase ? 1.2 : 0,
+                  fontSize: 12.sp,
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -280,12 +318,17 @@ class _SoteriaButtonState extends State<SoteriaButton>
           Icon(widget.icon, size: _getIconSize(), color: _getTextColor()),
           SizedBox(width: 8.w),
         ],
-        Text(
-          widget.uppercase ? widget.label.toUpperCase() : widget.label,
-          style: context.labelLarge.copyWith(
-            color: _getTextColor(),
-            fontWeight: FontWeight.bold,
-            letterSpacing: widget.uppercase ? 1.2 : 0,
+        Flexible(
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              widget.uppercase ? widget.label.toUpperCase() : widget.label,
+              style: context.labelLarge.copyWith(
+                color: _getTextColor(),
+                fontWeight: FontWeight.bold,
+                letterSpacing: widget.uppercase ? 1.2 : 0,
+              ),
+            ),
           ),
         ),
         if (widget.trailingIcon != null) ...[

@@ -320,7 +320,6 @@ class _ProHeader extends StatelessWidget {
                 ),
                 SizedBox(width: SoteriaSpacing.md),
                 SoteriaAvatar(
-                  imageUrl: player.photoUrl,
                   size: 44,
                   isOnline: isOnline,
                   showStatus: true,

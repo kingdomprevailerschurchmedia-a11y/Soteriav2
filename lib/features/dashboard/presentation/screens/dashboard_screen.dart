@@ -7,6 +7,7 @@ import '../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
 import '../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../core/logging/logger_service.dart';
+import '../../../../core/identity/providers/identity_providers.dart';
 import '../../../player/presentation/providers/progression_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
 import '../../../player/presentation/providers/milestone_providers.dart';
@@ -91,7 +92,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           final isOnline = ref.watch(isOnlineProvider);
                           
                           final profile = ref.watch(profileProvider);
-                          
                           return progressionAsync.when(
                             data: (progression) => DashboardHeader(
                               greeting: greeting,
@@ -100,7 +100,6 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               streak: player?.currentStreak ?? 0,
                               coins: player?.coins ?? 0,
                               profileCompletion: 1.0,
-                              avatarUrl: profile?.avatarUrl ?? player?.photoUrl,
                               isOnline: isOnline,
                             ),
                             loading: () => DashboardHeader(

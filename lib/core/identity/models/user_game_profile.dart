@@ -5,6 +5,7 @@ class UserGameProfile {
   final int xp;
   final int level;
   final int coins;
+  final int withdrawableCoins;
   final int tokens;
   final int lives;
   final List<String> achievements;
@@ -22,6 +23,7 @@ class UserGameProfile {
     this.xp = 0,
     this.level = 1,
     this.coins = 0,
+    this.withdrawableCoins = 0,
     this.tokens = 0,
     this.lives = 5,
     this.achievements = const [],
@@ -40,6 +42,7 @@ class UserGameProfile {
     int? xp,
     int? level,
     int? coins,
+    int? withdrawableCoins,
     int? tokens,
     int? lives,
     List<String>? achievements,
@@ -57,6 +60,7 @@ class UserGameProfile {
       xp: xp ?? this.xp,
       level: level ?? this.level,
       coins: coins ?? this.coins,
+      withdrawableCoins: withdrawableCoins ?? this.withdrawableCoins,
       tokens: tokens ?? this.tokens,
       lives: lives ?? this.lives,
       achievements: achievements ?? this.achievements,
@@ -77,6 +81,7 @@ class UserGameProfile {
       'xp': xp,
       'level': level,
       'coins': coins,
+      'withdrawableCoins': withdrawableCoins,
       'tokens': tokens,
       'lives': lives,
       'achievements': achievements,

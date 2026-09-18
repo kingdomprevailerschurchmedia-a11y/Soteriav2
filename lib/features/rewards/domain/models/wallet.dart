@@ -8,6 +8,7 @@ abstract class Wallet with _$Wallet {
   const factory Wallet({
     required String userId,
     @Default(0) int coins,
+    @Default(0) int withdrawableCoins,
     @Default(0) int tokens,
     @Default(0) int lifetimeCoinsEarned,
     @Default(0) int lifetimeCoinsSpent,

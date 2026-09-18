@@ -87,6 +87,10 @@ class DailyGoalsSection extends ConsumerWidget {
   Widget _buildEmptyState(BuildContext context) {
     return SoteriaCard(
       padding: EdgeInsets.all(SoteriaSpacing.md),
+      borderRadius: 28,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Center(
         child: Column(
           children: [
@@ -112,7 +116,10 @@ class DailyGoalsSection extends ConsumerWidget {
 
     return SoteriaCard(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
-      borderRadius: 24,
+      borderRadius: 28,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Row(
         children: [
           Expanded(
@@ -283,6 +290,10 @@ class _LoadingGoalsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SoteriaCard(
+      borderRadius: 28,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: SizedBox(
         height: 60.h,
         child: const Center(child: CircularProgressIndicator()),

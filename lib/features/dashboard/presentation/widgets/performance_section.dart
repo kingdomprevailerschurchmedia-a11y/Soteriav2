@@ -125,7 +125,10 @@ class _PerformanceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SoteriaCard(
       padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-      borderRadius: 18.r,
+      borderRadius: 28,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [

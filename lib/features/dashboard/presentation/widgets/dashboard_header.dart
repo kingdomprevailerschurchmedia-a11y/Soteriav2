@@ -19,7 +19,6 @@ class DashboardHeader extends ConsumerWidget {
     required this.streak,
     required this.coins,
     required this.profileCompletion,
-    this.avatarUrl,
     this.isOnline = true,
   });
 
@@ -29,7 +28,6 @@ class DashboardHeader extends ConsumerWidget {
   final int streak;
   final int coins;
   final double profileCompletion;
-  final String? avatarUrl;
   final bool isOnline;
 
   @override
@@ -59,7 +57,6 @@ class DashboardHeader extends ConsumerWidget {
                     showStatus: true,
                     size: 54,
                     showGlow: true,
-                    imageUrl: avatarUrl,
                   ),
                 ),
               ),

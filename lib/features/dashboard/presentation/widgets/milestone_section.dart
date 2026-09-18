@@ -84,7 +84,10 @@ class _DashboardMilestoneCard extends StatelessWidget {
     return SoteriaCard(
       onTap: onTap,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-      borderRadius: 20,
+      borderRadius: 28,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Row(
         children: [
           Container(

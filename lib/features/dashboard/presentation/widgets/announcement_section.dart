@@ -32,7 +32,10 @@ class AnnouncementSection extends StatelessWidget {
           SizedBox(height: SoteriaSpacing.md),
           SoteriaCard(
             padding: EdgeInsets.zero,
-            borderRadius: SoteriaRadius.xxl,
+            borderRadius: 28,
+            blur: 5.0,
+            opacity: 0.02,
+            borderColor: Colors.white.withValues(alpha: 0.1),
             child: Column(
               children: List.generate(announcements.length, (index) {
                 final isLast = index == announcements.length - 1;

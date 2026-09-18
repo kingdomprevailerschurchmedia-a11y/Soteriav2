@@ -332,7 +332,15 @@ class FirestoreWalletRepository implements WalletRepository {
           ? (data['coins'] ?? 0) 
           : (data['tokens'] ?? 0);
           
+      final withdrawableBalance = data['withdrawableCoins'] ?? 0;
+      
+      // If it's a withdrawal or peer transfer, ensure it comes from withdrawable balance
+      final isMonetaryAction = source == 'withdrawal' || source == 'peerTransfer' || source == 'sendToUser';
+      
       if (currentBalance < amount) throw Exception('Insufficient $currency');
+      if (isMonetaryAction && withdrawableBalance < amount) {
+        throw Exception('Insufficient withdrawable coins');
+      }
       
       final balanceField = (currency == 'coins') ? 'coins' : 'tokens';
       final spentField = (currency == 'coins') ? 'lifetimeCoinsSpent' : 'lifetimeTokensSpent';
@@ -340,6 +348,7 @@ class FirestoreWalletRepository implements WalletRepository {
       // 1. Update Wallet collection
       transaction.update(walletRef, {
         balanceField: FieldValue.increment(-amount),
+        if (isMonetaryAction) 'withdrawableCoins': FieldValue.increment(-amount),
         spentField: FieldValue.increment(amount),
         'lastTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
@@ -348,6 +357,7 @@ class FirestoreWalletRepository implements WalletRepository {
       // 2. Sync to Users collection (Authoritative for Gameplay)
       transaction.update(userRef, {
         balanceField: FieldValue.increment(-amount),
+        if (isMonetaryAction) 'withdrawableCoins': FieldValue.increment(-amount),
         if (balanceField == 'coins') 'lastCoinTransactionId': txRef.id,
         'updatedAt': FieldValue.serverTimestamp(),
       });
@@ -355,6 +365,7 @@ class FirestoreWalletRepository implements WalletRepository {
       // 3. Sync to User Game Profiles (Identity)
       transaction.set(gameProfileRef, {
         balanceField: FieldValue.increment(-amount),
+        if (isMonetaryAction) 'withdrawableCoins': FieldValue.increment(-amount),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 
@@ -401,12 +412,22 @@ class FirestoreWalletRepository implements WalletRepository {
 
       final balanceField = (currency == 'coins') ? 'coins' : 'tokens';
       final earnedField = (currency == 'coins') ? 'lifetimeCoinsEarned' : 'lifetimeTokensEarned';
+      
+      final isWithdrawable = currency == 'coins' && (
+        source == 'proModeReward' || 
+        source == 'practice' || 
+        source == 'tournamentReward' || 
+        source == 'competitiveReward' ||
+        source == 'versusReward' ||
+        source == 'proReward'
+      );
 
       // 3. ATOMIC WRITES
       
       // Update Wallet
       transaction.set(walletRef, {
         balanceField: FieldValue.increment(amount),
+        if (isWithdrawable) 'withdrawableCoins': FieldValue.increment(amount),
         earnedField: FieldValue.increment(amount),
         'lastTransactionId': txId,
         'updatedAt': FieldValue.serverTimestamp(),
@@ -415,6 +436,7 @@ class FirestoreWalletRepository implements WalletRepository {
       // Update User (Gameplay)
       transaction.update(userRef, {
         balanceField: FieldValue.increment(amount),
+        if (isWithdrawable) 'withdrawableCoins': FieldValue.increment(amount),
         if (balanceField == 'coins') 'lastCoinTransactionId': txId,
         'updatedAt': FieldValue.serverTimestamp(),
       });
@@ -422,6 +444,7 @@ class FirestoreWalletRepository implements WalletRepository {
       // Update User Game Profile (Identity)
       transaction.set(gameProfileRef, {
         balanceField: FieldValue.increment(amount),
+        if (isWithdrawable) 'withdrawableCoins': FieldValue.increment(amount),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 

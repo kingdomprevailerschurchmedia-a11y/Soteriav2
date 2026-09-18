@@ -597,6 +597,7 @@ class FirestoreProModeRepository implements ProModeRepository {
 
       if (settlementAmount > 0) {
         playerUpdates['coins'] = FieldValue.increment(settlementAmount);
+        playerUpdates['withdrawableCoins'] = FieldValue.increment(settlementAmount);
         playerUpdates['lastCoinTransactionId'] = txId;
       }
 
@@ -607,12 +608,14 @@ class FirestoreProModeRepository implements ProModeRepository {
       };
       if (settlementAmount > 0) {
         walletUpdates['coins'] = FieldValue.increment(settlementAmount);
+        walletUpdates['withdrawableCoins'] = FieldValue.increment(settlementAmount);
         walletUpdates['lastTransactionId'] = txId;
       }
       transaction.set(walletRef, walletUpdates, SetOptions(merge: true));
 
       transaction.set(gameProfileRef, {
         'coins': FieldValue.increment(settlementAmount),
+        'withdrawableCoins': FieldValue.increment(settlementAmount),
         'updatedAt': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
 

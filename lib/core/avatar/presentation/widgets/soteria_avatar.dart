@@ -7,6 +7,7 @@ import '../../domain/avatar.dart';
 import '../../providers/avatar_providers.dart';
 import '../../../identity/providers/identity_providers.dart';
 import '../../../../features/player/providers/player_providers.dart';
+import '../../../../core/firebase/providers/firebase_providers.dart';
 import 'avatar_frame.dart';
 
 class SoteriaAvatar extends ConsumerWidget {
@@ -74,21 +75,29 @@ class SoteriaAvatar extends ConsumerWidget {
       final playerAvatar = player?.selectedAvatarId;
 
       // Priority logic:
-      // 1. If we have a custom profile photo (from identity), show it.
+      // 1. Explicit Custom Profile Photo (from identity profile)
       if (profileUrl != null && profileUrl.isNotEmpty) {
         effectiveImageUrl = profileUrl;
       } 
-      // 2. If we have a selected avatar ID in identity (and NOT using a custom photo), show it.
-      else if (profileAvatar != null && profileAvatar.isNotEmpty && profileAvatar != 'socrates') {
-         effectiveAvatarId = profileAvatar;
-      }
-      // 3. Fallback to player photo (from gameplay).
+      // 2. Google Profile Photo (from player profile or auth fallback)
       else if (playerUrl != null && playerUrl.isNotEmpty) {
         effectiveImageUrl = playerUrl;
+      } else {
+        final authUser = ref.watch(firebaseAuthServiceProvider).currentUser;
+        if (authUser?.photoURL != null && authUser!.photoURL!.isNotEmpty) {
+          effectiveImageUrl = authUser.photoURL;
+        }
       }
-      // 4. Fallback to player avatar ID.
-      else if (playerAvatar != null && playerAvatar.isNotEmpty) {
-        effectiveAvatarId = playerAvatar;
+      
+      // 3. Custom Selected Avatar ID (if not default)
+      if (effectiveImageUrl == null) {
+        if (profileAvatar != null && profileAvatar.isNotEmpty && profileAvatar != 'socrates') {
+           effectiveAvatarId = profileAvatar;
+        }
+        // 4. Fallback to default/player avatar ID
+        else if (playerAvatar != null && playerAvatar.isNotEmpty) {
+          effectiveAvatarId = playerAvatar;
+        }
       }
     }
 

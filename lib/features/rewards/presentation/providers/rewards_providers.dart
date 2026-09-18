@@ -51,7 +51,10 @@ final walletProvider = StreamProvider<Wallet>((ref) {
     if (playerProfile != null) {
       // Prioritize the coin balance from the authoritative PlayerProfile (users collection)
       // while maintaining other economy-specific fields from the wallet document.
-      return wallet.copyWith(coins: playerProfile.coins);
+      return wallet.copyWith(
+        coins: playerProfile.coins,
+        withdrawableCoins: playerProfile.withdrawableCoins,
+      );
     }
     return wallet;
   });

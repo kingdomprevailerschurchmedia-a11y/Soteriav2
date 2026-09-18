@@ -48,6 +48,7 @@ const _$MilestoneTypeEnumMap = {
   MilestoneType.rank: 'rank',
   MilestoneType.position: 'position',
   MilestoneType.season: 'season',
+  MilestoneType.level: 'level',
   MilestoneType.statistic: 'statistic',
   MilestoneType.careerBest: 'careerBest',
   MilestoneType.promotion: 'promotion',

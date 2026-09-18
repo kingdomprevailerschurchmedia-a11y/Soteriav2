@@ -35,8 +35,10 @@ class DailyChallengeCard extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.lg),
         child: GlassSurface(
           padding: EdgeInsets.all(SoteriaSpacing.lg),
-          borderRadius: BorderRadius.circular(SoteriaRadius.xl),
-          opacity: isCompleted ? 0.03 : 0.06,
+          borderRadius: BorderRadius.circular(28),
+          blur: 5.0,
+          opacity: 0.02,
+          border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

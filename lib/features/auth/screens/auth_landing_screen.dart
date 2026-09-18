@@ -43,114 +43,115 @@ class _AuthLandingContent extends ConsumerWidget {
       }
     });
 
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 24.w),
-      child: Column(
-        children: [
-          SizedBox(height: 0.55.sh),
-
-          // Welcome Header Redesign
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'LEARN. PLAY.\nCOMPETE. GROW',
-                style: context.headlineLarge.copyWith(
-                  color: Colors.amber,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 28.sp,
-                  letterSpacing: 1.2,
-                  height: 1.2,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              SizedBox(height: 12.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Text(
-                  'Sharpen your knowledge, rise through every challenge and compete with the best.',
-                  style: context.bodyMedium.copyWith(
-                    color: Colors.white.withValues(alpha: 0.7),
-                    height: 1.5,
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w500,
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Column(
+          children: [
+            SizedBox(height: 0.55.sh),
+  
+            // Welcome Header Redesign
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'LEARN. PLAY.\nCOMPETE. GROW',
+                  style: context.headlineLarge.copyWith(
+                    color: Colors.amber,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 28.sp,
+                    letterSpacing: 1.2,
+                    height: 1.2,
                   ),
                   textAlign: TextAlign.center,
                 ),
-              ),
-            ],
-          ),
-
-          SizedBox(height: 32.h),
-
-          // Action Buttons
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // Continue with Google
-              _PrimaryButton(
-                label: 'Continue with Google',
-                onTap: () => notifier.signInWithGoogle(),
-                isLoading: state.isLoading,
-              ),
-
-              SizedBox(height: 12.h),
-
-              // Create Account
-              _SecondaryButton(
-                label: 'Create Account',
-                onTap: state.isLoading
-                    ? null
-                    : () {
-                        ref.read(appLifecycleProvider.notifier).setPersonalization();
-                        ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
-                      },
-              ),
-
-              SizedBox(height: 16.h),
-
-              // Login with Email
-              TextButton(
-                onPressed: state.isLoading
-                    ? null
-                    : () => EmailLoginDialog.show(context),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.zero,
-                  minimumSize: Size.zero,
-                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                ),
-                child: Text(
-                  'Login with Email',
-                  style: context.bodyMedium.copyWith(
-                    color: Colors.white.withValues(alpha: 0.6),
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.sp,
-                    decoration: TextDecoration.underline,
-                    decorationColor: Colors.white.withValues(alpha: 0.3),
+                SizedBox(height: 12.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 20.w),
+                  child: Text(
+                    'Sharpen your knowledge, rise through every challenge and compete with the best.',
+                    style: context.bodyMedium.copyWith(
+                      color: Colors.white.withValues(alpha: 0.7),
+                      height: 1.5,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              ),
-              SizedBox(height: 24.h),
-            ],
-          ),
-
-          const Spacer(),
-
-          // Footer Links
-          Padding(
-            padding: EdgeInsets.only(bottom: 16.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _LegalLink(label: 'Terms', onTap: () {}),
-                const _LegalDot(),
-                _LegalLink(label: 'Privacy', onTap: () {}),
-                const _LegalDot(),
-                _LegalLink(label: 'Guidelines', onTap: () {}),
               ],
             ),
-          ),
-        ],
+  
+            SizedBox(height: 32.h),
+  
+            // Action Buttons
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Continue with Google
+                _PrimaryButton(
+                  label: 'Continue with Google',
+                  onTap: () => notifier.signInWithGoogle(),
+                  isLoading: state.isLoading,
+                ),
+  
+                SizedBox(height: 12.h),
+  
+                // Create Account
+                _SecondaryButton(
+                  label: 'Create Account',
+                  onTap: state.isLoading
+                      ? null
+                      : () {
+                          ref.read(appLifecycleProvider.notifier).setPersonalization();
+                          ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
+                        },
+                ),
+  
+                SizedBox(height: 16.h),
+  
+                // Login with Email
+                TextButton(
+                  onPressed: state.isLoading
+                      ? null
+                      : () => EmailLoginDialog.show(context),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size.zero,
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'Login with Email',
+                    style: context.bodyMedium.copyWith(
+                      color: Colors.white.withValues(alpha: 0.6),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14.sp,
+                      decoration: TextDecoration.underline,
+                      decorationColor: Colors.white.withValues(alpha: 0.3),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 32.h),
+              ],
+            ),
+  
+            // Footer Links
+            Padding(
+              padding: EdgeInsets.only(bottom: 24.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _LegalLink(label: 'Terms', onTap: () {}),
+                  const _LegalDot(),
+                  _LegalLink(label: 'Privacy', onTap: () {}),
+                  const _LegalDot(),
+                  _LegalLink(label: 'Guidelines', onTap: () {}),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
 

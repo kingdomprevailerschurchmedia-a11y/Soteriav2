@@ -8,7 +8,6 @@ plugins {
 android {
     namespace = "com.soteria.app"
     compileSdk = 36
-    buildToolsVersion = "35.0.0"
     ndkVersion = "28.2.13676358"
     
     compileOptions {
@@ -19,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.soteria.app"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }

@@ -117,6 +117,7 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
 
       if (actualCoins > 0) {
         playerUpdates['coins'] = FieldValue.increment(actualCoins);
+        playerUpdates['withdrawableCoins'] = FieldValue.increment(actualCoins);
         playerUpdates['lastCoinTransactionId'] = txId;
       }
 
@@ -126,6 +127,7 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
       if (actualCoins > 0) {
         transaction.set(walletRef, {
           'coins': FieldValue.increment(actualCoins),
+          'withdrawableCoins': FieldValue.increment(actualCoins),
           'lifetimeCoinsEarned': FieldValue.increment(actualCoins),
           'lastTransactionId': txId,
           'updatedAt': FieldValue.serverTimestamp(),
@@ -133,6 +135,7 @@ class FirestorePracticeResultRepository implements PracticeResultRepository {
 
         transaction.set(gameProfileRef, {
           'coins': FieldValue.increment(actualCoins),
+          'withdrawableCoins': FieldValue.increment(actualCoins),
           'updatedAt': FieldValue.serverTimestamp(),
         }, SetOptions(merge: true));
 

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:soteria/core/navigation/navigation_service.dart';
+import 'package:soteria/core/navigation/soteria_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_profile.dart';
@@ -63,7 +64,10 @@ class ProfileNotifier extends Notifier<UserProfile?> {
 
   Future<void> _loadProfile(String uid) async {
     try {
-      ref.read(profileLoadingProvider.notifier).state = true;
+      // Defer updating the loading state provider to a secondary microtask to avoid side effects during provider build phase initialization
+      Future.delayed(Duration.zero, () {
+        ref.read(profileLoadingProvider.notifier).state = true;
+      });
       final profile = await ref
           .read(identityRepositoryProvider)
           .getUserProfile(uid);
@@ -71,7 +75,9 @@ class ProfileNotifier extends Notifier<UserProfile?> {
     } catch (e, st) {
       LoggerService.e('Failed to load profile', error: e, stackTrace: st, feature: 'Identity');
     } finally {
-      ref.read(profileLoadingProvider.notifier).state = false;
+      Future.delayed(Duration.zero, () {
+        ref.read(profileLoadingProvider.notifier).state = false;
+      });
     }
   }
 
@@ -248,7 +254,6 @@ class AppLifecycleNotifier extends Notifier<AppStartupState> {
               state = AppStartupState.ready;
             } else {
               state = AppStartupState.personalization;
-              ref.read(navigationServiceProvider).go(SoteriaRoutes.personalization);
             }
           }
         } else if (state == AppStartupState.personalization) {

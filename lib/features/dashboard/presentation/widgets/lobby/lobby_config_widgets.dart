@@ -425,23 +425,16 @@ class LobbyCountCircle extends StatelessWidget {
                   : null,
             ),
             child: Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Opacity(
-                    opacity: isEnabled ? 1.0 : 0.3,
-                    child: Text(
-                      count.toString(),
-                      style: context.titleMedium.copyWith(
-                        color: isSelected ? Colors.white : Colors.white60,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18.sp,
-                      ),
-                    ),
+              child: Opacity(
+                opacity: isEnabled ? 1.0 : 0.2, // Slightly more faint for locked state
+                child: Text(
+                  count.toString(),
+                  style: context.titleMedium.copyWith(
+                    color: isSelected ? Colors.white : Colors.white60,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 18.sp,
                   ),
-                  if (!isEnabled)
-                    Icon(Icons.lock_rounded, size: 16.sp, color: Colors.white24),
-                ],
+                ),
               ),
             ),
           ),
