@@ -232,7 +232,9 @@ class _VerificationOrchestratorState
   String _getButtonLabel(VerificationStep step) {
     switch (step) {
       case VerificationStep.request:
-        return 'Send Code';
+        return widget.type == VerificationType.passwordRecovery
+            ? 'Send Link'
+            : 'Send Code';
       case VerificationStep.sent:
         if (widget.type == VerificationType.passwordRecovery) {
           return 'Back to Login';

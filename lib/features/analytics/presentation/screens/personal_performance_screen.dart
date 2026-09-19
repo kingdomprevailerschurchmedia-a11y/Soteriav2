@@ -177,12 +177,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Overview',
-          style: SoteriaTypography.titleMedium.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 3.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: SoteriaColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              'Overview',
+              style: SoteriaTypography.titleMedium.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
@@ -195,7 +208,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                   value: analytics.averageAccuracy,
                   label: '${(analytics.averageAccuracy * 100).toInt()}%',
                   subLabel: 'Avg Accuracy',
-                  color: SoteriaColors.primary,
+                  color: SoteriaColors.gold,
                 ),
               ),
             ),
@@ -207,14 +220,14 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                     title: 'Total Quizzes',
                     value: '${analytics.totalQuizzes}',
                     icon: Icons.quiz,
-                    color: SoteriaColors.secondary,
+                    color: SoteriaColors.gold,
                   ),
                   SoteriaSpacing.gapMD,
                   MetricCard(
                     title: 'Total XP',
                     value: '${analytics.totalXp}',
                     icon: Icons.bolt,
-                    color: SoteriaColors.xpColor,
+                    color: SoteriaColors.gold,
                   ),
                 ],
               ),
@@ -238,7 +251,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
                 title: 'Best Streak',
                 value: '${analytics.bestStreak}',
                 icon: Icons.local_fire_department,
-                color: SoteriaColors.warning,
+                color: SoteriaColors.gold,
               ),
             ),
           ],
@@ -255,12 +268,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Accuracy Trend',
-          style: SoteriaTypography.titleMedium.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 3.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: SoteriaColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              'Accuracy Trend',
+              style: SoteriaTypography.titleMedium.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
         SizedBox(height: SoteriaSpacing.md),
         Container(
@@ -286,12 +312,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Personal Insights',
-          style: SoteriaTypography.titleMedium.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 3.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: SoteriaColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              'Personal Insights',
+              style: SoteriaTypography.titleMedium.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
@@ -317,12 +356,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Category Performance',
-          style: SoteriaTypography.titleMedium.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 3.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: SoteriaColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              'Category Performance',
+              style: SoteriaTypography.titleMedium.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
@@ -354,12 +406,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Difficulty Breakdown',
-          style: SoteriaTypography.titleMedium.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 3.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: SoteriaColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              'Difficulty Breakdown',
+              style: SoteriaTypography.titleMedium.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
@@ -393,12 +458,25 @@ class PersonalPerformanceScreen extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Consistency',
-          style: SoteriaTypography.titleMedium.copyWith(
-            color: SoteriaColors.textPrimary,
-            fontWeight: FontWeight.w900,
-          ),
+        Row(
+          children: [
+            Container(
+              width: 3.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: SoteriaColors.gold,
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Text(
+              'Consistency',
+              style: SoteriaTypography.titleMedium.copyWith(
+                color: SoteriaColors.textPrimary,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
         SizedBox(
           height: SoteriaSpacing.adaptive(context, SoteriaSpacing.mdStatic),
@@ -429,7 +507,7 @@ class PersonalPerformanceScreen extends ConsumerWidget {
       case Difficulty.expert:
         return SoteriaColors.error;
       default:
-        return SoteriaColors.primary;
+        return SoteriaColors.gold;
     }
   }
 }

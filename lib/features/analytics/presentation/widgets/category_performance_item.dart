@@ -48,13 +48,11 @@ class CategoryPerformanceItem extends StatelessWidget {
                 child: Container(
                   height: 6.h,
                   decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [SoteriaColors.primary, SoteriaColors.secondary],
-                    ),
+                    color: SoteriaColors.gold,
                     borderRadius: BorderRadius.circular(3.r),
                     boxShadow: [
                       BoxShadow(
-                        color: SoteriaColors.primary.withValues(alpha: 0.3),
+                        color: SoteriaColors.gold.withValues(alpha: 0.3),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),

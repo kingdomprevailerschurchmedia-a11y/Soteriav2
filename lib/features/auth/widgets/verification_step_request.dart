@@ -41,7 +41,7 @@ class VerificationStepRequest extends ConsumerWidget {
                           ? 'Password'
                           : 'Email',
                       style: context.headlineLarge.copyWith(
-                        color: SoteriaColors.secondary,
+                        color: SoteriaColors.gold,
                       ),
                     ),
                   ],
@@ -52,7 +52,7 @@ class VerificationStepRequest extends ConsumerWidget {
                 type == VerificationType.passwordRecovery
                     ? Icons.lock_reset_rounded
                     : Icons.verified_user_rounded,
-                color: SoteriaColors.secondary,
+                color: SoteriaColors.gold,
                 size: 28.sp,
               ),
             ],
@@ -62,7 +62,7 @@ class VerificationStepRequest extends ConsumerWidget {
             type == VerificationType.passwordRecovery
                 ? 'Enter your email to receive a password reset link.'
                 : 'Verify your email to secure your account and unlock all features.',
-            style: context.bodyMedium,
+            style: context.bodyMedium.copyWith(color: Colors.white70),
           ),
           SizedBox(height: SoteriaSpacing.xl),
 
@@ -88,7 +88,7 @@ class VerificationStepRequest extends ConsumerWidget {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: SoteriaColors.primary.withValues(alpha: 0.2),
+                            color: SoteriaColors.gold.withValues(alpha: 0.15),
                             blurRadius: 40,
                             spreadRadius: 10,
                           ),
@@ -101,7 +101,7 @@ class VerificationStepRequest extends ConsumerWidget {
                           ? Icons.lock_open_rounded
                           : Icons.email_rounded,
                       size: 80.sp,
-                      color: SoteriaColors.primary,
+                      color: SoteriaColors.gold,
                     ),
                     Positioned(
                       top: 10,
@@ -109,7 +109,7 @@ class VerificationStepRequest extends ConsumerWidget {
                       child: Icon(
                         Icons.lock_outline_rounded,
                         size: 30.sp,
-                        color: SoteriaColors.primary.withValues(alpha: 0.5),
+                        color: SoteriaColors.gold.withValues(alpha: 0.4),
                       ),
                     ),
                     Positioned(
@@ -120,7 +120,7 @@ class VerificationStepRequest extends ConsumerWidget {
                         child: Icon(
                           Icons.send_rounded,
                           size: 24.sp,
-                          color: SoteriaColors.primary.withValues(alpha: 0.5),
+                          color: SoteriaColors.gold.withValues(alpha: 0.4),
                         ),
                       ),
                     ),
@@ -132,12 +132,12 @@ class VerificationStepRequest extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: SoteriaColors.background,
                           shape: BoxShape.circle,
-                          border: Border.all(color: SoteriaColors.primary),
+                          border: Border.all(color: SoteriaColors.gold),
                         ),
                         child: Icon(
                           Icons.check_rounded,
                           size: 16.sp,
-                          color: SoteriaColors.primary,
+                          color: SoteriaColors.gold,
                         ),
                       ),
                     ),
@@ -168,7 +168,7 @@ class VerificationStepRequest extends ConsumerWidget {
                               ? 'We\'ll send a password reset link to the email you provide.'
                               : 'We\'ll send a 6-digit verification code to the email you provide.',
                           style: context.bodySmall.copyWith(
-                            color: SoteriaColors.textSecondary,
+                            color: Colors.white70,
                           ),
                         ),
                       ),
@@ -184,8 +184,9 @@ class VerificationStepRequest extends ConsumerWidget {
           Text(
             'Email Address',
             style: context.labelSmall.copyWith(
-              color: SoteriaColors.textSecondary,
-              fontWeight: FontWeight.bold,
+              color: SoteriaColors.gold,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.0,
             ),
           ),
           SizedBox(height: SoteriaSpacing.sm),
@@ -204,13 +205,13 @@ class VerificationStepRequest extends ConsumerWidget {
               Icon(
                 Icons.lock_outline_rounded,
                 size: 14.sp,
-                color: SoteriaColors.muted,
+                color: Colors.white30,
               ),
               SizedBox(width: SoteriaSpacing.xs),
               Expanded(
                 child: Text(
                   'Your email is safe with us. We never share your information.',
-                  style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+                  style: context.bodySmall.copyWith(color: Colors.white30),
                 ),
               ),
             ],

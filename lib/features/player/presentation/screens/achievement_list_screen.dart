@@ -281,7 +281,7 @@ class _CompletionSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     final progress = total > 0 ? earned / total : 0.0;
     return Container(
-      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.xl),
+      padding: EdgeInsets.symmetric(vertical: SoteriaSpacing.sm),
       child: Column(
         children: [
           Text(
@@ -396,7 +396,7 @@ class _AchievementListItem extends ConsumerWidget {
                 child: LinearProgressIndicator(
                   value: progress.progressPercentage,
                   backgroundColor: Colors.white10,
-                  valueColor: const AlwaysStoppedAnimation(SoteriaColors.primary),
+                  valueColor: const AlwaysStoppedAnimation(SoteriaColors.gold),
                   minHeight: 2.h,
                 ),
               ),
@@ -418,7 +418,7 @@ class _AchievementListItem extends ConsumerWidget {
             if (isCompleted && !isClaimed) ...[
               SizedBox(height: 12.h),
               SoteriaButton.reward(
-                label: 'CLAIM ${def.coinReward} COINS',
+                label: _getClaimLabel(def),
                 onPressed: () => _claimAchievement(context, ref),
                 isLoading: ref.watch(achievementClaimControllerProvider).isLoading,
                 size: SoteriaButtonSize.sm,
@@ -429,6 +429,18 @@ class _AchievementListItem extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  String _getClaimLabel(AchievementDefinition def) {
+    if (def.coinReward > 0 && def.xpReward > 0) {
+      return 'CLAIM ${def.coinReward} COINS & ${def.xpReward} XP';
+    } else if (def.coinReward > 0) {
+      return 'CLAIM ${def.coinReward} COINS';
+    } else if (def.xpReward > 0) {
+      return 'CLAIM ${def.xpReward} XP';
+    } else {
+      return 'CLAIM REWARD';
+    }
   }
 
   Future<void> _claimAchievement(BuildContext context, WidgetRef ref) async {

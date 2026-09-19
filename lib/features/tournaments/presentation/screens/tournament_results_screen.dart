@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:soteria/core/design_system/colors/soteria_colors.dart';
 import 'package:soteria/core/design_system/spacing/soteria_spacing.dart';
 import 'package:soteria/core/design_system/typography/soteria_typography.dart';
 import 'package:soteria/core/design_system/components/soteria_button.dart';
-import 'package:soteria/core/widgets/safe_gradient_scaffold.dart';
-import '../../domain/models/tournament_ranking.dart';
+import '../../../../shared/widgets/soteria_result_components.dart';
+import '../../../../shared/widgets/soteria_page.dart';
 import '../providers/tournament_results_provider.dart';
-import '../widgets/tournament_prize_card.dart';
-import '../../../gameplay_engine/widgets/competitive_statistics_card.dart';
-import '../../../gameplay_engine/models/game_mode.dart';
-import '../../../gameplay_engine/models/game_result.dart';
 
 class TournamentResultsScreen extends ConsumerWidget {
   final String tournamentId;
@@ -24,18 +19,20 @@ class TournamentResultsScreen extends ConsumerWidget {
     final results = ref.watch(tournamentResultsProvider(tournamentId));
 
     if (results.isLoading) {
-      return const SafeGradientScaffold(
-        body: Center(child: CircularProgressIndicator()),
+      return const SoteriaPage(
+        showBackground: false,
+        child: Center(child: CircularProgressIndicator()),
       );
     }
 
     if (results.ranking == null) {
-      return SafeGradientScaffold(
-        body: Center(
+      return SoteriaPage(
+        showBackground: false,
+        child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Rankings are still being calculated...'),
+              Text('Rankings are still being calculated...', style: context.bodyMedium),
               SizedBox(height: SoteriaSpacing.xl),
               SoteriaButton.primary(
                 label: 'REFRESH',
@@ -49,125 +46,71 @@ class TournamentResultsScreen extends ConsumerWidget {
     }
 
     final ranking = results.ranking!;
+    final isSuccess = ranking.accuracy >= 0.7;
 
-    return SafeGradientScaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(SoteriaSpacing.lg),
-        child: Column(
-          children: [
-            SizedBox(height: 64.h),
-            _buildCelebration(context, ranking.rank),
-            SizedBox(height: SoteriaSpacing.xxl),
-            _buildRankSection(context, ranking.rank),
-            SizedBox(height: SoteriaSpacing.xl),
-            if (ranking.prize != null) ...[
-              TournamentPrizeCard(reward: ranking.prize!),
-              SizedBox(height: SoteriaSpacing.xl),
-            ],
-            _buildStatsCard(ranking),
-            SizedBox(height: SoteriaSpacing.xxl),
-            SoteriaButton.primary(
-              label: 'VIEW FULL LEADERBOARD',
-              onPressed: () =>
-                  context.push('/app/tournaments/leaderboard/$tournamentId'),
-              icon: Icons.leaderboard_rounded,
-            ),
-            SizedBox(height: SoteriaSpacing.md),
-            SoteriaButton.ghost(
-              label: 'BACK TO MENU',
-              onPressed: () => context.go('/app/tournaments'),
-            ),
-            SizedBox(height: SoteriaSpacing.xxxl),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCelebration(BuildContext context, int rank) {
-    String title = 'TOURNAMENT OVER';
-    IconData icon = Icons.emoji_events_rounded;
-    Color color = SoteriaColors.primary;
-
-    if (rank == 1) {
-      title = 'TOURNAMENT CHAMPION';
-      color = SoteriaColors.gold;
-    } else if (rank <= 3) {
-      title = 'PODIUM FINISH';
-      color = const Color(0xFFC0C0C0);
-    } else if (rank <= 10) {
-      title = 'TOP 10 FINISH';
-    }
-
-    return Column(
-      children: [
-        Icon(icon, color: color, size: 64.w),
-        SizedBox(height: SoteriaSpacing.md),
-        Text(
-          title,
-          style: context.displaySmall.copyWith(
-            fontWeight: FontWeight.w900,
-            color: color,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRankSection(BuildContext context, int rank) {
-    return Column(
-      children: [
-        Text(
-          'YOUR FINAL RANK',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.muted,
-            letterSpacing: 2,
-          ),
-        ),
-        SizedBox(height: SoteriaSpacing.sm),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
-          children: [
-            Text(
-              '#',
-              style: context.displayMedium.copyWith(
-                color: SoteriaColors.muted,
-                fontWeight: FontWeight.bold,
+    return SoteriaPage(
+      useSafeArea: false,
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: isSuccess
+            ? SuccessResultView(
+                accuracy: ranking.accuracy,
+                correctAnswers: ranking.score ~/ 100, // Approximate mapping
+                xpEarned: ranking.prize?.xp ?? 0,
+                coinsEarned: ranking.prize?.coins ?? 0,
+                title: ranking.rank == 1 ? 'TOURNAMENT CHAMPION' : 'TOURNAMENT COMPLETE',
+                actions: _buildActions(context, tournamentId),
+              )
+            : FailureResultView(
+                modeName: 'TOURNAMENT FAILED',
+                rating: _calculateRating(ranking.accuracy),
+                score: ranking.score,
+                accuracy: ranking.accuracy,
+                xpEarned: ranking.prize?.xp ?? 0,
+                coinsEarned: ranking.prize?.coins ?? 0,
+                onExit: () => context.go('/app/tournaments'),
+                detailedMetrics: [
+                  ResultDetailedMetric(
+                    label: 'Final Rank',
+                    value: '#${ranking.rank}',
+                    icon: Icons.emoji_events_rounded,
+                    color: SoteriaColors.gold,
+                  ),
+                  ResultDetailedMetric(
+                    label: 'Score',
+                    value: '${ranking.score}',
+                    icon: Icons.star_rounded,
+                    color: SoteriaColors.primary,
+                  ),
+                ],
+                actions: _buildActions(context, tournamentId),
               ),
-            ),
-            Text(
-              rank.toString(),
-              style: context.displayLarge.copyWith(fontWeight: FontWeight.w900),
-            ),
-          ],
-        ),
-      ],
+      ),
     );
   }
 
-  Widget _buildStatsCard(TournamentRanking ranking) {
-    // Reusing CompetitiveStatisticsCard but needs GameResult
-    final mockResult = GameResult(
-      sessionId: 'tournament',
-      playerId: ranking.uid,
-      mode: GameMode.tournament,
-      finalScore: ranking.score,
-      totalXP: ranking.prize?.xp ?? 0,
-      totalQuestions: 20, // Mock
-      correctAnswers: ranking.score ~/ 200, // Simplistic mapping
-      wrongAnswers: 0,
-      totalDuration: ranking.completionTime,
-      accuracy: ranking.accuracy,
-      maxStreak: 0,
-      avgResponseTime: Duration(
-        milliseconds: (ranking.completionTime.inMilliseconds / 20).toInt(),
-      ),
-      timestamp: DateTime.now(),
-    );
+  String _calculateRating(double accuracy) {
+    if (accuracy >= 0.9) return 'A';
+    if (accuracy >= 0.8) return 'B';
+    if (accuracy >= 0.7) return 'C';
+    if (accuracy >= 0.6) return 'D';
+    return 'F';
+  }
 
-    return CompetitiveStatisticsCard(result: mockResult);
+  List<Widget> _buildActions(BuildContext context, String tournamentId) {
+    return [
+      SoteriaButton.primary(
+        label: 'VIEW FULL LEADERBOARD',
+        onPressed: () => context.push('/app/tournaments/leaderboard/$tournamentId'),
+        size: SoteriaButtonSize.lg,
+        icon: Icons.leaderboard_rounded,
+      ),
+      SizedBox(height: SoteriaSpacing.md),
+      SoteriaButton.secondary(
+        label: 'BACK TO MENU',
+        onPressed: () => context.go('/app/tournaments'),
+        size: SoteriaButtonSize.lg,
+      ),
+    ];
   }
 }

@@ -25,7 +25,7 @@ class SoteriaLineChart extends StatelessWidget {
       return const SizedBox.shrink();
     }
 
-    final lineColor = color ?? SoteriaColors.primary;
+    final lineColor = color ?? SoteriaColors.gold;
 
     return LineChart(
       duration: animate ? const Duration(milliseconds: 800) : Duration.zero,

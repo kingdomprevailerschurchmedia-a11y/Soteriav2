@@ -36,24 +36,34 @@ class AchievementSummarySection extends ConsumerWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'ACHIEVEMENTS',
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.gold,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w800,
-                fontSize: 13.sp,
-              ),
+            Row(
+              children: [
+                Icon(Icons.military_tech_rounded, color: SoteriaColors.gold, size: 20.r),
+                SizedBox(width: 12.w),
+                Text(
+                  'Achievements',
+                  style: context.titleSmall.copyWith(
+                    color: SoteriaColors.gold,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
+              ],
             ),
             GestureDetector(
               onTap: () => context.push(SoteriaRoutes.achievements),
-              child: Text(
-                '${earned.length} / $total EARNED',
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.secondary,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 12.sp,
-                ),
+              child: Row(
+                children: [
+                  Text(
+                    '${earned.length} / $total EARNED',
+                    style: context.labelSmall.copyWith(
+                      color: const Color(0xFF7C4DFF),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 4.w),
+                  Icon(Icons.chevron_right_rounded, color: const Color(0xFF7C4DFF), size: 18.r),
+                ],
               ),
             ),
           ],
@@ -63,7 +73,7 @@ class AchievementSummarySection extends ConsumerWidget {
         // Next Milestone Card
         nextMilestoneAsync.when(
           data: (next) => next != null 
-            ? _NextMilestoneCard(progress: next, onTap: onViewAll)
+            ? _NextMilestoneCard(progress: next, onTap: () => context.push(SoteriaRoutes.achievements))
             : const SizedBox.shrink(),
           loading: () => const SizedBox.shrink(),
           error: (_, _) => const SizedBox.shrink(),
@@ -94,36 +104,45 @@ class _NextMilestoneCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SoteriaCard(
       onTap: onTap,
-      padding: EdgeInsets.all(20.r),
+      padding: EdgeInsets.all(16.r),
+      borderRadius: 24,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Row(
         children: [
           Container(
-            width: 56.w,
-            height: 56.w,
+            width: 72.r,
+            height: 72.r,
             decoration: BoxDecoration(
-              color: SoteriaColors.secondary.withValues(alpha: 0.1),
-              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Center(
-              child: Icon(
-                Icons.flag_rounded,
-                color: SoteriaColors.secondary,
-                size: 28.sp,
+              child: Image.asset(
+                'assets/icons/next_milestone.png',
+                width: 36.r,
+                height: 36.r,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) => Icon(
+                  Icons.rocket_launch_rounded,
+                  color: const Color(0xFF7C4DFF),
+                  size: 32.sp,
+                ),
               ),
             ),
           ),
-          SizedBox(width: 16.w),
+          SizedBox(width: 20.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'NEXT MILESTONE',
+                  'Next Milestone',
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.muted,
-                    letterSpacing: 1.2,
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w900,
+                    fontSize: 12.sp,
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -132,6 +151,7 @@ class _NextMilestoneCard extends StatelessWidget {
                   style: context.titleMedium.copyWith(
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
+                    fontSize: 20.sp,
                   ),
                 ),
                 SizedBox(height: 12.h),
@@ -143,8 +163,8 @@ class _NextMilestoneCard extends StatelessWidget {
                         child: LinearProgressIndicator(
                           value: progress.progressPercentage,
                           backgroundColor: Colors.white.withValues(alpha: 0.05),
-                          valueColor: const AlwaysStoppedAnimation(SoteriaColors.secondary),
-                          minHeight: 6.h,
+                          valueColor: const AlwaysStoppedAnimation(Color(0xFF7C4DFF)),
+                          minHeight: 8.h,
                         ),
                       ),
                     ),
@@ -162,13 +182,8 @@ class _NextMilestoneCard extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(width: 16.w),
-          Image.asset(
-            'assets/icons/next_milestone.png',
-            width: 56.w,
-            height: 56.w,
-            fit: BoxFit.contain,
-          ),
+          SizedBox(width: 12.w),
+          Icon(Icons.chevron_right_rounded, color: Colors.white24, size: 24.r),
         ],
       ),
     );

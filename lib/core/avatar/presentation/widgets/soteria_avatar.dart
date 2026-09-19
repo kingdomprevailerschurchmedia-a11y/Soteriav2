@@ -14,6 +14,7 @@ class SoteriaAvatar extends ConsumerWidget {
   final Avatar? avatar;
   final String? imageUrl;
   final String? initials;
+  final String? userId;
   final double size;
   final AvatarFrameStyle? frameStyle;
   final int? rank;
@@ -28,6 +29,7 @@ class SoteriaAvatar extends ConsumerWidget {
     this.avatar,
     this.imageUrl,
     this.initials,
+    this.userId,
     required this.size,
     this.frameStyle,
     this.rank,
@@ -40,6 +42,7 @@ class SoteriaAvatar extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final session = ref.watch(sessionProvider);
     final profile = ref.watch(profileProvider);
     final isProfileLoading = ref.watch(profileLoadingProvider);
     final player = ref.watch(currentPlayerProvider);
@@ -58,29 +61,27 @@ class SoteriaAvatar extends ConsumerWidget {
     String? effectiveImageUrl;
     String? effectiveAvatarId;
 
-    // Smart priority: check if provided imageUrl is just a fallback from player data
-    final isProvidedUrlFromPlayer = hasProvidedImageUrl && imageUrl == player?.photoUrl;
+    // Dynamic resolution from providers (ONLY if userId matches current user or is not provided)
+    final bool isCurrentUser = userId == null || (session.uid != null && userId == session.uid);
 
-    if (hasProvidedImageUrl && (!isProvidedUrlFromPlayer || (profile?.avatarUrl == null || profile!.avatarUrl!.isEmpty))) {
+    if (hasProvidedImageUrl) {
+      // Priority 1: Explicitly provided non-empty URL
       effectiveImageUrl = imageUrl;
     } else if (hasProvidedAvatar) {
+      // Priority 2: Explicitly provided Avatar object
       effectiveAvatarId = avatar!.id;
     } else if (hasProvidedInitials) {
-      // Initials handled separately below
-    } else {
-      // Dynamic resolution from providers
+      // Priority 3: Initials (Handled below)
+    } else if (isCurrentUser) {
+      // Priority 4: Dynamic resolution from current user providers
       final profileUrl = profile?.avatarUrl;
       final profileAvatar = profile?.selectedAvatarId;
       final playerUrl = player?.photoUrl;
       final playerAvatar = player?.selectedAvatarId;
 
-      // Priority logic:
-      // 1. Explicit Custom Profile Photo (from identity profile)
       if (profileUrl != null && profileUrl.isNotEmpty) {
         effectiveImageUrl = profileUrl;
-      } 
-      // 2. Google Profile Photo (from player profile or auth fallback)
-      else if (playerUrl != null && playerUrl.isNotEmpty) {
+      } else if (playerUrl != null && playerUrl.isNotEmpty) {
         effectiveImageUrl = playerUrl;
       } else {
         final authUser = ref.watch(firebaseAuthServiceProvider).currentUser;
@@ -88,14 +89,11 @@ class SoteriaAvatar extends ConsumerWidget {
           effectiveImageUrl = authUser.photoURL;
         }
       }
-      
-      // 3. Custom Selected Avatar ID (if not default)
+
       if (effectiveImageUrl == null) {
         if (profileAvatar != null && profileAvatar.isNotEmpty && profileAvatar != 'socrates') {
-           effectiveAvatarId = profileAvatar;
-        }
-        // 4. Fallback to default/player avatar ID
-        else if (playerAvatar != null && playerAvatar.isNotEmpty) {
+          effectiveAvatarId = profileAvatar;
+        } else if (playerAvatar != null && playerAvatar.isNotEmpty) {
           effectiveAvatarId = playerAvatar;
         }
       }

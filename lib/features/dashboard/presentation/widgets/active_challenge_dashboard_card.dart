@@ -75,6 +75,7 @@ class _ChallengeCard extends ConsumerWidget {
                     avatar: AvatarCatalog().getById(profile?.avatarId ?? 'socrates'),
                     size: 40,
                     imageUrl: profile?.photoUrl,
+                    userId: otherUserId,
                   ),
                   loading: () => const SizedBox(width: 40, height: 40, child: CircularProgressIndicator()),
                   error: (_, _) => const Icon(Icons.error),

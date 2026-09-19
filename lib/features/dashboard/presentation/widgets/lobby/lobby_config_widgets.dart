@@ -31,13 +31,19 @@ class LobbyHeroHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Icon(
+            Icons.school_rounded,
+            color: const Color(0xFF7C4DFF),
+            size: 48.sp,
+          ),
+          SizedBox(height: 12.h),
           RichText(
             text: TextSpan(
               style: context.headlineLarge.copyWith(
                 fontWeight: FontWeight.w900,
                 letterSpacing: -1.0,
                 color: Colors.white,
-                fontSize: 42.sp,
+                fontSize: 36.sp,
               ),
               children: [
                 TextSpan(text: '$part1 '),
@@ -52,7 +58,7 @@ class LobbyHeroHeader extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                         letterSpacing: -1.0,
                         color: Colors.white,
-                        fontSize: 42.sp,
+                        fontSize: 36.sp,
                       ),
                     ),
                   ),
@@ -68,7 +74,7 @@ class LobbyHeroHeader extends StatelessWidget {
                         fontWeight: FontWeight.w900,
                         letterSpacing: -1.0,
                         color: Colors.white,
-                        fontSize: 42.sp,
+                        fontSize: 36.sp,
                       ),
                     ),
                   ),
@@ -82,6 +88,7 @@ class LobbyHeroHeader extends StatelessWidget {
             style: context.bodyMedium.copyWith(
               color: Colors.white60,
               fontWeight: FontWeight.w500,
+              fontSize: 16.sp,
             ),
           ),
         ],
@@ -101,31 +108,46 @@ class LobbyInterestsCard extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.title = 'Use My Interests',
-    this.subtitle = 'Personalized mix based on your profile',
+    this.subtitle = 'Get personalized practice based on your profile and interests.',
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.03),
-        borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.08)),
+        borderRadius: BorderRadius.circular(24.r),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Colors.white.withValues(alpha: 0.1),
+            Colors.white.withValues(alpha: 0.02),
+          ],
+        ),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        boxShadow: [
+          if (value)
+            BoxShadow(
+              color: const Color(0xFF7C4DFF).withValues(alpha: 0.15),
+              blurRadius: 30,
+              spreadRadius: 2,
+            ),
+        ],
       ),
+      padding: EdgeInsets.all(16.w),
       child: Row(
         children: [
           Container(
-            padding: EdgeInsets.all(8.w),
+            padding: EdgeInsets.all(10.w),
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
               gradient: LinearGradient(
                 colors: [Color(0xFF2E1A8A), Color(0xFF5B3FD9)],
               ),
             ),
-            child: const Icon(Icons.auto_awesome_rounded, color: SoteriaColors.gold, size: 20),
+            child: const Icon(Icons.auto_awesome_rounded, color: SoteriaColors.gold, size: 24),
           ),
-          SizedBox(width: SoteriaSpacing.sm),
+          SizedBox(width: 16.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,28 +157,27 @@ class LobbyInterestsCard extends StatelessWidget {
                   style: context.titleSmall.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
                   ),
                 ),
+                SizedBox(height: 4.h),
                 Text(
                   subtitle,
                   style: context.bodySmall.copyWith(
-                    fontSize: 10.sp,
-                    color: Colors.white.withValues(alpha: 0.4),
+                    fontSize: 12.sp,
+                    color: Colors.white.withValues(alpha: 0.5),
                   ),
                 ),
               ],
             ),
           ),
-          Transform.scale(
-            scale: 0.8,
-            child: Switch(
-              value: value,
-              onChanged: onChanged,
-              activeThumbColor: Colors.white,
-              activeTrackColor: SoteriaColors.gold,
-              inactiveThumbColor: Colors.white60,
-              inactiveTrackColor: Colors.white12,
-            ),
+          Switch(
+            value: value,
+            onChanged: onChanged,
+            activeThumbColor: Colors.white,
+            activeTrackColor: SoteriaColors.gold,
+            inactiveThumbColor: Colors.white60,
+            inactiveTrackColor: Colors.white12,
           ),
         ],
       ),
@@ -167,28 +188,40 @@ class LobbyInterestsCard extends StatelessWidget {
 class LobbySectionHeader extends StatelessWidget {
   final String label;
   final IconData icon;
+  final String? subtitle;
 
   const LobbySectionHeader({
     super.key,
     required this.label,
     required this.icon,
+    this.subtitle,
   });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: SoteriaColors.secondary, size: 18.sp),
-        SizedBox(width: 8.w),
+        Icon(icon, color: SoteriaColors.gold, size: 20.sp),
+        SizedBox(width: 10.w),
         Text(
           label.toUpperCase(),
           style: context.labelSmall.copyWith(
-            color: Colors.white,
+            color: SoteriaColors.gold,
             letterSpacing: 2.0,
             fontWeight: FontWeight.w900,
-            fontSize: 11.sp,
+            fontSize: 12.sp,
           ),
         ),
+        if (subtitle != null) ...[
+          const Spacer(),
+          Text(
+            subtitle!,
+            style: context.labelSmall.copyWith(
+              color: Colors.white.withValues(alpha: 0.3),
+              fontSize: 10.sp,
+            ),
+          ),
+        ],
       ],
     );
   }
@@ -200,6 +233,7 @@ class LobbyDifficultyCard extends StatelessWidget {
   final IconData icon;
   final Color color;
   final VoidCallback onTap;
+  final int dotCount;
 
   const LobbyDifficultyCard({
     super.key,
@@ -208,6 +242,7 @@ class LobbyDifficultyCard extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.onTap,
+    this.dotCount = 1,
   });
 
   @override
@@ -215,19 +250,19 @@ class LobbyDifficultyCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 250),
         decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(16.r),
+          color: isSelected ? const Color(0xFF1E1045) : Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: isSelected ? color.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.05),
-            width: 2.0,
+            color: isSelected ? const Color(0xFF7C4DFF) : Colors.white.withValues(alpha: 0.05),
+            width: isSelected ? 2.0 : 1.0,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: color.withValues(alpha: 0.25),
-                    blurRadius: 15,
+                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                    blurRadius: 20,
                     spreadRadius: -2,
                   ),
                 ]
@@ -238,19 +273,35 @@ class LobbyDifficultyCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? color : color.withValues(alpha: 0.4),
-              size: 22.sp,
+              color: isSelected ? color : color.withValues(alpha: 0.5),
+              size: 26.sp,
+            ),
+            SizedBox(height: 8.h),
+            Text(
+              label,
+              style: context.labelSmall.copyWith(
+                color: isSelected ? Colors.white : Colors.white60,
+                fontWeight: FontWeight.bold,
+                fontSize: 12.sp,
+              ),
             ),
             SizedBox(height: 6.h),
-            Text(
-              label.toUpperCase(),
-              textAlign: TextAlign.center,
-              style: context.labelSmall.copyWith(
-                color: isSelected ? color : color.withValues(alpha: 0.4),
-                fontWeight: FontWeight.w900,
-                fontSize: 8.sp,
-                letterSpacing: 0.5,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(4, (index) {
+                final bool isActive = index < dotCount;
+                return Container(
+                  width: 5.r,
+                  height: 5.r,
+                  margin: EdgeInsets.symmetric(horizontal: 2.w),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: isActive 
+                        ? (isSelected ? color : color.withValues(alpha: 0.4))
+                        : Colors.white.withValues(alpha: 0.1),
+                  ),
+                );
+              }),
             ),
           ],
         ),
@@ -263,12 +314,14 @@ class LobbyAdaptiveToggle extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onTap;
   final String label;
+  final String subtitle;
 
   const LobbyAdaptiveToggle({
     super.key,
     required this.isSelected,
     required this.onTap,
-    this.label = 'ADAPTIVE',
+    this.label = 'Adaptive',
+    this.subtitle = 'Adjusts to your performance',
   });
 
   @override
@@ -276,32 +329,55 @@ class LobbyAdaptiveToggle extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
+        duration: const Duration(milliseconds: 250),
+        padding: EdgeInsets.all(16.r),
         decoration: BoxDecoration(
-          color: isSelected ? SoteriaColors.info.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(12.r),
+          color: isSelected ? const Color(0xFF1E1045) : Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(16.r),
           border: Border.all(
-            color: isSelected ? SoteriaColors.info.withValues(alpha: 0.4) : Colors.white.withValues(alpha: 0.05),
+            color: isSelected ? const Color(0xFF7C4DFF) : Colors.white.withValues(alpha: 0.05),
           ),
         ),
         child: Row(
-          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              Icons.cloudy_snowing,
-              size: 14.sp,
-              color: isSelected ? SoteriaColors.info : Colors.white60,
-            ),
-            SizedBox(width: 8.w),
-            Text(
-              label.toUpperCase(),
-              style: context.labelSmall.copyWith(
-                color: isSelected ? SoteriaColors.info : Colors.white60,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
-                fontSize: 9.sp,
+            Container(
+              padding: EdgeInsets.all(10.r),
+              decoration: BoxDecoration(
+                color: const Color(0xFFB456FF).withValues(alpha: 0.1),
+                shape: BoxShape.circle,
               ),
+              child: const Icon(
+                Icons.psychology_rounded,
+                color: Color(0xFFB456FF),
+                size: 24,
+              ),
+            ),
+            SizedBox(width: 16.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: context.titleSmall.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                  Text(
+                    subtitle,
+                    style: context.bodySmall.copyWith(
+                      color: Colors.white.withValues(alpha: 0.4),
+                      fontSize: 11.sp,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Icon(
+              Icons.chevron_right_rounded,
+              color: isSelected ? const Color(0xFF7C4DFF) : Colors.white24,
             ),
           ],
         ),
@@ -326,23 +402,22 @@ class LobbyCategoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const color = SoteriaColors.primary;
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 250),
         decoration: BoxDecoration(
-          color: isSelected ? color.withValues(alpha: 0.1) : Colors.white.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(16.r),
+          color: isSelected ? const Color(0xFF1E1045) : Colors.white.withValues(alpha: 0.03),
+          borderRadius: BorderRadius.circular(20.r),
           border: Border.all(
-            color: isSelected ? color.withValues(alpha: 0.6) : Colors.white.withValues(alpha: 0.05),
-            width: 1.5.w,
+            color: isSelected ? const Color(0xFF7C4DFF) : Colors.white.withValues(alpha: 0.05),
+            width: isSelected ? 2.0 : 1.0,
           ),
           boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: color.withValues(alpha: 0.25),
-                    blurRadius: 10,
+                    color: const Color(0xFF7C4DFF).withValues(alpha: 0.4),
+                    blurRadius: 20,
                     spreadRadius: -2,
                   ),
                 ]
@@ -353,10 +428,10 @@ class LobbyCategoryCard extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: isSelected ? color : Colors.white60,
-              size: 20.sp,
+              color: isSelected ? SoteriaColors.primary : Colors.white24,
+              size: 26.sp,
             ),
-            SizedBox(height: 4.h),
+            SizedBox(height: 8.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 4.w),
               child: Text(
@@ -365,7 +440,7 @@ class LobbyCategoryCard extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: context.labelSmall.copyWith(
-                  color: isSelected ? Colors.white : Colors.white60,
+                  color: isSelected ? Colors.white : Colors.white38,
                   fontWeight: isSelected ? FontWeight.w900 : FontWeight.w600,
                   fontSize: 8.sp,
                   letterSpacing: 0.5,
@@ -400,25 +475,25 @@ class LobbyCountCircle extends StatelessWidget {
       child: Column(
         children: [
           AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            width: 52.w,
-            height: 52.w,
+            duration: const Duration(milliseconds: 250),
+            width: 64.w,
+            height: 64.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.04),
+              color: isSelected ? Colors.transparent : Colors.white.withValues(alpha: 0.03),
               border: Border.all(
                 color: !isEnabled 
                     ? Colors.white.withValues(alpha: 0.03)
                     : isSelected 
-                        ? const Color(0xFF7C4DFF) 
-                        : Colors.white.withValues(alpha: 0.08),
-                width: 2.0,
+                        ? const Color(0xFFB456FF) 
+                        : Colors.white.withValues(alpha: 0.1),
+                width: isSelected ? 3.0 : 1.5,
               ),
               boxShadow: (isSelected && isEnabled)
                   ? [
                       BoxShadow(
-                        color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
-                        blurRadius: 12,
+                        color: const Color(0xFFB456FF).withValues(alpha: 0.4),
+                        blurRadius: 15,
                         spreadRadius: 1,
                       ),
                     ]
@@ -426,28 +501,24 @@ class LobbyCountCircle extends StatelessWidget {
             ),
             child: Center(
               child: Opacity(
-                opacity: isEnabled ? 1.0 : 0.2, // Slightly more faint for locked state
+                opacity: isEnabled ? 1.0 : 0.2,
                 child: Text(
                   count.toString(),
                   style: context.titleMedium.copyWith(
                     color: isSelected ? Colors.white : Colors.white60,
                     fontWeight: FontWeight.w900,
-                    fontSize: 18.sp,
+                    fontSize: 20.sp,
                   ),
                 ),
               ),
             ),
           ),
-          SizedBox(height: 6.h),
+          SizedBox(height: 8.h),
           Text(
             'Qns',
             style: context.labelSmall.copyWith(
-              color: !isEnabled 
-                  ? Colors.white10
-                  : isSelected 
-                      ? const Color(0xFF7C4DFF) 
-                      : Colors.white24,
-              fontSize: 9.sp,
+              color: isSelected ? const Color(0xFFB456FF) : Colors.white24,
+              fontSize: 10.sp,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -485,65 +556,54 @@ class LobbyStartAction extends StatelessWidget {
           end: Alignment.bottomCenter,
           colors: [
             Colors.transparent,
-            SoteriaColors.background.withValues(alpha: 0.9),
+            SoteriaColors.background.withValues(alpha: 0.95),
           ],
         ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.verified_user_outlined, size: 14.sp, color: Colors.white30),
-              SizedBox(width: 4.w),
-              Text(
-                helperText,
-                style: context.labelSmall.copyWith(color: Colors.white30, fontSize: 9.sp),
-              ),
-            ],
-          ),
-          SizedBox(height: 16.h),
           GestureDetector(
             onTap: (enabled && !isLoading) ? onStart : null,
             child: AnimatedOpacity(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 250),
               opacity: (enabled && !isLoading) ? 1.0 : 0.5,
               child: Container(
                 height: 64.h,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF7C4DFF), Color(0xFF5B3FD9), Color(0xFF2E1A8A)],
+                    colors: [Color(0xFFFFD700), Color(0xFFFFAB40), Color(0xFFE58C3D)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
-                  borderRadius: BorderRadius.circular(16.r),
+                  borderRadius: BorderRadius.circular(20.r),
                   boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF7C4DFF).withValues(alpha: 0.3),
-                      blurRadius: 15,
-                      offset: const Offset(0, 6),
-                    ),
+                    if (enabled)
+                      BoxShadow(
+                        color: const Color(0xFFFFD700).withValues(alpha: 0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
                   ],
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: isLoading
-                    ? const Center(child: CircularProgressIndicator(color: Colors.white))
+                    ? const Center(child: CircularProgressIndicator(color: Colors.black))
                     : Row(
                         children: [
-                          const Icon(Icons.bolt_rounded, color: SoteriaColors.gold, size: 28),
+                          const Icon(Icons.bolt_rounded, color: Color(0xFF1E1045), size: 32),
                           const Spacer(),
                           Text(
-                            label.toUpperCase(),
+                            label,
                             style: context.titleSmall.copyWith(
-                              color: Colors.white,
+                              color: const Color(0xFF1E1045),
                               fontWeight: FontWeight.w900,
                               letterSpacing: 1.5,
-                              fontSize: 16.sp,
+                              fontSize: 18.sp,
                             ),
                           ),
                           const Spacer(),
-                          const Icon(Icons.arrow_forward_rounded, color: Colors.white, size: 28),
+                          const Icon(Icons.arrow_forward_rounded, color: Color(0xFF1E1045), size: 32),
                         ],
                       ),
               ),
@@ -561,7 +621,7 @@ class LobbyStartAction extends StatelessWidget {
                 ),
               ),
             ),
-          SizedBox(height: MediaQuery.paddingOf(context).bottom),
+          SizedBox(height: 8.h),
         ],
       ),
     );

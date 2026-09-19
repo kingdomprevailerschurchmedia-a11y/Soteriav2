@@ -34,7 +34,7 @@ class PeriodSelector extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? SoteriaColors.primary
+                      ? SoteriaColors.gold
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8.r),
                 ),
@@ -42,9 +42,9 @@ class PeriodSelector extends StatelessWidget {
                   period.label,
                   style: SoteriaTypography.labelSmall.copyWith(
                     color: isSelected
-                        ? SoteriaColors.textPrimary
+                        ? Colors.black
                         : SoteriaColors.muted,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w900 : FontWeight.w400,
                   ),
                 ),
               ),

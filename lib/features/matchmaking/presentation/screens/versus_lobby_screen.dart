@@ -18,6 +18,7 @@ import '../../../player/presentation/widgets/presence/recent_opponents_section.d
 import '../../../../core/avatar/presentation/widgets/soteria_avatar.dart';
 import '../../../../core/network/providers/connectivity_providers.dart';
 import '../../../player/presentation/providers/rank_providers.dart';
+import '../../../player/presentation/providers/progression_providers.dart';
 
 class VersusLobbyScreen extends ConsumerWidget {
   const VersusLobbyScreen({super.key});
@@ -243,7 +244,10 @@ class _LobbyHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(SoteriaSpacing.lg),
+      padding: EdgeInsets.symmetric(
+        horizontal: SoteriaSpacing.lg,
+        vertical: SoteriaSpacing.md,
+      ),
       child: Row(
         children: [
           if (showBackButton)
@@ -252,11 +256,40 @@ class _LobbyHeader extends StatelessWidget {
             const SizedBox.shrink(),
           const Spacer(),
           if (player != null)
-            SoteriaAvatar(
-              imageUrl: player.photoUrl,
-              size: 40,
-              isOnline: isOnline,
-              showStatus: true,
+            Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      player.displayName,
+                      style: context.titleSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final level = ref.watch(currentCompetitiveLevelProvider);
+                        return Text(
+                          'Lvl $level',
+                          style: context.labelSmall.copyWith(
+                            color: SoteriaColors.gold,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                SizedBox(width: SoteriaSpacing.md),
+                SoteriaAvatar(
+                  imageUrl: player.photoUrl,
+                  size: 44,
+                  isOnline: isOnline,
+                  showStatus: true,
+                ),
+              ],
             ),
         ],
       ),

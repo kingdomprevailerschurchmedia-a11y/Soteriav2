@@ -114,6 +114,7 @@ class TopScholarsSection extends ConsumerWidget {
                             color: _getRankColor(index + 1),
                             avatarId: scholar.avatarId ?? 'athena',
                             imageUrl: scholar.avatarUrl,
+                            userId: scholar.userId,
                             isMe: isMe,
                           ),
                           if (index < top3.length - 1) _Divider(),
@@ -171,6 +172,7 @@ class _ScholarRow extends ConsumerWidget {
     required this.color,
     required this.avatarId,
     this.imageUrl,
+    this.userId,
     this.isMe = false,
   });
 
@@ -181,6 +183,7 @@ class _ScholarRow extends ConsumerWidget {
   final Color color;
   final String avatarId;
   final String? imageUrl;
+  final String? userId;
   final bool isMe;
 
   @override
@@ -201,6 +204,7 @@ class _ScholarRow extends ConsumerWidget {
           SoteriaAvatar(
             avatar: avatar,
             imageUrl: imageUrl,
+            userId: userId,
             size: 33,
             frameStyle: _getFrameStyle(rank),
             showGlow: true,

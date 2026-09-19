@@ -359,19 +359,19 @@ class _SoteriaButtonState extends State<SoteriaButton>
 
     switch (widget.variant) {
       case SoteriaButtonVariant.primary:
-        return SoteriaColors.textPrimary;
+        return Colors.black;
       case SoteriaButtonVariant.reward:
         return Colors.black;
       case SoteriaButtonVariant.secondary:
         return SoteriaColors.textPrimary;
       case SoteriaButtonVariant.ghost:
-        return SoteriaColors.primary;
+        return SoteriaColors.gold;
       case SoteriaButtonVariant.danger:
         return SoteriaColors.error;
       case SoteriaButtonVariant.outline:
-        return SoteriaColors.primary;
+        return SoteriaColors.gold;
       case SoteriaButtonVariant.text:
-        return SoteriaColors.primary;
+        return SoteriaColors.gold;
     }
   }
 

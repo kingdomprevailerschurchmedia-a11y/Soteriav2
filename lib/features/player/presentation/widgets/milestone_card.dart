@@ -177,9 +177,7 @@ class MilestoneCard extends StatelessWidget {
             value: isCompleted ? 1.0 : progress.progressPercentage,
             minHeight: 4.h,
             backgroundColor: Colors.white.withValues(alpha: 0.05),
-            valueColor: AlwaysStoppedAnimation<Color>(
-              isCompleted ? SoteriaColors.success : SoteriaColors.secondary
-            ),
+            valueColor: const AlwaysStoppedAnimation<Color>(SoteriaColors.gold),
           ),
         ),
       ],

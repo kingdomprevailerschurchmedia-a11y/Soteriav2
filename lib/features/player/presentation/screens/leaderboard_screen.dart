@@ -61,7 +61,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
 
     return SoteriaPage(
       useSafeArea: false,
-      showBackground: true,
+      showBackground: false,
       child: Scaffold(
         extendBody: true,
         backgroundColor: Colors.transparent,
@@ -70,6 +70,10 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen>
           surfaceTintColor: Colors.transparent,
           elevation: 0,
           scrolledUnderElevation: 0,
+          toolbarHeight: 60.h + MediaQuery.paddingOf(context).top,
+          flexibleSpace: Container(
+            padding: EdgeInsets.only(top: MediaQuery.paddingOf(context).top),
+          ),
           title: Text(
             'LEADERBOARD',
             style: context.titleMedium.copyWith(
@@ -438,7 +442,11 @@ class _CurrentUserStickyRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: SoteriaSpacing.md),
+      padding: EdgeInsets.only(
+        left: SoteriaSpacing.md,
+        right: SoteriaSpacing.md,
+        bottom: 80.h + MediaQuery.paddingOf(context).bottom,
+      ),
       child: SoteriaCard(
         padding: EdgeInsets.zero,
         hasGlow: true,

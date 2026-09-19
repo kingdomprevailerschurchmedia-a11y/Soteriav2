@@ -10,6 +10,7 @@ import 'package:soteria/core/widgets/glass_surface.dart';
 import '../providers/competitive_profile_provider.dart';
 import '../../domain/models/competitive_profile.dart';
 import '../widgets/profile/competitive_profile_header.dart';
+import '../widgets/profile/rank_progress_section.dart';
 import '../widgets/profile/achievement_summary_section.dart';
 import '../widgets/profile/engagement_summary_section.dart';
 import '../widgets/profile/career_statistics_section.dart';
@@ -68,6 +69,15 @@ class PlayerProfileScreen extends ConsumerWidget {
             ),
             SoteriaSpacing.gapLG,
             RepaintBoundary(
+              child: RankProgressSection(progression: profile.progression),
+            ),
+            SoteriaSpacing.gapLG,
+            if (profile.careerSummary != null)
+              RepaintBoundary(
+                child: CareerStatisticsSection(summary: profile.careerSummary!),
+              ),
+            SoteriaSpacing.gapLG,
+            RepaintBoundary(
               child: EngagementSummarySection(
                 progression: profile.progression,
                 winStreak: profile.streak,
@@ -80,11 +90,6 @@ class PlayerProfileScreen extends ConsumerWidget {
                 total: profile.totalAchievements,
               ),
             ),
-            SoteriaSpacing.gapLG,
-            if (profile.careerSummary != null)
-              RepaintBoundary(
-                child: CareerStatisticsSection(summary: profile.careerSummary!),
-              ),
             SoteriaSpacing.gapLG,
             SizedBox(height: 40.h + MediaQuery.paddingOf(context).bottom),
           ],
@@ -122,39 +127,60 @@ class PlayerProfileScreen extends ConsumerWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'COMPETITIVE IDENTITY',
-              style: context.labelSmall.copyWith(
-                color: SoteriaColors.secondary,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w900,
-                fontSize: 11.sp,
-              ),
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Text(
+                  'PROFILE',
+                  style: context.headlineMedium.copyWith(
+                    fontWeight: FontWeight.w900,
+                    color: Colors.white,
+                    fontSize: 28.sp,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                Positioned(
+                  bottom: -6.h,
+                  left: 0,
+                  child: Container(
+                    width: 40.w,
+                    height: 3.h,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          SoteriaColors.secondary,
+                          SoteriaColors.secondary.withValues(alpha: 0.1),
+                        ],
+                      ),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
+                ),
+              ],
             ),
-            SoteriaSpacing.gapXS,
-            Text(
-              'Profile',
-              style: context.headlineLarge.copyWith(
-                fontWeight: FontWeight.w900,
-                color: Colors.white,
-                fontSize: 32.sp,
-              ),
-            ),
-            SoteriaSpacing.gapXS,
+            SizedBox(height: 12.h),
             Text(
               'Learn. Compete. Become Legendary.',
               style: context.bodySmall.copyWith(
                 color: Colors.white60,
                 fontWeight: FontWeight.w500,
+                fontSize: 14.sp,
               ),
             ),
           ],
         ),
         Row(
           children: [
-            const NotificationIconButton(),
+            _CircleIconButton(
+              icon: Icons.notifications_none_rounded,
+              badgeCount: 9,
+              onTap: () {},
+            ),
             SizedBox(width: 12.w),
-            _SettingsButton(onTap: () => context.push('/app/settings')),
+            _CircleIconButton(
+              icon: Icons.settings_outlined,
+              onTap: () => context.push('/app/settings'),
+            ),
           ],
         ),
       ],
@@ -162,24 +188,58 @@ class PlayerProfileScreen extends ConsumerWidget {
   }
 }
 
-class _SettingsButton extends StatelessWidget {
+class _CircleIconButton extends StatelessWidget {
+  final IconData icon;
+  final int? badgeCount;
   final VoidCallback onTap;
-  const _SettingsButton({required this.onTap});
+
+  const _CircleIconButton({
+    required this.icon,
+    this.badgeCount,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white.withValues(alpha: 0.05),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
-      ),
-      child: IconButton(
-        padding: EdgeInsets.zero,
-        icon: const Icon(Icons.settings_outlined, color: Colors.white, size: 20),
-        onPressed: onTap,
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: 44.r,
+            height: 44.r,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.white.withValues(alpha: 0.05),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+            ),
+            child: Icon(icon, color: Colors.white, size: 22.r),
+          ),
+          if (badgeCount != null)
+            Positioned(
+              top: -2,
+              right: -2,
+              child: Container(
+                padding: EdgeInsets.all(4.r),
+                decoration: const BoxDecoration(
+                  color: SoteriaColors.error,
+                  shape: BoxShape.circle,
+                ),
+                constraints: BoxConstraints(minWidth: 18.r, minHeight: 18.r),
+                child: Center(
+                  child: Text(
+                    badgeCount! > 9 ? '9+' : '$badgeCount',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 8.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

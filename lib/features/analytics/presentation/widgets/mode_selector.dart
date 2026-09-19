@@ -34,7 +34,7 @@ class ModeSelector extends StatelessWidget {
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: isSelected
-                      ? SoteriaColors.secondary // Use different color for mode to distinguish from period
+                      ? SoteriaColors.gold
                       : Colors.transparent,
                   borderRadius: BorderRadius.circular(8.r),
                 ),
@@ -42,9 +42,9 @@ class ModeSelector extends StatelessWidget {
                   mode.label,
                   style: SoteriaTypography.labelSmall.copyWith(
                     color: isSelected
-                        ? SoteriaColors.textPrimary
+                        ? Colors.black
                         : SoteriaColors.muted,
-                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: isSelected ? FontWeight.w900 : FontWeight.w400,
                   ),
                 ),
               ),

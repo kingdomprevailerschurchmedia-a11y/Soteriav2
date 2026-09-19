@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../../core/design_system/colors/soteria_colors.dart';
 import '../../../../../core/design_system/spacing/soteria_spacing.dart';
 import '../../../../../core/design_system/typography/soteria_typography.dart';
 import '../../../../../core/design_system/components/soteria_progress_bar.dart';
+import '../../../../../core/design_system/components/soteria_card.dart';
 import '../../../domain/models/player_progression.dart';
 import '../../../domain/services/competitive_ranking_engine.dart';
+import '../competitive_rank_badge.dart';
 
 class RankProgressSection extends StatelessWidget {
   final PlayerProgression progression;
@@ -14,75 +17,71 @@ class RankProgressSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final engine = CompetitiveRankingEngine();
-    final rankProgress = engine.calculateRankProgress(progression.rankPoints);
+    final rankInfo = engine.calculateRankProgress(progression.rankPoints);
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildProgressRow(
-          context,
-          label: 'XP PROGRESS',
-          value:
-              '${progression.currentXp} / ${progression.xpRequiredForNextLevel - progression.xpRequiredForCurrentLevel} XP',
-          progress: progression.xpProgress,
-          color: SoteriaColors.xpColor,
-        ),
-        SizedBox(height: SoteriaSpacing.lg),
-        _buildProgressRow(
-          context,
-          label: 'RANK PROGRESS',
-          value: '${(progression.rankProgress * 100).toInt()}%',
-          progress: progression.rankProgress,
-          color: SoteriaColors.gold,
-          showGoal: true,
-          semanticLabel: rankProgress.isMaxRank
-              ? '${rankProgress.currentRank}. Maximum rank achieved.'
-              : '${rankProgress.currentRank}. ${rankProgress.currentRP} points. ${rankProgress.rpToNextRank} points to ${rankProgress.nextRank}.',
-        ),
-      ],
-    );
-  }
-
-  Widget _buildProgressRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-    required double progress,
-    required Color color,
-    bool showGoal = false,
-    String? semanticLabel,
-  }) {
-    return Semantics(
-      label: semanticLabel ?? '$label: $value',
-      value: '${(progress * 100).toInt()}%',
+    return SoteriaCard(
+      padding: EdgeInsets.all(20.r),
+      borderRadius: 24,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Icon(Icons.workspace_premium_rounded, color: SoteriaColors.gold, size: 20.r),
+              SizedBox(width: 12.w),
               Text(
-                label,
-                style: context.labelSmall.copyWith(
-                  color: SoteriaColors.muted,
-                  letterSpacing: 1.2,
+                'Rank Progress',
+                style: context.titleSmall.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.sp,
                 ),
               ),
+              const Spacer(),
               Text(
-                value,
+                progression.currentRank,
                 style: context.labelSmall.copyWith(
-                  color: SoteriaColors.textPrimary,
+                  color: SoteriaColors.gold,
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(width: 4.w),
+              Icon(Icons.chevron_right_rounded, color: SoteriaColors.gold, size: 18.r),
             ],
           ),
-          SizedBox(height: SoteriaSpacing.xs),
-          SoteriaProgressBar(
-            progress: progress,
-            color: color,
-            height: 8,
-            hasGlow: true,
+          SoteriaSpacing.gapLG,
+          Row(
+            children: [
+              CompetitiveRankBadge(
+                rankName: '',
+                tierId: progression.currentRankTier.toLowerCase(),
+                size: RankBadgeSize.medium,
+              ),
+              SizedBox(width: 20.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    SoteriaProgressBar(
+                      progress: rankInfo.progressPercentage,
+                      color: const Color(0xFF7C4DFF),
+                      height: 10.h,
+                      hasGlow: true,
+                    ),
+                    SizedBox(height: 8.h),
+                    Text(
+                      '${progression.currentXp} / ${progression.xpRequiredForNextLevel - progression.xpRequiredForCurrentLevel} XP',
+                      style: context.labelSmall.copyWith(
+                        color: Colors.white.withValues(alpha: 0.3),
+                        fontSize: 10.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

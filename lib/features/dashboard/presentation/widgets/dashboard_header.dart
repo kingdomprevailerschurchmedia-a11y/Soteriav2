@@ -111,10 +111,20 @@ class DashboardHeader extends ConsumerWidget {
                 children: [
                   GestureDetector(
                     onTap: nav.openWallet,
-                    child: _CompactStat(
-                      assetPath: 'assets/icons/coin_icon.png',
-                      value: coins.toString(),
-                      label: 'Coins',
+                    child: Hero(
+                      tag: 'wallet_balance_card',
+                      flightShuttleBuilder: (flightContext, animation, direction,
+                          fromContext, toContext) {
+                        return Material(
+                          color: Colors.transparent,
+                          child: toContext.widget,
+                        );
+                      },
+                      child: _CompactStat(
+                        assetPath: 'assets/icons/coin_icon.png',
+                        value: coins.toString(),
+                        label: 'Coins',
+                      ),
                     ),
                   ),
                   SizedBox(width: 16.w),

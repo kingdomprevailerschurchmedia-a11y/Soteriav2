@@ -80,11 +80,11 @@ class SoteriaGradients {
   static LinearGradient button = const LinearGradient(
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,
-    colors: [SoteriaColors.primary, SoteriaColors.secondary],
+    colors: [SoteriaColors.gold, Color(0xFFB8860B)],
   );
 
   static const LinearGradient premiumButton = LinearGradient(
-    colors: [Color(0xFF2E1A8A), Color(0xFF5B3FD9), Color(0xFF7C4DFF)],
+    colors: [Color(0xFFD8B24A), Color(0xFFFFD700), Color(0xFFB8860B)],
     stops: [0.0, 0.5, 1.0],
     begin: Alignment.centerLeft,
     end: Alignment.centerRight,

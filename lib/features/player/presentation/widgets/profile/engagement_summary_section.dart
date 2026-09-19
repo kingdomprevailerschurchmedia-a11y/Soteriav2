@@ -23,17 +23,43 @@ class EngagementSummarySection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'ENGAGEMENT',
-          style: context.labelSmall.copyWith(
-            color: SoteriaColors.gold,
-            letterSpacing: 2.0,
-            fontWeight: FontWeight.w800,
-            fontSize: 13.sp,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.local_fire_department_rounded, color: SoteriaColors.gold, size: 20.r),
+                SizedBox(width: 12.w),
+                Text(
+                  'Engagement',
+                  style: context.titleSmall.copyWith(
+                    color: SoteriaColors.gold,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.sp,
+                  ),
+                ),
+              ],
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Row(
+                children: [
+                  Text(
+                    '${progression.dailyStreak} DAYS STREAK',
+                    style: context.labelSmall.copyWith(
+                      color: const Color(0xFF7C4DFF),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(width: 4.w),
+                  Icon(Icons.chevron_right_rounded, color: const Color(0xFF7C4DFF), size: 18.r),
+                ],
+              ),
+            ),
+          ],
         ),
         SizedBox(height: SoteriaSpacing.md),
-        _DailyStreakCard(
+        _EngagementCard(
           current: progression.dailyStreak,
           best: progression.longestStreak,
         ),
@@ -42,48 +68,48 @@ class EngagementSummarySection extends StatelessWidget {
   }
 }
 
-class _DailyStreakCard extends StatelessWidget {
+class _EngagementCard extends StatelessWidget {
   final int current;
   final int best;
 
-  const _DailyStreakCard({required this.current, required this.best});
+  const _EngagementCard({required this.current, required this.best});
 
   @override
   Widget build(BuildContext context) {
     return SoteriaCard(
-      padding: EdgeInsets.all(20.r),
+      padding: EdgeInsets.all(16.r),
+      borderRadius: 24,
+      blur: 5.0,
+      opacity: 0.02,
+      borderColor: Colors.white.withValues(alpha: 0.1),
       child: Row(
         children: [
           Container(
-            width: 64.w,
-            height: 64.w,
+            width: 72.r,
+            height: 72.r,
             decoration: BoxDecoration(
-              color: SoteriaColors.secondary.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(16.r),
-              border: Border.all(
-                color: SoteriaColors.secondary.withValues(alpha: 0.2),
-              ),
+              color: Colors.white.withValues(alpha: 0.05),
+              borderRadius: BorderRadius.circular(20.r),
+              border: Border.all(color: Colors.white.withValues(alpha: 0.05)),
             ),
             child: Center(
               child: Icon(
                 Icons.calendar_month_rounded,
-                color: SoteriaColors.secondary,
+                color: const Color(0xFF7C4DFF),
                 size: 32.sp,
               ),
             ),
           ),
-          SizedBox(width: 16.w),
+          SizedBox(width: 20.w),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'DAILY STREAK',
+                  'Daily Streak',
                   style: context.labelSmall.copyWith(
                     color: SoteriaColors.muted,
-                    letterSpacing: 1.2,
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w900,
+                    fontSize: 12.sp,
                   ),
                 ),
                 SizedBox(height: 4.h),
@@ -92,15 +118,16 @@ class _DailyStreakCard extends StatelessWidget {
                   style: context.headlineSmall.copyWith(
                     fontWeight: FontWeight.w900,
                     color: Colors.white,
-                    fontSize: 22.sp,
+                    fontSize: 24.sp,
+                    letterSpacing: 1.0,
                   ),
                 ),
                 SizedBox(height: 4.h),
                 Text(
                   'Best: $best',
                   style: context.labelSmall.copyWith(
-                    color: SoteriaColors.muted,
-                    fontWeight: FontWeight.w600,
+                    color: Colors.white30,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -110,26 +137,28 @@ class _DailyStreakCard extends StatelessWidget {
             children: [
               ShaderMask(
                 shaderCallback: (bounds) => const LinearGradient(
-                  colors: [Color(0xFF7C4DFF), Color(0xFFFF4DFF)],
+                  colors: [Color(0xFFB456FF), Color(0xFF7C4DFF)],
                 ).createShader(bounds),
                 child: Icon(
                   Icons.local_fire_department_rounded,
-                  size: 44.sp,
+                  size: 48.sp,
                   color: Colors.white,
                 ),
               ),
-              SizedBox(height: 8.h),
+              SizedBox(height: 12.h),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   for (int i = 0; i < 5; i++)
                     Container(
-                      width: 6.w,
-                      height: 6.w,
-                      margin: EdgeInsets.symmetric(horizontal: 2.w),
+                      width: 6.r,
+                      height: 6.r,
+                      margin: EdgeInsets.symmetric(horizontal: 3.w),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: i == 0 ? SoteriaColors.secondary : Colors.white10,
+                        color: i < (current % 5 == 0 && current > 0 ? 5 : current % 5) 
+                            ? const Color(0xFFB456FF) 
+                            : Colors.white12,
                       ),
                     ),
                 ],

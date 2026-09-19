@@ -18,6 +18,7 @@ import '../../../../core/navigation/services/navigation_coordinator.dart';
 import '../../../../core/design_system/components/soteria_button.dart';
 import '../../../../core/design_system/components/soteria_back_button.dart';
 import '../../../../core/design_system/components/soteria_card.dart';
+import '../../../../shared/widgets/animations/animated_rolling_number.dart';
 
 class WalletScreen extends ConsumerWidget {
   const WalletScreen({super.key});
@@ -29,17 +30,25 @@ class WalletScreen extends ConsumerWidget {
     final navigation = ref.watch(navigationCoordinatorProvider);
 
     return SoteriaPage(
-      useSafeArea: true,
+      useSafeArea: false,
+      showBackground: false,
       child: Scaffold(
+        extendBody: true,
         backgroundColor: Colors.transparent,
         body: Column(
           children: [
+            SizedBox(height: MediaQuery.paddingOf(context).top),
             _buildHeader(context, navigation),
             Expanded(
               child: ListView(
-                padding: EdgeInsets.symmetric(
-                  horizontal: SoteriaSpacing.containerPadding(context),
-                  vertical: 16.h,
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                padding: EdgeInsets.only(
+                  left: SoteriaSpacing.containerPadding(context),
+                  right: SoteriaSpacing.containerPadding(context),
+                  top: 16.h,
+                  bottom: 100.h + MediaQuery.paddingOf(context).bottom,
                 ),
                 children: [
                   walletAsync.when(
@@ -106,83 +115,110 @@ class WalletScreen extends ConsumerWidget {
     final ngnBalance = wallet.coins * conversionFactor;
     final withdrawableNgn = wallet.withdrawableCoins * conversionFactor;
 
-    return SoteriaCard(
-      padding: EdgeInsets.all(24.r),
-      borderRadius: 32,
-      blur: 5.0,
-      opacity: 0.02,
-      borderColor: Colors.white.withValues(alpha: 0.1),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    return Hero(
+      tag: 'wallet_balance_card',
+      child: Material(
+        color: Colors.transparent,
+        child: SoteriaCard(
+          padding: EdgeInsets.all(24.r),
+          borderRadius: 28,
+          blur: 15.0,
+          opacity: 0.05,
+          borderColor: Colors.white.withValues(alpha: 0.1),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Image.asset('assets/icons/coin_icon.png', width: 20.r, height: 20.r),
-              SoteriaSpacing.gapXS,
-              Text(
-                'Coin Balance',
-                style: context.labelMedium.copyWith(
-                  color: SoteriaColors.textSecondary,
-                  letterSpacing: 1.0,
-                ),
-              ),
-            ],
-          ),
-          SoteriaSpacing.gapSM,
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Text(
-                wallet.coins.toString().replaceAllMapped(
-                    RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (m) => '${m[1]},'),
-                style: context.displayMedium.copyWith(
-                  color: SoteriaColors.textPrimary,
-                  fontWeight: FontWeight.w900,
-                  height: 1.0,
-                ),
-              ),
-              SizedBox(width: 8.w),
-              Padding(
-                padding: EdgeInsets.only(bottom: 6.h),
-                child: Text(
-                  '≈ ₦${NumberFormat('#,###.##').format(ngnBalance)}',
-                  style: context.bodyMedium.copyWith(
-                    color: SoteriaColors.muted,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SoteriaSpacing.gapLG,
-          Divider(color: Colors.white.withValues(alpha: 0.05), height: 1),
-          SoteriaSpacing.gapLG,
-          Row(
-            children: [
-              Icon(Icons.info_outline_rounded, color: SoteriaColors.muted, size: 18.r),
-              SoteriaSpacing.gapSM,
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Withdrawable Balance',
-                      style: context.bodySmall.copyWith(color: SoteriaColors.muted),
+              Row(
+                children: [
+                  Image.asset('assets/icons/coin_icon.png',
+                      width: 20.r, height: 20.r),
+                  SoteriaSpacing.gapXS,
+                  Text(
+                    'Coin Balance',
+                    style: context.labelMedium.copyWith(
+                      color: SoteriaColors.textSecondary,
+                      letterSpacing: 1.0,
                     ),
-                    Text(
-                      '${wallet.withdrawableCoins.toString().replaceAllMapped(RegExp(r"(\d{1,3})(?=(\d{3})+(?!\d))"), (m) => "${m[1]},")} Coins (₦${NumberFormat("#,###").format(withdrawableNgn)})',
-                      style: context.labelLarge.copyWith(
-                        color: SoteriaColors.textPrimary,
-                        fontWeight: FontWeight.w700,
+                  ),
+                ],
+              ),
+              SoteriaSpacing.gapSM,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  AnimatedRollingNumber(
+                    value: wallet.coins,
+                    style: context.displayMedium.copyWith(
+                      color: SoteriaColors.textPrimary,
+                      fontWeight: FontWeight.w900,
+                      height: 1.0,
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 6.h),
+                    child: AnimatedRollingNumber(
+                      value: ngnBalance,
+                      prefix: '≈ ₦',
+                      fractionDigits: 2,
+                      style: context.bodyMedium.copyWith(
+                        color: SoteriaColors.muted,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-              Icon(Icons.chevron_right_rounded, color: SoteriaColors.muted, size: 24.r),
+              SoteriaSpacing.gapLG,
+              Divider(color: Colors.white.withValues(alpha: 0.05), height: 1),
+              SoteriaSpacing.gapLG,
+              Row(
+                children: [
+                  Icon(Icons.info_outline_rounded,
+                      color: SoteriaColors.muted, size: 18.r),
+                  SoteriaSpacing.gapSM,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Withdrawable Balance',
+                          style: context.bodySmall
+                              .copyWith(color: SoteriaColors.muted),
+                        ),
+                        Row(
+                          children: [
+                            AnimatedRollingNumber(
+                              value: wallet.withdrawableCoins,
+                              style: context.labelLarge.copyWith(
+                                color: SoteriaColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              suffix: ' Coins',
+                            ),
+                            SizedBox(width: 4.w),
+                            AnimatedRollingNumber(
+                              value: withdrawableNgn,
+                              prefix: '(₦',
+                              suffix: ')',
+                              fractionDigits: 0,
+                              style: context.labelLarge.copyWith(
+                                color: SoteriaColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Icon(Icons.chevron_right_rounded,
+                      color: SoteriaColors.muted, size: 24.r),
+                ],
+              ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
