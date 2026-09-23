@@ -17,10 +17,15 @@ class FirebaseAdminInterop {
   });
 
   static Future<FirebaseAdminInterop?> initialize() async {
-    final credPath = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
+    var credPath = Platform.environment['GOOGLE_APPLICATION_CREDENTIALS'];
     
     if (credPath == null || credPath.isEmpty) {
-      return null;
+      const localKey = 'serviceAccountKey.json';
+      if (File(localKey).existsSync()) {
+        credPath = localKey;
+      } else {
+        return null;
+      }
     }
 
     final file = File(credPath);

@@ -88,7 +88,7 @@ class QuestionSelectionService {
         filteredPool = fallbackPool.where((q) => !request.excludedQuestionIds.contains(q.id)).toList();
       }
 
-      // LOCAL STARTER BANK FALLBACK: If Practice mode is still empty, load from local asset
+      // LOCAL STARTER BANK FALLBACK: Exclusively for offline Practice Mode (zero stakes)
       if (filteredPool.isEmpty && request.mode == GameMode.practice && _localDataSource != null) {
         LoggerService.i('Falling back to local Starter Bank for Practice Mode', feature: 'QuestionSelection');
         final dtos = await _localDataSource.fetchStarterQuestions();

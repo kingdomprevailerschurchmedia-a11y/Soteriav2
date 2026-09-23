@@ -132,24 +132,22 @@ void main(List<String> args) async {
           continue;
         }
 
-        // Firestore existence check
+        // Optional Firestore existence check (skipped if --fast or --skip-exists-check)
+        final skipCheck = args.contains('--fast') || args.contains('--skip-exists-check');
         bool exists = false;
-        try {
-          if (admin != null) {
-            // Admin SDK bypasses rules
-            final docPath = 'projects/$projectId/databases/(default)/documents/questions/${dto.id}';
-            await admin.api.projects.databases.documents.get(docPath);
-            exists = true;
-          } else {
-            // Firedart fallback (subject to rules)
-            final doc = await Firestore.instance.collection('questions').document(dto.id).get();
-            exists = doc != null;
+        if (!skipCheck) {
+          try {
+            if (admin != null) {
+              final docPath = 'projects/$projectId/databases/(default)/documents/questions/${dto.id}';
+              await admin.api.projects.databases.documents.get(docPath);
+              exists = true;
+            } else {
+              final doc = await Firestore.instance.collection('questions').document(dto.id).get();
+              exists = doc != null;
+            }
+          } catch (e) {
+            exists = false;
           }
-        } catch (e) {
-          // If 404/NotFound, document doesn't exist.
-          // Firedart returns null on not found. 
-          // googleapis throws DetailedApiRequestError with 404.
-          exists = false;
         }
 
         if (exists) {

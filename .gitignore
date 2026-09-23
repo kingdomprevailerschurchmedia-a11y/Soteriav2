@@ -26,3 +26,5 @@ remaining_errors.txt
 secrets/
 *.secret.json
 service-account.json
+serviceAccountKey.json
+*serviceAccount*.json
