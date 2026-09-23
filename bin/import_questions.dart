@@ -208,6 +208,7 @@ void main(List<String> args) async {
         }));
 
         print('  Progress: ${successCount + failureCount}/${toCreate.length} uploaded...');
+        await Future.delayed(const Duration(milliseconds: 150));
       }
 
       print('============================================================');
