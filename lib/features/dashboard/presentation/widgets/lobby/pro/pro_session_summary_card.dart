@@ -86,7 +86,11 @@ class ProSessionSummaryCard extends ConsumerWidget {
                     _SummaryItem(
                       label: 'Win Cap',
                       value: '${preview['potentialCoins']} Coins',
-                      icon: Icons.monetization_on_rounded,
+                      iconWidget: Image.asset(
+                        'assets/icons/coin_icon.png',
+                        width: 18.sp,
+                        height: 18.sp,
+                      ),
                       color: const Color(0xFF7C4DFF),
                     ),
                   ],
@@ -148,14 +152,16 @@ class _SummaryItem extends StatelessWidget {
   const _SummaryItem({
     required this.label,
     required this.value,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.color,
     this.isReward = false,
   });
 
   final String label;
   final String value;
-  final IconData icon;
+  final IconData? icon;
+  final Widget? iconWidget;
   final Color color;
   final bool isReward;
 
@@ -173,7 +179,7 @@ class _SummaryItem extends StatelessWidget {
                   color: color.withValues(alpha: 0.1),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(icon, color: color, size: 18.sp),
+                child: iconWidget ?? Icon(icon, color: color, size: 18.sp),
               ),
               SizedBox(width: 8.w),
               Column(

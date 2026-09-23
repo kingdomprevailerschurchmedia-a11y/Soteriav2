@@ -294,15 +294,10 @@ class _ProHeader extends StatelessWidget {
                     ),
                     Row(
                       children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            colors: [SoteriaColors.gold, Color(0xFFFFD700)],
-                          ).createShader(bounds),
-                          child: const Icon(
-                            Icons.monetization_on_rounded,
-                            color: Colors.white,
-                            size: 12,
-                          ),
+                        Image.asset(
+                          'assets/icons/coin_icon.png',
+                          width: 14.w,
+                          height: 14.w,
                         ),
                         const SizedBox(width: 4),
                         Text(

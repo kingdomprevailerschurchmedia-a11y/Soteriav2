@@ -48,7 +48,11 @@ class ProRewardCard extends ConsumerWidget {
           _RewardItem(
             label: 'Potential Coins',
             value: preview['potentialCoins'].toString(),
-            icon: Icons.monetization_on_rounded,
+            iconWidget: Image.asset(
+              'assets/icons/coin_icon.png',
+              width: 20,
+              height: 20,
+            ),
             color: SoteriaColors.gold,
           ),
           SizedBox(height: SoteriaSpacing.md),
@@ -67,13 +71,15 @@ class ProRewardCard extends ConsumerWidget {
 class _RewardItem extends StatelessWidget {
   final String label;
   final String value;
-  final IconData icon;
+  final IconData? icon;
+  final Widget? iconWidget;
   final Color color;
 
   const _RewardItem({
     required this.label,
     required this.value,
-    required this.icon,
+    this.icon,
+    this.iconWidget,
     required this.color,
   });
 
@@ -81,7 +87,10 @@ class _RewardItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(icon, color: color, size: 20),
+        if (iconWidget != null)
+          iconWidget!
+        else if (icon != null)
+          Icon(icon, color: color, size: 20),
         SizedBox(width: SoteriaSpacing.md),
         Text(
           label,

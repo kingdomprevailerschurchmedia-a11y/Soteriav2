@@ -92,9 +92,12 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
     updateCategory(category);
   }
 
-  void toggleCategory(String categoryId) {
+  bool toggleCategory(String categoryId) {
     final currentIds = List<String>.from(state.config.categoryIds);
     if (currentIds.contains(categoryId)) {
+      if (currentIds.length <= 1) {
+        return false; // Prevent unselecting the last remaining category
+      }
       currentIds.remove(categoryId);
     } else {
       currentIds.add(categoryId);
@@ -107,6 +110,7 @@ class PracticeLobbyNotifier extends Notifier<PracticeLobbyState> {
       ),
     );
     _updateSummary();
+    return true;
   }
 
   void updateDifficulty(Difficulty difficulty) {

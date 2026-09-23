@@ -9,6 +9,7 @@ import '../providers/matchmaking_providers.dart';
 import '../../../dashboard/presentation/widgets/lobby/lobby_config_widgets.dart';
 
 import 'package:soteria/features/question_content/utils/category_icons.dart';
+import 'package:soteria/core/widgets/feedback/feedback_components.dart';
 
 class VersusCategorySelector extends ConsumerWidget {
   const VersusCategorySelector({super.key});
@@ -89,9 +90,18 @@ class VersusCategorySelector extends ConsumerWidget {
               label: category.name,
               icon: CategoryIcons.getIcon(category.icon),
               isSelected: isSelected,
-              onTap: () => ref
-                  .read(versusLobbyProvider.notifier)
-                  .toggleCategory(category.id),
+              onTap: () {
+                final success = ref
+                    .read(versusLobbyProvider.notifier)
+                    .toggleCategory(category.id);
+                if (!success) {
+                  SoteriaFeedback.showSnackbar(
+                    context,
+                    message: 'At least one category needs to be selected',
+                    type: FeedbackType.warning,
+                  );
+                }
+              },
             );
           },
         ),

@@ -39,9 +39,8 @@ class _ProGameplayScreenState extends ConsumerState<ProGameplayScreen> {
     _gameConfig = GameConfiguration(
       mode: GameMode.pro,
       questionCount: widget.session.config.questionCount,
-      questionTimer: widget.session.config.timerEnabled 
-          ? const Duration(seconds: 15) 
-          : const Duration(seconds: 20), // Default timer if not specified
+      questionTimer: const Duration(seconds: 15), // Exactly 15 seconds per question
+      initialLives: 999, // Allow completing all selected questions (e.g. 10/10)
       allowLifelines: true,
       autoAdvance: false, // Don't auto-advance so user can read explanation
       difficultyMultiplier: _getMultiplier(widget.session.config.difficulty.name),

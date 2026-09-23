@@ -8,6 +8,7 @@ import '../../providers/practice_lobby_providers.dart';
 import 'lobby_config_widgets.dart';
 
 import 'package:soteria/features/question_content/utils/category_icons.dart';
+import 'package:soteria/core/widgets/feedback/feedback_components.dart';
 
 class CategorySelector extends ConsumerWidget {
   const CategorySelector({super.key});
@@ -88,9 +89,18 @@ class CategorySelector extends ConsumerWidget {
               label: category.name,
               icon: CategoryIcons.getIcon(category.icon),
               isSelected: isSelected,
-              onTap: () => ref
-                  .read(practiceLobbyProvider.notifier)
-                  .toggleCategory(category.id),
+              onTap: () {
+                final success = ref
+                    .read(practiceLobbyProvider.notifier)
+                    .toggleCategory(category.id);
+                if (!success) {
+                  SoteriaFeedback.showSnackbar(
+                    context,
+                    message: 'At least one category needs to be selected',
+                    type: FeedbackType.warning,
+                  );
+                }
+              },
             );
           },
         ),

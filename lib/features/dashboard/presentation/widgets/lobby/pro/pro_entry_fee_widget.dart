@@ -58,10 +58,10 @@ class ProEntryFeeWidget extends ConsumerWidget {
                 ),
               ),
             ] else ...[
-              const Icon(
-                Icons.monetization_on_rounded,
-                color: SoteriaColors.gold,
-                size: 32,
+              Image.asset(
+                'assets/icons/coin_icon.png',
+                width: 32,
+                height: 32,
               ),
               SizedBox(width: SoteriaSpacing.md),
               Text(

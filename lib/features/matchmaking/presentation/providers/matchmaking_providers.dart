@@ -66,9 +66,12 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
     _validate();
   }
 
-  void toggleCategory(String categoryId) {
+  bool toggleCategory(String categoryId) {
     final currentIds = List<String>.from(state.categoryIds);
     if (currentIds.contains(categoryId)) {
+      if (currentIds.length <= 1) {
+        return false; // Prevent unselecting the last remaining category
+      }
       currentIds.remove(categoryId);
     } else {
       currentIds.add(categoryId);
@@ -79,6 +82,7 @@ class VersusLobbyNotifier extends Notifier<VersusLobbyState> {
       useInterests: false,
     );
     _validate();
+    return true;
   }
 
   void updateDifficulty(Difficulty diff) {

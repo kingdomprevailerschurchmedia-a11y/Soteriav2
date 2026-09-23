@@ -187,9 +187,12 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
     _updateValidation();
   }
 
-  void toggleCategory(String categoryId) {
+  bool toggleCategory(String categoryId) {
     final currentIds = List<String>.from(state.config.categoryIds);
     if (currentIds.contains(categoryId)) {
+      if (currentIds.length <= 1) {
+        return false; // Prevent unselecting the last remaining category
+      }
       currentIds.remove(categoryId);
     } else {
       currentIds.add(categoryId);
@@ -202,6 +205,7 @@ class ProLobbyNotifier extends Notifier<ProLobbyState> {
       ),
     );
     _updateValidation();
+    return true;
   }
 
   void setUseInterests(bool value) {

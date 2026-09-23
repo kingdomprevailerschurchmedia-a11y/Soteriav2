@@ -45,8 +45,8 @@ class GameConfiguration {
   /// Factory for a standard Pro session.
   factory GameConfiguration.pro() => const GameConfiguration(
     mode: GameMode.pro,
-    questionCount: 15,
-    initialLives: 3,
+    questionCount: 10,
+    initialLives: 999, // Allow completing all selected questions
     questionTimer: Duration(seconds: 15),
     difficultyMultiplier: 1.5,
   );
