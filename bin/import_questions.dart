@@ -181,33 +181,33 @@ void main(List<String> args) async {
         return;
       }
 
-      print('Executing physical import...');
+      print('Executing physical import in parallel batches...');
       int successCount = 0;
       int failureCount = 0;
 
-      for (final q in toCreate) {
-        try {
-          // 1. Convert DTO to JSON map
-          final dataMap = jsonDecode(jsonEncode(q.toJson())) as Map<String, dynamic>;
-          
-          // 2. Remove ID (it becomes the document ID)
-          dataMap.remove('id');
-          
-          // 3. Physical write
-          if (admin != null) {
-            // Use Admin SDK (Bypasses rules)
-            await admin.writeQuestion(q.id, dataMap);
-          } else {
-            // Use Firedart (Subject to rules)
-            await Firestore.instance.collection('questions').document(q.id).set(dataMap);
+      const batchSize = 30; // 30 concurrent writes per batch
+      for (int i = 0; i < toCreate.length; i += batchSize) {
+        final chunk = toCreate.sublist(i, (i + batchSize > toCreate.length) ? toCreate.length : i + batchSize);
+
+        await Future.wait(chunk.map((q) async {
+          try {
+            final dataMap = jsonDecode(jsonEncode(q.toJson())) as Map<String, dynamic>;
+            dataMap.remove('id');
+
+            if (admin != null) {
+              await admin.writeQuestion(q.id, dataMap);
+            } else {
+              await Firestore.instance.collection('questions').document(q.id).set(dataMap);
+            }
+
+            successCount++;
+          } catch (e) {
+            failureCount++;
+            print('  [FAILED] ${q.id}: $e');
           }
-          
-          successCount++;
-          print('  [CREATED] ${q.id}');
-        } catch (e) {
-          failureCount++;
-          print('  [FAILED]  ${q.id}: $e');
-        }
+        }));
+
+        print('  Progress: ${successCount + failureCount}/${toCreate.length} uploaded...');
       }
 
       print('============================================================');
